@@ -1,0 +1,19 @@
+---
+title: "About"
+image: profile.jpg
+about:
+  template: jolla
+  links:
+    - icon: twitter
+      text: hasangoni
+      href: https://twitter.com/hasangoni
+    - icon: linkedin
+      text: Hasan Goni 
+      href: https://www.linkedin.com/in/mohammed-hasan-goni-77614a89/
+    - icon: github
+      text: Github
+      href: https://github.com/HasanGoni
+
+---
+
+This is more about my notes. I am inthusiast about machine learning
