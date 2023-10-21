@@ -1,0 +1,4 @@
+- source: project
+  quarto-pub:
+    - id: 2ee6e754-9284-483f-aaa5-dc90965db98a
+      url: 'https://hasangoni.quarto.pub/hasan-blog-post'
