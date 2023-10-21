@@ -12,7 +12,7 @@ website:
         href: https://twitter.com/hasangoni
     left:
       - text: "Blog"
-        href : blog/index.qmd
+        href : https://hasangoni.quarto.pub/hasan-blog-post/
 format:
   html:
     theme: cosmo

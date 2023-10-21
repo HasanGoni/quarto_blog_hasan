@@ -20,14 +20,21 @@ image: "image.png"
 - Copied from [here](https://github.com/NielsRogge/Transformers-Tutorials/tree/master/Nougat)
 
 # TL-DR
-
---------------- Summary ---------------------
-
 Nougat is a Visual Transformer model designed to enhance accessibility of scientific knowledge in the digital age.
 It converts scientific documents from PDFs into a markup language, improving understanding, especially for mathematical expressions.
 The model's effectiveness has been demonstrated on a new dataset of scientific documents.
 This innovation bridges the gap between human-readable and machine-readable text.
 The authors have shared their models and code to accelerate future research in scientific text recognition.
+
+
+This is just notebook, to show how to use it.
+
+* TODO
+	+ Write some more about the paper.
+	+ Add nbdev library to work with it, so that  just entering name of the pdf is needed from user hand and then it will be automatically converted.
+        + Create pip install documentation for it
+
+## Jupter notebook is the following
 ```python
 #pip install -q pymupdf python-Levenshtein nltk
 ```
@@ -176,7 +183,7 @@ image
 
 
     
-![png](2023-09-27-Nougat%20to%20read%20scientific%20PDFs_files/2023-09-27-Nougat%20to%20read%20scientific%20PDFs_9_0.png)
+![png](images/image.png)
     
 
 
