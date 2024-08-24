@@ -1,0 +1,45 @@
+[
+  {
+    "listing": "/index.html",
+    "items": [
+      "/posts/matrix_multiplication_from_fastai_course/00_matmul.html",
+      "/posts/nougat-to-read-scientific-pdf-files/index.html",
+      "/posts/post-with-code/index.html",
+      "/posts/welcome/index.html",
+      "/posts/data-science-steps-to-follow-part05/index.html",
+      "/posts/data-science-steps-to-follow-part06/index.html",
+      "/posts/data-science-steps-to-follow-part04/index.html",
+      "/posts/data-science-steps-to-follow-part03/index.html",
+      "/posts/data-science-steps-to-follow-part02/index.html",
+      "/posts/data-science-steps-to-follow-part01/index.html"
+    ]
+  },
+  {
+    "listing": "/posts/data-science-steps-to-follow-part06/index.html",
+    "items": []
+  },
+  {
+    "listing": "/posts/data-science-steps-to-follow-part02/index.html",
+    "items": []
+  },
+  {
+    "listing": "/posts/data-science-steps-to-follow-part04/index.html",
+    "items": []
+  },
+  {
+    "listing": "/posts/data-science-steps-to-follow-part01/index.html",
+    "items": []
+  },
+  {
+    "listing": "/posts/data-science-steps-to-follow-part05/index.html",
+    "items": []
+  },
+  {
+    "listing": "/posts/nougat-to-read-scientific-pdf-files/index.html",
+    "items": []
+  },
+  {
+    "listing": "/posts/data-science-steps-to-follow-part03/index.html",
+    "items": []
+  }
+]
