@@ -1,0 +1,185 @@
+---
+title: "Understanding Matrix Multiplication from FastAI"
+subtitle: "A Deep Dive into Neural Network Fundamentals"
+author: "Hasan Goni"
+date: "2023-11-20"
+categories: [deep-learning, mathematics, fastai]
+tags: [matrix-multiplication, neural-networks, pytorch, numpy, mathematics]
+image: "matrix_mult.png"
+jupyter: python3
+format:
+  html:
+    code-fold: false
+---
+
+::: {.callout-note}
+## Related Content
+This post is part of our deep learning foundations series. You might also be interested in:
+- [Data Science Steps Series](/posts/series/data-science-steps)
+- [Feature Preprocessing](/posts/data-science-steps-to-follow-part02)
+:::
+
+# Matrix Multiplication: The Building Block of Deep Learning
+
+![Matrix Multiplication Visualization](matrix_mult.png)
+
+In this post, we'll explore matrix multiplication from first principles, following Jeremy Howard's excellent teaching approach from the FastAI course. We'll understand why it's crucial for deep learning and implement it from scratch in Python.
+
+## Why Matrix Multiplication Matters
+
+Matrix multiplication is fundamental to deep learning because:
+
+1. It's the core operation in neural network layers
+2. It enables efficient parallel computation
+3. It allows us to represent complex transformations compactly
+
+## Implementation from Scratch
+
+Let's implement matrix multiplication using Python and NumPy:
+
+```{python}
+import numpy as np
+import torch
+from typing import List, Tuple
+import matplotlib.pyplot as plt
+
+def matmul(a: List[List[float]], b: List[List[float]]) -> List[List[float]]:
+    """Matrix multiplication from scratch"""
+    # Check dimensions
+    assert len(a[0]) == len(b), "Incompatible dimensions"
+    
+    # Initialize result matrix
+    result = [[0.0 for _ in range(len(b[0]))] for _ in range(len(a))]
+    
+    # Perform multiplication
+    for i in range(len(a)):
+        for j in range(len(b[0])):
+            for k in range(len(b)):
+                result[i][j] += a[i][k] * b[k][j]
+    
+    return result
+
+# Example matrices
+A = [[1, 2], [3, 4]]
+B = [[5, 6], [7, 8]]
+
+# Calculate result
+result = matmul(A, B)
+print("Result of matrix multiplication:")
+print(np.array(result))
+```
+
+## Visualizing Matrix Multiplication
+
+Let's create a visual representation of how matrix multiplication works:
+
+```{python}
+def plot_matrix_mult(A: np.ndarray, B: np.ndarray) -> None:
+    """Visualize matrix multiplication process"""
+    fig, (ax1, ax2, ax3) = plt.subplots(1, 3, figsize=(15, 5))
+    
+    # Plot first matrix
+    ax1.imshow(A, cmap='viridis')
+    ax1.set_title('Matrix A')
+    
+    # Plot second matrix
+    ax2.imshow(B, cmap='viridis')
+    ax2.set_title('Matrix B')
+    
+    # Plot result
+    result = np.dot(A, B)
+    ax3.imshow(result, cmap='viridis')
+    ax3.set_title('A × B')
+    
+    plt.tight_layout()
+    plt.show()
+
+# Create example matrices
+A = np.array([[1, 2], [3, 4]])
+B = np.array([[5, 6], [7, 8]])
+
+plot_matrix_mult(A, B)
+```
+
+## PyTorch Implementation
+
+In practice, we use optimized libraries like PyTorch:
+
+```{python}
+# Convert to PyTorch tensors
+A_torch = torch.tensor(A, dtype=torch.float32)
+B_torch = torch.tensor(B, dtype=torch.float32)
+
+# PyTorch matrix multiplication
+result_torch = torch.matmul(A_torch, B_torch)
+print("PyTorch result:")
+print(result_torch)
+```
+
+## Performance Comparison
+
+Let's compare our implementation with NumPy and PyTorch:
+
+```{python}
+import time
+
+def benchmark_matmul(size: int = 100) -> None:
+    """Compare performance of different implementations"""
+    # Generate random matrices
+    A = np.random.randn(size, size)
+    B = np.random.randn(size, size)
+    
+    # Custom implementation
+    start = time.time()
+    _ = matmul(A.tolist(), B.tolist())
+    custom_time = time.time() - start
+    
+    # NumPy
+    start = time.time()
+    _ = np.dot(A, B)
+    numpy_time = time.time() - start
+    
+    # PyTorch
+    A_torch = torch.tensor(A)
+    B_torch = torch.tensor(B)
+    start = time.time()
+    _ = torch.matmul(A_torch, B_torch)
+    torch_time = time.time() - start
+    
+    print(f"Custom implementation: {custom_time:.4f}s")
+    print(f"NumPy: {numpy_time:.4f}s")
+    print(f"PyTorch: {torch_time:.4f}s")
+
+benchmark_matmul()
+```
+
+## Key Takeaways
+
+1. Matrix multiplication is a fundamental operation in deep learning
+2. Understanding it from first principles helps debug neural networks
+3. Libraries like PyTorch provide highly optimized implementations
+4. The operation is inherently parallelizable
+
+::: {.callout-tip}
+## FastAI Insight
+Jeremy Howard emphasizes understanding matrix multiplication from scratch because it's the foundation of neural network operations. This understanding helps in debugging and optimizing deep learning models.
+:::
+
+## Next Steps
+
+In future posts, we'll explore:
+- How matrix multiplication enables neural network layers
+- Efficient implementations using CUDA
+- Common optimization techniques
+
+## Related Posts
+
+- [Data Science Steps Series](/posts/series/data-science-steps)
+- [Feature Preprocessing](/posts/data-science-steps-to-follow-part02)
+- [Using Nougat for Research Papers](/posts/nougat-to-read-scientific-pdf-files)
+
+## References
+
+1. [FastAI Course](https://course.fast.ai/)
+2. [Deep Learning Book - Linear Algebra Chapter](https://www.deeplearningbook.org/contents/linear_algebra.html)
+3. [PyTorch Documentation](https://pytorch.org/docs/stable/torch.html#torch.matmul) 

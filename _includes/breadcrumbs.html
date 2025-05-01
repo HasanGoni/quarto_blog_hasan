@@ -1,0 +1,46 @@
+<nav class="breadcrumbs" aria-label="breadcrumb">
+    <ol class="breadcrumb">
+        <li class="breadcrumb-item"><a href="/">Home</a></li>
+        {{#if series}}
+        <li class="breadcrumb-item"><a href="/posts/series">Series</a></li>
+        <li class="breadcrumb-item"><a href="/posts/series/{{series.name}}">{{series.name}}</a></li>
+        {{/if}}
+        {{#if categories}}
+        <li class="breadcrumb-item"><a href="/categories">Categories</a></li>
+        {{#each categories}}
+        <li class="breadcrumb-item"><a href="/categories/{{this}}">{{this}}</a></li>
+        {{/each}}
+        {{/if}}
+        <li class="breadcrumb-item active" aria-current="page">{{title}}</li>
+    </ol>
+</nav>
+
+<style>
+    .breadcrumbs {
+        padding: 0.5rem 0;
+        margin-bottom: 1rem;
+        font-size: 0.9rem;
+    }
+
+    .breadcrumb {
+        display: flex;
+        flex-wrap: wrap;
+        padding: 0;
+        margin: 0;
+        list-style: none;
+    }
+
+    .breadcrumb-item+.breadcrumb-item::before {
+        content: "›";
+        padding: 0 0.5rem;
+    }
+
+    .breadcrumb-item a {
+        text-decoration: none;
+        color: #0366d6;
+    }
+
+    .breadcrumb-item.active {
+        color: #586069;
+    }
+</style>

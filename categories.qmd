@@ -1,0 +1,78 @@
+---
+title: "Categories"
+page-layout: full
+toc: true
+listing:
+  - id: data-science
+    contents: "posts/**/index.qmd"
+    type: grid
+    categories: true
+    sort-ui: true
+    filter-ui: true
+    image-height: 200px
+    fields: [image, date, title, subtitle, categories, author]
+    filter: category == "data-science"
+    
+  - id: deep-learning
+    contents: "posts/**/index.qmd"
+    type: grid
+    categories: true
+    sort-ui: true
+    filter-ui: true
+    image-height: 200px
+    fields: [image, date, title, subtitle, categories, author]
+    filter: category == "deep-learning"
+    
+  - id: tools
+    contents: "posts/**/index.qmd"
+    type: grid
+    categories: true
+    sort-ui: true
+    filter-ui: true
+    image-height: 200px
+    fields: [image, date, title, subtitle, categories, author]
+    filter: category == "tools"
+---
+
+# Browse by Category
+
+Welcome to the category index! Here you can find all posts organized by their main topics.
+
+## Data Science
+::: {#data-science}
+:::
+
+## Deep Learning
+::: {#deep-learning}
+:::
+
+## Tools and Technologies
+::: {#tools}
+:::
+
+## All Categories
+
+Use the links below to browse specific categories:
+
+::: {.grid}
+::: {.g-col-4}
+### Core Topics
+- [Data Science](/categories/data-science.html)
+- [Machine Learning](/categories/machine-learning.html)
+- [Deep Learning](/categories/deep-learning.html)
+:::
+
+::: {.g-col-4}
+### Programming
+- [Python](/categories/python.html)
+- [PyTorch](/categories/pytorch.html)
+- [NumPy](/categories/numpy.html)
+:::
+
+::: {.g-col-4}
+### Tools & Techniques
+- [EDA](/categories/analysis.html)
+- [Visualization](/categories/visualization.html)
+- [Tools](/categories/tools.html)
+:::
+::: 

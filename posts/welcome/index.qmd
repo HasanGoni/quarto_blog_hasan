@@ -1,12 +1,47 @@
 ---
-title: "Welcome To My Blog"
-author: "Tristan O'Malley"
+title: "Welcome To My Data Science & Machine Learning Blog"
+author: "Hasan Goni"
 date: "2023-10-17"
-categories: [news]
+categories: [news, data-science]
+image: "thumbnail.jpg"
 ---
 
-This is the first post in a Quarto blog. Welcome!
+Welcome to my technical blog where I share insights about Data Science, Machine Learning, and Deep Learning! 
 
-![](thumbnail.jpg)
+![Data Science Journey](thumbnail.jpg)
 
-Since this post doesn't specify an explicit `image`, the first image in the post will be used in the listing page of posts.
+## What to Expect
+
+In this blog, you'll find:
+
+### 1. Data Science Series
+A comprehensive guide covering everything from exploratory data analysis to advanced modeling:
+
+- [Part 1: Exploratory Data Analysis Fundamentals](/posts/data-science-steps-to-follow-part01)
+- [Part 2: Feature Preprocessing and Generation](/posts/data-science-steps-to-follow-part02)
+- [Part 3: Handling Anonymized Data](/posts/data-science-steps-to-follow-part03)
+- [Part 4: Text Feature Extraction](/posts/data-science-steps-to-follow-part04)
+- [Part 5: Image Feature Extraction](/posts/data-science-steps-to-follow-part05)
+- [Part 6: Advanced Techniques](/posts/data-science-steps-to-follow-part06)
+
+### 2. Deep Learning Concepts
+Explanations inspired by Jeremy Howard's teaching style:
+
+- [Understanding Matrix Multiplication](/posts/matrix_multiplication_from_fastai_course)
+- More coming soon!
+
+### 3. Technical Tools
+Exploring modern data science tools:
+
+- [Using Nougat to Read Scientific Papers](/posts/nougat-to-read-scientific-pdf-files)
+
+### 4. Practical Tutorials
+Hands-on guides with real-world applications (Coming Soon)
+
+## Getting Started
+
+If you're new to data science, I recommend starting with the [Data Science Series Part 1](/posts/data-science-steps-to-follow-part01), where we explore the fundamentals of data analysis.
+
+For those interested in deep learning, check out the [matrix multiplication tutorial](/posts/matrix_multiplication_from_fastai_course) to understand the building blocks of neural networks.
+
+Stay tuned for regular updates and deep technical content! Feel free to connect with me on [GitHub](https://github.com/HasanGoni) or [Twitter](https://twitter.com/hasangoni).

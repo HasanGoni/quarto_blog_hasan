@@ -1,0 +1,109 @@
+---
+title: "Data Science Steps: A Comprehensive Guide"
+subtitle: "From EDA to Advanced Modeling"
+description: "A complete guide to data science fundamentals, from exploratory data analysis to advanced modeling techniques."
+author: "Hasan Goni"
+date: "2022-11-19"
+categories: [series-overview, data-science, guide]
+image: "series-banner.png"
+toc: true
+---
+
+# Series Overview
+
+Welcome to my comprehensive Data Science Steps series! This series is designed to take you through the entire data science workflow, from initial data exploration to advanced modeling techniques.
+
+## What You'll Learn
+
+::: {.callout-tip}
+## Key Learning Outcomes
+By following this series, you'll learn:
+- How to effectively explore and understand data
+- Techniques for feature preprocessing and generation
+- Methods for handling different types of data
+- Best practices in data science workflows
+:::
+
+## Series Contents
+
+### [Part 1: EDA Fundamentals](/posts/data-science-steps-to-follow-part01)
+- Understanding the importance of EDA
+- Visualization techniques
+- Building domain knowledge
+- Data validation approaches
+
+### [Part 2: Feature Preprocessing and Generation](/posts/data-science-steps-to-follow-part02)
+- Data cleaning techniques
+- Feature engineering fundamentals
+- Handling missing values
+- Scaling and normalization
+
+### [Part 3: Handling Anonymized Data](/posts/data-science-steps-to-follow-part03)
+- Working with masked data
+- Pattern recognition in anonymous features
+- Statistical analysis techniques
+- Feature importance in anonymous datasets
+
+### [Part 4: Text Feature Extraction](/posts/data-science-steps-to-follow-part04)
+- Text preprocessing
+- NLP techniques
+- Word embeddings
+- Text vectorization methods
+
+### [Part 5: Image Feature Extraction](/posts/data-science-steps-to-follow-part05)
+- Image preprocessing
+- Feature extraction techniques
+- Computer vision basics
+- Deep learning approaches
+
+### [Part 6: Advanced Techniques](/posts/data-science-steps-to-follow-part06)
+- Advanced modeling strategies
+- Ensemble methods
+- Model optimization
+- Production deployment considerations
+
+## Prerequisites
+
+To get the most out of this series, you should have:
+- Basic Python programming knowledge
+- Understanding of basic statistics
+- Familiarity with pandas and numpy
+- Basic machine learning concepts
+
+## Related Resources
+
+### Deep Learning Foundations
+- [Understanding Matrix Multiplication](/posts/matrix_multiplication_from_fastai_course)
+  Essential mathematical concepts for deep learning
+
+### Tools and Techniques
+- [Using Nougat for Research Papers](/posts/nougat-to-read-scientific-pdf-files)
+  Modern tools for data science research
+
+## Getting Started
+
+Ready to begin? Start with [Part 1: EDA Fundamentals](/posts/data-science-steps-to-follow-part01) to build a strong foundation in data science practices.
+
+## Series Navigation
+
+::: {.callout-note}
+## Quick Links
+- [Series Home](/posts/series/data-science-steps) (You are here)
+- [Part 1: EDA Fundamentals](/posts/data-science-steps-to-follow-part01)
+- [Part 2: Feature Preprocessing](/posts/data-science-steps-to-follow-part02)
+- [Part 3: Anonymized Data](/posts/data-science-steps-to-follow-part03)
+- [Part 4: Text Features](/posts/data-science-steps-to-follow-part04)
+- [Part 5: Image Features](/posts/data-science-steps-to-follow-part05)
+- [Part 6: Advanced Techniques](/posts/data-science-steps-to-follow-part06)
+:::
+
+## Feedback and Questions
+
+Have questions or suggestions? Feel free to:
+- Open an issue on [GitHub](https://github.com/HasanGoni)
+- Connect with me on [Twitter](https://twitter.com/hasangoni)
+- Leave a comment below
+
+## Updates
+
+Subscribe to get notified about new posts and updates to this series! 

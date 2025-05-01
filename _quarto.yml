@@ -1,22 +1,59 @@
 project:
   type: website
+  output-dir: _site
 
 website:
-  title: "Hasan Blog Post"
+  title: "Hasan's Data Science & AI Blog"
   navbar:
+    background: primary
+    search: true
+    left:
+      - text: "Home"
+        file: index.qmd
+      - text: "Series"
+        menu:
+          - text: "Data Science Steps"
+            file: posts/series/data-science-steps.qmd
+          - text: "Computer Vision"
+            file: posts/series/computer-vision-with-pytorch.qmd
+      - text: "Categories"
+        file: categories.qmd
+      - text: "Tags"
+        file: tags.qmd
+      - text: "About"
+        file: about.qmd
     right:
-      - about.qmd
       - icon: github
         href: https://github.com/HasanGoni
       - icon: twitter
-        href: https://twitter.com/hasangoni
-    left:
-      - text: "Blog"
-        href : https://hasangoni.quarto.pub/hasan-blog-post/
+        href: https://twitter.com/yourusername
+
+  sidebar:
+    - title: "Series"
+      style: "docked"
+      contents:
+        - section: "Data Science"
+          contents:
+            - posts/series/data-science-steps.qmd
+            - posts/data-science-steps-to-follow-part01/index.qmd
+            - posts/data-science-steps-to-follow-part02/index.qmd
+            - posts/data-science-steps-to-follow-part03/index.qmd
+            - posts/data-science-steps-to-follow-part04/index.qmd
+            - posts/data-science-steps-to-follow-part05/index.qmd
+            - posts/data-science-steps-to-follow-part06/index.qmd
+        - section: "Computer Vision"
+          contents:
+            - posts/series/computer-vision-with-pytorch.qmd
+
 format:
   html:
     theme: cosmo
     css: styles.css
+    toc: true
+    code-fold: true
+    code-tools: true
+    highlight-style: github
+    include-after-body: _includes/utterances.html
 
 
 

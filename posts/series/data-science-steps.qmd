@@ -1,0 +1,68 @@
+---
+title: "Data Science Steps Series"
+description: "A practical guide to data science following FastAI's top-down learning approach"
+author: "Hasan"
+date: last-modified
+categories: [series, data-science]
+image: "../images/data-science-banner.jpg"
+toc: true
+---
+
+## Series Overview
+
+This series follows FastAI's practical, top-down approach to learning data science. Instead of starting with theory, we'll begin with practical applications and gradually dive deeper into the underlying concepts.
+
+### Learning Philosophy
+
+- **Start with the practical**: We begin with working code and real applications
+- **Spiral learning**: Revisit concepts multiple times with increasing depth
+- **Learn by doing**: Each post includes hands-on notebooks and exercises
+
+### Posts in this Series
+
+1. [Getting Started with Data Science](../data-science-steps-to-follow-part01/index.qmd)
+   - Setting up your environment
+   - Your first end-to-end project
+   
+2. [Data Exploration and Visualization](../data-science-steps-to-follow-part02/index.qmd)
+   - Practical EDA techniques
+   - Creating impactful visualizations
+   
+3. [Feature Engineering and Selection](../data-science-steps-to-follow-part03/index.qmd)
+   - Transforming data for better models
+   - Selecting the most important features
+   
+4. [Model Selection and Training](../data-science-steps-to-follow-part04/index.qmd)
+   - Choosing the right model
+   - Training best practices
+   
+5. [Model Evaluation and Interpretation](../data-science-steps-to-follow-part05/index.qmd)
+   - Understanding model performance
+   - Interpreting model decisions
+   
+6. [Deployment and Monitoring](../data-science-steps-to-follow-part06/index.qmd)
+   - Taking models to production
+   - Monitoring and maintaining models
+
+## Prerequisites
+
+- Basic Python knowledge
+- Familiarity with Jupyter notebooks
+- Understanding of basic statistics (we'll review as needed)
+
+## Tools We'll Use
+
+- PyTorch for deep learning
+- Pandas for data manipulation
+- Scikit-learn for traditional ML
+- FastAI for rapid prototyping
+
+## Getting Help
+
+- Use the comments section below each post
+- Check the [GitHub repository](https://github.com/yourusername/quarto_blog_hasan) for code
+- Join our discussion forum (coming soon)
+
+:::{.callout-note}
+This series is continuously updated with new content and improvements based on reader feedback.
+::: 

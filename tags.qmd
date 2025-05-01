@@ -1,0 +1,30 @@
+---
+title: "Tags"
+listing:
+  contents: posts
+  sort: "date desc"
+  type: table
+  categories: true
+  sort-ui: true
+  filter-ui: true
+  fields: [date, title, categories, tags]
+  field-display-names:
+    title: "Post"
+    categories: "Category"
+    tags: "Tags"
+page-layout: full
+title-block-banner: true
+---
+
+# Browse by Tag
+
+Welcome to the tag index! Here you can find all posts organized by their tags. Use the search and filter options to find specific content.
+
+## Popular Tags
+
+::: {#tag-cloud}
+:::
+
+## All Posts
+
+Below is a searchable table of all posts with their associated tags: 

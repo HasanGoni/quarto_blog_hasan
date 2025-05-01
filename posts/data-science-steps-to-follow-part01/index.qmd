@@ -1,93 +1,132 @@
 ---
-title: Data Science Steps to Follow -01
-subtitle: Explanatory data analysis steps 
+title: "Data Science Steps to Follow - Part 1"
+subtitle: "Exploratory Data Analysis Fundamentals" 
 date: "2022-11-19"
-categories: [code, tabular, analysis]
+categories: [code, analysis, tutorial]
 author: "Hasan Goni"
-
-listing:
-  sort: "date desc"
-  contents: "posts"
-  sort-ui: false
-  filter-ui: false
-  categories: true
-   
-page-layout: full
 image: "image.jpg"
+toc: true
+series:
+  name: "Data Science Steps"
+  number: 1
 ---
 
+# Series Navigation
 
-# Explanatory Data Analysis
+::: {.callout-note}
+## Data Science Steps Series
+This is Part 1 of a 6-part series on data science fundamentals:
 
-* This is a summary of the course [How to win a data science competition: Learn from top Kagglers](https://www.coursera.org/learn/competitive-data-science). The course is available on coursera. The course is taught by Yandex and MIPT. This is my note taken from that course.
+1. **Part 1: EDA Fundamentals** (You are here)
+2. [Part 2: Feature Preprocessing and Generation](/posts/data-science-steps-to-follow-part02)
+3. [Part 3: Handling Anonymized Data](/posts/data-science-steps-to-follow-part03)
+4. [Part 4: Text Feature Extraction](/posts/data-science-steps-to-follow-part04)
+5. [Part 5: Image Feature Extraction](/posts/data-science-steps-to-follow-part05)
+6. [Part 6: Advanced Techniques](/posts/data-science-steps-to-follow-part06)
+:::
 
-* As the summary seems a little bit long. So I tried to convert it different parts. This is introduction part. In this part I will try to explain what is EDA and how should one proceed with EDA in a project.
+# Exploratory Data Analysis (EDA)
 
-  * [Feature preprocessing and generation](https://Hasangoni.github.io/2023/11/19/Feature_preprocessing_and_generation.html)
-  * [Exploring anonymized data](https://Hasangoni.github.io/2023/11/19/Exploring_anonymized_data.html)
-  * [Feature extraction from text](https://Hasangoni.github.io/2023/11/19/Feature_extraction_from_text.html)
-  * [Feature extraction from images](https://Hasangoni.github.io/2023/11/19/Feature_extraction_images.html)
+This guide is based on the excellent course [How to Win a Data Science Competition: Learn from Top Kagglers](https://www.coursera.org/learn/competitive-data-science) by Yandex and MIPT. I've organized these notes to help fellow data scientists master the art of EDA.
 
-# Explantory data analysis
+## What is EDA?
 
-2. What are the most important things we need to pay attention to when we are doing exploratory data analysis?
-3. This knowledge help to create a good model
+EDA is the critical first step in any data science project. It helps us:
 
-## What is EDA
+- Understand the data deeply
+- Build intuition about patterns and relationships
+- Generate hypotheses for feature engineering
+- Find insights that inform modeling decisions
 
-* Understand the data
-* Build intuition about the data
-* Generatge hypothesis of possible new features
-* Find some insights about the data
+## The Power of Visualization
 
-## Visualization
+One of the most powerful EDA tools is visualization. Let's look at a fascinating example from a Kaggle competition:
 
-* One EDA tool is visualization -> see the patterns-> what are these patterns -> why we see them
-* e.g. There was a competition in kaggle, where you just don't need anaything, if you just understand it very well
-  * Goal of the competition: whether a person will use the promo, or not
-  * Feature of the person are the inputs, e.g. age, sex, marital status, etc. and there are features which described the promo.
-  * But two intersting features were
+::: {.callout-tip}
+## Real-World Example
+In a promotion prediction competition, simple visualization revealed:
+- Two key features: promos sent and promos used
+- A direct relationship between their difference and the target
+- This insight led to 81% accuracy without complex modeling!
+:::
 
-    * Number of promos sent by the person before
-    * NUmber of promos the person has used before
-  * If we sort the rows based on number of promos sent by the person before and we calcualte the difference between number of promos used by the person. Most of the time this difference is equal to target values.
-  * Although it is not given what to do with the Nan values, but we can see that without doing modeling we can get 81% accuracy. It is only possible after doing EDA.
-  * Actually this is very good example of data leakage, done by the person who created the dataset.
+```python
+# Example visualization code
+import pandas as pd
+import seaborn as sns
+import matplotlib.pyplot as plt
 
-## Building intuition
+def plot_promo_relationship(df):
+    plt.figure(figsize=(10, 6))
+    plt.scatter('promos_sent', 'promos_used', data=df)
+    plt.xlabel('Number of Promos Sent')
+    plt.ylabel('Number of Promos Used')
+    plt.title('Promo Usage Pattern')
+    plt.show()
+```
 
+## Building Intuition
 
-2. Getting domain knowledge 
-3. Checking the data is intuitive
-4. Understand how data is generated
+### 1. Domain Knowledge Acquisition
 
-### 2. Getting domain knowledge
+Before diving into analysis, focus on:
 
-* What is our goal?
-* What data we have?
-* how people actually tackle this kind of problem to build this problem to build baseline?
+- Understanding the business goal
+- Researching similar problems
+- Learning industry-specific metrics
+- Reading relevant documentation
 
+### 2. Data Validation
 
-* So may be first goal is to read wikipedia, do google search, read some blogs, etc. to get some domain knowledge.
-* e.g. We need to predict advisers's cost
+::: {.callout-important}
+## Key Validation Checks
+- Value ranges (e.g., age between 0-120)
+- Logical relationships (clicks ≤ impressions)
+- Missing value patterns
+- Outliers and anomalies
+:::
 
-  * First to understand this is about web adverstisemnt. 
-  * By seeing column names we can understand, that data is exported from Google AdWords system. 
-  * After reading several articles we get the meaning of the columns.
+```python
+def validate_data(df):
+    """Basic data validation checks"""
+    issues = []
+    
+    # Age check
+    if df['age'].max() > 120:
+        issues.append("Found age > 120")
+        
+    # Click validation
+    if any(df['clicks'] > df['impressions']):
+        issues.append("Found clicks > impressions")
+    
+    return issues
+```
 
-### 3. Checking the data is intuitive
- 
-* After getting the domain knowledge, we can check the data is intuitive or not. Whether it agrees with our domain knowledge or not.
-  * e.g. if this is a age data, we can be sure that the age is between 1 and 100. If it is not, then we need to check it. If we get a value 336, may be it's a typo and it should be 33.6. If it is not, then we need to check it. 
-  * The value of Clicks columns should be less or equal to Impressions. If it is not, then we need to check it. We need to check whethe it is a error or some kind of logic there. 
-  * > **Note**: Fastai founder Jeremy says there is outlier in statistics, but in case of data science, if there is some anomaly, we need to check it and go deep down to understand it.
-  * We also createa a new feature with incorrect, whether 1 or 1, based on the above conditions.
+### 3. Understanding Data Generation
 
-### 4. Understand how data is generated
+Key considerations:
 
-* Algorithm for sampling object from database.
-* Random sample, or over sampling, or under sampling
-* Validation scheme can only ge genreated if we understand how data is generated 
-* If theere is a diffrence between train and test, then we need to check it, try to understand why it is done and whether to gain any intuition about it. 
+- Sampling methodology
+- Train/test split rationale
+- Time-based patterns
+- Data collection process
 
-__Next post can be found [here](https://Hasangoni.github.io/2023/11/19/Feature_preprocessing_and_generation.html)__
+::: {.callout-note}
+## Jeremy Howard's Insight
+"In data science, there are no outliers - only opportunities to understand your data better."
+:::
+
+## Related Resources
+
+- [Understanding Matrix Multiplication](/posts/matrix_multiplication_from_fastai_course) - Essential math for data science
+- [Using Nougat for Research Papers](/posts/nougat-to-read-scientific-pdf-files) - Tool for data science research
+
+## Next Steps
+
+Continue to [Part 2: Feature Preprocessing and Generation](/posts/data-science-steps-to-follow-part02), where we'll explore how to transform raw data into meaningful features.
+
+## References
+
+1. [Coursera: How to Win a Data Science Competition](https://www.coursera.org/learn/competitive-data-science)
+2. [Fast.ai: Practical Deep Learning](https://course.fast.ai/)
+3. [Python Data Science Handbook](https://jakevdp.github.io/PythonDataScienceHandbook/)
