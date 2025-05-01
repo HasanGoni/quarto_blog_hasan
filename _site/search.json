@@ -151,7 +151,7 @@
     "href": "posts/post-with-code/index.html",
     "title": "Post With Code",
     "section": "",
-    "text": "This is a post with executable code.\n\n\n\n\n\nReuseCC BY-NC-SA 4.0CitationBibTeX citation:@online{malloc2023,\n  author = {Malloc, Harlow},\n  title = {Post {With} {Code}},\n  date = {2023-10-20},\n  langid = {en}\n}\nFor attribution, please cite this work as:\nMalloc, Harlow. 2023. “Post With Code.” October 20, 2023."
+    "text": "This is a post with executable code.\n\n\n\n\n\nReuseCC BY-NC-SA 4.0CitationBibTeX citation:@online{malloc2023,\n  author = {Malloc, Harlow},\n  title = {Post {With} {Code}},\n  date = {2023-10-20},\n  url = {https://hasangoni.quarto.pub/hasan-blog-post/posts/post-with-code},\n  langid = {en}\n}\nFor attribution, please cite this work as:\nMalloc, Harlow. 2023. “Post With Code.” October 20, 2023.\nhttps://hasangoni.quarto.pub/hasan-blog-post/posts/post-with-code."
   },
   {
     "objectID": "posts/data-science-steps-to-follow-part04/index.html",
@@ -249,7 +249,7 @@
     "href": "posts/data-science-steps-to-follow-part05/index.html",
     "title": "Data Science Steps to Follow -05",
     "section": "",
-    "text": "1 Introduction\n\nThis is a part of the series. First, Second, Third and Fourth parts are connected in link. In this part I will try to write about EDA, when the data is image type\n\n\n\n2 Images Vector extraction\n\nSimilar to text vector extraction, we can extract features from images\nBesides getting outputs from last layer, we also can get outputs from intermediate layers, we call them descriptors.\nDescriptors from later layers are better to solve task similar to one network was trained on.\nIn contraray descriptors from earlier layers has some task independent features.\nImage net descriptors from last layer can be used for like car classification, but for medical image task earlier layers descriptos may be a better choice or train from scratch.\nFine tuning is a good option to get better results.\n\ne.g. Data Science game 2016. The task was to classify roofs into groups. Log Loss was the metric. Competitors has 8000 images. Fine tuning with image net helps to get better results.\n\nAugmentations:\n\nCreate different versions of same image, may be rotation, random crop, etc.\n\nBe careful with validation and don’t overfit.\n\n\n\n\n\n\n\n\n\n\n\n\n\nNo matching items\n\nReuseCC BY-NC-SA 4.0CitationBibTeX citation:@online{goni2022,\n  author = {Goni, Hasan},\n  title = {Data {Science} {Steps} to {Follow} -05},\n  date = {2022-11-22},\n  langid = {en}\n}\nFor attribution, please cite this work as:\nGoni, Hasan. 2022. “Data Science Steps to Follow -05.”\nNovember 22, 2022."
+    "text": "1 Introduction\n\nThis is a part of the series. First, Second, Third and Fourth parts are connected in link. In this part I will try to write about EDA, when the data is image type\n\n\n\n2 Images Vector extraction\n\nSimilar to text vector extraction, we can extract features from images\nBesides getting outputs from last layer, we also can get outputs from intermediate layers, we call them descriptors.\nDescriptors from later layers are better to solve task similar to one network was trained on.\nIn contraray descriptors from earlier layers has some task independent features.\nImage net descriptors from last layer can be used for like car classification, but for medical image task earlier layers descriptos may be a better choice or train from scratch.\nFine tuning is a good option to get better results.\n\ne.g. Data Science game 2016. The task was to classify roofs into groups. Log Loss was the metric. Competitors has 8000 images. Fine tuning with image net helps to get better results.\n\nAugmentations:\n\nCreate different versions of same image, may be rotation, random crop, etc.\n\nBe careful with validation and don’t overfit.\n\n\n\n\n\n\n\n\n\n\n\n\n\nNo matching items\n\nReuseCC BY-NC-SA 4.0CitationBibTeX citation:@online{goni2022,\n  author = {Goni, Hasan},\n  title = {Data {Science} {Steps} to {Follow} -05},\n  date = {2022-11-22},\n  url = {https://hasangoni.quarto.pub/hasan-blog-post/posts/data-science-steps-to-follow-part05},\n  langid = {en}\n}\nFor attribution, please cite this work as:\nGoni, Hasan. 2022. “Data Science Steps to Follow -05.”\nNovember 22, 2022. https://hasangoni.quarto.pub/hasan-blog-post/posts/data-science-steps-to-follow-part05."
   },
   {
     "objectID": "posts/nougat-to-read-scientific-pdf-files/index.html",
@@ -368,7 +368,7 @@
     "href": "posts/series/computer-vision-with-pytorch.html",
     "title": "",
     "section": "",
-    "text": "Code\n\n\n\n\n\n\n\n\nReuseCC BY-NC-SA 4.0CitationBibTeX citation:@online{untitled,\n  author = {, Hasan},\n  langid = {en}\n}\nFor attribution, please cite this work as:\nHasan. n.d."
+    "text": "Code\n\n\n\n\n\n\n\n\nReuseCC BY-NC-SA 4.0CitationBibTeX citation:@online{untitled,\n  author = {, Hasan},\n  url = {https://hasangoni.quarto.pub/hasan-blog-post/posts/series/computer-vision-with-pytorch.html},\n  langid = {en}\n}\nFor attribution, please cite this work as:\nHasan. n.d. https://hasangoni.quarto.pub/hasan-blog-post/posts/series/computer-vision-with-pytorch.html."
   },
   {
     "objectID": "posts/data-science-steps-to-follow-part06/index.html",
