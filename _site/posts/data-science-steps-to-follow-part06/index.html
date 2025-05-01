@@ -8,8 +8,9 @@
 
 <meta name="author" content="Hasan Goni">
 <meta name="dcterms.date" content="2022-11-22">
+<meta name="description" content="Learn about different validation strategies and how to properly evaluate your models">
 
-<title>Hasan Blog Post - Data Science Steps to Follow -06</title>
+<title>Hasan’s Data Science &amp; AI Blog - Data Science Steps to Follow - Part 6</title>
 <style>
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
@@ -66,8 +67,6 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <script src="../../site_libs/quarto-search/fuse.min.js"></script>
 <script src="../../site_libs/quarto-search/quarto-search.js"></script>
 <meta name="quarto:offset" content="../../">
-<script src="../../site_libs/quarto-listing/list.min.js"></script>
-<script src="../../site_libs/quarto-listing/quarto-listing.js"></script>
 <script src="../../site_libs/quarto-html/quarto.js"></script>
 <script src="../../site_libs/quarto-html/popper.min.js"></script>
 <script src="../../site_libs/quarto-html/tippy.umd.min.js"></script>
@@ -97,43 +96,22 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
     "search-label": "Search"
   }
 }</script>
-<script>
+<style>html{ scroll-behavior: smooth; }</style>
+<script async="" src="https://hypothes.is/embed.js"></script>
 
-  window.document.addEventListener("DOMContentLoaded", function (_event) {
-    const listingTargetEl = window.document.querySelector('#listing-listing .list');
-    if (!listingTargetEl) {
-      // No listing discovered, do not attach.
-      return; 
-    }
-
-    const options = {
-      valueNames: ['listing-categories',{ data: ['index'] },{ data: ['categories'] },{ data: ['listing-date-sort'] },{ data: ['listing-file-modified-sort'] }],
-      
-      searchColumns: ["listing-categories"],
-    };
-
-    window['quarto-listings'] = window['quarto-listings'] || {};
-    window['quarto-listings']['listing-listing'] = new List('listing-listing', options);
-
-    if (window['quarto-listing-loaded']) {
-      window['quarto-listing-loaded']();
-    }
-  });
-
-  window.addEventListener('hashchange',() => {
-    if (window['quarto-listing-loaded']) {
-      window['quarto-listing-loaded']();
-    }
-  })
-  </script>
-
-  <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
-  <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js" type="text/javascript"></script>
 
 <link rel="stylesheet" href="../../styles.css">
+<meta property="og:title" content="Hasan’s Data Science &amp; AI Blog - Data Science Steps to Follow - Part 6">
+<meta property="og:description" content="Learn about different validation strategies and how to properly evaluate your models">
+<meta property="og:image" content="image.jpg">
+<meta property="og:site-name" content="Hasan's Data Science &amp; AI Blog">
+<meta name="twitter:title" content="Hasan’s Data Science &amp; AI Blog - Data Science Steps to Follow - Part 6">
+<meta name="twitter:description" content="Learn about different validation strategies and how to properly evaluate your models">
+<meta name="twitter:image" content="image.jpg">
+<meta name="twitter:card" content="summary_large_image">
 </head>
 
-<body class="nav-fixed">
+<body class="nav-sidebar docked nav-fixed">
 
 <div id="quarto-search-results"></div>
   <header id="quarto-header" class="headroom fixed-top">
@@ -141,7 +119,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
       <div class="navbar-container container-fluid">
       <div class="navbar-brand-container">
     <a class="navbar-brand" href="../../index.html">
-    <span class="navbar-title">Hasan Blog Post</span>
+    <span class="navbar-title">Hasan’s Data Science &amp; AI Blog</span>
     </a>
   </div>
             <div id="quarto-search" class="" title="Search"></div>
@@ -151,22 +129,45 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
           <div class="collapse navbar-collapse" id="navbarCollapse">
             <ul class="navbar-nav navbar-nav-scroll me-auto">
   <li class="nav-item">
-    <a class="nav-link" href="https://hasangoni.quarto.pub/hasan-blog-post/" rel="" target="">
- <span class="menu-text">Blog</span></a>
+    <a class="nav-link" href="../../index.html" rel="" target="">
+ <span class="menu-text">Home</span></a>
   </li>  
-</ul>
-            <ul class="navbar-nav navbar-nav-scroll ms-auto">
+  <li class="nav-item dropdown ">
+    <a class="nav-link dropdown-toggle" href="#" id="nav-menu-series" role="button" data-bs-toggle="dropdown" aria-expanded="false" rel="" target="">
+ <span class="menu-text">Series</span>
+    </a>
+    <ul class="dropdown-menu" aria-labelledby="nav-menu-series">    
+        <li>
+    <a class="dropdown-item" href="../../posts/series/data-science-steps.html" rel="" target="">
+ <span class="dropdown-text">Data Science Steps</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="../../posts/series/computer-vision-with-pytorch.html" rel="" target="">
+ <span class="dropdown-text">Computer Vision</span></a>
+  </li>  
+    </ul>
+  </li>
+  <li class="nav-item">
+    <a class="nav-link" href="../../categories.html" rel="" target="">
+ <span class="menu-text">Categories</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="../../tags.html" rel="" target="">
+ <span class="menu-text">Tags</span></a>
+  </li>  
   <li class="nav-item">
     <a class="nav-link" href="../../about.html" rel="" target="">
  <span class="menu-text">About</span></a>
   </li>  
+</ul>
+            <ul class="navbar-nav navbar-nav-scroll ms-auto">
   <li class="nav-item compact">
     <a class="nav-link" href="https://github.com/HasanGoni" rel="" target=""><i class="bi bi-github" role="img">
 </i> 
  <span class="menu-text"></span></a>
   </li>  
   <li class="nav-item compact">
-    <a class="nav-link" href="https://twitter.com/hasangoni" rel="" target=""><i class="bi bi-twitter" role="img">
+    <a class="nav-link" href="https://twitter.com/yourusername" rel="" target=""><i class="bi bi-twitter" role="img">
 </i> 
  <span class="menu-text"></span></a>
   </li>  
@@ -176,17 +177,32 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
           </div> <!-- /navcollapse -->
       </div> <!-- /container-fluid -->
     </nav>
+  <nav class="quarto-secondary-nav">
+    <div class="container-fluid d-flex">
+      <button type="button" class="quarto-btn-toggle btn" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar,#quarto-sidebar-glass" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+        <i class="bi bi-layout-text-sidebar-reverse"></i>
+      </button>
+      <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../../posts/series/data-science-steps.html">Data Science</a></li><li class="breadcrumb-item"><a href="../../posts/data-science-steps-to-follow-part06/index.html">Data Science Steps to Follow - Part 6</a></li></ol></nav>
+      <a class="flex-grow-1" role="button" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar,#quarto-sidebar-glass" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
+      </a>
+    </div>
+  </nav>
 </header>
 <!-- content -->
 <header id="title-block-header" class="quarto-title-block default page-columns page-full">
   <div class="quarto-title-banner page-columns page-full">
-    <div class="quarto-title column-page-left">
-      <h1 class="title">Data Science Steps to Follow -06</h1>
-            <p class="subtitle lead">Validation Strategy</p>
-                                <div class="quarto-categories">
-                <div class="quarto-category">code</div>
-                <div class="quarto-category">tabular</div>
-                <div class="quarto-category">analysis</div>
+    <div class="quarto-title column-body">
+      <div class="quarto-title-block"><div><h1 class="title">Data Science Steps to Follow - Part 6</h1><button type="button" class="btn code-tools-button" id="quarto-code-tools-source"><i class="bi"></i> Code</button></div></div>
+            <p class="subtitle lead">Validation Strategy and Model Evaluation</p>
+                  <div>
+        <div class="description">
+          Learn about different validation strategies and how to properly evaluate your models
+        </div>
+      </div>
+                          <div class="quarto-categories">
+                <div class="quarto-category">data-science</div>
+                <div class="quarto-category">machine-learning</div>
+                <div class="quarto-category">validation</div>
               </div>
                   </div>
   </div>
@@ -208,300 +224,278 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
       </div>
     </div>
     
+      <div>
+      <div class="quarto-title-meta-heading">Modified</div>
+      <div class="quarto-title-meta-contents">
+        <p class="date-modified">May 1, 2025</p>
+      </div>
+    </div>
       
     </div>
     
   
-  </header><div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-full page-navbar">
+  </header><div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article page-navbar">
 <!-- sidebar -->
+  <nav id="quarto-sidebar" class="sidebar collapse collapse-horizontal sidebar-navigation docked overflow-auto">
+    <div class="sidebar-menu-container"> 
+    <ul class="list-unstyled mt-1">
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-1" aria-expanded="true">
+ <span class="menu-text">Data Science</span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-1" aria-expanded="true" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-1" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../posts/series/data-science-steps.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Data Science Steps Series</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../posts/data-science-steps-to-follow-part01/index.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Data Science Steps to Follow - Part 1</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../posts/data-science-steps-to-follow-part02/index.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Data Science Steps to Follow - Part 2</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../posts/data-science-steps-to-follow-part03/index.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Data Science Steps to Follow -03</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../posts/data-science-steps-to-follow-part04/index.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Data Science Steps to Follow -04</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../posts/data-science-steps-to-follow-part05/index.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Data Science Steps to Follow -05</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../posts/data-science-steps-to-follow-part06/index.html" class="sidebar-item-text sidebar-link active">
+ <span class="menu-text">Data Science Steps to Follow - Part 6</span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-2" aria-expanded="true">
+ <span class="menu-text">Computer Vision</span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-2" aria-expanded="true" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-2" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../posts/series/computer-vision-with-pytorch.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">computer-vision-with-pytorch.html</span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+    </ul>
+    </div>
+</nav>
+<div id="quarto-sidebar-glass" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar,#quarto-sidebar-glass"></div>
 <!-- margin-sidebar -->
     <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
-        
-    <h5 class="quarto-listing-category-title">Categories</h5><div class="quarto-listing-category category-default"><div class="category" data-category="">All <span class="quarto-category-count">(0)</span></div></div></div>
+        <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">On this page</h2>
+   
+  <ul>
+  <li><a href="#validation-strategy-and-model-evaluation" id="toc-validation-strategy-and-model-evaluation" class="nav-link active" data-scroll-target="#validation-strategy-and-model-evaluation"><span class="header-section-number">1</span> Validation Strategy and Model Evaluation</a>
+  <ul class="collapse">
+  <li><a href="#validation-strategies" id="toc-validation-strategies" class="nav-link" data-scroll-target="#validation-strategies"><span class="header-section-number">1.1</span> Validation Strategies</a>
+  <ul class="collapse">
+  <li><a href="#holdout-validation" id="toc-holdout-validation" class="nav-link" data-scroll-target="#holdout-validation"><span class="header-section-number">1.1.1</span> Holdout Validation</a></li>
+  <li><a href="#k-fold-cross-validation" id="toc-k-fold-cross-validation" class="nav-link" data-scroll-target="#k-fold-cross-validation"><span class="header-section-number">1.1.2</span> K-Fold Cross Validation</a></li>
+  <li><a href="#leave-one-out-validation" id="toc-leave-one-out-validation" class="nav-link" data-scroll-target="#leave-one-out-validation"><span class="header-section-number">1.1.3</span> Leave-One-Out Validation</a></li>
+  </ul></li>
+  <li><a href="#common-validation-problems" id="toc-common-validation-problems" class="nav-link" data-scroll-target="#common-validation-problems"><span class="header-section-number">1.2</span> Common Validation Problems</a>
+  <ul class="collapse">
+  <li><a href="#data-leakage" id="toc-data-leakage" class="nav-link" data-scroll-target="#data-leakage"><span class="header-section-number">1.2.1</span> 1. Data Leakage</a></li>
+  <li><a href="#distribution-mismatch" id="toc-distribution-mismatch" class="nav-link" data-scroll-target="#distribution-mismatch"><span class="header-section-number">1.2.2</span> 2. Distribution Mismatch</a></li>
+  <li><a href="#sample-size-issues" id="toc-sample-size-issues" class="nav-link" data-scroll-target="#sample-size-issues"><span class="header-section-number">1.2.3</span> 3. Sample Size Issues</a></li>
+  </ul></li>
+  <li><a href="#best-practices" id="toc-best-practices" class="nav-link" data-scroll-target="#best-practices"><span class="header-section-number">1.3</span> Best Practices</a></li>
+  <li><a href="#implementation-examples" id="toc-implementation-examples" class="nav-link" data-scroll-target="#implementation-examples"><span class="header-section-number">1.4</span> Implementation Examples</a></li>
+  <li><a href="#next-steps" id="toc-next-steps" class="nav-link" data-scroll-target="#next-steps"><span class="header-section-number">1.5</span> Next Steps</a></li>
+  <li><a href="#references" id="toc-references" class="nav-link" data-scroll-target="#references"><span class="header-section-number">1.6</span> References</a></li>
+  </ul></li>
+  </ul>
+</nav>
+    </div>
 <!-- main -->
-<main class="content quarto-banner-title-block column-page-left" id="quarto-document-content">
+<main class="content quarto-banner-title-block" id="quarto-document-content">
 
 
 
 
-<section id="validation-strategy-and-its-related-problems" class="level1">
-<h1>Validation strategy and its related problems</h1>
-<ul>
-<li>This is a summary of the course <a href="https://www.coursera.org/learn/competitive-data-science">How to win a data science competition: Learn from top Kagglers</a>. The course is available on coursera. The course is taught by Yandex and MIPT. This is my note taken from that course.</li>
-</ul>
+<section id="validation-strategy-and-model-evaluation" class="level1" data-number="1">
+<h1 data-number="1"><span class="header-section-number">1</span> Validation Strategy and Model Evaluation</h1>
+<p>This post covers essential validation strategies and model evaluation techniques in data science. We’ll explore different approaches to ensure your models generalize well to unseen data.</p>
+<section id="validation-strategies" class="level2" data-number="1.1">
+<h2 data-number="1.1" class="anchored" data-anchor-id="validation-strategies"><span class="header-section-number">1.1</span> Validation Strategies</h2>
+<section id="holdout-validation" class="level3" data-number="1.1.1">
+<h3 data-number="1.1.1" class="anchored" data-anchor-id="holdout-validation"><span class="header-section-number">1.1.1</span> Holdout Validation</h3>
+<p>The simplest form of validation where we split our data into training and validation sets:</p>
+<div class="sourceCode" id="cb1"><pre class="sourceCode numberSource mermaid number-lines code-with-copy"><code class="sourceCode"><span id="cb1-1"><a href="#cb1-1"></a>flowchart TB</span>
+<span id="cb1-2"><a href="#cb1-2"></a>    A[data] --&gt; B[Validation data]</span>
+<span id="cb1-3"><a href="#cb1-3"></a>    A[data] --&gt; C[Training data]</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>This approach is good when: - You have sufficient data - The data distribution is relatively uniform - Time-based dependencies are not critical</p>
 </section>
-<section id="validation-and-overfitting" class="level1">
-<h1>Validation and overfitting</h1>
-<ul>
-<li><p>Validation is one of the most important things to be done, becuase we need to select our best model based on validation data. Next we will discuss following topics on validation and overfitting.</p>
-<ul>
-<li>Concept of validation</li>
-<li>number of splits that should be done to establish stable validation score</li>
-<li>most frequent ways to generate train-test split</li>
-<li>most often validation problem</li>
-</ul></li>
-</ul>
-<section id="concept-of-validation" class="level2">
-<h2 class="anchored" data-anchor-id="concept-of-validation">Concept of validation</h2>
-<ul>
-<li><p>We want to make sure, whether model is performing well on unseen data. Very easy way to understand that, e.g.&nbsp;you went to class for taking a subject, but you didn’t understand the topics well. So you just memorized it without understanding its detail. During exam the professor asked you similar question but in a different way. So you could not answer it, because you just did cramming. In case of validaiton, if model did not learn the function well, then with unseen data, it will perform bad.</p></li>
-<li><p>Normally we have some training data. And we have some test data, which we never seen during training and also we don’t have label for those data.</p></li>
-<li><p>Then we split our given training data into two parts.</p>
-<ul>
-<li>One part is used for training the model.</li>
-<li>Other part is used for validation. <strong>Be careful here, there is a possibility we sometime overfit on validation data, so we need to be very careful here.</strong></li>
-</ul></li>
-</ul>
-<section id="overfitting-and-underfitting" class="level3">
-<h3 class="anchored" data-anchor-id="overfitting-and-underfitting">Overfitting and underfitting</h3>
-<ul>
-<li>Underfitting: If model is not able to learn the function well, then it is called underfitting. In this case, model will perform bad on both training and validation data.</li>
-<li>Overfitting: If we use a very complex function, then it is called overfitting. In this case, model will perform good on training data, but it will perform bad on validation data.</li>
-<li>Following figure shows the concept of underfitting and overfitting.</li>
-</ul>
-<div class="quarto-figure quarto-figure-center">
-<figure class="figure">
-<p><img src="validation_and_overfitting_images/overfitting_and_underfitting.png" class="img-fluid figure-img"></p>
-<figcaption class="figure-caption">overfitting</figcaption>
-</figure>
-</div>
-<ul>
-<li>Another useful way to understand overfitting and underfitting is to use following figure.</li>
-</ul>
-<div class="quarto-figure quarto-figure-center">
-<figure class="figure">
-<p><img src="validation_and_overfitting_images/model_complexity.png" class="img-fluid figure-img"></p>
-<figcaption class="figure-caption">overfitting</figcaption>
-</figure>
-</div>
+<section id="k-fold-cross-validation" class="level3" data-number="1.1.2">
+<h3 data-number="1.1.2" class="anchored" data-anchor-id="k-fold-cross-validation"><span class="header-section-number">1.1.2</span> K-Fold Cross Validation</h3>
+<p>A more robust approach that uses multiple training-validation splits:</p>
+<div class="sourceCode" id="cb2"><pre class="sourceCode numberSource mermaid number-lines code-with-copy"><code class="sourceCode"><span id="cb2-1"><a href="#cb2-1"></a>flowchart TB</span>
+<span id="cb2-2"><a href="#cb2-2"></a>    A[data] --&gt; B[Fold 1]</span>
+<span id="cb2-3"><a href="#cb2-3"></a>    B[Fold 1] --&gt; C[Training data]</span>
+<span id="cb2-4"><a href="#cb2-4"></a>    B[Fold 1] --&gt; D[Validation data]</span>
+<span id="cb2-5"><a href="#cb2-5"></a></span>
+<span id="cb2-6"><a href="#cb2-6"></a>    A[data] --&gt; E[Fold 2]</span>
+<span id="cb2-7"><a href="#cb2-7"></a>    E[Fold 2] --&gt; F[Training data]</span>
+<span id="cb2-8"><a href="#cb2-8"></a>    E[Fold 2] --&gt; G[Validation data]</span>
+<span id="cb2-9"><a href="#cb2-9"></a></span>
+<span id="cb2-10"><a href="#cb2-10"></a>    A[data] --&gt; H[Fold 3]</span>
+<span id="cb2-11"><a href="#cb2-11"></a>    H[Fold 3] --&gt; I[Training data]</span>
+<span id="cb2-12"><a href="#cb2-12"></a>    H[Fold 3] --&gt; J[Validation data]</span>
+<span id="cb2-13"><a href="#cb2-13"></a></span>
+<span id="cb2-14"><a href="#cb2-14"></a>    C(Training data) --&gt; K[Average]</span>
+<span id="cb2-15"><a href="#cb2-15"></a>    D(Training data) --&gt; K[Average]</span>
+<span id="cb2-16"><a href="#cb2-16"></a>    F(Training data) --&gt; K[Average]</span>
+<span id="cb2-17"><a href="#cb2-17"></a>    G(Training data) --&gt; K[Average]</span>
+<span id="cb2-18"><a href="#cb2-18"></a>    I(Training data) --&gt; K[Average]</span>
+<span id="cb2-19"><a href="#cb2-19"></a>    J(Training data) --&gt; K[Average]</span>
+<span id="cb2-20"><a href="#cb2-20"></a></span>
+<span id="cb2-21"><a href="#cb2-21"></a>    K(Average) --&gt; L[Final model performance]</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</section>
+<section id="leave-one-out-validation" class="level3" data-number="1.1.3">
+<h3 data-number="1.1.3" class="anchored" data-anchor-id="leave-one-out-validation"><span class="header-section-number">1.1.3</span> Leave-One-Out Validation</h3>
+<p>Best for very small datasets where we need to maximize training data usage.</p>
 </section>
 </section>
-<section id="validation-strategies" class="level2">
-<h2 class="anchored" data-anchor-id="validation-strategies">Validation Strategies</h2>
+<section id="common-validation-problems" class="level2" data-number="1.2">
+<h2 data-number="1.2" class="anchored" data-anchor-id="common-validation-problems"><span class="header-section-number">1.2</span> Common Validation Problems</h2>
+<section id="data-leakage" class="level3" data-number="1.2.1">
+<h3 data-number="1.2.1" class="anchored" data-anchor-id="data-leakage"><span class="header-section-number">1.2.1</span> 1. Data Leakage</h3>
 <ul>
-<li><p>Common validation types are</p>
-<ul>
-<li>Holdout validation</li>
-<li>K-fold validation</li>
-<li>Leave-one-out validation</li>
-</ul></li>
-</ul>
-<section id="holdout-validation" class="level3">
-<h3 class="anchored" data-anchor-id="holdout-validation">Holdout validation</h3>
-<pre class="mermaid"><code>flowchart TB
-    A[data] --&gt; B[Validation data]
-    A[data] --&gt; C[Training data]</code></pre>
-<ul>
-<li>So here one sample can go to either validation data or training data. So we can have different validation data and training data. So we can have different validation score. After selecting best model, we can select all the data and train model will all data.</li>
-</ul>
-<div class="sourceCode" id="cb2"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> sklearn.model_selection <span class="im">import</span> ShuffleSplit</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<ul>
-<li>It is a good choice when we have enough data for validation.</li>
+<li>Target leakage</li>
+<li>Train-test contamination</li>
+<li>Feature leakage</li>
 </ul>
 </section>
-<section id="k-fold-validation" class="level3">
-<h3 class="anchored" data-anchor-id="k-fold-validation">K-fold validation</h3>
+<section id="distribution-mismatch" class="level3" data-number="1.2.2">
+<h3 data-number="1.2.2" class="anchored" data-anchor-id="distribution-mismatch"><span class="header-section-number">1.2.2</span> 2. Distribution Mismatch</h3>
 <ul>
-<li>K-fold is actually repeated holdout validation. Split the data in K folds.</li>
-<li>Iterate though each fold: retrain the model on all folds except current fold, predict for the current fold.</li>
-<li>Use the predictions to calculate quality on each fold. Find such hyper-parameters, that quality on each fold is maximized. You can also estimate mean and variance of the loss. This is very helpful in order to understand significance of improvement.</li>
-</ul>
-<pre class="mermaid"><code>flowchart TB
-    A[data] --&gt; B[Fold 1]
-    B[Fold 1] --&gt; C[Training data]
-    B[Fold 1] --&gt; D[Validation data]
-
-    A[data] --&gt; E[Fold 2]
-    E[Fold 2] --&gt; F[Training data]
-    E[Fold 2] --&gt; G[Validation data]
-
-    A[data] --&gt; H[Fold 3]
-    H[Fold 3] --&gt; I[Training data]
-    H[Fold 3] --&gt; J[Validation data]
-
-    C(Training data) --&gt; K[Average]
-      D(Training data) --&gt; K[Average]
-    F(Training data) --&gt; K[Average]
-      G(Training data) --&gt; K[Average]
-    I(Training data) --&gt; K[Average]
-      J(Training data) --&gt; K[Average]
-
-    K(Average) --&gt; L[Final model performance]</code></pre>
-<div class="sourceCode" id="cb4"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a>sklearn.model_selection.KFold</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<ul>
-<li>it is good choice when we have major amount of data.</li>
+<li>Training data not representative</li>
+<li>Temporal dependencies</li>
+<li>Concept drift</li>
 </ul>
 </section>
-<section id="leave-one-out-validation" class="level3">
-<h3 class="anchored" data-anchor-id="leave-one-out-validation">Leave-one-out validation</h3>
-<p>Iterate over samples: retrain the model on all samples except current sample, predict for the current sample. You will need to retrain the model N times (if N is the number of samples in the dataset).</p>
-<p>In the end you will get LOO predictions for every sample in the trainset and can calculate loss.</p>
+<section id="sample-size-issues" class="level3" data-number="1.2.3">
+<h3 data-number="1.2.3" class="anchored" data-anchor-id="sample-size-issues"><span class="header-section-number">1.2.3</span> 3. Sample Size Issues</h3>
 <ul>
-<li>It is used when we have very small amount of data and sufficient time to trian a model with small amount of time.</li>
+<li>Too little validation data</li>
+<li>Imbalanced splits</li>
+<li>High variance in metrics</li>
 </ul>
 </section>
 </section>
-<section id="stratification" class="level2">
-<h2 class="anchored" data-anchor-id="stratification">Stratification</h2>
-<ul>
-<li><p>we normally use random split for k fold or hold out. But sometimes random split can fail, because some target sample never went into validaiton set.</p></li>
-<li><p>Just to make sure, similar target distribution over different folds, we use stratification.</p></li>
-<li><p>Stratification is usefull for</p>
-<ul>
-<li>small dataset</li>
-<li>Unbalanced dataset</li>
-<li>Malticlass classification</li>
-</ul></li>
-</ul>
-<table class="table">
-<colgroup>
-<col style="width: 6%">
-</colgroup>
-<tbody>
-<tr class="odd">
-<td>Notice, that these are validation schemes are supposed to be used to estimate quality of the model. When you found the right hyper-parameters and want to get test predictions don’t forget to retrain your model using all training data</td>
-</tr>
-</tbody>
-</table>
-</section>
-<section id="most-frequent-ways-to-generate-train-test-split" class="level2">
-<h2 class="anchored" data-anchor-id="most-frequent-ways-to-generate-train-test-split">Most frequent ways to generate train-test split</h2>
-<ul>
-<li><p>Time series data</p>
-<ul>
-<li>If we create features which is time based, then we need to split with time into account</li>
-<li>If we want to create a random split, then we need to create features which don’t account time in it. Here may be time base features will not work, although in case of time data, this model could be the best model.</li>
-</ul></li>
-<li><p>Different splitting strategies can differ significantly</p>
+<section id="best-practices" class="level2" data-number="1.3">
+<h2 data-number="1.3" class="anchored" data-anchor-id="best-practices"><span class="header-section-number">1.3</span> Best Practices</h2>
 <ol type="1">
-<li>in generated features</li>
-<li>in a way the model will rely on that features</li>
-<li>in some kind of target leak</li>
-</ol></li>
-<li><p>Splitting data</p>
+<li>Always use stratification for:
+<ul>
+<li>Small datasets</li>
+<li>Imbalanced classes</li>
+<li>Multi-class problems</li>
+</ul></li>
+<li>Consider temporal aspects:
+<ul>
+<li>Time-based splits for time series</li>
+<li>Rolling window validation</li>
+<li>Forward-chaining</li>
+</ul></li>
+<li>Monitor multiple metrics:
+<ul>
+<li>Accuracy/RMSE</li>
+<li>ROC-AUC</li>
+<li>Precision-Recall</li>
+<li>Business metrics</li>
+</ul></li>
+</ol>
+</section>
+<section id="implementation-examples" class="level2" data-number="1.4">
+<h2 data-number="1.4" class="anchored" data-anchor-id="implementation-examples"><span class="header-section-number">1.4</span> Implementation Examples</h2>
+<p>Here’s how to implement different validation strategies using scikit-learn:</p>
+<div class="sourceCode" id="cb3"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb3-1"><a href="#cb3-1"></a><span class="im">from</span> sklearn.model_selection <span class="im">import</span> (</span>
+<span id="cb3-2"><a href="#cb3-2"></a>    train_test_split,</span>
+<span id="cb3-3"><a href="#cb3-3"></a>    KFold,</span>
+<span id="cb3-4"><a href="#cb3-4"></a>    StratifiedKFold,</span>
+<span id="cb3-5"><a href="#cb3-5"></a>    LeaveOneOut</span>
+<span id="cb3-6"><a href="#cb3-6"></a>)</span>
+<span id="cb3-7"><a href="#cb3-7"></a></span>
+<span id="cb3-8"><a href="#cb3-8"></a><span class="co"># Simple holdout</span></span>
+<span id="cb3-9"><a href="#cb3-9"></a>X_train, X_val, y_train, y_val <span class="op">=</span> train_test_split(</span>
+<span id="cb3-10"><a href="#cb3-10"></a>    X, y, test_size<span class="op">=</span><span class="fl">0.2</span>, random_state<span class="op">=</span><span class="dv">42</span></span>
+<span id="cb3-11"><a href="#cb3-11"></a>)</span>
+<span id="cb3-12"><a href="#cb3-12"></a></span>
+<span id="cb3-13"><a href="#cb3-13"></a><span class="co"># K-Fold CV</span></span>
+<span id="cb3-14"><a href="#cb3-14"></a>kf <span class="op">=</span> KFold(n_splits<span class="op">=</span><span class="dv">5</span>, shuffle<span class="op">=</span><span class="va">True</span>, random_state<span class="op">=</span><span class="dv">42</span>)</span>
+<span id="cb3-15"><a href="#cb3-15"></a><span class="cf">for</span> train_idx, val_idx <span class="kw">in</span> kf.split(X):</span>
+<span id="cb3-16"><a href="#cb3-16"></a>    X_train, X_val <span class="op">=</span> X[train_idx], X[val_idx]</span>
+<span id="cb3-17"><a href="#cb3-17"></a>    y_train, y_val <span class="op">=</span> y[train_idx], y[val_idx]</span>
+<span id="cb3-18"><a href="#cb3-18"></a></span>
+<span id="cb3-19"><a href="#cb3-19"></a><span class="co"># Stratified K-Fold</span></span>
+<span id="cb3-20"><a href="#cb3-20"></a>skf <span class="op">=</span> StratifiedKFold(n_splits<span class="op">=</span><span class="dv">5</span>, shuffle<span class="op">=</span><span class="va">True</span>, random_state<span class="op">=</span><span class="dv">42</span>)</span>
+<span id="cb3-21"><a href="#cb3-21"></a><span class="cf">for</span> train_idx, val_idx <span class="kw">in</span> skf.split(X, y):</span>
+<span id="cb3-22"><a href="#cb3-22"></a>    X_train, X_val <span class="op">=</span> X[train_idx], X[val_idx]</span>
+<span id="cb3-23"><a href="#cb3-23"></a>    y_train, y_val <span class="op">=</span> y[train_idx], y[val_idx]</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</section>
+<section id="next-steps" class="level2" data-number="1.5">
+<h2 data-number="1.5" class="anchored" data-anchor-id="next-steps"><span class="header-section-number">1.5</span> Next Steps</h2>
+<p>Now that you understand validation strategies, you can: 1. Choose appropriate validation methods for your data 2. Implement robust validation pipelines 3. Avoid common pitfalls in model evaluation</p>
+</section>
+<section id="references" class="level2" data-number="1.6">
+<h2 data-number="1.6" class="anchored" data-anchor-id="references"><span class="header-section-number">1.6</span> References</h2>
 <ol type="1">
-<li><p>Random split, row-wise (assumption is rows are independent)</p></li>
-<li><p>Time based split (assumption some type of time dependency)</p>
-<ul>
-<li>special case of time based validaiton is moving window validation</li>
-</ul></li>
-<li><p>By id</p>
-<ul>
-<li>May be user, shop or item id</li>
-<li>User which was in train set, should not be in test set</li>
-</ul></li>
-<li><p>Combined</p>
-<ul>
-<li>for example we have to predict sales for a shop and a shelf of this shop</li>
-<li>in that case we need to search for shope and date in this shop</li>
-<li>or in case of search result for different users, we can split based on different user id and search engine</li>
-</ul></li>
-</ol></li>
-</ul>
-</section>
-<section id="problems-occurinng-during-validation" class="level2">
-<h2 class="anchored" data-anchor-id="problems-occurinng-during-validation">Problems occurinng during validation</h2>
-<ol type="a">
-<li>Problem in validation stage.</li>
-<li>Problem in leader -board or when in production</li>
+<li>Hastie, T., Tibshirani, R., &amp; Friedman, J. (2009). The Elements of Statistical Learning</li>
+<li>Raschka, S. (2018). Model Evaluation, Model Selection, and Algorithm Selection in Machine Learning</li>
+<li>Kohavi, R. (1995). A Study of Cross-Validation and Bootstrap for Accuracy Estimation and Model Selection</li>
 </ol>
-<section id="a.-problem-in-validation-stage" class="level3">
-<h3 class="anchored" data-anchor-id="a.-problem-in-validation-stage">a. Problem in validation stage</h3>
-<ul>
-<li><p>Actually we find it during validation</p>
-<ul>
-<li><p>e.g.&nbsp;we have a model which predict the sells in Febraury. Say we have model and our validation set is for Month January. In January the holidays are signficantly more than February. And people tend to buy more in January. So our model will perform well in January, but it will perform bad in February. So we need to be careful about this.</p></li>
-<li><p>This type of behviour is expected. But in case of we can already know what could be the problem in validation low score.</p></li>
-<li><p>Tool little data.</p>
-<ul>
-<li>There are lots of patterns in data and we have little data to genrate such patterns.</li>
-</ul></li>
-<li><p>Too diverse and inconsistant data</p>
-<ul>
-<li>similar features but different target values. One of them in train and other in test. Then we will get error which is big. In case of both in validation data, then we will get less error.</li>
-<li>In case of January and February problem, this is expected, we can remove such diverstiy if we can validate it with last year February data.</li>
-</ul></li>
-</ul></li>
-</ul>
-</section>
-<section id="solution" class="level3">
-<h3 class="anchored" data-anchor-id="solution">Solution</h3>
-<ul>
-<li><p>We need to do more thorogh validation on such case.</p>
-<ul>
-<li>Average score from different KFold splits ( normally 5 folds are enough , but can be increased). May be try different random seed and then try to estimate the model quality from them.</li>
-<li>Tune model on one split, evaluate score on the other split. In case of hyperparameter tuning.</li>
-</ul></li>
-</ul>
-</section>
-<section id="b.-problem-in-leader-board-or-when-in-production" class="level3">
-<h3 class="anchored" data-anchor-id="b.-problem-in-leader-board-or-when-in-production">b. Problem in leader-board or when in production</h3>
-<ol type="1">
-<li>During serving the score is constantly higher, lower than validaiton score</li>
-<li>During serving the score is not correlated with validation score</li>
-</ol>
-<ul>
-<li>These problems can be much more problematic. Because we can’t find it during validation. The solution for this type of problem, is somehow recreate train-test split during validation, which is not easy.</li>
-<li><strong>Highly recommended</strong> to submit solution or in case of production, compare with production data, as eary as possible.</li>
-</ul>
-<ol start="0" type="1">
-<li><p>As we already know, we have different type of score in differnt validation. So we can assume leader-board/production is another type of validation. If we have different score on different fold and differnt result on leader-board/production result is not surprising. We can calculate mean and standard deviation of validaiton scores and estimate if the leader-board/produciton score is expected or not.</p></li>
-<li><p>If this is not the case then there is something which is wrong.</p>
-<ol type="a">
-<li><p>Too little data, which ok. Trust your validation and it will be ok.</p></li>
-<li><p>Train and test are from differnt distribution. (here train test means train and production)</p>
-<img src="validation_and_overfitting_images/train_test_different_distribution.png" class="img-fluid" alt="Train and test distribution difference"></li>
-</ol>
-<ul>
-<li><p>If the train data just see the men and test data just see women, so model will have problem in production. So we need to make sure that train and test data are from same distribution.</p></li>
-<li><p><strong>Solution</strong>:</p>
-<ul>
-<li>We need to find a way to tackle differnt distribution in train and test. Sometimes it is possible by adjusting during training. But sometimes it is only possible to adjust production/leader-board data.</li>
-<li>In this particular solution, we can some how figure out a constant from train and test data
-<ul>
-<li>Mean from train data</li>
-<li>Mean from test data</li>
-</ul></li>
-<li>Then shift the prediciton with this difference.</li>
-<li>Normally this type of case is rare. However the most frequent type of problem is following.</li>
-</ul>
-<div class="quarto-figure quarto-figure-center">
-<figure class="figure">
-<p><img src="validation_and_overfitting_images/leader_board_problem.png" class="img-fluid figure-img"></p>
-<figcaption class="figure-caption">leaderboard_problem</figcaption>
-</figure>
-</div>
-<ul>
-<li>Then as we said, try to create a validation set , which reflects the test data. So we need to create a similar distribution in validation data. Then we can find out the problem.</li>
-</ul>
-<div class="quarto-figure quarto-figure-center">
-<figure class="figure">
-<p><img src="validation_and_overfitting_images/minimize_difference_in_train_test.png" class="img-fluid figure-img"></p>
-<figcaption class="figure-caption">minimize_difference</figcaption>
-</figure>
-</div></li>
-</ul></li>
-</ol>
-<hr>
-</section>
-</section>
-</section>
-<section id="useful-link" class="level1">
-<h1>Useful link</h1>
-<p><a href="https://www.fast.ai/2017/11/13/validation-sets.html">How(and why) to create a good validation set</a> <a href="https://scikit-learn.org/stable/modules/cross_validation.html">sklearn doc</a> <a href="http://www.chioka.in/how-to-select-your-final-models-in-a-kaggle-competitio/">Advices on kaggle validation</a></p>
 
 
+<!-- -->
 
 </section>
+</section>
 
-<div class="quarto-listing quarto-listing-container-default" id="listing-listing">
-<div class="list quarto-listing-default">
-
-</div>
-<div class="listing-no-matching d-none">
-No matching items
-</div>
-</div></main> <!-- /main -->
+<div id="quarto-appendix" class="default"><section class="quarto-appendix-contents"><h2 class="anchored quarto-appendix-heading">Reuse</h2><div id="quarto-reuse" class="quarto-appendix-contents"><div>CC BY-NC-SA 4.0</div></div></section><section class="quarto-appendix-contents"><h2 class="anchored quarto-appendix-heading">Citation</h2><div><div class="quarto-appendix-secondary-label">BibTeX citation:</div><pre class="sourceCode code-with-copy quarto-appendix-bibtex"><code class="sourceCode bibtex">@online{goni2022,
+  author = {Goni, Hasan},
+  title = {Data {Science} {Steps} to {Follow} - {Part} 6},
+  date = {2022-11-22},
+  langid = {en}
+}
+</code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre><div class="quarto-appendix-secondary-label">For attribution, please cite this work as:</div><div id="ref-goni2022" class="csl-entry quarto-appendix-citeas" role="listitem">
+Goni, Hasan. 2022. <span>“Data Science Steps to Follow - Part 6.”</span>
+November 22, 2022.
+</div></div></section></div></main> <!-- /main -->
 <script id="quarto-html-after-body" type="application/javascript">
 window.document.addEventListener("DOMContentLoaded", function (event) {
   const toggleBodyColorMode = (bsSheetEl) => {
@@ -581,6 +575,57 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
     // clear code selection
     e.clearSelection();
   });
+  const viewSource = window.document.getElementById('quarto-view-source') ||
+                     window.document.getElementById('quarto-code-tools-source');
+  if (viewSource) {
+    const sourceUrl = viewSource.getAttribute("data-quarto-source-url");
+    viewSource.addEventListener("click", function(e) {
+      if (sourceUrl) {
+        // rstudio viewer pane
+        if (/\bcapabilities=\b/.test(window.location)) {
+          window.open(sourceUrl);
+        } else {
+          window.location.href = sourceUrl;
+        }
+      } else {
+        const modal = new bootstrap.Modal(document.getElementById('quarto-embedded-source-code-modal'));
+        modal.show();
+      }
+      return false;
+    });
+  }
+  function toggleCodeHandler(show) {
+    return function(e) {
+      const detailsSrc = window.document.querySelectorAll(".cell > details > .sourceCode");
+      for (let i=0; i<detailsSrc.length; i++) {
+        const details = detailsSrc[i].parentElement;
+        if (show) {
+          details.open = true;
+        } else {
+          details.removeAttribute("open");
+        }
+      }
+      const cellCodeDivs = window.document.querySelectorAll(".cell > .sourceCode");
+      const fromCls = show ? "hidden" : "unhidden";
+      const toCls = show ? "unhidden" : "hidden";
+      for (let i=0; i<cellCodeDivs.length; i++) {
+        const codeDiv = cellCodeDivs[i];
+        if (codeDiv.classList.contains(fromCls)) {
+          codeDiv.classList.remove(fromCls);
+          codeDiv.classList.add(toCls);
+        } 
+      }
+      return false;
+    }
+  }
+  const hideAllCode = window.document.getElementById("quarto-hide-all-code");
+  if (hideAllCode) {
+    hideAllCode.addEventListener("click", toggleCodeHandler(false));
+  }
+  const showAllCode = window.document.getElementById("quarto-show-all-code");
+  if (showAllCode) {
+    showAllCode.addEventListener("click", toggleCodeHandler(true));
+  }
   function tippyHover(el, contentFn) {
     const config = {
       allowHTML: true,
@@ -735,8 +780,163 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
   }
 });
 </script>
+<script src="https://utteranc.es/client.js" repo="yourusername/quarto_blog_hasan" issue-term="pathname" theme="github-light" crossorigin="anonymous" async="">
+</script>
+<script src="https://giscus.app/client.js" data-repo="HasanGoni/quarto_blog_hasan" data-repo-id="" data-category="General" data-category-id="" data-mapping="title" data-reactions-enabled="1" data-emit-metadata="0" data-input-position="top" data-theme="light" data-lang="en" crossorigin="anonymous" async="">
+</script><div class="modal fade" id="quarto-embedded-source-code-modal" tabindex="-1" aria-labelledby="quarto-embedded-source-code-modal-label" aria-hidden="true"><div class="modal-dialog modal-dialog-scrollable"><div class="modal-content"><div class="modal-header"><h5 class="modal-title" id="quarto-embedded-source-code-modal-label">Source Code</h5><button class="btn-close" data-bs-dismiss="modal"></button></div><div class="modal-body"><div class="">
+<div class="sourceCode" id="cb4" data-shortcodes="false"><pre class="sourceCode numberSource markdown number-lines code-with-copy"><code class="sourceCode markdown"><span id="cb4-1"><a href="#cb4-1"></a><span class="co">---</span></span>
+<span id="cb4-2"><a href="#cb4-2"></a><span class="an">title:</span><span class="co"> "Data Science Steps to Follow - Part 6"</span></span>
+<span id="cb4-3"><a href="#cb4-3"></a><span class="an">subtitle:</span><span class="co"> "Validation Strategy and Model Evaluation"</span></span>
+<span id="cb4-4"><a href="#cb4-4"></a><span class="an">description:</span><span class="co"> "Learn about different validation strategies and how to properly evaluate your models"</span></span>
+<span id="cb4-5"><a href="#cb4-5"></a><span class="an">author:</span><span class="co"> "Hasan Goni"</span></span>
+<span id="cb4-6"><a href="#cb4-6"></a><span class="an">date:</span><span class="co"> "2022-11-22"</span></span>
+<span id="cb4-7"><a href="#cb4-7"></a><span class="an">categories:</span><span class="co"> [data-science, machine-learning, validation]</span></span>
+<span id="cb4-8"><a href="#cb4-8"></a><span class="an">tags:</span><span class="co"> [validation, overfitting, cross-validation]</span></span>
+<span id="cb4-9"><a href="#cb4-9"></a><span class="an">image:</span><span class="co"> "image.jpg"</span></span>
+<span id="cb4-10"><a href="#cb4-10"></a><span class="an">toc:</span><span class="co"> true</span></span>
+<span id="cb4-11"><a href="#cb4-11"></a><span class="an">format:</span></span>
+<span id="cb4-12"><a href="#cb4-12"></a><span class="co">  html:</span></span>
+<span id="cb4-13"><a href="#cb4-13"></a><span class="co">    code-fold: true</span></span>
+<span id="cb4-14"><a href="#cb4-14"></a><span class="co">    code-tools: true</span></span>
+<span id="cb4-15"><a href="#cb4-15"></a><span class="an">series:</span></span>
+<span id="cb4-16"><a href="#cb4-16"></a><span class="co">  name: "Data Science Steps"</span></span>
+<span id="cb4-17"><a href="#cb4-17"></a><span class="co">  number: 6</span></span>
+<span id="cb4-18"><a href="#cb4-18"></a><span class="co">---</span></span>
+<span id="cb4-19"><a href="#cb4-19"></a></span>
+<span id="cb4-20"><a href="#cb4-20"></a><span class="fu"># Validation Strategy and Model Evaluation</span></span>
+<span id="cb4-21"><a href="#cb4-21"></a></span>
+<span id="cb4-22"><a href="#cb4-22"></a>This post covers essential validation strategies and model evaluation techniques in data science. We'll explore different approaches to ensure your models generalize well to unseen data.</span>
+<span id="cb4-23"><a href="#cb4-23"></a></span>
+<span id="cb4-24"><a href="#cb4-24"></a><span class="fu">## Validation Strategies</span></span>
+<span id="cb4-25"><a href="#cb4-25"></a></span>
+<span id="cb4-26"><a href="#cb4-26"></a><span class="fu">### Holdout Validation</span></span>
+<span id="cb4-27"><a href="#cb4-27"></a></span>
+<span id="cb4-28"><a href="#cb4-28"></a>The simplest form of validation where we split our data into training and validation sets:</span>
+<span id="cb4-29"><a href="#cb4-29"></a></span>
+<span id="cb4-30"><a href="#cb4-30"></a><span class="in">```mermaid</span></span>
+<span id="cb4-31"><a href="#cb4-31"></a>flowchart TB</span>
+<span id="cb4-32"><a href="#cb4-32"></a>    A[data] --&gt; B[Validation data]</span>
+<span id="cb4-33"><a href="#cb4-33"></a>    A[data] --&gt; C[Training data]</span>
+<span id="cb4-34"><a href="#cb4-34"></a><span class="in">```</span></span>
+<span id="cb4-35"><a href="#cb4-35"></a></span>
+<span id="cb4-36"><a href="#cb4-36"></a>This approach is good when:</span>
+<span id="cb4-37"><a href="#cb4-37"></a><span class="ss">- </span>You have sufficient data</span>
+<span id="cb4-38"><a href="#cb4-38"></a><span class="ss">- </span>The data distribution is relatively uniform</span>
+<span id="cb4-39"><a href="#cb4-39"></a><span class="ss">- </span>Time-based dependencies are not critical</span>
+<span id="cb4-40"><a href="#cb4-40"></a></span>
+<span id="cb4-41"><a href="#cb4-41"></a><span class="fu">### K-Fold Cross Validation</span></span>
+<span id="cb4-42"><a href="#cb4-42"></a></span>
+<span id="cb4-43"><a href="#cb4-43"></a>A more robust approach that uses multiple training-validation splits:</span>
+<span id="cb4-44"><a href="#cb4-44"></a></span>
+<span id="cb4-45"><a href="#cb4-45"></a><span class="in">```mermaid</span></span>
+<span id="cb4-46"><a href="#cb4-46"></a>flowchart TB</span>
+<span id="cb4-47"><a href="#cb4-47"></a>    A[data] --&gt; B[Fold <span class="dv">1</span>]</span>
+<span id="cb4-48"><a href="#cb4-48"></a>    B[Fold <span class="dv">1</span>] --&gt; C[Training data]</span>
+<span id="cb4-49"><a href="#cb4-49"></a>    B[Fold <span class="dv">1</span>] --&gt; D[Validation data]</span>
+<span id="cb4-50"><a href="#cb4-50"></a></span>
+<span id="cb4-51"><a href="#cb4-51"></a>    A[data] --&gt; E[Fold <span class="dv">2</span>]</span>
+<span id="cb4-52"><a href="#cb4-52"></a>    E[Fold <span class="dv">2</span>] --&gt; F[Training data]</span>
+<span id="cb4-53"><a href="#cb4-53"></a>    E[Fold <span class="dv">2</span>] --&gt; G[Validation data]</span>
+<span id="cb4-54"><a href="#cb4-54"></a></span>
+<span id="cb4-55"><a href="#cb4-55"></a>    A[data] --&gt; H[Fold <span class="dv">3</span>]</span>
+<span id="cb4-56"><a href="#cb4-56"></a>    H[Fold <span class="dv">3</span>] --&gt; I[Training data]</span>
+<span id="cb4-57"><a href="#cb4-57"></a>    H[Fold <span class="dv">3</span>] --&gt; J[Validation data]</span>
+<span id="cb4-58"><a href="#cb4-58"></a></span>
+<span id="cb4-59"><a href="#cb4-59"></a>    C(Training data) --&gt; K[Average]</span>
+<span id="cb4-60"><a href="#cb4-60"></a>    D(Training data) --&gt; K[Average]</span>
+<span id="cb4-61"><a href="#cb4-61"></a>    F(Training data) --&gt; K[Average]</span>
+<span id="cb4-62"><a href="#cb4-62"></a>    G(Training data) --&gt; K[Average]</span>
+<span id="cb4-63"><a href="#cb4-63"></a>    I(Training data) --&gt; K[Average]</span>
+<span id="cb4-64"><a href="#cb4-64"></a>    J(Training data) --&gt; K[Average]</span>
+<span id="cb4-65"><a href="#cb4-65"></a></span>
+<span id="cb4-66"><a href="#cb4-66"></a>    K(Average) --&gt; L[Final model performance]</span>
+<span id="cb4-67"><a href="#cb4-67"></a><span class="in">```</span></span>
+<span id="cb4-68"><a href="#cb4-68"></a></span>
+<span id="cb4-69"><a href="#cb4-69"></a><span class="fu">### Leave-One-Out Validation</span></span>
+<span id="cb4-70"><a href="#cb4-70"></a></span>
+<span id="cb4-71"><a href="#cb4-71"></a>Best for very small datasets where we need to maximize training data usage.</span>
+<span id="cb4-72"><a href="#cb4-72"></a></span>
+<span id="cb4-73"><a href="#cb4-73"></a><span class="fu">## Common Validation Problems</span></span>
+<span id="cb4-74"><a href="#cb4-74"></a></span>
+<span id="cb4-75"><a href="#cb4-75"></a><span class="fu">### 1. Data Leakage</span></span>
+<span id="cb4-76"><a href="#cb4-76"></a><span class="ss">- </span>Target leakage</span>
+<span id="cb4-77"><a href="#cb4-77"></a><span class="ss">- </span>Train-test contamination</span>
+<span id="cb4-78"><a href="#cb4-78"></a><span class="ss">- </span>Feature leakage</span>
+<span id="cb4-79"><a href="#cb4-79"></a></span>
+<span id="cb4-80"><a href="#cb4-80"></a><span class="fu">### 2. Distribution Mismatch</span></span>
+<span id="cb4-81"><a href="#cb4-81"></a><span class="ss">- </span>Training data not representative</span>
+<span id="cb4-82"><a href="#cb4-82"></a><span class="ss">- </span>Temporal dependencies</span>
+<span id="cb4-83"><a href="#cb4-83"></a><span class="ss">- </span>Concept drift</span>
+<span id="cb4-84"><a href="#cb4-84"></a></span>
+<span id="cb4-85"><a href="#cb4-85"></a><span class="fu">### 3. Sample Size Issues</span></span>
+<span id="cb4-86"><a href="#cb4-86"></a><span class="ss">- </span>Too little validation data</span>
+<span id="cb4-87"><a href="#cb4-87"></a><span class="ss">- </span>Imbalanced splits</span>
+<span id="cb4-88"><a href="#cb4-88"></a><span class="ss">- </span>High variance in metrics</span>
+<span id="cb4-89"><a href="#cb4-89"></a></span>
+<span id="cb4-90"><a href="#cb4-90"></a><span class="fu">## Best Practices</span></span>
+<span id="cb4-91"><a href="#cb4-91"></a></span>
+<span id="cb4-92"><a href="#cb4-92"></a><span class="ss">1. </span>Always use stratification for:</span>
+<span id="cb4-93"><a href="#cb4-93"></a><span class="ss">   - </span>Small datasets</span>
+<span id="cb4-94"><a href="#cb4-94"></a><span class="ss">   - </span>Imbalanced classes</span>
+<span id="cb4-95"><a href="#cb4-95"></a><span class="ss">   - </span>Multi-class problems</span>
+<span id="cb4-96"><a href="#cb4-96"></a></span>
+<span id="cb4-97"><a href="#cb4-97"></a><span class="ss">2. </span>Consider temporal aspects:</span>
+<span id="cb4-98"><a href="#cb4-98"></a><span class="ss">   - </span>Time-based splits for time series</span>
+<span id="cb4-99"><a href="#cb4-99"></a><span class="ss">   - </span>Rolling window validation</span>
+<span id="cb4-100"><a href="#cb4-100"></a><span class="ss">   - </span>Forward-chaining</span>
+<span id="cb4-101"><a href="#cb4-101"></a></span>
+<span id="cb4-102"><a href="#cb4-102"></a><span class="ss">3. </span>Monitor multiple metrics:</span>
+<span id="cb4-103"><a href="#cb4-103"></a><span class="ss">   - </span>Accuracy/RMSE</span>
+<span id="cb4-104"><a href="#cb4-104"></a><span class="ss">   - </span>ROC-AUC</span>
+<span id="cb4-105"><a href="#cb4-105"></a><span class="ss">   - </span>Precision-Recall</span>
+<span id="cb4-106"><a href="#cb4-106"></a><span class="ss">   - </span>Business metrics</span>
+<span id="cb4-107"><a href="#cb4-107"></a></span>
+<span id="cb4-108"><a href="#cb4-108"></a><span class="fu">## Implementation Examples</span></span>
+<span id="cb4-109"><a href="#cb4-109"></a></span>
+<span id="cb4-110"><a href="#cb4-110"></a>Here's how to implement different validation strategies using scikit-learn:</span>
+<span id="cb4-111"><a href="#cb4-111"></a></span>
+<span id="cb4-112"><a href="#cb4-112"></a><span class="in">```python</span></span>
+<span id="cb4-113"><a href="#cb4-113"></a><span class="im">from</span> sklearn.model_selection <span class="im">import</span> (</span>
+<span id="cb4-114"><a href="#cb4-114"></a>    train_test_split,</span>
+<span id="cb4-115"><a href="#cb4-115"></a>    KFold,</span>
+<span id="cb4-116"><a href="#cb4-116"></a>    StratifiedKFold,</span>
+<span id="cb4-117"><a href="#cb4-117"></a>    LeaveOneOut</span>
+<span id="cb4-118"><a href="#cb4-118"></a>)</span>
+<span id="cb4-119"><a href="#cb4-119"></a></span>
+<span id="cb4-120"><a href="#cb4-120"></a><span class="co"># Simple holdout</span></span>
+<span id="cb4-121"><a href="#cb4-121"></a>X_train, X_val, y_train, y_val <span class="op">=</span> train_test_split(</span>
+<span id="cb4-122"><a href="#cb4-122"></a>    X, y, test_size<span class="op">=</span><span class="fl">0.2</span>, random_state<span class="op">=</span><span class="dv">42</span></span>
+<span id="cb4-123"><a href="#cb4-123"></a>)</span>
+<span id="cb4-124"><a href="#cb4-124"></a></span>
+<span id="cb4-125"><a href="#cb4-125"></a><span class="co"># K-Fold CV</span></span>
+<span id="cb4-126"><a href="#cb4-126"></a>kf <span class="op">=</span> KFold(n_splits<span class="op">=</span><span class="dv">5</span>, shuffle<span class="op">=</span><span class="va">True</span>, random_state<span class="op">=</span><span class="dv">42</span>)</span>
+<span id="cb4-127"><a href="#cb4-127"></a><span class="cf">for</span> train_idx, val_idx <span class="kw">in</span> kf.split(X):</span>
+<span id="cb4-128"><a href="#cb4-128"></a>    X_train, X_val <span class="op">=</span> X[train_idx], X[val_idx]</span>
+<span id="cb4-129"><a href="#cb4-129"></a>    y_train, y_val <span class="op">=</span> y[train_idx], y[val_idx]</span>
+<span id="cb4-130"><a href="#cb4-130"></a></span>
+<span id="cb4-131"><a href="#cb4-131"></a><span class="co"># Stratified K-Fold</span></span>
+<span id="cb4-132"><a href="#cb4-132"></a>skf <span class="op">=</span> StratifiedKFold(n_splits<span class="op">=</span><span class="dv">5</span>, shuffle<span class="op">=</span><span class="va">True</span>, random_state<span class="op">=</span><span class="dv">42</span>)</span>
+<span id="cb4-133"><a href="#cb4-133"></a><span class="cf">for</span> train_idx, val_idx <span class="kw">in</span> skf.split(X, y):</span>
+<span id="cb4-134"><a href="#cb4-134"></a>    X_train, X_val <span class="op">=</span> X[train_idx], X[val_idx]</span>
+<span id="cb4-135"><a href="#cb4-135"></a>    y_train, y_val <span class="op">=</span> y[train_idx], y[val_idx]</span>
+<span id="cb4-136"><a href="#cb4-136"></a><span class="in">```</span></span>
+<span id="cb4-137"><a href="#cb4-137"></a></span>
+<span id="cb4-138"><a href="#cb4-138"></a><span class="fu">## Next Steps</span></span>
+<span id="cb4-139"><a href="#cb4-139"></a></span>
+<span id="cb4-140"><a href="#cb4-140"></a>Now that you understand validation strategies, you can:</span>
+<span id="cb4-141"><a href="#cb4-141"></a><span class="ss">1. </span>Choose appropriate validation methods for your data</span>
+<span id="cb4-142"><a href="#cb4-142"></a><span class="ss">2. </span>Implement robust validation pipelines</span>
+<span id="cb4-143"><a href="#cb4-143"></a><span class="ss">3. </span>Avoid common pitfalls in model evaluation</span>
+<span id="cb4-144"><a href="#cb4-144"></a></span>
+<span id="cb4-145"><a href="#cb4-145"></a><span class="fu">## References</span></span>
+<span id="cb4-146"><a href="#cb4-146"></a></span>
+<span id="cb4-147"><a href="#cb4-147"></a><span class="ss">1. </span>Hastie, T., Tibshirani, R., &amp; Friedman, J. (2009). The Elements of Statistical Learning</span>
+<span id="cb4-148"><a href="#cb4-148"></a><span class="ss">2. </span>Raschka, S. (2018). Model Evaluation, Model Selection, and Algorithm Selection in Machine Learning</span>
+<span id="cb4-149"><a href="#cb4-149"></a><span class="ss">3. </span>Kohavi, R. (1995). A Study of Cross-Validation and Bootstrap for Accuracy Estimation and Model Selection </span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div></div></div></div></div>
 </div> <!-- /content -->
 
 
 
+<script src="../../site_libs/quarto-html/zenscroll-min.js"></script>
 </body></html>

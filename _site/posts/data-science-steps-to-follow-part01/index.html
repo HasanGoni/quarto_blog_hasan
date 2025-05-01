@@ -9,7 +9,7 @@
 <meta name="author" content="Hasan Goni">
 <meta name="dcterms.date" content="2022-11-19">
 
-<title>Hasan Blog Post - Data Science Steps to Follow -01</title>
+<title>Hasan’s Data Science &amp; AI Blog - Data Science Steps to Follow - Part 1</title>
 <style>
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
@@ -22,6 +22,40 @@ ul.task-list li input[type="checkbox"] {
   margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
   vertical-align: middle;
 }
+/* CSS for syntax highlighting */
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+  }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
 </style>
 
 
@@ -32,8 +66,6 @@ ul.task-list li input[type="checkbox"] {
 <script src="../../site_libs/quarto-search/fuse.min.js"></script>
 <script src="../../site_libs/quarto-search/quarto-search.js"></script>
 <meta name="quarto:offset" content="../../">
-<script src="../../site_libs/quarto-listing/list.min.js"></script>
-<script src="../../site_libs/quarto-listing/quarto-listing.js"></script>
 <script src="../../site_libs/quarto-html/quarto.js"></script>
 <script src="../../site_libs/quarto-html/popper.min.js"></script>
 <script src="../../site_libs/quarto-html/tippy.umd.min.js"></script>
@@ -63,43 +95,22 @@ ul.task-list li input[type="checkbox"] {
     "search-label": "Search"
   }
 }</script>
-<script>
+<style>html{ scroll-behavior: smooth; }</style>
+<script async="" src="https://hypothes.is/embed.js"></script>
 
-  window.document.addEventListener("DOMContentLoaded", function (_event) {
-    const listingTargetEl = window.document.querySelector('#listing-listing .list');
-    if (!listingTargetEl) {
-      // No listing discovered, do not attach.
-      return; 
-    }
-
-    const options = {
-      valueNames: ['listing-categories',{ data: ['index'] },{ data: ['categories'] },{ data: ['listing-date-sort'] },{ data: ['listing-file-modified-sort'] }],
-      
-      searchColumns: ["listing-categories"],
-    };
-
-    window['quarto-listings'] = window['quarto-listings'] || {};
-    window['quarto-listings']['listing-listing'] = new List('listing-listing', options);
-
-    if (window['quarto-listing-loaded']) {
-      window['quarto-listing-loaded']();
-    }
-  });
-
-  window.addEventListener('hashchange',() => {
-    if (window['quarto-listing-loaded']) {
-      window['quarto-listing-loaded']();
-    }
-  })
-  </script>
-
-  <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
-  <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js" type="text/javascript"></script>
 
 <link rel="stylesheet" href="../../styles.css">
+<meta property="og:title" content="Hasan’s Data Science &amp; AI Blog - Data Science Steps to Follow - Part 1">
+<meta property="og:description" content="Exploratory Data Analysis Fundamentals">
+<meta property="og:image" content="image.jpg">
+<meta property="og:site-name" content="Hasan's Data Science &amp; AI Blog">
+<meta name="twitter:title" content="Hasan’s Data Science &amp; AI Blog - Data Science Steps to Follow - Part 1">
+<meta name="twitter:description" content="Exploratory Data Analysis Fundamentals">
+<meta name="twitter:image" content="image.jpg">
+<meta name="twitter:card" content="summary_large_image">
 </head>
 
-<body class="nav-fixed">
+<body class="nav-sidebar docked nav-fixed">
 
 <div id="quarto-search-results"></div>
   <header id="quarto-header" class="headroom fixed-top">
@@ -107,7 +118,7 @@ ul.task-list li input[type="checkbox"] {
       <div class="navbar-container container-fluid">
       <div class="navbar-brand-container">
     <a class="navbar-brand" href="../../index.html">
-    <span class="navbar-title">Hasan Blog Post</span>
+    <span class="navbar-title">Hasan’s Data Science &amp; AI Blog</span>
     </a>
   </div>
             <div id="quarto-search" class="" title="Search"></div>
@@ -117,22 +128,45 @@ ul.task-list li input[type="checkbox"] {
           <div class="collapse navbar-collapse" id="navbarCollapse">
             <ul class="navbar-nav navbar-nav-scroll me-auto">
   <li class="nav-item">
-    <a class="nav-link" href="https://hasangoni.quarto.pub/hasan-blog-post/" rel="" target="">
- <span class="menu-text">Blog</span></a>
+    <a class="nav-link" href="../../index.html" rel="" target="">
+ <span class="menu-text">Home</span></a>
   </li>  
-</ul>
-            <ul class="navbar-nav navbar-nav-scroll ms-auto">
+  <li class="nav-item dropdown ">
+    <a class="nav-link dropdown-toggle" href="#" id="nav-menu-series" role="button" data-bs-toggle="dropdown" aria-expanded="false" rel="" target="">
+ <span class="menu-text">Series</span>
+    </a>
+    <ul class="dropdown-menu" aria-labelledby="nav-menu-series">    
+        <li>
+    <a class="dropdown-item" href="../../posts/series/data-science-steps.html" rel="" target="">
+ <span class="dropdown-text">Data Science Steps</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="../../posts/series/computer-vision-with-pytorch.html" rel="" target="">
+ <span class="dropdown-text">Computer Vision</span></a>
+  </li>  
+    </ul>
+  </li>
+  <li class="nav-item">
+    <a class="nav-link" href="../../categories.html" rel="" target="">
+ <span class="menu-text">Categories</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="../../tags.html" rel="" target="">
+ <span class="menu-text">Tags</span></a>
+  </li>  
   <li class="nav-item">
     <a class="nav-link" href="../../about.html" rel="" target="">
  <span class="menu-text">About</span></a>
   </li>  
+</ul>
+            <ul class="navbar-nav navbar-nav-scroll ms-auto">
   <li class="nav-item compact">
     <a class="nav-link" href="https://github.com/HasanGoni" rel="" target=""><i class="bi bi-github" role="img">
 </i> 
  <span class="menu-text"></span></a>
   </li>  
   <li class="nav-item compact">
-    <a class="nav-link" href="https://twitter.com/hasangoni" rel="" target=""><i class="bi bi-twitter" role="img">
+    <a class="nav-link" href="https://twitter.com/yourusername" rel="" target=""><i class="bi bi-twitter" role="img">
 </i> 
  <span class="menu-text"></span></a>
   </li>  
@@ -142,17 +176,27 @@ ul.task-list li input[type="checkbox"] {
           </div> <!-- /navcollapse -->
       </div> <!-- /container-fluid -->
     </nav>
+  <nav class="quarto-secondary-nav">
+    <div class="container-fluid d-flex">
+      <button type="button" class="quarto-btn-toggle btn" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar,#quarto-sidebar-glass" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+        <i class="bi bi-layout-text-sidebar-reverse"></i>
+      </button>
+      <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../../posts/series/data-science-steps.html">Data Science</a></li><li class="breadcrumb-item"><a href="../../posts/data-science-steps-to-follow-part01/index.html">Data Science Steps to Follow - Part 1</a></li></ol></nav>
+      <a class="flex-grow-1" role="button" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar,#quarto-sidebar-glass" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
+      </a>
+    </div>
+  </nav>
 </header>
 <!-- content -->
 <header id="title-block-header" class="quarto-title-block default page-columns page-full">
   <div class="quarto-title-banner page-columns page-full">
-    <div class="quarto-title column-page-left">
-      <h1 class="title">Data Science Steps to Follow -01</h1>
-            <p class="subtitle lead">Explanatory data analysis steps</p>
+    <div class="quarto-title column-body">
+      <div class="quarto-title-block"><div><h1 class="title">Data Science Steps to Follow - Part 1</h1><button type="button" class="btn code-tools-button" id="quarto-code-tools-source"><i class="bi"></i> Code</button></div></div>
+            <p class="subtitle lead">Exploratory Data Analysis Fundamentals</p>
                                 <div class="quarto-categories">
                 <div class="quarto-category">code</div>
-                <div class="quarto-category">tabular</div>
                 <div class="quarto-category">analysis</div>
+                <div class="quarto-category">tutorial</div>
               </div>
                   </div>
   </div>
@@ -174,129 +218,296 @@ ul.task-list li input[type="checkbox"] {
       </div>
     </div>
     
+      <div>
+      <div class="quarto-title-meta-heading">Modified</div>
+      <div class="quarto-title-meta-contents">
+        <p class="date-modified">May 1, 2025</p>
+      </div>
+    </div>
       
     </div>
     
   
-  </header><div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-full page-navbar">
+  </header><div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article page-navbar">
 <!-- sidebar -->
+  <nav id="quarto-sidebar" class="sidebar collapse collapse-horizontal sidebar-navigation docked overflow-auto">
+    <div class="sidebar-menu-container"> 
+    <ul class="list-unstyled mt-1">
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-1" aria-expanded="true">
+ <span class="menu-text">Data Science</span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-1" aria-expanded="true" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-1" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../posts/series/data-science-steps.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Data Science Steps Series</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../posts/data-science-steps-to-follow-part01/index.html" class="sidebar-item-text sidebar-link active">
+ <span class="menu-text">Data Science Steps to Follow - Part 1</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../posts/data-science-steps-to-follow-part02/index.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Data Science Steps to Follow - Part 2</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../posts/data-science-steps-to-follow-part03/index.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Data Science Steps to Follow -03</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../posts/data-science-steps-to-follow-part04/index.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Data Science Steps to Follow -04</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../posts/data-science-steps-to-follow-part05/index.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Data Science Steps to Follow -05</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../posts/data-science-steps-to-follow-part06/index.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Data Science Steps to Follow - Part 6</span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-2" aria-expanded="true">
+ <span class="menu-text">Computer Vision</span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-2" aria-expanded="true" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-2" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../posts/series/computer-vision-with-pytorch.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">computer-vision-with-pytorch.html</span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+    </ul>
+    </div>
+</nav>
+<div id="quarto-sidebar-glass" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar,#quarto-sidebar-glass"></div>
 <!-- margin-sidebar -->
     <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
-        
-    <h5 class="quarto-listing-category-title">Categories</h5><div class="quarto-listing-category category-default"><div class="category" data-category="">All <span class="quarto-category-count">(0)</span></div></div></div>
+        <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">On this page</h2>
+   
+  <ul>
+  <li><a href="#series-navigation" id="toc-series-navigation" class="nav-link active" data-scroll-target="#series-navigation"><span class="header-section-number">1</span> Series Navigation</a></li>
+  <li><a href="#exploratory-data-analysis-eda" id="toc-exploratory-data-analysis-eda" class="nav-link" data-scroll-target="#exploratory-data-analysis-eda"><span class="header-section-number">2</span> Exploratory Data Analysis (EDA)</a>
+  <ul class="collapse">
+  <li><a href="#what-is-eda" id="toc-what-is-eda" class="nav-link" data-scroll-target="#what-is-eda"><span class="header-section-number">2.1</span> What is EDA?</a></li>
+  <li><a href="#the-power-of-visualization" id="toc-the-power-of-visualization" class="nav-link" data-scroll-target="#the-power-of-visualization"><span class="header-section-number">2.2</span> The Power of Visualization</a></li>
+  <li><a href="#building-intuition" id="toc-building-intuition" class="nav-link" data-scroll-target="#building-intuition"><span class="header-section-number">2.3</span> Building Intuition</a>
+  <ul class="collapse">
+  <li><a href="#domain-knowledge-acquisition" id="toc-domain-knowledge-acquisition" class="nav-link" data-scroll-target="#domain-knowledge-acquisition"><span class="header-section-number">2.3.1</span> 1. Domain Knowledge Acquisition</a></li>
+  <li><a href="#data-validation" id="toc-data-validation" class="nav-link" data-scroll-target="#data-validation"><span class="header-section-number">2.3.2</span> 2. Data Validation</a></li>
+  <li><a href="#understanding-data-generation" id="toc-understanding-data-generation" class="nav-link" data-scroll-target="#understanding-data-generation"><span class="header-section-number">2.3.3</span> 3. Understanding Data Generation</a></li>
+  </ul></li>
+  <li><a href="#related-resources" id="toc-related-resources" class="nav-link" data-scroll-target="#related-resources"><span class="header-section-number">2.4</span> Related Resources</a></li>
+  <li><a href="#next-steps" id="toc-next-steps" class="nav-link" data-scroll-target="#next-steps"><span class="header-section-number">2.5</span> Next Steps</a></li>
+  <li><a href="#references" id="toc-references" class="nav-link" data-scroll-target="#references"><span class="header-section-number">2.6</span> References</a></li>
+  </ul></li>
+  </ul>
+</nav>
+    </div>
 <!-- main -->
-<main class="content quarto-banner-title-block column-page-left" id="quarto-document-content">
+<main class="content quarto-banner-title-block" id="quarto-document-content">
 
 
 
 
-<section id="explanatory-data-analysis" class="level1">
-<h1>Explanatory Data Analysis</h1>
-<ul>
-<li><p>This is a summary of the course <a href="https://www.coursera.org/learn/competitive-data-science">How to win a data science competition: Learn from top Kagglers</a>. The course is available on coursera. The course is taught by Yandex and MIPT. This is my note taken from that course.</p></li>
-<li><p>As the summary seems a little bit long. So I tried to convert it different parts. This is introduction part. In this part I will try to explain what is EDA and how should one proceed with EDA in a project.</p>
-<ul>
-<li><a href="https://Hasangoni.github.io/2023/11/19/Feature_preprocessing_and_generation.html">Feature preprocessing and generation</a></li>
-<li><a href="https://Hasangoni.github.io/2023/11/19/Exploring_anonymized_data.html">Exploring anonymized data</a></li>
-<li><a href="https://Hasangoni.github.io/2023/11/19/Feature_extraction_from_text.html">Feature extraction from text</a></li>
-<li><a href="https://Hasangoni.github.io/2023/11/19/Feature_extraction_images.html">Feature extraction from images</a></li>
-</ul></li>
-</ul>
-</section>
-<section id="explantory-data-analysis" class="level1">
-<h1>Explantory data analysis</h1>
-<ol start="2" type="1">
-<li>What are the most important things we need to pay attention to when we are doing exploratory data analysis?</li>
-<li>This knowledge help to create a good model</li>
-</ol>
-<section id="what-is-eda" class="level2">
-<h2 class="anchored" data-anchor-id="what-is-eda">What is EDA</h2>
-<ul>
-<li>Understand the data</li>
-<li>Build intuition about the data</li>
-<li>Generatge hypothesis of possible new features</li>
-<li>Find some insights about the data</li>
-</ul>
-</section>
-<section id="visualization" class="level2">
-<h2 class="anchored" data-anchor-id="visualization">Visualization</h2>
-<ul>
-<li>One EDA tool is visualization -&gt; see the patterns-&gt; what are these patterns -&gt; why we see them</li>
-<li>e.g.&nbsp;There was a competition in kaggle, where you just don’t need anaything, if you just understand it very well
-<ul>
-<li><p>Goal of the competition: whether a person will use the promo, or not</p></li>
-<li><p>Feature of the person are the inputs, e.g.&nbsp;age, sex, marital status, etc. and there are features which described the promo.</p></li>
-<li><p>But two intersting features were</p>
-<ul>
-<li>Number of promos sent by the person before</li>
-<li>NUmber of promos the person has used before</li>
-</ul></li>
-<li><p>If we sort the rows based on number of promos sent by the person before and we calcualte the difference between number of promos used by the person. Most of the time this difference is equal to target values.</p></li>
-<li><p>Although it is not given what to do with the Nan values, but we can see that without doing modeling we can get 81% accuracy. It is only possible after doing EDA.</p></li>
-<li><p>Actually this is very good example of data leakage, done by the person who created the dataset.</p></li>
-</ul></li>
-</ul>
-</section>
-<section id="building-intuition" class="level2">
-<h2 class="anchored" data-anchor-id="building-intuition">Building intuition</h2>
-<ol start="2" type="1">
-<li>Getting domain knowledge</li>
-<li>Checking the data is intuitive</li>
-<li>Understand how data is generated</li>
-</ol>
-<section id="getting-domain-knowledge" class="level3">
-<h3 class="anchored" data-anchor-id="getting-domain-knowledge">2. Getting domain knowledge</h3>
-<ul>
-<li><p>What is our goal?</p></li>
-<li><p>What data we have?</p></li>
-<li><p>how people actually tackle this kind of problem to build this problem to build baseline?</p></li>
-<li><p>So may be first goal is to read wikipedia, do google search, read some blogs, etc. to get some domain knowledge.</p></li>
-<li><p>e.g.&nbsp;We need to predict advisers’s cost</p>
-<ul>
-<li>First to understand this is about web adverstisemnt.</li>
-<li>By seeing column names we can understand, that data is exported from Google AdWords system.</li>
-<li>After reading several articles we get the meaning of the columns.</li>
-</ul></li>
-</ul>
-</section>
-<section id="checking-the-data-is-intuitive" class="level3">
-<h3 class="anchored" data-anchor-id="checking-the-data-is-intuitive">3. Checking the data is intuitive</h3>
-<ul>
-<li>After getting the domain knowledge, we can check the data is intuitive or not. Whether it agrees with our domain knowledge or not.
-<ul>
-<li>e.g.&nbsp;if this is a age data, we can be sure that the age is between 1 and 100. If it is not, then we need to check it. If we get a value 336, may be it’s a typo and it should be 33.6. If it is not, then we need to check it.</li>
-<li>The value of Clicks columns should be less or equal to Impressions. If it is not, then we need to check it. We need to check whethe it is a error or some kind of logic there.</li>
-<li><blockquote class="blockquote">
-<p><strong>Note</strong>: Fastai founder Jeremy says there is outlier in statistics, but in case of data science, if there is some anomaly, we need to check it and go deep down to understand it.</p>
-</blockquote></li>
-<li>We also createa a new feature with incorrect, whether 1 or 1, based on the above conditions.</li>
-</ul></li>
-</ul>
-</section>
-<section id="understand-how-data-is-generated" class="level3">
-<h3 class="anchored" data-anchor-id="understand-how-data-is-generated">4. Understand how data is generated</h3>
-<ul>
-<li>Algorithm for sampling object from database.</li>
-<li>Random sample, or over sampling, or under sampling</li>
-<li>Validation scheme can only ge genreated if we understand how data is generated</li>
-<li>If theere is a diffrence between train and test, then we need to check it, try to understand why it is done and whether to gain any intuition about it.</li>
-</ul>
-<p><strong>Next post can be found <a href="https://Hasangoni.github.io/2023/11/19/Feature_preprocessing_and_generation.html">here</a></strong></p>
-
-
-
-</section>
-</section>
-</section>
-
-<div class="quarto-listing quarto-listing-container-default" id="listing-listing">
-<div class="list quarto-listing-default">
-
+<section id="series-navigation" class="level1" data-number="1">
+<h1 data-number="1"><span class="header-section-number">1</span> Series Navigation</h1>
+<div class="callout callout-style-default callout-note callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
 </div>
-<div class="listing-no-matching d-none">
-No matching items
+<div class="callout-title-container flex-fill">
+Data Science Steps Series
 </div>
-</div></main> <!-- /main -->
+</div>
+<div class="callout-body-container callout-body">
+<p>This is Part 1 of a 6-part series on data science fundamentals:</p>
+<ol type="1">
+<li><strong>Part 1: EDA Fundamentals</strong> (You are here)</li>
+<li><a href="../../posts/data-science-steps-to-follow-part02">Part 2: Feature Preprocessing and Generation</a></li>
+<li><a href="../../posts/data-science-steps-to-follow-part03">Part 3: Handling Anonymized Data</a></li>
+<li><a href="../../posts/data-science-steps-to-follow-part04">Part 4: Text Feature Extraction</a></li>
+<li><a href="../../posts/data-science-steps-to-follow-part05">Part 5: Image Feature Extraction</a></li>
+<li><a href="../../posts/data-science-steps-to-follow-part06">Part 6: Advanced Techniques</a></li>
+</ol>
+</div>
+</div>
+</section>
+<section id="exploratory-data-analysis-eda" class="level1" data-number="2">
+<h1 data-number="2"><span class="header-section-number">2</span> Exploratory Data Analysis (EDA)</h1>
+<p>This guide is based on the excellent course <a href="https://www.coursera.org/learn/competitive-data-science">How to Win a Data Science Competition: Learn from Top Kagglers</a> by Yandex and MIPT. I’ve organized these notes to help fellow data scientists master the art of EDA.</p>
+<section id="what-is-eda" class="level2" data-number="2.1">
+<h2 data-number="2.1" class="anchored" data-anchor-id="what-is-eda"><span class="header-section-number">2.1</span> What is EDA?</h2>
+<p>EDA is the critical first step in any data science project. It helps us:</p>
+<ul>
+<li>Understand the data deeply</li>
+<li>Build intuition about patterns and relationships</li>
+<li>Generate hypotheses for feature engineering</li>
+<li>Find insights that inform modeling decisions</li>
+</ul>
+</section>
+<section id="the-power-of-visualization" class="level2" data-number="2.2">
+<h2 data-number="2.2" class="anchored" data-anchor-id="the-power-of-visualization"><span class="header-section-number">2.2</span> The Power of Visualization</h2>
+<p>One of the most powerful EDA tools is visualization. Let’s look at a fascinating example from a Kaggle competition:</p>
+<div class="callout callout-style-default callout-tip callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Real-World Example
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>In a promotion prediction competition, simple visualization revealed: - Two key features: promos sent and promos used - A direct relationship between their difference and the target - This insight led to 81% accuracy without complex modeling!</p>
+</div>
+</div>
+<div class="sourceCode" id="cb1"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb1-1"><a href="#cb1-1"></a><span class="co"># Example visualization code</span></span>
+<span id="cb1-2"><a href="#cb1-2"></a><span class="im">import</span> pandas <span class="im">as</span> pd</span>
+<span id="cb1-3"><a href="#cb1-3"></a><span class="im">import</span> seaborn <span class="im">as</span> sns</span>
+<span id="cb1-4"><a href="#cb1-4"></a><span class="im">import</span> matplotlib.pyplot <span class="im">as</span> plt</span>
+<span id="cb1-5"><a href="#cb1-5"></a></span>
+<span id="cb1-6"><a href="#cb1-6"></a><span class="kw">def</span> plot_promo_relationship(df):</span>
+<span id="cb1-7"><a href="#cb1-7"></a>    plt.figure(figsize<span class="op">=</span>(<span class="dv">10</span>, <span class="dv">6</span>))</span>
+<span id="cb1-8"><a href="#cb1-8"></a>    plt.scatter(<span class="st">'promos_sent'</span>, <span class="st">'promos_used'</span>, data<span class="op">=</span>df)</span>
+<span id="cb1-9"><a href="#cb1-9"></a>    plt.xlabel(<span class="st">'Number of Promos Sent'</span>)</span>
+<span id="cb1-10"><a href="#cb1-10"></a>    plt.ylabel(<span class="st">'Number of Promos Used'</span>)</span>
+<span id="cb1-11"><a href="#cb1-11"></a>    plt.title(<span class="st">'Promo Usage Pattern'</span>)</span>
+<span id="cb1-12"><a href="#cb1-12"></a>    plt.show()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</section>
+<section id="building-intuition" class="level2" data-number="2.3">
+<h2 data-number="2.3" class="anchored" data-anchor-id="building-intuition"><span class="header-section-number">2.3</span> Building Intuition</h2>
+<section id="domain-knowledge-acquisition" class="level3" data-number="2.3.1">
+<h3 data-number="2.3.1" class="anchored" data-anchor-id="domain-knowledge-acquisition"><span class="header-section-number">2.3.1</span> 1. Domain Knowledge Acquisition</h3>
+<p>Before diving into analysis, focus on:</p>
+<ul>
+<li>Understanding the business goal</li>
+<li>Researching similar problems</li>
+<li>Learning industry-specific metrics</li>
+<li>Reading relevant documentation</li>
+</ul>
+</section>
+<section id="data-validation" class="level3" data-number="2.3.2">
+<h3 data-number="2.3.2" class="anchored" data-anchor-id="data-validation"><span class="header-section-number">2.3.2</span> 2. Data Validation</h3>
+<div class="callout callout-style-default callout-important callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Key Validation Checks
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<ul>
+<li>Value ranges (e.g., age between 0-120)</li>
+<li>Logical relationships (clicks ≤ impressions)</li>
+<li>Missing value patterns</li>
+<li>Outliers and anomalies</li>
+</ul>
+</div>
+</div>
+<div class="sourceCode" id="cb2"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb2-1"><a href="#cb2-1"></a><span class="kw">def</span> validate_data(df):</span>
+<span id="cb2-2"><a href="#cb2-2"></a>    <span class="co">"""Basic data validation checks"""</span></span>
+<span id="cb2-3"><a href="#cb2-3"></a>    issues <span class="op">=</span> []</span>
+<span id="cb2-4"><a href="#cb2-4"></a>    </span>
+<span id="cb2-5"><a href="#cb2-5"></a>    <span class="co"># Age check</span></span>
+<span id="cb2-6"><a href="#cb2-6"></a>    <span class="cf">if</span> df[<span class="st">'age'</span>].<span class="bu">max</span>() <span class="op">&gt;</span> <span class="dv">120</span>:</span>
+<span id="cb2-7"><a href="#cb2-7"></a>        issues.append(<span class="st">"Found age &gt; 120"</span>)</span>
+<span id="cb2-8"><a href="#cb2-8"></a>        </span>
+<span id="cb2-9"><a href="#cb2-9"></a>    <span class="co"># Click validation</span></span>
+<span id="cb2-10"><a href="#cb2-10"></a>    <span class="cf">if</span> <span class="bu">any</span>(df[<span class="st">'clicks'</span>] <span class="op">&gt;</span> df[<span class="st">'impressions'</span>]):</span>
+<span id="cb2-11"><a href="#cb2-11"></a>        issues.append(<span class="st">"Found clicks &gt; impressions"</span>)</span>
+<span id="cb2-12"><a href="#cb2-12"></a>    </span>
+<span id="cb2-13"><a href="#cb2-13"></a>    <span class="cf">return</span> issues</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</section>
+<section id="understanding-data-generation" class="level3" data-number="2.3.3">
+<h3 data-number="2.3.3" class="anchored" data-anchor-id="understanding-data-generation"><span class="header-section-number">2.3.3</span> 3. Understanding Data Generation</h3>
+<p>Key considerations:</p>
+<ul>
+<li>Sampling methodology</li>
+<li>Train/test split rationale</li>
+<li>Time-based patterns</li>
+<li>Data collection process</li>
+</ul>
+<div class="callout callout-style-default callout-note callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Jeremy Howard’s Insight
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>“In data science, there are no outliers - only opportunities to understand your data better.”</p>
+</div>
+</div>
+</section>
+</section>
+<section id="related-resources" class="level2" data-number="2.4">
+<h2 data-number="2.4" class="anchored" data-anchor-id="related-resources"><span class="header-section-number">2.4</span> Related Resources</h2>
+<ul>
+<li><a href="../../posts/matrix_multiplication_from_fastai_course">Understanding Matrix Multiplication</a> - Essential math for data science</li>
+<li><a href="../../posts/nougat-to-read-scientific-pdf-files">Using Nougat for Research Papers</a> - Tool for data science research</li>
+</ul>
+</section>
+<section id="next-steps" class="level2" data-number="2.5">
+<h2 data-number="2.5" class="anchored" data-anchor-id="next-steps"><span class="header-section-number">2.5</span> Next Steps</h2>
+<p>Continue to <a href="../../posts/data-science-steps-to-follow-part02">Part 2: Feature Preprocessing and Generation</a>, where we’ll explore how to transform raw data into meaningful features.</p>
+</section>
+<section id="references" class="level2" data-number="2.6">
+<h2 data-number="2.6" class="anchored" data-anchor-id="references"><span class="header-section-number">2.6</span> References</h2>
+<ol type="1">
+<li><a href="https://www.coursera.org/learn/competitive-data-science">Coursera: How to Win a Data Science Competition</a></li>
+<li><a href="https://course.fast.ai/">Fast.ai: Practical Deep Learning</a></li>
+<li><a href="https://jakevdp.github.io/PythonDataScienceHandbook/">Python Data Science Handbook</a></li>
+</ol>
+
+
+<!-- -->
+
+</section>
+</section>
+
+<div id="quarto-appendix" class="default"><section class="quarto-appendix-contents"><h2 class="anchored quarto-appendix-heading">Reuse</h2><div id="quarto-reuse" class="quarto-appendix-contents"><div>CC BY-NC-SA 4.0</div></div></section><section class="quarto-appendix-contents"><h2 class="anchored quarto-appendix-heading">Citation</h2><div><div class="quarto-appendix-secondary-label">BibTeX citation:</div><pre class="sourceCode code-with-copy quarto-appendix-bibtex"><code class="sourceCode bibtex">@online{goni2022,
+  author = {Goni, Hasan},
+  title = {Data {Science} {Steps} to {Follow} - {Part} 1},
+  date = {2022-11-19},
+  langid = {en}
+}
+</code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre><div class="quarto-appendix-secondary-label">For attribution, please cite this work as:</div><div id="ref-goni2022" class="csl-entry quarto-appendix-citeas" role="listitem">
+Goni, Hasan. 2022. <span>“Data Science Steps to Follow - Part 1.”</span>
+November 19, 2022.
+</div></div></section></div></main> <!-- /main -->
 <script id="quarto-html-after-body" type="application/javascript">
 window.document.addEventListener("DOMContentLoaded", function (event) {
   const toggleBodyColorMode = (bsSheetEl) => {
@@ -376,6 +587,57 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
     // clear code selection
     e.clearSelection();
   });
+  const viewSource = window.document.getElementById('quarto-view-source') ||
+                     window.document.getElementById('quarto-code-tools-source');
+  if (viewSource) {
+    const sourceUrl = viewSource.getAttribute("data-quarto-source-url");
+    viewSource.addEventListener("click", function(e) {
+      if (sourceUrl) {
+        // rstudio viewer pane
+        if (/\bcapabilities=\b/.test(window.location)) {
+          window.open(sourceUrl);
+        } else {
+          window.location.href = sourceUrl;
+        }
+      } else {
+        const modal = new bootstrap.Modal(document.getElementById('quarto-embedded-source-code-modal'));
+        modal.show();
+      }
+      return false;
+    });
+  }
+  function toggleCodeHandler(show) {
+    return function(e) {
+      const detailsSrc = window.document.querySelectorAll(".cell > details > .sourceCode");
+      for (let i=0; i<detailsSrc.length; i++) {
+        const details = detailsSrc[i].parentElement;
+        if (show) {
+          details.open = true;
+        } else {
+          details.removeAttribute("open");
+        }
+      }
+      const cellCodeDivs = window.document.querySelectorAll(".cell > .sourceCode");
+      const fromCls = show ? "hidden" : "unhidden";
+      const toCls = show ? "unhidden" : "hidden";
+      for (let i=0; i<cellCodeDivs.length; i++) {
+        const codeDiv = cellCodeDivs[i];
+        if (codeDiv.classList.contains(fromCls)) {
+          codeDiv.classList.remove(fromCls);
+          codeDiv.classList.add(toCls);
+        } 
+      }
+      return false;
+    }
+  }
+  const hideAllCode = window.document.getElementById("quarto-hide-all-code");
+  if (hideAllCode) {
+    hideAllCode.addEventListener("click", toggleCodeHandler(false));
+  }
+  const showAllCode = window.document.getElementById("quarto-show-all-code");
+  if (showAllCode) {
+    showAllCode.addEventListener("click", toggleCodeHandler(true));
+  }
   function tippyHover(el, contentFn) {
     const config = {
       allowHTML: true,
@@ -530,8 +792,146 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
   }
 });
 </script>
+<script src="https://utteranc.es/client.js" repo="yourusername/quarto_blog_hasan" issue-term="pathname" theme="github-light" crossorigin="anonymous" async="">
+</script>
+<script src="https://giscus.app/client.js" data-repo="HasanGoni/quarto_blog_hasan" data-repo-id="" data-category="General" data-category-id="" data-mapping="title" data-reactions-enabled="1" data-emit-metadata="0" data-input-position="top" data-theme="light" data-lang="en" crossorigin="anonymous" async="">
+</script><div class="modal fade" id="quarto-embedded-source-code-modal" tabindex="-1" aria-labelledby="quarto-embedded-source-code-modal-label" aria-hidden="true"><div class="modal-dialog modal-dialog-scrollable"><div class="modal-content"><div class="modal-header"><h5 class="modal-title" id="quarto-embedded-source-code-modal-label">Source Code</h5><button class="btn-close" data-bs-dismiss="modal"></button></div><div class="modal-body"><div class="">
+<div class="sourceCode" id="cb3" data-shortcodes="false"><pre class="sourceCode numberSource markdown number-lines code-with-copy"><code class="sourceCode markdown"><span id="cb3-1"><a href="#cb3-1"></a><span class="co">---</span></span>
+<span id="cb3-2"><a href="#cb3-2"></a><span class="an">title:</span><span class="co"> "Data Science Steps to Follow - Part 1"</span></span>
+<span id="cb3-3"><a href="#cb3-3"></a><span class="an">subtitle:</span><span class="co"> "Exploratory Data Analysis Fundamentals" </span></span>
+<span id="cb3-4"><a href="#cb3-4"></a><span class="an">date:</span><span class="co"> "2022-11-19"</span></span>
+<span id="cb3-5"><a href="#cb3-5"></a><span class="an">categories:</span><span class="co"> [code, analysis, tutorial]</span></span>
+<span id="cb3-6"><a href="#cb3-6"></a><span class="an">author:</span><span class="co"> "Hasan Goni"</span></span>
+<span id="cb3-7"><a href="#cb3-7"></a><span class="an">image:</span><span class="co"> "image.jpg"</span></span>
+<span id="cb3-8"><a href="#cb3-8"></a><span class="an">toc:</span><span class="co"> true</span></span>
+<span id="cb3-9"><a href="#cb3-9"></a><span class="an">series:</span></span>
+<span id="cb3-10"><a href="#cb3-10"></a><span class="co">  name: "Data Science Steps"</span></span>
+<span id="cb3-11"><a href="#cb3-11"></a><span class="co">  number: 1</span></span>
+<span id="cb3-12"><a href="#cb3-12"></a><span class="co">---</span></span>
+<span id="cb3-13"><a href="#cb3-13"></a></span>
+<span id="cb3-14"><a href="#cb3-14"></a><span class="fu"># Series Navigation</span></span>
+<span id="cb3-15"><a href="#cb3-15"></a></span>
+<span id="cb3-16"><a href="#cb3-16"></a>::: {.callout-note}</span>
+<span id="cb3-17"><a href="#cb3-17"></a><span class="fu">## Data Science Steps Series</span></span>
+<span id="cb3-18"><a href="#cb3-18"></a>This is Part 1 of a 6-part series on data science fundamentals:</span>
+<span id="cb3-19"><a href="#cb3-19"></a></span>
+<span id="cb3-20"><a href="#cb3-20"></a><span class="ss">1. </span>**Part 1: EDA Fundamentals** (You are here)</span>
+<span id="cb3-21"><a href="#cb3-21"></a><span class="ss">2. </span><span class="co">[</span><span class="ot">Part 2: Feature Preprocessing and Generation</span><span class="co">](/posts/data-science-steps-to-follow-part02)</span></span>
+<span id="cb3-22"><a href="#cb3-22"></a><span class="ss">3. </span><span class="co">[</span><span class="ot">Part 3: Handling Anonymized Data</span><span class="co">](/posts/data-science-steps-to-follow-part03)</span></span>
+<span id="cb3-23"><a href="#cb3-23"></a><span class="ss">4. </span><span class="co">[</span><span class="ot">Part 4: Text Feature Extraction</span><span class="co">](/posts/data-science-steps-to-follow-part04)</span></span>
+<span id="cb3-24"><a href="#cb3-24"></a><span class="ss">5. </span><span class="co">[</span><span class="ot">Part 5: Image Feature Extraction</span><span class="co">](/posts/data-science-steps-to-follow-part05)</span></span>
+<span id="cb3-25"><a href="#cb3-25"></a><span class="ss">6. </span><span class="co">[</span><span class="ot">Part 6: Advanced Techniques</span><span class="co">](/posts/data-science-steps-to-follow-part06)</span></span>
+<span id="cb3-26"><a href="#cb3-26"></a>:::</span>
+<span id="cb3-27"><a href="#cb3-27"></a></span>
+<span id="cb3-28"><a href="#cb3-28"></a><span class="fu"># Exploratory Data Analysis (EDA)</span></span>
+<span id="cb3-29"><a href="#cb3-29"></a></span>
+<span id="cb3-30"><a href="#cb3-30"></a>This guide is based on the excellent course <span class="co">[</span><span class="ot">How to Win a Data Science Competition: Learn from Top Kagglers</span><span class="co">](https://www.coursera.org/learn/competitive-data-science)</span> by Yandex and MIPT. I've organized these notes to help fellow data scientists master the art of EDA.</span>
+<span id="cb3-31"><a href="#cb3-31"></a></span>
+<span id="cb3-32"><a href="#cb3-32"></a><span class="fu">## What is EDA?</span></span>
+<span id="cb3-33"><a href="#cb3-33"></a></span>
+<span id="cb3-34"><a href="#cb3-34"></a>EDA is the critical first step in any data science project. It helps us:</span>
+<span id="cb3-35"><a href="#cb3-35"></a></span>
+<span id="cb3-36"><a href="#cb3-36"></a><span class="ss">- </span>Understand the data deeply</span>
+<span id="cb3-37"><a href="#cb3-37"></a><span class="ss">- </span>Build intuition about patterns and relationships</span>
+<span id="cb3-38"><a href="#cb3-38"></a><span class="ss">- </span>Generate hypotheses for feature engineering</span>
+<span id="cb3-39"><a href="#cb3-39"></a><span class="ss">- </span>Find insights that inform modeling decisions</span>
+<span id="cb3-40"><a href="#cb3-40"></a></span>
+<span id="cb3-41"><a href="#cb3-41"></a><span class="fu">## The Power of Visualization</span></span>
+<span id="cb3-42"><a href="#cb3-42"></a></span>
+<span id="cb3-43"><a href="#cb3-43"></a>One of the most powerful EDA tools is visualization. Let's look at a fascinating example from a Kaggle competition:</span>
+<span id="cb3-44"><a href="#cb3-44"></a></span>
+<span id="cb3-45"><a href="#cb3-45"></a>::: {.callout-tip}</span>
+<span id="cb3-46"><a href="#cb3-46"></a><span class="fu">## Real-World Example</span></span>
+<span id="cb3-47"><a href="#cb3-47"></a>In a promotion prediction competition, simple visualization revealed:</span>
+<span id="cb3-48"><a href="#cb3-48"></a><span class="ss">- </span>Two key features: promos sent and promos used</span>
+<span id="cb3-49"><a href="#cb3-49"></a><span class="ss">- </span>A direct relationship between their difference and the target</span>
+<span id="cb3-50"><a href="#cb3-50"></a><span class="ss">- </span>This insight led to 81% accuracy without complex modeling!</span>
+<span id="cb3-51"><a href="#cb3-51"></a>:::</span>
+<span id="cb3-52"><a href="#cb3-52"></a></span>
+<span id="cb3-53"><a href="#cb3-53"></a><span class="in">```python</span></span>
+<span id="cb3-54"><a href="#cb3-54"></a><span class="co"># Example visualization code</span></span>
+<span id="cb3-55"><a href="#cb3-55"></a><span class="im">import</span> pandas <span class="im">as</span> pd</span>
+<span id="cb3-56"><a href="#cb3-56"></a><span class="im">import</span> seaborn <span class="im">as</span> sns</span>
+<span id="cb3-57"><a href="#cb3-57"></a><span class="im">import</span> matplotlib.pyplot <span class="im">as</span> plt</span>
+<span id="cb3-58"><a href="#cb3-58"></a></span>
+<span id="cb3-59"><a href="#cb3-59"></a><span class="kw">def</span> plot_promo_relationship(df):</span>
+<span id="cb3-60"><a href="#cb3-60"></a>    plt.figure(figsize<span class="op">=</span>(<span class="dv">10</span>, <span class="dv">6</span>))</span>
+<span id="cb3-61"><a href="#cb3-61"></a>    plt.scatter(<span class="st">'promos_sent'</span>, <span class="st">'promos_used'</span>, data<span class="op">=</span>df)</span>
+<span id="cb3-62"><a href="#cb3-62"></a>    plt.xlabel(<span class="st">'Number of Promos Sent'</span>)</span>
+<span id="cb3-63"><a href="#cb3-63"></a>    plt.ylabel(<span class="st">'Number of Promos Used'</span>)</span>
+<span id="cb3-64"><a href="#cb3-64"></a>    plt.title(<span class="st">'Promo Usage Pattern'</span>)</span>
+<span id="cb3-65"><a href="#cb3-65"></a>    plt.show()</span>
+<span id="cb3-66"><a href="#cb3-66"></a><span class="in">```</span></span>
+<span id="cb3-67"><a href="#cb3-67"></a></span>
+<span id="cb3-68"><a href="#cb3-68"></a><span class="fu">## Building Intuition</span></span>
+<span id="cb3-69"><a href="#cb3-69"></a></span>
+<span id="cb3-70"><a href="#cb3-70"></a><span class="fu">### 1. Domain Knowledge Acquisition</span></span>
+<span id="cb3-71"><a href="#cb3-71"></a></span>
+<span id="cb3-72"><a href="#cb3-72"></a>Before diving into analysis, focus on:</span>
+<span id="cb3-73"><a href="#cb3-73"></a></span>
+<span id="cb3-74"><a href="#cb3-74"></a><span class="ss">- </span>Understanding the business goal</span>
+<span id="cb3-75"><a href="#cb3-75"></a><span class="ss">- </span>Researching similar problems</span>
+<span id="cb3-76"><a href="#cb3-76"></a><span class="ss">- </span>Learning industry-specific metrics</span>
+<span id="cb3-77"><a href="#cb3-77"></a><span class="ss">- </span>Reading relevant documentation</span>
+<span id="cb3-78"><a href="#cb3-78"></a></span>
+<span id="cb3-79"><a href="#cb3-79"></a><span class="fu">### 2. Data Validation</span></span>
+<span id="cb3-80"><a href="#cb3-80"></a></span>
+<span id="cb3-81"><a href="#cb3-81"></a>::: {.callout-important}</span>
+<span id="cb3-82"><a href="#cb3-82"></a><span class="fu">## Key Validation Checks</span></span>
+<span id="cb3-83"><a href="#cb3-83"></a><span class="ss">- </span>Value ranges (e.g., age between 0-120)</span>
+<span id="cb3-84"><a href="#cb3-84"></a><span class="ss">- </span>Logical relationships (clicks ≤ impressions)</span>
+<span id="cb3-85"><a href="#cb3-85"></a><span class="ss">- </span>Missing value patterns</span>
+<span id="cb3-86"><a href="#cb3-86"></a><span class="ss">- </span>Outliers and anomalies</span>
+<span id="cb3-87"><a href="#cb3-87"></a>:::</span>
+<span id="cb3-88"><a href="#cb3-88"></a></span>
+<span id="cb3-89"><a href="#cb3-89"></a><span class="in">```python</span></span>
+<span id="cb3-90"><a href="#cb3-90"></a><span class="kw">def</span> validate_data(df):</span>
+<span id="cb3-91"><a href="#cb3-91"></a>    <span class="co">"""Basic data validation checks"""</span></span>
+<span id="cb3-92"><a href="#cb3-92"></a>    issues <span class="op">=</span> []</span>
+<span id="cb3-93"><a href="#cb3-93"></a>    </span>
+<span id="cb3-94"><a href="#cb3-94"></a>    <span class="co"># Age check</span></span>
+<span id="cb3-95"><a href="#cb3-95"></a>    <span class="cf">if</span> df[<span class="st">'age'</span>].<span class="bu">max</span>() <span class="op">&gt;</span> <span class="dv">120</span>:</span>
+<span id="cb3-96"><a href="#cb3-96"></a>        issues.append(<span class="st">"Found age &gt; 120"</span>)</span>
+<span id="cb3-97"><a href="#cb3-97"></a>        </span>
+<span id="cb3-98"><a href="#cb3-98"></a>    <span class="co"># Click validation</span></span>
+<span id="cb3-99"><a href="#cb3-99"></a>    <span class="cf">if</span> <span class="bu">any</span>(df[<span class="st">'clicks'</span>] <span class="op">&gt;</span> df[<span class="st">'impressions'</span>]):</span>
+<span id="cb3-100"><a href="#cb3-100"></a>        issues.append(<span class="st">"Found clicks &gt; impressions"</span>)</span>
+<span id="cb3-101"><a href="#cb3-101"></a>    </span>
+<span id="cb3-102"><a href="#cb3-102"></a>    <span class="cf">return</span> issues</span>
+<span id="cb3-103"><a href="#cb3-103"></a><span class="in">```</span></span>
+<span id="cb3-104"><a href="#cb3-104"></a></span>
+<span id="cb3-105"><a href="#cb3-105"></a><span class="fu">### 3. Understanding Data Generation</span></span>
+<span id="cb3-106"><a href="#cb3-106"></a></span>
+<span id="cb3-107"><a href="#cb3-107"></a>Key considerations:</span>
+<span id="cb3-108"><a href="#cb3-108"></a></span>
+<span id="cb3-109"><a href="#cb3-109"></a><span class="ss">- </span>Sampling methodology</span>
+<span id="cb3-110"><a href="#cb3-110"></a><span class="ss">- </span>Train/test split rationale</span>
+<span id="cb3-111"><a href="#cb3-111"></a><span class="ss">- </span>Time-based patterns</span>
+<span id="cb3-112"><a href="#cb3-112"></a><span class="ss">- </span>Data collection process</span>
+<span id="cb3-113"><a href="#cb3-113"></a></span>
+<span id="cb3-114"><a href="#cb3-114"></a>::: {.callout-note}</span>
+<span id="cb3-115"><a href="#cb3-115"></a><span class="fu">## Jeremy Howard's Insight</span></span>
+<span id="cb3-116"><a href="#cb3-116"></a>"In data science, there are no outliers - only opportunities to understand your data better."</span>
+<span id="cb3-117"><a href="#cb3-117"></a>:::</span>
+<span id="cb3-118"><a href="#cb3-118"></a></span>
+<span id="cb3-119"><a href="#cb3-119"></a><span class="fu">## Related Resources</span></span>
+<span id="cb3-120"><a href="#cb3-120"></a></span>
+<span id="cb3-121"><a href="#cb3-121"></a><span class="ss">- </span><span class="co">[</span><span class="ot">Understanding Matrix Multiplication</span><span class="co">](/posts/matrix_multiplication_from_fastai_course)</span> - Essential math for data science</span>
+<span id="cb3-122"><a href="#cb3-122"></a><span class="ss">- </span><span class="co">[</span><span class="ot">Using Nougat for Research Papers</span><span class="co">](/posts/nougat-to-read-scientific-pdf-files)</span> - Tool for data science research</span>
+<span id="cb3-123"><a href="#cb3-123"></a></span>
+<span id="cb3-124"><a href="#cb3-124"></a><span class="fu">## Next Steps</span></span>
+<span id="cb3-125"><a href="#cb3-125"></a></span>
+<span id="cb3-126"><a href="#cb3-126"></a>Continue to <span class="co">[</span><span class="ot">Part 2: Feature Preprocessing and Generation</span><span class="co">](/posts/data-science-steps-to-follow-part02)</span>, where we'll explore how to transform raw data into meaningful features.</span>
+<span id="cb3-127"><a href="#cb3-127"></a></span>
+<span id="cb3-128"><a href="#cb3-128"></a><span class="fu">## References</span></span>
+<span id="cb3-129"><a href="#cb3-129"></a></span>
+<span id="cb3-130"><a href="#cb3-130"></a><span class="ss">1. </span><span class="co">[</span><span class="ot">Coursera: How to Win a Data Science Competition</span><span class="co">](https://www.coursera.org/learn/competitive-data-science)</span></span>
+<span id="cb3-131"><a href="#cb3-131"></a><span class="ss">2. </span><span class="co">[</span><span class="ot">Fast.ai: Practical Deep Learning</span><span class="co">](https://course.fast.ai/)</span></span>
+<span id="cb3-132"><a href="#cb3-132"></a><span class="ss">3. </span><span class="co">[</span><span class="ot">Python Data Science Handbook</span><span class="co">](https://jakevdp.github.io/PythonDataScienceHandbook/)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div></div></div></div></div>
 </div> <!-- /content -->
 
 
 
+<script src="../../site_libs/quarto-html/zenscroll-min.js"></script>
 </body></html>

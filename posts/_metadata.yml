@@ -42,7 +42,7 @@ back-to-top-navigation: true
 categories-display: true
 tags-display: true
 
-# Code execution
+# Code execution and FastAI-style components
 execute:
   echo: true
   warning: false
@@ -77,14 +77,6 @@ tag-cloud:
   min-font-size: 0.8
   max-font-size: 2.0
 
-# FastAI-style components
-execute:
-  echo: true
-  warning: false
-  error: false
-  cache: true
-  freeze: auto
-
 # Interactive components
 jupyter: python3
 
@@ -97,16 +89,6 @@ crossref:
   tbl-title: "Table"
   eq-title: "Equation"
 
-# Navigation
-page-navigation: true
-title-block-banner: true
-title-block-style: default
-
-# Comments and social
-comments:
-  hypothesis: true
-  utterances: 
-    repo: yourusername/quarto_blog_hasan
-    theme: github-light
+# Social media cards
 twitter-card: true
 open-graph: true

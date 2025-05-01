@@ -11,7 +11,8 @@ listing:
     filter-ui: true
     image-height: 200px
     fields: [image, date, title, subtitle, categories, author]
-    filter: category == "data-science"
+    include: 
+      categories: "data-science"
     
   - id: deep-learning
     contents: "posts/**/index.qmd"
@@ -21,7 +22,8 @@ listing:
     filter-ui: true
     image-height: 200px
     fields: [image, date, title, subtitle, categories, author]
-    filter: category == "deep-learning"
+    include:
+      categories: "deep-learning"
     
   - id: tools
     contents: "posts/**/index.qmd"
@@ -31,7 +33,8 @@ listing:
     filter-ui: true
     image-height: 200px
     fields: [image, date, title, subtitle, categories, author]
-    filter: category == "tools"
+    include:
+      categories: "tools"
 ---
 
 # Browse by Category

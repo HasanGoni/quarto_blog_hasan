@@ -10,7 +10,7 @@
 <meta name="dcterms.date" content="2024-08-13">
 <meta name="description" content="Matrix Multiplication from fastai course 2022">
 
-<title>Hasan Blog Post - Matrix Multiplication</title>
+<title>Hasan’s Data Science &amp; AI Blog - Matrix Multiplication</title>
 <style>
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
@@ -96,12 +96,22 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
     "search-label": "Search"
   }
 }</script>
+<style>html{ scroll-behavior: smooth; }</style>
+<script async="" src="https://hypothes.is/embed.js"></script>
 
 
 <link rel="stylesheet" href="../../styles.css">
+<meta property="og:title" content="Hasan’s Data Science &amp; AI Blog - Matrix Multiplication">
+<meta property="og:description" content="Matrix Multiplication from fastai course 2022">
+<meta property="og:image" content="image.webp">
+<meta property="og:site-name" content="Hasan's Data Science &amp; AI Blog">
+<meta name="twitter:title" content="Hasan’s Data Science &amp; AI Blog - Matrix Multiplication">
+<meta name="twitter:description" content="Matrix Multiplication from fastai course 2022">
+<meta name="twitter:image" content="image.webp">
+<meta name="twitter:card" content="summary_large_image">
 </head>
 
-<body class="nav-fixed fullcontent">
+<body class="nav-sidebar docked nav-fixed">
 
 <div id="quarto-search-results"></div>
   <header id="quarto-header" class="headroom fixed-top">
@@ -109,7 +119,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
       <div class="navbar-container container-fluid">
       <div class="navbar-brand-container">
     <a class="navbar-brand" href="../../index.html">
-    <span class="navbar-title">Hasan Blog Post</span>
+    <span class="navbar-title">Hasan’s Data Science &amp; AI Blog</span>
     </a>
   </div>
             <div id="quarto-search" class="" title="Search"></div>
@@ -119,22 +129,45 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
           <div class="collapse navbar-collapse" id="navbarCollapse">
             <ul class="navbar-nav navbar-nav-scroll me-auto">
   <li class="nav-item">
-    <a class="nav-link" href="https://hasangoni.quarto.pub/hasan-blog-post/" rel="" target="">
- <span class="menu-text">Blog</span></a>
+    <a class="nav-link" href="../../index.html" rel="" target="">
+ <span class="menu-text">Home</span></a>
   </li>  
-</ul>
-            <ul class="navbar-nav navbar-nav-scroll ms-auto">
+  <li class="nav-item dropdown ">
+    <a class="nav-link dropdown-toggle" href="#" id="nav-menu-series" role="button" data-bs-toggle="dropdown" aria-expanded="false" rel="" target="">
+ <span class="menu-text">Series</span>
+    </a>
+    <ul class="dropdown-menu" aria-labelledby="nav-menu-series">    
+        <li>
+    <a class="dropdown-item" href="../../posts/series/data-science-steps.html" rel="" target="">
+ <span class="dropdown-text">Data Science Steps</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="../../posts/series/computer-vision-with-pytorch.html" rel="" target="">
+ <span class="dropdown-text">Computer Vision</span></a>
+  </li>  
+    </ul>
+  </li>
+  <li class="nav-item">
+    <a class="nav-link" href="../../categories.html" rel="" target="">
+ <span class="menu-text">Categories</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="../../tags.html" rel="" target="">
+ <span class="menu-text">Tags</span></a>
+  </li>  
   <li class="nav-item">
     <a class="nav-link" href="../../about.html" rel="" target="">
  <span class="menu-text">About</span></a>
   </li>  
+</ul>
+            <ul class="navbar-nav navbar-nav-scroll ms-auto">
   <li class="nav-item compact">
     <a class="nav-link" href="https://github.com/HasanGoni" rel="" target=""><i class="bi bi-github" role="img">
 </i> 
  <span class="menu-text"></span></a>
   </li>  
   <li class="nav-item compact">
-    <a class="nav-link" href="https://twitter.com/hasangoni" rel="" target=""><i class="bi bi-twitter" role="img">
+    <a class="nav-link" href="https://twitter.com/yourusername" rel="" target=""><i class="bi bi-twitter" role="img">
 </i> 
  <span class="menu-text"></span></a>
   </li>  
@@ -144,12 +177,22 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
           </div> <!-- /navcollapse -->
       </div> <!-- /container-fluid -->
     </nav>
+  <nav class="quarto-secondary-nav">
+    <div class="container-fluid d-flex">
+      <button type="button" class="quarto-btn-toggle btn" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar,#quarto-sidebar-glass" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+        <i class="bi bi-layout-text-sidebar-reverse"></i>
+      </button>
+      <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item">Matrix Multiplication</li></ol></nav>
+      <a class="flex-grow-1" role="button" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar,#quarto-sidebar-glass" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
+      </a>
+    </div>
+  </nav>
 </header>
 <!-- content -->
 <header id="title-block-header" class="quarto-title-block default page-columns page-full">
   <div class="quarto-title-banner page-columns page-full">
     <div class="quarto-title column-body">
-      <h1 class="title">Matrix Multiplication</h1>
+      <div class="quarto-title-block"><div><h1 class="title">Matrix Multiplication</h1><button type="button" class="btn code-tools-button dropdown-toggle" id="quarto-code-tools-menu" data-bs-toggle="dropdown" aria-expanded="false"><i class="bi"></i> Code</button><ul class="dropdown-menu dropdown-menu-end" aria-labelelledby="quarto-code-tools-menu"><li><a id="quarto-show-all-code" class="dropdown-item" href="javascript:void(0)" role="button">Show All Code</a></li><li><a id="quarto-hide-all-code" class="dropdown-item" href="javascript:void(0)" role="button">Hide All Code</a></li></ul></div></div>
                   <div>
         <div class="description">
           Matrix Multiplication from fastai course 2022
@@ -179,49 +222,153 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
       </div>
     </div>
     
+      <div>
+      <div class="quarto-title-meta-heading">Modified</div>
+      <div class="quarto-title-meta-contents">
+        <p class="date-modified">August 13, 2024</p>
+      </div>
+    </div>
       
     </div>
     
   
   </header><div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article page-navbar">
 <!-- sidebar -->
+  <nav id="quarto-sidebar" class="sidebar collapse collapse-horizontal sidebar-navigation docked overflow-auto">
+    <div class="sidebar-menu-container"> 
+    <ul class="list-unstyled mt-1">
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-1" aria-expanded="true">
+ <span class="menu-text">Data Science</span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-1" aria-expanded="true" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-1" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../posts/series/data-science-steps.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Data Science Steps Series</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../posts/data-science-steps-to-follow-part01/index.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Data Science Steps to Follow - Part 1</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../posts/data-science-steps-to-follow-part02/index.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Data Science Steps to Follow - Part 2</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../posts/data-science-steps-to-follow-part03/index.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Data Science Steps to Follow -03</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../posts/data-science-steps-to-follow-part04/index.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Data Science Steps to Follow -04</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../posts/data-science-steps-to-follow-part05/index.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Data Science Steps to Follow -05</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../posts/data-science-steps-to-follow-part06/index.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Data Science Steps to Follow - Part 6</span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-2" aria-expanded="true">
+ <span class="menu-text">Computer Vision</span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-2" aria-expanded="true" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-2" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../posts/series/computer-vision-with-pytorch.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">computer-vision-with-pytorch.html</span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+    </ul>
+    </div>
+</nav>
+<div id="quarto-sidebar-glass" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar,#quarto-sidebar-glass"></div>
 <!-- margin-sidebar -->
-    
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+        <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">On this page</h2>
+   
+  <ul>
+  <li><a href="#first-description" id="toc-first-description" class="nav-link active" data-scroll-target="#first-description"><span class="header-section-number">0.1</span> First description</a></li>
+  <li><a href="#get-data" id="toc-get-data" class="nav-link" data-scroll-target="#get-data"><span class="header-section-number">0.2</span> Get data</a></li>
+  </ul>
+</nav>
+    </div>
 <!-- main -->
 <main class="content quarto-banner-title-block" id="quarto-document-content">
 
 
 
 
-<section id="first-description" class="level2">
-<h2 class="anchored" data-anchor-id="first-description">First description</h2>
+<section id="first-description" class="level2" data-number="0.1">
+<h2 data-number="0.1" class="anchored" data-anchor-id="first-description"><span class="header-section-number">0.1</span> First description</h2>
 <ul>
 <li>This notebook is actually reprodcution fo course practical deep learning for coders part2. Matrix Multiplication starts with Lession 11 (1:08:47).</li>
 <li>To get the noebook shown in the video, one should clone the course repository and run the notebook 01_matmul.ipynb.</li>
 </ul>
 </section>
-<section id="get-data" class="level2">
-<h2 class="anchored" data-anchor-id="get-data">Get data</h2>
+<section id="get-data" class="level2" data-number="0.2">
+<h2 data-number="0.2" class="anchored" data-anchor-id="get-data"><span class="header-section-number">0.2</span> Get data</h2>
 <p>We firt download the mnist data to work with it</p>
 <div class="cell" data-execution_count="10">
-<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> pathlib <span class="im">import</span> Path</span>
-<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> gzip, time, os, pickle, math</span>
-<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> urllib.request <span class="im">import</span> urlretrieve</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<details>
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb1-1"><a href="#cb1-1"></a><span class="im">from</span> pathlib <span class="im">import</span> Path</span>
+<span id="cb1-2"><a href="#cb1-2"></a><span class="im">import</span> gzip, time, os, pickle, math</span>
+<span id="cb1-3"><a href="#cb1-3"></a><span class="im">from</span> urllib.request <span class="im">import</span> urlretrieve</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
 </div>
 <div class="cell" data-execution_count="9">
-<div class="sourceCode cell-code" id="cb2"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a>HOME <span class="op">=</span> os.getenv(<span class="st">'HOME'</span>)</span>
-<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a>data_path <span class="op">=</span> Path(<span class="vs">fr'</span><span class="sc">{</span>HOME<span class="sc">}</span><span class="vs">/Schreibtisch/projects/git_data/course22p2/nbs/data'</span>)</span>
-<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a>MNIST_URL<span class="op">=</span><span class="st">'https://github.com/mnielsen/neural-networks-and-deep-learning/blob/master/data/mnist.pkl.gz?raw=true'</span></span>
-<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a>path_data <span class="op">=</span> data_path</span>
-<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a>path_data.mkdir(exist_ok<span class="op">=</span><span class="va">True</span>)</span>
-<span id="cb2-6"><a href="#cb2-6" aria-hidden="true" tabindex="-1"></a>path_gz <span class="op">=</span> path_data<span class="op">/</span><span class="st">'mnist.pkl.gz'</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<details>
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb2"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb2-1"><a href="#cb2-1"></a>HOME <span class="op">=</span> os.getenv(<span class="st">'HOME'</span>)</span>
+<span id="cb2-2"><a href="#cb2-2"></a>data_path <span class="op">=</span> Path(<span class="vs">fr'</span><span class="sc">{</span>HOME<span class="sc">}</span><span class="vs">/Schreibtisch/projects/git_data/course22p2/nbs/data'</span>)</span>
+<span id="cb2-3"><a href="#cb2-3"></a>MNIST_URL<span class="op">=</span><span class="st">'https://github.com/mnielsen/neural-networks-and-deep-learning/blob/master/data/mnist.pkl.gz?raw=true'</span></span>
+<span id="cb2-4"><a href="#cb2-4"></a>path_data <span class="op">=</span> data_path</span>
+<span id="cb2-5"><a href="#cb2-5"></a>path_data.mkdir(exist_ok<span class="op">=</span><span class="va">True</span>)</span>
+<span id="cb2-6"><a href="#cb2-6"></a>path_gz <span class="op">=</span> path_data<span class="op">/</span><span class="st">'mnist.pkl.gz'</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
 </div>
 <div class="cell" data-execution_count="11">
-<div class="sourceCode cell-code" id="cb3"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="cf">with</span> gzip.<span class="bu">open</span>(path_gz, <span class="st">'rb'</span>) <span class="im">as</span> f_in:</span>
-<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a>    ((x_train, y_train), (x_valid, y_valid),_ ) <span class="op">=</span>pickle.load(f_in, encoding<span class="op">=</span><span class="st">'latin1'</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<details>
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb3"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb3-1"><a href="#cb3-1"></a><span class="cf">with</span> gzip.<span class="bu">open</span>(path_gz, <span class="st">'rb'</span>) <span class="im">as</span> f_in:</span>
+<span id="cb3-2"><a href="#cb3-2"></a>    ((x_train, y_train), (x_valid, y_valid),_ ) <span class="op">=</span>pickle.load(f_in, encoding<span class="op">=</span><span class="st">'latin1'</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
 </div>
 <div class="cell" data-execution_count="12">
-<div class="sourceCode cell-code" id="cb4"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a>x_train.shape</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<details>
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb4"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb4-1"><a href="#cb4-1"></a>x_train.shape</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
 <div class="cell-output cell-output-display" data-execution_count="12">
 <pre><code>(50000, 784)</code></pre>
 </div>
@@ -230,7 +377,16 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 
 </section>
 
-</main> <!-- /main -->
+<div id="quarto-appendix" class="default"><section class="quarto-appendix-contents"><h2 class="anchored quarto-appendix-heading">Reuse</h2><div id="quarto-reuse" class="quarto-appendix-contents"><div>CC BY-NC-SA 4.0</div></div></section><section class="quarto-appendix-contents"><h2 class="anchored quarto-appendix-heading">Citation</h2><div><div class="quarto-appendix-secondary-label">BibTeX citation:</div><pre class="sourceCode code-with-copy quarto-appendix-bibtex"><code class="sourceCode bibtex">@online{goni2024,
+  author = {Goni, Hasan},
+  title = {Matrix {Multiplication}},
+  date = {2024-08-13},
+  langid = {en}
+}
+</code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre><div class="quarto-appendix-secondary-label">For attribution, please cite this work as:</div><div id="ref-goni2024" class="csl-entry quarto-appendix-citeas" role="listitem">
+Goni, Hasan. 2024. <span>“Matrix Multiplication.”</span> August 13,
+2024.
+</div></div></section></div></main> <!-- /main -->
 <script id="quarto-html-after-body" type="application/javascript">
 window.document.addEventListener("DOMContentLoaded", function (event) {
   const toggleBodyColorMode = (bsSheetEl) => {
@@ -310,6 +466,57 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
     // clear code selection
     e.clearSelection();
   });
+  const viewSource = window.document.getElementById('quarto-view-source') ||
+                     window.document.getElementById('quarto-code-tools-source');
+  if (viewSource) {
+    const sourceUrl = viewSource.getAttribute("data-quarto-source-url");
+    viewSource.addEventListener("click", function(e) {
+      if (sourceUrl) {
+        // rstudio viewer pane
+        if (/\bcapabilities=\b/.test(window.location)) {
+          window.open(sourceUrl);
+        } else {
+          window.location.href = sourceUrl;
+        }
+      } else {
+        const modal = new bootstrap.Modal(document.getElementById('quarto-embedded-source-code-modal'));
+        modal.show();
+      }
+      return false;
+    });
+  }
+  function toggleCodeHandler(show) {
+    return function(e) {
+      const detailsSrc = window.document.querySelectorAll(".cell > details > .sourceCode");
+      for (let i=0; i<detailsSrc.length; i++) {
+        const details = detailsSrc[i].parentElement;
+        if (show) {
+          details.open = true;
+        } else {
+          details.removeAttribute("open");
+        }
+      }
+      const cellCodeDivs = window.document.querySelectorAll(".cell > .sourceCode");
+      const fromCls = show ? "hidden" : "unhidden";
+      const toCls = show ? "unhidden" : "hidden";
+      for (let i=0; i<cellCodeDivs.length; i++) {
+        const codeDiv = cellCodeDivs[i];
+        if (codeDiv.classList.contains(fromCls)) {
+          codeDiv.classList.remove(fromCls);
+          codeDiv.classList.add(toCls);
+        } 
+      }
+      return false;
+    }
+  }
+  const hideAllCode = window.document.getElementById("quarto-hide-all-code");
+  if (hideAllCode) {
+    hideAllCode.addEventListener("click", toggleCodeHandler(false));
+  }
+  const showAllCode = window.document.getElementById("quarto-show-all-code");
+  if (showAllCode) {
+    showAllCode.addEventListener("click", toggleCodeHandler(true));
+  }
   function tippyHover(el, contentFn) {
     const config = {
       allowHTML: true,
@@ -464,8 +671,13 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
   }
 });
 </script>
+<script src="https://utteranc.es/client.js" repo="yourusername/quarto_blog_hasan" issue-term="pathname" theme="github-light" crossorigin="anonymous" async="">
+</script>
+<script src="https://giscus.app/client.js" data-repo="HasanGoni/quarto_blog_hasan" data-repo-id="" data-category="General" data-category-id="" data-mapping="title" data-reactions-enabled="1" data-emit-metadata="0" data-input-position="top" data-theme="light" data-lang="en" crossorigin="anonymous" async="">
+</script>
 </div> <!-- /content -->
 
 
 
+<script src="../../site_libs/quarto-html/zenscroll-min.js"></script>
 </body></html>
