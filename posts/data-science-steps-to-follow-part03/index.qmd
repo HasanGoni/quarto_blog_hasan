@@ -24,7 +24,7 @@ This is Part 3 of a 6-part series on data science fundamentals:
 
 1. [Part 1: EDA Fundamentals](https://hasangoni.quarto.pub/hasan-blog-post/posts/data-science-steps-to-follow-part01/)
 2. [Part 2: Feature Preprocessing and Generation](https://hasangoni.quarto.pub/hasan-blog-post/posts/data-science-steps-to-follow-part02/)
-3. **Part 3: Handling Anonymized Data (You are here)
+3. **Part 3: Handling Anonymized Data** (You are here)
 4. [Part 4: Text Feature Extraction](https://hasangoni.quarto.pub/hasan-blog-post/posts/data-science-steps-to-follow-part04/)
 5. [Part 5: Image Feature Extraction](https://hasangoni.quarto.pub/hasan-blog-post/posts/data-science-steps-to-follow-part05/)
 6. [Part 6: Advanced Techniques](https://hasangoni.quarto.pub/hasan-blog-post/posts/data-science-steps-to-follow-part06/)
@@ -211,4 +211,4 @@ df.mean().sort_values().plot(style='.')
 
  * Now we can have close look to each group and use imagination to create new features.
 
-__Next post can be found [here](https://hasangoni.quarto.pub/hasan-blog-post/posts/data-science-steps-to-follow-part04)__
+__Next post can be found [here](https://hasangoni.quarto.pub/hasan-blog-post/posts/data-science-steps-to-follow-part04/)__

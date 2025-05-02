@@ -151,7 +151,7 @@
     "href": "posts/data-science-steps-to-follow-part05/index.html",
     "title": "Data Science Steps to Follow - 05",
     "section": "",
-    "text": "Data Science Steps Series\n\n\n\nThis is Part 5 of a 6-part series on data science fundamentals:\n\nPart 1: EDA Fundamentals\n[Part 2: Feature Preprocessing and Generation] (https://hasangoni.quarto.pub/hasan-blog-post/posts/data-science-steps-to-follow-part02/)\nPart 3: Handling Anonymized Data\nPart 4: Text Feature Extraction\nPart 5: Image Feature Extraction ( You are here)\nPart 6: Advanced Techniques"
+    "text": "Data Science Steps Series\n\n\n\nThis is Part 5 of a 6-part series on data science fundamentals:\n\nPart 1: EDA Fundamentals\nPart 2: Feature Preprocessing and Generation\nPart 3: Handling Anonymized Data\nPart 4: Text Feature Extraction\nPart 5: Image Feature Extraction ( You are here)\nPart 6: Advanced Techniques"
   },
   {
     "objectID": "posts/data-science-steps-to-follow-part05/index.html#next-steps",
@@ -165,7 +165,7 @@
     "href": "posts/data-science-steps-to-follow-part01/index.html",
     "title": "Data Science Steps to Follow - 01",
     "section": "",
-    "text": "Data Science Steps Series\n\n\n\nThis is Part 1 of a 6-part series on data science fundamentals:\n\nPart 1: EDA Fundamentals (You are here)\n[Part 2]: Feature Preprocessing and Generation\nPart 3: Handling Anonymized Data\nPart 4: Text Feature Extraction\nPart 5: Image Feature Extraction\nPart 6: Advanced Techniques"
+    "text": "Data Science Steps Series\n\n\n\nThis is Part 1 of a 6-part series on data science fundamentals:\n\nPart 1: EDA Fundamentals (You are here)\nPart 2: Feature Preprocessing and Generation\nPart 3: Handling Anonymized Data\nPart 4: Text Feature Extraction\nPart 5: Image Feature Extraction\nPart 6: Advanced Techniques"
   },
   {
     "objectID": "posts/data-science-steps-to-follow-part01/index.html#what-is-eda",
@@ -270,7 +270,7 @@
     "href": "posts/data-science-steps-to-follow-part03/index.html",
     "title": "Data Science Steps to Follow - 03",
     "section": "",
-    "text": "Data Science Steps Series\n\n\n\nThis is Part 3 of a 6-part series on data science fundamentals:\n\nPart 1: EDA Fundamentals\nPart 2: Feature Preprocessing and Generation\n**Part 3: Handling Anonymized Data (You are here)\nPart 4: Text Feature Extraction\nPart 5: Image Feature Extraction\nPart 6: Advanced Techniques"
+    "text": "Data Science Steps Series\n\n\n\nThis is Part 3 of a 6-part series on data science fundamentals:\n\nPart 1: EDA Fundamentals\nPart 2: Feature Preprocessing and Generation\nPart 3: Handling Anonymized Data (You are here)\nPart 4: Text Feature Extraction\nPart 5: Image Feature Extraction\nPart 6: Advanced Techniques"
   },
   {
     "objectID": "posts/data-science-steps-to-follow-part03/index.html#explore-individual-feature",
@@ -375,7 +375,7 @@
     "href": "posts/data-science-steps-to-follow-part06/index.html",
     "title": "Data Science Steps to Follow - 06",
     "section": "",
-    "text": "Data Science Steps Series\n\n\n\nThis is Part 6 of a 6-part series on data science fundamentals:\n\nPart 1: EDA Fundamentals\n[Part 2: Feature Preprocessing and Generation] (https://hasangoni.quarto.pub/hasan-blog-post/posts/data-science-steps-to-follow-part02/)\nPart 3: Handling Anonymized Data\nPart 4: Text Feature Extraction\nPart 5: Image Feature Extraction\nPart 6: Advanced Techniques"
+    "text": "Data Science Steps Series\n\n\n\nThis is Part 6 of a 6-part series on data science fundamentals:\n\nPart 1: EDA Fundamentals\nPart 2: Feature Preprocessing and Generation\nPart 3: Handling Anonymized Data\nPart 4: Text Feature Extraction\nPart 5: Image Feature Extraction\nPart 6: Advanced Techniques (You are here)"
   },
   {
     "objectID": "posts/data-science-steps-to-follow-part06/index.html#validation-strategies",
