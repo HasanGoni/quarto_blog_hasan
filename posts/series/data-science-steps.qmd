@@ -4,7 +4,7 @@ description: "A practical guide to data science following FastAI's top-down lear
 author: "Hasan"
 date: last-modified
 categories: [series, data-science]
-image: "../images/data-science-banner.jpg"
+image: "title_image.png"
 toc: true
 ---
 

@@ -1,5 +1,5 @@
 ---
-title: "Data Science Steps to Follow - Part 1"
+title: "Data Science Steps to Follow - 01"
 subtitle: "Exploratory Data Analysis Fundamentals" 
 date: "2022-11-19"
 categories: [code, analysis, tutorial]
@@ -18,11 +18,11 @@ series:
 This is Part 1 of a 6-part series on data science fundamentals:
 
 1. **Part 1: EDA Fundamentals** (You are here)
-2. [Part 2: Feature Preprocessing and Generation](/posts/data-science-steps-to-follow-part02)
-3. [Part 3: Handling Anonymized Data](/posts/data-science-steps-to-follow-part03)
-4. [Part 4: Text Feature Extraction](/posts/data-science-steps-to-follow-part04)
-5. [Part 5: Image Feature Extraction](/posts/data-science-steps-to-follow-part05)
-6. [Part 6: Advanced Techniques](/posts/data-science-steps-to-follow-part06)
+2. [Part 2]: [Feature Preprocessing and Generation](https://hasangoni.quarto.pub/hasan-blog-post/posts/data-science-steps-to-follow-part02/)
+3. [Part 3: Handling Anonymized Data](https://hasangoni.quarto.pub/hasan-blog-post/posts/data-science-steps-to-follow-part03/)
+4. [Part 4: Text Feature Extraction](https://hasangoni.quarto.pub/hasan-blog-post/posts/data-science-steps-to-follow-part04/)
+5. [Part 5: Image Feature Extraction](https://hasangoni.quarto.pub/hasan-blog-post/posts/data-science-steps-to-follow-part05/)
+6. [Part 6: Advanced Techniques](https://hasangoni.quarto.pub/hasan-blog-post/posts/data-science-steps-to-follow-part06/)
 :::
 
 # Exploratory Data Analysis (EDA)
@@ -123,7 +123,7 @@ Key considerations:
 
 ## Next Steps
 
-Continue to [Part 2: Feature Preprocessing and Generation](/posts/data-science-steps-to-follow-part02), where we'll explore how to transform raw data into meaningful features.
+Continue to [Part 2: Feature Preprocessing and Generation](https://hasangoni.quarto.pub/hasan-blog-post/posts/data-science-steps-to-follow-part02/), where we'll explore how to transform raw data into meaningful features.
 
 ## References
 

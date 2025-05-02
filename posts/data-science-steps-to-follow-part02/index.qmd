@@ -1,5 +1,5 @@
 ---
-title: "Data Science Steps to Follow - Part 2"
+title: "Data Science Steps to Follow - 02"
 subtitle: "Feature Preprocessing and Generation"
 description: "Learn essential techniques for preparing and engineering features in your data science projects."
 author: "Hasan Goni"

@@ -13,11 +13,22 @@ listing:
   categories: true
    
 page-layout: full
-image: "image.jpg"
+image: "extract_features_from_image.png"
 ---
-# Introduction
 
-* This is a part of the series. [First](https://Hasangoni.github.io/2022/11/19/Explanatory_data_analysis.html), [Second](https://Hasangoni.github.io/2022/11/19/Feature_preprocessing_and_generation.html), [Third](https://Hasangoni.github.io/2022/11/19/Exploring_anonymized_data.html) and [Fourth](https://Hasangoni.github.io/2022/11/19/Feature_extraction_from_text.html) parts are connected in link. In this part I will try to write about EDA, when the data is image type
+# Series Navigation
+
+::: {.callout-note}
+## Data Science Steps Series
+This is Part 5 of a 6-part series on data science fundamentals:
+
+1. [Part 1: EDA Fundamentals](https://hasangoni.quarto.pub/hasan-blog-post/posts/data-science-steps-to-follow-part01/)
+2. [Part 2: Feature Preprocessing and Generation] (https://hasangoni.quarto.pub/hasan-blog-post/posts/data-science-steps-to-follow-part02/)
+3. [Part 3: Handling Anonymized Data](https://hasangoni.quarto.pub/hasan-blog-post/posts/data-science-steps-to-follow-part03/)
+4. [Part 4: Text Feature Extraction](https://hasangoni.quarto.pub/hasan-blog-post/posts/data-science-steps-to-follow-part04/)
+5. **Part 5: Image Feature Extraction** ( You are here)
+6. [Part 6: Advanced Techniques](https://hasangoni.quarto.pub/hasan-blog-post/posts/data-science-steps-to-follow-part06/)
+:::
 
 # Images Vector extraction
 
@@ -31,3 +42,7 @@ image: "image.jpg"
 * Augmentations:
   * Create different versions of same image, may be rotation, random crop, etc.
 * Be careful with validation and don't overfit.
+
+## Next Steps
+
+Continue to [Part 6: Advanced techniques](https://hasangoni.quarto.pub/hasan-blog-post/posts/data-science-steps-to-follow-part06/).

@@ -13,8 +13,22 @@ listing:
   categories: true
    
 page-layout: full
-image: "image.jpg"
+image: "anonymized_data.png"
 ---
+
+# Series Navigation
+
+::: {.callout-note}
+## Data Science Steps Series
+This is Part 3 of a 6-part series on data science fundamentals:
+
+1. [Part 1: EDA Fundamentals](https://hasangoni.quarto.pub/hasan-blog-post/posts/data-science-steps-to-follow-part01/)
+2. [Part 2: Feature Preprocessing and Generation](https://hasangoni.quarto.pub/hasan-blog-post/posts/data-science-steps-to-follow-part02/)
+3. **Part 3: Handling Anonymized Data (You are here)
+4. [Part 4: Text Feature Extraction](https://hasangoni.quarto.pub/hasan-blog-post/posts/data-science-steps-to-follow-part04/)
+5. [Part 5: Image Feature Extraction](https://hasangoni.quarto.pub/hasan-blog-post/posts/data-science-steps-to-follow-part05/)
+6. [Part 6: Advanced Techniques](https://hasangoni.quarto.pub/hasan-blog-post/posts/data-science-steps-to-follow-part06/)
+:::
 # EDA on Anonymized Data
 
 * This is third part of the series. [First](https://Hasangoni.github.io/2022/11/19/Explanatory_data_analysis.html) and [second](https://Hasangoni.github.io/2022/11/19/Feature_preprocessing_and_generation) part needs to be read for better understanding. In this part description can be found, when we have anonymized data and how to explore it.
@@ -197,4 +211,4 @@ df.mean().sort_values().plot(style='.')
 
  * Now we can have close look to each group and use imagination to create new features.
 
-__Next post can be found [here](https://Hasangoni.github.io/2022/11/19/Feature_extraction_from_text.html)__
+__Next post can be found [here](https://hasangoni.quarto.pub/hasan-blog-post/posts/data-science-steps-to-follow-part04)__
