@@ -1,5 +1,5 @@
 ---
-title: "Data Science Steps to Follow - Part 6"
+title: "Data Science Steps to Follow - 06"
 subtitle: "Validation Strategy and Model Evaluation"
 description: "Learn about different validation strategies and how to properly evaluate your models"
 author: "Hasan Goni"

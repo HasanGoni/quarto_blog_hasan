@@ -1,5 +1,5 @@
 ---
-title: Data Science Steps to Follow -05
+title: Data Science Steps to Follow - 05
 subtitle: Feature Extraction from Image
 date: "2022-11-22"
 categories: [code, image, analysis]
