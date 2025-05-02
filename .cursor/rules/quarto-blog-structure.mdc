@@ -3,3 +3,51 @@ description:
 globs:
 alwaysApply: false
 ---
+# Quarto Blog Project Structure
+
+This document outlines the structure and organization of the Quarto blog project.
+
+## Core Configuration Files
+
+- [_quarto.yml](mdc:_quarto.yml): Main configuration file that defines the website structure, navigation, and theme
+- [_publish.yml](mdc:_publish.yml): Publishing configuration for the blog
+- [styles.css](mdc:styles.css): Custom CSS styles for the website
+- [index.qmd](mdc:index.qmd): Homepage of the blog
+- [about.qmd](mdc:about.qmd): About page content
+
+## Content Organization
+
+### Blog Posts
+All blog posts are stored in the `posts/` directory. Each post is contained in its own directory with the following structure:
+
+```
+posts/
+├── post-name/
+│   ├── index.qmd    # Main post content
+│   ├── images/      # Post-specific images
+│   └── data/        # Post-specific data files
+```
+
+Key post directories:
+- Data Science Series:
+  - [data-science-steps-to-follow-part01/](mdc:posts/data-science-steps-to-follow-part01)
+  - [data-science-steps-to-follow-part02/](mdc:posts/data-science-steps-to-follow-part02)
+  - [data-science-steps-to-follow-part03/](mdc:posts/data-science-steps-to-follow-part03)
+  - [data-science-steps-to-follow-part04/](mdc:posts/data-science-steps-to-follow-part04)
+  - [data-science-steps-to-follow-part05/](mdc:posts/data-science-steps-to-follow-part05)
+  - [data-science-steps-to-follow-part06/](mdc:posts/data-science-steps-to-follow-part06)
+- Technical Posts:
+  - [matrix_multiplication_from_fastai_course/](mdc:posts/matrix_multiplication_from_fastai_course)
+  - [nougat-to-read-scientific-pdf-files/](mdc:posts/nougat-to-read-scientific-pdf-files)
+
+### Global Assets
+- `posts/images/`: Directory for shared images used across multiple posts
+- [posts/_metadata.yml](mdc:posts/_metadata.yml): Default metadata settings for all posts
+
+## Build and Output
+- `_site/`: Generated static website files (not tracked in git)
+- `.quarto/`: Quarto's internal files and cache (not tracked in git)
+
+## Version Control
+- `.gitignore`: Specifies which files and directories should be ignored by git
+- `.git/`: Git repository data
