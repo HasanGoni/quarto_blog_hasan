@@ -16,6 +16,10 @@ website:
             file: posts/series/data-science-steps.qmd
           - text: "Computer Vision"
             file: posts/series/computer-vision-with-pytorch.qmd
+          - text: "VLM Series"
+            file: posts/series/vlm.qmd
+          - text: "Anomaly Detection"
+            file: posts/series/anomaly-detection/index.qmd
       - text: "Categories"
         file: categories.qmd
       - text: "Tags"
@@ -26,24 +30,43 @@ website:
       - icon: github
         href: https://github.com/HasanGoni
       - icon: twitter
-        href: https://twitter.com/yourusername
+        href: https://twitter.com/hasangoni
 
   sidebar:
-    - title: "Series"
-      style: "docked"
-      contents:
-        - section: "Data Science"
-          contents:
-            - posts/series/data-science-steps.qmd
-            - posts/data-science-steps-to-follow-part01/index.qmd
-            - posts/data-science-steps-to-follow-part02/index.qmd
-            - posts/data-science-steps-to-follow-part03/index.qmd
-            - posts/data-science-steps-to-follow-part04/index.qmd
-            - posts/data-science-steps-to-follow-part05/index.qmd
-            - posts/data-science-steps-to-follow-part06/index.qmd
-        - section: "Computer Vision"
-          contents:
-            - posts/series/computer-vision-with-pytorch.qmd
+    style: "docked"
+    contents:
+      - section: "Data Science"
+        collapse: true
+        collapsed: true
+        contents:
+          - posts/series/data-science-steps.qmd
+          - posts/data-science-steps-to-follow-part01/index.qmd
+          - posts/data-science-steps-to-follow-part02/index.qmd
+          - posts/data-science-steps-to-follow-part03/index.qmd
+          - posts/data-science-steps-to-follow-part04/index.qmd
+          - posts/data-science-steps-to-follow-part05/index.qmd
+          - posts/data-science-steps-to-follow-part06/index.qmd
+      - section: "Computer Vision"
+        collapse: true
+        collapsed: true
+        contents:
+          - posts/series/computer-vision-with-pytorch.qmd
+      - section: "Anomaly Detection"
+        collapse: true
+        collapsed: true
+        contents:
+          - text: "Introduction"
+            href: posts/series/anomaly-detection/index.qmd
+          - text: "Finding the Oddballs"
+            href: posts/series/anomaly-detection/finding-the-oddballs.qmd
+      - section: "VLM Series"
+        collapse: true
+        collapsed: true
+        contents:
+          - text: "Introduction"
+            href: posts/series/vlm.qmd
+          - text: "Qwen3-14B"
+            href: posts/series/vlm-qwen3-14b/index.qmd
 
 format:
   html:
@@ -53,6 +76,3 @@ format:
     code-fold: true
     code-tools: true
     highlight-style: github
-
-
-

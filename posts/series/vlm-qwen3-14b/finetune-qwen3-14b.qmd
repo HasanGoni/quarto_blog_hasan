@@ -1,0 +1,162 @@
+---
+title: "Fine-Tuning Qwen3-14B with Unsloth: A Practical Guide for Data Scientists"
+author: "Hasan"
+date: 2025-05-03
+categories: [LLM, Fine-tuning, HuggingFace, LoRA, QLoRA]
+tags: [Qwen3, Unsloth, Transformers, Colab, GPU, Fine-Tuning, LoRA]
+image: "qwen3-14b.png"
+toc: true
+series:
+  name: "VLM Series"
+  number: 2
+format:
+  html: default
+---
+
+:::{.callout-tip}
+This post is part of the [VLM Series](../vlm.qmd). Feedback and questions are welcome!
+:::
+
+## Introduction
+
+Large language models (LLMs) like Qwen3-14B are powerful, but off-the-shelf models can fall short in specialized domains. Fine-tuning lets us inject private domain knowledge, align behavior, and optimize for unique downstream tasks.
+
+In this guide, we'll show how to fine-tune Qwen3-14B using **Unsloth**, a blazing-fast fine-tuning library that works on Colab or local GPUs. We'll cover both:
+
+- **Colab-based fine-tuning** (for light experiments and demos)
+- **Local multi-GPU fine-tuning** (for serious workloads)
+
+---
+
+## Why Use Unsloth?
+
+Unsloth adds significant speed and memory optimizations for training HuggingFace models—up to 2x faster on consumer GPUs.
+
+Features:
+- Integrated QLoRA & LoRA
+- FlashAttention-2 support
+- HuggingFace-compatible models
+
+---
+
+## 1. Fine-Tuning in Google Colab
+
+### Step 1: Setup
+
+```python
+!pip install --quiet unsloth datasets trl
+```
+
+### Step 2: Load the Model(QLoRA)
+
+```python
+from unsloth import FastLanguageModel
+model, tokenizer = FastLanguageModel.from_pretrained(
+    model_name = "unsloth/qwen2-14b-chat-gptq",
+    max_seq_length = 2048,
+    dtype = None,
+    load_in_4bit = True,
+)
+
+``` 
+
+### Step 3: Prepare the Dataset
+
+Use a HuggingFace datasets object:
+
+
+```python
+from datasets import load_dataset
+dataset = load_dataset("tatsu-lab/alpaca", split="train[:500]")
+```
+
+Or bring your own in JSONL format: 
+
+```
+{"instruction": "...", "input": "...", "output": "..."}
+```
+
+Step 4: Fine-Tune with LoRA
+
+```python
+model = FastLanguageModel.get_peft_model(
+    model,
+    r = 64,
+    lora_alpha = 16,
+    lora_dropout = 0.05,
+    bias = "none",
+    task_type = "CAUSAL_LM",
+)
+```
+then train with:
+
+```python
+from trl import SFTTrainer
+trainer = SFTTrainer(model=model, tokenizer=tokenizer, train_dataset=dataset)
+trainer.train()
+```
+
+## 2. Fine-Tuning Locally (Multi-GPU / A100 / RTX)
+
+
+### Setup linux
+
+```bash
+pip install unsloth[all] accelerate deepspeed
+accelerate config
+```
+
+Enable multi-GPU with DeepSpeed or accelerate.
+
+### Launch Training
+
+```python
+accelerate launch train.py
+```
+
+Your train.py should import and use FastLanguageModel just like in Colab. You'll get better memory handling and faster throughput with FP16 + QLoRA.
+
+For training large corpora, you can stream JSONL from disk, or integrate with DVC or HuggingFace Datasets to handle TB-scale data.
+
+## Practical Use Cases
+
+- **Custom Assistants**: Inject your product or company domain into the model.
+
+- **Data QA Bots**: Fine-tune on your own feature dictionaries, KPIs, and docs.
+
+- **Math Tutors**: Reinforce multi-step reasoning with math datasets (e.g., GSM8K).
+
+## Tips for Success
+
+1. Use max_seq_length=2048 for long-context reasoning tasks.
+
+2. Regularize using small LoRA dropout (0.05 or 0.1).
+
+3. Evaluate outputs on real tasks—don't just trust loss!
+
+## Wrap Up
+Fine-tuning Qwen3-14B with Unsloth makes LLM customization accessible—whether you're in Colab or scaling up on A100s.
+
+Let me know if you want a follow-up post on:
+
+- Evaluation methods
+- Quantization after fine-tuning
+- Deploying fine-tuned models
+
+---
+
+## Next Steps
+
+- [Back to VLM Series Overview](../vlm.qmd)
+- [Read the first post: Hands-On with Qwen3-14B](index.qmd)
+
+## References
+
+1. [Unsloth Documentation](https://github.com/unslothai/unsloth)
+2. [Qwen3-14B on HuggingFace](https://huggingface.co/Qwen/Qwen1.5-14B)
+3. [VLM Series Overview](../vlm.qmd)
+
+:::{.callout-note}
+This post is part of the [VLM Series](../vlm.qmd). Feedback and questions are welcome!
+:::
+

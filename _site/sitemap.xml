@@ -2,66 +2,86 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <url>
     <loc>https://hasangoni.quarto.pub/hasan-blog-post/index.html</loc>
-    <lastmod>2025-05-02T11:04:36.026Z</lastmod>
+    <lastmod>2025-05-03T11:25:06.610Z</lastmod>
   </url>
   <url>
     <loc>https://hasangoni.quarto.pub/hasan-blog-post/about.html</loc>
-    <lastmod>2025-05-02T11:04:34.418Z</lastmod>
+    <lastmod>2025-05-03T11:25:04.570Z</lastmod>
   </url>
   <url>
     <loc>https://hasangoni.quarto.pub/hasan-blog-post/posts/series/data-science-steps.html</loc>
-    <lastmod>2025-05-02T11:04:32.986Z</lastmod>
+    <lastmod>2025-05-03T11:25:03.170Z</lastmod>
   </url>
   <url>
-    <loc>https://hasangoni.quarto.pub/hasan-blog-post/posts/welcome/index.html</loc>
-    <lastmod>2025-05-02T11:04:31.626Z</lastmod>
+    <loc>https://hasangoni.quarto.pub/hasan-blog-post/posts/series/anomaly-detection/finding-the-oddballs.html</loc>
+    <lastmod>2025-05-03T11:25:01.794Z</lastmod>
   </url>
   <url>
-    <loc>https://hasangoni.quarto.pub/hasan-blog-post/posts/matrix_multiplication_from_fastai_course/00_matmul.html</loc>
-    <lastmod>2025-05-02T11:04:29.986Z</lastmod>
+    <loc>https://hasangoni.quarto.pub/hasan-blog-post/posts/series/vlm.html</loc>
+    <lastmod>2025-05-03T11:24:59.682Z</lastmod>
   </url>
   <url>
-    <loc>https://hasangoni.quarto.pub/hasan-blog-post/posts/data-science-steps-to-follow-part02/index.html</loc>
-    <lastmod>2025-05-02T11:04:28.174Z</lastmod>
-  </url>
-  <url>
-    <loc>https://hasangoni.quarto.pub/hasan-blog-post/posts/data-science-steps-to-follow-part05/index.html</loc>
-    <lastmod>2025-05-02T11:04:26.094Z</lastmod>
-  </url>
-  <url>
-    <loc>https://hasangoni.quarto.pub/hasan-blog-post/posts/data-science-steps-to-follow-part01/index.html</loc>
-    <lastmod>2025-05-02T11:04:24.410Z</lastmod>
-  </url>
-  <url>
-    <loc>https://hasangoni.quarto.pub/hasan-blog-post/tags.html</loc>
-    <lastmod>2025-05-02T11:04:23.150Z</lastmod>
-  </url>
-  <url>
-    <loc>https://hasangoni.quarto.pub/hasan-blog-post/posts/data-science-steps-to-follow-part04/index.html</loc>
-    <lastmod>2025-05-02T11:04:25.258Z</lastmod>
-  </url>
-  <url>
-    <loc>https://hasangoni.quarto.pub/hasan-blog-post/posts/nougat-to-read-scientific-pdf-files/index.html</loc>
-    <lastmod>2025-05-02T11:04:26.970Z</lastmod>
-  </url>
-  <url>
-    <loc>https://hasangoni.quarto.pub/hasan-blog-post/posts/data-science-steps-to-follow-part03/index.html</loc>
-    <lastmod>2025-05-02T11:04:29.402Z</lastmod>
+    <loc>https://hasangoni.quarto.pub/hasan-blog-post/posts/series/vlm-qwen3-14b/finetune-qwen3-14b.html</loc>
+    <lastmod>2025-05-03T11:24:58.066Z</lastmod>
   </url>
   <url>
     <loc>https://hasangoni.quarto.pub/hasan-blog-post/posts/matrix_multiplication_from_fastai_course/index.html</loc>
-    <lastmod>2025-05-02T11:04:30.974Z</lastmod>
+    <lastmod>2025-05-03T11:24:56.514Z</lastmod>
+  </url>
+  <url>
+    <loc>https://hasangoni.quarto.pub/hasan-blog-post/posts/data-science-steps-to-follow-part03/index.html</loc>
+    <lastmod>2025-05-03T11:24:54.866Z</lastmod>
+  </url>
+  <url>
+    <loc>https://hasangoni.quarto.pub/hasan-blog-post/posts/nougat-to-read-scientific-pdf-files/index.html</loc>
+    <lastmod>2025-05-03T11:24:52.362Z</lastmod>
+  </url>
+  <url>
+    <loc>https://hasangoni.quarto.pub/hasan-blog-post/posts/data-science-steps-to-follow-part04/index.html</loc>
+    <lastmod>2025-05-03T11:24:50.850Z</lastmod>
+  </url>
+  <url>
+    <loc>https://hasangoni.quarto.pub/hasan-blog-post/tags.html</loc>
+    <lastmod>2025-05-03T11:24:48.770Z</lastmod>
+  </url>
+  <url>
+    <loc>https://hasangoni.quarto.pub/hasan-blog-post/posts/data-science-steps-to-follow-part01/index.html</loc>
+    <lastmod>2025-05-03T11:24:50.006Z</lastmod>
+  </url>
+  <url>
+    <loc>https://hasangoni.quarto.pub/hasan-blog-post/posts/data-science-steps-to-follow-part05/index.html</loc>
+    <lastmod>2025-05-03T11:24:51.558Z</lastmod>
+  </url>
+  <url>
+    <loc>https://hasangoni.quarto.pub/hasan-blog-post/posts/data-science-steps-to-follow-part02/index.html</loc>
+    <lastmod>2025-05-03T11:24:53.578Z</lastmod>
+  </url>
+  <url>
+    <loc>https://hasangoni.quarto.pub/hasan-blog-post/posts/matrix_multiplication_from_fastai_course/00_matmul.html</loc>
+    <lastmod>2025-05-03T11:24:55.518Z</lastmod>
+  </url>
+  <url>
+    <loc>https://hasangoni.quarto.pub/hasan-blog-post/posts/welcome/index.html</loc>
+    <lastmod>2025-05-03T11:24:57.218Z</lastmod>
+  </url>
+  <url>
+    <loc>https://hasangoni.quarto.pub/hasan-blog-post/posts/series/vlm-qwen3-14b/index.html</loc>
+    <lastmod>2025-05-03T11:24:58.914Z</lastmod>
   </url>
   <url>
     <loc>https://hasangoni.quarto.pub/hasan-blog-post/posts/series/computer-vision-with-pytorch.html</loc>
-    <lastmod>2025-05-02T11:04:32.274Z</lastmod>
+    <lastmod>2025-05-03T11:25:00.314Z</lastmod>
+  </url>
+  <url>
+    <loc>https://hasangoni.quarto.pub/hasan-blog-post/posts/series/anomaly-detection/index.html</loc>
+    <lastmod>2025-05-03T11:25:02.398Z</lastmod>
   </url>
   <url>
     <loc>https://hasangoni.quarto.pub/hasan-blog-post/posts/data-science-steps-to-follow-part06/index.html</loc>
-    <lastmod>2025-05-02T11:04:33.910Z</lastmod>
+    <lastmod>2025-05-03T11:25:04.054Z</lastmod>
   </url>
   <url>
     <loc>https://hasangoni.quarto.pub/hasan-blog-post/categories.html</loc>
-    <lastmod>2025-05-02T11:04:35.166Z</lastmod>
+    <lastmod>2025-05-03T11:25:05.374Z</lastmod>
   </url>
 </urlset>

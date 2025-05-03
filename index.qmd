@@ -1,5 +1,5 @@
 ---
-title: "quarto_blog_hasan"
+title: "DS notes"
 listing:
   contents: posts
   sort: "date desc"

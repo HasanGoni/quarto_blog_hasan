@@ -103,11 +103,15 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <link rel="stylesheet" href="../../styles.css">
 <meta property="og:title" content="Hasan’s Data Science &amp; AI Blog - Matrix Multiplication">
 <meta property="og:description" content="Matrix Multiplication from fastai course 2022">
-<meta property="og:image" content="https://hasangoni.quarto.pub/hasan-blog-post/posts/matrix_multiplication_from_fastai_course/image.webp">
+<meta property="og:image" content="https://hasangoni.quarto.pub/hasan-blog-post/posts/matrix_multiplication_from_fastai_course/matrix_mult.png">
 <meta property="og:site-name" content="Hasan's Data Science &amp; AI Blog">
+<meta property="og:image:height" content="1432">
+<meta property="og:image:width" content="4471">
 <meta name="twitter:title" content="Hasan’s Data Science &amp; AI Blog - Matrix Multiplication">
 <meta name="twitter:description" content="Matrix Multiplication from fastai course 2022">
-<meta name="twitter:image" content="https://hasangoni.quarto.pub/hasan-blog-post/posts/matrix_multiplication_from_fastai_course/image.webp">
+<meta name="twitter:image" content="https://hasangoni.quarto.pub/hasan-blog-post/posts/matrix_multiplication_from_fastai_course/matrix_mult.png">
+<meta name="twitter:image-height" content="1432">
+<meta name="twitter:image-width" content="4471">
 <meta name="twitter:card" content="summary_large_image">
 </head>
 
@@ -145,6 +149,14 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
     <a class="dropdown-item" href="../../posts/series/computer-vision-with-pytorch.html" rel="" target="">
  <span class="dropdown-text">Computer Vision</span></a>
   </li>  
+        <li>
+    <a class="dropdown-item" href="../../posts/series/vlm.html" rel="" target="">
+ <span class="dropdown-text">VLM Series</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="../../posts/series/anomaly-detection/index.html" rel="" target="">
+ <span class="dropdown-text">Anomaly Detection</span></a>
+  </li>  
     </ul>
   </li>
   <li class="nav-item">
@@ -167,7 +179,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
  <span class="menu-text"></span></a>
   </li>  
   <li class="nav-item compact">
-    <a class="nav-link" href="https://twitter.com/yourusername" rel="" target=""><i class="bi bi-twitter" role="img">
+    <a class="nav-link" href="https://twitter.com/hasangoni" rel="" target=""><i class="bi bi-twitter" role="img">
 </i> 
  <span class="menu-text"></span></a>
   </li>  
@@ -225,7 +237,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
       <div>
       <div class="quarto-title-meta-heading">Modified</div>
       <div class="quarto-title-meta-contents">
-        <p class="date-modified">August 13, 2024</p>
+        <p class="date-modified">May 3, 2025</p>
       </div>
     </div>
       
@@ -307,6 +319,52 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </li>
       </ul>
   </li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-3" aria-expanded="true">
+ <span class="menu-text">Anomaly Detection</span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-3" aria-expanded="true" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-3" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../posts/series/anomaly-detection/index.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Introduction</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../posts/series/anomaly-detection/finding-the-oddballs.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Finding the Oddballs</span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-4" aria-expanded="true">
+ <span class="menu-text">VLM Series</span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-4" aria-expanded="true" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-4" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../posts/series/vlm.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Introduction</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../posts/series/vlm-qwen3-14b/index.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Qwen3-14B</span></a>
+  </div>
+</li>
+      </ul>
+  </li>
     </ul>
     </div>
 </nav>
@@ -337,7 +395,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </section>
 <section id="get-data" class="level2" data-number="0.2">
 <h2 data-number="0.2" class="anchored" data-anchor-id="get-data"><span class="header-section-number">0.2</span> Get data</h2>
-<p>We firt download the mnist data to work with it</p>
+<p>We first download the mnist data to work with it</p>
 <div class="cell" data-execution_count="10">
 <details>
 <summary>Code</summary>

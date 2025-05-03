@@ -1,0 +1,56 @@
+---
+title: "VLM Series"
+description: "A practical guide to Vision-Language Models (VLMs) with a focus on open-source models and hands-on PyTorch/HuggingFace workflows"
+author: "Hasan"
+date: last-modified
+categories: [series, vision-language, VLM]
+image: "vlm_title.png"
+toc: true
+---
+
+## Series Overview
+
+This series takes a fastai-inspired, top-down approach to Vision-Language Models (VLMs). We'll start with real-world applications and working code, then dive deeper into the concepts behind these powerful models. The focus is on open-source VLMs and practical workflows using PyTorch and HuggingFace.
+
+### Learning Philosophy
+
+- **Start with working code**: Each post begins with hands-on examples
+defining real tasks
+- **Iterative deepening**: Concepts are revisited with increasing depth
+- **Learn by building**: Notebooks and exercises included for every topic
+
+### Posts in this Series
+
+1. [Hands-On with Qwen3-14B: A Reasoning-Centric LLM for Data Scientists](vlm-qwen3-14b/index.html)
+   - What is Qwen3-14B?
+   - How to use it for vision-language tasks
+   - Hands-on: inference and fine-tuning
+2. [Fine-Tuning Qwen3-14B with Unsloth](vlm-qwen3-14b/finetune-qwen3-14b.html)
+   - Practical guide to fine-tuning with Unsloth
+   - Colab and local multi-GPU workflows
+   - Tips for data scientists
+
+<!-- Future posts can be added here -->
+
+## Prerequisites
+
+- Basic Python and PyTorch
+- Familiarity with Jupyter notebooks
+- Some experience with deep learning (helpful, not required)
+
+## Tools We'll Use
+
+- PyTorch for model development
+- HuggingFace Transformers for VLMs
+- FastAI for rapid prototyping (where applicable)
+- Open-source VLMs (Qwen, LLaVA, etc.)
+
+## Getting Help
+
+- Use the comments section below each post
+- Check the [GitHub repository](https://github.com/hasangoni/quarto_blog_hasan) for code
+- Join our discussion forum (coming soon)
+
+:::{.callout-note}
+This series is updated regularly based on reader feedback and new developments in VLM research.
+::: 

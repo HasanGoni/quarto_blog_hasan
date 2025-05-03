@@ -1,6 +1,6 @@
 ---
-description:
-globs:
+description: 
+globs: 
 alwaysApply: false
 ---
 # Quarto Blog Project Structure
@@ -39,6 +39,9 @@ Key post directories:
 - Technical Posts:
   - [matrix_multiplication_from_fastai_course/](mdc:posts/matrix_multiplication_from_fastai_course)
   - [nougat-to-read-scientific-pdf-files/](mdc:posts/nougat-to-read-scientific-pdf-files)
+
+### Tone of the description
+- Each blog post will be easy to read and write very easy to understand. Write like an expert Data scientist who is very expert in story telling. Any type of complex or mathematical issue should be described with an easy to understand example and very humourous way.
 
 ### Global Assets
 - `posts/images/`: Directory for shared images used across multiple posts

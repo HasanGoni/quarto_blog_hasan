@@ -2,9 +2,9 @@
   {
     "objectID": "index.html",
     "href": "index.html",
-    "title": "quarto_blog_hasan",
+    "title": "DS notes",
     "section": "",
-    "text": "Hasan\n\n\n\n\n\n\n  \n\n\n\n\nData Science Steps Series\n\n\n\n\n\n\n\nseries\n\n\ndata-science\n\n\n\n\nA practical guide to data science following FastAI’s top-down learning approach\n\n\n\n\n\n\nMay 2, 2025\n\n\nHasan\n\n\n\n\n\n\n  \n\n\n\n\nMatrix Multiplication\n\n\n\n\n\n\n\nfastai\n\n\nmatrix multiplication\n\n\n\n\nMatrix Multiplication from fastai course 2022\n\n\n\n\n\n\nAug 13, 2024\n\n\nHasan Goni\n\n\n\n\n\n\n  \n\n\n\n\nUnderstanding Matrix Multiplication from FastAI\n\n\nA Deep Dive into Neural Network Fundamentals\n\n\n\n\ndeep-learning\n\n\nmathematics\n\n\nfastai\n\n\n\n\n\n\n\n\n\n\n\nNov 20, 2023\n\n\nHasan Goni\n\n\n\n\n\n\n  \n\n\n\n\nHow to Use Nougat to Read Scientific Paper\n\n\nResearch paper working\n\n\n\n\nNlp\n\n\nResearch paper\n\n\nText\n\n\n\n\n\n\n\n\n\n\n\nOct 21, 2023\n\n\nHasan Goni\n\n\n\n\n\n\n  \n\n\n\n\nWelcome To My Data Science & Machine Learning Blog\n\n\n\n\n\n\n\nnews\n\n\ndata-science\n\n\n\n\n\n\n\n\n\n\n\nOct 17, 2023\n\n\nHasan Goni\n\n\n\n\n\n\n  \n\n\n\n\nData Science Steps to Follow - 05\n\n\nFeature Extraction from Image\n\n\n\n\ncode\n\n\nimage\n\n\nanalysis\n\n\n\n\n\n\n\n\n\n\n\nNov 22, 2022\n\n\nHasan Goni\n\n\n\n\n\n\n  \n\n\n\n\nData Science Steps to Follow - 06\n\n\nValidation Strategy and Model Evaluation\n\n\n\n\ndata-science\n\n\nmachine-learning\n\n\nvalidation\n\n\n\n\nLearn about different validation strategies and how to properly evaluate your models\n\n\n\n\n\n\nNov 22, 2022\n\n\nHasan Goni\n\n\n\n\n\n\n  \n\n\n\n\nData Science Steps to Follow - 04\n\n\nFeature Extraction from Text\n\n\n\n\ncode\n\n\ntext\n\n\nanalysis\n\n\n\n\n\n\n\n\n\n\n\nNov 21, 2022\n\n\nHasan Goni\n\n\n\n\n\n\n  \n\n\n\n\nData Science Steps to Follow - 03\n\n\nExploring Anonymized data\n\n\n\n\ncode\n\n\ntabular\n\n\nanalysis\n\n\n\n\n\n\n\n\n\n\n\nNov 21, 2022\n\n\nHasan Goni\n\n\n\n\n\n\n  \n\n\n\n\nData Science Steps to Follow - 02\n\n\nFeature Preprocessing and Generation\n\n\n\n\ndata-science\n\n\nfeature-engineering\n\n\ntutorial\n\n\n\n\nLearn essential techniques for preparing and engineering features in your data science projects.\n\n\n\n\n\n\nNov 20, 2022\n\n\nHasan Goni\n\n\n\n\n\n\n  \n\n\n\n\nData Science Steps to Follow - 01\n\n\nExploratory Data Analysis Fundamentals\n\n\n\n\ncode\n\n\nanalysis\n\n\ntutorial\n\n\n\n\n\n\n\n\n\n\n\nNov 19, 2022\n\n\nHasan Goni\n\n\n\n\n\n\nNo matching items"
+    "text": "Hasan\n\n\n\n\n\n\n  \n\n\n\n\nVLM Series\n\n\n\n\n\n\n\nseries\n\n\nvision-language\n\n\nVLM\n\n\n\n\nA practical guide to Vision-Language Models (VLMs) with a focus on open-source models and hands-on PyTorch/HuggingFace workflows\n\n\n\n\n\n\nMay 3, 2025\n\n\nHasan\n\n\n\n\n\n\n  \n\n\n\n\nFine-Tuning Qwen3-14B with Unsloth: A Practical Guide for Data Scientists\n\n\n\n\n\n\n\nLLM\n\n\nFine-tuning\n\n\nHuggingFace\n\n\nLoRA\n\n\nQLoRA\n\n\n\n\n\n\n\n\n\n\n\nMay 3, 2025\n\n\nHasan\n\n\n\n\n\n\n  \n\n\n\n\nHands-On with Qwen3-14B: A Reasoning-Centric LLM for Data Scientists\n\n\n\n\n\n\n\nAI\n\n\nLLM\n\n\nReasoning\n\n\nNLP\n\n\nHuggingFace\n\n\nColab\n\n\nTransformers\n\n\n\n\n\n\n\n\n\n\n\nMay 3, 2025\n\n\nHasan\n\n\n\n\n\n\n  \n\n\n\n\nFinding the Oddballs: A Not-So-Technical Guide to Anomaly Detection(Density Estimation and Robustness)\n\n\n\n\n\n\n\ndata science\n\n\nmachine learning\n\n\ntutorial\n\n\nanomaly detection\n\n\n\n\nA fun, accessible explanation of anomaly detection using density estimation techniques\n\n\n\n\n\n\nMay 3, 2025\n\n\nYour Name\n\n\n\n\n\n\n  \n\n\n\n\nAnomaly Detection Series\n\n\n\n\n\n\n\ndata science\n\n\nmachine learning\n\n\nanomaly detection\n\n\n\n\nA series exploring anomaly detection techniques with fun, accessible explanations.\n\n\n\n\n\n\nMay 3, 2025\n\n\nYour Name\n\n\n\n\n\n\n  \n\n\n\n\nData Science Steps Series\n\n\n\n\n\n\n\nseries\n\n\ndata-science\n\n\n\n\nA practical guide to data science following FastAI’s top-down learning approach\n\n\n\n\n\n\nMay 2, 2025\n\n\nHasan\n\n\n\n\n\n\n  \n\n\n\n\nMatrix Multiplication\n\n\n\n\n\n\n\nfastai\n\n\nmatrix multiplication\n\n\n\n\nMatrix Multiplication from fastai course 2022\n\n\n\n\n\n\nAug 13, 2024\n\n\nHasan Goni\n\n\n\n\n\n\n  \n\n\n\n\nUnderstanding Matrix Multiplication from FastAI\n\n\nA Deep Dive into Neural Network Fundamentals\n\n\n\n\ndeep-learning\n\n\nmathematics\n\n\nfastai\n\n\n\n\n\n\n\n\n\n\n\nNov 20, 2023\n\n\nHasan Goni\n\n\n\n\n\n\n  \n\n\n\n\nHow to Use Nougat to Read Scientific Paper\n\n\nResearch paper working\n\n\n\n\nNlp\n\n\nResearch paper\n\n\nText\n\n\n\n\n\n\n\n\n\n\n\nOct 21, 2023\n\n\nHasan Goni\n\n\n\n\n\n\n  \n\n\n\n\nWelcome To My Data Science & Machine Learning Blog\n\n\n\n\n\n\n\nnews\n\n\ndata-science\n\n\n\n\n\n\n\n\n\n\n\nOct 17, 2023\n\n\nHasan Goni\n\n\n\n\n\n\n  \n\n\n\n\nData Science Steps to Follow - 05\n\n\nFeature Extraction from Image\n\n\n\n\ncode\n\n\nimage\n\n\nanalysis\n\n\n\n\n\n\n\n\n\n\n\nNov 22, 2022\n\n\nHasan Goni\n\n\n\n\n\n\n  \n\n\n\n\nData Science Steps to Follow - 06\n\n\nValidation Strategy and Model Evaluation\n\n\n\n\ndata-science\n\n\nmachine-learning\n\n\nvalidation\n\n\n\n\nLearn about different validation strategies and how to properly evaluate your models\n\n\n\n\n\n\nNov 22, 2022\n\n\nHasan Goni\n\n\n\n\n\n\n  \n\n\n\n\nData Science Steps to Follow - 04\n\n\nFeature Extraction from Text\n\n\n\n\ncode\n\n\ntext\n\n\nanalysis\n\n\n\n\n\n\n\n\n\n\n\nNov 21, 2022\n\n\nHasan Goni\n\n\n\n\n\n\n  \n\n\n\n\nData Science Steps to Follow - 03\n\n\nExploring Anonymized data\n\n\n\n\ncode\n\n\ntabular\n\n\nanalysis\n\n\n\n\n\n\n\n\n\n\n\nNov 21, 2022\n\n\nHasan Goni\n\n\n\n\n\n\n  \n\n\n\n\nData Science Steps to Follow - 02\n\n\nFeature Preprocessing and Generation\n\n\n\n\ndata-science\n\n\nfeature-engineering\n\n\ntutorial\n\n\n\n\nLearn essential techniques for preparing and engineering features in your data science projects.\n\n\n\n\n\n\nNov 20, 2022\n\n\nHasan Goni\n\n\n\n\n\n\n  \n\n\n\n\nData Science Steps to Follow - 01\n\n\nExploratory Data Analysis Fundamentals\n\n\n\n\ncode\n\n\nanalysis\n\n\ntutorial\n\n\n\n\n\n\n\n\n\n\n\nNov 19, 2022\n\n\nHasan Goni\n\n\n\n\n\n\nNo matching items"
   },
   {
     "objectID": "about.html",
@@ -49,249 +49,186 @@
     "text": "0.4 Getting Help\n\nUse the comments section below each post\nCheck the GitHub repository for code\nJoin our discussion forum (coming soon)\n\n\n\n\n\n\n\nNote\n\n\n\nThis series is continuously updated with new content and improvements based on reader feedback."
   },
   {
-    "objectID": "posts/welcome/index.html",
-    "href": "posts/welcome/index.html",
-    "title": "Welcome To My Data Science & Machine Learning Blog",
+    "objectID": "posts/series/anomaly-detection/finding-the-oddballs.html",
+    "href": "posts/series/anomaly-detection/finding-the-oddballs.html",
+    "title": "Finding the Oddballs: A Not-So-Technical Guide to Anomaly Detection(Density Estimation and Robustness)",
     "section": "",
-    "text": "Welcome to my technical blog where I share insights about Data Science, Machine Learning, and Deep Learning!"
+    "text": "Imagine you’re at a family reunion. Aunts, uncles, cousins—everyone’s mingling around the potato salad, sharing stories about their perfectly average lives. But then, there’s cousin Eddie. While everyone else talks about their 9-to-5 jobs, Eddie casually mentions he just returned from six months living in an underwater cave “researching mermaid sociology.”\nThat, my friends, is an anomaly.\nAnd just as you can spot Eddie from across the room (probably wearing socks with sandals), computers can be trained to spot anomalies in data. Let’s dive into the fascinating world of Anomaly Detection—with absolutely minimal math and maximum fun.\n\n\n\n\n\n\nNote\n\n\n\nAn anomaly is simply a data point that significantly deviates from the expected pattern or behavior of the majority of data.\n\n\nAn anomaly is basically the weirdo in your dataset—the point that doesn’t follow the rules everyone else seems to be playing by. In the world of data science, identifying these oddballs can be incredibly valuable:\n\nIt could be fraudulent credit card activity (“Hmm, you’ve never bought anything in Kazakhstan before, and now there’s a $5,000 purchase at 3 AM?”)\nA manufacturing defect (“This widget is supposed to be 2 inches, not 7 feet tall”)\nA potential new scientific discovery (“Wait, this star isn’t behaving like any other star we’ve seen”)\n\nBut how do we teach computers to find these needles in our digital haystacks? Enter: Density Estimation."
   },
   {
-    "objectID": "posts/welcome/index.html#what-to-expect",
-    "href": "posts/welcome/index.html#what-to-expect",
-    "title": "Welcome To My Data Science & Machine Learning Blog",
-    "section": "0.1 What to Expect",
-    "text": "0.1 What to Expect\nIn this blog, you’ll find:\n\n0.1.1 1. Data Science Series\nA comprehensive guide covering everything from exploratory data analysis to advanced modeling:\n\nPart 1: Exploratory Data Analysis Fundamentals\nPart 2: Feature Preprocessing and Generation\nPart 3: Handling Anonymized Data\nPart 4: Text Feature Extraction\nPart 5: Image Feature Extraction\nPart 6: Advanced Techniques\n\n\n\n0.1.2 2. Deep Learning Concepts\nExplanations inspired by Jeremy Howard’s teaching style:\n\nUnderstanding Matrix Multiplication\nMore coming soon!\n\n\n\n0.1.3 3. Technical Tools\nExploring modern data science tools:\n\nUsing Nougat to Read Scientific Papers\n\n\n\n0.1.4 4. Practical Tutorials\nHands-on guides with real-world applications (Coming Soon)"
-  },
-  {
-    "objectID": "posts/welcome/index.html#getting-started",
-    "href": "posts/welcome/index.html#getting-started",
-    "title": "Welcome To My Data Science & Machine Learning Blog",
-    "section": "0.2 Getting Started",
-    "text": "0.2 Getting Started\nIf you’re new to data science, I recommend starting with the Data Science Series Part 1, where we explore the fundamentals of data analysis.\nFor those interested in deep learning, check out the matrix multiplication tutorial to understand the building blocks of neural networks.\nStay tuned for regular updates and deep technical content! Feel free to connect with me on GitHub or Twitter."
-  },
-  {
-    "objectID": "posts/matrix_multiplication_from_fastai_course/00_matmul.html",
-    "href": "posts/matrix_multiplication_from_fastai_course/00_matmul.html",
-    "title": "Matrix Multiplication",
+    "objectID": "posts/series/anomaly-detection/finding-the-oddballs.html#whats-an-anomaly-anyway",
+    "href": "posts/series/anomaly-detection/finding-the-oddballs.html#whats-an-anomaly-anyway",
+    "title": "Finding the Oddballs: A Not-So-Technical Guide to Anomaly Detection(Density Estimation and Robustness)",
     "section": "",
-    "text": "This notebook is actually reprodcution fo course practical deep learning for coders part2. Matrix Multiplication starts with Lession 11 (1:08:47).\nTo get the noebook shown in the video, one should clone the course repository and run the notebook 01_matmul.ipynb."
+    "text": "Imagine you’re at a family reunion. Aunts, uncles, cousins—everyone’s mingling around the potato salad, sharing stories about their perfectly average lives. But then, there’s cousin Eddie. While everyone else talks about their 9-to-5 jobs, Eddie casually mentions he just returned from six months living in an underwater cave “researching mermaid sociology.”\nThat, my friends, is an anomaly.\nAnd just as you can spot Eddie from across the room (probably wearing socks with sandals), computers can be trained to spot anomalies in data. Let’s dive into the fascinating world of Anomaly Detection—with absolutely minimal math and maximum fun.\n\n\n\n\n\n\nNote\n\n\n\nAn anomaly is simply a data point that significantly deviates from the expected pattern or behavior of the majority of data.\n\n\nAn anomaly is basically the weirdo in your dataset—the point that doesn’t follow the rules everyone else seems to be playing by. In the world of data science, identifying these oddballs can be incredibly valuable:\n\nIt could be fraudulent credit card activity (“Hmm, you’ve never bought anything in Kazakhstan before, and now there’s a $5,000 purchase at 3 AM?”)\nA manufacturing defect (“This widget is supposed to be 2 inches, not 7 feet tall”)\nA potential new scientific discovery (“Wait, this star isn’t behaving like any other star we’ve seen”)\n\nBut how do we teach computers to find these needles in our digital haystacks? Enter: Density Estimation."
   },
   {
-    "objectID": "posts/matrix_multiplication_from_fastai_course/00_matmul.html#first-description",
-    "href": "posts/matrix_multiplication_from_fastai_course/00_matmul.html#first-description",
-    "title": "Matrix Multiplication",
+    "objectID": "posts/series/anomaly-detection/finding-the-oddballs.html#density-estimation-the-wheres-everyone-hanging-out-approach",
+    "href": "posts/series/anomaly-detection/finding-the-oddballs.html#density-estimation-the-wheres-everyone-hanging-out-approach",
+    "title": "Finding the Oddballs: A Not-So-Technical Guide to Anomaly Detection(Density Estimation and Robustness)",
+    "section": "0.2 Density Estimation: The “Where’s Everyone Hanging Out?” Approach",
+    "text": "0.2 Density Estimation: The “Where’s Everyone Hanging Out?” Approach\nImagine a crowded beach on a hot summer day. People naturally cluster in certain areas—near the ice cream stand, in the shade of palm trees, or in the water. If you spotted someone standing alone in the blazing sun far from everyone else, you’d think, “What’s that person doing all the way over there?”\nThis is essentially what density estimation does. It figures out where most of your data “hangs out,” and then can identify points that are chilling in low-density neighborhoods.\n\n\n\n\n\nFigure 1: Visualizing data density - notice the outlier in the lower left"
+  },
+  {
+    "objectID": "posts/series/anomaly-detection/finding-the-oddballs.html#the-kernel-density-estimator-kde-spreading-good-vibes",
+    "href": "posts/series/anomaly-detection/finding-the-oddballs.html#the-kernel-density-estimator-kde-spreading-good-vibes",
+    "title": "Finding the Oddballs: A Not-So-Technical Guide to Anomaly Detection(Density Estimation and Robustness)",
+    "section": "0.3 The Kernel Density Estimator (KDE): Spreading Good Vibes",
+    "text": "0.3 The Kernel Density Estimator (KDE): Spreading Good Vibes\nLet’s break down Kernel Density Estimation using another analogy:\nImagine each data point is a streetlight on a dark road. Each light casts a circular glow around it. Where many lights are close together, their glows overlap, creating brightly lit areas. Where lights are sparse, you get dimmer areas.\nIn KDE: - Each data point spreads a little “probability mass” around itself (the streetlight’s glow) - The shape of this spread is determined by something called a kernel function (the shape of the light’s glow) - Areas where many points overlap have high density (brightly lit areas) - Areas with few or no points have low density (dark areas)\nAnd anomalies? They’re hanging out in the dark, of course.\n\n\nCommon kernel functions include Gaussian (bell-shaped), Top Hat (flat circle), and Cosine (smooth hill), but the choice of kernel is less important than the bandwidth parameter."
+  },
+  {
+    "objectID": "posts/series/anomaly-detection/finding-the-oddballs.html#sec-bandwidth",
+    "href": "posts/series/anomaly-detection/finding-the-oddballs.html#sec-bandwidth",
+    "title": "Finding the Oddballs: A Not-So-Technical Guide to Anomaly Detection(Density Estimation and Robustness)",
+    "section": "0.4 The All-Important Bandwidth: Finding the Sweet Spot",
+    "text": "0.4 The All-Important Bandwidth: Finding the Sweet Spot\nHere’s where things get interesting. The most crucial parameter in KDE is something called “bandwidth.” Think of it as determining how far each data point’s influence reaches.\nToo small a bandwidth? Each point barely influences its surroundings, like tiny flashlights that only illuminate a foot around them. This creates a spiky, disconnected map that’s too sensitive to individual points.\nToo large a bandwidth? Each point’s influence spreads far and wide, like massive floodlights. Everything gets washed out, and you lose the ability to see interesting patterns.\nIt’s like making mashed potatoes: - Too little mashing (small bandwidth): You’ve got chunky potatoes with distinct pieces - Too much mashing (large bandwidth): You’ve made potato soup\nThe perfect bandwidth gives you that smooth, creamy consistency where everything comes together just right.\n\nUnder-smoothedJust RightOver-smoothed\n\n\n\n\n\nToo small bandwidth creates spiky estimates\n\n\n\n\n\n\n\nOptimal bandwidth balances detail and smoothness\n\n\n\n\n\n\n\nToo large bandwidth washes out important features"
+  },
+  {
+    "objectID": "posts/series/anomaly-detection/finding-the-oddballs.html#the-curse-of-dimensionality-when-more-is-less",
+    "href": "posts/series/anomaly-detection/finding-the-oddballs.html#the-curse-of-dimensionality-when-more-is-less",
+    "title": "Finding the Oddballs: A Not-So-Technical Guide to Anomaly Detection(Density Estimation and Robustness)",
+    "section": "0.5 The Curse of Dimensionality: When More is Less",
+    "text": "0.5 The Curse of Dimensionality: When More is Less\nHere’s where our anomaly detector starts sweating nervously. As we add more dimensions (variables) to our data, things get weird fast.\nImagine playing hide-and-seek in: 1. A hallway (1D): Pretty easy to find someone 2. A field (2D): Harder, but still manageable 3. A multi-story building (3D): Much more challenging 4. A 100-dimensional hypercube: screams internally\nThe “curse of dimensionality” means that as dimensions increase, data becomes increasingly sparse, making it harder to estimate densities accurately. It’s like trying to find a friend in a city where each person can hide not just on any street or in any building, but in any parallel universe.\nTo maintain the same quality of estimation, we need exponentially more data as dimensions increase. No wonder our poor algorithm is cursing!\n\n\n\n\n\nFigure 2: Sample complexity grows exponentially with dimensions\n\n\n\n\n\n\n\n\n\n\nImportant\n\n\n\nAccording to Stone’s theorem (1982), the convergence rate of KDE is highly dependent on dimensionality. To achieve the same estimation quality in higher dimensions, you need exponentially more samples!"
+  },
+  {
+    "objectID": "posts/series/anomaly-detection/finding-the-oddballs.html#when-anomalies-crash-your-training-party",
+    "href": "posts/series/anomaly-detection/finding-the-oddballs.html#when-anomalies-crash-your-training-party",
+    "title": "Finding the Oddballs: A Not-So-Technical Guide to Anomaly Detection(Density Estimation and Robustness)",
+    "section": "0.6 When Anomalies Crash Your Training Party",
+    "text": "0.6 When Anomalies Crash Your Training Party\nThere’s a delicious irony in anomaly detection: if anomalies sneak into your training data, they can mess up your detector’s ability to find other anomalies. It’s like hiring a security guard who can’t tell the difference between a bank robber and a bank teller.\nStandard KDE isn’t robust against these pesky infiltrators. Its “breakdown point” (the fraction of data that needs to change to completely throw off your estimate) is close to zero. That’s like having a security system that fails if even one person tampers with it!"
+  },
+  {
+    "objectID": "posts/series/anomaly-detection/finding-the-oddballs.html#coming-to-the-rescue-robust-estimation",
+    "href": "posts/series/anomaly-detection/finding-the-oddballs.html#coming-to-the-rescue-robust-estimation",
+    "title": "Finding the Oddballs: A Not-So-Technical Guide to Anomaly Detection(Density Estimation and Robustness)",
+    "section": "0.7 Coming to the Rescue: Robust Estimation",
+    "text": "0.7 Coming to the Rescue: Robust Estimation\nFear not! Robust statistics comes to our rescue with some clever techniques:\n\n0.7.1 The Median of Means Approach\nImagine you’re calculating the average height of people in a room, but Shaquille O’Neal walks in. Suddenly, your average is way off! Instead, you could: 1. Split people into groups 2. Calculate the average height of each group 3. Take the median (middle value) of those averages\nThis “median of means” approach is less affected by extreme values. If Shaq is in just one group, the other groups’ averages remain unaffected, and the median won’t change much.\n\n\n0.7.2 M-estimation: Changing the Rules of the Game\nStandard estimation methods give equal importance to all points, including potential anomalies. M-estimation changes this by using special loss functions:\n\n0.7.2.1 Huber Loss: The “I’ll Only Tolerate So Much” Approach\nHuber loss is like a parent’s patience: - For small deviations: “That’s fine, I’m cool with that” (quadratic behavior) - For large deviations: “Nope, I’m not getting more upset than this” (linear behavior)\nThis limits the influence of outliers without ignoring them completely.\n\n\nCode\nimport numpy as np\nimport matplotlib.pyplot as plt\n\n# Example of how Huber loss works\ndef huber_loss(x, delta=1.0):\n    if abs(x) &lt;= delta:\n        return 0.5 * x**2\n    else:\n        return delta * (abs(x) - 0.5 * delta)\n\nx = np.linspace(-3, 3, 1000)\ny = [huber_loss(val) for val in x]\n\nplt.figure(figsize=(8, 4))\nplt.plot(x, y)\nplt.title(\"Huber Loss Function\")\nplt.xlabel(\"Error\")\nplt.ylabel(\"Loss\")\nplt.grid(True)\nplt.show()\n\n\n\n\n\nFigure 3: Visualization of Huber Loss function\n\n\n\n\n\n\n0.7.2.2 Hampel Loss: The “Three Strikes” System\nHampel loss takes it further with two thresholds: - Close points: Full attention (quadratic) - Medium-distance points: Limited attention (linear) - Far away points: Fixed penalty (constant)\nIt’s like saying: “If you’re way out there doing your own thing, I’ll acknowledge you exist, but I won’t let you control the entire situation.”"
+  },
+  {
+    "objectID": "posts/series/anomaly-detection/finding-the-oddballs.html#the-real-world-test-house-prices",
+    "href": "posts/series/anomaly-detection/finding-the-oddballs.html#the-real-world-test-house-prices",
+    "title": "Finding the Oddballs: A Not-So-Technical Guide to Anomaly Detection(Density Estimation and Robustness)",
+    "section": "0.8 The Real-World Test: House Prices",
+    "text": "0.8 The Real-World Test: House Prices\nWhen applied to real-world data like house prices, these methods show their worth. Imagine trying to determine if a $10 million listing in a neighborhood of $300,000 homes is an anomaly or if it’s legitimately worth that much.\nStandard KDE might get thrown off by a few unusual listings in the training data. But robust methods, especially using Hampel loss, consistently outperform when the data contains those sneaky anomalies—particularly when they make up less than 10% of the data (which is usually the case).\n\n\nCode\n# Python placeholder for performance comparison table\nimport pandas as pd\nimport matplotlib.pyplot as plt\n\ndata = {\n    'Method': ['Standard KDE', 'Median of Means', 'Huber Loss', 'Hampel Loss'],\n    'AUC': [0.82, 0.88, 0.90, 0.93],\n    'Robust to Outliers': ['No', 'Medium', 'Yes', 'Yes (Best)']\n}\ndf = pd.DataFrame(data)\n\nfig, ax = plt.subplots(figsize=(7, 2))\nax.axis('off')\ntable = ax.table(cellText=df.values, colLabels=df.columns, cellLoc='center', loc='center')\ntable.auto_set_font_size(False)\ntable.set_fontsize(12)\ntable.scale(1.2, 1.2)\nplt.title('Performance of different methods on house price anomaly detection', pad=20)\nplt.show()\n\n\n\n?(caption)"
+  },
+  {
+    "objectID": "posts/series/anomaly-detection/finding-the-oddballs.html#the-bottom-line",
+    "href": "posts/series/anomaly-detection/finding-the-oddballs.html#the-bottom-line",
+    "title": "Finding the Oddballs: A Not-So-Technical Guide to Anomaly Detection(Density Estimation and Robustness)",
+    "section": "0.9 The Bottom Line",
+    "text": "0.9 The Bottom Line\nFinding anomalies is both art and science. Density estimation gives us a powerful framework, but we need to: - Choose the right bandwidth (not too smooth, not too chunky) - Be wary of high-dimensional data (the curse is real!) - Use robust methods to handle contaminated training data (Hampel loss for the win!)\nSo next time you spot cousin Eddie at the family reunion, remember—you’re performing your own personal anomaly detection. Just be glad you don’t have to calculate his probability density function to know something’s a bit off!\n\n\n\n\n\n\nWhat’s Next?\n\n\n\nStay tuned for our next post: Finding anomalies by isolation—or as I like to call it, “The Social Distancing Approach to Anomaly Detection.”"
+  },
+  {
+    "objectID": "posts/series/anomaly-detection/finding-the-oddballs.html#references",
+    "href": "posts/series/anomaly-detection/finding-the-oddballs.html#references",
+    "title": "Finding the Oddballs: A Not-So-Technical Guide to Anomaly Detection(Density Estimation and Robustness)",
+    "section": "0.10 References",
+    "text": "0.10 References"
+  },
+  {
+    "objectID": "posts/series/vlm.html",
+    "href": "posts/series/vlm.html",
+    "title": "VLM Series",
     "section": "",
-    "text": "This notebook is actually reprodcution fo course practical deep learning for coders part2. Matrix Multiplication starts with Lession 11 (1:08:47).\nTo get the noebook shown in the video, one should clone the course repository and run the notebook 01_matmul.ipynb."
+    "text": "This series takes a fastai-inspired, top-down approach to Vision-Language Models (VLMs). We’ll start with real-world applications and working code, then dive deeper into the concepts behind these powerful models. The focus is on open-source VLMs and practical workflows using PyTorch and HuggingFace.\n\n\n\nStart with working code: Each post begins with hands-on examples defining real tasks\nIterative deepening: Concepts are revisited with increasing depth\nLearn by building: Notebooks and exercises included for every topic\n\n\n\n\n\nHands-On with Qwen3-14B: A Reasoning-Centric LLM for Data Scientists\n\nWhat is Qwen3-14B?\nHow to use it for vision-language tasks\nHands-on: inference and fine-tuning\n\nFine-Tuning Qwen3-14B with Unsloth\n\nPractical guide to fine-tuning with Unsloth\nColab and local multi-GPU workflows\nTips for data scientists"
   },
   {
-    "objectID": "posts/matrix_multiplication_from_fastai_course/00_matmul.html#get-data",
-    "href": "posts/matrix_multiplication_from_fastai_course/00_matmul.html#get-data",
-    "title": "Matrix Multiplication",
-    "section": "0.2 Get data",
-    "text": "0.2 Get data\nWe firt download the mnist data to work with it\n\n\nCode\nfrom pathlib import Path\nimport gzip, time, os, pickle, math\nfrom urllib.request import urlretrieve\n\n\n\n\nCode\nHOME = os.getenv('HOME')\ndata_path = Path(fr'{HOME}/Schreibtisch/projects/git_data/course22p2/nbs/data')\nMNIST_URL='https://github.com/mnielsen/neural-networks-and-deep-learning/blob/master/data/mnist.pkl.gz?raw=true'\npath_data = data_path\npath_data.mkdir(exist_ok=True)\npath_gz = path_data/'mnist.pkl.gz'\n\n\n\n\nCode\nwith gzip.open(path_gz, 'rb') as f_in:\n    ((x_train, y_train), (x_valid, y_valid),_ ) =pickle.load(f_in, encoding='latin1')\n\n\n\n\nCode\nx_train.shape\n\n\n(50000, 784)"
-  },
-  {
-    "objectID": "posts/data-science-steps-to-follow-part02/index.html",
-    "href": "posts/data-science-steps-to-follow-part02/index.html",
-    "title": "Data Science Steps to Follow - 02",
+    "objectID": "posts/series/vlm.html#series-overview",
+    "href": "posts/series/vlm.html#series-overview",
+    "title": "VLM Series",
     "section": "",
-    "text": "Data Science Steps Series\n\n\n\nThis is Part 2 of a 6-part series on data science fundamentals:\n\nPart 1: EDA Fundamentals\nPart 2: Feature Preprocessing and Generation (You are here)\nPart 3: Handling Anonymized Data\nPart 4: Text Feature Extraction\nPart 5: Image Feature Extraction\nPart 6: Advanced Techniques"
+    "text": "This series takes a fastai-inspired, top-down approach to Vision-Language Models (VLMs). We’ll start with real-world applications and working code, then dive deeper into the concepts behind these powerful models. The focus is on open-source VLMs and practical workflows using PyTorch and HuggingFace.\n\n\n\nStart with working code: Each post begins with hands-on examples defining real tasks\nIterative deepening: Concepts are revisited with increasing depth\nLearn by building: Notebooks and exercises included for every topic\n\n\n\n\n\nHands-On with Qwen3-14B: A Reasoning-Centric LLM for Data Scientists\n\nWhat is Qwen3-14B?\nHow to use it for vision-language tasks\nHands-on: inference and fine-tuning\n\nFine-Tuning Qwen3-14B with Unsloth\n\nPractical guide to fine-tuning with Unsloth\nColab and local multi-GPU workflows\nTips for data scientists"
   },
   {
-    "objectID": "posts/data-science-steps-to-follow-part02/index.html#interactive-data-explorer",
-    "href": "posts/data-science-steps-to-follow-part02/index.html#interactive-data-explorer",
-    "title": "Data Science Steps to Follow - 02",
-    "section": "2.1 Interactive Data Explorer",
-    "text": "2.1 Interactive Data Explorer\n\n\nShow/hide code for interactive data explorer\nimport pandas as pd\nimport numpy as np\nimport seaborn as sns\nimport matplotlib.pyplot as plt\nimport plotly.express as px\nfrom sklearn.preprocessing import StandardScaler, MinMaxScaler\n\n# Generate sample data\nnp.random.seed(42)\nn_samples = 1000\n\ndata = {\n    'age': np.random.normal(35, 10, n_samples),\n    'income': np.random.lognormal(10, 1, n_samples),\n    'education_years': np.random.randint(8, 22, n_samples),\n    'satisfaction': np.random.randint(1, 6, n_samples)\n}\n\ndf = pd.DataFrame(data)\n\n# Create interactive scatter plot\nfig = px.scatter(df, x='age', y='income', \n                 color='satisfaction',\n                 size='education_years',\n                 hover_data=['education_years'],\n                 title='Interactive Feature Relationships')\nfig.show()"
+    "objectID": "posts/series/vlm.html#prerequisites",
+    "href": "posts/series/vlm.html#prerequisites",
+    "title": "VLM Series",
+    "section": "0.2 Prerequisites",
+    "text": "0.2 Prerequisites\n\nBasic Python and PyTorch\nFamiliarity with Jupyter notebooks\nSome experience with deep learning (helpful, not required)"
   },
   {
-    "objectID": "posts/data-science-steps-to-follow-part02/index.html#feature-preprocessing-steps",
-    "href": "posts/data-science-steps-to-follow-part02/index.html#feature-preprocessing-steps",
-    "title": "Data Science Steps to Follow - 02",
-    "section": "2.2 Feature Preprocessing Steps",
-    "text": "2.2 Feature Preprocessing Steps\n\n2.2.1 1. Handling Missing Values\n\nCodeExample\n\n\ndef handle_missing_values(df):\n    # Numeric columns\n    numeric_cols = df.select_dtypes(include=[np.number]).columns\n    df[numeric_cols] = df[numeric_cols].fillna(df[numeric_cols].median())\n    \n    # Categorical columns\n    cat_cols = df.select_dtypes(exclude=[np.number]).columns\n    df[cat_cols] = df[cat_cols].fillna(df[cat_cols].mode().iloc[0])\n    \n    return df\n\n\n# Example usage\ndf_clean = handle_missing_values(df.copy())\nprint(\"Missing values after cleaning:\")\nprint(df_clean.isnull().sum())\n\n\n\n\n\n2.2.2 2. Scaling Features\nLet’s compare different scaling methods:\n\n\nShow/hide scaling comparison code\ndef compare_scaling_methods(data):\n    # Original data\n    original = data['age'].copy()\n    \n    # Standard scaling\n    scaler = StandardScaler()\n    standard_scaled = scaler.fit_transform(original.values.reshape(-1, 1))\n    \n    # Min-max scaling\n    min_max_scaler = MinMaxScaler()\n    minmax_scaled = min_max_scaler.fit_transform(original.values.reshape(-1, 1))\n    \n    # Plotting\n    fig, axes = plt.subplots(1, 3, figsize=(15, 5))\n    \n    # Original distribution\n    sns.histplot(original, ax=axes[0])\n    axes[0].set_title('Original Data')\n    \n    # Standard scaled\n    sns.histplot(standard_scaled, ax=axes[1])\n    axes[1].set_title('Standard Scaled')\n    \n    # Min-max scaled\n    sns.histplot(minmax_scaled, ax=axes[2])\n    axes[2].set_title('Min-Max Scaled')\n    \n    plt.tight_layout()\n    plt.show()\n\ncompare_scaling_methods(df)\n\n\n\n\n\n\n\n2.2.3 3. Feature Generation\n\n\n\n\n\n\nInteractive Feature Generator\n\n\n\nUse the code below to experiment with different feature combinations:\n\n\n\n\nShow/hide feature generation code\ndef generate_features(df):\n    \"\"\"Generate new features from existing ones\"\"\"\n    # Polynomial features\n    df['income_squared'] = df['income'] ** 2\n    \n    # Interaction features\n    df['income_per_education'] = df['income'] / df['education_years']\n    \n    # Binning\n    df['age_group'] = pd.qcut(df['age'], q=5, labels=['Very Young', 'Young', 'Middle', 'Senior', 'Elder'])\n    \n    return df\n\n# Generate new features\ndf_featured = generate_features(df.copy())\n\n# Show correlations\nplt.figure(figsize=(10, 8))\nsns.heatmap(df_featured.select_dtypes(include=[np.number]).corr(), \n            annot=True, cmap='coolwarm', center=0)\nplt.title('Feature Correlations')\nplt.show()"
+    "objectID": "posts/series/vlm.html#tools-well-use",
+    "href": "posts/series/vlm.html#tools-well-use",
+    "title": "VLM Series",
+    "section": "0.3 Tools We’ll Use",
+    "text": "0.3 Tools We’ll Use\n\nPyTorch for model development\nHuggingFace Transformers for VLMs\nFastAI for rapid prototyping (where applicable)\nOpen-source VLMs (Qwen, LLaVA, etc.)"
   },
   {
-    "objectID": "posts/data-science-steps-to-follow-part02/index.html#best-practices",
-    "href": "posts/data-science-steps-to-follow-part02/index.html#best-practices",
-    "title": "Data Science Steps to Follow - 02",
-    "section": "2.3 Best Practices",
-    "text": "2.3 Best Practices\n\n\n\n\n\n\nKey Points to Remember\n\n\n\n\nAlways scale features after splitting into train/test sets\nHandle missing values before feature generation\nDocument all preprocessing steps for reproducibility\nValidate generated features with domain experts"
+    "objectID": "posts/series/vlm.html#getting-help",
+    "href": "posts/series/vlm.html#getting-help",
+    "title": "VLM Series",
+    "section": "0.4 Getting Help",
+    "text": "0.4 Getting Help\n\nUse the comments section below each post\nCheck the GitHub repository for code\nJoin our discussion forum (coming soon)\n\n\n\n\n\n\n\nNote\n\n\n\nThis series is updated regularly based on reader feedback and new developments in VLM research."
   },
   {
-    "objectID": "posts/data-science-steps-to-follow-part02/index.html#interactive-feature-selection-tool",
-    "href": "posts/data-science-steps-to-follow-part02/index.html#interactive-feature-selection-tool",
-    "title": "Data Science Steps to Follow - 02",
-    "section": "2.4 Interactive Feature Selection Tool",
-    "text": "2.4 Interactive Feature Selection Tool\n\n\nShow/hide feature selection tool\nfrom sklearn.feature_selection import SelectKBest, f_regression\n\ndef plot_feature_importance(X, y, k=5):\n    \"\"\"Plot top k most important features\"\"\"\n    selector = SelectKBest(score_func=f_regression, k=k)\n    selector.fit(X, y)\n    \n    # Get feature scores\n    scores = pd.DataFrame({\n        'Feature': X.columns,\n        'Score': selector.scores_\n    }).sort_values('Score', ascending=False)\n    \n    # Create interactive bar plot\n    fig = px.bar(scores, x='Feature', y='Score',\n                 title=f'Top {k} Most Important Features',\n                 labels={'Score': 'Importance Score'})\n    fig.show()\n\n# Example usage\nX = df_featured.select_dtypes(include=[np.number]).drop('satisfaction', axis=1)\ny = df_featured['satisfaction']\nplot_feature_importance(X, y)"
-  },
-  {
-    "objectID": "posts/data-science-steps-to-follow-part02/index.html#next-steps",
-    "href": "posts/data-science-steps-to-follow-part02/index.html#next-steps",
-    "title": "Data Science Steps to Follow - 02",
-    "section": "2.5 Next Steps",
-    "text": "2.5 Next Steps\nContinue to Part 3: Handling Anonymized Data to learn about working with masked and anonymized datasets."
-  },
-  {
-    "objectID": "posts/data-science-steps-to-follow-part02/index.html#related-resources",
-    "href": "posts/data-science-steps-to-follow-part02/index.html#related-resources",
-    "title": "Data Science Steps to Follow - 02",
-    "section": "2.6 Related Resources",
-    "text": "2.6 Related Resources\n\nUnderstanding Matrix Multiplication - Important for feature transformations\nData Science Series Overview"
-  },
-  {
-    "objectID": "posts/data-science-steps-to-follow-part02/index.html#references",
-    "href": "posts/data-science-steps-to-follow-part02/index.html#references",
-    "title": "Data Science Steps to Follow - 02",
-    "section": "2.7 References",
-    "text": "2.7 References\n\nScikit-learn Preprocessing Guide\nFeature Engineering for Machine Learning\nPython Data Science Handbook"
-  },
-  {
-    "objectID": "posts/data-science-steps-to-follow-part05/index.html",
-    "href": "posts/data-science-steps-to-follow-part05/index.html",
-    "title": "Data Science Steps to Follow - 05",
+    "objectID": "posts/series/vlm-qwen3-14b/finetune-qwen3-14b.html",
+    "href": "posts/series/vlm-qwen3-14b/finetune-qwen3-14b.html",
+    "title": "Fine-Tuning Qwen3-14B with Unsloth: A Practical Guide for Data Scientists",
     "section": "",
-    "text": "Data Science Steps Series\n\n\n\nThis is Part 5 of a 6-part series on data science fundamentals:\n\nPart 1: EDA Fundamentals\nPart 2: Feature Preprocessing and Generation\nPart 3: Handling Anonymized Data\nPart 4: Text Feature Extraction\nPart 5: Image Feature Extraction ( You are here)\nPart 6: Advanced Techniques"
+    "text": "Tip\n\n\n\nThis post is part of the VLM Series. Feedback and questions are welcome!"
   },
   {
-    "objectID": "posts/data-science-steps-to-follow-part05/index.html#next-steps",
-    "href": "posts/data-science-steps-to-follow-part05/index.html#next-steps",
-    "title": "Data Science Steps to Follow - 05",
-    "section": "2.1 Next Steps",
-    "text": "2.1 Next Steps\nContinue to Part 6: Advanced techniques."
+    "objectID": "posts/series/vlm-qwen3-14b/finetune-qwen3-14b.html#introduction",
+    "href": "posts/series/vlm-qwen3-14b/finetune-qwen3-14b.html#introduction",
+    "title": "Fine-Tuning Qwen3-14B with Unsloth: A Practical Guide for Data Scientists",
+    "section": "0.1 Introduction",
+    "text": "0.1 Introduction\nLarge language models (LLMs) like Qwen3-14B are powerful, but off-the-shelf models can fall short in specialized domains. Fine-tuning lets us inject private domain knowledge, align behavior, and optimize for unique downstream tasks.\nIn this guide, we’ll show how to fine-tune Qwen3-14B using Unsloth, a blazing-fast fine-tuning library that works on Colab or local GPUs. We’ll cover both:\n\nColab-based fine-tuning (for light experiments and demos)\nLocal multi-GPU fine-tuning (for serious workloads)"
   },
   {
-    "objectID": "posts/data-science-steps-to-follow-part01/index.html",
-    "href": "posts/data-science-steps-to-follow-part01/index.html",
-    "title": "Data Science Steps to Follow - 01",
-    "section": "",
-    "text": "Data Science Steps Series\n\n\n\nThis is Part 1 of a 6-part series on data science fundamentals:\n\nPart 1: EDA Fundamentals (You are here)\nPart 2: Feature Preprocessing and Generation\nPart 3: Handling Anonymized Data\nPart 4: Text Feature Extraction\nPart 5: Image Feature Extraction\nPart 6: Advanced Techniques"
+    "objectID": "posts/series/vlm-qwen3-14b/finetune-qwen3-14b.html#why-use-unsloth",
+    "href": "posts/series/vlm-qwen3-14b/finetune-qwen3-14b.html#why-use-unsloth",
+    "title": "Fine-Tuning Qwen3-14B with Unsloth: A Practical Guide for Data Scientists",
+    "section": "0.2 Why Use Unsloth?",
+    "text": "0.2 Why Use Unsloth?\nUnsloth adds significant speed and memory optimizations for training HuggingFace models—up to 2x faster on consumer GPUs.\nFeatures: - Integrated QLoRA & LoRA - FlashAttention-2 support - HuggingFace-compatible models"
   },
   {
-    "objectID": "posts/data-science-steps-to-follow-part01/index.html#what-is-eda",
-    "href": "posts/data-science-steps-to-follow-part01/index.html#what-is-eda",
-    "title": "Data Science Steps to Follow - 01",
-    "section": "2.1 What is EDA?",
-    "text": "2.1 What is EDA?\nEDA is the critical first step in any data science project. It helps us:\n\nUnderstand the data deeply\nBuild intuition about patterns and relationships\nGenerate hypotheses for feature engineering\nFind insights that inform modeling decisions"
+    "objectID": "posts/series/vlm-qwen3-14b/finetune-qwen3-14b.html#fine-tuning-in-google-colab",
+    "href": "posts/series/vlm-qwen3-14b/finetune-qwen3-14b.html#fine-tuning-in-google-colab",
+    "title": "Fine-Tuning Qwen3-14B with Unsloth: A Practical Guide for Data Scientists",
+    "section": "0.3 1. Fine-Tuning in Google Colab",
+    "text": "0.3 1. Fine-Tuning in Google Colab\n\n0.3.1 Step 1: Setup\n!pip install --quiet unsloth datasets trl\n\n\n0.3.2 Step 2: Load the Model(QLoRA)\nfrom unsloth import FastLanguageModel\nmodel, tokenizer = FastLanguageModel.from_pretrained(\n    model_name = \"unsloth/qwen2-14b-chat-gptq\",\n    max_seq_length = 2048,\n    dtype = None,\n    load_in_4bit = True,\n)\n\n\n0.3.3 Step 3: Prepare the Dataset\nUse a HuggingFace datasets object:\nfrom datasets import load_dataset\ndataset = load_dataset(\"tatsu-lab/alpaca\", split=\"train[:500]\")\nOr bring your own in JSONL format:\n{\"instruction\": \"...\", \"input\": \"...\", \"output\": \"...\"}\nStep 4: Fine-Tune with LoRA\nmodel = FastLanguageModel.get_peft_model(\n    model,\n    r = 64,\n    lora_alpha = 16,\n    lora_dropout = 0.05,\n    bias = \"none\",\n    task_type = \"CAUSAL_LM\",\n)\nthen train with:\nfrom trl import SFTTrainer\ntrainer = SFTTrainer(model=model, tokenizer=tokenizer, train_dataset=dataset)\ntrainer.train()"
   },
   {
-    "objectID": "posts/data-science-steps-to-follow-part01/index.html#the-power-of-visualization",
-    "href": "posts/data-science-steps-to-follow-part01/index.html#the-power-of-visualization",
-    "title": "Data Science Steps to Follow - 01",
-    "section": "2.2 The Power of Visualization",
-    "text": "2.2 The Power of Visualization\nOne of the most powerful EDA tools is visualization. Let’s look at a fascinating example from a Kaggle competition:\n\n\n\n\n\n\nReal-World Example\n\n\n\nIn a promotion prediction competition, simple visualization revealed: - Two key features: promos sent and promos used - A direct relationship between their difference and the target - This insight led to 81% accuracy without complex modeling!\n\n\n# Example visualization code\nimport pandas as pd\nimport seaborn as sns\nimport matplotlib.pyplot as plt\n\ndef plot_promo_relationship(df):\n    plt.figure(figsize=(10, 6))\n    plt.scatter('promos_sent', 'promos_used', data=df)\n    plt.xlabel('Number of Promos Sent')\n    plt.ylabel('Number of Promos Used')\n    plt.title('Promo Usage Pattern')\n    plt.show()"
+    "objectID": "posts/series/vlm-qwen3-14b/finetune-qwen3-14b.html#fine-tuning-locally-multi-gpu-a100-rtx",
+    "href": "posts/series/vlm-qwen3-14b/finetune-qwen3-14b.html#fine-tuning-locally-multi-gpu-a100-rtx",
+    "title": "Fine-Tuning Qwen3-14B with Unsloth: A Practical Guide for Data Scientists",
+    "section": "0.4 2. Fine-Tuning Locally (Multi-GPU / A100 / RTX)",
+    "text": "0.4 2. Fine-Tuning Locally (Multi-GPU / A100 / RTX)\n\n0.4.1 Setup linux\npip install unsloth[all] accelerate deepspeed\naccelerate config\nEnable multi-GPU with DeepSpeed or accelerate.\n\n\n0.4.2 Launch Training\naccelerate launch train.py\nYour train.py should import and use FastLanguageModel just like in Colab. You’ll get better memory handling and faster throughput with FP16 + QLoRA.\nFor training large corpora, you can stream JSONL from disk, or integrate with DVC or HuggingFace Datasets to handle TB-scale data."
   },
   {
-    "objectID": "posts/data-science-steps-to-follow-part01/index.html#building-intuition",
-    "href": "posts/data-science-steps-to-follow-part01/index.html#building-intuition",
-    "title": "Data Science Steps to Follow - 01",
-    "section": "2.3 Building Intuition",
-    "text": "2.3 Building Intuition\n\n2.3.1 1. Domain Knowledge Acquisition\nBefore diving into analysis, focus on:\n\nUnderstanding the business goal\nResearching similar problems\nLearning industry-specific metrics\nReading relevant documentation\n\n\n\n2.3.2 2. Data Validation\n\n\n\n\n\n\nKey Validation Checks\n\n\n\n\nValue ranges (e.g., age between 0-120)\nLogical relationships (clicks ≤ impressions)\nMissing value patterns\nOutliers and anomalies\n\n\n\ndef validate_data(df):\n    \"\"\"Basic data validation checks\"\"\"\n    issues = []\n    \n    # Age check\n    if df['age'].max() &gt; 120:\n        issues.append(\"Found age &gt; 120\")\n        \n    # Click validation\n    if any(df['clicks'] &gt; df['impressions']):\n        issues.append(\"Found clicks &gt; impressions\")\n    \n    return issues\n\n\n2.3.3 3. Understanding Data Generation\nKey considerations:\n\nSampling methodology\nTrain/test split rationale\nTime-based patterns\nData collection process\n\n\n\n\n\n\n\nJeremy Howard’s Insight\n\n\n\n“In data science, there are no outliers - only opportunities to understand your data better.”"
+    "objectID": "posts/series/vlm-qwen3-14b/finetune-qwen3-14b.html#practical-use-cases",
+    "href": "posts/series/vlm-qwen3-14b/finetune-qwen3-14b.html#practical-use-cases",
+    "title": "Fine-Tuning Qwen3-14B with Unsloth: A Practical Guide for Data Scientists",
+    "section": "0.5 Practical Use Cases",
+    "text": "0.5 Practical Use Cases\n\nCustom Assistants: Inject your product or company domain into the model.\nData QA Bots: Fine-tune on your own feature dictionaries, KPIs, and docs.\nMath Tutors: Reinforce multi-step reasoning with math datasets (e.g., GSM8K)."
   },
   {
-    "objectID": "posts/data-science-steps-to-follow-part01/index.html#related-resources",
-    "href": "posts/data-science-steps-to-follow-part01/index.html#related-resources",
-    "title": "Data Science Steps to Follow - 01",
-    "section": "2.4 Related Resources",
-    "text": "2.4 Related Resources\n\nUnderstanding Matrix Multiplication - Essential math for data science\nUsing Nougat for Research Papers - Tool for data science research"
+    "objectID": "posts/series/vlm-qwen3-14b/finetune-qwen3-14b.html#tips-for-success",
+    "href": "posts/series/vlm-qwen3-14b/finetune-qwen3-14b.html#tips-for-success",
+    "title": "Fine-Tuning Qwen3-14B with Unsloth: A Practical Guide for Data Scientists",
+    "section": "0.6 Tips for Success",
+    "text": "0.6 Tips for Success\n\nUse max_seq_length=2048 for long-context reasoning tasks.\nRegularize using small LoRA dropout (0.05 or 0.1).\nEvaluate outputs on real tasks—don’t just trust loss!"
   },
   {
-    "objectID": "posts/data-science-steps-to-follow-part01/index.html#next-steps",
-    "href": "posts/data-science-steps-to-follow-part01/index.html#next-steps",
-    "title": "Data Science Steps to Follow - 01",
-    "section": "2.5 Next Steps",
-    "text": "2.5 Next Steps\nContinue to Part 2: Feature Preprocessing and Generation, where we’ll explore how to transform raw data into meaningful features."
+    "objectID": "posts/series/vlm-qwen3-14b/finetune-qwen3-14b.html#wrap-up",
+    "href": "posts/series/vlm-qwen3-14b/finetune-qwen3-14b.html#wrap-up",
+    "title": "Fine-Tuning Qwen3-14B with Unsloth: A Practical Guide for Data Scientists",
+    "section": "0.7 Wrap Up",
+    "text": "0.7 Wrap Up\nFine-tuning Qwen3-14B with Unsloth makes LLM customization accessible—whether you’re in Colab or scaling up on A100s.\nLet me know if you want a follow-up post on:\n\nEvaluation methods\nQuantization after fine-tuning\nDeploying fine-tuned models"
   },
   {
-    "objectID": "posts/data-science-steps-to-follow-part01/index.html#references",
-    "href": "posts/data-science-steps-to-follow-part01/index.html#references",
-    "title": "Data Science Steps to Follow - 01",
-    "section": "2.6 References",
-    "text": "2.6 References\n\nCoursera: How to Win a Data Science Competition\nFast.ai: Practical Deep Learning\nPython Data Science Handbook"
+    "objectID": "posts/series/vlm-qwen3-14b/finetune-qwen3-14b.html#next-steps",
+    "href": "posts/series/vlm-qwen3-14b/finetune-qwen3-14b.html#next-steps",
+    "title": "Fine-Tuning Qwen3-14B with Unsloth: A Practical Guide for Data Scientists",
+    "section": "0.8 Next Steps",
+    "text": "0.8 Next Steps\n\nBack to VLM Series Overview\nRead the first post: Hands-On with Qwen3-14B"
   },
   {
-    "objectID": "tags.html",
-    "href": "tags.html",
-    "title": "Tags",
-    "section": "",
-    "text": "Welcome to the tag index! Here you can find all posts organized by their tags. Use the search and filter options to find specific content.\n\n\n\n\n\n\n\n\nBelow is a searchable table of all posts with their associated tags:"
-  },
-  {
-    "objectID": "tags.html#all-posts",
-    "href": "tags.html#all-posts",
-    "title": "Tags",
-    "section": "",
-    "text": "Below is a searchable table of all posts with their associated tags:"
-  },
-  {
-    "objectID": "posts/data-science-steps-to-follow-part04/index.html",
-    "href": "posts/data-science-steps-to-follow-part04/index.html",
-    "title": "Data Science Steps to Follow - 04",
-    "section": "",
-    "text": "Data Science Steps Series\n\n\n\nThis is Part 3 of a 6-part series on data science fundamentals:\n\nPart 1: EDA Fundamentals\nPart 2: Feature Preprocessing and Generation\nPart 3: Handling Anonymized Data\nPart 4: Text Feature Extraction (you are here)\nPart 5: Image Feature Extraction\nPart 6: Advanced Techniques"
-  },
-  {
-    "objectID": "posts/data-science-steps-to-follow-part04/index.html#bag-of-words",
-    "href": "posts/data-science-steps-to-follow-part04/index.html#bag-of-words",
-    "title": "Data Science Steps to Follow - 04",
-    "section": "2.1 1. Bag of words",
-    "text": "2.1 1. Bag of words\n1.1. CountVectorizer\n\neach word is separated and count number of occurences\n\nfrom sklearn.feature_extraction.text import CountVectorizer\nvectorizer = CountVectorizer()\nX = vectorizer.fit_transform(corpus)\nprint(vectorizer.get_feature_names())\nprint(X.toarray())\n\nWe may be need to do some post processing. As we know KNN, neural networks are sensitive to the scale of the features. So we need to scale the features. We can use TF-IDF to do this.\n\n1.2. TfidfVectorizer\n\nWhat actually is just not frequency but normalized frequency.\nTerm frequency:\n\ntf = 1/ x.sum[axis=1](:,None)\nx = x * tf\n\nInverse document frequency:\n\nidf = np.log(x.shape[0]/(x&gt;0).sum(axis=0)))\nx = x*idf\nsklearn.feature_extraction.text.TfidfVectorizer\n1.3 N-grams\n\nNot only words but n-consequent words\n\nsklearn.feature_extraction.text.CountVectorizer(ngram_range=(1,2)) \n# may be parameter analyzer\n\n2.1.1 Text Preprocessing\n\nActually before applying any Bag of words we need to preprocess the text. We need to remove the stop words, stemming, lemmatization, etc.* Conventionally preprocessing are\n\nTokenization -&gt; Very very sunny day -&gt; [Very, very, sunny, day]\nLowercasing -&gt; [very, very, sunny, day] -&gt; [very, very, sunny, day] -&gt;CountVectorizer from sklearn will automatically do this\nRemoving punctuation\nRemoving stopwords -&gt; [The cow jumped over the moon] -&gt; [cow, jumped, moon]\n\nAriticles or preprositon words\nVery common words\nCan be used NLTK library\nsklearn.feature_extraction.text.CountVectorizer(max_df)\nmax_df is the frequency threshold, after which the word is removed\n\nStemming/Lemmatization\nStemming\n\n[democracy, democratic, democratization] -&gt; [democr]\n[Saw] -&gt; [s]\n\nLemitization\n\n[democracy, democratic, democratization] -&gt; [democracy]\n[Saw, sawing, sawed] -&gt; [see or saw] depending on text"
-  },
-  {
-    "objectID": "posts/data-science-steps-to-follow-part04/index.html#summray-of-bag-of-words-pipeline",
-    "href": "posts/data-science-steps-to-follow-part04/index.html#summray-of-bag-of-words-pipeline",
-    "title": "Data Science Steps to Follow - 04",
-    "section": "2.2 Summray of Bag of words Pipeline",
-    "text": "2.2 Summray of Bag of words Pipeline\n\nPreprocessing Lowercasing, removing punctuation, removing stopwords, stemming/lemmatization\nN-grams helps to get local context\nPost processing TF-IDF"
-  },
-  {
-    "objectID": "posts/data-science-steps-to-follow-part04/index.html#embeddings",
-    "href": "posts/data-science-steps-to-follow-part04/index.html#embeddings",
-    "title": "Data Science Steps to Follow - 04",
-    "section": "2.3 2. Embeddings",
-    "text": "2.3 2. Embeddings\n\n2.3.1 Word2vec\n\nVector representation of words and text\nEach word is represented as a vector, in some sophisticated way, which could have 100 dimensions or more.\nSame words will have similar vectors. king-&gt;queen\nAlso addition and subtraction of vectors will have some meaning. -&gt; king + woman - man = queen\nSeveral implementaton of word2vec\n\nWord2vec\nGlove\nFastText\n\nSentences\n\nDoc2vec\n\nBased on situation we can use word or sentence embeddings. Actually try both and take the best one.\nAll the preprocessing steps can be applied to the text before applying word2vec.\n\n\n\n2.3.2 Comparion Bag of words and Word2vec\n\nBag of words\n\nVery large vector\nmeaning is easy value in vector is known\n\nWord2vec\n\nRelative Small vector\nValues of vector can be interpreted only some cases\nThe words with simlar meaning will have similar embeddings\n\n\nNext post can be found here"
-  },
-  {
-    "objectID": "posts/nougat-to-read-scientific-pdf-files/index.html",
-    "href": "posts/nougat-to-read-scientific-pdf-files/index.html",
-    "title": "How to Use Nougat to Read Scientific Paper",
-    "section": "",
-    "text": "Copied from here"
-  },
-  {
-    "objectID": "posts/nougat-to-read-scientific-pdf-files/index.html#jupter-notebook-is-the-following",
-    "href": "posts/nougat-to-read-scientific-pdf-files/index.html#jupter-notebook-is-the-following",
-    "title": "How to Use Nougat to Read Scientific Paper",
-    "section": "2.1 Jupter notebook is the following",
-    "text": "2.1 Jupter notebook is the following\n#pip install -q pymupdf python-Levenshtein nltk\nfrom transformers import AutoProcessor, VisionEncoderDecoderModel\nimport torch\nfrom pathlib import Path\nfrom typing import Optional, List, Dict, Tuple \nimport io\nimport fitz\nfrom huggingface_hub import hf_hub_download\nfrom PIL import Image\nfrom collections import defaultdict\nfrom transformers import StoppingCriteria, StoppingCriteriaList\nprocessor = AutoProcessor.from_pretrained(\"facebook/nougat-small\")\nmodel = VisionEncoderDecoderModel.from_pretrained(\"facebook/nougat-small\")\nDownloading (…)rocessor_config.json:   0%|          | 0.00/479 [00:00&lt;?, ?B/s]\n\n\n\nDownloading (…)okenizer_config.json:   0%|          | 0.00/4.49k [00:00&lt;?, ?B/s]\n\n\n\nDownloading (…)/main/tokenizer.json:   0%|          | 0.00/2.14M [00:00&lt;?, ?B/s]\n\n\n\nDownloading (…)cial_tokens_map.json:   0%|          | 0.00/96.0 [00:00&lt;?, ?B/s]\n\n\nSpecial tokens have been added in the vocabulary, make sure the associated word embeddings are fine-tuned or trained.\n\n\n\nDownloading (…)lve/main/config.json:   0%|          | 0.00/4.77k [00:00&lt;?, ?B/s]\n\n\n\nDownloading pytorch_model.bin:   0%|          | 0.00/990M [00:00&lt;?, ?B/s]\n\n\n\nDownloading (…)neration_config.json:   0%|          | 0.00/165 [00:00&lt;?, ?B/s]\n%%capture\n#device = \"cuda\" if torch.cuda.is_available() else \"cpu\"\ndevice = \"cpu\"\nmodel.to(device)\n     \nfilepath = hf_hub_download(repo_id=\"ysharma/nougat\", filename=\"input/nougat.pdf\", repo_type=\"space\")\nDownloading nougat.pdf:   0%|          | 0.00/4.13M [00:00&lt;?, ?B/s]\ndef rasterize_paper(\n    pdf: Path,\n    outpath: Optional[Path] = None,\n    dpi: int = 96,\n    return_pil=False,\n    pages=None,\n) -&gt; Optional[List[io.BytesIO]]:\n    \"\"\"\n    Rasterize a PDF file to PNG images.\n\n    Args:\n        pdf (Path): The path to the PDF file.\n        outpath (Optional[Path], optional): The output directory. If None, the PIL images will be returned instead. Defaults to None.\n        dpi (int, optional): The output DPI. Defaults to 96.\n        return_pil (bool, optional): Whether to return the PIL images instead of writing them to disk. Defaults to False.\n        pages (Optional[List[int]], optional): The pages to rasterize. If None, all pages will be rasterized. Defaults to None.\n\n    Returns:\n        Optional[List[io.BytesIO]]: The PIL images if `return_pil` is True, otherwise None.\n    \"\"\"\n\n    pillow_images = []\n    if outpath is None:\n        return_pil = True\n    try:\n        if isinstance(pdf, (str, Path)):\n            pdf = fitz.open(pdf)\n        if pages is None:\n            pages = range(len(pdf))\n        for i in pages:\n            page_bytes: bytes = pdf[i].get_pixmap(dpi=dpi).pil_tobytes(format=\"PNG\")\n            if return_pil:\n                pillow_images.append(io.BytesIO(page_bytes))\n            else:\n                with (outpath / (\"%02d.png\" % (i + 1))).open(\"wb\") as f:\n                    f.write(page_bytes)\n    except Exception:\n        pass\n    if return_pil:\n        return pillow_images\nimages = rasterize_paper(pdf=filepath, return_pil=True)\nlen(images)\n17\nimage = Image.open(images[0])\nimage\n\n\n\npng\n\n\n# prepare image for the model\npixel_values = processor(images=image, return_tensors=\"pt\").pixel_values\nprint(pixel_values.shape)\n     \ntorch.Size([1, 3, 896, 672])\nclass RunningVarTorch:\n    def __init__(self, L=15, norm=False):\n        self.values = None\n        self.L = L\n        self.norm = norm\n\n    def push(self, x: torch.Tensor):\n        assert x.dim() == 1\n        if self.values is None:\n            self.values = x[:, None]\n        elif self.values.shape[1] &lt; self.L:\n            self.values = torch.cat((self.values, x[:, None]), 1)\n        else:\n            self.values = torch.cat((self.values[:, 1:], x[:, None]), 1)\n\n    def variance(self):\n        if self.values is None:\n            return\n        if self.norm:\n            return torch.var(self.values, 1) / self.values.shape[1]\n        else:\n            return torch.var(self.values, 1)\nclass StoppingCriteriaScores(StoppingCriteria):\n    def __init__(self, threshold: float = 0.015, window_size: int = 200):\n        super().__init__()\n        self.threshold = threshold\n        self.vars = RunningVarTorch(norm=True)\n        self.varvars = RunningVarTorch(L=window_size)\n        self.stop_inds = defaultdict(int)\n        self.stopped = defaultdict(bool)\n        self.size = 0\n        self.window_size = window_size\n\n    @torch.no_grad()\n    def __call__(self, input_ids: torch.LongTensor, scores: torch.FloatTensor):\n        last_scores = scores[-1]\n        self.vars.push(last_scores.max(1)[0].float().cpu())\n        self.varvars.push(self.vars.variance())\n        self.size += 1\n        if self.size &lt; self.window_size:\n            return False\n\n        varvar = self.varvars.variance()\n        for b in range(len(last_scores)):\n            if varvar[b] &lt; self.threshold:\n                if self.stop_inds[b] &gt; 0 and not self.stopped[b]:\n                    self.stopped[b] = self.stop_inds[b] &gt;= self.size\n                else:\n                    self.stop_inds[b] = int(\n                        min(max(self.size, 1) * 1.15 + 150 + self.window_size, 4095)\n                    )\n            else:\n                self.stop_inds[b] = 0\n                self.stopped[b] = False\n        return all(self.stopped.values()) and len(self.stopped) &gt; 0\n\n# autoregressively generate tokens, with custom stopping criteria (as defined by the Nougat authors)\noutputs = model.generate(pixel_values.to(device),\n                          min_length=1,\n                          max_length=3584,\n                          bad_words_ids=[[processor.tokenizer.unk_token_id]],\n                          return_dict_in_generate=True,\n                          output_scores=True,\n                          stopping_criteria=StoppingCriteriaList([StoppingCriteriaScores()]),\n)\ngenerated = processor.batch_decode(outputs[0], skip_special_tokens=True)[0]\ngenerated = processor.post_process_generation(generated, fix_markdown=False)\nprint(generated)\n# Nougat: Neural Optical Understanding for Academic Documents\n\n Lukas Blecher\n\nCorrespondence to: lblecher@meta.com\n\nGuillem Cucurull\n\nThomas Scialom\n\nRobert Stojnic\n\nMeta AI\n\nThe paper reports 8.1M papers but the authors recently updated the numbers on the GitHub page https://github.com/allenai/s2orc\n\n###### Abstract\n\nScientific knowledge is predominantly stored in books and scientific journals, often in the form of PDFs. However, the PDF format leads to a loss of semantic information, particularly for mathematical expressions. We propose Nougat (**N**eural **O**ptical **U**nderstanding for **A**cademic Documents), a Visual Transformer model that performs an _Optical Character Recognition_ (OCR) task for processing scientific documents into a markup language, and demonstrate the effectiveness of our model on a new dataset of scientific documents. The proposed approach offers a promising solution to enhance the accessibility of scientific knowledge in the digital age, by bridging the gap between human-readable documents and machine-readable text. We release the models and code to accelerate future work on scientific text recognition.\n\n## 1 Introduction\n\nThe majority of scientific knowledge is stored in books or published in scientific journals, most commonly in the Portable Document Format (PDF). Next to HTML, PDFs are the second most prominent data format on the internet, making up 2.4% of common crawl [1]. However, the information stored in these files is very difficult to extract into any other formats. This is especially true for highly specialized documents, such as scientific research papers, where the semantic information of mathematical expressions is lost.\n\nExisting Optical Character Recognition (OCR) engines, such as Tesseract OCR [2], excel at detecting and classifying individual characters and words in an image, but fail to understand the relationship between them due to their line-by-line approach. This means that they treat superscripts and subscripts in the same way as the surrounding text, which is a significant drawback for mathematical expressions. In mathematical notations like fractions, exponents, and matrices, relative positions of characters are crucial.\n\nConverting academic research papers into machine-readable text also enables accessibility and searchability of science as a whole. The information of millions of academic papers can not be fully accessed because they are locked behind an unreadable format. Existing corpora, such as the S2ORC dataset [3], capture the text of 12M2 papers using GROBID [4], but are missing meaningful representations of the mathematical equations.\n\nFootnote 2: The paper reports 8.1M papers but the authors recently updated the numbers on the GitHub page https://github.com/allenai/s2orc\n\nTo this end, we introduce Nougat, a transformer based model that can convert images of document pages to formatted markup text.\n\nThe primary contributions in this paper are\n\n* Release of a pre-trained model capable of converting a PDF to a lightweight markup language. We release the code and the model on GitHub3 Footnote 3: https://github.com/facebookresearch/nougat\n* We introduce a pipeline to create dataset for pairing PDFs to source code\n* Our method is only dependent on the image of a page, allowing access to scanned papers and books"
-  },
-  {
-    "objectID": "posts/data-science-steps-to-follow-part03/index.html",
-    "href": "posts/data-science-steps-to-follow-part03/index.html",
-    "title": "Data Science Steps to Follow - 03",
-    "section": "",
-    "text": "Data Science Steps Series\n\n\n\nThis is Part 3 of a 6-part series on data science fundamentals:\n\nPart 1: EDA Fundamentals\nPart 2: Feature Preprocessing and Generation\nPart 3: Handling Anonymized Data (You are here)\nPart 4: Text Feature Extraction\nPart 5: Image Feature Extraction\nPart 6: Advanced Techniques"
-  },
-  {
-    "objectID": "posts/data-science-steps-to-follow-part03/index.html#explore-individual-feature",
-    "href": "posts/data-science-steps-to-follow-part03/index.html#explore-individual-feature",
-    "title": "Data Science Steps to Follow - 03",
-    "section": "4.1 1. Explore individual feature",
-    "text": "4.1 1. Explore individual feature\n\nGuess the meaning of columns.\nGuess the types of columns. Separate them numerical, categorical, ordinal, date, text, etc."
-  },
-  {
-    "objectID": "posts/data-science-steps-to-follow-part03/index.html#explore-feature-relations",
-    "href": "posts/data-science-steps-to-follow-part03/index.html#explore-feature-relations",
-    "title": "Data Science Steps to Follow - 03",
-    "section": "4.2 2. Explore feature relations",
-    "text": "4.2 2. Explore feature relations\n\nFind relation between pairs.\nFind feature groups.\n\n\n4.2.1 1. Individual feature\n\nThere was a competition, where like there are different features, which were anonymized means the features names are x1, x2, etc. There were some numerical and some hash value, which could be categorical feature.\nWhat the lecturer did, first create a baseline with random forest. fillna with -999, categorical featueres factorize.\nThen plot feature importance from this baseline model.\nHe found that, one feature named as x8 has highest influence on the target variable.\nSo he starts to invesitage a little bit deeper.\nThen tried to find mean and std values. It seems close to 0 and 1. It seems normalized but it is not exactly 0 and 1 but extra decimal places. May be because of train and test.\nThen search for other reapeatd values by value counts. It seems there are lots of repeted values.\nAs we understood them, they are normalized, we tried to find the normalize parameter, means scaling and shift parameter. Lets’s try to find it, or is it actaully possible.\n\nSearch for unique values and sort them.\nThen use np.diff to find the difference between two consecutive values. It seems the values are same all the time.\nThen devide this values with to our sorted array. It is almost 1. May be not 1 because of some numerical error.\nSo if we devide this vlaue to our feature, we will get the original values. It is also visible each positive number decimal places are same and also each negative number decimal places are same. This could be part of shifting parameter.\nSo we devide to our previous value and substract to decimal place, we get almost integer values.\nAfter that it seems that we are right direction, because we are getting integer values. However we got shifing value, a fractioanal part, but how to get the full part of shifting value.\nSo the lecturer had a hanch. He just tried value counts of integer values. Then he found an extremely different number from other and the value was - 1968 . So he assumed may be it is some kind of year and one person put 0 or forgot to enter, then system converted to 0. So may be the shifting value is 1968. So he tried to substract 1968 from the feature and then he got the original values.\nBut how it helps in the competition. One can use different things from it. But at that competition he could not use this feature. But it was very interseting to see how he found the original values.\n\nif there are small features we can see manually. If there are many features.\ndf.dtypes\ndf.info()\nx.value_counts()\nx.isnull()"
-  },
-  {
-    "objectID": "posts/data-science-steps-to-follow-part03/index.html#explore-feature-relations-1",
-    "href": "posts/data-science-steps-to-follow-part03/index.html#explore-feature-relations-1",
-    "title": "Data Science Steps to Follow - 03",
-    "section": "4.3 2. Explore feature relations",
-    "text": "4.3 2. Explore feature relations\n\nTo explore different features, important things can be done is visualization\n\nExplore individual features\n\n\nHistograms\nplots\nstatistics\n\n\nExplore feature relations\n\n\nScatter plots\nCorrelation plots\nPlot(index vs feature statistics)\nAnd more.\n\n\nEDA is art and visualization is the tool.\n\n\n\n4.3.1 1. Individual features\nplt.hist(x)\n\nSometimes it is misleading. So change number of bins.\nNever make a hypothesis from a single plot. Try to plot different things and then make a decision.\nSometimes in histogram you will see some spikes. It could be anything. Actually in particular case the organizer put the missing vlaue with its mean. We can change this value with other than mean.\nwe can also plot x is index and y is feature value. Not conenct with line but with circles only. python plt.plot(x,'.' )\n\n\n\nindex_image\n\n\nIf we see horizontal line in such plots, it means there are repeated values and if there is no vertical lines, it means the data is shuffled nicely.\nWe can also color code based on labels.\nplt.scater(x,y,c=y)\nPandas describe function also helps a lot\npd.describe()\nx.mean()\nx.var()\nAlso value counts and isnull is very helpfull\nx.value_counts()\nx.isnull()\n\n\n\n4.3.2 2. Feature relation\n\nScatter plot\n\nplt.scatter(x,y)\n\nfor classificaiton we can color map the label\nfor regression heatmap can be used.\nAlso we can compare the scatter plot in trianing and test set is same.\n\n\n\ncolor_code_train_test\n\n\nThe following graph show the diagonal realtion. The equation of a diagonal, x1 -&gt; xaxis and x2-&gt; y axis\n\n\\[x2&lt;=1 -x1\\]\n\nThe equation of diagonal line is $ x1 + x2 = 1 $\n\n\n\n\ndiagonal_equation\n\n\n\nSuppose we found this relaiton but how to use them. There are differet ways but for tree based model we can create the difference or ratio of these two features.\nIf we see the following scatter plot, we can see that there are some outliers. So we can remove them.\n\n\n\nscatter plot\n\n\nSo how this is helpful, our goal is to generate features. How to generate feature from this plot. As we see two traingles, we can create a feature where each triangle will get a set of points and hope this feature will help.\nIf we have smaller number of features, we can use pandas for all features together.\n\npd.scatter_matrix(df)\n\nIt is always good to use scatter plot and histogram in same plot. Scatter plot -&gt; week information about densities, while histogram -&gt; don’t show feature interaction.\nWe can also create a correlation plot. It is a heatmap. It is very helpfull to find the correlation between features. It is also good to see the correlation between features and labels.\n\ndf.corr(), plt.matshow(..)\n\nWe can also create other matrix other than correlation matrix, How many times, one feature is greater than another feature.\nif the matrix is a total mess like following\n\n\n\n\nmessy_matrix\n\n\nwe can create some kind of clsutering and then plot them, like k means clustering or rows and columnd and reorder those features. The following plot is the result of k means clustering.\n\n\n\nordered\n\n\n\n4.3.2.1 Feature groups\n\nNew features based on groups\nOne important feature plot could\n\ndf.mean().plot(style='.')\nx -&gt; feature y -&gt; feature mean\n\nIf this is random, then may be we will see random. But if we sort them.\n\ndf.mean().sort_values().plot(style='.')\n\n\n\nordered_feature_mean\n\n\n\nNow we can have close look to each group and use imagination to create new features.\n\nNext post can be found here"
+    "objectID": "posts/series/vlm-qwen3-14b/finetune-qwen3-14b.html#references",
+    "href": "posts/series/vlm-qwen3-14b/finetune-qwen3-14b.html#references",
+    "title": "Fine-Tuning Qwen3-14B with Unsloth: A Practical Guide for Data Scientists",
+    "section": "0.9 References",
+    "text": "0.9 References\n\nUnsloth Documentation\nQwen3-14B on HuggingFace\nVLM Series Overview\n\n\n\n\n\n\n\nNote\n\n\n\nThis post is part of the VLM Series. Feedback and questions are welcome!"
   },
   {
     "objectID": "posts/matrix_multiplication_from_fastai_course/index.html",
@@ -364,11 +301,361 @@
     "text": "1.9 References\n\nFastAI Course\nDeep Learning Book - Linear Algebra Chapter\nPyTorch Documentation"
   },
   {
+    "objectID": "posts/data-science-steps-to-follow-part03/index.html",
+    "href": "posts/data-science-steps-to-follow-part03/index.html",
+    "title": "Data Science Steps to Follow - 03",
+    "section": "",
+    "text": "Data Science Steps Series\n\n\n\nThis is Part 3 of a 6-part series on data science fundamentals:\n\nPart 1: EDA Fundamentals\nPart 2: Feature Preprocessing and Generation\nPart 3: Handling Anonymized Data (You are here)\nPart 4: Text Feature Extraction\nPart 5: Image Feature Extraction\nPart 6: Advanced Techniques"
+  },
+  {
+    "objectID": "posts/data-science-steps-to-follow-part03/index.html#explore-individual-feature",
+    "href": "posts/data-science-steps-to-follow-part03/index.html#explore-individual-feature",
+    "title": "Data Science Steps to Follow - 03",
+    "section": "4.1 1. Explore individual feature",
+    "text": "4.1 1. Explore individual feature\n\nGuess the meaning of columns.\nGuess the types of columns. Separate them numerical, categorical, ordinal, date, text, etc."
+  },
+  {
+    "objectID": "posts/data-science-steps-to-follow-part03/index.html#explore-feature-relations",
+    "href": "posts/data-science-steps-to-follow-part03/index.html#explore-feature-relations",
+    "title": "Data Science Steps to Follow - 03",
+    "section": "4.2 2. Explore feature relations",
+    "text": "4.2 2. Explore feature relations\n\nFind relation between pairs.\nFind feature groups.\n\n\n4.2.1 1. Individual feature\n\nThere was a competition, where like there are different features, which were anonymized means the features names are x1, x2, etc. There were some numerical and some hash value, which could be categorical feature.\nWhat the lecturer did, first create a baseline with random forest. fillna with -999, categorical featueres factorize.\nThen plot feature importance from this baseline model.\nHe found that, one feature named as x8 has highest influence on the target variable.\nSo he starts to invesitage a little bit deeper.\nThen tried to find mean and std values. It seems close to 0 and 1. It seems normalized but it is not exactly 0 and 1 but extra decimal places. May be because of train and test.\nThen search for other reapeatd values by value counts. It seems there are lots of repeted values.\nAs we understood them, they are normalized, we tried to find the normalize parameter, means scaling and shift parameter. Lets’s try to find it, or is it actaully possible.\n\nSearch for unique values and sort them.\nThen use np.diff to find the difference between two consecutive values. It seems the values are same all the time.\nThen devide this values with to our sorted array. It is almost 1. May be not 1 because of some numerical error.\nSo if we devide this vlaue to our feature, we will get the original values. It is also visible each positive number decimal places are same and also each negative number decimal places are same. This could be part of shifting parameter.\nSo we devide to our previous value and substract to decimal place, we get almost integer values.\nAfter that it seems that we are right direction, because we are getting integer values. However we got shifing value, a fractioanal part, but how to get the full part of shifting value.\nSo the lecturer had a hanch. He just tried value counts of integer values. Then he found an extremely different number from other and the value was - 1968 . So he assumed may be it is some kind of year and one person put 0 or forgot to enter, then system converted to 0. So may be the shifting value is 1968. So he tried to substract 1968 from the feature and then he got the original values.\nBut how it helps in the competition. One can use different things from it. But at that competition he could not use this feature. But it was very interseting to see how he found the original values.\n\nif there are small features we can see manually. If there are many features.\ndf.dtypes\ndf.info()\nx.value_counts()\nx.isnull()"
+  },
+  {
+    "objectID": "posts/data-science-steps-to-follow-part03/index.html#explore-feature-relations-1",
+    "href": "posts/data-science-steps-to-follow-part03/index.html#explore-feature-relations-1",
+    "title": "Data Science Steps to Follow - 03",
+    "section": "4.3 2. Explore feature relations",
+    "text": "4.3 2. Explore feature relations\n\nTo explore different features, important things can be done is visualization\n\nExplore individual features\n\n\nHistograms\nplots\nstatistics\n\n\nExplore feature relations\n\n\nScatter plots\nCorrelation plots\nPlot(index vs feature statistics)\nAnd more.\n\n\nEDA is art and visualization is the tool.\n\n\n\n4.3.1 1. Individual features\nplt.hist(x)\n\nSometimes it is misleading. So change number of bins.\nNever make a hypothesis from a single plot. Try to plot different things and then make a decision.\nSometimes in histogram you will see some spikes. It could be anything. Actually in particular case the organizer put the missing vlaue with its mean. We can change this value with other than mean.\nwe can also plot x is index and y is feature value. Not conenct with line but with circles only. python plt.plot(x,'.' )\n\n\n\nindex_image\n\n\nIf we see horizontal line in such plots, it means there are repeated values and if there is no vertical lines, it means the data is shuffled nicely.\nWe can also color code based on labels.\nplt.scater(x,y,c=y)\nPandas describe function also helps a lot\npd.describe()\nx.mean()\nx.var()\nAlso value counts and isnull is very helpfull\nx.value_counts()\nx.isnull()\n\n\n\n4.3.2 2. Feature relation\n\nScatter plot\n\nplt.scatter(x,y)\n\nfor classificaiton we can color map the label\nfor regression heatmap can be used.\nAlso we can compare the scatter plot in trianing and test set is same.\n\n\n\ncolor_code_train_test\n\n\nThe following graph show the diagonal realtion. The equation of a diagonal, x1 -&gt; xaxis and x2-&gt; y axis\n\n\\[x2&lt;=1 -x1\\]\n\nThe equation of diagonal line is $ x1 + x2 = 1 $\n\n\n\n\ndiagonal_equation\n\n\n\nSuppose we found this relaiton but how to use them. There are differet ways but for tree based model we can create the difference or ratio of these two features.\nIf we see the following scatter plot, we can see that there are some outliers. So we can remove them.\n\n\n\nscatter plot\n\n\nSo how this is helpful, our goal is to generate features. How to generate feature from this plot. As we see two traingles, we can create a feature where each triangle will get a set of points and hope this feature will help.\nIf we have smaller number of features, we can use pandas for all features together.\n\npd.scatter_matrix(df)\n\nIt is always good to use scatter plot and histogram in same plot. Scatter plot -&gt; week information about densities, while histogram -&gt; don’t show feature interaction.\nWe can also create a correlation plot. It is a heatmap. It is very helpfull to find the correlation between features. It is also good to see the correlation between features and labels.\n\ndf.corr(), plt.matshow(..)\n\nWe can also create other matrix other than correlation matrix, How many times, one feature is greater than another feature.\nif the matrix is a total mess like following\n\n\n\n\nmessy_matrix\n\n\nwe can create some kind of clsutering and then plot them, like k means clustering or rows and columnd and reorder those features. The following plot is the result of k means clustering.\n\n\n\nordered\n\n\n\n4.3.2.1 Feature groups\n\nNew features based on groups\nOne important feature plot could\n\ndf.mean().plot(style='.')\nx -&gt; feature y -&gt; feature mean\n\nIf this is random, then may be we will see random. But if we sort them.\n\ndf.mean().sort_values().plot(style='.')\n\n\n\nordered_feature_mean\n\n\n\nNow we can have close look to each group and use imagination to create new features.\n\nNext post can be found here"
+  },
+  {
+    "objectID": "posts/nougat-to-read-scientific-pdf-files/index.html",
+    "href": "posts/nougat-to-read-scientific-pdf-files/index.html",
+    "title": "How to Use Nougat to Read Scientific Paper",
+    "section": "",
+    "text": "Copied from here"
+  },
+  {
+    "objectID": "posts/nougat-to-read-scientific-pdf-files/index.html#jupter-notebook-is-the-following",
+    "href": "posts/nougat-to-read-scientific-pdf-files/index.html#jupter-notebook-is-the-following",
+    "title": "How to Use Nougat to Read Scientific Paper",
+    "section": "2.1 Jupter notebook is the following",
+    "text": "2.1 Jupter notebook is the following\n#pip install -q pymupdf python-Levenshtein nltk\nfrom transformers import AutoProcessor, VisionEncoderDecoderModel\nimport torch\nfrom pathlib import Path\nfrom typing import Optional, List, Dict, Tuple \nimport io\nimport fitz\nfrom huggingface_hub import hf_hub_download\nfrom PIL import Image\nfrom collections import defaultdict\nfrom transformers import StoppingCriteria, StoppingCriteriaList\nprocessor = AutoProcessor.from_pretrained(\"facebook/nougat-small\")\nmodel = VisionEncoderDecoderModel.from_pretrained(\"facebook/nougat-small\")\nDownloading (…)rocessor_config.json:   0%|          | 0.00/479 [00:00&lt;?, ?B/s]\n\n\n\nDownloading (…)okenizer_config.json:   0%|          | 0.00/4.49k [00:00&lt;?, ?B/s]\n\n\n\nDownloading (…)/main/tokenizer.json:   0%|          | 0.00/2.14M [00:00&lt;?, ?B/s]\n\n\n\nDownloading (…)cial_tokens_map.json:   0%|          | 0.00/96.0 [00:00&lt;?, ?B/s]\n\n\nSpecial tokens have been added in the vocabulary, make sure the associated word embeddings are fine-tuned or trained.\n\n\n\nDownloading (…)lve/main/config.json:   0%|          | 0.00/4.77k [00:00&lt;?, ?B/s]\n\n\n\nDownloading pytorch_model.bin:   0%|          | 0.00/990M [00:00&lt;?, ?B/s]\n\n\n\nDownloading (…)neration_config.json:   0%|          | 0.00/165 [00:00&lt;?, ?B/s]\n%%capture\n#device = \"cuda\" if torch.cuda.is_available() else \"cpu\"\ndevice = \"cpu\"\nmodel.to(device)\n     \nfilepath = hf_hub_download(repo_id=\"ysharma/nougat\", filename=\"input/nougat.pdf\", repo_type=\"space\")\nDownloading nougat.pdf:   0%|          | 0.00/4.13M [00:00&lt;?, ?B/s]\ndef rasterize_paper(\n    pdf: Path,\n    outpath: Optional[Path] = None,\n    dpi: int = 96,\n    return_pil=False,\n    pages=None,\n) -&gt; Optional[List[io.BytesIO]]:\n    \"\"\"\n    Rasterize a PDF file to PNG images.\n\n    Args:\n        pdf (Path): The path to the PDF file.\n        outpath (Optional[Path], optional): The output directory. If None, the PIL images will be returned instead. Defaults to None.\n        dpi (int, optional): The output DPI. Defaults to 96.\n        return_pil (bool, optional): Whether to return the PIL images instead of writing them to disk. Defaults to False.\n        pages (Optional[List[int]], optional): The pages to rasterize. If None, all pages will be rasterized. Defaults to None.\n\n    Returns:\n        Optional[List[io.BytesIO]]: The PIL images if `return_pil` is True, otherwise None.\n    \"\"\"\n\n    pillow_images = []\n    if outpath is None:\n        return_pil = True\n    try:\n        if isinstance(pdf, (str, Path)):\n            pdf = fitz.open(pdf)\n        if pages is None:\n            pages = range(len(pdf))\n        for i in pages:\n            page_bytes: bytes = pdf[i].get_pixmap(dpi=dpi).pil_tobytes(format=\"PNG\")\n            if return_pil:\n                pillow_images.append(io.BytesIO(page_bytes))\n            else:\n                with (outpath / (\"%02d.png\" % (i + 1))).open(\"wb\") as f:\n                    f.write(page_bytes)\n    except Exception:\n        pass\n    if return_pil:\n        return pillow_images\nimages = rasterize_paper(pdf=filepath, return_pil=True)\nlen(images)\n17\nimage = Image.open(images[0])\nimage\n\n\n\npng\n\n\n# prepare image for the model\npixel_values = processor(images=image, return_tensors=\"pt\").pixel_values\nprint(pixel_values.shape)\n     \ntorch.Size([1, 3, 896, 672])\nclass RunningVarTorch:\n    def __init__(self, L=15, norm=False):\n        self.values = None\n        self.L = L\n        self.norm = norm\n\n    def push(self, x: torch.Tensor):\n        assert x.dim() == 1\n        if self.values is None:\n            self.values = x[:, None]\n        elif self.values.shape[1] &lt; self.L:\n            self.values = torch.cat((self.values, x[:, None]), 1)\n        else:\n            self.values = torch.cat((self.values[:, 1:], x[:, None]), 1)\n\n    def variance(self):\n        if self.values is None:\n            return\n        if self.norm:\n            return torch.var(self.values, 1) / self.values.shape[1]\n        else:\n            return torch.var(self.values, 1)\nclass StoppingCriteriaScores(StoppingCriteria):\n    def __init__(self, threshold: float = 0.015, window_size: int = 200):\n        super().__init__()\n        self.threshold = threshold\n        self.vars = RunningVarTorch(norm=True)\n        self.varvars = RunningVarTorch(L=window_size)\n        self.stop_inds = defaultdict(int)\n        self.stopped = defaultdict(bool)\n        self.size = 0\n        self.window_size = window_size\n\n    @torch.no_grad()\n    def __call__(self, input_ids: torch.LongTensor, scores: torch.FloatTensor):\n        last_scores = scores[-1]\n        self.vars.push(last_scores.max(1)[0].float().cpu())\n        self.varvars.push(self.vars.variance())\n        self.size += 1\n        if self.size &lt; self.window_size:\n            return False\n\n        varvar = self.varvars.variance()\n        for b in range(len(last_scores)):\n            if varvar[b] &lt; self.threshold:\n                if self.stop_inds[b] &gt; 0 and not self.stopped[b]:\n                    self.stopped[b] = self.stop_inds[b] &gt;= self.size\n                else:\n                    self.stop_inds[b] = int(\n                        min(max(self.size, 1) * 1.15 + 150 + self.window_size, 4095)\n                    )\n            else:\n                self.stop_inds[b] = 0\n                self.stopped[b] = False\n        return all(self.stopped.values()) and len(self.stopped) &gt; 0\n\n# autoregressively generate tokens, with custom stopping criteria (as defined by the Nougat authors)\noutputs = model.generate(pixel_values.to(device),\n                          min_length=1,\n                          max_length=3584,\n                          bad_words_ids=[[processor.tokenizer.unk_token_id]],\n                          return_dict_in_generate=True,\n                          output_scores=True,\n                          stopping_criteria=StoppingCriteriaList([StoppingCriteriaScores()]),\n)\ngenerated = processor.batch_decode(outputs[0], skip_special_tokens=True)[0]\ngenerated = processor.post_process_generation(generated, fix_markdown=False)\nprint(generated)\n# Nougat: Neural Optical Understanding for Academic Documents\n\n Lukas Blecher\n\nCorrespondence to: lblecher@meta.com\n\nGuillem Cucurull\n\nThomas Scialom\n\nRobert Stojnic\n\nMeta AI\n\nThe paper reports 8.1M papers but the authors recently updated the numbers on the GitHub page https://github.com/allenai/s2orc\n\n###### Abstract\n\nScientific knowledge is predominantly stored in books and scientific journals, often in the form of PDFs. However, the PDF format leads to a loss of semantic information, particularly for mathematical expressions. We propose Nougat (**N**eural **O**ptical **U**nderstanding for **A**cademic Documents), a Visual Transformer model that performs an _Optical Character Recognition_ (OCR) task for processing scientific documents into a markup language, and demonstrate the effectiveness of our model on a new dataset of scientific documents. The proposed approach offers a promising solution to enhance the accessibility of scientific knowledge in the digital age, by bridging the gap between human-readable documents and machine-readable text. We release the models and code to accelerate future work on scientific text recognition.\n\n## 1 Introduction\n\nThe majority of scientific knowledge is stored in books or published in scientific journals, most commonly in the Portable Document Format (PDF). Next to HTML, PDFs are the second most prominent data format on the internet, making up 2.4% of common crawl [1]. However, the information stored in these files is very difficult to extract into any other formats. This is especially true for highly specialized documents, such as scientific research papers, where the semantic information of mathematical expressions is lost.\n\nExisting Optical Character Recognition (OCR) engines, such as Tesseract OCR [2], excel at detecting and classifying individual characters and words in an image, but fail to understand the relationship between them due to their line-by-line approach. This means that they treat superscripts and subscripts in the same way as the surrounding text, which is a significant drawback for mathematical expressions. In mathematical notations like fractions, exponents, and matrices, relative positions of characters are crucial.\n\nConverting academic research papers into machine-readable text also enables accessibility and searchability of science as a whole. The information of millions of academic papers can not be fully accessed because they are locked behind an unreadable format. Existing corpora, such as the S2ORC dataset [3], capture the text of 12M2 papers using GROBID [4], but are missing meaningful representations of the mathematical equations.\n\nFootnote 2: The paper reports 8.1M papers but the authors recently updated the numbers on the GitHub page https://github.com/allenai/s2orc\n\nTo this end, we introduce Nougat, a transformer based model that can convert images of document pages to formatted markup text.\n\nThe primary contributions in this paper are\n\n* Release of a pre-trained model capable of converting a PDF to a lightweight markup language. We release the code and the model on GitHub3 Footnote 3: https://github.com/facebookresearch/nougat\n* We introduce a pipeline to create dataset for pairing PDFs to source code\n* Our method is only dependent on the image of a page, allowing access to scanned papers and books"
+  },
+  {
+    "objectID": "posts/data-science-steps-to-follow-part04/index.html",
+    "href": "posts/data-science-steps-to-follow-part04/index.html",
+    "title": "Data Science Steps to Follow - 04",
+    "section": "",
+    "text": "Data Science Steps Series\n\n\n\nThis is Part 3 of a 6-part series on data science fundamentals:\n\nPart 1: EDA Fundamentals\nPart 2: Feature Preprocessing and Generation\nPart 3: Handling Anonymized Data\nPart 4: Text Feature Extraction (you are here)\nPart 5: Image Feature Extraction\nPart 6: Advanced Techniques"
+  },
+  {
+    "objectID": "posts/data-science-steps-to-follow-part04/index.html#bag-of-words",
+    "href": "posts/data-science-steps-to-follow-part04/index.html#bag-of-words",
+    "title": "Data Science Steps to Follow - 04",
+    "section": "2.1 1. Bag of words",
+    "text": "2.1 1. Bag of words\n1.1. CountVectorizer\n\neach word is separated and count number of occurences\n\nfrom sklearn.feature_extraction.text import CountVectorizer\nvectorizer = CountVectorizer()\nX = vectorizer.fit_transform(corpus)\nprint(vectorizer.get_feature_names())\nprint(X.toarray())\n\nWe may be need to do some post processing. As we know KNN, neural networks are sensitive to the scale of the features. So we need to scale the features. We can use TF-IDF to do this.\n\n1.2. TfidfVectorizer\n\nWhat actually is just not frequency but normalized frequency.\nTerm frequency:\n\ntf = 1/ x.sum[axis=1](:,None)\nx = x * tf\n\nInverse document frequency:\n\nidf = np.log(x.shape[0]/(x&gt;0).sum(axis=0)))\nx = x*idf\nsklearn.feature_extraction.text.TfidfVectorizer\n1.3 N-grams\n\nNot only words but n-consequent words\n\nsklearn.feature_extraction.text.CountVectorizer(ngram_range=(1,2)) \n# may be parameter analyzer\n\n2.1.1 Text Preprocessing\n\nActually before applying any Bag of words we need to preprocess the text. We need to remove the stop words, stemming, lemmatization, etc.* Conventionally preprocessing are\n\nTokenization -&gt; Very very sunny day -&gt; [Very, very, sunny, day]\nLowercasing -&gt; [very, very, sunny, day] -&gt; [very, very, sunny, day] -&gt;CountVectorizer from sklearn will automatically do this\nRemoving punctuation\nRemoving stopwords -&gt; [The cow jumped over the moon] -&gt; [cow, jumped, moon]\n\nAriticles or preprositon words\nVery common words\nCan be used NLTK library\nsklearn.feature_extraction.text.CountVectorizer(max_df)\nmax_df is the frequency threshold, after which the word is removed\n\nStemming/Lemmatization\nStemming\n\n[democracy, democratic, democratization] -&gt; [democr]\n[Saw] -&gt; [s]\n\nLemitization\n\n[democracy, democratic, democratization] -&gt; [democracy]\n[Saw, sawing, sawed] -&gt; [see or saw] depending on text"
+  },
+  {
+    "objectID": "posts/data-science-steps-to-follow-part04/index.html#summray-of-bag-of-words-pipeline",
+    "href": "posts/data-science-steps-to-follow-part04/index.html#summray-of-bag-of-words-pipeline",
+    "title": "Data Science Steps to Follow - 04",
+    "section": "2.2 Summray of Bag of words Pipeline",
+    "text": "2.2 Summray of Bag of words Pipeline\n\nPreprocessing Lowercasing, removing punctuation, removing stopwords, stemming/lemmatization\nN-grams helps to get local context\nPost processing TF-IDF"
+  },
+  {
+    "objectID": "posts/data-science-steps-to-follow-part04/index.html#embeddings",
+    "href": "posts/data-science-steps-to-follow-part04/index.html#embeddings",
+    "title": "Data Science Steps to Follow - 04",
+    "section": "2.3 2. Embeddings",
+    "text": "2.3 2. Embeddings\n\n2.3.1 Word2vec\n\nVector representation of words and text\nEach word is represented as a vector, in some sophisticated way, which could have 100 dimensions or more.\nSame words will have similar vectors. king-&gt;queen\nAlso addition and subtraction of vectors will have some meaning. -&gt; king + woman - man = queen\nSeveral implementaton of word2vec\n\nWord2vec\nGlove\nFastText\n\nSentences\n\nDoc2vec\n\nBased on situation we can use word or sentence embeddings. Actually try both and take the best one.\nAll the preprocessing steps can be applied to the text before applying word2vec.\n\n\n\n2.3.2 Comparion Bag of words and Word2vec\n\nBag of words\n\nVery large vector\nmeaning is easy value in vector is known\n\nWord2vec\n\nRelative Small vector\nValues of vector can be interpreted only some cases\nThe words with simlar meaning will have similar embeddings\n\n\nNext post can be found here"
+  },
+  {
+    "objectID": "tags.html",
+    "href": "tags.html",
+    "title": "Tags",
+    "section": "",
+    "text": "Welcome to the tag index! Here you can find all posts organized by their tags. Use the search and filter options to find specific content.\n\n\n\n\n\n\n\n\nBelow is a searchable table of all posts with their associated tags:"
+  },
+  {
+    "objectID": "tags.html#all-posts",
+    "href": "tags.html#all-posts",
+    "title": "Tags",
+    "section": "",
+    "text": "Below is a searchable table of all posts with their associated tags:"
+  },
+  {
+    "objectID": "posts/data-science-steps-to-follow-part01/index.html",
+    "href": "posts/data-science-steps-to-follow-part01/index.html",
+    "title": "Data Science Steps to Follow - 01",
+    "section": "",
+    "text": "Data Science Steps Series\n\n\n\nThis is Part 1 of a 6-part series on data science fundamentals:\n\nPart 1: EDA Fundamentals (You are here)\nPart 2: Feature Preprocessing and Generation\nPart 3: Handling Anonymized Data\nPart 4: Text Feature Extraction\nPart 5: Image Feature Extraction\nPart 6: Advanced Techniques"
+  },
+  {
+    "objectID": "posts/data-science-steps-to-follow-part01/index.html#what-is-eda",
+    "href": "posts/data-science-steps-to-follow-part01/index.html#what-is-eda",
+    "title": "Data Science Steps to Follow - 01",
+    "section": "2.1 What is EDA?",
+    "text": "2.1 What is EDA?\nEDA is the critical first step in any data science project. It helps us:\n\nUnderstand the data deeply\nBuild intuition about patterns and relationships\nGenerate hypotheses for feature engineering\nFind insights that inform modeling decisions"
+  },
+  {
+    "objectID": "posts/data-science-steps-to-follow-part01/index.html#the-power-of-visualization",
+    "href": "posts/data-science-steps-to-follow-part01/index.html#the-power-of-visualization",
+    "title": "Data Science Steps to Follow - 01",
+    "section": "2.2 The Power of Visualization",
+    "text": "2.2 The Power of Visualization\nOne of the most powerful EDA tools is visualization. Let’s look at a fascinating example from a Kaggle competition:\n\n\n\n\n\n\nReal-World Example\n\n\n\nIn a promotion prediction competition, simple visualization revealed: - Two key features: promos sent and promos used - A direct relationship between their difference and the target - This insight led to 81% accuracy without complex modeling!\n\n\n# Example visualization code\nimport pandas as pd\nimport seaborn as sns\nimport matplotlib.pyplot as plt\n\ndef plot_promo_relationship(df):\n    plt.figure(figsize=(10, 6))\n    plt.scatter('promos_sent', 'promos_used', data=df)\n    plt.xlabel('Number of Promos Sent')\n    plt.ylabel('Number of Promos Used')\n    plt.title('Promo Usage Pattern')\n    plt.show()"
+  },
+  {
+    "objectID": "posts/data-science-steps-to-follow-part01/index.html#building-intuition",
+    "href": "posts/data-science-steps-to-follow-part01/index.html#building-intuition",
+    "title": "Data Science Steps to Follow - 01",
+    "section": "2.3 Building Intuition",
+    "text": "2.3 Building Intuition\n\n2.3.1 1. Domain Knowledge Acquisition\nBefore diving into analysis, focus on:\n\nUnderstanding the business goal\nResearching similar problems\nLearning industry-specific metrics\nReading relevant documentation\n\n\n\n2.3.2 2. Data Validation\n\n\n\n\n\n\nKey Validation Checks\n\n\n\n\nValue ranges (e.g., age between 0-120)\nLogical relationships (clicks ≤ impressions)\nMissing value patterns\nOutliers and anomalies\n\n\n\ndef validate_data(df):\n    \"\"\"Basic data validation checks\"\"\"\n    issues = []\n    \n    # Age check\n    if df['age'].max() &gt; 120:\n        issues.append(\"Found age &gt; 120\")\n        \n    # Click validation\n    if any(df['clicks'] &gt; df['impressions']):\n        issues.append(\"Found clicks &gt; impressions\")\n    \n    return issues\n\n\n2.3.3 3. Understanding Data Generation\nKey considerations:\n\nSampling methodology\nTrain/test split rationale\nTime-based patterns\nData collection process\n\n\n\n\n\n\n\nJeremy Howard’s Insight\n\n\n\n“In data science, there are no outliers - only opportunities to understand your data better.”"
+  },
+  {
+    "objectID": "posts/data-science-steps-to-follow-part01/index.html#related-resources",
+    "href": "posts/data-science-steps-to-follow-part01/index.html#related-resources",
+    "title": "Data Science Steps to Follow - 01",
+    "section": "2.4 Related Resources",
+    "text": "2.4 Related Resources\n\nUnderstanding Matrix Multiplication - Essential math for data science\nUsing Nougat for Research Papers - Tool for data science research"
+  },
+  {
+    "objectID": "posts/data-science-steps-to-follow-part01/index.html#next-steps",
+    "href": "posts/data-science-steps-to-follow-part01/index.html#next-steps",
+    "title": "Data Science Steps to Follow - 01",
+    "section": "2.5 Next Steps",
+    "text": "2.5 Next Steps\nContinue to Part 2: Feature Preprocessing and Generation, where we’ll explore how to transform raw data into meaningful features."
+  },
+  {
+    "objectID": "posts/data-science-steps-to-follow-part01/index.html#references",
+    "href": "posts/data-science-steps-to-follow-part01/index.html#references",
+    "title": "Data Science Steps to Follow - 01",
+    "section": "2.6 References",
+    "text": "2.6 References\n\nCoursera: How to Win a Data Science Competition\nFast.ai: Practical Deep Learning\nPython Data Science Handbook"
+  },
+  {
+    "objectID": "posts/data-science-steps-to-follow-part05/index.html",
+    "href": "posts/data-science-steps-to-follow-part05/index.html",
+    "title": "Data Science Steps to Follow - 05",
+    "section": "",
+    "text": "Data Science Steps Series\n\n\n\nThis is Part 5 of a 6-part series on data science fundamentals:\n\nPart 1: EDA Fundamentals\nPart 2: Feature Preprocessing and Generation\nPart 3: Handling Anonymized Data\nPart 4: Text Feature Extraction\nPart 5: Image Feature Extraction ( You are here)\nPart 6: Advanced Techniques"
+  },
+  {
+    "objectID": "posts/data-science-steps-to-follow-part05/index.html#next-steps",
+    "href": "posts/data-science-steps-to-follow-part05/index.html#next-steps",
+    "title": "Data Science Steps to Follow - 05",
+    "section": "2.1 Next Steps",
+    "text": "2.1 Next Steps\nContinue to Part 6: Advanced techniques."
+  },
+  {
+    "objectID": "posts/data-science-steps-to-follow-part02/index.html",
+    "href": "posts/data-science-steps-to-follow-part02/index.html",
+    "title": "Data Science Steps to Follow - 02",
+    "section": "",
+    "text": "Data Science Steps Series\n\n\n\nThis is Part 2 of a 6-part series on data science fundamentals:\n\nPart 1: EDA Fundamentals\nPart 2: Feature Preprocessing and Generation (You are here)\nPart 3: Handling Anonymized Data\nPart 4: Text Feature Extraction\nPart 5: Image Feature Extraction\nPart 6: Advanced Techniques"
+  },
+  {
+    "objectID": "posts/data-science-steps-to-follow-part02/index.html#interactive-data-explorer",
+    "href": "posts/data-science-steps-to-follow-part02/index.html#interactive-data-explorer",
+    "title": "Data Science Steps to Follow - 02",
+    "section": "2.1 Interactive Data Explorer",
+    "text": "2.1 Interactive Data Explorer\n\n\nShow/hide code for interactive data explorer\nimport pandas as pd\nimport numpy as np\nimport seaborn as sns\nimport matplotlib.pyplot as plt\nimport plotly.express as px\nfrom sklearn.preprocessing import StandardScaler, MinMaxScaler\n\n# Generate sample data\nnp.random.seed(42)\nn_samples = 1000\n\ndata = {\n    'age': np.random.normal(35, 10, n_samples),\n    'income': np.random.lognormal(10, 1, n_samples),\n    'education_years': np.random.randint(8, 22, n_samples),\n    'satisfaction': np.random.randint(1, 6, n_samples)\n}\n\ndf = pd.DataFrame(data)\n\n# Create interactive scatter plot\nfig = px.scatter(df, x='age', y='income', \n                 color='satisfaction',\n                 size='education_years',\n                 hover_data=['education_years'],\n                 title='Interactive Feature Relationships')\nfig.show()"
+  },
+  {
+    "objectID": "posts/data-science-steps-to-follow-part02/index.html#feature-preprocessing-steps",
+    "href": "posts/data-science-steps-to-follow-part02/index.html#feature-preprocessing-steps",
+    "title": "Data Science Steps to Follow - 02",
+    "section": "2.2 Feature Preprocessing Steps",
+    "text": "2.2 Feature Preprocessing Steps\n\n2.2.1 1. Handling Missing Values\n\nCodeExample\n\n\ndef handle_missing_values(df):\n    # Numeric columns\n    numeric_cols = df.select_dtypes(include=[np.number]).columns\n    df[numeric_cols] = df[numeric_cols].fillna(df[numeric_cols].median())\n    \n    # Categorical columns\n    cat_cols = df.select_dtypes(exclude=[np.number]).columns\n    df[cat_cols] = df[cat_cols].fillna(df[cat_cols].mode().iloc[0])\n    \n    return df\n\n\n# Example usage\ndf_clean = handle_missing_values(df.copy())\nprint(\"Missing values after cleaning:\")\nprint(df_clean.isnull().sum())\n\n\n\n\n\n2.2.2 2. Scaling Features\nLet’s compare different scaling methods:\n\n\nShow/hide scaling comparison code\ndef compare_scaling_methods(data):\n    # Original data\n    original = data['age'].copy()\n    \n    # Standard scaling\n    scaler = StandardScaler()\n    standard_scaled = scaler.fit_transform(original.values.reshape(-1, 1))\n    \n    # Min-max scaling\n    min_max_scaler = MinMaxScaler()\n    minmax_scaled = min_max_scaler.fit_transform(original.values.reshape(-1, 1))\n    \n    # Plotting\n    fig, axes = plt.subplots(1, 3, figsize=(15, 5))\n    \n    # Original distribution\n    sns.histplot(original, ax=axes[0])\n    axes[0].set_title('Original Data')\n    \n    # Standard scaled\n    sns.histplot(standard_scaled, ax=axes[1])\n    axes[1].set_title('Standard Scaled')\n    \n    # Min-max scaled\n    sns.histplot(minmax_scaled, ax=axes[2])\n    axes[2].set_title('Min-Max Scaled')\n    \n    plt.tight_layout()\n    plt.show()\n\ncompare_scaling_methods(df)\n\n\n\n\n\n\n\n2.2.3 3. Feature Generation\n\n\n\n\n\n\nInteractive Feature Generator\n\n\n\nUse the code below to experiment with different feature combinations:\n\n\n\n\nShow/hide feature generation code\ndef generate_features(df):\n    \"\"\"Generate new features from existing ones\"\"\"\n    # Polynomial features\n    df['income_squared'] = df['income'] ** 2\n    \n    # Interaction features\n    df['income_per_education'] = df['income'] / df['education_years']\n    \n    # Binning\n    df['age_group'] = pd.qcut(df['age'], q=5, labels=['Very Young', 'Young', 'Middle', 'Senior', 'Elder'])\n    \n    return df\n\n# Generate new features\ndf_featured = generate_features(df.copy())\n\n# Show correlations\nplt.figure(figsize=(10, 8))\nsns.heatmap(df_featured.select_dtypes(include=[np.number]).corr(), \n            annot=True, cmap='coolwarm', center=0)\nplt.title('Feature Correlations')\nplt.show()"
+  },
+  {
+    "objectID": "posts/data-science-steps-to-follow-part02/index.html#best-practices",
+    "href": "posts/data-science-steps-to-follow-part02/index.html#best-practices",
+    "title": "Data Science Steps to Follow - 02",
+    "section": "2.3 Best Practices",
+    "text": "2.3 Best Practices\n\n\n\n\n\n\nKey Points to Remember\n\n\n\n\nAlways scale features after splitting into train/test sets\nHandle missing values before feature generation\nDocument all preprocessing steps for reproducibility\nValidate generated features with domain experts"
+  },
+  {
+    "objectID": "posts/data-science-steps-to-follow-part02/index.html#interactive-feature-selection-tool",
+    "href": "posts/data-science-steps-to-follow-part02/index.html#interactive-feature-selection-tool",
+    "title": "Data Science Steps to Follow - 02",
+    "section": "2.4 Interactive Feature Selection Tool",
+    "text": "2.4 Interactive Feature Selection Tool\n\n\nShow/hide feature selection tool\nfrom sklearn.feature_selection import SelectKBest, f_regression\n\ndef plot_feature_importance(X, y, k=5):\n    \"\"\"Plot top k most important features\"\"\"\n    selector = SelectKBest(score_func=f_regression, k=k)\n    selector.fit(X, y)\n    \n    # Get feature scores\n    scores = pd.DataFrame({\n        'Feature': X.columns,\n        'Score': selector.scores_\n    }).sort_values('Score', ascending=False)\n    \n    # Create interactive bar plot\n    fig = px.bar(scores, x='Feature', y='Score',\n                 title=f'Top {k} Most Important Features',\n                 labels={'Score': 'Importance Score'})\n    fig.show()\n\n# Example usage\nX = df_featured.select_dtypes(include=[np.number]).drop('satisfaction', axis=1)\ny = df_featured['satisfaction']\nplot_feature_importance(X, y)"
+  },
+  {
+    "objectID": "posts/data-science-steps-to-follow-part02/index.html#next-steps",
+    "href": "posts/data-science-steps-to-follow-part02/index.html#next-steps",
+    "title": "Data Science Steps to Follow - 02",
+    "section": "2.5 Next Steps",
+    "text": "2.5 Next Steps\nContinue to Part 3: Handling Anonymized Data to learn about working with masked and anonymized datasets."
+  },
+  {
+    "objectID": "posts/data-science-steps-to-follow-part02/index.html#related-resources",
+    "href": "posts/data-science-steps-to-follow-part02/index.html#related-resources",
+    "title": "Data Science Steps to Follow - 02",
+    "section": "2.6 Related Resources",
+    "text": "2.6 Related Resources\n\nUnderstanding Matrix Multiplication - Important for feature transformations\nData Science Series Overview"
+  },
+  {
+    "objectID": "posts/data-science-steps-to-follow-part02/index.html#references",
+    "href": "posts/data-science-steps-to-follow-part02/index.html#references",
+    "title": "Data Science Steps to Follow - 02",
+    "section": "2.7 References",
+    "text": "2.7 References\n\nScikit-learn Preprocessing Guide\nFeature Engineering for Machine Learning\nPython Data Science Handbook"
+  },
+  {
+    "objectID": "posts/matrix_multiplication_from_fastai_course/00_matmul.html",
+    "href": "posts/matrix_multiplication_from_fastai_course/00_matmul.html",
+    "title": "Matrix Multiplication",
+    "section": "",
+    "text": "This notebook is actually reprodcution fo course practical deep learning for coders part2. Matrix Multiplication starts with Lession 11 (1:08:47).\nTo get the noebook shown in the video, one should clone the course repository and run the notebook 01_matmul.ipynb."
+  },
+  {
+    "objectID": "posts/matrix_multiplication_from_fastai_course/00_matmul.html#first-description",
+    "href": "posts/matrix_multiplication_from_fastai_course/00_matmul.html#first-description",
+    "title": "Matrix Multiplication",
+    "section": "",
+    "text": "This notebook is actually reprodcution fo course practical deep learning for coders part2. Matrix Multiplication starts with Lession 11 (1:08:47).\nTo get the noebook shown in the video, one should clone the course repository and run the notebook 01_matmul.ipynb."
+  },
+  {
+    "objectID": "posts/matrix_multiplication_from_fastai_course/00_matmul.html#get-data",
+    "href": "posts/matrix_multiplication_from_fastai_course/00_matmul.html#get-data",
+    "title": "Matrix Multiplication",
+    "section": "0.2 Get data",
+    "text": "0.2 Get data\nWe first download the mnist data to work with it\n\n\nCode\nfrom pathlib import Path\nimport gzip, time, os, pickle, math\nfrom urllib.request import urlretrieve\n\n\n\n\nCode\nHOME = os.getenv('HOME')\ndata_path = Path(fr'{HOME}/Schreibtisch/projects/git_data/course22p2/nbs/data')\nMNIST_URL='https://github.com/mnielsen/neural-networks-and-deep-learning/blob/master/data/mnist.pkl.gz?raw=true'\npath_data = data_path\npath_data.mkdir(exist_ok=True)\npath_gz = path_data/'mnist.pkl.gz'\n\n\n\n\nCode\nwith gzip.open(path_gz, 'rb') as f_in:\n    ((x_train, y_train), (x_valid, y_valid),_ ) =pickle.load(f_in, encoding='latin1')\n\n\n\n\nCode\nx_train.shape\n\n\n(50000, 784)"
+  },
+  {
+    "objectID": "posts/welcome/index.html",
+    "href": "posts/welcome/index.html",
+    "title": "Welcome To My Data Science & Machine Learning Blog",
+    "section": "",
+    "text": "Welcome to my technical blog where I share insights about Data Science, Machine Learning, and Deep Learning!"
+  },
+  {
+    "objectID": "posts/welcome/index.html#what-to-expect",
+    "href": "posts/welcome/index.html#what-to-expect",
+    "title": "Welcome To My Data Science & Machine Learning Blog",
+    "section": "0.1 What to Expect",
+    "text": "0.1 What to Expect\nIn this blog, you’ll find:\n\n0.1.1 1. Data Science Series\nA comprehensive guide covering everything from exploratory data analysis to advanced modeling:\n\nPart 1: Exploratory Data Analysis Fundamentals\nPart 2: Feature Preprocessing and Generation\nPart 3: Handling Anonymized Data\nPart 4: Text Feature Extraction\nPart 5: Image Feature Extraction\nPart 6: Advanced Techniques\n\n\n\n0.1.2 2. Deep Learning Concepts\nExplanations inspired by Jeremy Howard’s teaching style:\n\nUnderstanding Matrix Multiplication\nMore coming soon!\n\n\n\n0.1.3 3. Technical Tools\nExploring modern data science tools:\n\nUsing Nougat to Read Scientific Papers\n\n\n\n0.1.4 4. Practical Tutorials\nHands-on guides with real-world applications (Coming Soon)"
+  },
+  {
+    "objectID": "posts/welcome/index.html#getting-started",
+    "href": "posts/welcome/index.html#getting-started",
+    "title": "Welcome To My Data Science & Machine Learning Blog",
+    "section": "0.2 Getting Started",
+    "text": "0.2 Getting Started\nIf you’re new to data science, I recommend starting with the Data Science Series Part 1, where we explore the fundamentals of data analysis.\nFor those interested in deep learning, check out the matrix multiplication tutorial to understand the building blocks of neural networks.\nStay tuned for regular updates and deep technical content! Feel free to connect with me on GitHub or Twitter."
+  },
+  {
+    "objectID": "posts/series/vlm-qwen3-14b/index.html",
+    "href": "posts/series/vlm-qwen3-14b/index.html",
+    "title": "Hands-On with Qwen3-14B: A Reasoning-Centric LLM for Data Scientists",
+    "section": "",
+    "text": "As data scientists, we constantly move between raw data and real-world decisions. Whether you’re explaining anomalies, generating insights, or deploying models, reasoning is core to our work. But most large language models (LLMs) are still parrots—pattern matchers without deeper understanding.\nEnter Qwen3-14B, Alibaba’s newest open-source model. It’s not just another massive transformer—it’s been designed and instruction-tuned with reasoning and conversation in mind. And thanks to the amazing open-source work by Unsloth, we get a full-featured Colab notebook that lets us try it right now, without needing a GPU cluster.\nThis post is a walkthrough of that notebook:\nColab Notebook: Qwen3 (14B) - Reasoning & Conversational\nWe’ll unpack each section, explain how things work, and give you hands-on examples to help you integrate Qwen3 into your own workflow.\n\n\n\n\n\n\nTip\n\n\n\nThis post is part of the VLM Series. Feedback and questions are welcome!"
+  },
+  {
+    "objectID": "posts/series/vlm-qwen3-14b/index.html#introduction-what-if-llms-could-actually-reason",
+    "href": "posts/series/vlm-qwen3-14b/index.html#introduction-what-if-llms-could-actually-reason",
+    "title": "Hands-On with Qwen3-14B: A Reasoning-Centric LLM for Data Scientists",
+    "section": "",
+    "text": "As data scientists, we constantly move between raw data and real-world decisions. Whether you’re explaining anomalies, generating insights, or deploying models, reasoning is core to our work. But most large language models (LLMs) are still parrots—pattern matchers without deeper understanding.\nEnter Qwen3-14B, Alibaba’s newest open-source model. It’s not just another massive transformer—it’s been designed and instruction-tuned with reasoning and conversation in mind. And thanks to the amazing open-source work by Unsloth, we get a full-featured Colab notebook that lets us try it right now, without needing a GPU cluster.\nThis post is a walkthrough of that notebook:\nColab Notebook: Qwen3 (14B) - Reasoning & Conversational\nWe’ll unpack each section, explain how things work, and give you hands-on examples to help you integrate Qwen3 into your own workflow.\n\n\n\n\n\n\nTip\n\n\n\nThis post is part of the VLM Series. Feedback and questions are welcome!"
+  },
+  {
+    "objectID": "posts/series/vlm-qwen3-14b/index.html#model-and-tokenizer-loading",
+    "href": "posts/series/vlm-qwen3-14b/index.html#model-and-tokenizer-loading",
+    "title": "Hands-On with Qwen3-14B: A Reasoning-Centric LLM for Data Scientists",
+    "section": "0.2 Model and Tokenizer Loading",
+    "text": "0.2 Model and Tokenizer Loading\nLet’s get started by loading the model and tokenizer using HuggingFace Transformers:\nfrom transformers import AutoModelForCausalLM, AutoTokenizer\nmodel_id = \"unsloth/qwen2-14b-chat-gptq\"\n\ntokenizer = AutoTokenizer.from_pretrained(model_id)\nmodel = AutoModelForCausalLM.from_pretrained(model_id, device_map=\"auto\", trust_remote_code=True)"
+  },
+  {
+    "objectID": "posts/series/vlm-qwen3-14b/index.html#example-the-reasoning-difference",
+    "href": "posts/series/vlm-qwen3-14b/index.html#example-the-reasoning-difference",
+    "title": "Hands-On with Qwen3-14B: A Reasoning-Centric LLM for Data Scientists",
+    "section": "0.3 Example: The Reasoning Difference",
+    "text": "0.3 Example: The Reasoning Difference\nTo see the power of Qwen3, consider this classic chain-of-thought task:\nPrompt:\nAlice has 3 apples. She gives 1 to Bob, then buys 5 more. How many apples does she have?\nprompt = \"Alice has 3 apples. She gives 1 to Bob, then buys 5 more. How many apples does she have?\"\ninputs = tokenizer(prompt, return_tensors=\"pt\").to(\"cuda\")\noutputs = model.generate(**inputs, max_new_tokens=50)\nprint(tokenizer.decode(outputs[0], skip_special_tokens=True))\nExpected Output:\nLet’s break it down. Alice starts with 3 apples. She gives 1 to Bob → 3 - 1 = 2. She buys 5 more → 2 + 5 = 7. Answer: 7 apples."
+  },
+  {
+    "objectID": "posts/series/vlm-qwen3-14b/index.html#system-prompts-and-personality",
+    "href": "posts/series/vlm-qwen3-14b/index.html#system-prompts-and-personality",
+    "title": "Hands-On with Qwen3-14B: A Reasoning-Centric LLM for Data Scientists",
+    "section": "0.4 System Prompts and Personality",
+    "text": "0.4 System Prompts and Personality\nQwen3 supports “system prompts” that define tone and behavior:\nprompt = \"&lt;|im_start|&gt;system\\nYou are a sarcastic data science tutor.&lt;|im_end|&gt;\\n&lt;|im_start|&gt;user\\nWhy is my model overfitting?&lt;|im_end|&gt;\"\ninputs = tokenizer(prompt, return_tensors=\"pt\").to(\"cuda\")\noutputs = model.generate(**inputs, max_new_tokens=50)\nprint(tokenizer.decode(outputs[0], skip_special_tokens=True))\nOutput:\nOh, I don’t know… maybe because you fed it every single variable and forgot cross-validation? Classic!"
+  },
+  {
+    "objectID": "posts/series/vlm-qwen3-14b/index.html#fine-tuning-and-customization-optional",
+    "href": "posts/series/vlm-qwen3-14b/index.html#fine-tuning-and-customization-optional",
+    "title": "Hands-On with Qwen3-14B: A Reasoning-Centric LLM for Data Scientists",
+    "section": "0.5 Fine-Tuning and Customization (Optional)",
+    "text": "0.5 Fine-Tuning and Customization (Optional)\nUnsloth supports fine-tuning with LoRA or QLoRA. You could:\n\nFeed your company’s docs and fine-tune a chatbot\nInject private datasets and business-specific reasoning\nModify for multi-modal pipelines\n\nNot covered directly in the notebook—see the next blog post for a tutorial!"
+  },
+  {
+    "objectID": "posts/series/vlm-qwen3-14b/index.html#performance-on-data-science-tasks",
+    "href": "posts/series/vlm-qwen3-14b/index.html#performance-on-data-science-tasks",
+    "title": "Hands-On with Qwen3-14B: A Reasoning-Centric LLM for Data Scientists",
+    "section": "0.6 Performance on Data Science Tasks",
+    "text": "0.6 Performance on Data Science Tasks\nQwen3-14B shines at:\n\nEDA Explanations\nMath QA\nPrompt Chaining\nCode Review\n\nprompt = \"Explain what this code does:\\ndf.groupby('region')['sales'].mean().sort_values(ascending=False)\"\ninputs = tokenizer(prompt, return_tensors=\"pt\").to(\"cuda\")\noutputs = model.generate(**inputs, max_new_tokens=50)\nprint(tokenizer.decode(outputs[0], skip_special_tokens=True))\nAnswer:\nThis groups the dataframe df by the ‘region’ column, computes the mean sales for each group, and sorts the results in descending order."
+  },
+  {
+    "objectID": "posts/series/vlm-qwen3-14b/index.html#tldr",
+    "href": "posts/series/vlm-qwen3-14b/index.html#tldr",
+    "title": "Hands-On with Qwen3-14B: A Reasoning-Centric LLM for Data Scientists",
+    "section": "0.7 TL;DR",
+    "text": "0.7 TL;DR\nIf you’re a data scientist looking for:\n\nOpen, commercial-friendly LLMs\nStrong reasoning abilities\nEasy deployment via Colab\n\nQwen3-14B is worth your time."
+  },
+  {
+    "objectID": "posts/series/vlm-qwen3-14b/index.html#bonus-prompt-engineering-tips",
+    "href": "posts/series/vlm-qwen3-14b/index.html#bonus-prompt-engineering-tips",
+    "title": "Hands-On with Qwen3-14B: A Reasoning-Centric LLM for Data Scientists",
+    "section": "0.8 Bonus: Prompt Engineering Tips",
+    "text": "0.8 Bonus: Prompt Engineering Tips\n\nBe Explicit: Add “Step-by-step reasoning” to prompts.\nUse System Prompts: Tailor tone and format.\nLimit Token Budget: Keep max tokens reasonable for speed + clarity."
+  },
+  {
+    "objectID": "posts/series/vlm-qwen3-14b/index.html#why-qwen3-14b",
+    "href": "posts/series/vlm-qwen3-14b/index.html#why-qwen3-14b",
+    "title": "Hands-On with Qwen3-14B: A Reasoning-Centric LLM for Data Scientists",
+    "section": "0.9 Why Qwen3-14B?",
+    "text": "0.9 Why Qwen3-14B?\nBefore diving into code, here’s what makes Qwen3 interesting:\n\nSize and Performance: 14B parameters—big enough to be powerful, small enough to run locally with quantization.\nOpen Weight License: Truly open, including for commercial use.\nReasoning Optimized: Trained with a focus on multi-step logical tasks, coding, math, and chain-of-thought."
+  },
+  {
+    "objectID": "posts/series/vlm-qwen3-14b/index.html#setup-running-a-14b-model-in-google-colab",
+    "href": "posts/series/vlm-qwen3-14b/index.html#setup-running-a-14b-model-in-google-colab",
+    "title": "Hands-On with Qwen3-14B: A Reasoning-Centric LLM for Data Scientists",
+    "section": "0.10 Setup: Running a 14B Model in Google Colab?",
+    "text": "0.10 Setup: Running a 14B Model in Google Colab?\nThe notebook from Unsloth uses the HuggingFace transformers library, AutoGPTQ, and 4-bit quantized weights. That means we can run Qwen3-14B on a free Colab GPU (ideally a T4 or A100) without melting our RAM.\n!pip install --upgrade --quiet transformers accelerate auto-gptq\n\n\n\n\n\n\nImportant\n\n\n\n\nRun the cell above in your Colab notebook before anything else.\nFor best results, use a GPU runtime (T4 or A100 preferred)."
+  },
+  {
+    "objectID": "posts/series/vlm-qwen3-14b/index.html#next-steps",
+    "href": "posts/series/vlm-qwen3-14b/index.html#next-steps",
+    "title": "Hands-On with Qwen3-14B: A Reasoning-Centric LLM for Data Scientists",
+    "section": "0.11 Next Steps",
+    "text": "0.11 Next Steps\n\nBack to VLM Series Overview\nFine-Tuning Qwen3-14B with Unsloth (next post)\nTry the Colab Notebook"
+  },
+  {
+    "objectID": "posts/series/vlm-qwen3-14b/index.html#references",
+    "href": "posts/series/vlm-qwen3-14b/index.html#references",
+    "title": "Hands-On with Qwen3-14B: A Reasoning-Centric LLM for Data Scientists",
+    "section": "0.12 References",
+    "text": "0.12 References\n\nQwen3-14B on HuggingFace\nQwen3-14B Paper\nUnsloth Qwen3-14B Colab Notebook\nVLM Series Overview\n\n\n\n\n\n\n\nNote\n\n\n\nThis post is part of the VLM Series. Feedback and questions are welcome!"
+  },
+  {
     "objectID": "posts/series/computer-vision-with-pytorch.html",
     "href": "posts/series/computer-vision-with-pytorch.html",
     "title": "",
     "section": "",
     "text": "Code\n\n\n\n\n\n\n\n\nReuseCC BY-NC-SA 4.0CitationBibTeX citation:@online{untitled,\n  author = {, Hasan},\n  url = {https://hasangoni.quarto.pub/hasan-blog-post/posts/series/computer-vision-with-pytorch.html},\n  langid = {en}\n}\nFor attribution, please cite this work as:\nHasan. n.d. https://hasangoni.quarto.pub/hasan-blog-post/posts/series/computer-vision-with-pytorch.html."
+  },
+  {
+    "objectID": "posts/series/anomaly-detection/index.html",
+    "href": "posts/series/anomaly-detection/index.html",
+    "title": "Anomaly Detection Series",
+    "section": "",
+    "text": "This series will guide you through the wild and wonderful world of anomaly detection, with a focus on intuition, practical examples, and a healthy dose of humor. Whether you’re a data scientist, a machine learning enthusiast, or just someone who likes finding the oddballs in a crowd, you’re in the right place.\n\n\n\nFinding the Oddballs: A Not-So-Technical Guide to Anomaly Detection(Density Estimation and Robustness)\n\nStay tuned for more posts, including hands-on tutorials and advanced techniques!"
+  },
+  {
+    "objectID": "posts/series/anomaly-detection/index.html#posts-in-this-series",
+    "href": "posts/series/anomaly-detection/index.html#posts-in-this-series",
+    "title": "Anomaly Detection Series",
+    "section": "",
+    "text": "Finding the Oddballs: A Not-So-Technical Guide to Anomaly Detection(Density Estimation and Robustness)\n\nStay tuned for more posts, including hands-on tutorials and advanced techniques!"
   },
   {
     "objectID": "posts/data-science-steps-to-follow-part06/index.html",

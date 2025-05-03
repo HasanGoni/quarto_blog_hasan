@@ -1,0 +1,164 @@
+---
+title: "Hands-On with Qwen3-14B: A Reasoning-Centric LLM for Data Scientists"
+author: "Hasan"
+date: 2025-05-03
+categories: [AI, LLM, Reasoning, NLP, HuggingFace, Colab, Transformers]
+tags: [Qwen3, HuggingFace Transformers, Colab, Instruction Tuning, Conversational AI]
+image: "qwen3-14b.png"
+toc: true
+series:
+  name: "VLM Series"
+  number: 1
+format:
+  html: default
+---
+
+## Introduction: What If LLMs Could *Actually* Reason?
+
+As data scientists, we constantly move between raw data and real-world decisions. Whether you're explaining anomalies, generating insights, or deploying models, reasoning is core to our work. But most large language models (LLMs) are still *parrots*—pattern matchers without deeper understanding.
+
+Enter **Qwen3-14B**, Alibaba's newest open-source model. It's not just another massive transformer—it's been designed and instruction-tuned with *reasoning* and *conversation* in mind. And thanks to the amazing open-source work by **Unsloth**, we get a full-featured Colab notebook that lets us try it right now, without needing a GPU cluster.
+
+This post is a walkthrough of that notebook:  
+[Colab Notebook: Qwen3 (14B) - Reasoning & Conversational](https://colab.research.google.com/github/unslothai/notebooks/blob/main/nb/Qwen3_(14B)-Reasoning-Conversational.ipynb)  
+We'll unpack each section, explain how things work, and give you hands-on examples to help you integrate Qwen3 into your own workflow.
+
+:::{.callout-tip}
+This post is part of the [VLM Series](../vlm.qmd). Feedback and questions are welcome!
+:::
+
+## Model and Tokenizer Loading
+
+Let's get started by loading the model and tokenizer using HuggingFace Transformers:
+
+```python
+from transformers import AutoModelForCausalLM, AutoTokenizer
+model_id = "unsloth/qwen2-14b-chat-gptq"
+
+tokenizer = AutoTokenizer.from_pretrained(model_id)
+model = AutoModelForCausalLM.from_pretrained(model_id, device_map="auto", trust_remote_code=True)
+```
+
+## Example: The Reasoning Difference
+
+To see the power of Qwen3, consider this classic chain-of-thought task:
+
+**Prompt:**
+
+Alice has 3 apples. She gives 1 to Bob, then buys 5 more. How many apples does she have?
+
+```python
+prompt = "Alice has 3 apples. She gives 1 to Bob, then buys 5 more. How many apples does she have?"
+inputs = tokenizer(prompt, return_tensors="pt").to("cuda")
+outputs = model.generate(**inputs, max_new_tokens=50)
+print(tokenizer.decode(outputs[0], skip_special_tokens=True))
+```
+
+**Expected Output:**
+
+Let's break it down.
+Alice starts with 3 apples.
+She gives 1 to Bob → 3 - 1 = 2.
+She buys 5 more → 2 + 5 = 7.
+Answer: 7 apples.
+
+## System Prompts and Personality
+
+Qwen3 supports "system prompts" that define tone and behavior:
+
+```python
+prompt = "<|im_start|>system\nYou are a sarcastic data science tutor.<|im_end|>\n<|im_start|>user\nWhy is my model overfitting?<|im_end|>"
+inputs = tokenizer(prompt, return_tensors="pt").to("cuda")
+outputs = model.generate(**inputs, max_new_tokens=50)
+print(tokenizer.decode(outputs[0], skip_special_tokens=True))
+```
+
+**Output:**
+
+Oh, I don't know... maybe because you fed it every single variable and forgot cross-validation? Classic!
+
+## Fine-Tuning and Customization (Optional)
+
+Unsloth supports fine-tuning with LoRA or QLoRA. You could:
+
+- Feed your company's docs and fine-tune a chatbot
+- Inject private datasets and business-specific reasoning
+- Modify for multi-modal pipelines
+
+_Not covered directly in the notebook—see [the next blog post for a tutorial](finetune-qwen3-14b.qmd)!_
+
+## Performance on Data Science Tasks
+
+Qwen3-14B shines at:
+
+- EDA Explanations
+- Math QA
+- Prompt Chaining
+- Code Review
+
+```python
+prompt = "Explain what this code does:\ndf.groupby('region')['sales'].mean().sort_values(ascending=False)"
+inputs = tokenizer(prompt, return_tensors="pt").to("cuda")
+outputs = model.generate(**inputs, max_new_tokens=50)
+print(tokenizer.decode(outputs[0], skip_special_tokens=True))
+```
+
+**Answer:**
+
+This groups the dataframe df by the 'region' column, computes the mean sales for each group, and sorts the results in descending order.
+
+## TL;DR
+
+If you're a data scientist looking for:
+
+- Open, commercial-friendly LLMs
+- Strong reasoning abilities
+- Easy deployment via Colab
+
+Qwen3-14B is worth your time.
+
+## Bonus: Prompt Engineering Tips
+
+- **Be Explicit:** Add "Step-by-step reasoning" to prompts.
+- **Use System Prompts:** Tailor tone and format.
+- **Limit Token Budget:** Keep max tokens reasonable for speed + clarity.
+
+---
+
+## Why Qwen3-14B?
+
+Before diving into code, here's what makes Qwen3 interesting:
+
+- **Size and Performance:** 14B parameters—big enough to be powerful, small enough to run locally with quantization.
+- **Open Weight License:** Truly open, including for commercial use.
+- **Reasoning Optimized:** Trained with a focus on multi-step logical tasks, coding, math, and chain-of-thought.
+
+## Setup: Running a 14B Model in Google Colab?
+
+The notebook from Unsloth uses the HuggingFace `transformers` library, `AutoGPTQ`, and 4-bit quantized weights. That means we can run Qwen3-14B on a free Colab GPU (ideally a T4 or A100) without melting our RAM.
+
+```python
+!pip install --upgrade --quiet transformers accelerate auto-gptq
+```
+
+:::{.callout-important}
+- Run the cell above in your Colab notebook before anything else.
+- For best results, use a GPU runtime (T4 or A100 preferred).
+:::
+
+## Next Steps
+
+- [Back to VLM Series Overview](../vlm.qmd)
+- [Fine-Tuning Qwen3-14B with Unsloth (next post)](finetune-qwen3-14b.qmd)
+- Try the [Colab Notebook](https://colab.research.google.com/github/unslothai/notebooks/blob/main/nb/Qwen3_(14B)-Reasoning-Conversational.ipynb)
+
+## References
+
+1. [Qwen3-14B on HuggingFace](https://huggingface.co/Qwen/Qwen1.5-14B)
+2. [Qwen3-14B Paper](https://arxiv.org/abs/2403.05530)
+3. [Unsloth Qwen3-14B Colab Notebook](https://colab.research.google.com/github/unslothai/notebooks/blob/main/nb/Qwen3_(14B)-Reasoning-Conversational.ipynb)
+4. [VLM Series Overview](../vlm.qmd)
+
+:::{.callout-note}
+This post is part of the [VLM Series](../vlm.qmd). Feedback and questions are welcome!
+::: 

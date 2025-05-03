@@ -1,0 +1,24 @@
+---
+title: "Anomaly Detection Series"
+author: "Your Name"
+date: 2025-05-03
+categories: [data science, machine learning, anomaly detection]
+image: "anomaly_detection_title.jpg"
+description: "A series exploring anomaly detection techniques with fun, accessible explanations."
+toc: true
+series:
+  name: "Anomaly Detection Series"
+  number: 1
+format:
+  html: default
+---
+
+# Welcome to the Anomaly Detection Series!
+
+This series will guide you through the wild and wonderful world of anomaly detection, with a focus on intuition, practical examples, and a healthy dose of humor. Whether you're a data scientist, a machine learning enthusiast, or just someone who likes finding the oddballs in a crowd, you're in the right place.
+
+## Posts in this Series
+
+- [Finding the Oddballs: A Not-So-Technical Guide to Anomaly Detection(Density Estimation and Robustness)](finding-the-oddballs.qmd)
+
+Stay tuned for more posts, including hands-on tutorials and advanced techniques! 
