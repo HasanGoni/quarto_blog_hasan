@@ -1,0 +1,22 @@
+---
+title: "Tools Series"
+description: "A series exploring modern Python development tools for productivity, reproducibility, and speed."
+author: "Your Name"
+date: 2024-05-10
+categories: [series, tools, python, development]
+series:
+  name: "Tools Series"
+  number: 1
+format:
+  html: default
+---
+
+# Welcome to the Tools Series!
+
+This series highlights the best modern tools for Python developers, with a focus on speed, reproducibility, and developer happiness. Each post dives deep into a single tool, showing not just how to use it, but why it matters.
+
+## Posts in this Series
+
+- [UV: A Bolt of Lightning for Python Packaging](uv.qmd)
+
+<!-- Add more tools posts here as the series grows --> 
