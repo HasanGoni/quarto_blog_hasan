@@ -1,0 +1,168 @@
+---
+title: "UV: Python Packaging, Reimagined (and Lightning Fast)"
+author: "An Expert Storyteller"
+date: "2024-09-07"
+categories: [python, packaging, development, tools, uv, scripting, workflow, opinion]
+format:
+  html:
+    toc: true
+    css: styles.css
+---
+
+# UV: Python Packaging, Reimagined (and Lightning Fast)
+
+If you've spent any time wrangling Python environments, you know the drill: `pip` for installs, `venv` for isolation, `pip-tools` for reproducibility, `pipx` for CLI tools, and maybe `poetry` or `pdm` for project management. Each tool solves a piece of the puzzle, but the overall experience? Sometimes it feels like assembling IKEA furniture with parts from five different sets.
+
+But what if there was a tool that unified all of this—faster, simpler, and more powerful than anything before? Enter **UV**, a Rust-powered, developer-obsessed packaging tool from the folks at Astral (the same team behind the blazing-fast Ruff linter). UV isn't just another tool—it's a rethink of what Python packaging can be, and it's so fast it changes what's possible.
+
+Let's take a journey through UV's world, from the old way to the new, and see how it unlocks workflows you might never have considered.
+
+---
+
+## The Old Way: A Familiar (and Tedious) Dance
+
+Let's say you want to start a new Flask app that needs `requests`. Here's the classic routine:
+
+```bash
+mkdir old_way
+cd old_way
+python3 -m venv .venv
+source .venv/bin/activate
+pip install flask requests
+pip freeze > requirements.txt
+touch main.py
+```
+
+You create a directory, set up a virtual environment, activate it, install dependencies, freeze them, and finally start coding. It works, but it's a lot of steps—and a lot of mental context switching.
+
+---
+
+## Enter UV: The Lightning Path
+
+With UV, the workflow is radically streamlined:
+
+```bash
+uv init new_app
+cd new_app
+uv add flask requests
+uv run main.py
+```
+
+- `uv init` scaffolds your project: `.venv`, `.git`, `pyproject.toml`, `uv.lock`, and more.
+- `uv add` installs dependencies, updates your manifest, and pins everything in a lockfile—blazingly fast.
+- `uv run` executes your code in the right environment, no manual activation needed. Delete `.venv` and run again? UV will recreate it, perfectly reproducible.
+
+**Why is this so powerful?**
+- Unified interface: No more juggling five tools.
+- Rust-powered speed: Dependency resolution and installs happen in milliseconds, not seconds.
+- Built-in reproducibility: The `uv.lock` file guarantees identical environments everywhere.
+- Smart caching: Shared packages across projects save disk space and time.
+
+---
+
+## The Speed Demon: Scripting Without Friction
+
+Here's where UV's speed unlocks new workflows. Imagine you have a script that needs a couple of packages, but you don't want to pollute your main environment:
+
+```python
+# demo.py
+import requests
+from rich.pretty import pprint
+
+resp = requests.get("https://peps.python.org/api/peps.json")
+data = resp.json()
+pprint([(k, v["title"]) for k, v in data.items()][:10])
+```
+
+With UV, you can run this script with its dependencies, instantly:
+
+```bash
+uv run --with requests --with rich demo.py
+```
+
+UV spins up a temporary, cached environment, installs the packages (or pulls from cache), runs your script, and cleans up. No manual setup, no leftover environments.
+
+---
+
+## Self-Contained Scripts: PEP 723 Magic
+
+Thanks to [PEP 723](https://peps.python.org/pep-0723/), you can now embed dependency metadata directly in your script:
+
+```python
+# richdemo.py
+# /// script
+# requires-python = ">=3.11"
+# dependencies = [
+#   "requests<3",
+#   "rich",
+# ]
+# ///
+
+import requests
+from rich.pretty import pprint
+
+resp = requests.get("https://peps.python.org/api/peps.json")
+data = resp.json()
+pprint([(k, v["title"]) for k, v in data.items()][:10])
+```
+
+Now, just run:
+
+```bash
+uv run richdemo.py
+```
+
+UV reads the inline metadata, sets up the right environment, and runs the script. This is a game-changer for sharing scripts—no more "install these packages first" disclaimers. Your code is instantly reproducible and runnable.
+
+---
+
+## Beyond the Basics: Dynamic Environments and Advanced Tricks
+
+UV's speed means you can do things that were previously too slow or clunky to consider. For example, you can dynamically run functions in isolated environments—great for benchmarking, testing across dependency versions, or isolating tricky code.
+
+Here's a "party trick" using the `uvtrick` package to benchmark different versions of scikit-learn's PCA:
+
+```python
+# sk.py
+from sklearn.datasets import make_regression
+X, y = make_regression(n_samples=10_000, n_features=10, random_state=42)
+
+def bench(X, y):
+    from time import time
+    from sklearn.decomposition import PCA
+    tic = time()
+    pca = PCA(n_components=2).fit(X, y)
+    toc = time()
+    return toc - tic
+
+print("Running scikit-learn benchmarks")
+for version in ["1.4", "1.5"]:
+    for i in range(4):
+        from uvtrick import Env
+        timed = Env(f"scikit-learn={version}").run(bench, X, y)
+        print(version, timed)
+```
+
+Run it with:
+
+```bash
+uv run --with uvtrick --with scikit-learn sk.py
+```
+
+You can compare performance across versions, all without polluting your main environment. This is just the beginning—think about running quick experiments, cron jobs, or utility scripts, all with perfectly isolated, reproducible dependencies.
+
+---
+
+## The Broader Implications: Rethinking Python Workflows
+
+UV isn't just faster. It's a catalyst for new ways of working:
+- **Shareable, self-contained scripts**: Perfect for blogs, tutorials, and "Today I Scripted" moments.
+- **Instant, throwaway environments**: Run experiments, benchmarks, or one-off tasks without setup overhead.
+- **Reproducibility by default**: No more "works on my machine" headaches.
+- **Integrated tool management**: Install, run, or even temporarily use CLI tools (`uv tool install ruff`, `uvx ruff check`)—all with the same speed and simplicity.
+
+Astral's work on UV is a gift to the Python community. It's not just about speed (though you'll love that). It's about making Python development more joyful, more reliable, and more creative.
+
+So next time you reach for `pip`, `venv`, or `pipx`, ask yourself: what could you do if your tools were 10x faster and 10x simpler? With UV, you don't have to imagine—it's already here.
+
+Happy coding!
