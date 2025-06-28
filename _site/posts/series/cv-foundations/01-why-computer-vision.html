@@ -1,0 +1,1575 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.3.450">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+<meta name="author" content="Hasan">
+<meta name="dcterms.date" content="2025-01-15">
+
+<title>Hasan’s Data Science &amp; AI Blog - Why Computer Vision? Teaching a Robot to See</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
+  vertical-align: middle;
+}
+/* CSS for syntax highlighting */
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+  }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+</style>
+
+
+<script src="../../../site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="../../../site_libs/quarto-nav/headroom.min.js"></script>
+<script src="../../../site_libs/clipboard/clipboard.min.js"></script>
+<script src="../../../site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="../../../site_libs/quarto-search/fuse.min.js"></script>
+<script src="../../../site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="../../../">
+<script src="../../../site_libs/quarto-html/quarto.js"></script>
+<script src="../../../site_libs/quarto-html/popper.min.js"></script>
+<script src="../../../site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="../../../site_libs/quarto-html/anchor.min.js"></script>
+<link href="../../../site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="../../../site_libs/quarto-html/quarto-syntax-highlighting.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="../../../site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="../../../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="../../../site_libs/bootstrap/bootstrap.min.css" rel="stylesheet" id="quarto-bootstrap" data-mode="light">
+<script id="quarto-search-options" type="application/json">{
+  "location": "navbar",
+  "copy-button": false,
+  "collapse-after": 3,
+  "panel-placement": "end",
+  "type": "overlay",
+  "limit": 20,
+  "language": {
+    "search-no-results-text": "No results",
+    "search-matching-documents-text": "matching documents",
+    "search-copy-link-title": "Copy link to search",
+    "search-hide-matches-text": "Hide additional matches",
+    "search-more-match-text": "more match in this document",
+    "search-more-matches-text": "more matches in this document",
+    "search-clear-button-title": "Clear",
+    "search-detached-cancel-button-title": "Cancel",
+    "search-submit-button-title": "Submit",
+    "search-label": "Search"
+  }
+}</script>
+<style>html{ scroll-behavior: smooth; }</style>
+<script async="" src="https://hypothes.is/embed.js"></script>
+
+
+<link rel="stylesheet" href="../../../styles.css">
+<meta property="og:title" content="Hasan’s Data Science &amp; AI Blog - Why Computer Vision? Teaching a Robot to See">
+<meta property="og:description" content="">
+<meta property="og:image" content="https://images.unsplash.com/photo-1526374965328-7f61d4dc18c5?ixlib=rb-4.0.3&amp;ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&amp;auto=format&amp;fit=crop&amp;w=2070&amp;q=80">
+<meta property="og:site-name" content="Hasan's Data Science &amp; AI Blog">
+<meta name="twitter:title" content="Hasan’s Data Science &amp; AI Blog - Why Computer Vision? Teaching a Robot to See">
+<meta name="twitter:description" content="">
+<meta name="twitter:image" content="https://images.unsplash.com/photo-1526374965328-7f61d4dc18c5?ixlib=rb-4.0.3&amp;ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&amp;auto=format&amp;fit=crop&amp;w=2070&amp;q=80">
+<meta name="twitter:card" content="summary_large_image">
+</head>
+
+<body class="nav-sidebar docked nav-fixed">
+
+<div id="quarto-search-results"></div>
+  <header id="quarto-header" class="headroom fixed-top">
+    <nav class="navbar navbar-expand-lg navbar-dark ">
+      <div class="navbar-container container-fluid">
+      <div class="navbar-brand-container">
+    <a class="navbar-brand" href="../../../index.html">
+    <span class="navbar-title">Hasan’s Data Science &amp; AI Blog</span>
+    </a>
+  </div>
+            <div id="quarto-search" class="" title="Search"></div>
+          <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCollapse" aria-controls="navbarCollapse" aria-expanded="false" aria-label="Toggle navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+  <span class="navbar-toggler-icon"></span>
+</button>
+          <div class="collapse navbar-collapse" id="navbarCollapse">
+            <ul class="navbar-nav navbar-nav-scroll me-auto">
+  <li class="nav-item">
+    <a class="nav-link" href="../../../index.html" rel="" target="">
+ <span class="menu-text">Home</span></a>
+  </li>  
+  <li class="nav-item dropdown ">
+    <a class="nav-link dropdown-toggle" href="#" id="nav-menu-series" role="button" data-bs-toggle="dropdown" aria-expanded="false" rel="" target="">
+ <span class="menu-text">Series</span>
+    </a>
+    <ul class="dropdown-menu" aria-labelledby="nav-menu-series">    
+        <li>
+    <a class="dropdown-item" href="../../../posts/series/data-science-steps.html" rel="" target="">
+ <span class="dropdown-text">Data Science Steps</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="../../../posts/series/computer-vision-with-pytorch.qmd" rel="" target="">
+ <span class="dropdown-text">Computer Vision</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="../../../posts/series/vlm.html" rel="" target="">
+ <span class="dropdown-text">VLM Series</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="../../../posts/series/anomaly-detection/index.html" rel="" target="">
+ <span class="dropdown-text">Anomaly Detection</span></a>
+  </li>  
+    </ul>
+  </li>
+  <li class="nav-item">
+    <a class="nav-link" href="../../../categories.html" rel="" target="">
+ <span class="menu-text">Categories</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="../../../tags.html" rel="" target="">
+ <span class="menu-text">Tags</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="../../../about.html" rel="" target="">
+ <span class="menu-text">About</span></a>
+  </li>  
+</ul>
+            <ul class="navbar-nav navbar-nav-scroll ms-auto">
+  <li class="nav-item compact">
+    <a class="nav-link" href="https://github.com/HasanGoni" rel="" target=""><i class="bi bi-github" role="img">
+</i> 
+ <span class="menu-text"></span></a>
+  </li>  
+  <li class="nav-item compact">
+    <a class="nav-link" href="https://twitter.com/hasangoni" rel="" target=""><i class="bi bi-twitter" role="img">
+</i> 
+ <span class="menu-text"></span></a>
+  </li>  
+</ul>
+            <div class="quarto-navbar-tools">
+</div>
+          </div> <!-- /navcollapse -->
+      </div> <!-- /container-fluid -->
+    </nav>
+  <nav class="quarto-secondary-nav">
+    <div class="container-fluid d-flex">
+      <button type="button" class="quarto-btn-toggle btn" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar,#quarto-sidebar-glass" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+        <i class="bi bi-layout-text-sidebar-reverse"></i>
+      </button>
+      <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item">Why Computer Vision? Teaching a Robot to See</li></ol></nav>
+      <a class="flex-grow-1" role="button" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar,#quarto-sidebar-glass" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
+      </a>
+    </div>
+  </nav>
+</header>
+<!-- content -->
+<header id="title-block-header" class="quarto-title-block default page-columns page-full">
+  <div class="quarto-title-banner page-columns page-full">
+    <div class="quarto-title column-body">
+      <div class="quarto-title-block"><div><h1 class="title">Why Computer Vision? Teaching a Robot to See</h1><button type="button" class="btn code-tools-button dropdown-toggle" id="quarto-code-tools-menu" data-bs-toggle="dropdown" aria-expanded="false"><i class="bi"></i> Code</button><ul class="dropdown-menu dropdown-menu-end" aria-labelelledby="quarto-code-tools-menu"><li><a id="quarto-show-all-code" class="dropdown-item" href="javascript:void(0)" role="button">Show All Code</a></li><li><a id="quarto-hide-all-code" class="dropdown-item" href="javascript:void(0)" role="button">Hide All Code</a></li><li><hr class="dropdown-divider"></li><li><a id="quarto-view-source" class="dropdown-item" href="javascript:void(0)" role="button">View Source</a></li></ul></div></div>
+                                <div class="quarto-categories">
+                <div class="quarto-category">Computer Vision</div>
+                <div class="quarto-category">AI</div>
+                <div class="quarto-category">Machine Learning</div>
+                <div class="quarto-category">OpenCV</div>
+                <div class="quarto-category">Deep Learning</div>
+              </div>
+                  </div>
+  </div>
+    
+  
+  <div class="quarto-title-meta">
+
+      <div>
+      <div class="quarto-title-meta-heading">Author</div>
+      <div class="quarto-title-meta-contents">
+               <p>Hasan </p>
+            </div>
+    </div>
+      
+      <div>
+      <div class="quarto-title-meta-heading">Published</div>
+      <div class="quarto-title-meta-contents">
+        <p class="date">January 15, 2025</p>
+      </div>
+    </div>
+    
+      <div>
+      <div class="quarto-title-meta-heading">Modified</div>
+      <div class="quarto-title-meta-contents">
+        <p class="date-modified">June 28, 2025</p>
+      </div>
+    </div>
+      
+    </div>
+    
+  
+  </header><div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article page-navbar">
+<!-- sidebar -->
+  <nav id="quarto-sidebar" class="sidebar collapse collapse-horizontal sidebar-navigation docked overflow-auto">
+    <div class="sidebar-menu-container"> 
+    <ul class="list-unstyled mt-1">
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-1" aria-expanded="true">
+ <span class="menu-text">Data Science</span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-1" aria-expanded="true" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-1" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../../posts/series/data-science-steps.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Data Science Steps Series</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../../posts/data-science-steps-to-follow-part01/index.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Data Science Steps to Follow - 01</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../../posts/data-science-steps-to-follow-part02/index.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Data Science Steps to Follow - 02</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../../posts/data-science-steps-to-follow-part03/index.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Data Science Steps to Follow - 03</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../../posts/data-science-steps-to-follow-part04/index.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Data Science Steps to Follow - 04</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../../posts/data-science-steps-to-follow-part05/index.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Data Science Steps to Follow - 05</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../../posts/data-science-steps-to-follow-part06/index.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Data Science Steps to Follow - 06</span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-2" aria-expanded="true">
+ <span class="menu-text">Computer Vision</span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-2" aria-expanded="true" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-2" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
+ <span class="menu-text">posts/series/computer-vision-with-pytorch.qmd</span>
+  </li>
+      </ul>
+  </li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-3" aria-expanded="true">
+ <span class="menu-text">Anomaly Detection</span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-3" aria-expanded="true" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-3" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../../posts/series/anomaly-detection/index.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Introduction</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../../posts/series/anomaly-detection/finding-the-oddballs.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Finding the Oddballs</span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-4" aria-expanded="true">
+ <span class="menu-text">VLM Series</span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-4" aria-expanded="true" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-4" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../../posts/series/vlm.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Introduction</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../../posts/series/vlm-qwen3-14b/index.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Qwen3-14B</span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+    </ul>
+    </div>
+</nav>
+<div id="quarto-sidebar-glass" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar,#quarto-sidebar-glass"></div>
+<!-- margin-sidebar -->
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+        <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">On this page</h2>
+   
+  <ul>
+  <li><a href="#the-magic-moment-when-machines-learn-to-see" id="toc-the-magic-moment-when-machines-learn-to-see" class="nav-link active" data-scroll-target="#the-magic-moment-when-machines-learn-to-see"><span class="header-section-number">0.1</span> The Magic Moment: When Machines Learn to See</a></li>
+  <li><a href="#the-story-that-started-it-all" id="toc-the-story-that-started-it-all" class="nav-link" data-scroll-target="#the-story-that-started-it-all"><span class="header-section-number">0.2</span> The Story That Started It All</a></li>
+  <li><a href="#what-is-computer-vision-really" id="toc-what-is-computer-vision-really" class="nav-link" data-scroll-target="#what-is-computer-vision-really"><span class="header-section-number">0.3</span> What Is Computer Vision, Really?</a></li>
+  <li><a href="#the-aha-moment-why-this-matters" id="toc-the-aha-moment-why-this-matters" class="nav-link" data-scroll-target="#the-aha-moment-why-this-matters"><span class="header-section-number">0.4</span> The “Aha!” Moment: Why This Matters</a>
+  <ul class="collapse">
+  <li><a href="#self-driving-cars" id="toc-self-driving-cars" class="nav-link" data-scroll-target="#self-driving-cars"><span class="header-section-number">0.4.1</span> 🚗 <strong>Self-Driving Cars</strong></a></li>
+  <li><a href="#medical-diagnosis" id="toc-medical-diagnosis" class="nav-link" data-scroll-target="#medical-diagnosis"><span class="header-section-number">0.4.2</span> 🏥 <strong>Medical Diagnosis</strong></a></li>
+  <li><a href="#your-daily-life" id="toc-your-daily-life" class="nav-link" data-scroll-target="#your-daily-life"><span class="header-section-number">0.4.3</span> 📱 <strong>Your Daily Life</strong></a></li>
+  <li><a href="#agriculture" id="toc-agriculture" class="nav-link" data-scroll-target="#agriculture"><span class="header-section-number">0.4.4</span> 🌾 <strong>Agriculture</strong></a></li>
+  </ul></li>
+  <li><a href="#the-beautiful-challenge" id="toc-the-beautiful-challenge" class="nav-link" data-scroll-target="#the-beautiful-challenge"><span class="header-section-number">0.5</span> The Beautiful Challenge</a></li>
+  <li><a href="#your-first-taste-what-does-a-computer-see" id="toc-your-first-taste-what-does-a-computer-see" class="nav-link" data-scroll-target="#your-first-taste-what-does-a-computer-see"><span class="header-section-number">0.6</span> Your First Taste: What Does a Computer See?</a></li>
+  <li><a href="#the-journey-were-taking-together" id="toc-the-journey-were-taking-together" class="nav-link" data-scroll-target="#the-journey-were-taking-together"><span class="header-section-number">0.7</span> The Journey We’re Taking Together</a>
+  <ul class="collapse">
+  <li><a href="#week-1-2-understanding-the-basics" id="toc-week-1-2-understanding-the-basics" class="nav-link" data-scroll-target="#week-1-2-understanding-the-basics"><span class="header-section-number">0.7.1</span> <strong>Week 1-2: Understanding the Basics</strong></a></li>
+  <li><a href="#week-3-4-classical-techniques" id="toc-week-3-4-classical-techniques" class="nav-link" data-scroll-target="#week-3-4-classical-techniques"><span class="header-section-number">0.7.2</span> <strong>Week 3-4: Classical Techniques</strong></a></li>
+  <li><a href="#week-5-6-the-deep-learning-revolution" id="toc-week-5-6-the-deep-learning-revolution" class="nav-link" data-scroll-target="#week-5-6-the-deep-learning-revolution"><span class="header-section-number">0.7.3</span> <strong>Week 5-6: The Deep Learning Revolution</strong></a></li>
+  <li><a href="#week-7-8-modern-foundation-models" id="toc-week-7-8-modern-foundation-models" class="nav-link" data-scroll-target="#week-7-8-modern-foundation-models"><span class="header-section-number">0.7.4</span> <strong>Week 7-8: Modern Foundation Models</strong></a></li>
+  </ul></li>
+  <li><a href="#the-pareto-principle-in-action" id="toc-the-pareto-principle-in-action" class="nav-link" data-scroll-target="#the-pareto-principle-in-action"><span class="header-section-number">0.8</span> The Pareto Principle in Action</a></li>
+  <li><a href="#what-youll-build" id="toc-what-youll-build" class="nav-link" data-scroll-target="#what-youll-build"><span class="header-section-number">0.9</span> What You’ll Build</a></li>
+  <li><a href="#the-tools-of-the-trade" id="toc-the-tools-of-the-trade" class="nav-link" data-scroll-target="#the-tools-of-the-trade"><span class="header-section-number">0.10</span> The Tools of the Trade</a></li>
+  <li><a href="#a-personal-promise" id="toc-a-personal-promise" class="nav-link" data-scroll-target="#a-personal-promise"><span class="header-section-number">0.11</span> A Personal Promise</a></li>
+  <li><a href="#your-first-assignment-optional-but-fun" id="toc-your-first-assignment-optional-but-fun" class="nav-link" data-scroll-target="#your-first-assignment-optional-but-fun"><span class="header-section-number">0.12</span> Your First Assignment (Optional but Fun!)</a></li>
+  <li><a href="#whats-next" id="toc-whats-next" class="nav-link" data-scroll-target="#whats-next"><span class="header-section-number">0.13</span> What’s Next?</a></li>
+  <li><a href="#join-the-journey" id="toc-join-the-journey" class="nav-link" data-scroll-target="#join-the-journey"><span class="header-section-number">0.14</span> Join the Journey</a></li>
+  <li><a href="#your-first-computer-vision-moment" id="toc-your-first-computer-vision-moment" class="nav-link" data-scroll-target="#your-first-computer-vision-moment"><span class="header-section-number">0.15</span> Your First Computer Vision Moment</a></li>
+  <li><a href="#real-world-computer-vision-magic" id="toc-real-world-computer-vision-magic" class="nav-link" data-scroll-target="#real-world-computer-vision-magic"><span class="header-section-number">0.16</span> Real-World Computer Vision Magic</a>
+  <ul class="collapse">
+  <li><a href="#medical-diagnosis-1" id="toc-medical-diagnosis-1" class="nav-link" data-scroll-target="#medical-diagnosis-1"><span class="header-section-number">0.16.1</span> 1. Medical Diagnosis</a></li>
+  <li><a href="#autonomous-vehicles" id="toc-autonomous-vehicles" class="nav-link" data-scroll-target="#autonomous-vehicles"><span class="header-section-number">0.16.2</span> 2. Autonomous Vehicles</a></li>
+  <li><a href="#agriculture-revolution" id="toc-agriculture-revolution" class="nav-link" data-scroll-target="#agriculture-revolution"><span class="header-section-number">0.16.3</span> 3. Agriculture Revolution</a></li>
+  </ul></li>
+  <li><a href="#the-journey-ahead-your-cv-learning-path" id="toc-the-journey-ahead-your-cv-learning-path" class="nav-link" data-scroll-target="#the-journey-ahead-your-cv-learning-path"><span class="header-section-number">0.17</span> The Journey Ahead: Your CV Learning Path</a>
+  <ul class="collapse">
+  <li><a href="#our-learning-philosophy-inspired-by-fastai" id="toc-our-learning-philosophy-inspired-by-fastai" class="nav-link" data-scroll-target="#our-learning-philosophy-inspired-by-fastai"><span class="header-section-number">0.17.1</span> Our Learning Philosophy (Inspired by fastai)</a></li>
+  <li><a href="#what-youll-build-1" id="toc-what-youll-build-1" class="nav-link" data-scroll-target="#what-youll-build-1"><span class="header-section-number">0.17.2</span> What You’ll Build</a></li>
+  </ul></li>
+  <li><a href="#your-first-taste-images-as-numbers" id="toc-your-first-taste-images-as-numbers" class="nav-link" data-scroll-target="#your-first-taste-images-as-numbers"><span class="header-section-number">0.18</span> Your First Taste: Images as Numbers</a></li>
+  <li><a href="#quick-win-your-first-cv-program" id="toc-quick-win-your-first-cv-program" class="nav-link" data-scroll-target="#quick-win-your-first-cv-program"><span class="header-section-number">0.19</span> Quick Win: Your First CV Program</a></li>
+  <li><a href="#the-big-picture-why-this-matters" id="toc-the-big-picture-why-this-matters" class="nav-link" data-scroll-target="#the-big-picture-why-this-matters"><span class="header-section-number">0.20</span> The Big Picture: Why This Matters</a></li>
+  <li><a href="#whats-next-1" id="toc-whats-next-1" class="nav-link" data-scroll-target="#whats-next-1"><span class="header-section-number">0.21</span> What’s Next?</a></li>
+  <li><a href="#key-takeaways" id="toc-key-takeaways" class="nav-link" data-scroll-target="#key-takeaways"><span class="header-section-number">0.22</span> Key Takeaways</a></li>
+  </ul>
+</nav>
+    </div>
+<!-- main -->
+<main class="content quarto-banner-title-block" id="quarto-document-content">
+
+
+
+
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="https://images.unsplash.com/photo-1526374965328-7f61d4dc18c5?ixlib=rb-4.0.3&amp;ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&amp;auto=format&amp;fit=crop&amp;w=2070&amp;q=80" class="img-fluid figure-img"></p>
+<figcaption class="figure-caption">Robot eye representing computer vision</figcaption>
+</figure>
+</div>
+<section id="the-magic-moment-when-machines-learn-to-see" class="level2" data-number="0.1">
+<h2 data-number="0.1" class="anchored" data-anchor-id="the-magic-moment-when-machines-learn-to-see"><span class="header-section-number">0.1</span> The Magic Moment: When Machines Learn to See</h2>
+<p>Imagine you’re teaching a friend to recognize your cat in photos. You’d point out the whiskers, the pointed ears, maybe that distinctive patch of white fur. Now imagine doing the same thing with a computer—except the computer doesn’t understand “whiskers” or “cute.” It only sees numbers.</p>
+<p>That’s exactly what computer vision is: <strong>teaching machines to understand and interpret visual information the way humans do</strong>.</p>
+<div class="callout callout-style-default callout-tip callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Tip
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p><strong>Try it yourself!</strong> Open this <a href="https://colab.research.google.com/github/hasanpasha/quarto_blog_hasan/blob/main/notebooks/cv-foundations-01-why-computer-vision.ipynb">interactive Colab notebook</a> to see computer vision in action as we build this tutorial series.</p>
+</div>
+</div>
+</section>
+<section id="the-story-that-started-it-all" class="level2" data-number="0.2">
+<h2 data-number="0.2" class="anchored" data-anchor-id="the-story-that-started-it-all"><span class="header-section-number">0.2</span> The Story That Started It All</h2>
+<p>Picture this: You’re showing your grandmother a photo on your phone. Within milliseconds, she says, “Oh, that’s your cat Whiskers sitting on the windowsill!” But if you asked a computer the same question just 15 years ago, it would have been completely stumped.</p>
+<p>Today? Your phone can not only recognize your cat but also tell you the breed, suggest similar photos, and even create a cute slideshow. <strong>How did we get here?</strong></p>
+<p>That’s the magic of computer vision – teaching machines to see and understand the world like we do.</p>
+</section>
+<section id="what-is-computer-vision-really" class="level2" data-number="0.3">
+<h2 data-number="0.3" class="anchored" data-anchor-id="what-is-computer-vision-really"><span class="header-section-number">0.3</span> What Is Computer Vision, Really?</h2>
+<p>Let’s start with a simple experiment. Look at this image:</p>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="https://unsplash.com/de/fotos/eine-orange-weisse-katze-die-auf-einem-stuhl-sitzt-ESlm5awnvH0.png" class="img-fluid figure-img"></p>
+<figcaption class="figure-caption">A simple scene</figcaption>
+</figure>
+</div>
+<p>In less than a second, your brain processed: - There’s a cat - It’s sitting on a chair<br>
+- The chair is brown</p>
+<p>But to a computer, this image is just a grid of numbers. <strong>Our job is to bridge that gap.</strong></p>
+</section>
+<section id="the-aha-moment-why-this-matters" class="level2" data-number="0.4">
+<h2 data-number="0.4" class="anchored" data-anchor-id="the-aha-moment-why-this-matters"><span class="header-section-number">0.4</span> The “Aha!” Moment: Why This Matters</h2>
+<p>Computer vision isn’t just academic curiosity. It’s changing the world right now:</p>
+<section id="self-driving-cars" class="level3" data-number="0.4.1">
+<h3 data-number="0.4.1" class="anchored" data-anchor-id="self-driving-cars"><span class="header-section-number">0.4.1</span> 🚗 <strong>Self-Driving Cars</strong></h3>
+<p>Every Tesla on the road uses computer vision to see lane lines, traffic lights, and pedestrians. It’s literally saving lives.</p>
+</section>
+<section id="medical-diagnosis" class="level3" data-number="0.4.2">
+<h3 data-number="0.4.2" class="anchored" data-anchor-id="medical-diagnosis"><span class="header-section-number">0.4.2</span> 🏥 <strong>Medical Diagnosis</strong></h3>
+<p>Doctors use CV to spot cancer in X-rays faster and more accurately than ever before.</p>
+</section>
+<section id="your-daily-life" class="level3" data-number="0.4.3">
+<h3 data-number="0.4.3" class="anchored" data-anchor-id="your-daily-life"><span class="header-section-number">0.4.3</span> 📱 <strong>Your Daily Life</strong></h3>
+<ul>
+<li>Unlocking your phone with Face ID</li>
+<li>Google Photos organizing your pictures</li>
+<li>Instagram filters that put bunny ears on your head</li>
+</ul>
+</section>
+<section id="agriculture" class="level3" data-number="0.4.4">
+<h3 data-number="0.4.4" class="anchored" data-anchor-id="agriculture"><span class="header-section-number">0.4.4</span> 🌾 <strong>Agriculture</strong></h3>
+<p>Farmers use drones with computer vision to monitor crop health and optimize yields.</p>
+</section>
+</section>
+<section id="the-beautiful-challenge" class="level2" data-number="0.5">
+<h2 data-number="0.5" class="anchored" data-anchor-id="the-beautiful-challenge"><span class="header-section-number">0.5</span> The Beautiful Challenge</h2>
+<p>Here’s what makes computer vision fascinating: <strong>It’s both incredibly simple and mind-bogglingly complex.</strong></p>
+<p>Simple because the goal is clear: help computers understand images.</p>
+<p>Complex because human vision is the result of millions of years of evolution, and we’re trying to replicate it with math and code.</p>
+</section>
+<section id="your-first-taste-what-does-a-computer-see" class="level2" data-number="0.6">
+<h2 data-number="0.6" class="anchored" data-anchor-id="your-first-taste-what-does-a-computer-see"><span class="header-section-number">0.6</span> Your First Taste: What Does a Computer See?</h2>
+<p>Let’s peek behind the curtain. Here’s what an image looks like to a computer:</p>
+<div class="cell" data-execution_count="2">
+<details>
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb1-1"><a href="#cb1-1"></a><span class="im">import</span> numpy <span class="im">as</span> np</span>
+<span id="cb1-2"><a href="#cb1-2"></a><span class="im">import</span> matplotlib.pyplot <span class="im">as</span> plt</span>
+<span id="cb1-3"><a href="#cb1-3"></a></span>
+<span id="cb1-4"><a href="#cb1-4"></a><span class="co"># Create a simple 5x5 "image" (just numbers!)</span></span>
+<span id="cb1-5"><a href="#cb1-5"></a>simple_image <span class="op">=</span> np.array([</span>
+<span id="cb1-6"><a href="#cb1-6"></a>    [<span class="dv">255</span>, <span class="dv">255</span>, <span class="dv">255</span>, <span class="dv">255</span>, <span class="dv">255</span>],</span>
+<span id="cb1-7"><a href="#cb1-7"></a>    [<span class="dv">255</span>,   <span class="dv">0</span>,   <span class="dv">0</span>,   <span class="dv">0</span>, <span class="dv">255</span>],</span>
+<span id="cb1-8"><a href="#cb1-8"></a>    [<span class="dv">255</span>,   <span class="dv">0</span>, <span class="dv">128</span>,   <span class="dv">0</span>, <span class="dv">255</span>],</span>
+<span id="cb1-9"><a href="#cb1-9"></a>    [<span class="dv">255</span>,   <span class="dv">0</span>,   <span class="dv">0</span>,   <span class="dv">0</span>, <span class="dv">255</span>],</span>
+<span id="cb1-10"><a href="#cb1-10"></a>    [<span class="dv">255</span>, <span class="dv">255</span>, <span class="dv">255</span>, <span class="dv">255</span>, <span class="dv">255</span>]</span>
+<span id="cb1-11"><a href="#cb1-11"></a>])</span>
+<span id="cb1-12"><a href="#cb1-12"></a></span>
+<span id="cb1-13"><a href="#cb1-13"></a><span class="co"># Show it as an image</span></span>
+<span id="cb1-14"><a href="#cb1-14"></a>plt.figure(figsize<span class="op">=</span>(<span class="dv">8</span>, <span class="dv">4</span>))</span>
+<span id="cb1-15"><a href="#cb1-15"></a></span>
+<span id="cb1-16"><a href="#cb1-16"></a>plt.subplot(<span class="dv">1</span>, <span class="dv">2</span>, <span class="dv">1</span>)</span>
+<span id="cb1-17"><a href="#cb1-17"></a>plt.imshow(simple_image, cmap<span class="op">=</span><span class="st">'gray'</span>)</span>
+<span id="cb1-18"><a href="#cb1-18"></a>plt.title(<span class="st">"What You See"</span>)</span>
+<span id="cb1-19"><a href="#cb1-19"></a>plt.axis(<span class="st">'off'</span>)</span>
+<span id="cb1-20"><a href="#cb1-20"></a></span>
+<span id="cb1-21"><a href="#cb1-21"></a>plt.subplot(<span class="dv">1</span>, <span class="dv">2</span>, <span class="dv">2</span>)</span>
+<span id="cb1-22"><a href="#cb1-22"></a>plt.imshow(simple_image, cmap<span class="op">=</span><span class="st">'gray'</span>)</span>
+<span id="cb1-23"><a href="#cb1-23"></a>plt.title(<span class="st">"What the Computer Sees"</span>)</span>
+<span id="cb1-24"><a href="#cb1-24"></a><span class="cf">for</span> i <span class="kw">in</span> <span class="bu">range</span>(<span class="dv">5</span>):</span>
+<span id="cb1-25"><a href="#cb1-25"></a>    <span class="cf">for</span> j <span class="kw">in</span> <span class="bu">range</span>(<span class="dv">5</span>):</span>
+<span id="cb1-26"><a href="#cb1-26"></a>        plt.text(j, i, <span class="bu">str</span>(simple_image[i, j]), </span>
+<span id="cb1-27"><a href="#cb1-27"></a>                ha<span class="op">=</span><span class="st">'center'</span>, va<span class="op">=</span><span class="st">'center'</span>, color<span class="op">=</span><span class="st">'red'</span>, fontsize<span class="op">=</span><span class="dv">8</span>)</span>
+<span id="cb1-28"><a href="#cb1-28"></a></span>
+<span id="cb1-29"><a href="#cb1-29"></a>plt.tight_layout()</span>
+<span id="cb1-30"><a href="#cb1-30"></a>plt.show()</span>
+<span id="cb1-31"><a href="#cb1-31"></a></span>
+<span id="cb1-32"><a href="#cb1-32"></a><span class="bu">print</span>(<span class="st">"The computer sees this as a 5x5 grid of numbers:"</span>)</span>
+<span id="cb1-33"><a href="#cb1-33"></a><span class="bu">print</span>(simple_image)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+</div>
+<p><strong>Try this yourself!</strong> 👆 <a href="https://colab.research.google.com/drive/1ZxQz9ZxQz9ZxQz9ZxQz9ZxQz9ZxQz9ZxQz">Open in Colab</a></p>
+</section>
+<section id="the-journey-were-taking-together" class="level2" data-number="0.7">
+<h2 data-number="0.7" class="anchored" data-anchor-id="the-journey-were-taking-together"><span class="header-section-number">0.7</span> The Journey We’re Taking Together</h2>
+<p>In this series, we’ll follow a specific path:</p>
+<section id="week-1-2-understanding-the-basics" class="level3" data-number="0.7.1">
+<h3 data-number="0.7.1" class="anchored" data-anchor-id="week-1-2-understanding-the-basics"><span class="header-section-number">0.7.1</span> <strong>Week 1-2: Understanding the Basics</strong></h3>
+<ul>
+<li>How images are stored as numbers</li>
+<li>Basic operations (resize, crop, rotate)</li>
+<li>Your first “Hello, Computer Vision!” program</li>
+</ul>
+</section>
+<section id="week-3-4-classical-techniques" class="level3" data-number="0.7.2">
+<h3 data-number="0.7.2" class="anchored" data-anchor-id="week-3-4-classical-techniques"><span class="header-section-number">0.7.2</span> <strong>Week 3-4: Classical Techniques</strong></h3>
+<ul>
+<li>Finding edges and shapes</li>
+<li>Detecting objects the “old school” way</li>
+<li>Building a simple face detector</li>
+</ul>
+</section>
+<section id="week-5-6-the-deep-learning-revolution" class="level3" data-number="0.7.3">
+<h3 data-number="0.7.3" class="anchored" data-anchor-id="week-5-6-the-deep-learning-revolution"><span class="header-section-number">0.7.3</span> <strong>Week 5-6: The Deep Learning Revolution</strong></h3>
+<ul>
+<li>Why neural networks changed everything</li>
+<li>Using pre-trained models (the smart shortcut)</li>
+<li>Building your first image classifier</li>
+</ul>
+</section>
+<section id="week-7-8-modern-foundation-models" class="level3" data-number="0.7.4">
+<h3 data-number="0.7.4" class="anchored" data-anchor-id="week-7-8-modern-foundation-models"><span class="header-section-number">0.7.4</span> <strong>Week 7-8: Modern Foundation Models</strong></h3>
+<ul>
+<li>What is DINOv2 and why it’s amazing</li>
+<li>Extracting features from any image</li>
+<li>Your capstone project</li>
+</ul>
+</section>
+</section>
+<section id="the-pareto-principle-in-action" class="level2" data-number="0.8">
+<h2 data-number="0.8" class="anchored" data-anchor-id="the-pareto-principle-in-action"><span class="header-section-number">0.8</span> The Pareto Principle in Action</h2>
+<p>Here’s our secret weapon: <strong>The 80/20 rule.</strong></p>
+<ul>
+<li>80% of computer vision tasks use just 20% of the available techniques</li>
+<li>80% of your results will come from 20% of your effort</li>
+<li>80% of real-world applications use pre-trained models (not custom training)</li>
+</ul>
+<p>We’ll focus on that crucial 20% that gives you maximum impact.</p>
+</section>
+<section id="what-youll-build" class="level2" data-number="0.9">
+<h2 data-number="0.9" class="anchored" data-anchor-id="what-youll-build"><span class="header-section-number">0.9</span> What You’ll Build</h2>
+<p>By the end of this series, you’ll have created:</p>
+<ol type="1">
+<li><strong>A simple edge detector</strong> (Week 2)</li>
+<li><strong>An object counter</strong> (Week 3)</li>
+<li><strong>A face recognition system</strong> (Week 4)</li>
+<li><strong>An image classifier</strong> (Week 6)</li>
+<li><strong>A feature extraction tool</strong> (Week 7)</li>
+<li><strong>Your own creative project</strong> (Week 8)</li>
+</ol>
+</section>
+<section id="the-tools-of-the-trade" class="level2" data-number="0.10">
+<h2 data-number="0.10" class="anchored" data-anchor-id="the-tools-of-the-trade"><span class="header-section-number">0.10</span> The Tools of the Trade</h2>
+<p>We’ll use the same tools that professionals use:</p>
+<ul>
+<li><strong>Python</strong>: The language of choice for computer vision</li>
+<li><strong>OpenCV</strong>: The Swiss Army knife of image processing</li>
+<li><strong>PyTorch</strong>: For deep learning magic</li>
+<li><strong>Google Colab</strong>: Free GPU power for everyone</li>
+<li><strong>HuggingFace</strong>: Pre-trained models made easy</li>
+</ul>
+<p>Don’t worry if these names sound scary – we’ll introduce each one gently.</p>
+</section>
+<section id="a-personal-promise" class="level2" data-number="0.11">
+<h2 data-number="0.11" class="anchored" data-anchor-id="a-personal-promise"><span class="header-section-number">0.11</span> A Personal Promise</h2>
+<p>I promise you this: <strong>Every concept will be explained with simple analogies.</strong></p>
+<ul>
+<li>Neural networks? Think of them as very picky art critics.</li>
+<li>Convolutions? Imagine sliding a magnifying glass over a photo.</li>
+<li>Transfer learning? Like learning to drive a truck after you know how to drive a car.</li>
+</ul>
+</section>
+<section id="your-first-assignment-optional-but-fun" class="level2" data-number="0.12">
+<h2 data-number="0.12" class="anchored" data-anchor-id="your-first-assignment-optional-but-fun"><span class="header-section-number">0.12</span> Your First Assignment (Optional but Fun!)</h2>
+<p>Before we dive into code, try this thought experiment:</p>
+<ol type="1">
+<li>Take a photo with your phone</li>
+<li>Look at it for 5 seconds</li>
+<li>Write down everything you can see</li>
+<li>Now imagine explaining each item to someone who has never seen the world</li>
+</ol>
+<p>That list you just made? That’s what we’re teaching computers to do.</p>
+</section>
+<section id="whats-next" class="level2" data-number="0.13">
+<h2 data-number="0.13" class="anchored" data-anchor-id="whats-next"><span class="header-section-number">0.13</span> What’s Next?</h2>
+<p>In our next post, <a href="../../../posts/series/cv-foundations/02-images-as-data.html"><strong>“Images as Data: How Computers See the World”</strong></a>, we’ll:</p>
+<ul>
+<li>Load our first image with Python</li>
+<li>Explore how colors become numbers<br>
+</li>
+<li>Play with pixels like digital Lego blocks</li>
+<li>Create our first simple image filter</li>
+</ul>
+</section>
+<section id="join-the-journey" class="level2" data-number="0.14">
+<h2 data-number="0.14" class="anchored" data-anchor-id="join-the-journey"><span class="header-section-number">0.14</span> Join the Journey</h2>
+<p>This series is designed to be interactive. I encourage you to:</p>
+<ul>
+<li><strong>Ask questions</strong> in the comments</li>
+<li><strong>Share your experiments</strong> on social media</li>
+<li><strong>Suggest improvements</strong> to make this better for everyone</li>
+</ul>
+<p>Remember: every expert was once a beginner. The only difference is that they started.</p>
+<p><strong>Are you ready to teach machines to see?</strong></p>
+<div class="callout callout-style-default callout-tip callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Ready to Start Coding?
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>Jump into our hands-on Colab notebook where you’ll run your first computer vision code: <a href="https://colab.research.google.com/drive/1ZxQz9ZxQz9ZxQz9ZxQz9ZxQz9ZxQz9ZxQz"><strong>First Steps in Computer Vision</strong></a></p>
+</div>
+</div>
+<div class="callout callout-style-default callout-note callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Series Navigation
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<ul>
+<li><strong>Next</strong>: <a href="../02-images-as-data/">Images as Data: How Computers See the World</a></li>
+<li><strong>Series Home</strong>: <a href="../../../posts/series/computer-vision-foundations.html">Computer Vision Foundations</a></li>
+</ul>
+</div>
+</div>
+<hr>
+<p><em>This post is part of the <a href="../../../posts/series/computer-vision-foundations.html">Computer Vision Foundations Series</a>. Each post builds on the previous one, so take your time and enjoy the journey!</em></p>
+</section>
+<section id="your-first-computer-vision-moment" class="level2" data-number="0.15">
+<h2 data-number="0.15" class="anchored" data-anchor-id="your-first-computer-vision-moment"><span class="header-section-number">0.15</span> Your First Computer Vision Moment</h2>
+<p>Let’s start with something magical. Here’s what happens when we show a computer this image:</p>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="https://images.unsplash.com/photo-1601758228041-f3b2795255f1?ixlib=rb-4.0.3&amp;ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&amp;auto=format&amp;fit=crop&amp;w=2070&amp;q=80" class="img-fluid figure-img"></p>
+<figcaption class="figure-caption">Cat and dog together</figcaption>
+</figure>
+</div>
+<div class="sourceCode" id="cb2"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb2-1"><a href="#cb2-1"></a><span class="co"># What the computer actually "sees"</span></span>
+<span id="cb2-2"><a href="#cb2-2"></a><span class="im">import</span> numpy <span class="im">as</span> np</span>
+<span id="cb2-3"><a href="#cb2-3"></a><span class="im">import</span> matplotlib.pyplot <span class="im">as</span> plt</span>
+<span id="cb2-4"><a href="#cb2-4"></a><span class="im">from</span> PIL <span class="im">import</span> Image</span>
+<span id="cb2-5"><a href="#cb2-5"></a><span class="im">import</span> requests</span>
+<span id="cb2-6"><a href="#cb2-6"></a><span class="im">from</span> io <span class="im">import</span> BytesIO</span>
+<span id="cb2-7"><a href="#cb2-7"></a></span>
+<span id="cb2-8"><a href="#cb2-8"></a><span class="co"># Load image from URL</span></span>
+<span id="cb2-9"><a href="#cb2-9"></a>url <span class="op">=</span> <span class="st">"https://images.unsplash.com/photo-1601758228041-f3b2795255f1?ixlib=rb-4.0.3&amp;ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&amp;auto=format&amp;fit=crop&amp;w=400&amp;q=80"</span></span>
+<span id="cb2-10"><a href="#cb2-10"></a>response <span class="op">=</span> requests.get(url)</span>
+<span id="cb2-11"><a href="#cb2-11"></a>img <span class="op">=</span> Image.<span class="bu">open</span>(BytesIO(response.content))</span>
+<span id="cb2-12"><a href="#cb2-12"></a>img_array <span class="op">=</span> np.array(img)</span>
+<span id="cb2-13"><a href="#cb2-13"></a></span>
+<span id="cb2-14"><a href="#cb2-14"></a><span class="bu">print</span>(<span class="ss">f"Image shape: </span><span class="sc">{</span>img_array<span class="sc">.</span>shape<span class="sc">}</span><span class="ss">"</span>)</span>
+<span id="cb2-15"><a href="#cb2-15"></a><span class="bu">print</span>(<span class="ss">f"First few pixels: </span><span class="sc">{</span>img_array[<span class="dv">0</span>, <span class="dv">0</span>]<span class="sc">}</span><span class="ss">"</span>)  <span class="co"># RGB values for top-left pixel</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p><strong>Output:</strong></p>
+<pre><code>Image shape: (267, 400, 3)  # height x width x color channels
+First few pixels: [123, 145, 167]  # Red, Green, Blue values</code></pre>
+</section>
+<section id="real-world-computer-vision-magic" class="level2" data-number="0.16">
+<h2 data-number="0.16" class="anchored" data-anchor-id="real-world-computer-vision-magic"><span class="header-section-number">0.16</span> Real-World Computer Vision Magic</h2>
+<p>Here are some mind-blowing applications that exist <strong>right now</strong>:</p>
+<section id="medical-diagnosis-1" class="level3" data-number="0.16.1">
+<h3 data-number="0.16.1" class="anchored" data-anchor-id="medical-diagnosis-1"><span class="header-section-number">0.16.1</span> 1. Medical Diagnosis</h3>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="https://images.unsplash.com/photo-1559757148-5c350d0d3c56?ixlib=rb-4.0.3&amp;ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&amp;auto=format&amp;fit=crop&amp;w=400&amp;q=80" class="img-fluid figure-img"></p>
+<figcaption class="figure-caption">Medical scan</figcaption>
+</figure>
+</div>
+<p>Computer vision can detect cancer in medical scans with <strong>higher accuracy than human doctors</strong>. Google’s DeepMind can diagnose over 50 eye diseases just from retinal photos.</p>
+</section>
+<section id="autonomous-vehicles" class="level3" data-number="0.16.2">
+<h3 data-number="0.16.2" class="anchored" data-anchor-id="autonomous-vehicles"><span class="header-section-number">0.16.2</span> 2. Autonomous Vehicles</h3>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="https://images.unsplash.com/photo-1617788138017-80ad40651399?ixlib=rb-4.0.3&amp;ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&amp;auto=format&amp;fit=crop&amp;w=400&amp;q=80" class="img-fluid figure-img"></p>
+<figcaption class="figure-caption">Self-driving car</figcaption>
+</figure>
+</div>
+<p>Tesla’s cars process <strong>36 images per second</strong> from 8 cameras to navigate roads, recognize traffic signs, and avoid pedestrians.</p>
+</section>
+<section id="agriculture-revolution" class="level3" data-number="0.16.3">
+<h3 data-number="0.16.3" class="anchored" data-anchor-id="agriculture-revolution"><span class="header-section-number">0.16.3</span> 3. Agriculture Revolution</h3>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="https://images.unsplash.com/photo-1581833971358-2c8b550f87b3?ixlib=rb-4.0.3&amp;ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&amp;auto=format&amp;fit=crop&amp;w=400&amp;q=80" class="img-fluid figure-img"></p>
+<figcaption class="figure-caption">Drone over crops</figcaption>
+</figure>
+</div>
+<p>Drones equipped with computer vision can identify diseased crops, count plants, and optimize irrigation—<strong>increasing yields by 20-30%</strong>.</p>
+</section>
+</section>
+<section id="the-journey-ahead-your-cv-learning-path" class="level2" data-number="0.17">
+<h2 data-number="0.17" class="anchored" data-anchor-id="the-journey-ahead-your-cv-learning-path"><span class="header-section-number">0.17</span> The Journey Ahead: Your CV Learning Path</h2>
+<p>In this series, we’ll build your computer vision skills using the <strong>80/20 principle</strong>—focusing on the 20% of concepts that give you 80% of the results.</p>
+<section id="our-learning-philosophy-inspired-by-fastai" class="level3" data-number="0.17.1">
+<h3 data-number="0.17.1" class="anchored" data-anchor-id="our-learning-philosophy-inspired-by-fastai"><span class="header-section-number">0.17.1</span> Our Learning Philosophy (Inspired by fastai)</h3>
+<ol type="1">
+<li><strong>Start with working code</strong> → Build intuition → Understand theory</li>
+<li><strong>Top-down learning</strong> → See the big picture first</li>
+<li><strong>Practical projects</strong> → Build real applications</li>
+<li><strong>Progressive complexity</strong> → From pixels to foundation models</li>
+</ol>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="https://images.unsplash.com/photo-1516321318423-f06f85e504b3?ixlib=rb-4.0.3&amp;ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&amp;auto=format&amp;fit=crop&amp;w=400&amp;q=80" class="img-fluid figure-img"></p>
+<figcaption class="figure-caption">Learning path visualization</figcaption>
+</figure>
+</div>
+</section>
+<section id="what-youll-build-1" class="level3" data-number="0.17.2">
+<h3 data-number="0.17.2" class="anchored" data-anchor-id="what-youll-build-1"><span class="header-section-number">0.17.2</span> What You’ll Build</h3>
+<p>By the end of this series, you’ll have: - ✅ A complete understanding of how images work as data - ✅ Hands-on experience with OpenCV and modern deep learning - ✅ A working web app that combines classical and modern CV techniques - ✅ The foundation to build your own computer vision projects</p>
+</section>
+</section>
+<section id="your-first-taste-images-as-numbers" class="level2" data-number="0.18">
+<h2 data-number="0.18" class="anchored" data-anchor-id="your-first-taste-images-as-numbers"><span class="header-section-number">0.18</span> Your First Taste: Images as Numbers</h2>
+<p>Let’s demystify the magic right now. Here’s how a computer “sees” a simple image:</p>
+<div class="sourceCode" id="cb4"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb4-1"><a href="#cb4-1"></a><span class="co"># Create a tiny 3x3 "image" of a cross pattern</span></span>
+<span id="cb4-2"><a href="#cb4-2"></a>cross <span class="op">=</span> np.array([</span>
+<span id="cb4-3"><a href="#cb4-3"></a>    [[<span class="dv">255</span>, <span class="dv">255</span>, <span class="dv">255</span>], [<span class="dv">0</span>, <span class="dv">0</span>, <span class="dv">0</span>], [<span class="dv">255</span>, <span class="dv">255</span>, <span class="dv">255</span>]],      <span class="co"># White, Black, White</span></span>
+<span id="cb4-4"><a href="#cb4-4"></a>    [[<span class="dv">0</span>, <span class="dv">0</span>, <span class="dv">0</span>], [<span class="dv">0</span>, <span class="dv">0</span>, <span class="dv">0</span>], [<span class="dv">0</span>, <span class="dv">0</span>, <span class="dv">0</span>]],                  <span class="co"># Black, Black, Black  </span></span>
+<span id="cb4-5"><a href="#cb4-5"></a>    [[<span class="dv">255</span>, <span class="dv">255</span>, <span class="dv">255</span>], [<span class="dv">0</span>, <span class="dv">0</span>, <span class="dv">0</span>], [<span class="dv">255</span>, <span class="dv">255</span>, <span class="dv">255</span>]]       <span class="co"># White, Black, White</span></span>
+<span id="cb4-6"><a href="#cb4-6"></a>])</span>
+<span id="cb4-7"><a href="#cb4-7"></a></span>
+<span id="cb4-8"><a href="#cb4-8"></a>plt.figure(figsize<span class="op">=</span>(<span class="dv">3</span>, <span class="dv">3</span>))</span>
+<span id="cb4-9"><a href="#cb4-9"></a>plt.imshow(cross)</span>
+<span id="cb4-10"><a href="#cb4-10"></a>plt.title(<span class="st">"A 3x3 Cross Pattern"</span>)</span>
+<span id="cb4-11"><a href="#cb4-11"></a>plt.axis(<span class="st">'off'</span>)</span>
+<span id="cb4-12"><a href="#cb4-12"></a>plt.show()</span>
+<span id="cb4-13"><a href="#cb4-13"></a></span>
+<span id="cb4-14"><a href="#cb4-14"></a><span class="bu">print</span>(<span class="st">"What the computer sees:"</span>)</span>
+<span id="cb4-15"><a href="#cb4-15"></a><span class="bu">print</span>(cross[:,:,<span class="dv">0</span>])  <span class="co"># Just the red channel</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p><strong>Output:</strong></p>
+<pre><code>What the computer sees:
+[[255   0 255]
+ [  0   0   0]
+ [255   0 255]]</code></pre>
+<p><strong>Mind = Blown!</strong> 🤯 The computer doesn’t see a “cross”—it sees a pattern of numbers. But with the right algorithms, those numbers become meaningful.</p>
+</section>
+<section id="quick-win-your-first-cv-program" class="level2" data-number="0.19">
+<h2 data-number="0.19" class="anchored" data-anchor-id="quick-win-your-first-cv-program"><span class="header-section-number">0.19</span> Quick Win: Your First CV Program</h2>
+<p>Let’s build something <strong>right now</strong> that will amaze you:</p>
+<div class="sourceCode" id="cb6"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb6-1"><a href="#cb6-1"></a><span class="im">import</span> cv2</span>
+<span id="cb6-2"><a href="#cb6-2"></a><span class="im">import</span> numpy <span class="im">as</span> np</span>
+<span id="cb6-3"><a href="#cb6-3"></a><span class="im">from</span> google.colab.patches <span class="im">import</span> cv2_imshow</span>
+<span id="cb6-4"><a href="#cb6-4"></a></span>
+<span id="cb6-5"><a href="#cb6-5"></a><span class="co"># Load an image from URL</span></span>
+<span id="cb6-6"><a href="#cb6-6"></a><span class="kw">def</span> load_image_from_url(url):</span>
+<span id="cb6-7"><a href="#cb6-7"></a>    response <span class="op">=</span> requests.get(url)</span>
+<span id="cb6-8"><a href="#cb6-8"></a>    img_array <span class="op">=</span> np.frombuffer(response.content, np.uint8)</span>
+<span id="cb6-9"><a href="#cb6-9"></a>    img <span class="op">=</span> cv2.imdecode(img_array, cv2.IMREAD_COLOR)</span>
+<span id="cb6-10"><a href="#cb6-10"></a>    <span class="cf">return</span> img</span>
+<span id="cb6-11"><a href="#cb6-11"></a></span>
+<span id="cb6-12"><a href="#cb6-12"></a><span class="co"># Load a sample image</span></span>
+<span id="cb6-13"><a href="#cb6-13"></a>img_url <span class="op">=</span> <span class="st">"https://images.unsplash.com/photo-1574158622682-e40e69881006?ixlib=rb-4.0.3&amp;ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&amp;auto=format&amp;fit=crop&amp;w=400&amp;q=80"</span></span>
+<span id="cb6-14"><a href="#cb6-14"></a>img <span class="op">=</span> load_image_from_url(img_url)</span>
+<span id="cb6-15"><a href="#cb6-15"></a></span>
+<span id="cb6-16"><a href="#cb6-16"></a><span class="co"># Apply a simple "magic" filter</span></span>
+<span id="cb6-17"><a href="#cb6-17"></a>magic_img <span class="op">=</span> cv2.GaussianBlur(img, (<span class="dv">51</span>, <span class="dv">51</span>), <span class="dv">0</span>)</span>
+<span id="cb6-18"><a href="#cb6-18"></a></span>
+<span id="cb6-19"><a href="#cb6-19"></a><span class="co"># Show before and after</span></span>
+<span id="cb6-20"><a href="#cb6-20"></a><span class="bu">print</span>(<span class="st">"Original:"</span>)</span>
+<span id="cb6-21"><a href="#cb6-21"></a>cv2_imshow(img)</span>
+<span id="cb6-22"><a href="#cb6-22"></a><span class="bu">print</span>(<span class="st">"</span><span class="ch">\n</span><span class="st">After magic filter:"</span>)</span>
+<span id="cb6-23"><a href="#cb6-23"></a>cv2_imshow(magic_img)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p><strong>Congratulations!</strong> 🎉 You just applied your first computer vision algorithm—a Gaussian blur that creates a dreamy, artistic effect.</p>
+</section>
+<section id="the-big-picture-why-this-matters" class="level2" data-number="0.20">
+<h2 data-number="0.20" class="anchored" data-anchor-id="the-big-picture-why-this-matters"><span class="header-section-number">0.20</span> The Big Picture: Why This Matters</h2>
+<p>Computer vision isn’t just about cool demos. It’s about <strong>solving real problems</strong>:</p>
+<ul>
+<li><strong>Healthcare</strong>: Early disease detection saves lives</li>
+<li><strong>Safety</strong>: Autonomous systems prevent accidents<br>
+</li>
+<li><strong>Accessibility</strong>: Visual assistance for the visually impaired</li>
+<li><strong>Environment</strong>: Monitoring climate change and wildlife</li>
+<li><strong>Business</strong>: Automating quality control and inventory</li>
+</ul>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="https://images.unsplash.com/photo-1451187580459-43490279c0fa?ixlib=rb-4.0.3&amp;ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&amp;auto=format&amp;fit=crop&amp;w=400&amp;q=80" class="img-fluid figure-img"></p>
+<figcaption class="figure-caption">Impact of computer vision</figcaption>
+</figure>
+</div>
+</section>
+<section id="whats-next-1" class="level2" data-number="0.21">
+<h2 data-number="0.21" class="anchored" data-anchor-id="whats-next-1"><span class="header-section-number">0.21</span> What’s Next?</h2>
+<p>In our next post, <strong>“Images as Data: The Digital Lego Blocks”</strong>, we’ll dive deeper into: - How pixels work as building blocks - Color spaces and why they matter<br>
+- Your first image manipulation techniques - Building a simple photo editor</p>
+<div class="callout callout-style-default callout-note callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Note
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p><strong>Ready to dive deeper?</strong> Click <a href="https://colab.research.google.com/github/hasanpasha/quarto_blog_hasan/blob/main/notebooks/cv-foundations-01-why-computer-vision.ipynb">here for the interactive Colab notebook</a> where you can run all the code examples and experiment with your own images!</p>
+</div>
+</div>
+</section>
+<section id="key-takeaways" class="level2" data-number="0.22">
+<h2 data-number="0.22" class="anchored" data-anchor-id="key-takeaways"><span class="header-section-number">0.22</span> Key Takeaways</h2>
+<ul>
+<li><strong>Computer vision = teaching machines to understand images</strong></li>
+<li><strong>Images are just arrays of numbers</strong> (but meaningful ones!)</li>
+<li><strong>Start with working code, build intuition, then understand theory</strong></li>
+<li><strong>Real applications are already changing the world</strong></li>
+<li><strong>You can build amazing things with surprisingly little code</strong></li>
+</ul>
+<hr>
+<p><strong>Next up</strong>: <a href="../../../posts/series/cv-foundations/02-images-as-data.html">Images as Data: The Digital Lego Blocks →</a></p>
+<p><strong>Series Navigation</strong>: <a href="../../../posts/series/computer-vision-foundations.html">← Back to CV Foundations Overview</a></p>
+
+
+<!-- -->
+
+</section>
+
+<div id="quarto-appendix" class="default"><section class="quarto-appendix-contents"><h2 class="anchored quarto-appendix-heading">Reuse</h2><div id="quarto-reuse" class="quarto-appendix-contents"><div>CC BY-NC-SA 4.0</div></div></section><section class="quarto-appendix-contents"><h2 class="anchored quarto-appendix-heading">Citation</h2><div><div class="quarto-appendix-secondary-label">BibTeX citation:</div><pre class="sourceCode code-with-copy quarto-appendix-bibtex"><code class="sourceCode bibtex">@online{2025,
+  author = {, Hasan},
+  title = {Why {Computer} {Vision?} {Teaching} a {Robot} to {See}},
+  date = {2025-01-15},
+  langid = {en}
+}
+</code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre><div class="quarto-appendix-secondary-label">For attribution, please cite this work as:</div><div id="ref-2025" class="csl-entry quarto-appendix-citeas" role="listitem">
+Hasan. 2025. <span>“Why Computer Vision? Teaching a Robot to
+See.”</span> January 15, 2025.
+</div></div></section></div></main> <!-- /main -->
+<script id="quarto-html-after-body" type="application/javascript">
+window.document.addEventListener("DOMContentLoaded", function (event) {
+  const toggleBodyColorMode = (bsSheetEl) => {
+    const mode = bsSheetEl.getAttribute("data-mode");
+    const bodyEl = window.document.querySelector("body");
+    if (mode === "dark") {
+      bodyEl.classList.add("quarto-dark");
+      bodyEl.classList.remove("quarto-light");
+    } else {
+      bodyEl.classList.add("quarto-light");
+      bodyEl.classList.remove("quarto-dark");
+    }
+  }
+  const toggleBodyColorPrimary = () => {
+    const bsSheetEl = window.document.querySelector("link#quarto-bootstrap");
+    if (bsSheetEl) {
+      toggleBodyColorMode(bsSheetEl);
+    }
+  }
+  toggleBodyColorPrimary();  
+  const icon = "";
+  const anchorJS = new window.AnchorJS();
+  anchorJS.options = {
+    placement: 'right',
+    icon: icon
+  };
+  anchorJS.add('.anchored');
+  const isCodeAnnotation = (el) => {
+    for (const clz of el.classList) {
+      if (clz.startsWith('code-annotation-')) {                     
+        return true;
+      }
+    }
+    return false;
+  }
+  const clipboard = new window.ClipboardJS('.code-copy-button', {
+    text: function(trigger) {
+      const codeEl = trigger.previousElementSibling.cloneNode(true);
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
+        }
+      }
+      return codeEl.innerText;
+    }
+  });
+  clipboard.on('success', function(e) {
+    // button target
+    const button = e.trigger;
+    // don't keep focus
+    button.blur();
+    // flash "checked"
+    button.classList.add('code-copy-button-checked');
+    var currentTitle = button.getAttribute("title");
+    button.setAttribute("title", "Copied!");
+    let tooltip;
+    if (window.bootstrap) {
+      button.setAttribute("data-bs-toggle", "tooltip");
+      button.setAttribute("data-bs-placement", "left");
+      button.setAttribute("data-bs-title", "Copied!");
+      tooltip = new bootstrap.Tooltip(button, 
+        { trigger: "manual", 
+          customClass: "code-copy-button-tooltip",
+          offset: [0, -8]});
+      tooltip.show();    
+    }
+    setTimeout(function() {
+      if (tooltip) {
+        tooltip.hide();
+        button.removeAttribute("data-bs-title");
+        button.removeAttribute("data-bs-toggle");
+        button.removeAttribute("data-bs-placement");
+      }
+      button.setAttribute("title", currentTitle);
+      button.classList.remove('code-copy-button-checked');
+    }, 1000);
+    // clear code selection
+    e.clearSelection();
+  });
+  const viewSource = window.document.getElementById('quarto-view-source') ||
+                     window.document.getElementById('quarto-code-tools-source');
+  if (viewSource) {
+    const sourceUrl = viewSource.getAttribute("data-quarto-source-url");
+    viewSource.addEventListener("click", function(e) {
+      if (sourceUrl) {
+        // rstudio viewer pane
+        if (/\bcapabilities=\b/.test(window.location)) {
+          window.open(sourceUrl);
+        } else {
+          window.location.href = sourceUrl;
+        }
+      } else {
+        const modal = new bootstrap.Modal(document.getElementById('quarto-embedded-source-code-modal'));
+        modal.show();
+      }
+      return false;
+    });
+  }
+  function toggleCodeHandler(show) {
+    return function(e) {
+      const detailsSrc = window.document.querySelectorAll(".cell > details > .sourceCode");
+      for (let i=0; i<detailsSrc.length; i++) {
+        const details = detailsSrc[i].parentElement;
+        if (show) {
+          details.open = true;
+        } else {
+          details.removeAttribute("open");
+        }
+      }
+      const cellCodeDivs = window.document.querySelectorAll(".cell > .sourceCode");
+      const fromCls = show ? "hidden" : "unhidden";
+      const toCls = show ? "unhidden" : "hidden";
+      for (let i=0; i<cellCodeDivs.length; i++) {
+        const codeDiv = cellCodeDivs[i];
+        if (codeDiv.classList.contains(fromCls)) {
+          codeDiv.classList.remove(fromCls);
+          codeDiv.classList.add(toCls);
+        } 
+      }
+      return false;
+    }
+  }
+  const hideAllCode = window.document.getElementById("quarto-hide-all-code");
+  if (hideAllCode) {
+    hideAllCode.addEventListener("click", toggleCodeHandler(false));
+  }
+  const showAllCode = window.document.getElementById("quarto-show-all-code");
+  if (showAllCode) {
+    showAllCode.addEventListener("click", toggleCodeHandler(true));
+  }
+  function tippyHover(el, contentFn) {
+    const config = {
+      allowHTML: true,
+      content: contentFn,
+      maxWidth: 500,
+      delay: 100,
+      arrow: false,
+      appendTo: function(el) {
+          return el.parentElement;
+      },
+      interactive: true,
+      interactiveBorder: 10,
+      theme: 'quarto',
+      placement: 'bottom-start'
+    };
+    window.tippy(el, config); 
+  }
+  const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+  for (var i=0; i<noterefs.length; i++) {
+    const ref = noterefs[i];
+    tippyHover(ref, function() {
+      // use id or data attribute instead here
+      let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+      try { href = new URL(href).hash; } catch {}
+      const id = href.replace(/^#\/?/, "");
+      const note = window.document.getElementById(id);
+      return note.innerHTML;
+    });
+  }
+      let selectedAnnoteEl;
+      const selectorForAnnotation = ( cell, annotation) => {
+        let cellAttr = 'data-code-cell="' + cell + '"';
+        let lineAttr = 'data-code-annotation="' +  annotation + '"';
+        const selector = 'span[' + cellAttr + '][' + lineAttr + ']';
+        return selector;
+      }
+      const selectCodeLines = (annoteEl) => {
+        const doc = window.document;
+        const targetCell = annoteEl.getAttribute("data-target-cell");
+        const targetAnnotation = annoteEl.getAttribute("data-target-annotation");
+        const annoteSpan = window.document.querySelector(selectorForAnnotation(targetCell, targetAnnotation));
+        const lines = annoteSpan.getAttribute("data-code-lines").split(",");
+        const lineIds = lines.map((line) => {
+          return targetCell + "-" + line;
+        })
+        let top = null;
+        let height = null;
+        let parent = null;
+        if (lineIds.length > 0) {
+            //compute the position of the single el (top and bottom and make a div)
+            const el = window.document.getElementById(lineIds[0]);
+            top = el.offsetTop;
+            height = el.offsetHeight;
+            parent = el.parentElement.parentElement;
+          if (lineIds.length > 1) {
+            const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
+            const bottom = lastEl.offsetTop + lastEl.offsetHeight;
+            height = bottom - top;
+          }
+          if (top !== null && height !== null && parent !== null) {
+            // cook up a div (if necessary) and position it 
+            let div = window.document.getElementById("code-annotation-line-highlight");
+            if (div === null) {
+              div = window.document.createElement("div");
+              div.setAttribute("id", "code-annotation-line-highlight");
+              div.style.position = 'absolute';
+              parent.appendChild(div);
+            }
+            div.style.top = top - 2 + "px";
+            div.style.height = height + 4 + "px";
+            let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
+            if (gutterDiv === null) {
+              gutterDiv = window.document.createElement("div");
+              gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
+              gutterDiv.style.position = 'absolute';
+              const codeCell = window.document.getElementById(targetCell);
+              const gutter = codeCell.querySelector('.code-annotation-gutter');
+              gutter.appendChild(gutterDiv);
+            }
+            gutterDiv.style.top = top - 2 + "px";
+            gutterDiv.style.height = height + 4 + "px";
+          }
+          selectedAnnoteEl = annoteEl;
+        }
+      };
+      const unselectCodeLines = () => {
+        const elementsIds = ["code-annotation-line-highlight", "code-annotation-line-highlight-gutter"];
+        elementsIds.forEach((elId) => {
+          const div = window.document.getElementById(elId);
+          if (div) {
+            div.remove();
+          }
+        });
+        selectedAnnoteEl = undefined;
+      };
+      // Attach click handler to the DT
+      const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
+      for (const annoteDlNode of annoteDls) {
+        annoteDlNode.addEventListener('click', (event) => {
+          const clickedEl = event.target;
+          if (clickedEl !== selectedAnnoteEl) {
+            unselectCodeLines();
+            const activeEl = window.document.querySelector('dt[data-target-cell].code-annotation-active');
+            if (activeEl) {
+              activeEl.classList.remove('code-annotation-active');
+            }
+            selectCodeLines(clickedEl);
+            clickedEl.classList.add('code-annotation-active');
+          } else {
+            // Unselect the line
+            unselectCodeLines();
+            clickedEl.classList.remove('code-annotation-active');
+          }
+        });
+      }
+  const findCites = (el) => {
+    const parentEl = el.parentElement;
+    if (parentEl) {
+      const cites = parentEl.dataset.cites;
+      if (cites) {
+        return {
+          el,
+          cites: cites.split(' ')
+        };
+      } else {
+        return findCites(el.parentElement)
+      }
+    } else {
+      return undefined;
+    }
+  };
+  var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+  for (var i=0; i<bibliorefs.length; i++) {
+    const ref = bibliorefs[i];
+    const citeInfo = findCites(ref);
+    if (citeInfo) {
+      tippyHover(citeInfo.el, function() {
+        var popup = window.document.createElement('div');
+        citeInfo.cites.forEach(function(cite) {
+          var citeDiv = window.document.createElement('div');
+          citeDiv.classList.add('hanging-indent');
+          citeDiv.classList.add('csl-entry');
+          var biblioDiv = window.document.getElementById('ref-' + cite);
+          if (biblioDiv) {
+            citeDiv.innerHTML = biblioDiv.innerHTML;
+          }
+          popup.appendChild(citeDiv);
+        });
+        return popup.innerHTML;
+      });
+    }
+  }
+});
+</script>
+<script src="https://utteranc.es/client.js" repo="yourusername/quarto_blog_hasan" issue-term="pathname" theme="github-light" crossorigin="anonymous" async="">
+</script>
+<script src="https://giscus.app/client.js" data-repo="HasanGoni/quarto_blog_hasan" data-repo-id="" data-category="General" data-category-id="" data-mapping="title" data-reactions-enabled="1" data-emit-metadata="0" data-input-position="top" data-theme="light" data-lang="en" crossorigin="anonymous" async="">
+</script><div class="modal fade" id="quarto-embedded-source-code-modal" tabindex="-1" aria-labelledby="quarto-embedded-source-code-modal-label" aria-hidden="true"><div class="modal-dialog modal-dialog-scrollable"><div class="modal-content"><div class="modal-header"><h5 class="modal-title" id="quarto-embedded-source-code-modal-label">Source Code</h5><button class="btn-close" data-bs-dismiss="modal"></button></div><div class="modal-body"><div class="">
+<div class="sourceCode" id="cb7" data-shortcodes="false"><pre class="sourceCode numberSource markdown number-lines code-with-copy"><code class="sourceCode markdown"><span id="cb7-1"><a href="#cb7-1"></a><span class="co">---</span></span>
+<span id="cb7-2"><a href="#cb7-2"></a><span class="an">title:</span><span class="co"> "Why Computer Vision? Teaching a Robot to See"</span></span>
+<span id="cb7-3"><a href="#cb7-3"></a><span class="an">author:</span><span class="co"> "Hasan"</span></span>
+<span id="cb7-4"><a href="#cb7-4"></a><span class="an">date:</span><span class="co"> 2025-01-15</span></span>
+<span id="cb7-5"><a href="#cb7-5"></a><span class="an">categories:</span><span class="co"> [Computer Vision, AI, Machine Learning, OpenCV, Deep Learning]</span></span>
+<span id="cb7-6"><a href="#cb7-6"></a><span class="an">tags:</span><span class="co"> [Computer Vision, Image Processing, AI, Tutorial, Beginner]</span></span>
+<span id="cb7-7"><a href="#cb7-7"></a><span class="an">image:</span><span class="co"> "https://images.unsplash.com/photo-1526374965328-7f61d4dc18c5?ixlib=rb-4.0.3&amp;ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&amp;auto=format&amp;fit=crop&amp;w=2070&amp;q=80"</span></span>
+<span id="cb7-8"><a href="#cb7-8"></a><span class="an">toc:</span><span class="co"> true</span></span>
+<span id="cb7-9"><a href="#cb7-9"></a><span class="an">series:</span></span>
+<span id="cb7-10"><a href="#cb7-10"></a><span class="co">  name: "Computer Vision Foundations"</span></span>
+<span id="cb7-11"><a href="#cb7-11"></a><span class="co">  number: 1</span></span>
+<span id="cb7-12"><a href="#cb7-12"></a><span class="an">format:</span></span>
+<span id="cb7-13"><a href="#cb7-13"></a><span class="co">  html: default</span></span>
+<span id="cb7-14"><a href="#cb7-14"></a><span class="an">jupyter:</span><span class="co"> python3</span></span>
+<span id="cb7-15"><a href="#cb7-15"></a><span class="co">---</span></span>
+<span id="cb7-16"><a href="#cb7-16"></a></span>
+<span id="cb7-17"><a href="#cb7-17"></a><span class="al">![Robot eye representing computer vision](https://images.unsplash.com/photo-1526374965328-7f61d4dc18c5?ixlib=rb-4.0.3&amp;ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&amp;auto=format&amp;fit=crop&amp;w=2070&amp;q=80)</span></span>
+<span id="cb7-18"><a href="#cb7-18"></a></span>
+<span id="cb7-19"><a href="#cb7-19"></a><span class="fu">## The Magic Moment: When Machines Learn to See</span></span>
+<span id="cb7-20"><a href="#cb7-20"></a></span>
+<span id="cb7-21"><a href="#cb7-21"></a>Imagine you're teaching a friend to recognize your cat in photos. You'd point out the whiskers, the pointed ears, maybe that distinctive patch of white fur. Now imagine doing the same thing with a computer—except the computer doesn't understand "whiskers" or "cute." It only sees numbers.</span>
+<span id="cb7-22"><a href="#cb7-22"></a></span>
+<span id="cb7-23"><a href="#cb7-23"></a>That's exactly what computer vision is: **teaching machines to understand and interpret visual information the way humans do**.</span>
+<span id="cb7-24"><a href="#cb7-24"></a></span>
+<span id="cb7-25"><a href="#cb7-25"></a>:::{.callout-tip}</span>
+<span id="cb7-26"><a href="#cb7-26"></a>**Try it yourself!** Open this <span class="co">[</span><span class="ot">interactive Colab notebook</span><span class="co">](https://colab.research.google.com/github/hasanpasha/quarto_blog_hasan/blob/main/notebooks/cv-foundations-01-why-computer-vision.ipynb)</span> to see computer vision in action as we build this tutorial series.</span>
+<span id="cb7-27"><a href="#cb7-27"></a>:::</span>
+<span id="cb7-28"><a href="#cb7-28"></a></span>
+<span id="cb7-29"><a href="#cb7-29"></a><span class="fu">## The Story That Started It All</span></span>
+<span id="cb7-30"><a href="#cb7-30"></a></span>
+<span id="cb7-31"><a href="#cb7-31"></a>Picture this: You're showing your grandmother a photo on your phone. Within milliseconds, she says, "Oh, that's your cat Whiskers sitting on the windowsill!" But if you asked a computer the same question just 15 years ago, it would have been completely stumped.</span>
+<span id="cb7-32"><a href="#cb7-32"></a></span>
+<span id="cb7-33"><a href="#cb7-33"></a>Today? Your phone can not only recognize your cat but also tell you the breed, suggest similar photos, and even create a cute slideshow. **How did we get here?**</span>
+<span id="cb7-34"><a href="#cb7-34"></a></span>
+<span id="cb7-35"><a href="#cb7-35"></a>That's the magic of computer vision – teaching machines to see and understand the world like we do.</span>
+<span id="cb7-36"><a href="#cb7-36"></a></span>
+<span id="cb7-37"><a href="#cb7-37"></a><span class="fu">## What Is Computer Vision, Really?</span></span>
+<span id="cb7-38"><a href="#cb7-38"></a></span>
+<span id="cb7-39"><a href="#cb7-39"></a>Let's start with a simple experiment. Look at this image:</span>
+<span id="cb7-40"><a href="#cb7-40"></a></span>
+<span id="cb7-41"><a href="#cb7-41"></a><span class="al">![A simple scene](https://unsplash.com/de/fotos/eine-orange-weisse-katze-die-auf-einem-stuhl-sitzt-ESlm5awnvH0)</span></span>
+<span id="cb7-42"><a href="#cb7-42"></a></span>
+<span id="cb7-43"><a href="#cb7-43"></a>In less than a second, your brain processed:</span>
+<span id="cb7-44"><a href="#cb7-44"></a><span class="ss">- </span>There's a cat</span>
+<span id="cb7-45"><a href="#cb7-45"></a><span class="ss">- </span>It's sitting on a chair  </span>
+<span id="cb7-46"><a href="#cb7-46"></a><span class="ss">- </span>The chair is brown</span>
+<span id="cb7-47"><a href="#cb7-47"></a></span>
+<span id="cb7-48"><a href="#cb7-48"></a>But to a computer, this image is just a grid of numbers. **Our job is to bridge that gap.**</span>
+<span id="cb7-49"><a href="#cb7-49"></a></span>
+<span id="cb7-50"><a href="#cb7-50"></a><span class="fu">## The "Aha!" Moment: Why This Matters</span></span>
+<span id="cb7-51"><a href="#cb7-51"></a></span>
+<span id="cb7-52"><a href="#cb7-52"></a>Computer vision isn't just academic curiosity. It's changing the world right now:</span>
+<span id="cb7-53"><a href="#cb7-53"></a></span>
+<span id="cb7-54"><a href="#cb7-54"></a><span class="fu">### 🚗 **Self-Driving Cars**</span></span>
+<span id="cb7-55"><a href="#cb7-55"></a>Every Tesla on the road uses computer vision to see lane lines, traffic lights, and pedestrians. It's literally saving lives.</span>
+<span id="cb7-56"><a href="#cb7-56"></a></span>
+<span id="cb7-57"><a href="#cb7-57"></a><span class="fu">### 🏥 **Medical Diagnosis**  </span></span>
+<span id="cb7-58"><a href="#cb7-58"></a>Doctors use CV to spot cancer in X-rays faster and more accurately than ever before.</span>
+<span id="cb7-59"><a href="#cb7-59"></a></span>
+<span id="cb7-60"><a href="#cb7-60"></a><span class="fu">### 📱 **Your Daily Life**</span></span>
+<span id="cb7-61"><a href="#cb7-61"></a><span class="ss">- </span>Unlocking your phone with Face ID</span>
+<span id="cb7-62"><a href="#cb7-62"></a><span class="ss">- </span>Google Photos organizing your pictures</span>
+<span id="cb7-63"><a href="#cb7-63"></a><span class="ss">- </span>Instagram filters that put bunny ears on your head</span>
+<span id="cb7-64"><a href="#cb7-64"></a></span>
+<span id="cb7-65"><a href="#cb7-65"></a><span class="fu">### 🌾 **Agriculture**</span></span>
+<span id="cb7-66"><a href="#cb7-66"></a>Farmers use drones with computer vision to monitor crop health and optimize yields.</span>
+<span id="cb7-67"><a href="#cb7-67"></a></span>
+<span id="cb7-68"><a href="#cb7-68"></a><span class="fu">## The Beautiful Challenge</span></span>
+<span id="cb7-69"><a href="#cb7-69"></a></span>
+<span id="cb7-70"><a href="#cb7-70"></a>Here's what makes computer vision fascinating: **It's both incredibly simple and mind-bogglingly complex.**</span>
+<span id="cb7-71"><a href="#cb7-71"></a></span>
+<span id="cb7-72"><a href="#cb7-72"></a>Simple because the goal is clear: help computers understand images.</span>
+<span id="cb7-73"><a href="#cb7-73"></a></span>
+<span id="cb7-74"><a href="#cb7-74"></a>Complex because human vision is the result of millions of years of evolution, and we're trying to replicate it with math and code.</span>
+<span id="cb7-75"><a href="#cb7-75"></a></span>
+<span id="cb7-76"><a href="#cb7-76"></a><span class="fu">## Your First Taste: What Does a Computer See?</span></span>
+<span id="cb7-77"><a href="#cb7-77"></a></span>
+<span id="cb7-78"><a href="#cb7-78"></a>Let's peek behind the curtain. Here's what an image looks like to a computer:</span>
+<span id="cb7-79"><a href="#cb7-79"></a></span>
+<span id="cb7-82"><a href="#cb7-82"></a><span class="in">```{python}</span></span>
+<span id="cb7-83"><a href="#cb7-83"></a><span class="co">#| eval: false</span></span>
+<span id="cb7-84"><a href="#cb7-84"></a><span class="im">import</span> numpy <span class="im">as</span> np</span>
+<span id="cb7-85"><a href="#cb7-85"></a><span class="im">import</span> matplotlib.pyplot <span class="im">as</span> plt</span>
+<span id="cb7-86"><a href="#cb7-86"></a></span>
+<span id="cb7-87"><a href="#cb7-87"></a><span class="co"># Create a simple 5x5 "image" (just numbers!)</span></span>
+<span id="cb7-88"><a href="#cb7-88"></a>simple_image <span class="op">=</span> np.array([</span>
+<span id="cb7-89"><a href="#cb7-89"></a>    [<span class="dv">255</span>, <span class="dv">255</span>, <span class="dv">255</span>, <span class="dv">255</span>, <span class="dv">255</span>],</span>
+<span id="cb7-90"><a href="#cb7-90"></a>    [<span class="dv">255</span>,   <span class="dv">0</span>,   <span class="dv">0</span>,   <span class="dv">0</span>, <span class="dv">255</span>],</span>
+<span id="cb7-91"><a href="#cb7-91"></a>    [<span class="dv">255</span>,   <span class="dv">0</span>, <span class="dv">128</span>,   <span class="dv">0</span>, <span class="dv">255</span>],</span>
+<span id="cb7-92"><a href="#cb7-92"></a>    [<span class="dv">255</span>,   <span class="dv">0</span>,   <span class="dv">0</span>,   <span class="dv">0</span>, <span class="dv">255</span>],</span>
+<span id="cb7-93"><a href="#cb7-93"></a>    [<span class="dv">255</span>, <span class="dv">255</span>, <span class="dv">255</span>, <span class="dv">255</span>, <span class="dv">255</span>]</span>
+<span id="cb7-94"><a href="#cb7-94"></a>])</span>
+<span id="cb7-95"><a href="#cb7-95"></a></span>
+<span id="cb7-96"><a href="#cb7-96"></a><span class="co"># Show it as an image</span></span>
+<span id="cb7-97"><a href="#cb7-97"></a>plt.figure(figsize<span class="op">=</span>(<span class="dv">8</span>, <span class="dv">4</span>))</span>
+<span id="cb7-98"><a href="#cb7-98"></a></span>
+<span id="cb7-99"><a href="#cb7-99"></a>plt.subplot(<span class="dv">1</span>, <span class="dv">2</span>, <span class="dv">1</span>)</span>
+<span id="cb7-100"><a href="#cb7-100"></a>plt.imshow(simple_image, cmap<span class="op">=</span><span class="st">'gray'</span>)</span>
+<span id="cb7-101"><a href="#cb7-101"></a>plt.title(<span class="st">"What You See"</span>)</span>
+<span id="cb7-102"><a href="#cb7-102"></a>plt.axis(<span class="st">'off'</span>)</span>
+<span id="cb7-103"><a href="#cb7-103"></a></span>
+<span id="cb7-104"><a href="#cb7-104"></a>plt.subplot(<span class="dv">1</span>, <span class="dv">2</span>, <span class="dv">2</span>)</span>
+<span id="cb7-105"><a href="#cb7-105"></a>plt.imshow(simple_image, cmap<span class="op">=</span><span class="st">'gray'</span>)</span>
+<span id="cb7-106"><a href="#cb7-106"></a>plt.title(<span class="st">"What the Computer Sees"</span>)</span>
+<span id="cb7-107"><a href="#cb7-107"></a><span class="cf">for</span> i <span class="kw">in</span> <span class="bu">range</span>(<span class="dv">5</span>):</span>
+<span id="cb7-108"><a href="#cb7-108"></a>    <span class="cf">for</span> j <span class="kw">in</span> <span class="bu">range</span>(<span class="dv">5</span>):</span>
+<span id="cb7-109"><a href="#cb7-109"></a>        plt.text(j, i, <span class="bu">str</span>(simple_image[i, j]), </span>
+<span id="cb7-110"><a href="#cb7-110"></a>                ha<span class="op">=</span><span class="st">'center'</span>, va<span class="op">=</span><span class="st">'center'</span>, color<span class="op">=</span><span class="st">'red'</span>, fontsize<span class="op">=</span><span class="dv">8</span>)</span>
+<span id="cb7-111"><a href="#cb7-111"></a></span>
+<span id="cb7-112"><a href="#cb7-112"></a>plt.tight_layout()</span>
+<span id="cb7-113"><a href="#cb7-113"></a>plt.show()</span>
+<span id="cb7-114"><a href="#cb7-114"></a></span>
+<span id="cb7-115"><a href="#cb7-115"></a><span class="bu">print</span>(<span class="st">"The computer sees this as a 5x5 grid of numbers:"</span>)</span>
+<span id="cb7-116"><a href="#cb7-116"></a><span class="bu">print</span>(simple_image)</span>
+<span id="cb7-117"><a href="#cb7-117"></a><span class="in">```</span></span>
+<span id="cb7-118"><a href="#cb7-118"></a></span>
+<span id="cb7-119"><a href="#cb7-119"></a>**Try this yourself!** 👆 <span class="co">[</span><span class="ot">Open in Colab</span><span class="co">](https://colab.research.google.com/drive/1ZxQz9ZxQz9ZxQz9ZxQz9ZxQz9ZxQz9ZxQz)</span></span>
+<span id="cb7-120"><a href="#cb7-120"></a></span>
+<span id="cb7-121"><a href="#cb7-121"></a><span class="fu">## The Journey We're Taking Together</span></span>
+<span id="cb7-122"><a href="#cb7-122"></a></span>
+<span id="cb7-123"><a href="#cb7-123"></a>In this series, we'll follow a specific path:</span>
+<span id="cb7-124"><a href="#cb7-124"></a></span>
+<span id="cb7-125"><a href="#cb7-125"></a><span class="fu">### **Week 1-2: Understanding the Basics**</span></span>
+<span id="cb7-126"><a href="#cb7-126"></a><span class="ss">- </span>How images are stored as numbers</span>
+<span id="cb7-127"><a href="#cb7-127"></a><span class="ss">- </span>Basic operations (resize, crop, rotate)</span>
+<span id="cb7-128"><a href="#cb7-128"></a><span class="ss">- </span>Your first "Hello, Computer Vision!" program</span>
+<span id="cb7-129"><a href="#cb7-129"></a></span>
+<span id="cb7-130"><a href="#cb7-130"></a><span class="fu">### **Week 3-4: Classical Techniques**  </span></span>
+<span id="cb7-131"><a href="#cb7-131"></a><span class="ss">- </span>Finding edges and shapes</span>
+<span id="cb7-132"><a href="#cb7-132"></a><span class="ss">- </span>Detecting objects the "old school" way</span>
+<span id="cb7-133"><a href="#cb7-133"></a><span class="ss">- </span>Building a simple face detector</span>
+<span id="cb7-134"><a href="#cb7-134"></a></span>
+<span id="cb7-135"><a href="#cb7-135"></a><span class="fu">### **Week 5-6: The Deep Learning Revolution**</span></span>
+<span id="cb7-136"><a href="#cb7-136"></a><span class="ss">- </span>Why neural networks changed everything</span>
+<span id="cb7-137"><a href="#cb7-137"></a><span class="ss">- </span>Using pre-trained models (the smart shortcut)</span>
+<span id="cb7-138"><a href="#cb7-138"></a><span class="ss">- </span>Building your first image classifier</span>
+<span id="cb7-139"><a href="#cb7-139"></a></span>
+<span id="cb7-140"><a href="#cb7-140"></a><span class="fu">### **Week 7-8: Modern Foundation Models**</span></span>
+<span id="cb7-141"><a href="#cb7-141"></a><span class="ss">- </span>What is DINOv2 and why it's amazing</span>
+<span id="cb7-142"><a href="#cb7-142"></a><span class="ss">- </span>Extracting features from any image</span>
+<span id="cb7-143"><a href="#cb7-143"></a><span class="ss">- </span>Your capstone project</span>
+<span id="cb7-144"><a href="#cb7-144"></a></span>
+<span id="cb7-145"><a href="#cb7-145"></a><span class="fu">## The Pareto Principle in Action</span></span>
+<span id="cb7-146"><a href="#cb7-146"></a></span>
+<span id="cb7-147"><a href="#cb7-147"></a>Here's our secret weapon: **The 80/20 rule.**</span>
+<span id="cb7-148"><a href="#cb7-148"></a></span>
+<span id="cb7-149"><a href="#cb7-149"></a><span class="ss">- </span>80% of computer vision tasks use just 20% of the available techniques</span>
+<span id="cb7-150"><a href="#cb7-150"></a><span class="ss">- </span>80% of your results will come from 20% of your effort</span>
+<span id="cb7-151"><a href="#cb7-151"></a><span class="ss">- </span>80% of real-world applications use pre-trained models (not custom training)</span>
+<span id="cb7-152"><a href="#cb7-152"></a></span>
+<span id="cb7-153"><a href="#cb7-153"></a>We'll focus on that crucial 20% that gives you maximum impact.</span>
+<span id="cb7-154"><a href="#cb7-154"></a></span>
+<span id="cb7-155"><a href="#cb7-155"></a><span class="fu">## What You'll Build</span></span>
+<span id="cb7-156"><a href="#cb7-156"></a></span>
+<span id="cb7-157"><a href="#cb7-157"></a>By the end of this series, you'll have created:</span>
+<span id="cb7-158"><a href="#cb7-158"></a></span>
+<span id="cb7-159"><a href="#cb7-159"></a><span class="ss">1. </span>**A simple edge detector** (Week 2)</span>
+<span id="cb7-160"><a href="#cb7-160"></a><span class="ss">2. </span>**An object counter** (Week 3) </span>
+<span id="cb7-161"><a href="#cb7-161"></a><span class="ss">3. </span>**A face recognition system** (Week 4)</span>
+<span id="cb7-162"><a href="#cb7-162"></a><span class="ss">4. </span>**An image classifier** (Week 6)</span>
+<span id="cb7-163"><a href="#cb7-163"></a><span class="ss">5. </span>**A feature extraction tool** (Week 7)</span>
+<span id="cb7-164"><a href="#cb7-164"></a><span class="ss">6. </span>**Your own creative project** (Week 8)</span>
+<span id="cb7-165"><a href="#cb7-165"></a></span>
+<span id="cb7-166"><a href="#cb7-166"></a><span class="fu">## The Tools of the Trade</span></span>
+<span id="cb7-167"><a href="#cb7-167"></a></span>
+<span id="cb7-168"><a href="#cb7-168"></a>We'll use the same tools that professionals use:</span>
+<span id="cb7-169"><a href="#cb7-169"></a></span>
+<span id="cb7-170"><a href="#cb7-170"></a><span class="ss">- </span>**Python**: The language of choice for computer vision</span>
+<span id="cb7-171"><a href="#cb7-171"></a><span class="ss">- </span>**OpenCV**: The Swiss Army knife of image processing</span>
+<span id="cb7-172"><a href="#cb7-172"></a><span class="ss">- </span>**PyTorch**: For deep learning magic</span>
+<span id="cb7-173"><a href="#cb7-173"></a><span class="ss">- </span>**Google Colab**: Free GPU power for everyone</span>
+<span id="cb7-174"><a href="#cb7-174"></a><span class="ss">- </span>**HuggingFace**: Pre-trained models made easy</span>
+<span id="cb7-175"><a href="#cb7-175"></a></span>
+<span id="cb7-176"><a href="#cb7-176"></a>Don't worry if these names sound scary – we'll introduce each one gently.</span>
+<span id="cb7-177"><a href="#cb7-177"></a></span>
+<span id="cb7-178"><a href="#cb7-178"></a><span class="fu">## A Personal Promise</span></span>
+<span id="cb7-179"><a href="#cb7-179"></a></span>
+<span id="cb7-180"><a href="#cb7-180"></a>I promise you this: **Every concept will be explained with simple analogies.** </span>
+<span id="cb7-181"><a href="#cb7-181"></a></span>
+<span id="cb7-182"><a href="#cb7-182"></a><span class="ss">- </span>Neural networks? Think of them as very picky art critics.</span>
+<span id="cb7-183"><a href="#cb7-183"></a><span class="ss">- </span>Convolutions? Imagine sliding a magnifying glass over a photo.</span>
+<span id="cb7-184"><a href="#cb7-184"></a><span class="ss">- </span>Transfer learning? Like learning to drive a truck after you know how to drive a car.</span>
+<span id="cb7-185"><a href="#cb7-185"></a></span>
+<span id="cb7-186"><a href="#cb7-186"></a><span class="fu">## Your First Assignment (Optional but Fun!)</span></span>
+<span id="cb7-187"><a href="#cb7-187"></a></span>
+<span id="cb7-188"><a href="#cb7-188"></a>Before we dive into code, try this thought experiment:</span>
+<span id="cb7-189"><a href="#cb7-189"></a></span>
+<span id="cb7-190"><a href="#cb7-190"></a><span class="ss">1. </span>Take a photo with your phone</span>
+<span id="cb7-191"><a href="#cb7-191"></a><span class="ss">2. </span>Look at it for 5 seconds</span>
+<span id="cb7-192"><a href="#cb7-192"></a><span class="ss">3. </span>Write down everything you can see</span>
+<span id="cb7-193"><a href="#cb7-193"></a><span class="ss">4. </span>Now imagine explaining each item to someone who has never seen the world</span>
+<span id="cb7-194"><a href="#cb7-194"></a></span>
+<span id="cb7-195"><a href="#cb7-195"></a>That list you just made? That's what we're teaching computers to do.</span>
+<span id="cb7-196"><a href="#cb7-196"></a></span>
+<span id="cb7-197"><a href="#cb7-197"></a><span class="fu">## What's Next?</span></span>
+<span id="cb7-198"><a href="#cb7-198"></a></span>
+<span id="cb7-199"><a href="#cb7-199"></a>In our next post, <span class="co">[</span><span class="ot">**"Images as Data: How Computers See the World"**</span><span class="co">](02-images-as-data.qmd)</span>, we'll:</span>
+<span id="cb7-200"><a href="#cb7-200"></a></span>
+<span id="cb7-201"><a href="#cb7-201"></a><span class="ss">- </span>Load our first image with Python</span>
+<span id="cb7-202"><a href="#cb7-202"></a><span class="ss">- </span>Explore how colors become numbers  </span>
+<span id="cb7-203"><a href="#cb7-203"></a><span class="ss">- </span>Play with pixels like digital Lego blocks</span>
+<span id="cb7-204"><a href="#cb7-204"></a><span class="ss">- </span>Create our first simple image filter</span>
+<span id="cb7-205"><a href="#cb7-205"></a></span>
+<span id="cb7-206"><a href="#cb7-206"></a><span class="fu">## Join the Journey</span></span>
+<span id="cb7-207"><a href="#cb7-207"></a></span>
+<span id="cb7-208"><a href="#cb7-208"></a>This series is designed to be interactive. I encourage you to:</span>
+<span id="cb7-209"><a href="#cb7-209"></a></span>
+<span id="cb7-210"><a href="#cb7-210"></a><span class="ss">- </span>**Ask questions** in the comments</span>
+<span id="cb7-211"><a href="#cb7-211"></a><span class="ss">- </span>**Share your experiments** on social media</span>
+<span id="cb7-212"><a href="#cb7-212"></a><span class="ss">- </span>**Suggest improvements** to make this better for everyone</span>
+<span id="cb7-213"><a href="#cb7-213"></a></span>
+<span id="cb7-214"><a href="#cb7-214"></a>Remember: every expert was once a beginner. The only difference is that they started.</span>
+<span id="cb7-215"><a href="#cb7-215"></a></span>
+<span id="cb7-216"><a href="#cb7-216"></a>**Are you ready to teach machines to see?**</span>
+<span id="cb7-217"><a href="#cb7-217"></a></span>
+<span id="cb7-218"><a href="#cb7-218"></a>:::{.callout-tip}</span>
+<span id="cb7-219"><a href="#cb7-219"></a><span class="fu">## Ready to Start Coding?</span></span>
+<span id="cb7-220"><a href="#cb7-220"></a>Jump into our hands-on Colab notebook where you'll run your first computer vision code: <span class="co">[</span><span class="ot">**First Steps in Computer Vision**</span><span class="co">](https://colab.research.google.com/drive/1ZxQz9ZxQz9ZxQz9ZxQz9ZxQz9ZxQz9ZxQz)</span></span>
+<span id="cb7-221"><a href="#cb7-221"></a>:::</span>
+<span id="cb7-222"><a href="#cb7-222"></a></span>
+<span id="cb7-223"><a href="#cb7-223"></a>:::{.callout-note}</span>
+<span id="cb7-224"><a href="#cb7-224"></a><span class="fu">## Series Navigation</span></span>
+<span id="cb7-225"><a href="#cb7-225"></a><span class="ss">- </span>**Next**: <span class="co">[</span><span class="ot">Images as Data: How Computers See the World</span><span class="co">](../02-images-as-data/)</span></span>
+<span id="cb7-226"><a href="#cb7-226"></a><span class="ss">- </span>**Series Home**: <span class="co">[</span><span class="ot">Computer Vision Foundations</span><span class="co">](../computer-vision-foundations.qmd)</span></span>
+<span id="cb7-227"><a href="#cb7-227"></a>:::</span>
+<span id="cb7-228"><a href="#cb7-228"></a></span>
+<span id="cb7-229"><a href="#cb7-229"></a>---</span>
+<span id="cb7-230"><a href="#cb7-230"></a></span>
+<span id="cb7-231"><a href="#cb7-231"></a>*This post is part of the [Computer Vision Foundations Series](../computer-vision-foundations.qmd). Each post builds on the previous one, so take your time and enjoy the journey!*</span>
+<span id="cb7-232"><a href="#cb7-232"></a></span>
+<span id="cb7-233"><a href="#cb7-233"></a><span class="fu">## Your First Computer Vision Moment</span></span>
+<span id="cb7-234"><a href="#cb7-234"></a></span>
+<span id="cb7-235"><a href="#cb7-235"></a>Let's start with something magical. Here's what happens when we show a computer this image:</span>
+<span id="cb7-236"><a href="#cb7-236"></a></span>
+<span id="cb7-237"><a href="#cb7-237"></a><span class="al">![Cat and dog together](https://images.unsplash.com/photo-1601758228041-f3b2795255f1?ixlib=rb-4.0.3&amp;ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&amp;auto=format&amp;fit=crop&amp;w=2070&amp;q=80)</span></span>
+<span id="cb7-238"><a href="#cb7-238"></a></span>
+<span id="cb7-239"><a href="#cb7-239"></a><span class="in">```python</span></span>
+<span id="cb7-240"><a href="#cb7-240"></a><span class="co"># What the computer actually "sees"</span></span>
+<span id="cb7-241"><a href="#cb7-241"></a><span class="im">import</span> numpy <span class="im">as</span> np</span>
+<span id="cb7-242"><a href="#cb7-242"></a><span class="im">import</span> matplotlib.pyplot <span class="im">as</span> plt</span>
+<span id="cb7-243"><a href="#cb7-243"></a><span class="im">from</span> PIL <span class="im">import</span> Image</span>
+<span id="cb7-244"><a href="#cb7-244"></a><span class="im">import</span> requests</span>
+<span id="cb7-245"><a href="#cb7-245"></a><span class="im">from</span> io <span class="im">import</span> BytesIO</span>
+<span id="cb7-246"><a href="#cb7-246"></a></span>
+<span id="cb7-247"><a href="#cb7-247"></a><span class="co"># Load image from URL</span></span>
+<span id="cb7-248"><a href="#cb7-248"></a>url <span class="op">=</span> <span class="st">"https://images.unsplash.com/photo-1601758228041-f3b2795255f1?ixlib=rb-4.0.3&amp;ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&amp;auto=format&amp;fit=crop&amp;w=400&amp;q=80"</span></span>
+<span id="cb7-249"><a href="#cb7-249"></a>response <span class="op">=</span> requests.get(url)</span>
+<span id="cb7-250"><a href="#cb7-250"></a>img <span class="op">=</span> Image.<span class="bu">open</span>(BytesIO(response.content))</span>
+<span id="cb7-251"><a href="#cb7-251"></a>img_array <span class="op">=</span> np.array(img)</span>
+<span id="cb7-252"><a href="#cb7-252"></a></span>
+<span id="cb7-253"><a href="#cb7-253"></a><span class="bu">print</span>(<span class="ss">f"Image shape: </span><span class="sc">{</span>img_array<span class="sc">.</span>shape<span class="sc">}</span><span class="ss">"</span>)</span>
+<span id="cb7-254"><a href="#cb7-254"></a><span class="bu">print</span>(<span class="ss">f"First few pixels: </span><span class="sc">{</span>img_array[<span class="dv">0</span>, <span class="dv">0</span>]<span class="sc">}</span><span class="ss">"</span>)  <span class="co"># RGB values for top-left pixel</span></span>
+<span id="cb7-255"><a href="#cb7-255"></a><span class="in">```</span></span>
+<span id="cb7-256"><a href="#cb7-256"></a></span>
+<span id="cb7-257"><a href="#cb7-257"></a>**Output:**</span>
+<span id="cb7-258"><a href="#cb7-258"></a><span class="in">```</span></span>
+<span id="cb7-259"><a href="#cb7-259"></a><span class="in">Image shape: (267, 400, 3)  # height x width x color channels</span></span>
+<span id="cb7-260"><a href="#cb7-260"></a><span class="in">First few pixels: [123, 145, 167]  # Red, Green, Blue values</span></span>
+<span id="cb7-261"><a href="#cb7-261"></a><span class="in">```</span></span>
+<span id="cb7-262"><a href="#cb7-262"></a></span>
+<span id="cb7-263"><a href="#cb7-263"></a><span class="fu">## Real-World Computer Vision Magic</span></span>
+<span id="cb7-264"><a href="#cb7-264"></a></span>
+<span id="cb7-265"><a href="#cb7-265"></a>Here are some mind-blowing applications that exist **right now**:</span>
+<span id="cb7-266"><a href="#cb7-266"></a></span>
+<span id="cb7-267"><a href="#cb7-267"></a><span class="fu">### 1. Medical Diagnosis</span></span>
+<span id="cb7-268"><a href="#cb7-268"></a><span class="al">![Medical scan](https://images.unsplash.com/photo-1559757148-5c350d0d3c56?ixlib=rb-4.0.3&amp;ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&amp;auto=format&amp;fit=crop&amp;w=400&amp;q=80)</span></span>
+<span id="cb7-269"><a href="#cb7-269"></a></span>
+<span id="cb7-270"><a href="#cb7-270"></a>Computer vision can detect cancer in medical scans with **higher accuracy than human doctors**. Google's DeepMind can diagnose over 50 eye diseases just from retinal photos.</span>
+<span id="cb7-271"><a href="#cb7-271"></a></span>
+<span id="cb7-272"><a href="#cb7-272"></a><span class="fu">### 2. Autonomous Vehicles</span></span>
+<span id="cb7-273"><a href="#cb7-273"></a><span class="al">![Self-driving car](https://images.unsplash.com/photo-1617788138017-80ad40651399?ixlib=rb-4.0.3&amp;ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&amp;auto=format&amp;fit=crop&amp;w=400&amp;q=80)</span></span>
+<span id="cb7-274"><a href="#cb7-274"></a></span>
+<span id="cb7-275"><a href="#cb7-275"></a>Tesla's cars process **36 images per second** from 8 cameras to navigate roads, recognize traffic signs, and avoid pedestrians.</span>
+<span id="cb7-276"><a href="#cb7-276"></a></span>
+<span id="cb7-277"><a href="#cb7-277"></a><span class="fu">### 3. Agriculture Revolution</span></span>
+<span id="cb7-278"><a href="#cb7-278"></a><span class="al">![Drone over crops](https://images.unsplash.com/photo-1581833971358-2c8b550f87b3?ixlib=rb-4.0.3&amp;ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&amp;auto=format&amp;fit=crop&amp;w=400&amp;q=80)</span></span>
+<span id="cb7-279"><a href="#cb7-279"></a></span>
+<span id="cb7-280"><a href="#cb7-280"></a>Drones equipped with computer vision can identify diseased crops, count plants, and optimize irrigation—**increasing yields by 20-30%**.</span>
+<span id="cb7-281"><a href="#cb7-281"></a></span>
+<span id="cb7-282"><a href="#cb7-282"></a><span class="fu">## The Journey Ahead: Your CV Learning Path</span></span>
+<span id="cb7-283"><a href="#cb7-283"></a></span>
+<span id="cb7-284"><a href="#cb7-284"></a>In this series, we'll build your computer vision skills using the **80/20 principle**—focusing on the 20% of concepts that give you 80% of the results.</span>
+<span id="cb7-285"><a href="#cb7-285"></a></span>
+<span id="cb7-286"><a href="#cb7-286"></a><span class="fu">### Our Learning Philosophy (Inspired by fastai)</span></span>
+<span id="cb7-287"><a href="#cb7-287"></a><span class="ss">1. </span>**Start with working code** → Build intuition → Understand theory</span>
+<span id="cb7-288"><a href="#cb7-288"></a><span class="ss">2. </span>**Top-down learning** → See the big picture first</span>
+<span id="cb7-289"><a href="#cb7-289"></a><span class="ss">3. </span>**Practical projects** → Build real applications</span>
+<span id="cb7-290"><a href="#cb7-290"></a><span class="ss">4. </span>**Progressive complexity** → From pixels to foundation models</span>
+<span id="cb7-291"><a href="#cb7-291"></a></span>
+<span id="cb7-292"><a href="#cb7-292"></a><span class="al">![Learning path visualization](https://images.unsplash.com/photo-1516321318423-f06f85e504b3?ixlib=rb-4.0.3&amp;ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&amp;auto=format&amp;fit=crop&amp;w=400&amp;q=80)</span></span>
+<span id="cb7-293"><a href="#cb7-293"></a></span>
+<span id="cb7-294"><a href="#cb7-294"></a><span class="fu">### What You'll Build</span></span>
+<span id="cb7-295"><a href="#cb7-295"></a>By the end of this series, you'll have:</span>
+<span id="cb7-296"><a href="#cb7-296"></a><span class="ss">- </span>✅ A complete understanding of how images work as data</span>
+<span id="cb7-297"><a href="#cb7-297"></a><span class="ss">- </span>✅ Hands-on experience with OpenCV and modern deep learning</span>
+<span id="cb7-298"><a href="#cb7-298"></a><span class="ss">- </span>✅ A working web app that combines classical and modern CV techniques</span>
+<span id="cb7-299"><a href="#cb7-299"></a><span class="ss">- </span>✅ The foundation to build your own computer vision projects</span>
+<span id="cb7-300"><a href="#cb7-300"></a></span>
+<span id="cb7-301"><a href="#cb7-301"></a><span class="fu">## Your First Taste: Images as Numbers</span></span>
+<span id="cb7-302"><a href="#cb7-302"></a></span>
+<span id="cb7-303"><a href="#cb7-303"></a>Let's demystify the magic right now. Here's how a computer "sees" a simple image:</span>
+<span id="cb7-304"><a href="#cb7-304"></a></span>
+<span id="cb7-305"><a href="#cb7-305"></a><span class="in">```python</span></span>
+<span id="cb7-306"><a href="#cb7-306"></a><span class="co"># Create a tiny 3x3 "image" of a cross pattern</span></span>
+<span id="cb7-307"><a href="#cb7-307"></a>cross <span class="op">=</span> np.array([</span>
+<span id="cb7-308"><a href="#cb7-308"></a>    [[<span class="dv">255</span>, <span class="dv">255</span>, <span class="dv">255</span>], [<span class="dv">0</span>, <span class="dv">0</span>, <span class="dv">0</span>], [<span class="dv">255</span>, <span class="dv">255</span>, <span class="dv">255</span>]],      <span class="co"># White, Black, White</span></span>
+<span id="cb7-309"><a href="#cb7-309"></a>    [[<span class="dv">0</span>, <span class="dv">0</span>, <span class="dv">0</span>], [<span class="dv">0</span>, <span class="dv">0</span>, <span class="dv">0</span>], [<span class="dv">0</span>, <span class="dv">0</span>, <span class="dv">0</span>]],                  <span class="co"># Black, Black, Black  </span></span>
+<span id="cb7-310"><a href="#cb7-310"></a>    [[<span class="dv">255</span>, <span class="dv">255</span>, <span class="dv">255</span>], [<span class="dv">0</span>, <span class="dv">0</span>, <span class="dv">0</span>], [<span class="dv">255</span>, <span class="dv">255</span>, <span class="dv">255</span>]]       <span class="co"># White, Black, White</span></span>
+<span id="cb7-311"><a href="#cb7-311"></a>])</span>
+<span id="cb7-312"><a href="#cb7-312"></a></span>
+<span id="cb7-313"><a href="#cb7-313"></a>plt.figure(figsize<span class="op">=</span>(<span class="dv">3</span>, <span class="dv">3</span>))</span>
+<span id="cb7-314"><a href="#cb7-314"></a>plt.imshow(cross)</span>
+<span id="cb7-315"><a href="#cb7-315"></a>plt.title(<span class="st">"A 3x3 Cross Pattern"</span>)</span>
+<span id="cb7-316"><a href="#cb7-316"></a>plt.axis(<span class="st">'off'</span>)</span>
+<span id="cb7-317"><a href="#cb7-317"></a>plt.show()</span>
+<span id="cb7-318"><a href="#cb7-318"></a></span>
+<span id="cb7-319"><a href="#cb7-319"></a><span class="bu">print</span>(<span class="st">"What the computer sees:"</span>)</span>
+<span id="cb7-320"><a href="#cb7-320"></a><span class="bu">print</span>(cross[:,:,<span class="dv">0</span>])  <span class="co"># Just the red channel</span></span>
+<span id="cb7-321"><a href="#cb7-321"></a><span class="in">```</span></span>
+<span id="cb7-322"><a href="#cb7-322"></a></span>
+<span id="cb7-323"><a href="#cb7-323"></a>**Output:**</span>
+<span id="cb7-324"><a href="#cb7-324"></a><span class="in">```</span></span>
+<span id="cb7-325"><a href="#cb7-325"></a><span class="in">What the computer sees:</span></span>
+<span id="cb7-326"><a href="#cb7-326"></a><span class="in">[[255   0 255]</span></span>
+<span id="cb7-327"><a href="#cb7-327"></a><span class="in"> [  0   0   0]</span></span>
+<span id="cb7-328"><a href="#cb7-328"></a><span class="in"> [255   0 255]]</span></span>
+<span id="cb7-329"><a href="#cb7-329"></a><span class="in">```</span></span>
+<span id="cb7-330"><a href="#cb7-330"></a></span>
+<span id="cb7-331"><a href="#cb7-331"></a>**Mind = Blown!** 🤯 The computer doesn't see a "cross"—it sees a pattern of numbers. But with the right algorithms, those numbers become meaningful.</span>
+<span id="cb7-332"><a href="#cb7-332"></a></span>
+<span id="cb7-333"><a href="#cb7-333"></a><span class="fu">## Quick Win: Your First CV Program</span></span>
+<span id="cb7-334"><a href="#cb7-334"></a></span>
+<span id="cb7-335"><a href="#cb7-335"></a>Let's build something **right now** that will amaze you:</span>
+<span id="cb7-336"><a href="#cb7-336"></a></span>
+<span id="cb7-337"><a href="#cb7-337"></a><span class="in">```python</span></span>
+<span id="cb7-338"><a href="#cb7-338"></a><span class="im">import</span> cv2</span>
+<span id="cb7-339"><a href="#cb7-339"></a><span class="im">import</span> numpy <span class="im">as</span> np</span>
+<span id="cb7-340"><a href="#cb7-340"></a><span class="im">from</span> google.colab.patches <span class="im">import</span> cv2_imshow</span>
+<span id="cb7-341"><a href="#cb7-341"></a></span>
+<span id="cb7-342"><a href="#cb7-342"></a><span class="co"># Load an image from URL</span></span>
+<span id="cb7-343"><a href="#cb7-343"></a><span class="kw">def</span> load_image_from_url(url):</span>
+<span id="cb7-344"><a href="#cb7-344"></a>    response <span class="op">=</span> requests.get(url)</span>
+<span id="cb7-345"><a href="#cb7-345"></a>    img_array <span class="op">=</span> np.frombuffer(response.content, np.uint8)</span>
+<span id="cb7-346"><a href="#cb7-346"></a>    img <span class="op">=</span> cv2.imdecode(img_array, cv2.IMREAD_COLOR)</span>
+<span id="cb7-347"><a href="#cb7-347"></a>    <span class="cf">return</span> img</span>
+<span id="cb7-348"><a href="#cb7-348"></a></span>
+<span id="cb7-349"><a href="#cb7-349"></a><span class="co"># Load a sample image</span></span>
+<span id="cb7-350"><a href="#cb7-350"></a>img_url <span class="op">=</span> <span class="st">"https://images.unsplash.com/photo-1574158622682-e40e69881006?ixlib=rb-4.0.3&amp;ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&amp;auto=format&amp;fit=crop&amp;w=400&amp;q=80"</span></span>
+<span id="cb7-351"><a href="#cb7-351"></a>img <span class="op">=</span> load_image_from_url(img_url)</span>
+<span id="cb7-352"><a href="#cb7-352"></a></span>
+<span id="cb7-353"><a href="#cb7-353"></a><span class="co"># Apply a simple "magic" filter</span></span>
+<span id="cb7-354"><a href="#cb7-354"></a>magic_img <span class="op">=</span> cv2.GaussianBlur(img, (<span class="dv">51</span>, <span class="dv">51</span>), <span class="dv">0</span>)</span>
+<span id="cb7-355"><a href="#cb7-355"></a></span>
+<span id="cb7-356"><a href="#cb7-356"></a><span class="co"># Show before and after</span></span>
+<span id="cb7-357"><a href="#cb7-357"></a><span class="bu">print</span>(<span class="st">"Original:"</span>)</span>
+<span id="cb7-358"><a href="#cb7-358"></a>cv2_imshow(img)</span>
+<span id="cb7-359"><a href="#cb7-359"></a><span class="bu">print</span>(<span class="st">"</span><span class="ch">\n</span><span class="st">After magic filter:"</span>)</span>
+<span id="cb7-360"><a href="#cb7-360"></a>cv2_imshow(magic_img)</span>
+<span id="cb7-361"><a href="#cb7-361"></a><span class="in">```</span></span>
+<span id="cb7-362"><a href="#cb7-362"></a></span>
+<span id="cb7-363"><a href="#cb7-363"></a>**Congratulations!** 🎉 You just applied your first computer vision algorithm—a Gaussian blur that creates a dreamy, artistic effect.</span>
+<span id="cb7-364"><a href="#cb7-364"></a></span>
+<span id="cb7-365"><a href="#cb7-365"></a><span class="fu">## The Big Picture: Why This Matters</span></span>
+<span id="cb7-366"><a href="#cb7-366"></a></span>
+<span id="cb7-367"><a href="#cb7-367"></a>Computer vision isn't just about cool demos. It's about **solving real problems**:</span>
+<span id="cb7-368"><a href="#cb7-368"></a></span>
+<span id="cb7-369"><a href="#cb7-369"></a><span class="ss">- </span>**Healthcare**: Early disease detection saves lives</span>
+<span id="cb7-370"><a href="#cb7-370"></a><span class="ss">- </span>**Safety**: Autonomous systems prevent accidents  </span>
+<span id="cb7-371"><a href="#cb7-371"></a><span class="ss">- </span>**Accessibility**: Visual assistance for the visually impaired</span>
+<span id="cb7-372"><a href="#cb7-372"></a><span class="ss">- </span>**Environment**: Monitoring climate change and wildlife</span>
+<span id="cb7-373"><a href="#cb7-373"></a><span class="ss">- </span>**Business**: Automating quality control and inventory</span>
+<span id="cb7-374"><a href="#cb7-374"></a></span>
+<span id="cb7-375"><a href="#cb7-375"></a><span class="al">![Impact of computer vision](https://images.unsplash.com/photo-1451187580459-43490279c0fa?ixlib=rb-4.0.3&amp;ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&amp;auto=format&amp;fit=crop&amp;w=400&amp;q=80)</span></span>
+<span id="cb7-376"><a href="#cb7-376"></a></span>
+<span id="cb7-377"><a href="#cb7-377"></a><span class="fu">## What's Next?</span></span>
+<span id="cb7-378"><a href="#cb7-378"></a></span>
+<span id="cb7-379"><a href="#cb7-379"></a>In our next post, **"Images as Data: The Digital Lego Blocks"**, we'll dive deeper into:</span>
+<span id="cb7-380"><a href="#cb7-380"></a><span class="ss">- </span>How pixels work as building blocks</span>
+<span id="cb7-381"><a href="#cb7-381"></a><span class="ss">- </span>Color spaces and why they matter  </span>
+<span id="cb7-382"><a href="#cb7-382"></a><span class="ss">- </span>Your first image manipulation techniques</span>
+<span id="cb7-383"><a href="#cb7-383"></a><span class="ss">- </span>Building a simple photo editor</span>
+<span id="cb7-384"><a href="#cb7-384"></a></span>
+<span id="cb7-385"><a href="#cb7-385"></a>:::{.callout-note}</span>
+<span id="cb7-386"><a href="#cb7-386"></a>**Ready to dive deeper?** Click <span class="co">[</span><span class="ot">here for the interactive Colab notebook</span><span class="co">](https://colab.research.google.com/github/hasanpasha/quarto_blog_hasan/blob/main/notebooks/cv-foundations-01-why-computer-vision.ipynb)</span> where you can run all the code examples and experiment with your own images!</span>
+<span id="cb7-387"><a href="#cb7-387"></a>:::</span>
+<span id="cb7-388"><a href="#cb7-388"></a></span>
+<span id="cb7-389"><a href="#cb7-389"></a><span class="fu">## Key Takeaways</span></span>
+<span id="cb7-390"><a href="#cb7-390"></a></span>
+<span id="cb7-391"><a href="#cb7-391"></a><span class="ss">- </span>**Computer vision = teaching machines to understand images**</span>
+<span id="cb7-392"><a href="#cb7-392"></a><span class="ss">- </span>**Images are just arrays of numbers** (but meaningful ones!)</span>
+<span id="cb7-393"><a href="#cb7-393"></a><span class="ss">- </span>**Start with working code, build intuition, then understand theory**</span>
+<span id="cb7-394"><a href="#cb7-394"></a><span class="ss">- </span>**Real applications are already changing the world**</span>
+<span id="cb7-395"><a href="#cb7-395"></a><span class="ss">- </span>**You can build amazing things with surprisingly little code**</span>
+<span id="cb7-396"><a href="#cb7-396"></a></span>
+<span id="cb7-397"><a href="#cb7-397"></a>---</span>
+<span id="cb7-398"><a href="#cb7-398"></a></span>
+<span id="cb7-399"><a href="#cb7-399"></a>**Next up**: <span class="co">[</span><span class="ot">Images as Data: The Digital Lego Blocks →</span><span class="co">](02-images-as-data.qmd)</span></span>
+<span id="cb7-400"><a href="#cb7-400"></a></span>
+<span id="cb7-401"><a href="#cb7-401"></a>**Series Navigation**: <span class="co">[</span><span class="ot">← Back to CV Foundations Overview</span><span class="co">](../computer-vision-foundations.qmd)</span> </span>
+</code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div></div></div></div></div>
+</div> <!-- /content -->
+
+
+
+<script src="../../../site_libs/quarto-html/zenscroll-min.js"></script>
+</body></html>

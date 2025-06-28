@@ -1,0 +1,92 @@
+---
+title: "Computer Vision Foundations Series"
+description: "From Pixels to Foundation Models – A Gentle Journey for Beginners. Learn computer vision the fastai way: start with working code, build intuition, then dive deeper."
+author: "Hasan"
+date: last-modified
+categories: [series, computer-vision, opencv, pytorch, foundation-models]
+image: "https://images.unsplash.com/photo-1677442136019-21780ecad995?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2032&q=80"
+toc: true
+---
+
+## The Story Behind This Series
+
+Imagine you're teaching a robot to see. You show it a picture of your cat, but to the robot, this is just a giant grid of numbers! How do we help it understand what it's looking at? That's the beautiful challenge of computer vision.
+
+This series follows the **Pareto Principle**: we'll focus on the 20% of concepts and tools that give you 80% of the results. By the end, you'll understand the journey from classical OpenCV techniques to modern foundation models like DINOv2.
+
+## Learning Philosophy
+
+Following Jeremy Howard's fastai approach:
+- **Start with working code**: See results first, understand theory later
+- **Build intuition**: Every concept explained with simple analogies
+- **Learn by doing**: Each post includes hands-on Colab notebooks
+- **Progressive complexity**: From pixels to neural networks, step by step
+
+## The Journey Ahead
+
+### 🎯 **Phase 1: Understanding Images**
+1. [**Why Computer Vision?**](cv-foundations/01-why-computer-vision.qmd) - The big picture and motivation
+2. [**Images as Data**](cv-foundations/02-images-as-data.qmd) - How computers see the world
+
+### 🔧 **Phase 2: Classical Computer Vision**
+3. [**OpenCV Essentials**](cv-foundations/03-opencv-essentials.qmd) - Your first computer vision toolkit
+4. [**Finding Patterns**](cv-foundations/04-finding-patterns.qmd) - Edges, contours, and shapes
+5. [**Feature Magic**](cv-foundations/05-feature-magic.qmd) - What makes images unique
+
+### 🧠 **Phase 3: Deep Learning Revolution**
+6. [**Why Deep Learning?**](cv-foundations/06-why-deep-learning.qmd) - When classical methods hit the wall
+7. [**Modern Vision Models**](cv-foundations/07-modern-vision-models.qmd) - CNNs, Vision Transformers, and DINOv2
+
+### 🚀 **Phase 4: Building Your Future**
+8. [**Your First CV Project**](cv-foundations/08-first-cv-project.qmd) - Putting it all together
+9. [**Where to Go Next**](cv-foundations/09-where-to-go-next.qmd) - Your learning roadmap
+
+## What You'll Build
+
+By the end of this series, you'll have:
+- **Built 5+ hands-on projects** (from edge detection to object classification)
+- **Used both classical and modern techniques** (OpenCV + PyTorch)
+- **Extracted features with DINOv2** (foundation model magic)
+- **Created your own image classifier** (transfer learning)
+
+## Prerequisites
+
+- **Python basics**: Variables, functions, loops (we'll explain the rest!)
+- **Curiosity**: That's honestly the most important part
+- **Google account**: For running our Colab notebooks
+
+## Tools We'll Master
+
+- **OpenCV**: The Swiss Army knife of classical computer vision
+- **NumPy & Matplotlib**: For working with image data
+- **PyTorch**: Modern deep learning framework
+- **HuggingFace**: Pre-trained models made easy
+- **Google Colab**: Free GPU power for everyone
+
+## How to Use This Series
+
+1. **Read each post** like a story (they're designed to be fun!)
+2. **Run the Colab notebooks** (hands-on learning is key)
+3. **Experiment with your own images** (use photos of your pets, friends, anything!)
+4. **Ask questions** in the comments (no question is too basic)
+
+## A Personal Note
+
+This series is designed for someone just starting their computer vision journey. I believe everyone can learn to teach computers to see – it just takes the right approach. We'll go slow, explain everything, and have fun along the way.
+
+Remember: every expert was once a beginner. Let's begin this journey together!
+
+:::{.callout-tip}
+## Quick Start
+Ready to jump in? Start with [Why Computer Vision?](cv-foundations/01-why-computer-vision.qmd) and follow along with the Colab notebook. Each post builds on the previous one, so take your time and enjoy the process!
+:::
+
+## Getting Help
+
+- 💬 **Comments**: Use the discussion section below each post
+- 🐙 **GitHub**: Find all code in our [repository](https://github.com/hasangoni/quarto_blog_hasan)
+- 📧 **Email**: Reach out directly for specific questions
+
+:::{.callout-note}
+This series is continuously updated based on reader feedback and new developments in computer vision. Your questions and suggestions help make it better for everyone!
+::: 

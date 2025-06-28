@@ -1,0 +1,1008 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.3.450">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+<meta name="author" content="Hasan">
+<meta name="dcterms.date" content="2025-05-03">
+
+<title>Hasan’s Data Science &amp; AI Blog - Fine-Tuning Qwen3-14B with Unsloth: A Practical Guide for Data Scientists</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
+  vertical-align: middle;
+}
+/* CSS for syntax highlighting */
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+  }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+</style>
+
+
+<script src="../../../site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="../../../site_libs/quarto-nav/headroom.min.js"></script>
+<script src="../../../site_libs/clipboard/clipboard.min.js"></script>
+<script src="../../../site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="../../../site_libs/quarto-search/fuse.min.js"></script>
+<script src="../../../site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="../../../">
+<script src="../../../site_libs/quarto-html/quarto.js"></script>
+<script src="../../../site_libs/quarto-html/popper.min.js"></script>
+<script src="../../../site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="../../../site_libs/quarto-html/anchor.min.js"></script>
+<link href="../../../site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="../../../site_libs/quarto-html/quarto-syntax-highlighting.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="../../../site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="../../../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="../../../site_libs/bootstrap/bootstrap.min.css" rel="stylesheet" id="quarto-bootstrap" data-mode="light">
+<script id="quarto-search-options" type="application/json">{
+  "location": "navbar",
+  "copy-button": false,
+  "collapse-after": 3,
+  "panel-placement": "end",
+  "type": "overlay",
+  "limit": 20,
+  "language": {
+    "search-no-results-text": "No results",
+    "search-matching-documents-text": "matching documents",
+    "search-copy-link-title": "Copy link to search",
+    "search-hide-matches-text": "Hide additional matches",
+    "search-more-match-text": "more match in this document",
+    "search-more-matches-text": "more matches in this document",
+    "search-clear-button-title": "Clear",
+    "search-detached-cancel-button-title": "Cancel",
+    "search-submit-button-title": "Submit",
+    "search-label": "Search"
+  }
+}</script>
+<style>html{ scroll-behavior: smooth; }</style>
+<script async="" src="https://hypothes.is/embed.js"></script>
+
+
+<link rel="stylesheet" href="../../../styles.css">
+<meta property="og:title" content="Hasan’s Data Science &amp; AI Blog - Fine-Tuning Qwen3-14B with Unsloth: A Practical Guide for Data Scientists">
+<meta property="og:description" content="">
+<meta property="og:image" content="https://hasangoni.quarto.pub/hasan-blog-post/posts/series/vlm-qwen3-14b/qwen3-14b.png">
+<meta property="og:site-name" content="Hasan's Data Science &amp; AI Blog">
+<meta property="og:image:height" content="2048">
+<meta property="og:image:width" content="2048">
+<meta name="twitter:title" content="Hasan’s Data Science &amp; AI Blog - Fine-Tuning Qwen3-14B with Unsloth: A Practical Guide for Data Scientists">
+<meta name="twitter:description" content="">
+<meta name="twitter:image" content="https://hasangoni.quarto.pub/hasan-blog-post/posts/series/vlm-qwen3-14b/qwen3-14b.png">
+<meta name="twitter:image-height" content="2048">
+<meta name="twitter:image-width" content="2048">
+<meta name="twitter:card" content="summary_large_image">
+</head>
+
+<body class="nav-sidebar docked nav-fixed">
+
+<div id="quarto-search-results"></div>
+  <header id="quarto-header" class="headroom fixed-top">
+    <nav class="navbar navbar-expand-lg navbar-dark ">
+      <div class="navbar-container container-fluid">
+      <div class="navbar-brand-container">
+    <a class="navbar-brand" href="../../../index.html">
+    <span class="navbar-title">Hasan’s Data Science &amp; AI Blog</span>
+    </a>
+  </div>
+            <div id="quarto-search" class="" title="Search"></div>
+          <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCollapse" aria-controls="navbarCollapse" aria-expanded="false" aria-label="Toggle navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+  <span class="navbar-toggler-icon"></span>
+</button>
+          <div class="collapse navbar-collapse" id="navbarCollapse">
+            <ul class="navbar-nav navbar-nav-scroll me-auto">
+  <li class="nav-item">
+    <a class="nav-link" href="../../../index.html" rel="" target="">
+ <span class="menu-text">Home</span></a>
+  </li>  
+  <li class="nav-item dropdown ">
+    <a class="nav-link dropdown-toggle" href="#" id="nav-menu-series" role="button" data-bs-toggle="dropdown" aria-expanded="false" rel="" target="">
+ <span class="menu-text">Series</span>
+    </a>
+    <ul class="dropdown-menu" aria-labelledby="nav-menu-series">    
+        <li>
+    <a class="dropdown-item" href="../../../posts/series/data-science-steps.html" rel="" target="">
+ <span class="dropdown-text">Data Science Steps</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="../../../posts/series/computer-vision-with-pytorch.qmd" rel="" target="">
+ <span class="dropdown-text">Computer Vision</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="../../../posts/series/vlm.html" rel="" target="">
+ <span class="dropdown-text">VLM Series</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="../../../posts/series/anomaly-detection/index.html" rel="" target="">
+ <span class="dropdown-text">Anomaly Detection</span></a>
+  </li>  
+    </ul>
+  </li>
+  <li class="nav-item">
+    <a class="nav-link" href="../../../categories.html" rel="" target="">
+ <span class="menu-text">Categories</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="../../../tags.html" rel="" target="">
+ <span class="menu-text">Tags</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="../../../about.html" rel="" target="">
+ <span class="menu-text">About</span></a>
+  </li>  
+</ul>
+            <ul class="navbar-nav navbar-nav-scroll ms-auto">
+  <li class="nav-item compact">
+    <a class="nav-link" href="https://github.com/HasanGoni" rel="" target=""><i class="bi bi-github" role="img">
+</i> 
+ <span class="menu-text"></span></a>
+  </li>  
+  <li class="nav-item compact">
+    <a class="nav-link" href="https://twitter.com/hasangoni" rel="" target=""><i class="bi bi-twitter" role="img">
+</i> 
+ <span class="menu-text"></span></a>
+  </li>  
+</ul>
+            <div class="quarto-navbar-tools">
+</div>
+          </div> <!-- /navcollapse -->
+      </div> <!-- /container-fluid -->
+    </nav>
+  <nav class="quarto-secondary-nav">
+    <div class="container-fluid d-flex">
+      <button type="button" class="quarto-btn-toggle btn" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar,#quarto-sidebar-glass" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+        <i class="bi bi-layout-text-sidebar-reverse"></i>
+      </button>
+      <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item">Fine-Tuning Qwen3-14B with Unsloth: A Practical Guide for Data Scientists</li></ol></nav>
+      <a class="flex-grow-1" role="button" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar,#quarto-sidebar-glass" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
+      </a>
+    </div>
+  </nav>
+</header>
+<!-- content -->
+<header id="title-block-header" class="quarto-title-block default page-columns page-full">
+  <div class="quarto-title-banner page-columns page-full">
+    <div class="quarto-title column-body">
+      <div class="quarto-title-block"><div><h1 class="title">Fine-Tuning Qwen3-14B with Unsloth: A Practical Guide for Data Scientists</h1><button type="button" class="btn code-tools-button" id="quarto-code-tools-source"><i class="bi"></i> Code</button></div></div>
+                                <div class="quarto-categories">
+                <div class="quarto-category">LLM</div>
+                <div class="quarto-category">Fine-tuning</div>
+                <div class="quarto-category">HuggingFace</div>
+                <div class="quarto-category">LoRA</div>
+                <div class="quarto-category">QLoRA</div>
+              </div>
+                  </div>
+  </div>
+    
+  
+  <div class="quarto-title-meta">
+
+      <div>
+      <div class="quarto-title-meta-heading">Author</div>
+      <div class="quarto-title-meta-contents">
+               <p>Hasan </p>
+            </div>
+    </div>
+      
+      <div>
+      <div class="quarto-title-meta-heading">Published</div>
+      <div class="quarto-title-meta-contents">
+        <p class="date">May 3, 2025</p>
+      </div>
+    </div>
+    
+      <div>
+      <div class="quarto-title-meta-heading">Modified</div>
+      <div class="quarto-title-meta-contents">
+        <p class="date-modified">May 3, 2025</p>
+      </div>
+    </div>
+      
+    </div>
+    
+  
+  </header><div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article page-navbar">
+<!-- sidebar -->
+  <nav id="quarto-sidebar" class="sidebar collapse collapse-horizontal sidebar-navigation docked overflow-auto">
+    <div class="sidebar-menu-container"> 
+    <ul class="list-unstyled mt-1">
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-1" aria-expanded="true">
+ <span class="menu-text">Data Science</span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-1" aria-expanded="true" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-1" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../../posts/series/data-science-steps.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Data Science Steps Series</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../../posts/data-science-steps-to-follow-part01/index.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Data Science Steps to Follow - 01</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../../posts/data-science-steps-to-follow-part02/index.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Data Science Steps to Follow - 02</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../../posts/data-science-steps-to-follow-part03/index.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Data Science Steps to Follow - 03</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../../posts/data-science-steps-to-follow-part04/index.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Data Science Steps to Follow - 04</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../../posts/data-science-steps-to-follow-part05/index.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Data Science Steps to Follow - 05</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../../posts/data-science-steps-to-follow-part06/index.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Data Science Steps to Follow - 06</span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-2" aria-expanded="true">
+ <span class="menu-text">Computer Vision</span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-2" aria-expanded="true" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-2" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
+ <span class="menu-text">posts/series/computer-vision-with-pytorch.qmd</span>
+  </li>
+      </ul>
+  </li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-3" aria-expanded="true">
+ <span class="menu-text">Anomaly Detection</span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-3" aria-expanded="true" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-3" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../../posts/series/anomaly-detection/index.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Introduction</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../../posts/series/anomaly-detection/finding-the-oddballs.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Finding the Oddballs</span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-4" aria-expanded="true">
+ <span class="menu-text">VLM Series</span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-4" aria-expanded="true" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-4" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../../posts/series/vlm.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Introduction</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../../posts/series/vlm-qwen3-14b/index.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Qwen3-14B</span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+    </ul>
+    </div>
+</nav>
+<div id="quarto-sidebar-glass" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar,#quarto-sidebar-glass"></div>
+<!-- margin-sidebar -->
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+        <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">On this page</h2>
+   
+  <ul>
+  <li><a href="#introduction" id="toc-introduction" class="nav-link active" data-scroll-target="#introduction"><span class="header-section-number">0.1</span> Introduction</a></li>
+  <li><a href="#why-use-unsloth" id="toc-why-use-unsloth" class="nav-link" data-scroll-target="#why-use-unsloth"><span class="header-section-number">0.2</span> Why Use Unsloth?</a></li>
+  <li><a href="#fine-tuning-in-google-colab" id="toc-fine-tuning-in-google-colab" class="nav-link" data-scroll-target="#fine-tuning-in-google-colab"><span class="header-section-number">0.3</span> 1. Fine-Tuning in Google Colab</a>
+  <ul class="collapse">
+  <li><a href="#step-1-setup" id="toc-step-1-setup" class="nav-link" data-scroll-target="#step-1-setup"><span class="header-section-number">0.3.1</span> Step 1: Setup</a></li>
+  <li><a href="#step-2-load-the-modelqlora" id="toc-step-2-load-the-modelqlora" class="nav-link" data-scroll-target="#step-2-load-the-modelqlora"><span class="header-section-number">0.3.2</span> Step 2: Load the Model(QLoRA)</a></li>
+  <li><a href="#step-3-prepare-the-dataset" id="toc-step-3-prepare-the-dataset" class="nav-link" data-scroll-target="#step-3-prepare-the-dataset"><span class="header-section-number">0.3.3</span> Step 3: Prepare the Dataset</a></li>
+  </ul></li>
+  <li><a href="#fine-tuning-locally-multi-gpu-a100-rtx" id="toc-fine-tuning-locally-multi-gpu-a100-rtx" class="nav-link" data-scroll-target="#fine-tuning-locally-multi-gpu-a100-rtx"><span class="header-section-number">0.4</span> 2. Fine-Tuning Locally (Multi-GPU / A100 / RTX)</a>
+  <ul class="collapse">
+  <li><a href="#setup-linux" id="toc-setup-linux" class="nav-link" data-scroll-target="#setup-linux"><span class="header-section-number">0.4.1</span> Setup linux</a></li>
+  <li><a href="#launch-training" id="toc-launch-training" class="nav-link" data-scroll-target="#launch-training"><span class="header-section-number">0.4.2</span> Launch Training</a></li>
+  </ul></li>
+  <li><a href="#practical-use-cases" id="toc-practical-use-cases" class="nav-link" data-scroll-target="#practical-use-cases"><span class="header-section-number">0.5</span> Practical Use Cases</a></li>
+  <li><a href="#tips-for-success" id="toc-tips-for-success" class="nav-link" data-scroll-target="#tips-for-success"><span class="header-section-number">0.6</span> Tips for Success</a></li>
+  <li><a href="#wrap-up" id="toc-wrap-up" class="nav-link" data-scroll-target="#wrap-up"><span class="header-section-number">0.7</span> Wrap Up</a></li>
+  <li><a href="#next-steps" id="toc-next-steps" class="nav-link" data-scroll-target="#next-steps"><span class="header-section-number">0.8</span> Next Steps</a></li>
+  <li><a href="#references" id="toc-references" class="nav-link" data-scroll-target="#references"><span class="header-section-number">0.9</span> References</a></li>
+  </ul>
+</nav>
+    </div>
+<!-- main -->
+<main class="content quarto-banner-title-block" id="quarto-document-content">
+
+
+
+
+<div class="callout callout-style-default callout-tip callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Tip
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>This post is part of the <a href="../../../posts/series/vlm.html">VLM Series</a>. Feedback and questions are welcome!</p>
+</div>
+</div>
+<section id="introduction" class="level2" data-number="0.1">
+<h2 data-number="0.1" class="anchored" data-anchor-id="introduction"><span class="header-section-number">0.1</span> Introduction</h2>
+<p>Large language models (LLMs) like Qwen3-14B are powerful, but off-the-shelf models can fall short in specialized domains. Fine-tuning lets us inject private domain knowledge, align behavior, and optimize for unique downstream tasks.</p>
+<p>In this guide, we’ll show how to fine-tune Qwen3-14B using <strong>Unsloth</strong>, a blazing-fast fine-tuning library that works on Colab or local GPUs. We’ll cover both:</p>
+<ul>
+<li><strong>Colab-based fine-tuning</strong> (for light experiments and demos)</li>
+<li><strong>Local multi-GPU fine-tuning</strong> (for serious workloads)</li>
+</ul>
+<hr>
+</section>
+<section id="why-use-unsloth" class="level2" data-number="0.2">
+<h2 data-number="0.2" class="anchored" data-anchor-id="why-use-unsloth"><span class="header-section-number">0.2</span> Why Use Unsloth?</h2>
+<p>Unsloth adds significant speed and memory optimizations for training HuggingFace models—up to 2x faster on consumer GPUs.</p>
+<p>Features: - Integrated QLoRA &amp; LoRA - FlashAttention-2 support - HuggingFace-compatible models</p>
+<hr>
+</section>
+<section id="fine-tuning-in-google-colab" class="level2" data-number="0.3">
+<h2 data-number="0.3" class="anchored" data-anchor-id="fine-tuning-in-google-colab"><span class="header-section-number">0.3</span> 1. Fine-Tuning in Google Colab</h2>
+<section id="step-1-setup" class="level3" data-number="0.3.1">
+<h3 data-number="0.3.1" class="anchored" data-anchor-id="step-1-setup"><span class="header-section-number">0.3.1</span> Step 1: Setup</h3>
+<div class="sourceCode" id="cb1"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb1-1"><a href="#cb1-1"></a><span class="op">!</span>pip install <span class="op">--</span>quiet unsloth datasets trl</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</section>
+<section id="step-2-load-the-modelqlora" class="level3" data-number="0.3.2">
+<h3 data-number="0.3.2" class="anchored" data-anchor-id="step-2-load-the-modelqlora"><span class="header-section-number">0.3.2</span> Step 2: Load the Model(QLoRA)</h3>
+<div class="sourceCode" id="cb2"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb2-1"><a href="#cb2-1"></a><span class="im">from</span> unsloth <span class="im">import</span> FastLanguageModel</span>
+<span id="cb2-2"><a href="#cb2-2"></a>model, tokenizer <span class="op">=</span> FastLanguageModel.from_pretrained(</span>
+<span id="cb2-3"><a href="#cb2-3"></a>    model_name <span class="op">=</span> <span class="st">"unsloth/qwen2-14b-chat-gptq"</span>,</span>
+<span id="cb2-4"><a href="#cb2-4"></a>    max_seq_length <span class="op">=</span> <span class="dv">2048</span>,</span>
+<span id="cb2-5"><a href="#cb2-5"></a>    dtype <span class="op">=</span> <span class="va">None</span>,</span>
+<span id="cb2-6"><a href="#cb2-6"></a>    load_in_4bit <span class="op">=</span> <span class="va">True</span>,</span>
+<span id="cb2-7"><a href="#cb2-7"></a>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</section>
+<section id="step-3-prepare-the-dataset" class="level3" data-number="0.3.3">
+<h3 data-number="0.3.3" class="anchored" data-anchor-id="step-3-prepare-the-dataset"><span class="header-section-number">0.3.3</span> Step 3: Prepare the Dataset</h3>
+<p>Use a HuggingFace datasets object:</p>
+<div class="sourceCode" id="cb3"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb3-1"><a href="#cb3-1"></a><span class="im">from</span> datasets <span class="im">import</span> load_dataset</span>
+<span id="cb3-2"><a href="#cb3-2"></a>dataset <span class="op">=</span> load_dataset(<span class="st">"tatsu-lab/alpaca"</span>, split<span class="op">=</span><span class="st">"train[:500]"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>Or bring your own in JSONL format:</p>
+<pre><code>{"instruction": "...", "input": "...", "output": "..."}</code></pre>
+<p>Step 4: Fine-Tune with LoRA</p>
+<div class="sourceCode" id="cb5"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb5-1"><a href="#cb5-1"></a>model <span class="op">=</span> FastLanguageModel.get_peft_model(</span>
+<span id="cb5-2"><a href="#cb5-2"></a>    model,</span>
+<span id="cb5-3"><a href="#cb5-3"></a>    r <span class="op">=</span> <span class="dv">64</span>,</span>
+<span id="cb5-4"><a href="#cb5-4"></a>    lora_alpha <span class="op">=</span> <span class="dv">16</span>,</span>
+<span id="cb5-5"><a href="#cb5-5"></a>    lora_dropout <span class="op">=</span> <span class="fl">0.05</span>,</span>
+<span id="cb5-6"><a href="#cb5-6"></a>    bias <span class="op">=</span> <span class="st">"none"</span>,</span>
+<span id="cb5-7"><a href="#cb5-7"></a>    task_type <span class="op">=</span> <span class="st">"CAUSAL_LM"</span>,</span>
+<span id="cb5-8"><a href="#cb5-8"></a>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>then train with:</p>
+<div class="sourceCode" id="cb6"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb6-1"><a href="#cb6-1"></a><span class="im">from</span> trl <span class="im">import</span> SFTTrainer</span>
+<span id="cb6-2"><a href="#cb6-2"></a>trainer <span class="op">=</span> SFTTrainer(model<span class="op">=</span>model, tokenizer<span class="op">=</span>tokenizer, train_dataset<span class="op">=</span>dataset)</span>
+<span id="cb6-3"><a href="#cb6-3"></a>trainer.train()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</section>
+</section>
+<section id="fine-tuning-locally-multi-gpu-a100-rtx" class="level2" data-number="0.4">
+<h2 data-number="0.4" class="anchored" data-anchor-id="fine-tuning-locally-multi-gpu-a100-rtx"><span class="header-section-number">0.4</span> 2. Fine-Tuning Locally (Multi-GPU / A100 / RTX)</h2>
+<section id="setup-linux" class="level3" data-number="0.4.1">
+<h3 data-number="0.4.1" class="anchored" data-anchor-id="setup-linux"><span class="header-section-number">0.4.1</span> Setup linux</h3>
+<div class="sourceCode" id="cb7"><pre class="sourceCode numberSource bash number-lines code-with-copy"><code class="sourceCode bash"><span id="cb7-1"><a href="#cb7-1"></a><span class="ex">pip</span> install unsloth<span class="pp">[</span><span class="ss">all</span><span class="pp">]</span> accelerate deepspeed</span>
+<span id="cb7-2"><a href="#cb7-2"></a><span class="ex">accelerate</span> config</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>Enable multi-GPU with DeepSpeed or accelerate.</p>
+</section>
+<section id="launch-training" class="level3" data-number="0.4.2">
+<h3 data-number="0.4.2" class="anchored" data-anchor-id="launch-training"><span class="header-section-number">0.4.2</span> Launch Training</h3>
+<div class="sourceCode" id="cb8"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb8-1"><a href="#cb8-1"></a>accelerate launch train.py</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>Your train.py should import and use FastLanguageModel just like in Colab. You’ll get better memory handling and faster throughput with FP16 + QLoRA.</p>
+<p>For training large corpora, you can stream JSONL from disk, or integrate with DVC or HuggingFace Datasets to handle TB-scale data.</p>
+</section>
+</section>
+<section id="practical-use-cases" class="level2" data-number="0.5">
+<h2 data-number="0.5" class="anchored" data-anchor-id="practical-use-cases"><span class="header-section-number">0.5</span> Practical Use Cases</h2>
+<ul>
+<li><p><strong>Custom Assistants</strong>: Inject your product or company domain into the model.</p></li>
+<li><p><strong>Data QA Bots</strong>: Fine-tune on your own feature dictionaries, KPIs, and docs.</p></li>
+<li><p><strong>Math Tutors</strong>: Reinforce multi-step reasoning with math datasets (e.g., GSM8K).</p></li>
+</ul>
+</section>
+<section id="tips-for-success" class="level2" data-number="0.6">
+<h2 data-number="0.6" class="anchored" data-anchor-id="tips-for-success"><span class="header-section-number">0.6</span> Tips for Success</h2>
+<ol type="1">
+<li><p>Use max_seq_length=2048 for long-context reasoning tasks.</p></li>
+<li><p>Regularize using small LoRA dropout (0.05 or 0.1).</p></li>
+<li><p>Evaluate outputs on real tasks—don’t just trust loss!</p></li>
+</ol>
+</section>
+<section id="wrap-up" class="level2" data-number="0.7">
+<h2 data-number="0.7" class="anchored" data-anchor-id="wrap-up"><span class="header-section-number">0.7</span> Wrap Up</h2>
+<p>Fine-tuning Qwen3-14B with Unsloth makes LLM customization accessible—whether you’re in Colab or scaling up on A100s.</p>
+<p>Let me know if you want a follow-up post on:</p>
+<ul>
+<li>Evaluation methods</li>
+<li>Quantization after fine-tuning</li>
+<li>Deploying fine-tuned models</li>
+</ul>
+<hr>
+</section>
+<section id="next-steps" class="level2" data-number="0.8">
+<h2 data-number="0.8" class="anchored" data-anchor-id="next-steps"><span class="header-section-number">0.8</span> Next Steps</h2>
+<ul>
+<li><a href="../../../posts/series/vlm.html">Back to VLM Series Overview</a></li>
+<li><a href="../../../posts/series/vlm-qwen3-14b/index.html">Read the first post: Hands-On with Qwen3-14B</a></li>
+</ul>
+</section>
+<section id="references" class="level2" data-number="0.9">
+<h2 data-number="0.9" class="anchored" data-anchor-id="references"><span class="header-section-number">0.9</span> References</h2>
+<ol type="1">
+<li><a href="https://github.com/unslothai/unsloth">Unsloth Documentation</a></li>
+<li><a href="https://huggingface.co/Qwen/Qwen1.5-14B">Qwen3-14B on HuggingFace</a></li>
+<li><a href="../../../posts/series/vlm.html">VLM Series Overview</a></li>
+</ol>
+<div class="callout callout-style-default callout-note callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Note
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>This post is part of the <a href="../../../posts/series/vlm.html">VLM Series</a>. Feedback and questions are welcome!</p>
+</div>
+</div>
+
+
+<!-- -->
+
+</section>
+
+<div id="quarto-appendix" class="default"><section class="quarto-appendix-contents"><h2 class="anchored quarto-appendix-heading">Reuse</h2><div id="quarto-reuse" class="quarto-appendix-contents"><div>CC BY-NC-SA 4.0</div></div></section><section class="quarto-appendix-contents"><h2 class="anchored quarto-appendix-heading">Citation</h2><div><div class="quarto-appendix-secondary-label">BibTeX citation:</div><pre class="sourceCode code-with-copy quarto-appendix-bibtex"><code class="sourceCode bibtex">@online{2025,
+  author = {, Hasan},
+  title = {Fine-Tuning {Qwen3-14B} with {Unsloth:} {A} {Practical}
+    {Guide} for {Data} {Scientists}},
+  date = {2025-05-03},
+  url = {https://hasangoni.quarto.pub/hasan-blog-post/posts/series/vlm-qwen3-14b/finetune-qwen3-14b.html},
+  langid = {en}
+}
+</code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre><div class="quarto-appendix-secondary-label">For attribution, please cite this work as:</div><div id="ref-2025" class="csl-entry quarto-appendix-citeas" role="listitem">
+Hasan. 2025. <span>“Fine-Tuning Qwen3-14B with Unsloth: A Practical
+Guide for Data Scientists.”</span> May 3, 2025. <a href="https://hasangoni.quarto.pub/hasan-blog-post/posts/series/vlm-qwen3-14b/finetune-qwen3-14b.html">https://hasangoni.quarto.pub/hasan-blog-post/posts/series/vlm-qwen3-14b/finetune-qwen3-14b.html</a>.
+</div></div></section></div></main> <!-- /main -->
+<script id="quarto-html-after-body" type="application/javascript">
+window.document.addEventListener("DOMContentLoaded", function (event) {
+  const toggleBodyColorMode = (bsSheetEl) => {
+    const mode = bsSheetEl.getAttribute("data-mode");
+    const bodyEl = window.document.querySelector("body");
+    if (mode === "dark") {
+      bodyEl.classList.add("quarto-dark");
+      bodyEl.classList.remove("quarto-light");
+    } else {
+      bodyEl.classList.add("quarto-light");
+      bodyEl.classList.remove("quarto-dark");
+    }
+  }
+  const toggleBodyColorPrimary = () => {
+    const bsSheetEl = window.document.querySelector("link#quarto-bootstrap");
+    if (bsSheetEl) {
+      toggleBodyColorMode(bsSheetEl);
+    }
+  }
+  toggleBodyColorPrimary();  
+  const icon = "";
+  const anchorJS = new window.AnchorJS();
+  anchorJS.options = {
+    placement: 'right',
+    icon: icon
+  };
+  anchorJS.add('.anchored');
+  const isCodeAnnotation = (el) => {
+    for (const clz of el.classList) {
+      if (clz.startsWith('code-annotation-')) {                     
+        return true;
+      }
+    }
+    return false;
+  }
+  const clipboard = new window.ClipboardJS('.code-copy-button', {
+    text: function(trigger) {
+      const codeEl = trigger.previousElementSibling.cloneNode(true);
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
+        }
+      }
+      return codeEl.innerText;
+    }
+  });
+  clipboard.on('success', function(e) {
+    // button target
+    const button = e.trigger;
+    // don't keep focus
+    button.blur();
+    // flash "checked"
+    button.classList.add('code-copy-button-checked');
+    var currentTitle = button.getAttribute("title");
+    button.setAttribute("title", "Copied!");
+    let tooltip;
+    if (window.bootstrap) {
+      button.setAttribute("data-bs-toggle", "tooltip");
+      button.setAttribute("data-bs-placement", "left");
+      button.setAttribute("data-bs-title", "Copied!");
+      tooltip = new bootstrap.Tooltip(button, 
+        { trigger: "manual", 
+          customClass: "code-copy-button-tooltip",
+          offset: [0, -8]});
+      tooltip.show();    
+    }
+    setTimeout(function() {
+      if (tooltip) {
+        tooltip.hide();
+        button.removeAttribute("data-bs-title");
+        button.removeAttribute("data-bs-toggle");
+        button.removeAttribute("data-bs-placement");
+      }
+      button.setAttribute("title", currentTitle);
+      button.classList.remove('code-copy-button-checked');
+    }, 1000);
+    // clear code selection
+    e.clearSelection();
+  });
+  const viewSource = window.document.getElementById('quarto-view-source') ||
+                     window.document.getElementById('quarto-code-tools-source');
+  if (viewSource) {
+    const sourceUrl = viewSource.getAttribute("data-quarto-source-url");
+    viewSource.addEventListener("click", function(e) {
+      if (sourceUrl) {
+        // rstudio viewer pane
+        if (/\bcapabilities=\b/.test(window.location)) {
+          window.open(sourceUrl);
+        } else {
+          window.location.href = sourceUrl;
+        }
+      } else {
+        const modal = new bootstrap.Modal(document.getElementById('quarto-embedded-source-code-modal'));
+        modal.show();
+      }
+      return false;
+    });
+  }
+  function toggleCodeHandler(show) {
+    return function(e) {
+      const detailsSrc = window.document.querySelectorAll(".cell > details > .sourceCode");
+      for (let i=0; i<detailsSrc.length; i++) {
+        const details = detailsSrc[i].parentElement;
+        if (show) {
+          details.open = true;
+        } else {
+          details.removeAttribute("open");
+        }
+      }
+      const cellCodeDivs = window.document.querySelectorAll(".cell > .sourceCode");
+      const fromCls = show ? "hidden" : "unhidden";
+      const toCls = show ? "unhidden" : "hidden";
+      for (let i=0; i<cellCodeDivs.length; i++) {
+        const codeDiv = cellCodeDivs[i];
+        if (codeDiv.classList.contains(fromCls)) {
+          codeDiv.classList.remove(fromCls);
+          codeDiv.classList.add(toCls);
+        } 
+      }
+      return false;
+    }
+  }
+  const hideAllCode = window.document.getElementById("quarto-hide-all-code");
+  if (hideAllCode) {
+    hideAllCode.addEventListener("click", toggleCodeHandler(false));
+  }
+  const showAllCode = window.document.getElementById("quarto-show-all-code");
+  if (showAllCode) {
+    showAllCode.addEventListener("click", toggleCodeHandler(true));
+  }
+  function tippyHover(el, contentFn) {
+    const config = {
+      allowHTML: true,
+      content: contentFn,
+      maxWidth: 500,
+      delay: 100,
+      arrow: false,
+      appendTo: function(el) {
+          return el.parentElement;
+      },
+      interactive: true,
+      interactiveBorder: 10,
+      theme: 'quarto',
+      placement: 'bottom-start'
+    };
+    window.tippy(el, config); 
+  }
+  const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+  for (var i=0; i<noterefs.length; i++) {
+    const ref = noterefs[i];
+    tippyHover(ref, function() {
+      // use id or data attribute instead here
+      let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+      try { href = new URL(href).hash; } catch {}
+      const id = href.replace(/^#\/?/, "");
+      const note = window.document.getElementById(id);
+      return note.innerHTML;
+    });
+  }
+      let selectedAnnoteEl;
+      const selectorForAnnotation = ( cell, annotation) => {
+        let cellAttr = 'data-code-cell="' + cell + '"';
+        let lineAttr = 'data-code-annotation="' +  annotation + '"';
+        const selector = 'span[' + cellAttr + '][' + lineAttr + ']';
+        return selector;
+      }
+      const selectCodeLines = (annoteEl) => {
+        const doc = window.document;
+        const targetCell = annoteEl.getAttribute("data-target-cell");
+        const targetAnnotation = annoteEl.getAttribute("data-target-annotation");
+        const annoteSpan = window.document.querySelector(selectorForAnnotation(targetCell, targetAnnotation));
+        const lines = annoteSpan.getAttribute("data-code-lines").split(",");
+        const lineIds = lines.map((line) => {
+          return targetCell + "-" + line;
+        })
+        let top = null;
+        let height = null;
+        let parent = null;
+        if (lineIds.length > 0) {
+            //compute the position of the single el (top and bottom and make a div)
+            const el = window.document.getElementById(lineIds[0]);
+            top = el.offsetTop;
+            height = el.offsetHeight;
+            parent = el.parentElement.parentElement;
+          if (lineIds.length > 1) {
+            const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
+            const bottom = lastEl.offsetTop + lastEl.offsetHeight;
+            height = bottom - top;
+          }
+          if (top !== null && height !== null && parent !== null) {
+            // cook up a div (if necessary) and position it 
+            let div = window.document.getElementById("code-annotation-line-highlight");
+            if (div === null) {
+              div = window.document.createElement("div");
+              div.setAttribute("id", "code-annotation-line-highlight");
+              div.style.position = 'absolute';
+              parent.appendChild(div);
+            }
+            div.style.top = top - 2 + "px";
+            div.style.height = height + 4 + "px";
+            let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
+            if (gutterDiv === null) {
+              gutterDiv = window.document.createElement("div");
+              gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
+              gutterDiv.style.position = 'absolute';
+              const codeCell = window.document.getElementById(targetCell);
+              const gutter = codeCell.querySelector('.code-annotation-gutter');
+              gutter.appendChild(gutterDiv);
+            }
+            gutterDiv.style.top = top - 2 + "px";
+            gutterDiv.style.height = height + 4 + "px";
+          }
+          selectedAnnoteEl = annoteEl;
+        }
+      };
+      const unselectCodeLines = () => {
+        const elementsIds = ["code-annotation-line-highlight", "code-annotation-line-highlight-gutter"];
+        elementsIds.forEach((elId) => {
+          const div = window.document.getElementById(elId);
+          if (div) {
+            div.remove();
+          }
+        });
+        selectedAnnoteEl = undefined;
+      };
+      // Attach click handler to the DT
+      const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
+      for (const annoteDlNode of annoteDls) {
+        annoteDlNode.addEventListener('click', (event) => {
+          const clickedEl = event.target;
+          if (clickedEl !== selectedAnnoteEl) {
+            unselectCodeLines();
+            const activeEl = window.document.querySelector('dt[data-target-cell].code-annotation-active');
+            if (activeEl) {
+              activeEl.classList.remove('code-annotation-active');
+            }
+            selectCodeLines(clickedEl);
+            clickedEl.classList.add('code-annotation-active');
+          } else {
+            // Unselect the line
+            unselectCodeLines();
+            clickedEl.classList.remove('code-annotation-active');
+          }
+        });
+      }
+  const findCites = (el) => {
+    const parentEl = el.parentElement;
+    if (parentEl) {
+      const cites = parentEl.dataset.cites;
+      if (cites) {
+        return {
+          el,
+          cites: cites.split(' ')
+        };
+      } else {
+        return findCites(el.parentElement)
+      }
+    } else {
+      return undefined;
+    }
+  };
+  var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+  for (var i=0; i<bibliorefs.length; i++) {
+    const ref = bibliorefs[i];
+    const citeInfo = findCites(ref);
+    if (citeInfo) {
+      tippyHover(citeInfo.el, function() {
+        var popup = window.document.createElement('div');
+        citeInfo.cites.forEach(function(cite) {
+          var citeDiv = window.document.createElement('div');
+          citeDiv.classList.add('hanging-indent');
+          citeDiv.classList.add('csl-entry');
+          var biblioDiv = window.document.getElementById('ref-' + cite);
+          if (biblioDiv) {
+            citeDiv.innerHTML = biblioDiv.innerHTML;
+          }
+          popup.appendChild(citeDiv);
+        });
+        return popup.innerHTML;
+      });
+    }
+  }
+});
+</script>
+<script src="https://utteranc.es/client.js" repo="yourusername/quarto_blog_hasan" issue-term="pathname" theme="github-light" crossorigin="anonymous" async="">
+</script>
+<script src="https://giscus.app/client.js" data-repo="HasanGoni/quarto_blog_hasan" data-repo-id="" data-category="General" data-category-id="" data-mapping="title" data-reactions-enabled="1" data-emit-metadata="0" data-input-position="top" data-theme="light" data-lang="en" crossorigin="anonymous" async="">
+</script><div class="modal fade" id="quarto-embedded-source-code-modal" tabindex="-1" aria-labelledby="quarto-embedded-source-code-modal-label" aria-hidden="true"><div class="modal-dialog modal-dialog-scrollable"><div class="modal-content"><div class="modal-header"><h5 class="modal-title" id="quarto-embedded-source-code-modal-label">Source Code</h5><button class="btn-close" data-bs-dismiss="modal"></button></div><div class="modal-body"><div class="">
+<div class="sourceCode" id="cb9" data-shortcodes="false"><pre class="sourceCode numberSource markdown number-lines code-with-copy"><code class="sourceCode markdown"><span id="cb9-1"><a href="#cb9-1"></a><span class="co">---</span></span>
+<span id="cb9-2"><a href="#cb9-2"></a><span class="an">title:</span><span class="co"> "Fine-Tuning Qwen3-14B with Unsloth: A Practical Guide for Data Scientists"</span></span>
+<span id="cb9-3"><a href="#cb9-3"></a><span class="an">author:</span><span class="co"> "Hasan"</span></span>
+<span id="cb9-4"><a href="#cb9-4"></a><span class="an">date:</span><span class="co"> 2025-05-03</span></span>
+<span id="cb9-5"><a href="#cb9-5"></a><span class="an">categories:</span><span class="co"> [LLM, Fine-tuning, HuggingFace, LoRA, QLoRA]</span></span>
+<span id="cb9-6"><a href="#cb9-6"></a><span class="an">tags:</span><span class="co"> [Qwen3, Unsloth, Transformers, Colab, GPU, Fine-Tuning, LoRA]</span></span>
+<span id="cb9-7"><a href="#cb9-7"></a><span class="an">image:</span><span class="co"> "qwen3-14b.png"</span></span>
+<span id="cb9-8"><a href="#cb9-8"></a><span class="an">toc:</span><span class="co"> true</span></span>
+<span id="cb9-9"><a href="#cb9-9"></a><span class="an">series:</span></span>
+<span id="cb9-10"><a href="#cb9-10"></a><span class="co">  name: "VLM Series"</span></span>
+<span id="cb9-11"><a href="#cb9-11"></a><span class="co">  number: 2</span></span>
+<span id="cb9-12"><a href="#cb9-12"></a><span class="an">format:</span></span>
+<span id="cb9-13"><a href="#cb9-13"></a><span class="co">  html: default</span></span>
+<span id="cb9-14"><a href="#cb9-14"></a><span class="co">---</span></span>
+<span id="cb9-15"><a href="#cb9-15"></a></span>
+<span id="cb9-16"><a href="#cb9-16"></a>:::{.callout-tip}</span>
+<span id="cb9-17"><a href="#cb9-17"></a>This post is part of the <span class="co">[</span><span class="ot">VLM Series</span><span class="co">](../vlm.qmd)</span>. Feedback and questions are welcome!</span>
+<span id="cb9-18"><a href="#cb9-18"></a>:::</span>
+<span id="cb9-19"><a href="#cb9-19"></a></span>
+<span id="cb9-20"><a href="#cb9-20"></a><span class="fu">## Introduction</span></span>
+<span id="cb9-21"><a href="#cb9-21"></a></span>
+<span id="cb9-22"><a href="#cb9-22"></a>Large language models (LLMs) like Qwen3-14B are powerful, but off-the-shelf models can fall short in specialized domains. Fine-tuning lets us inject private domain knowledge, align behavior, and optimize for unique downstream tasks.</span>
+<span id="cb9-23"><a href="#cb9-23"></a></span>
+<span id="cb9-24"><a href="#cb9-24"></a>In this guide, we'll show how to fine-tune Qwen3-14B using **Unsloth**, a blazing-fast fine-tuning library that works on Colab or local GPUs. We'll cover both:</span>
+<span id="cb9-25"><a href="#cb9-25"></a></span>
+<span id="cb9-26"><a href="#cb9-26"></a><span class="ss">- </span>**Colab-based fine-tuning** (for light experiments and demos)</span>
+<span id="cb9-27"><a href="#cb9-27"></a><span class="ss">- </span>**Local multi-GPU fine-tuning** (for serious workloads)</span>
+<span id="cb9-28"><a href="#cb9-28"></a></span>
+<span id="cb9-29"><a href="#cb9-29"></a>---</span>
+<span id="cb9-30"><a href="#cb9-30"></a></span>
+<span id="cb9-31"><a href="#cb9-31"></a><span class="fu">## Why Use Unsloth?</span></span>
+<span id="cb9-32"><a href="#cb9-32"></a></span>
+<span id="cb9-33"><a href="#cb9-33"></a>Unsloth adds significant speed and memory optimizations for training HuggingFace models—up to 2x faster on consumer GPUs.</span>
+<span id="cb9-34"><a href="#cb9-34"></a></span>
+<span id="cb9-35"><a href="#cb9-35"></a>Features:</span>
+<span id="cb9-36"><a href="#cb9-36"></a><span class="ss">- </span>Integrated QLoRA &amp; LoRA</span>
+<span id="cb9-37"><a href="#cb9-37"></a><span class="ss">- </span>FlashAttention-2 support</span>
+<span id="cb9-38"><a href="#cb9-38"></a><span class="ss">- </span>HuggingFace-compatible models</span>
+<span id="cb9-39"><a href="#cb9-39"></a></span>
+<span id="cb9-40"><a href="#cb9-40"></a>---</span>
+<span id="cb9-41"><a href="#cb9-41"></a></span>
+<span id="cb9-42"><a href="#cb9-42"></a><span class="fu">## 1. Fine-Tuning in Google Colab</span></span>
+<span id="cb9-43"><a href="#cb9-43"></a></span>
+<span id="cb9-44"><a href="#cb9-44"></a><span class="fu">### Step 1: Setup</span></span>
+<span id="cb9-45"><a href="#cb9-45"></a></span>
+<span id="cb9-46"><a href="#cb9-46"></a><span class="in">```python</span></span>
+<span id="cb9-47"><a href="#cb9-47"></a><span class="op">!</span>pip install <span class="op">--</span>quiet unsloth datasets trl</span>
+<span id="cb9-48"><a href="#cb9-48"></a><span class="in">```</span></span>
+<span id="cb9-49"><a href="#cb9-49"></a></span>
+<span id="cb9-50"><a href="#cb9-50"></a><span class="fu">### Step 2: Load the Model(QLoRA)</span></span>
+<span id="cb9-51"><a href="#cb9-51"></a></span>
+<span id="cb9-52"><a href="#cb9-52"></a><span class="in">```python</span></span>
+<span id="cb9-53"><a href="#cb9-53"></a><span class="im">from</span> unsloth <span class="im">import</span> FastLanguageModel</span>
+<span id="cb9-54"><a href="#cb9-54"></a>model, tokenizer <span class="op">=</span> FastLanguageModel.from_pretrained(</span>
+<span id="cb9-55"><a href="#cb9-55"></a>    model_name <span class="op">=</span> <span class="st">"unsloth/qwen2-14b-chat-gptq"</span>,</span>
+<span id="cb9-56"><a href="#cb9-56"></a>    max_seq_length <span class="op">=</span> <span class="dv">2048</span>,</span>
+<span id="cb9-57"><a href="#cb9-57"></a>    dtype <span class="op">=</span> <span class="va">None</span>,</span>
+<span id="cb9-58"><a href="#cb9-58"></a>    load_in_4bit <span class="op">=</span> <span class="va">True</span>,</span>
+<span id="cb9-59"><a href="#cb9-59"></a>)</span>
+<span id="cb9-60"><a href="#cb9-60"></a></span>
+<span id="cb9-61"><a href="#cb9-61"></a><span class="in">```</span> </span>
+<span id="cb9-62"><a href="#cb9-62"></a></span>
+<span id="cb9-63"><a href="#cb9-63"></a><span class="fu">### Step 3: Prepare the Dataset</span></span>
+<span id="cb9-64"><a href="#cb9-64"></a></span>
+<span id="cb9-65"><a href="#cb9-65"></a>Use a HuggingFace datasets object:</span>
+<span id="cb9-66"><a href="#cb9-66"></a></span>
+<span id="cb9-67"><a href="#cb9-67"></a></span>
+<span id="cb9-68"><a href="#cb9-68"></a><span class="in">```python</span></span>
+<span id="cb9-69"><a href="#cb9-69"></a><span class="im">from</span> datasets <span class="im">import</span> load_dataset</span>
+<span id="cb9-70"><a href="#cb9-70"></a>dataset <span class="op">=</span> load_dataset(<span class="st">"tatsu-lab/alpaca"</span>, split<span class="op">=</span><span class="st">"train[:500]"</span>)</span>
+<span id="cb9-71"><a href="#cb9-71"></a><span class="in">```</span></span>
+<span id="cb9-72"><a href="#cb9-72"></a></span>
+<span id="cb9-73"><a href="#cb9-73"></a>Or bring your own in JSONL format: </span>
+<span id="cb9-74"><a href="#cb9-74"></a></span>
+<span id="cb9-75"><a href="#cb9-75"></a><span class="in">```</span></span>
+<span id="cb9-76"><a href="#cb9-76"></a><span class="in">{"instruction": "...", "input": "...", "output": "..."}</span></span>
+<span id="cb9-77"><a href="#cb9-77"></a><span class="in">```</span></span>
+<span id="cb9-78"><a href="#cb9-78"></a></span>
+<span id="cb9-79"><a href="#cb9-79"></a>Step 4: Fine-Tune with LoRA</span>
+<span id="cb9-80"><a href="#cb9-80"></a></span>
+<span id="cb9-81"><a href="#cb9-81"></a><span class="in">```python</span></span>
+<span id="cb9-82"><a href="#cb9-82"></a>model <span class="op">=</span> FastLanguageModel.get_peft_model(</span>
+<span id="cb9-83"><a href="#cb9-83"></a>    model,</span>
+<span id="cb9-84"><a href="#cb9-84"></a>    r <span class="op">=</span> <span class="dv">64</span>,</span>
+<span id="cb9-85"><a href="#cb9-85"></a>    lora_alpha <span class="op">=</span> <span class="dv">16</span>,</span>
+<span id="cb9-86"><a href="#cb9-86"></a>    lora_dropout <span class="op">=</span> <span class="fl">0.05</span>,</span>
+<span id="cb9-87"><a href="#cb9-87"></a>    bias <span class="op">=</span> <span class="st">"none"</span>,</span>
+<span id="cb9-88"><a href="#cb9-88"></a>    task_type <span class="op">=</span> <span class="st">"CAUSAL_LM"</span>,</span>
+<span id="cb9-89"><a href="#cb9-89"></a>)</span>
+<span id="cb9-90"><a href="#cb9-90"></a><span class="in">```</span></span>
+<span id="cb9-91"><a href="#cb9-91"></a>then train with:</span>
+<span id="cb9-92"><a href="#cb9-92"></a></span>
+<span id="cb9-93"><a href="#cb9-93"></a><span class="in">```python</span></span>
+<span id="cb9-94"><a href="#cb9-94"></a><span class="im">from</span> trl <span class="im">import</span> SFTTrainer</span>
+<span id="cb9-95"><a href="#cb9-95"></a>trainer <span class="op">=</span> SFTTrainer(model<span class="op">=</span>model, tokenizer<span class="op">=</span>tokenizer, train_dataset<span class="op">=</span>dataset)</span>
+<span id="cb9-96"><a href="#cb9-96"></a>trainer.train()</span>
+<span id="cb9-97"><a href="#cb9-97"></a><span class="in">```</span></span>
+<span id="cb9-98"><a href="#cb9-98"></a></span>
+<span id="cb9-99"><a href="#cb9-99"></a><span class="fu">## 2. Fine-Tuning Locally (Multi-GPU / A100 / RTX)</span></span>
+<span id="cb9-100"><a href="#cb9-100"></a></span>
+<span id="cb9-101"><a href="#cb9-101"></a></span>
+<span id="cb9-102"><a href="#cb9-102"></a><span class="fu">### Setup linux</span></span>
+<span id="cb9-103"><a href="#cb9-103"></a></span>
+<span id="cb9-104"><a href="#cb9-104"></a><span class="in">```bash</span></span>
+<span id="cb9-105"><a href="#cb9-105"></a><span class="ex">pip</span> install unsloth<span class="pp">[</span><span class="ss">all</span><span class="pp">]</span> accelerate deepspeed</span>
+<span id="cb9-106"><a href="#cb9-106"></a><span class="ex">accelerate</span> config</span>
+<span id="cb9-107"><a href="#cb9-107"></a><span class="in">```</span></span>
+<span id="cb9-108"><a href="#cb9-108"></a></span>
+<span id="cb9-109"><a href="#cb9-109"></a>Enable multi-GPU with DeepSpeed or accelerate.</span>
+<span id="cb9-110"><a href="#cb9-110"></a></span>
+<span id="cb9-111"><a href="#cb9-111"></a><span class="fu">### Launch Training</span></span>
+<span id="cb9-112"><a href="#cb9-112"></a></span>
+<span id="cb9-113"><a href="#cb9-113"></a><span class="in">```python</span></span>
+<span id="cb9-114"><a href="#cb9-114"></a>accelerate launch train.py</span>
+<span id="cb9-115"><a href="#cb9-115"></a><span class="in">```</span></span>
+<span id="cb9-116"><a href="#cb9-116"></a></span>
+<span id="cb9-117"><a href="#cb9-117"></a>Your train.py should import and use FastLanguageModel just like in Colab. You'll get better memory handling and faster throughput with FP16 + QLoRA.</span>
+<span id="cb9-118"><a href="#cb9-118"></a></span>
+<span id="cb9-119"><a href="#cb9-119"></a>For training large corpora, you can stream JSONL from disk, or integrate with DVC or HuggingFace Datasets to handle TB-scale data.</span>
+<span id="cb9-120"><a href="#cb9-120"></a></span>
+<span id="cb9-121"><a href="#cb9-121"></a><span class="fu">## Practical Use Cases</span></span>
+<span id="cb9-122"><a href="#cb9-122"></a></span>
+<span id="cb9-123"><a href="#cb9-123"></a><span class="ss">- </span>**Custom Assistants**: Inject your product or company domain into the model.</span>
+<span id="cb9-124"><a href="#cb9-124"></a></span>
+<span id="cb9-125"><a href="#cb9-125"></a><span class="ss">- </span>**Data QA Bots**: Fine-tune on your own feature dictionaries, KPIs, and docs.</span>
+<span id="cb9-126"><a href="#cb9-126"></a></span>
+<span id="cb9-127"><a href="#cb9-127"></a><span class="ss">- </span>**Math Tutors**: Reinforce multi-step reasoning with math datasets (e.g., GSM8K).</span>
+<span id="cb9-128"><a href="#cb9-128"></a></span>
+<span id="cb9-129"><a href="#cb9-129"></a><span class="fu">## Tips for Success</span></span>
+<span id="cb9-130"><a href="#cb9-130"></a></span>
+<span id="cb9-131"><a href="#cb9-131"></a><span class="ss">1. </span>Use max_seq_length=2048 for long-context reasoning tasks.</span>
+<span id="cb9-132"><a href="#cb9-132"></a></span>
+<span id="cb9-133"><a href="#cb9-133"></a><span class="ss">2. </span>Regularize using small LoRA dropout (0.05 or 0.1).</span>
+<span id="cb9-134"><a href="#cb9-134"></a></span>
+<span id="cb9-135"><a href="#cb9-135"></a><span class="ss">3. </span>Evaluate outputs on real tasks—don't just trust loss!</span>
+<span id="cb9-136"><a href="#cb9-136"></a></span>
+<span id="cb9-137"><a href="#cb9-137"></a><span class="fu">## Wrap Up</span></span>
+<span id="cb9-138"><a href="#cb9-138"></a>Fine-tuning Qwen3-14B with Unsloth makes LLM customization accessible—whether you're in Colab or scaling up on A100s.</span>
+<span id="cb9-139"><a href="#cb9-139"></a></span>
+<span id="cb9-140"><a href="#cb9-140"></a>Let me know if you want a follow-up post on:</span>
+<span id="cb9-141"><a href="#cb9-141"></a></span>
+<span id="cb9-142"><a href="#cb9-142"></a><span class="ss">- </span>Evaluation methods</span>
+<span id="cb9-143"><a href="#cb9-143"></a><span class="ss">- </span>Quantization after fine-tuning</span>
+<span id="cb9-144"><a href="#cb9-144"></a><span class="ss">- </span>Deploying fine-tuned models</span>
+<span id="cb9-145"><a href="#cb9-145"></a></span>
+<span id="cb9-146"><a href="#cb9-146"></a>---</span>
+<span id="cb9-147"><a href="#cb9-147"></a></span>
+<span id="cb9-148"><a href="#cb9-148"></a><span class="fu">## Next Steps</span></span>
+<span id="cb9-149"><a href="#cb9-149"></a></span>
+<span id="cb9-150"><a href="#cb9-150"></a><span class="ss">- </span><span class="co">[</span><span class="ot">Back to VLM Series Overview</span><span class="co">](../vlm.qmd)</span></span>
+<span id="cb9-151"><a href="#cb9-151"></a><span class="ss">- </span><span class="co">[</span><span class="ot">Read the first post: Hands-On with Qwen3-14B</span><span class="co">](index.qmd)</span></span>
+<span id="cb9-152"><a href="#cb9-152"></a></span>
+<span id="cb9-153"><a href="#cb9-153"></a><span class="fu">## References</span></span>
+<span id="cb9-154"><a href="#cb9-154"></a></span>
+<span id="cb9-155"><a href="#cb9-155"></a><span class="ss">1. </span><span class="co">[</span><span class="ot">Unsloth Documentation</span><span class="co">](https://github.com/unslothai/unsloth)</span></span>
+<span id="cb9-156"><a href="#cb9-156"></a><span class="ss">2. </span><span class="co">[</span><span class="ot">Qwen3-14B on HuggingFace</span><span class="co">](https://huggingface.co/Qwen/Qwen1.5-14B)</span></span>
+<span id="cb9-157"><a href="#cb9-157"></a><span class="ss">3. </span><span class="co">[</span><span class="ot">VLM Series Overview</span><span class="co">](../vlm.qmd)</span></span>
+<span id="cb9-158"><a href="#cb9-158"></a></span>
+<span id="cb9-159"><a href="#cb9-159"></a>:::{.callout-note}</span>
+<span id="cb9-160"><a href="#cb9-160"></a>This post is part of the <span class="co">[</span><span class="ot">VLM Series</span><span class="co">](../vlm.qmd)</span>. Feedback and questions are welcome!</span>
+<span id="cb9-161"><a href="#cb9-161"></a>:::</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div></div></div></div></div>
+</div> <!-- /content -->
+
+
+
+<script src="../../../site_libs/quarto-html/zenscroll-min.js"></script>
+</body></html>
