@@ -1,0 +1,1518 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.3.450">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+<meta name="author" content="Hasan">
+<meta name="dcterms.date" content="2025-06-29">
+<meta name="description" content="Multiply your computational power by mastering parallel processing. Learn to orchestrate multiple processes simultaneously, turning your single-threaded workflows into high-performance parallel operations.">
+
+<title>Hasan’s Data Science &amp; AI Blog - Parallel Processing Power</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
+  vertical-align: middle;
+}
+/* CSS for syntax highlighting */
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+  }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+</style>
+
+
+<script src="../../../site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="../../../site_libs/quarto-nav/headroom.min.js"></script>
+<script src="../../../site_libs/clipboard/clipboard.min.js"></script>
+<script src="../../../site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="../../../site_libs/quarto-search/fuse.min.js"></script>
+<script src="../../../site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="../../../">
+<script src="../../../site_libs/quarto-html/quarto.js"></script>
+<script src="../../../site_libs/quarto-html/popper.min.js"></script>
+<script src="../../../site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="../../../site_libs/quarto-html/anchor.min.js"></script>
+<link href="../../../site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="../../../site_libs/quarto-html/quarto-syntax-highlighting.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="../../../site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="../../../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="../../../site_libs/bootstrap/bootstrap.min.css" rel="stylesheet" id="quarto-bootstrap" data-mode="light">
+<script id="quarto-search-options" type="application/json">{
+  "location": "navbar",
+  "copy-button": false,
+  "collapse-after": 3,
+  "panel-placement": "end",
+  "type": "overlay",
+  "limit": 20,
+  "language": {
+    "search-no-results-text": "No results",
+    "search-matching-documents-text": "matching documents",
+    "search-copy-link-title": "Copy link to search",
+    "search-hide-matches-text": "Hide additional matches",
+    "search-more-match-text": "more match in this document",
+    "search-more-matches-text": "more matches in this document",
+    "search-clear-button-title": "Clear",
+    "search-detached-cancel-button-title": "Cancel",
+    "search-submit-button-title": "Submit",
+    "search-label": "Search"
+  }
+}</script>
+<style>html{ scroll-behavior: smooth; }</style>
+<script async="" src="https://hypothes.is/embed.js"></script>
+
+
+<link rel="stylesheet" href="../../../styles.css">
+<meta property="og:title" content="Hasan’s Data Science &amp; AI Blog - Parallel Processing Power">
+<meta property="og:description" content="Multiply your computational power by mastering parallel processing. Learn to orchestrate multiple processes simultaneously, turning your single-threaded workflows into high-performance parallel operations.">
+<meta property="og:image" content="https://images.unsplash.com/photo-1558494949-ef010cbdcc31?ixlib=rb-4.0.3&amp;auto=format&amp;fit=crop&amp;w=2000&amp;q=80">
+<meta property="og:site-name" content="Hasan's Data Science &amp; AI Blog">
+<meta name="twitter:title" content="Hasan’s Data Science &amp; AI Blog - Parallel Processing Power">
+<meta name="twitter:description" content="Multiply your computational power by mastering parallel processing. Learn to orchestrate multiple processes simultaneously, turning your single-threaded workflows into high-performance parallel operations.">
+<meta name="twitter:image" content="https://images.unsplash.com/photo-1558494949-ef010cbdcc31?ixlib=rb-4.0.3&amp;auto=format&amp;fit=crop&amp;w=2000&amp;q=80">
+<meta name="twitter:card" content="summary_large_image">
+</head>
+
+<body class="nav-sidebar docked nav-fixed">
+
+<div id="quarto-search-results"></div>
+  <header id="quarto-header" class="headroom fixed-top">
+    <nav class="navbar navbar-expand-lg navbar-dark ">
+      <div class="navbar-container container-fluid">
+      <div class="navbar-brand-container">
+    <a class="navbar-brand" href="../../../index.html">
+    <span class="navbar-title">Hasan’s Data Science &amp; AI Blog</span>
+    </a>
+  </div>
+            <div id="quarto-search" class="" title="Search"></div>
+          <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCollapse" aria-controls="navbarCollapse" aria-expanded="false" aria-label="Toggle navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+  <span class="navbar-toggler-icon"></span>
+</button>
+          <div class="collapse navbar-collapse" id="navbarCollapse">
+            <ul class="navbar-nav navbar-nav-scroll me-auto">
+  <li class="nav-item">
+    <a class="nav-link" href="../../../index.html" rel="" target="">
+ <span class="menu-text">Home</span></a>
+  </li>  
+  <li class="nav-item dropdown ">
+    <a class="nav-link dropdown-toggle" href="#" id="nav-menu-series" role="button" data-bs-toggle="dropdown" aria-expanded="false" rel="" target="">
+ <span class="menu-text">Series</span>
+    </a>
+    <ul class="dropdown-menu" aria-labelledby="nav-menu-series">    
+        <li>
+    <a class="dropdown-item" href="../../../posts/series/command-line-mastery.html" rel="" target="">
+ <span class="dropdown-text">Command Line Mastery for HPC</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="../../../posts/series/data-science-steps.html" rel="" target="">
+ <span class="dropdown-text">Data Science Steps</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="../../../posts/series/computer-vision-foundations.html" rel="" target="">
+ <span class="dropdown-text">Computer Vision Foundations</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="../../../posts/series/vlm.html" rel="" target="">
+ <span class="dropdown-text">VLM Series</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="../../../posts/series/anomaly-detection/index.html" rel="" target="">
+ <span class="dropdown-text">Anomaly Detection</span></a>
+  </li>  
+    </ul>
+  </li>
+  <li class="nav-item">
+    <a class="nav-link" href="../../../categories.html" rel="" target="">
+ <span class="menu-text">Categories</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="../../../tags.html" rel="" target="">
+ <span class="menu-text">Tags</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="../../../about.html" rel="" target="">
+ <span class="menu-text">About</span></a>
+  </li>  
+</ul>
+            <ul class="navbar-nav navbar-nav-scroll ms-auto">
+  <li class="nav-item compact">
+    <a class="nav-link" href="https://github.com/HasanGoni" rel="" target=""><i class="bi bi-github" role="img">
+</i> 
+ <span class="menu-text"></span></a>
+  </li>  
+  <li class="nav-item compact">
+    <a class="nav-link" href="https://twitter.com/hasangoni" rel="" target=""><i class="bi bi-twitter" role="img">
+</i> 
+ <span class="menu-text"></span></a>
+  </li>  
+</ul>
+            <div class="quarto-navbar-tools">
+</div>
+          </div> <!-- /navcollapse -->
+      </div> <!-- /container-fluid -->
+    </nav>
+  <nav class="quarto-secondary-nav">
+    <div class="container-fluid d-flex">
+      <button type="button" class="quarto-btn-toggle btn" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar,#quarto-sidebar-glass" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+        <i class="bi bi-layout-text-sidebar-reverse"></i>
+      </button>
+      <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../../../posts/series/command-line-mastery.html">Command Line Mastery for HPC</a></li><li class="breadcrumb-item"><a href="../../../posts/series/command-line-mastery/10-parallel-processing.html">10. Parallel Processing Power</a></li></ol></nav>
+      <a class="flex-grow-1" role="button" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar,#quarto-sidebar-glass" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
+      </a>
+    </div>
+  </nav>
+</header>
+<!-- content -->
+<header id="title-block-header" class="quarto-title-block default page-columns page-full">
+  <div class="quarto-title-banner page-columns page-full">
+    <div class="quarto-title column-body">
+      <div class="quarto-title-block"><div><h1 class="title">Parallel Processing Power</h1><button type="button" class="btn code-tools-button" id="quarto-code-tools-source"><i class="bi"></i> Code</button></div></div>
+                  <div>
+        <div class="description">
+          Multiply your computational power by mastering parallel processing. Learn to orchestrate multiple processes simultaneously, turning your single-threaded workflows into high-performance parallel operations.
+        </div>
+      </div>
+                          <div class="quarto-categories">
+                <div class="quarto-category">command-line</div>
+                <div class="quarto-category">parallel-processing</div>
+                <div class="quarto-category">xargs</div>
+                <div class="quarto-category">gnu-parallel</div>
+                <div class="quarto-category">background-jobs</div>
+              </div>
+                  </div>
+  </div>
+    
+  
+  <div class="quarto-title-meta">
+
+      <div>
+      <div class="quarto-title-meta-heading">Author</div>
+      <div class="quarto-title-meta-contents">
+               <p>Hasan </p>
+            </div>
+    </div>
+      
+      <div>
+      <div class="quarto-title-meta-heading">Published</div>
+      <div class="quarto-title-meta-contents">
+        <p class="date">June 29, 2025</p>
+      </div>
+    </div>
+    
+      <div>
+      <div class="quarto-title-meta-heading">Modified</div>
+      <div class="quarto-title-meta-contents">
+        <p class="date-modified">June 29, 2025</p>
+      </div>
+    </div>
+      
+    </div>
+    
+  
+  </header><div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article page-navbar">
+<!-- sidebar -->
+  <nav id="quarto-sidebar" class="sidebar collapse collapse-horizontal sidebar-navigation docked overflow-auto">
+    <div class="sidebar-menu-container"> 
+    <ul class="list-unstyled mt-1">
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-1" aria-expanded="true">
+ <span class="menu-text">Command Line Mastery for HPC</span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-1" aria-expanded="true" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-1" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../../posts/series/command-line-mastery.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Command Line Mastery for HPC Series</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../../posts/series/command-line-mastery/01-digital-compass.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">1. Digital Compass</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../../posts/series/command-line-mastery/02-file-detective.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">2. File Detective</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../../posts/series/command-line-mastery/03-file-manipulation.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">3. File Manipulation Magic</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../../posts/series/command-line-mastery/04-text-processing.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">4. Text Processing Power</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../../posts/series/command-line-mastery/05-permission-wizardry.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">5. Permission Wizardry</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../../posts/series/command-line-mastery/06-ssh-remote-access.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">6. SSH and Remote Access</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../../posts/series/command-line-mastery/07-file-transfer.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">7. File Transfer Mastery</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../../posts/series/command-line-mastery/08-environment-mastery.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">8. Environment Mastery</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../../posts/series/command-line-mastery/09-hpc-job-scheduling.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">9. HPC Job Scheduling</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../../posts/series/command-line-mastery/10-parallel-processing.html" class="sidebar-item-text sidebar-link active">
+ <span class="menu-text">10. Parallel Processing Power</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../../posts/series/command-line-mastery/11-bash-scripting.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">11. Bash Scripting Essentials</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../../posts/series/command-line-mastery/12-automation-excellence.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">12. Automation Excellence</span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-2" aria-expanded="true">
+ <span class="menu-text">Data Science</span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-2" aria-expanded="true" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-2" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../../posts/series/data-science-steps.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Data Science Steps Series</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../../posts/data-science-steps-to-follow-part01/index.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Data Science Steps to Follow - 01</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../../posts/data-science-steps-to-follow-part02/index.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Data Science Steps to Follow - 02</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../../posts/data-science-steps-to-follow-part03/index.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Data Science Steps to Follow - 03</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../../posts/data-science-steps-to-follow-part04/index.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Data Science Steps to Follow - 04</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../../posts/data-science-steps-to-follow-part05/index.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Data Science Steps to Follow - 05</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../../posts/data-science-steps-to-follow-part06/index.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Data Science Steps to Follow - 06</span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-3" aria-expanded="true">
+ <span class="menu-text">Computer Vision Foundations</span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-3" aria-expanded="true" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-3" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../../posts/series/computer-vision-foundations.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Computer Vision Foundations Series</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../../posts/series/cv-foundations/01-why-computer-vision.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">1. Why Computer Vision?</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../../posts/series/cv-foundations/02-images-as-data.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">2. Images as Data</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../../posts/series/cv-foundations/03-opencv-essentials.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">3. OpenCV Essentials</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../../posts/series/cv-foundations/04-finding-patterns.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">4. Finding Patterns</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../../posts/series/cv-foundations/05-image-segmentation.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">5. Image Segmentation</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../../posts/series/cv-foundations/06-feature-magic.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">6. Feature Magic</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../../posts/series/cv-foundations/07-why-deep-learning.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">7. Why Deep Learning?</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../../posts/series/cv-foundations/08-modern-vision-models.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">8. Modern Vision Models</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../../posts/series/cv-foundations/09-first-cv-project.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">9. First CV Project</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../../posts/series/cv-foundations/10-where-to-go-next.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">10. Where to Go Next</span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-4" aria-expanded="true">
+ <span class="menu-text">Anomaly Detection</span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-4" aria-expanded="true" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-4" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../../posts/series/anomaly-detection/index.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Introduction</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../../posts/series/anomaly-detection/finding-the-oddballs.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Finding the Oddballs</span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-5" aria-expanded="true">
+ <span class="menu-text">VLM Series</span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-5" aria-expanded="true" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-5" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../../posts/series/vlm.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Introduction</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../../posts/series/vlm-qwen3-14b/index.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Qwen3-14B</span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+    </ul>
+    </div>
+</nav>
+<div id="quarto-sidebar-glass" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar,#quarto-sidebar-glass"></div>
+<!-- margin-sidebar -->
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+        <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">On this page</h2>
+   
+  <ul>
+  <li><a href="#the-story-the-digital-orchestra-conductor" id="toc-the-story-the-digital-orchestra-conductor" class="nav-link active" data-scroll-target="#the-story-the-digital-orchestra-conductor"><span class="header-section-number">0.1</span> The Story: The Digital Orchestra Conductor</a></li>
+  <li><a href="#understanding-parallel-processing" id="toc-understanding-parallel-processing" class="nav-link" data-scroll-target="#understanding-parallel-processing"><span class="header-section-number">0.2</span> Understanding Parallel Processing</a>
+  <ul class="collapse">
+  <li><a href="#the-parallel-mindset" id="toc-the-parallel-mindset" class="nav-link" data-scroll-target="#the-parallel-mindset"><span class="header-section-number">0.2.1</span> The Parallel Mindset</a></li>
+  </ul></li>
+  <li><a href="#background-jobs-your-first-parallel-tool" id="toc-background-jobs-your-first-parallel-tool" class="nav-link" data-scroll-target="#background-jobs-your-first-parallel-tool"><span class="header-section-number">0.3</span> Background Jobs: Your First Parallel Tool</a>
+  <ul class="collapse">
+  <li><a href="#basic-background-processing" id="toc-basic-background-processing" class="nav-link" data-scroll-target="#basic-background-processing"><span class="header-section-number">0.3.1</span> Basic Background Processing</a></li>
+  <li><a href="#practical-background-job-examples" id="toc-practical-background-job-examples" class="nav-link" data-scroll-target="#practical-background-job-examples"><span class="header-section-number">0.3.2</span> Practical Background Job Examples</a></li>
+  </ul></li>
+  <li><a href="#advanced-parallel-processing-with-xargs" id="toc-advanced-parallel-processing-with-xargs" class="nav-link" data-scroll-target="#advanced-parallel-processing-with-xargs"><span class="header-section-number">0.4</span> Advanced Parallel Processing with <code>xargs</code></a>
+  <ul class="collapse">
+  <li><a href="#basic-xargs-parallel-processing" id="toc-basic-xargs-parallel-processing" class="nav-link" data-scroll-target="#basic-xargs-parallel-processing"><span class="header-section-number">0.4.1</span> Basic xargs Parallel Processing</a></li>
+  <li><a href="#real-world-xargs-examples" id="toc-real-world-xargs-examples" class="nav-link" data-scroll-target="#real-world-xargs-examples"><span class="header-section-number">0.4.2</span> Real-World xargs Examples</a></li>
+  </ul></li>
+  <li><a href="#gnu-parallel-the-professional-parallel-processor" id="toc-gnu-parallel-the-professional-parallel-processor" class="nav-link" data-scroll-target="#gnu-parallel-the-professional-parallel-processor"><span class="header-section-number">0.5</span> GNU Parallel: The Professional Parallel Processor</a>
+  <ul class="collapse">
+  <li><a href="#basic-gnu-parallel-usage" id="toc-basic-gnu-parallel-usage" class="nav-link" data-scroll-target="#basic-gnu-parallel-usage"><span class="header-section-number">0.5.1</span> Basic GNU Parallel Usage</a></li>
+  <li><a href="#advanced-gnu-parallel-features" id="toc-advanced-gnu-parallel-features" class="nav-link" data-scroll-target="#advanced-gnu-parallel-features"><span class="header-section-number">0.5.2</span> Advanced GNU Parallel Features</a></li>
+  </ul></li>
+  <li><a href="#real-world-hpc-parallel-processing-scenarios" id="toc-real-world-hpc-parallel-processing-scenarios" class="nav-link" data-scroll-target="#real-world-hpc-parallel-processing-scenarios"><span class="header-section-number">0.6</span> Real-World HPC Parallel Processing Scenarios</a>
+  <ul class="collapse">
+  <li><a href="#scenario-1-parallel-data-processing-pipeline" id="toc-scenario-1-parallel-data-processing-pipeline" class="nav-link" data-scroll-target="#scenario-1-parallel-data-processing-pipeline"><span class="header-section-number">0.6.1</span> Scenario 1: Parallel Data Processing Pipeline</a></li>
+  <li><a href="#scenario-2-parallel-file-operations" id="toc-scenario-2-parallel-file-operations" class="nav-link" data-scroll-target="#scenario-2-parallel-file-operations"><span class="header-section-number">0.6.2</span> Scenario 2: Parallel File Operations</a></li>
+  </ul></li>
+  <li><a href="#monitoring-and-managing-parallel-jobs" id="toc-monitoring-and-managing-parallel-jobs" class="nav-link" data-scroll-target="#monitoring-and-managing-parallel-jobs"><span class="header-section-number">0.7</span> Monitoring and Managing Parallel Jobs</a>
+  <ul class="collapse">
+  <li><a href="#job-control-and-monitoring" id="toc-job-control-and-monitoring" class="nav-link" data-scroll-target="#job-control-and-monitoring"><span class="header-section-number">0.7.1</span> Job Control and Monitoring</a></li>
+  <li><a href="#resource-management" id="toc-resource-management" class="nav-link" data-scroll-target="#resource-management"><span class="header-section-number">0.7.2</span> Resource Management</a></li>
+  </ul></li>
+  <li><a href="#integration-with-hpc-job-schedulers" id="toc-integration-with-hpc-job-schedulers" class="nav-link" data-scroll-target="#integration-with-hpc-job-schedulers"><span class="header-section-number">0.8</span> Integration with HPC Job Schedulers</a>
+  <ul class="collapse">
+  <li><a href="#parallel-processing-within-slurm-jobs" id="toc-parallel-processing-within-slurm-jobs" class="nav-link" data-scroll-target="#parallel-processing-within-slurm-jobs"><span class="header-section-number">0.8.1</span> Parallel Processing within SLURM Jobs</a></li>
+  </ul></li>
+  <li><a href="#quick-reference-parallel-processing-commands" id="toc-quick-reference-parallel-processing-commands" class="nav-link" data-scroll-target="#quick-reference-parallel-processing-commands"><span class="header-section-number">0.9</span> Quick Reference: Parallel Processing Commands</a></li>
+  <li><a href="#practice-exercises" id="toc-practice-exercises" class="nav-link" data-scroll-target="#practice-exercises"><span class="header-section-number">0.10</span> Practice Exercises</a></li>
+  <li><a href="#whats-next" id="toc-whats-next" class="nav-link" data-scroll-target="#whats-next"><span class="header-section-number">0.11</span> What’s Next?</a></li>
+  </ul>
+</nav>
+    </div>
+<!-- main -->
+<main class="content quarto-banner-title-block" id="quarto-document-content">
+
+
+
+
+<section id="the-story-the-digital-orchestra-conductor" class="level2" data-number="0.1">
+<h2 data-number="0.1" class="anchored" data-anchor-id="the-story-the-digital-orchestra-conductor"><span class="header-section-number">0.1</span> The Story: The Digital Orchestra Conductor</h2>
+<p>Imagine you’re conducting a symphony orchestra, but instead of musicians, you’re coordinating dozens of computational processes. Each process is like a skilled musician – capable of beautiful work individually, but when orchestrated together, they create something far more powerful than the sum of their parts.</p>
+<p>In the sequential world, you’d have each musician play their part one after another – a flute solo, then a violin solo, then drums. It would take hours to get through a simple piece. But as a conductor, you can have all musicians play simultaneously, creating rich, complex harmonies in a fraction of the time.</p>
+<p>This is the power of parallel processing – transforming your computer from a single-threaded worker into a coordinated team of processes.</p>
+</section>
+<section id="understanding-parallel-processing" class="level2" data-number="0.2">
+<h2 data-number="0.2" class="anchored" data-anchor-id="understanding-parallel-processing"><span class="header-section-number">0.2</span> Understanding Parallel Processing</h2>
+<section id="the-parallel-mindset" class="level3" data-number="0.2.1">
+<h3 data-number="0.2.1" class="anchored" data-anchor-id="the-parallel-mindset"><span class="header-section-number">0.2.1</span> The Parallel Mindset</h3>
+<p>Parallel processing is about breaking large tasks into smaller, independent pieces that can run simultaneously:</p>
+<div class="sourceCode" id="cb1"><pre class="sourceCode numberSource bash number-lines code-with-copy"><code class="sourceCode bash"><span id="cb1-1"><a href="#cb1-1"></a><span class="co"># Sequential processing (slow)</span></span>
+<span id="cb1-2"><a href="#cb1-2"></a><span class="cf">for</span> file <span class="kw">in</span> <span class="pp">*</span>.txt<span class="kw">;</span> <span class="cf">do</span></span>
+<span id="cb1-3"><a href="#cb1-3"></a>    <span class="ex">process_file</span> <span class="st">"</span><span class="va">$file</span><span class="st">"</span>  <span class="co"># Each file processed one at a time</span></span>
+<span id="cb1-4"><a href="#cb1-4"></a><span class="cf">done</span></span>
+<span id="cb1-5"><a href="#cb1-5"></a></span>
+<span id="cb1-6"><a href="#cb1-6"></a><span class="co"># Parallel processing (fast) </span></span>
+<span id="cb1-7"><a href="#cb1-7"></a><span class="cf">for</span> file <span class="kw">in</span> <span class="pp">*</span>.txt<span class="kw">;</span> <span class="cf">do</span></span>
+<span id="cb1-8"><a href="#cb1-8"></a>    <span class="ex">process_file</span> <span class="st">"</span><span class="va">$file</span><span class="st">"</span> <span class="kw">&amp;</span>  <span class="co"># All files processed simultaneously</span></span>
+<span id="cb1-9"><a href="#cb1-9"></a><span class="cf">done</span></span>
+<span id="cb1-10"><a href="#cb1-10"></a><span class="bu">wait</span>  <span class="co"># Wait for all background jobs to complete</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p><strong>Real-world analogy</strong>: Sequential processing is like washing dishes one at a time. Parallel processing is like having multiple people wash different dishes simultaneously – the total time is dramatically reduced.</p>
+</section>
+</section>
+<section id="background-jobs-your-first-parallel-tool" class="level2" data-number="0.3">
+<h2 data-number="0.3" class="anchored" data-anchor-id="background-jobs-your-first-parallel-tool"><span class="header-section-number">0.3</span> Background Jobs: Your First Parallel Tool</h2>
+<section id="basic-background-processing" class="level3" data-number="0.3.1">
+<h3 data-number="0.3.1" class="anchored" data-anchor-id="basic-background-processing"><span class="header-section-number">0.3.1</span> Basic Background Processing</h3>
+<div class="sourceCode" id="cb2"><pre class="sourceCode numberSource bash number-lines code-with-copy"><code class="sourceCode bash"><span id="cb2-1"><a href="#cb2-1"></a><span class="co"># Run command in background</span></span>
+<span id="cb2-2"><a href="#cb2-2"></a><span class="ex">long_running_command</span> <span class="kw">&amp;</span></span>
+<span id="cb2-3"><a href="#cb2-3"></a></span>
+<span id="cb2-4"><a href="#cb2-4"></a><span class="co"># Run multiple commands in background</span></span>
+<span id="cb2-5"><a href="#cb2-5"></a><span class="ex">command1</span> <span class="kw">&amp;</span></span>
+<span id="cb2-6"><a href="#cb2-6"></a><span class="ex">command2</span> <span class="kw">&amp;</span></span>
+<span id="cb2-7"><a href="#cb2-7"></a><span class="ex">command3</span> <span class="kw">&amp;</span></span>
+<span id="cb2-8"><a href="#cb2-8"></a></span>
+<span id="cb2-9"><a href="#cb2-9"></a><span class="co"># Wait for all background jobs to complete</span></span>
+<span id="cb2-10"><a href="#cb2-10"></a><span class="bu">wait</span></span>
+<span id="cb2-11"><a href="#cb2-11"></a></span>
+<span id="cb2-12"><a href="#cb2-12"></a><span class="co"># Check running background jobs</span></span>
+<span id="cb2-13"><a href="#cb2-13"></a><span class="bu">jobs</span></span>
+<span id="cb2-14"><a href="#cb2-14"></a></span>
+<span id="cb2-15"><a href="#cb2-15"></a><span class="co"># Bring background job to foreground</span></span>
+<span id="cb2-16"><a href="#cb2-16"></a><span class="bu">fg</span> %1  <span class="co"># Bring job 1 to foreground</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</section>
+<section id="practical-background-job-examples" class="level3" data-number="0.3.2">
+<h3 data-number="0.3.2" class="anchored" data-anchor-id="practical-background-job-examples"><span class="header-section-number">0.3.2</span> Practical Background Job Examples</h3>
+<div class="sourceCode" id="cb3"><pre class="sourceCode numberSource bash number-lines code-with-copy"><code class="sourceCode bash"><span id="cb3-1"><a href="#cb3-1"></a><span class="co"># Process multiple large files simultaneously</span></span>
+<span id="cb3-2"><a href="#cb3-2"></a><span class="cf">for</span> file <span class="kw">in</span> huge_dataset_<span class="pp">*</span>.csv<span class="kw">;</span> <span class="cf">do</span></span>
+<span id="cb3-3"><a href="#cb3-3"></a>    <span class="ex">python</span> analyze_data.py <span class="st">"</span><span class="va">$file</span><span class="st">"</span> <span class="kw">&amp;</span></span>
+<span id="cb3-4"><a href="#cb3-4"></a><span class="cf">done</span></span>
+<span id="cb3-5"><a href="#cb3-5"></a><span class="bu">wait</span></span>
+<span id="cb3-6"><a href="#cb3-6"></a><span class="bu">echo</span> <span class="st">"All analyses complete!"</span></span>
+<span id="cb3-7"><a href="#cb3-7"></a></span>
+<span id="cb3-8"><a href="#cb3-8"></a><span class="co"># Download multiple files in parallel</span></span>
+<span id="cb3-9"><a href="#cb3-9"></a><span class="cf">for</span> url <span class="kw">in</span> <span class="st">"</span><span class="va">${urls</span><span class="op">[@]</span><span class="va">}</span><span class="st">"</span><span class="kw">;</span> <span class="cf">do</span></span>
+<span id="cb3-10"><a href="#cb3-10"></a>    <span class="fu">wget</span> <span class="st">"</span><span class="va">$url</span><span class="st">"</span> <span class="kw">&amp;</span></span>
+<span id="cb3-11"><a href="#cb3-11"></a><span class="cf">done</span></span>
+<span id="cb3-12"><a href="#cb3-12"></a><span class="bu">wait</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</section>
+</section>
+<section id="advanced-parallel-processing-with-xargs" class="level2" data-number="0.4">
+<h2 data-number="0.4" class="anchored" data-anchor-id="advanced-parallel-processing-with-xargs"><span class="header-section-number">0.4</span> Advanced Parallel Processing with <code>xargs</code></h2>
+<p><code>xargs</code> is like having a smart job dispatcher that can distribute work across multiple processes.</p>
+<section id="basic-xargs-parallel-processing" class="level3" data-number="0.4.1">
+<h3 data-number="0.4.1" class="anchored" data-anchor-id="basic-xargs-parallel-processing"><span class="header-section-number">0.4.1</span> Basic xargs Parallel Processing</h3>
+<div class="sourceCode" id="cb4"><pre class="sourceCode numberSource bash number-lines code-with-copy"><code class="sourceCode bash"><span id="cb4-1"><a href="#cb4-1"></a><span class="co"># Process files in parallel (4 processes at once)</span></span>
+<span id="cb4-2"><a href="#cb4-2"></a><span class="fu">ls</span> <span class="pp">*</span>.txt <span class="kw">|</span> <span class="fu">xargs</span> <span class="at">-n</span> 1 <span class="at">-P</span> 4 process_file</span>
+<span id="cb4-3"><a href="#cb4-3"></a></span>
+<span id="cb4-4"><a href="#cb4-4"></a><span class="co"># Explanation:</span></span>
+<span id="cb4-5"><a href="#cb4-5"></a><span class="co"># -n 1: Pass one argument at a time to each process</span></span>
+<span id="cb4-6"><a href="#cb4-6"></a><span class="co"># -P 4: Run up to 4 processes in parallel</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</section>
+<section id="real-world-xargs-examples" class="level3" data-number="0.4.2">
+<h3 data-number="0.4.2" class="anchored" data-anchor-id="real-world-xargs-examples"><span class="header-section-number">0.4.2</span> Real-World xargs Examples</h3>
+<div class="sourceCode" id="cb5"><pre class="sourceCode numberSource bash number-lines code-with-copy"><code class="sourceCode bash"><span id="cb5-1"><a href="#cb5-1"></a><span class="co"># Convert images in parallel</span></span>
+<span id="cb5-2"><a href="#cb5-2"></a><span class="fu">find</span> . <span class="at">-name</span> <span class="st">"*.jpg"</span> <span class="kw">|</span> <span class="fu">xargs</span> <span class="at">-n</span> 1 <span class="at">-P</span> 8 <span class="at">-I</span> {} convert {} {}.png</span>
+<span id="cb5-3"><a href="#cb5-3"></a></span>
+<span id="cb5-4"><a href="#cb5-4"></a><span class="co"># Compress files in parallel</span></span>
+<span id="cb5-5"><a href="#cb5-5"></a><span class="fu">find</span> . <span class="at">-name</span> <span class="st">"*.log"</span> <span class="kw">|</span> <span class="fu">xargs</span> <span class="at">-n</span> 1 <span class="at">-P</span> 4 gzip</span>
+<span id="cb5-6"><a href="#cb5-6"></a></span>
+<span id="cb5-7"><a href="#cb5-7"></a><span class="co"># Process data files in parallel</span></span>
+<span id="cb5-8"><a href="#cb5-8"></a><span class="fu">ls</span> data_<span class="pp">*</span>.csv <span class="kw">|</span> <span class="fu">xargs</span> <span class="at">-n</span> 1 <span class="at">-P</span> 6 python process_data.py</span>
+<span id="cb5-9"><a href="#cb5-9"></a></span>
+<span id="cb5-10"><a href="#cb5-10"></a><span class="co"># Search multiple files in parallel</span></span>
+<span id="cb5-11"><a href="#cb5-11"></a><span class="fu">find</span> . <span class="at">-name</span> <span class="st">"*.txt"</span> <span class="kw">|</span> <span class="fu">xargs</span> <span class="at">-P</span> 8 grep <span class="st">"pattern"</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</section>
+</section>
+<section id="gnu-parallel-the-professional-parallel-processor" class="level2" data-number="0.5">
+<h2 data-number="0.5" class="anchored" data-anchor-id="gnu-parallel-the-professional-parallel-processor"><span class="header-section-number">0.5</span> GNU Parallel: The Professional Parallel Processor</h2>
+<p>GNU Parallel is like having a professional orchestra conductor with advanced scheduling capabilities.</p>
+<section id="basic-gnu-parallel-usage" class="level3" data-number="0.5.1">
+<h3 data-number="0.5.1" class="anchored" data-anchor-id="basic-gnu-parallel-usage"><span class="header-section-number">0.5.1</span> Basic GNU Parallel Usage</h3>
+<div class="sourceCode" id="cb6"><pre class="sourceCode numberSource bash number-lines code-with-copy"><code class="sourceCode bash"><span id="cb6-1"><a href="#cb6-1"></a><span class="co"># Basic parallel execution</span></span>
+<span id="cb6-2"><a href="#cb6-2"></a><span class="ex">parallel</span> echo ::: A B C D</span>
+<span id="cb6-3"><a href="#cb6-3"></a><span class="co"># Runs: echo A, echo B, echo C, echo D simultaneously</span></span>
+<span id="cb6-4"><a href="#cb6-4"></a></span>
+<span id="cb6-5"><a href="#cb6-5"></a><span class="co"># Process files in parallel</span></span>
+<span id="cb6-6"><a href="#cb6-6"></a><span class="ex">parallel</span> gzip ::: <span class="pp">*</span>.log</span>
+<span id="cb6-7"><a href="#cb6-7"></a></span>
+<span id="cb6-8"><a href="#cb6-8"></a><span class="co"># Use all CPU cores (default)</span></span>
+<span id="cb6-9"><a href="#cb6-9"></a><span class="ex">parallel</span> <span class="at">-j+0</span> process_file ::: <span class="pp">*</span>.txt</span>
+<span id="cb6-10"><a href="#cb6-10"></a></span>
+<span id="cb6-11"><a href="#cb6-11"></a><span class="co"># Limit to specific number of jobs</span></span>
+<span id="cb6-12"><a href="#cb6-12"></a><span class="ex">parallel</span> <span class="at">-j</span> 4 process_file ::: <span class="pp">*</span>.txt</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</section>
+<section id="advanced-gnu-parallel-features" class="level3" data-number="0.5.2">
+<h3 data-number="0.5.2" class="anchored" data-anchor-id="advanced-gnu-parallel-features"><span class="header-section-number">0.5.2</span> Advanced GNU Parallel Features</h3>
+<div class="sourceCode" id="cb7"><pre class="sourceCode numberSource bash number-lines code-with-copy"><code class="sourceCode bash"><span id="cb7-1"><a href="#cb7-1"></a><span class="co"># Progress monitoring</span></span>
+<span id="cb7-2"><a href="#cb7-2"></a><span class="ex">parallel</span> <span class="at">--progress</span> gzip ::: <span class="pp">*</span>.log</span>
+<span id="cb7-3"><a href="#cb7-3"></a></span>
+<span id="cb7-4"><a href="#cb7-4"></a><span class="co"># Dry run (show what would be executed)</span></span>
+<span id="cb7-5"><a href="#cb7-5"></a><span class="ex">parallel</span> <span class="at">--dry-run</span> gzip ::: <span class="pp">*</span>.log</span>
+<span id="cb7-6"><a href="#cb7-6"></a></span>
+<span id="cb7-7"><a href="#cb7-7"></a><span class="co"># Resume interrupted jobs</span></span>
+<span id="cb7-8"><a href="#cb7-8"></a><span class="ex">parallel</span> <span class="at">--resume</span> <span class="at">--joblog</span> logfile gzip ::: <span class="pp">*</span>.log</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</section>
+</section>
+<section id="real-world-hpc-parallel-processing-scenarios" class="level2" data-number="0.6">
+<h2 data-number="0.6" class="anchored" data-anchor-id="real-world-hpc-parallel-processing-scenarios"><span class="header-section-number">0.6</span> Real-World HPC Parallel Processing Scenarios</h2>
+<section id="scenario-1-parallel-data-processing-pipeline" class="level3" data-number="0.6.1">
+<h3 data-number="0.6.1" class="anchored" data-anchor-id="scenario-1-parallel-data-processing-pipeline"><span class="header-section-number">0.6.1</span> Scenario 1: Parallel Data Processing Pipeline</h3>
+<div class="sourceCode" id="cb8"><pre class="sourceCode numberSource bash number-lines code-with-copy"><code class="sourceCode bash"><span id="cb8-1"><a href="#cb8-1"></a><span class="co">#!/bin/bash</span></span>
+<span id="cb8-2"><a href="#cb8-2"></a><span class="co"># parallel_data_pipeline.sh - Process experimental data in parallel</span></span>
+<span id="cb8-3"><a href="#cb8-3"></a></span>
+<span id="cb8-4"><a href="#cb8-4"></a><span class="va">DATA_DIR</span><span class="op">=</span><span class="st">"raw_data"</span></span>
+<span id="cb8-5"><a href="#cb8-5"></a><span class="va">OUTPUT_DIR</span><span class="op">=</span><span class="st">"processed_data"</span></span>
+<span id="cb8-6"><a href="#cb8-6"></a><span class="va">NUM_CORES</span><span class="op">=</span><span class="va">$(</span><span class="fu">nproc</span><span class="va">)</span></span>
+<span id="cb8-7"><a href="#cb8-7"></a></span>
+<span id="cb8-8"><a href="#cb8-8"></a><span class="bu">echo</span> <span class="st">"Starting parallel data processing pipeline..."</span></span>
+<span id="cb8-9"><a href="#cb8-9"></a><span class="bu">echo</span> <span class="st">"Using </span><span class="va">$NUM_CORES</span><span class="st"> CPU cores"</span></span>
+<span id="cb8-10"><a href="#cb8-10"></a></span>
+<span id="cb8-11"><a href="#cb8-11"></a><span class="co"># Create output directory</span></span>
+<span id="cb8-12"><a href="#cb8-12"></a><span class="fu">mkdir</span> <span class="at">-p</span> <span class="st">"</span><span class="va">$OUTPUT_DIR</span><span class="st">"</span></span>
+<span id="cb8-13"><a href="#cb8-13"></a></span>
+<span id="cb8-14"><a href="#cb8-14"></a><span class="co"># Stage 1: Parallel data cleaning</span></span>
+<span id="cb8-15"><a href="#cb8-15"></a><span class="bu">echo</span> <span class="st">"Stage 1: Cleaning data files..."</span></span>
+<span id="cb8-16"><a href="#cb8-16"></a><span class="fu">find</span> <span class="st">"</span><span class="va">$DATA_DIR</span><span class="st">"</span> <span class="at">-name</span> <span class="st">"*.csv"</span> <span class="kw">|</span> <span class="dt">\</span></span>
+<span id="cb8-17"><a href="#cb8-17"></a>    <span class="ex">parallel</span> <span class="at">-j</span> <span class="st">"</span><span class="va">$NUM_CORES</span><span class="st">"</span> <span class="at">--progress</span> <span class="dt">\</span></span>
+<span id="cb8-18"><a href="#cb8-18"></a>    <span class="st">"python clean_data.py {} &gt; </span><span class="va">$OUTPUT_DIR</span><span class="st">/{/.}_clean.csv"</span></span>
+<span id="cb8-19"><a href="#cb8-19"></a></span>
+<span id="cb8-20"><a href="#cb8-20"></a><span class="co"># Stage 2: Parallel analysis</span></span>
+<span id="cb8-21"><a href="#cb8-21"></a><span class="bu">echo</span> <span class="st">"Stage 2: Running analysis..."</span></span>
+<span id="cb8-22"><a href="#cb8-22"></a><span class="fu">find</span> <span class="st">"</span><span class="va">$OUTPUT_DIR</span><span class="st">"</span> <span class="at">-name</span> <span class="st">"*_clean.csv"</span> <span class="kw">|</span> <span class="dt">\</span></span>
+<span id="cb8-23"><a href="#cb8-23"></a>    <span class="ex">parallel</span> <span class="at">-j</span> <span class="st">"</span><span class="va">$NUM_CORES</span><span class="st">"</span> <span class="at">--progress</span> <span class="dt">\</span></span>
+<span id="cb8-24"><a href="#cb8-24"></a>    <span class="st">"python analyze_data.py {} &gt; </span><span class="va">$OUTPUT_DIR</span><span class="st">/{/.}_results.txt"</span></span>
+<span id="cb8-25"><a href="#cb8-25"></a></span>
+<span id="cb8-26"><a href="#cb8-26"></a><span class="bu">echo</span> <span class="st">"Pipeline completed! Results in </span><span class="va">$OUTPUT_DIR</span><span class="st">"</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</section>
+<section id="scenario-2-parallel-file-operations" class="level3" data-number="0.6.2">
+<h3 data-number="0.6.2" class="anchored" data-anchor-id="scenario-2-parallel-file-operations"><span class="header-section-number">0.6.2</span> Scenario 2: Parallel File Operations</h3>
+<div class="sourceCode" id="cb9"><pre class="sourceCode numberSource bash number-lines code-with-copy"><code class="sourceCode bash"><span id="cb9-1"><a href="#cb9-1"></a><span class="co">#!/bin/bash</span></span>
+<span id="cb9-2"><a href="#cb9-2"></a><span class="co"># parallel_file_ops.sh - Efficient file operations</span></span>
+<span id="cb9-3"><a href="#cb9-3"></a></span>
+<span id="cb9-4"><a href="#cb9-4"></a><span class="va">SOURCE_DIR</span><span class="op">=</span><span class="st">"/data/large_dataset"</span></span>
+<span id="cb9-5"><a href="#cb9-5"></a><span class="va">BACKUP_DIR</span><span class="op">=</span><span class="st">"/backup/dataset_</span><span class="va">$(</span><span class="fu">date</span> +%Y%m%d<span class="va">)</span><span class="st">"</span></span>
+<span id="cb9-6"><a href="#cb9-6"></a></span>
+<span id="cb9-7"><a href="#cb9-7"></a><span class="bu">echo</span> <span class="st">"Starting parallel file operations..."</span></span>
+<span id="cb9-8"><a href="#cb9-8"></a></span>
+<span id="cb9-9"><a href="#cb9-9"></a><span class="co"># Create backup directory</span></span>
+<span id="cb9-10"><a href="#cb9-10"></a><span class="fu">mkdir</span> <span class="at">-p</span> <span class="st">"</span><span class="va">$BACKUP_DIR</span><span class="st">"</span></span>
+<span id="cb9-11"><a href="#cb9-11"></a></span>
+<span id="cb9-12"><a href="#cb9-12"></a><span class="co"># Parallel file copying with progress</span></span>
+<span id="cb9-13"><a href="#cb9-13"></a><span class="bu">echo</span> <span class="st">"Copying files in parallel..."</span></span>
+<span id="cb9-14"><a href="#cb9-14"></a><span class="fu">find</span> <span class="st">"</span><span class="va">$SOURCE_DIR</span><span class="st">"</span> <span class="at">-type</span> f <span class="kw">|</span> <span class="dt">\</span></span>
+<span id="cb9-15"><a href="#cb9-15"></a>    <span class="ex">parallel</span> <span class="at">-j</span> 8 <span class="at">--progress</span> <span class="dt">\</span></span>
+<span id="cb9-16"><a href="#cb9-16"></a>    <span class="st">'cp {} '"</span><span class="va">$BACKUP_DIR</span><span class="st">"'/{/}'</span></span>
+<span id="cb9-17"><a href="#cb9-17"></a></span>
+<span id="cb9-18"><a href="#cb9-18"></a><span class="co"># Parallel compression</span></span>
+<span id="cb9-19"><a href="#cb9-19"></a><span class="bu">echo</span> <span class="st">"Compressing files..."</span></span>
+<span id="cb9-20"><a href="#cb9-20"></a><span class="fu">find</span> <span class="st">"</span><span class="va">$BACKUP_DIR</span><span class="st">"</span> <span class="at">-name</span> <span class="st">"*.log"</span> <span class="kw">|</span> <span class="dt">\</span></span>
+<span id="cb9-21"><a href="#cb9-21"></a>    <span class="ex">parallel</span> <span class="at">-j</span> 4 <span class="at">--progress</span> gzip</span>
+<span id="cb9-22"><a href="#cb9-22"></a></span>
+<span id="cb9-23"><a href="#cb9-23"></a><span class="bu">echo</span> <span class="st">"File operations completed!"</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</section>
+</section>
+<section id="monitoring-and-managing-parallel-jobs" class="level2" data-number="0.7">
+<h2 data-number="0.7" class="anchored" data-anchor-id="monitoring-and-managing-parallel-jobs"><span class="header-section-number">0.7</span> Monitoring and Managing Parallel Jobs</h2>
+<section id="job-control-and-monitoring" class="level3" data-number="0.7.1">
+<h3 data-number="0.7.1" class="anchored" data-anchor-id="job-control-and-monitoring"><span class="header-section-number">0.7.1</span> Job Control and Monitoring</h3>
+<div class="sourceCode" id="cb10"><pre class="sourceCode numberSource bash number-lines code-with-copy"><code class="sourceCode bash"><span id="cb10-1"><a href="#cb10-1"></a><span class="co"># Monitor system load during parallel processing</span></span>
+<span id="cb10-2"><a href="#cb10-2"></a><span class="ex">watch</span> <span class="at">-n</span> 1 <span class="st">'uptime; echo; ps aux | head -20'</span></span>
+<span id="cb10-3"><a href="#cb10-3"></a></span>
+<span id="cb10-4"><a href="#cb10-4"></a><span class="co"># Check memory usage</span></span>
+<span id="cb10-5"><a href="#cb10-5"></a><span class="fu">free</span> <span class="at">-h</span></span>
+<span id="cb10-6"><a href="#cb10-6"></a></span>
+<span id="cb10-7"><a href="#cb10-7"></a><span class="co"># Kill all background jobs if needed</span></span>
+<span id="cb10-8"><a href="#cb10-8"></a><span class="bu">jobs</span> <span class="at">-p</span> <span class="kw">|</span> <span class="fu">xargs</span> kill</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</section>
+<section id="resource-management" class="level3" data-number="0.7.2">
+<h3 data-number="0.7.2" class="anchored" data-anchor-id="resource-management"><span class="header-section-number">0.7.2</span> Resource Management</h3>
+<div class="sourceCode" id="cb11"><pre class="sourceCode numberSource bash number-lines code-with-copy"><code class="sourceCode bash"><span id="cb11-1"><a href="#cb11-1"></a><span class="co"># Limit CPU usage for parallel jobs</span></span>
+<span id="cb11-2"><a href="#cb11-2"></a><span class="ex">parallel</span> <span class="at">--load</span> 80% process_file ::: <span class="pp">*</span>.txt  <span class="co"># Don't exceed 80% load</span></span>
+<span id="cb11-3"><a href="#cb11-3"></a></span>
+<span id="cb11-4"><a href="#cb11-4"></a><span class="co"># Use 50% of available cores</span></span>
+<span id="cb11-5"><a href="#cb11-5"></a><span class="ex">parallel</span> <span class="at">-j</span> 50% process_file ::: <span class="pp">*</span>.txt</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</section>
+</section>
+<section id="integration-with-hpc-job-schedulers" class="level2" data-number="0.8">
+<h2 data-number="0.8" class="anchored" data-anchor-id="integration-with-hpc-job-schedulers"><span class="header-section-number">0.8</span> Integration with HPC Job Schedulers</h2>
+<section id="parallel-processing-within-slurm-jobs" class="level3" data-number="0.8.1">
+<h3 data-number="0.8.1" class="anchored" data-anchor-id="parallel-processing-within-slurm-jobs"><span class="header-section-number">0.8.1</span> Parallel Processing within SLURM Jobs</h3>
+<div class="sourceCode" id="cb12"><pre class="sourceCode numberSource bash number-lines code-with-copy"><code class="sourceCode bash"><span id="cb12-1"><a href="#cb12-1"></a><span class="co">#!/bin/bash</span></span>
+<span id="cb12-2"><a href="#cb12-2"></a><span class="co">#SBATCH --job-name=parallel_processing</span></span>
+<span id="cb12-3"><a href="#cb12-3"></a><span class="co">#SBATCH --nodes=1</span></span>
+<span id="cb12-4"><a href="#cb12-4"></a><span class="co">#SBATCH --ntasks-per-node=16</span></span>
+<span id="cb12-5"><a href="#cb12-5"></a><span class="co">#SBATCH --time=02:00:00</span></span>
+<span id="cb12-6"><a href="#cb12-6"></a></span>
+<span id="cb12-7"><a href="#cb12-7"></a><span class="co"># Use all allocated cores for parallel processing</span></span>
+<span id="cb12-8"><a href="#cb12-8"></a><span class="va">CORES</span><span class="op">=</span><span class="va">$SLURM_NTASKS_PER_NODE</span></span>
+<span id="cb12-9"><a href="#cb12-9"></a></span>
+<span id="cb12-10"><a href="#cb12-10"></a><span class="bu">echo</span> <span class="st">"Running parallel processing with </span><span class="va">$CORES</span><span class="st"> cores"</span></span>
+<span id="cb12-11"><a href="#cb12-11"></a></span>
+<span id="cb12-12"><a href="#cb12-12"></a><span class="co"># Using GNU Parallel</span></span>
+<span id="cb12-13"><a href="#cb12-13"></a><span class="ex">parallel</span> <span class="at">-j</span> <span class="st">"</span><span class="va">$CORES</span><span class="st">"</span> process_file ::: <span class="pp">*</span>.txt</span>
+<span id="cb12-14"><a href="#cb12-14"></a></span>
+<span id="cb12-15"><a href="#cb12-15"></a><span class="co"># Using xargs</span></span>
+<span id="cb12-16"><a href="#cb12-16"></a><span class="fu">find</span> . <span class="at">-name</span> <span class="st">"*.data"</span> <span class="kw">|</span> <span class="fu">xargs</span> <span class="at">-n</span> 1 <span class="at">-P</span> <span class="st">"</span><span class="va">$CORES</span><span class="st">"</span> analyze_data</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</section>
+</section>
+<section id="quick-reference-parallel-processing-commands" class="level2" data-number="0.9">
+<h2 data-number="0.9" class="anchored" data-anchor-id="quick-reference-parallel-processing-commands"><span class="header-section-number">0.9</span> Quick Reference: Parallel Processing Commands</h2>
+<table class="table">
+<colgroup>
+<col style="width: 25%">
+<col style="width: 37%">
+<col style="width: 37%">
+</colgroup>
+<thead>
+<tr class="header">
+<th>Task</th>
+<th>Command</th>
+<th>Example</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>Background job</td>
+<td><code>command &amp;</code></td>
+<td><code>long_process &amp;</code></td>
+</tr>
+<tr class="even">
+<td>Wait for jobs</td>
+<td><code>wait</code></td>
+<td><code>wait</code></td>
+</tr>
+<tr class="odd">
+<td>List jobs</td>
+<td><code>jobs</code></td>
+<td><code>jobs</code></td>
+</tr>
+<tr class="even">
+<td>Parallel xargs</td>
+<td><code>xargs -P N</code></td>
+<td><code>ls *.txt \| xargs -P 4 wc -l</code></td>
+</tr>
+<tr class="odd">
+<td>GNU Parallel</td>
+<td><code>parallel command ::: args</code></td>
+<td><code>parallel gzip ::: *.log</code></td>
+</tr>
+<tr class="even">
+<td>Limit jobs</td>
+<td><code>parallel -j N</code></td>
+<td><code>parallel -j 8 process ::: *.data</code></td>
+</tr>
+<tr class="odd">
+<td>Progress monitor</td>
+<td><code>parallel --progress</code></td>
+<td><code>parallel --progress gzip ::: *.txt</code></td>
+</tr>
+</tbody>
+</table>
+</section>
+<section id="practice-exercises" class="level2" data-number="0.10">
+<h2 data-number="0.10" class="anchored" data-anchor-id="practice-exercises"><span class="header-section-number">0.10</span> Practice Exercises</h2>
+<div class="callout callout-style-default callout-important callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Your Parallel Processing Training
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<ol type="1">
+<li><strong>Basic parallel operations</strong>
+<ul>
+<li>Convert multiple images simultaneously</li>
+<li>Compress files in parallel</li>
+<li>Download multiple files concurrently</li>
+</ul></li>
+<li><strong>Advanced parallel workflows</strong>
+<ul>
+<li>Create a parallel data processing pipeline</li>
+<li>Implement error handling and retries</li>
+<li>Monitor resource usage during parallel execution</li>
+</ul></li>
+<li><strong>HPC integration</strong>
+<ul>
+<li>Write SLURM/LSF scripts with parallel processing</li>
+<li>Optimize job count based on available resources</li>
+<li>Create parallel job monitoring tools</li>
+</ul></li>
+</ol>
+</div>
+</div>
+</section>
+<section id="whats-next" class="level2" data-number="0.11">
+<h2 data-number="0.11" class="anchored" data-anchor-id="whats-next"><span class="header-section-number">0.11</span> What’s Next?</h2>
+<p>Now that you’ve mastered parallel processing, you’re ready to learn <a href="../../../posts/series/command-line-mastery/11-bash-scripting.html">Bash scripting</a>. Parallel processing is a key component of advanced automation, and you’ll use these skills to create sophisticated automated workflows.</p>
+<p>Remember: Parallel processing is about working smarter, not harder. By coordinating multiple processes, you can dramatically reduce processing time and maximize resource utilization.</p>
+<div class="callout callout-style-default callout-tip callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Parallel Processing Challenge
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>Before moving on, try this real-world scenario: 1. Create a data processing pipeline that uses parallel processing 2. Implement proper error handling and monitoring 3. Optimize the number of parallel jobs for your system 4. Measure the performance improvement over sequential processing</p>
+</div>
+</div>
+<hr>
+<p><em>You’ve mastered the art of parallel processing – the ability to multiply your computational power. Next, we’ll learn to weave these skills into sophisticated automated systems!</em></p>
+
+
+<!-- -->
+
+</section>
+
+<div id="quarto-appendix" class="default"><section class="quarto-appendix-contents"><h2 class="anchored quarto-appendix-heading">Reuse</h2><div id="quarto-reuse" class="quarto-appendix-contents"><div>CC BY-NC-SA 4.0</div></div></section><section class="quarto-appendix-contents"><h2 class="anchored quarto-appendix-heading">Citation</h2><div><div class="quarto-appendix-secondary-label">BibTeX citation:</div><pre class="sourceCode code-with-copy quarto-appendix-bibtex"><code class="sourceCode bibtex">@online{2025,
+  author = {, Hasan},
+  title = {Parallel {Processing} {Power}},
+  date = {2025-06-29},
+  url = {https://hasangoni.quarto.pub/hasan-blog-post/posts/series/command-line-mastery/10-parallel-processing.html},
+  langid = {en}
+}
+</code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre><div class="quarto-appendix-secondary-label">For attribution, please cite this work as:</div><div id="ref-2025" class="csl-entry quarto-appendix-citeas" role="listitem">
+Hasan. 2025. <span>“Parallel Processing Power.”</span> June 29, 2025. <a href="https://hasangoni.quarto.pub/hasan-blog-post/posts/series/command-line-mastery/10-parallel-processing.html">https://hasangoni.quarto.pub/hasan-blog-post/posts/series/command-line-mastery/10-parallel-processing.html</a>.
+</div></div></section></div></main> <!-- /main -->
+<script id="quarto-html-after-body" type="application/javascript">
+window.document.addEventListener("DOMContentLoaded", function (event) {
+  const toggleBodyColorMode = (bsSheetEl) => {
+    const mode = bsSheetEl.getAttribute("data-mode");
+    const bodyEl = window.document.querySelector("body");
+    if (mode === "dark") {
+      bodyEl.classList.add("quarto-dark");
+      bodyEl.classList.remove("quarto-light");
+    } else {
+      bodyEl.classList.add("quarto-light");
+      bodyEl.classList.remove("quarto-dark");
+    }
+  }
+  const toggleBodyColorPrimary = () => {
+    const bsSheetEl = window.document.querySelector("link#quarto-bootstrap");
+    if (bsSheetEl) {
+      toggleBodyColorMode(bsSheetEl);
+    }
+  }
+  toggleBodyColorPrimary();  
+  const icon = "";
+  const anchorJS = new window.AnchorJS();
+  anchorJS.options = {
+    placement: 'right',
+    icon: icon
+  };
+  anchorJS.add('.anchored');
+  const isCodeAnnotation = (el) => {
+    for (const clz of el.classList) {
+      if (clz.startsWith('code-annotation-')) {                     
+        return true;
+      }
+    }
+    return false;
+  }
+  const clipboard = new window.ClipboardJS('.code-copy-button', {
+    text: function(trigger) {
+      const codeEl = trigger.previousElementSibling.cloneNode(true);
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
+        }
+      }
+      return codeEl.innerText;
+    }
+  });
+  clipboard.on('success', function(e) {
+    // button target
+    const button = e.trigger;
+    // don't keep focus
+    button.blur();
+    // flash "checked"
+    button.classList.add('code-copy-button-checked');
+    var currentTitle = button.getAttribute("title");
+    button.setAttribute("title", "Copied!");
+    let tooltip;
+    if (window.bootstrap) {
+      button.setAttribute("data-bs-toggle", "tooltip");
+      button.setAttribute("data-bs-placement", "left");
+      button.setAttribute("data-bs-title", "Copied!");
+      tooltip = new bootstrap.Tooltip(button, 
+        { trigger: "manual", 
+          customClass: "code-copy-button-tooltip",
+          offset: [0, -8]});
+      tooltip.show();    
+    }
+    setTimeout(function() {
+      if (tooltip) {
+        tooltip.hide();
+        button.removeAttribute("data-bs-title");
+        button.removeAttribute("data-bs-toggle");
+        button.removeAttribute("data-bs-placement");
+      }
+      button.setAttribute("title", currentTitle);
+      button.classList.remove('code-copy-button-checked');
+    }, 1000);
+    // clear code selection
+    e.clearSelection();
+  });
+  const viewSource = window.document.getElementById('quarto-view-source') ||
+                     window.document.getElementById('quarto-code-tools-source');
+  if (viewSource) {
+    const sourceUrl = viewSource.getAttribute("data-quarto-source-url");
+    viewSource.addEventListener("click", function(e) {
+      if (sourceUrl) {
+        // rstudio viewer pane
+        if (/\bcapabilities=\b/.test(window.location)) {
+          window.open(sourceUrl);
+        } else {
+          window.location.href = sourceUrl;
+        }
+      } else {
+        const modal = new bootstrap.Modal(document.getElementById('quarto-embedded-source-code-modal'));
+        modal.show();
+      }
+      return false;
+    });
+  }
+  function toggleCodeHandler(show) {
+    return function(e) {
+      const detailsSrc = window.document.querySelectorAll(".cell > details > .sourceCode");
+      for (let i=0; i<detailsSrc.length; i++) {
+        const details = detailsSrc[i].parentElement;
+        if (show) {
+          details.open = true;
+        } else {
+          details.removeAttribute("open");
+        }
+      }
+      const cellCodeDivs = window.document.querySelectorAll(".cell > .sourceCode");
+      const fromCls = show ? "hidden" : "unhidden";
+      const toCls = show ? "unhidden" : "hidden";
+      for (let i=0; i<cellCodeDivs.length; i++) {
+        const codeDiv = cellCodeDivs[i];
+        if (codeDiv.classList.contains(fromCls)) {
+          codeDiv.classList.remove(fromCls);
+          codeDiv.classList.add(toCls);
+        } 
+      }
+      return false;
+    }
+  }
+  const hideAllCode = window.document.getElementById("quarto-hide-all-code");
+  if (hideAllCode) {
+    hideAllCode.addEventListener("click", toggleCodeHandler(false));
+  }
+  const showAllCode = window.document.getElementById("quarto-show-all-code");
+  if (showAllCode) {
+    showAllCode.addEventListener("click", toggleCodeHandler(true));
+  }
+  function tippyHover(el, contentFn) {
+    const config = {
+      allowHTML: true,
+      content: contentFn,
+      maxWidth: 500,
+      delay: 100,
+      arrow: false,
+      appendTo: function(el) {
+          return el.parentElement;
+      },
+      interactive: true,
+      interactiveBorder: 10,
+      theme: 'quarto',
+      placement: 'bottom-start'
+    };
+    window.tippy(el, config); 
+  }
+  const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+  for (var i=0; i<noterefs.length; i++) {
+    const ref = noterefs[i];
+    tippyHover(ref, function() {
+      // use id or data attribute instead here
+      let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+      try { href = new URL(href).hash; } catch {}
+      const id = href.replace(/^#\/?/, "");
+      const note = window.document.getElementById(id);
+      return note.innerHTML;
+    });
+  }
+      let selectedAnnoteEl;
+      const selectorForAnnotation = ( cell, annotation) => {
+        let cellAttr = 'data-code-cell="' + cell + '"';
+        let lineAttr = 'data-code-annotation="' +  annotation + '"';
+        const selector = 'span[' + cellAttr + '][' + lineAttr + ']';
+        return selector;
+      }
+      const selectCodeLines = (annoteEl) => {
+        const doc = window.document;
+        const targetCell = annoteEl.getAttribute("data-target-cell");
+        const targetAnnotation = annoteEl.getAttribute("data-target-annotation");
+        const annoteSpan = window.document.querySelector(selectorForAnnotation(targetCell, targetAnnotation));
+        const lines = annoteSpan.getAttribute("data-code-lines").split(",");
+        const lineIds = lines.map((line) => {
+          return targetCell + "-" + line;
+        })
+        let top = null;
+        let height = null;
+        let parent = null;
+        if (lineIds.length > 0) {
+            //compute the position of the single el (top and bottom and make a div)
+            const el = window.document.getElementById(lineIds[0]);
+            top = el.offsetTop;
+            height = el.offsetHeight;
+            parent = el.parentElement.parentElement;
+          if (lineIds.length > 1) {
+            const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
+            const bottom = lastEl.offsetTop + lastEl.offsetHeight;
+            height = bottom - top;
+          }
+          if (top !== null && height !== null && parent !== null) {
+            // cook up a div (if necessary) and position it 
+            let div = window.document.getElementById("code-annotation-line-highlight");
+            if (div === null) {
+              div = window.document.createElement("div");
+              div.setAttribute("id", "code-annotation-line-highlight");
+              div.style.position = 'absolute';
+              parent.appendChild(div);
+            }
+            div.style.top = top - 2 + "px";
+            div.style.height = height + 4 + "px";
+            let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
+            if (gutterDiv === null) {
+              gutterDiv = window.document.createElement("div");
+              gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
+              gutterDiv.style.position = 'absolute';
+              const codeCell = window.document.getElementById(targetCell);
+              const gutter = codeCell.querySelector('.code-annotation-gutter');
+              gutter.appendChild(gutterDiv);
+            }
+            gutterDiv.style.top = top - 2 + "px";
+            gutterDiv.style.height = height + 4 + "px";
+          }
+          selectedAnnoteEl = annoteEl;
+        }
+      };
+      const unselectCodeLines = () => {
+        const elementsIds = ["code-annotation-line-highlight", "code-annotation-line-highlight-gutter"];
+        elementsIds.forEach((elId) => {
+          const div = window.document.getElementById(elId);
+          if (div) {
+            div.remove();
+          }
+        });
+        selectedAnnoteEl = undefined;
+      };
+      // Attach click handler to the DT
+      const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
+      for (const annoteDlNode of annoteDls) {
+        annoteDlNode.addEventListener('click', (event) => {
+          const clickedEl = event.target;
+          if (clickedEl !== selectedAnnoteEl) {
+            unselectCodeLines();
+            const activeEl = window.document.querySelector('dt[data-target-cell].code-annotation-active');
+            if (activeEl) {
+              activeEl.classList.remove('code-annotation-active');
+            }
+            selectCodeLines(clickedEl);
+            clickedEl.classList.add('code-annotation-active');
+          } else {
+            // Unselect the line
+            unselectCodeLines();
+            clickedEl.classList.remove('code-annotation-active');
+          }
+        });
+      }
+  const findCites = (el) => {
+    const parentEl = el.parentElement;
+    if (parentEl) {
+      const cites = parentEl.dataset.cites;
+      if (cites) {
+        return {
+          el,
+          cites: cites.split(' ')
+        };
+      } else {
+        return findCites(el.parentElement)
+      }
+    } else {
+      return undefined;
+    }
+  };
+  var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+  for (var i=0; i<bibliorefs.length; i++) {
+    const ref = bibliorefs[i];
+    const citeInfo = findCites(ref);
+    if (citeInfo) {
+      tippyHover(citeInfo.el, function() {
+        var popup = window.document.createElement('div');
+        citeInfo.cites.forEach(function(cite) {
+          var citeDiv = window.document.createElement('div');
+          citeDiv.classList.add('hanging-indent');
+          citeDiv.classList.add('csl-entry');
+          var biblioDiv = window.document.getElementById('ref-' + cite);
+          if (biblioDiv) {
+            citeDiv.innerHTML = biblioDiv.innerHTML;
+          }
+          popup.appendChild(citeDiv);
+        });
+        return popup.innerHTML;
+      });
+    }
+  }
+});
+</script>
+<script src="https://utteranc.es/client.js" repo="yourusername/quarto_blog_hasan" issue-term="pathname" theme="github-light" crossorigin="anonymous" async="">
+</script>
+<script src="https://giscus.app/client.js" data-repo="HasanGoni/quarto_blog_hasan" data-repo-id="" data-category="General" data-category-id="" data-mapping="title" data-reactions-enabled="1" data-emit-metadata="0" data-input-position="top" data-theme="light" data-lang="en" crossorigin="anonymous" async="">
+</script><div class="modal fade" id="quarto-embedded-source-code-modal" tabindex="-1" aria-labelledby="quarto-embedded-source-code-modal-label" aria-hidden="true"><div class="modal-dialog modal-dialog-scrollable"><div class="modal-content"><div class="modal-header"><h5 class="modal-title" id="quarto-embedded-source-code-modal-label">Source Code</h5><button class="btn-close" data-bs-dismiss="modal"></button></div><div class="modal-body"><div class="">
+<div class="sourceCode" id="cb13" data-shortcodes="false"><pre class="sourceCode numberSource markdown number-lines code-with-copy"><code class="sourceCode markdown"><span id="cb13-1"><a href="#cb13-1"></a><span class="co">---</span></span>
+<span id="cb13-2"><a href="#cb13-2"></a><span class="an">title:</span><span class="co"> "Parallel Processing Power"</span></span>
+<span id="cb13-3"><a href="#cb13-3"></a><span class="an">description:</span><span class="co"> "Multiply your computational power by mastering parallel processing. Learn to orchestrate multiple processes simultaneously, turning your single-threaded workflows into high-performance parallel operations."</span></span>
+<span id="cb13-4"><a href="#cb13-4"></a><span class="an">author:</span><span class="co"> "Hasan"</span></span>
+<span id="cb13-5"><a href="#cb13-5"></a><span class="an">date:</span><span class="co"> last-modified</span></span>
+<span id="cb13-6"><a href="#cb13-6"></a><span class="an">categories:</span><span class="co"> [command-line, parallel-processing, xargs, gnu-parallel, background-jobs]</span></span>
+<span id="cb13-7"><a href="#cb13-7"></a><span class="an">image:</span><span class="co"> "https://images.unsplash.com/photo-1558494949-ef010cbdcc31?ixlib=rb-4.0.3&amp;auto=format&amp;fit=crop&amp;w=2000&amp;q=80"</span></span>
+<span id="cb13-8"><a href="#cb13-8"></a><span class="an">toc:</span><span class="co"> true</span></span>
+<span id="cb13-9"><a href="#cb13-9"></a><span class="co">---</span></span>
+<span id="cb13-10"><a href="#cb13-10"></a></span>
+<span id="cb13-11"><a href="#cb13-11"></a><span class="fu">## The Story: The Digital Orchestra Conductor</span></span>
+<span id="cb13-12"><a href="#cb13-12"></a></span>
+<span id="cb13-13"><a href="#cb13-13"></a>Imagine you're conducting a symphony orchestra, but instead of musicians, you're coordinating dozens of computational processes. Each process is like a skilled musician – capable of beautiful work individually, but when orchestrated together, they create something far more powerful than the sum of their parts.</span>
+<span id="cb13-14"><a href="#cb13-14"></a></span>
+<span id="cb13-15"><a href="#cb13-15"></a>In the sequential world, you'd have each musician play their part one after another – a flute solo, then a violin solo, then drums. It would take hours to get through a simple piece. But as a conductor, you can have all musicians play simultaneously, creating rich, complex harmonies in a fraction of the time.</span>
+<span id="cb13-16"><a href="#cb13-16"></a></span>
+<span id="cb13-17"><a href="#cb13-17"></a>This is the power of parallel processing – transforming your computer from a single-threaded worker into a coordinated team of processes.</span>
+<span id="cb13-18"><a href="#cb13-18"></a></span>
+<span id="cb13-19"><a href="#cb13-19"></a><span class="fu">## Understanding Parallel Processing</span></span>
+<span id="cb13-20"><a href="#cb13-20"></a></span>
+<span id="cb13-21"><a href="#cb13-21"></a><span class="fu">### The Parallel Mindset</span></span>
+<span id="cb13-22"><a href="#cb13-22"></a></span>
+<span id="cb13-23"><a href="#cb13-23"></a>Parallel processing is about breaking large tasks into smaller, independent pieces that can run simultaneously:</span>
+<span id="cb13-24"><a href="#cb13-24"></a></span>
+<span id="cb13-25"><a href="#cb13-25"></a><span class="in">```bash</span></span>
+<span id="cb13-26"><a href="#cb13-26"></a><span class="co"># Sequential processing (slow)</span></span>
+<span id="cb13-27"><a href="#cb13-27"></a><span class="cf">for</span> file <span class="kw">in</span> <span class="pp">*</span>.txt<span class="kw">;</span> <span class="cf">do</span></span>
+<span id="cb13-28"><a href="#cb13-28"></a>    <span class="ex">process_file</span> <span class="st">"</span><span class="va">$file</span><span class="st">"</span>  <span class="co"># Each file processed one at a time</span></span>
+<span id="cb13-29"><a href="#cb13-29"></a><span class="cf">done</span></span>
+<span id="cb13-30"><a href="#cb13-30"></a></span>
+<span id="cb13-31"><a href="#cb13-31"></a><span class="co"># Parallel processing (fast) </span></span>
+<span id="cb13-32"><a href="#cb13-32"></a><span class="cf">for</span> file <span class="kw">in</span> <span class="pp">*</span>.txt<span class="kw">;</span> <span class="cf">do</span></span>
+<span id="cb13-33"><a href="#cb13-33"></a>    <span class="ex">process_file</span> <span class="st">"</span><span class="va">$file</span><span class="st">"</span> <span class="kw">&amp;</span>  <span class="co"># All files processed simultaneously</span></span>
+<span id="cb13-34"><a href="#cb13-34"></a><span class="cf">done</span></span>
+<span id="cb13-35"><a href="#cb13-35"></a><span class="bu">wait</span>  <span class="co"># Wait for all background jobs to complete</span></span>
+<span id="cb13-36"><a href="#cb13-36"></a><span class="in">```</span></span>
+<span id="cb13-37"><a href="#cb13-37"></a></span>
+<span id="cb13-38"><a href="#cb13-38"></a>**Real-world analogy**: Sequential processing is like washing dishes one at a time. Parallel processing is like having multiple people wash different dishes simultaneously – the total time is dramatically reduced.</span>
+<span id="cb13-39"><a href="#cb13-39"></a></span>
+<span id="cb13-40"><a href="#cb13-40"></a><span class="fu">## Background Jobs: Your First Parallel Tool</span></span>
+<span id="cb13-41"><a href="#cb13-41"></a></span>
+<span id="cb13-42"><a href="#cb13-42"></a><span class="fu">### Basic Background Processing</span></span>
+<span id="cb13-43"><a href="#cb13-43"></a></span>
+<span id="cb13-44"><a href="#cb13-44"></a><span class="in">```bash</span></span>
+<span id="cb13-45"><a href="#cb13-45"></a><span class="co"># Run command in background</span></span>
+<span id="cb13-46"><a href="#cb13-46"></a><span class="ex">long_running_command</span> <span class="kw">&amp;</span></span>
+<span id="cb13-47"><a href="#cb13-47"></a></span>
+<span id="cb13-48"><a href="#cb13-48"></a><span class="co"># Run multiple commands in background</span></span>
+<span id="cb13-49"><a href="#cb13-49"></a><span class="ex">command1</span> <span class="kw">&amp;</span></span>
+<span id="cb13-50"><a href="#cb13-50"></a><span class="ex">command2</span> <span class="kw">&amp;</span></span>
+<span id="cb13-51"><a href="#cb13-51"></a><span class="ex">command3</span> <span class="kw">&amp;</span></span>
+<span id="cb13-52"><a href="#cb13-52"></a></span>
+<span id="cb13-53"><a href="#cb13-53"></a><span class="co"># Wait for all background jobs to complete</span></span>
+<span id="cb13-54"><a href="#cb13-54"></a><span class="bu">wait</span></span>
+<span id="cb13-55"><a href="#cb13-55"></a></span>
+<span id="cb13-56"><a href="#cb13-56"></a><span class="co"># Check running background jobs</span></span>
+<span id="cb13-57"><a href="#cb13-57"></a><span class="bu">jobs</span></span>
+<span id="cb13-58"><a href="#cb13-58"></a></span>
+<span id="cb13-59"><a href="#cb13-59"></a><span class="co"># Bring background job to foreground</span></span>
+<span id="cb13-60"><a href="#cb13-60"></a><span class="bu">fg</span> %1  <span class="co"># Bring job 1 to foreground</span></span>
+<span id="cb13-61"><a href="#cb13-61"></a><span class="in">```</span></span>
+<span id="cb13-62"><a href="#cb13-62"></a></span>
+<span id="cb13-63"><a href="#cb13-63"></a><span class="fu">### Practical Background Job Examples</span></span>
+<span id="cb13-64"><a href="#cb13-64"></a></span>
+<span id="cb13-65"><a href="#cb13-65"></a><span class="in">```bash</span></span>
+<span id="cb13-66"><a href="#cb13-66"></a><span class="co"># Process multiple large files simultaneously</span></span>
+<span id="cb13-67"><a href="#cb13-67"></a><span class="cf">for</span> file <span class="kw">in</span> huge_dataset_<span class="pp">*</span>.csv<span class="kw">;</span> <span class="cf">do</span></span>
+<span id="cb13-68"><a href="#cb13-68"></a>    <span class="ex">python</span> analyze_data.py <span class="st">"</span><span class="va">$file</span><span class="st">"</span> <span class="kw">&amp;</span></span>
+<span id="cb13-69"><a href="#cb13-69"></a><span class="cf">done</span></span>
+<span id="cb13-70"><a href="#cb13-70"></a><span class="bu">wait</span></span>
+<span id="cb13-71"><a href="#cb13-71"></a><span class="bu">echo</span> <span class="st">"All analyses complete!"</span></span>
+<span id="cb13-72"><a href="#cb13-72"></a></span>
+<span id="cb13-73"><a href="#cb13-73"></a><span class="co"># Download multiple files in parallel</span></span>
+<span id="cb13-74"><a href="#cb13-74"></a><span class="cf">for</span> url <span class="kw">in</span> <span class="st">"</span><span class="va">${urls</span><span class="op">[@]</span><span class="va">}</span><span class="st">"</span><span class="kw">;</span> <span class="cf">do</span></span>
+<span id="cb13-75"><a href="#cb13-75"></a>    <span class="fu">wget</span> <span class="st">"</span><span class="va">$url</span><span class="st">"</span> <span class="kw">&amp;</span></span>
+<span id="cb13-76"><a href="#cb13-76"></a><span class="cf">done</span></span>
+<span id="cb13-77"><a href="#cb13-77"></a><span class="bu">wait</span></span>
+<span id="cb13-78"><a href="#cb13-78"></a><span class="in">```</span></span>
+<span id="cb13-79"><a href="#cb13-79"></a></span>
+<span id="cb13-80"><a href="#cb13-80"></a><span class="fu">## Advanced Parallel Processing with `xargs`</span></span>
+<span id="cb13-81"><a href="#cb13-81"></a></span>
+<span id="cb13-82"><a href="#cb13-82"></a><span class="in">`xargs`</span> is like having a smart job dispatcher that can distribute work across multiple processes.</span>
+<span id="cb13-83"><a href="#cb13-83"></a></span>
+<span id="cb13-84"><a href="#cb13-84"></a><span class="fu">### Basic xargs Parallel Processing</span></span>
+<span id="cb13-85"><a href="#cb13-85"></a></span>
+<span id="cb13-86"><a href="#cb13-86"></a><span class="in">```bash</span></span>
+<span id="cb13-87"><a href="#cb13-87"></a><span class="co"># Process files in parallel (4 processes at once)</span></span>
+<span id="cb13-88"><a href="#cb13-88"></a><span class="fu">ls</span> <span class="pp">*</span>.txt <span class="kw">|</span> <span class="fu">xargs</span> <span class="at">-n</span> 1 <span class="at">-P</span> 4 process_file</span>
+<span id="cb13-89"><a href="#cb13-89"></a></span>
+<span id="cb13-90"><a href="#cb13-90"></a><span class="co"># Explanation:</span></span>
+<span id="cb13-91"><a href="#cb13-91"></a><span class="co"># -n 1: Pass one argument at a time to each process</span></span>
+<span id="cb13-92"><a href="#cb13-92"></a><span class="co"># -P 4: Run up to 4 processes in parallel</span></span>
+<span id="cb13-93"><a href="#cb13-93"></a><span class="in">```</span></span>
+<span id="cb13-94"><a href="#cb13-94"></a></span>
+<span id="cb13-95"><a href="#cb13-95"></a><span class="fu">### Real-World xargs Examples</span></span>
+<span id="cb13-96"><a href="#cb13-96"></a></span>
+<span id="cb13-97"><a href="#cb13-97"></a><span class="in">```bash</span></span>
+<span id="cb13-98"><a href="#cb13-98"></a><span class="co"># Convert images in parallel</span></span>
+<span id="cb13-99"><a href="#cb13-99"></a><span class="fu">find</span> . <span class="at">-name</span> <span class="st">"*.jpg"</span> <span class="kw">|</span> <span class="fu">xargs</span> <span class="at">-n</span> 1 <span class="at">-P</span> 8 <span class="at">-I</span> {} convert {} {}.png</span>
+<span id="cb13-100"><a href="#cb13-100"></a></span>
+<span id="cb13-101"><a href="#cb13-101"></a><span class="co"># Compress files in parallel</span></span>
+<span id="cb13-102"><a href="#cb13-102"></a><span class="fu">find</span> . <span class="at">-name</span> <span class="st">"*.log"</span> <span class="kw">|</span> <span class="fu">xargs</span> <span class="at">-n</span> 1 <span class="at">-P</span> 4 gzip</span>
+<span id="cb13-103"><a href="#cb13-103"></a></span>
+<span id="cb13-104"><a href="#cb13-104"></a><span class="co"># Process data files in parallel</span></span>
+<span id="cb13-105"><a href="#cb13-105"></a><span class="fu">ls</span> data_<span class="pp">*</span>.csv <span class="kw">|</span> <span class="fu">xargs</span> <span class="at">-n</span> 1 <span class="at">-P</span> 6 python process_data.py</span>
+<span id="cb13-106"><a href="#cb13-106"></a></span>
+<span id="cb13-107"><a href="#cb13-107"></a><span class="co"># Search multiple files in parallel</span></span>
+<span id="cb13-108"><a href="#cb13-108"></a><span class="fu">find</span> . <span class="at">-name</span> <span class="st">"*.txt"</span> <span class="kw">|</span> <span class="fu">xargs</span> <span class="at">-P</span> 8 grep <span class="st">"pattern"</span></span>
+<span id="cb13-109"><a href="#cb13-109"></a><span class="in">```</span></span>
+<span id="cb13-110"><a href="#cb13-110"></a></span>
+<span id="cb13-111"><a href="#cb13-111"></a><span class="fu">## GNU Parallel: The Professional Parallel Processor</span></span>
+<span id="cb13-112"><a href="#cb13-112"></a></span>
+<span id="cb13-113"><a href="#cb13-113"></a>GNU Parallel is like having a professional orchestra conductor with advanced scheduling capabilities.</span>
+<span id="cb13-114"><a href="#cb13-114"></a></span>
+<span id="cb13-115"><a href="#cb13-115"></a><span class="fu">### Basic GNU Parallel Usage</span></span>
+<span id="cb13-116"><a href="#cb13-116"></a></span>
+<span id="cb13-117"><a href="#cb13-117"></a><span class="in">```bash</span></span>
+<span id="cb13-118"><a href="#cb13-118"></a><span class="co"># Basic parallel execution</span></span>
+<span id="cb13-119"><a href="#cb13-119"></a><span class="ex">parallel</span> echo ::: A B C D</span>
+<span id="cb13-120"><a href="#cb13-120"></a><span class="co"># Runs: echo A, echo B, echo C, echo D simultaneously</span></span>
+<span id="cb13-121"><a href="#cb13-121"></a></span>
+<span id="cb13-122"><a href="#cb13-122"></a><span class="co"># Process files in parallel</span></span>
+<span id="cb13-123"><a href="#cb13-123"></a><span class="ex">parallel</span> gzip ::: <span class="pp">*</span>.log</span>
+<span id="cb13-124"><a href="#cb13-124"></a></span>
+<span id="cb13-125"><a href="#cb13-125"></a><span class="co"># Use all CPU cores (default)</span></span>
+<span id="cb13-126"><a href="#cb13-126"></a><span class="ex">parallel</span> <span class="at">-j+0</span> process_file ::: <span class="pp">*</span>.txt</span>
+<span id="cb13-127"><a href="#cb13-127"></a></span>
+<span id="cb13-128"><a href="#cb13-128"></a><span class="co"># Limit to specific number of jobs</span></span>
+<span id="cb13-129"><a href="#cb13-129"></a><span class="ex">parallel</span> <span class="at">-j</span> 4 process_file ::: <span class="pp">*</span>.txt</span>
+<span id="cb13-130"><a href="#cb13-130"></a><span class="in">```</span></span>
+<span id="cb13-131"><a href="#cb13-131"></a></span>
+<span id="cb13-132"><a href="#cb13-132"></a><span class="fu">### Advanced GNU Parallel Features</span></span>
+<span id="cb13-133"><a href="#cb13-133"></a></span>
+<span id="cb13-134"><a href="#cb13-134"></a><span class="in">```bash</span></span>
+<span id="cb13-135"><a href="#cb13-135"></a><span class="co"># Progress monitoring</span></span>
+<span id="cb13-136"><a href="#cb13-136"></a><span class="ex">parallel</span> <span class="at">--progress</span> gzip ::: <span class="pp">*</span>.log</span>
+<span id="cb13-137"><a href="#cb13-137"></a></span>
+<span id="cb13-138"><a href="#cb13-138"></a><span class="co"># Dry run (show what would be executed)</span></span>
+<span id="cb13-139"><a href="#cb13-139"></a><span class="ex">parallel</span> <span class="at">--dry-run</span> gzip ::: <span class="pp">*</span>.log</span>
+<span id="cb13-140"><a href="#cb13-140"></a></span>
+<span id="cb13-141"><a href="#cb13-141"></a><span class="co"># Resume interrupted jobs</span></span>
+<span id="cb13-142"><a href="#cb13-142"></a><span class="ex">parallel</span> <span class="at">--resume</span> <span class="at">--joblog</span> logfile gzip ::: <span class="pp">*</span>.log</span>
+<span id="cb13-143"><a href="#cb13-143"></a><span class="in">```</span></span>
+<span id="cb13-144"><a href="#cb13-144"></a></span>
+<span id="cb13-145"><a href="#cb13-145"></a><span class="fu">## Real-World HPC Parallel Processing Scenarios</span></span>
+<span id="cb13-146"><a href="#cb13-146"></a></span>
+<span id="cb13-147"><a href="#cb13-147"></a><span class="fu">### Scenario 1: Parallel Data Processing Pipeline</span></span>
+<span id="cb13-148"><a href="#cb13-148"></a></span>
+<span id="cb13-149"><a href="#cb13-149"></a><span class="in">```bash</span></span>
+<span id="cb13-150"><a href="#cb13-150"></a><span class="co">#!/bin/bash</span></span>
+<span id="cb13-151"><a href="#cb13-151"></a><span class="co"># parallel_data_pipeline.sh - Process experimental data in parallel</span></span>
+<span id="cb13-152"><a href="#cb13-152"></a></span>
+<span id="cb13-153"><a href="#cb13-153"></a><span class="va">DATA_DIR</span><span class="op">=</span><span class="st">"raw_data"</span></span>
+<span id="cb13-154"><a href="#cb13-154"></a><span class="va">OUTPUT_DIR</span><span class="op">=</span><span class="st">"processed_data"</span></span>
+<span id="cb13-155"><a href="#cb13-155"></a><span class="va">NUM_CORES</span><span class="op">=</span><span class="va">$(</span><span class="fu">nproc</span><span class="va">)</span></span>
+<span id="cb13-156"><a href="#cb13-156"></a></span>
+<span id="cb13-157"><a href="#cb13-157"></a><span class="bu">echo</span> <span class="st">"Starting parallel data processing pipeline..."</span></span>
+<span id="cb13-158"><a href="#cb13-158"></a><span class="bu">echo</span> <span class="st">"Using </span><span class="va">$NUM_CORES</span><span class="st"> CPU cores"</span></span>
+<span id="cb13-159"><a href="#cb13-159"></a></span>
+<span id="cb13-160"><a href="#cb13-160"></a><span class="co"># Create output directory</span></span>
+<span id="cb13-161"><a href="#cb13-161"></a><span class="fu">mkdir</span> <span class="at">-p</span> <span class="st">"</span><span class="va">$OUTPUT_DIR</span><span class="st">"</span></span>
+<span id="cb13-162"><a href="#cb13-162"></a></span>
+<span id="cb13-163"><a href="#cb13-163"></a><span class="co"># Stage 1: Parallel data cleaning</span></span>
+<span id="cb13-164"><a href="#cb13-164"></a><span class="bu">echo</span> <span class="st">"Stage 1: Cleaning data files..."</span></span>
+<span id="cb13-165"><a href="#cb13-165"></a><span class="fu">find</span> <span class="st">"</span><span class="va">$DATA_DIR</span><span class="st">"</span> <span class="at">-name</span> <span class="st">"*.csv"</span> <span class="kw">|</span> <span class="dt">\</span></span>
+<span id="cb13-166"><a href="#cb13-166"></a>    <span class="ex">parallel</span> <span class="at">-j</span> <span class="st">"</span><span class="va">$NUM_CORES</span><span class="st">"</span> <span class="at">--progress</span> <span class="dt">\</span></span>
+<span id="cb13-167"><a href="#cb13-167"></a>    <span class="st">"python clean_data.py {} &gt; </span><span class="va">$OUTPUT_DIR</span><span class="st">/{/.}_clean.csv"</span></span>
+<span id="cb13-168"><a href="#cb13-168"></a></span>
+<span id="cb13-169"><a href="#cb13-169"></a><span class="co"># Stage 2: Parallel analysis</span></span>
+<span id="cb13-170"><a href="#cb13-170"></a><span class="bu">echo</span> <span class="st">"Stage 2: Running analysis..."</span></span>
+<span id="cb13-171"><a href="#cb13-171"></a><span class="fu">find</span> <span class="st">"</span><span class="va">$OUTPUT_DIR</span><span class="st">"</span> <span class="at">-name</span> <span class="st">"*_clean.csv"</span> <span class="kw">|</span> <span class="dt">\</span></span>
+<span id="cb13-172"><a href="#cb13-172"></a>    <span class="ex">parallel</span> <span class="at">-j</span> <span class="st">"</span><span class="va">$NUM_CORES</span><span class="st">"</span> <span class="at">--progress</span> <span class="dt">\</span></span>
+<span id="cb13-173"><a href="#cb13-173"></a>    <span class="st">"python analyze_data.py {} &gt; </span><span class="va">$OUTPUT_DIR</span><span class="st">/{/.}_results.txt"</span></span>
+<span id="cb13-174"><a href="#cb13-174"></a></span>
+<span id="cb13-175"><a href="#cb13-175"></a><span class="bu">echo</span> <span class="st">"Pipeline completed! Results in </span><span class="va">$OUTPUT_DIR</span><span class="st">"</span></span>
+<span id="cb13-176"><a href="#cb13-176"></a><span class="in">```</span></span>
+<span id="cb13-177"><a href="#cb13-177"></a></span>
+<span id="cb13-178"><a href="#cb13-178"></a><span class="fu">### Scenario 2: Parallel File Operations</span></span>
+<span id="cb13-179"><a href="#cb13-179"></a></span>
+<span id="cb13-180"><a href="#cb13-180"></a><span class="in">```bash</span></span>
+<span id="cb13-181"><a href="#cb13-181"></a><span class="co">#!/bin/bash</span></span>
+<span id="cb13-182"><a href="#cb13-182"></a><span class="co"># parallel_file_ops.sh - Efficient file operations</span></span>
+<span id="cb13-183"><a href="#cb13-183"></a></span>
+<span id="cb13-184"><a href="#cb13-184"></a><span class="va">SOURCE_DIR</span><span class="op">=</span><span class="st">"/data/large_dataset"</span></span>
+<span id="cb13-185"><a href="#cb13-185"></a><span class="va">BACKUP_DIR</span><span class="op">=</span><span class="st">"/backup/dataset_</span><span class="va">$(</span><span class="fu">date</span> +%Y%m%d<span class="va">)</span><span class="st">"</span></span>
+<span id="cb13-186"><a href="#cb13-186"></a></span>
+<span id="cb13-187"><a href="#cb13-187"></a><span class="bu">echo</span> <span class="st">"Starting parallel file operations..."</span></span>
+<span id="cb13-188"><a href="#cb13-188"></a></span>
+<span id="cb13-189"><a href="#cb13-189"></a><span class="co"># Create backup directory</span></span>
+<span id="cb13-190"><a href="#cb13-190"></a><span class="fu">mkdir</span> <span class="at">-p</span> <span class="st">"</span><span class="va">$BACKUP_DIR</span><span class="st">"</span></span>
+<span id="cb13-191"><a href="#cb13-191"></a></span>
+<span id="cb13-192"><a href="#cb13-192"></a><span class="co"># Parallel file copying with progress</span></span>
+<span id="cb13-193"><a href="#cb13-193"></a><span class="bu">echo</span> <span class="st">"Copying files in parallel..."</span></span>
+<span id="cb13-194"><a href="#cb13-194"></a><span class="fu">find</span> <span class="st">"</span><span class="va">$SOURCE_DIR</span><span class="st">"</span> <span class="at">-type</span> f <span class="kw">|</span> <span class="dt">\</span></span>
+<span id="cb13-195"><a href="#cb13-195"></a>    <span class="ex">parallel</span> <span class="at">-j</span> 8 <span class="at">--progress</span> <span class="dt">\</span></span>
+<span id="cb13-196"><a href="#cb13-196"></a>    <span class="st">'cp {} '"</span><span class="va">$BACKUP_DIR</span><span class="st">"'/{/}'</span></span>
+<span id="cb13-197"><a href="#cb13-197"></a></span>
+<span id="cb13-198"><a href="#cb13-198"></a><span class="co"># Parallel compression</span></span>
+<span id="cb13-199"><a href="#cb13-199"></a><span class="bu">echo</span> <span class="st">"Compressing files..."</span></span>
+<span id="cb13-200"><a href="#cb13-200"></a><span class="fu">find</span> <span class="st">"</span><span class="va">$BACKUP_DIR</span><span class="st">"</span> <span class="at">-name</span> <span class="st">"*.log"</span> <span class="kw">|</span> <span class="dt">\</span></span>
+<span id="cb13-201"><a href="#cb13-201"></a>    <span class="ex">parallel</span> <span class="at">-j</span> 4 <span class="at">--progress</span> gzip</span>
+<span id="cb13-202"><a href="#cb13-202"></a></span>
+<span id="cb13-203"><a href="#cb13-203"></a><span class="bu">echo</span> <span class="st">"File operations completed!"</span></span>
+<span id="cb13-204"><a href="#cb13-204"></a><span class="in">```</span></span>
+<span id="cb13-205"><a href="#cb13-205"></a></span>
+<span id="cb13-206"><a href="#cb13-206"></a><span class="fu">## Monitoring and Managing Parallel Jobs</span></span>
+<span id="cb13-207"><a href="#cb13-207"></a></span>
+<span id="cb13-208"><a href="#cb13-208"></a><span class="fu">### Job Control and Monitoring</span></span>
+<span id="cb13-209"><a href="#cb13-209"></a></span>
+<span id="cb13-210"><a href="#cb13-210"></a><span class="in">```bash</span></span>
+<span id="cb13-211"><a href="#cb13-211"></a><span class="co"># Monitor system load during parallel processing</span></span>
+<span id="cb13-212"><a href="#cb13-212"></a><span class="ex">watch</span> <span class="at">-n</span> 1 <span class="st">'uptime; echo; ps aux | head -20'</span></span>
+<span id="cb13-213"><a href="#cb13-213"></a></span>
+<span id="cb13-214"><a href="#cb13-214"></a><span class="co"># Check memory usage</span></span>
+<span id="cb13-215"><a href="#cb13-215"></a><span class="fu">free</span> <span class="at">-h</span></span>
+<span id="cb13-216"><a href="#cb13-216"></a></span>
+<span id="cb13-217"><a href="#cb13-217"></a><span class="co"># Kill all background jobs if needed</span></span>
+<span id="cb13-218"><a href="#cb13-218"></a><span class="bu">jobs</span> <span class="at">-p</span> <span class="kw">|</span> <span class="fu">xargs</span> kill</span>
+<span id="cb13-219"><a href="#cb13-219"></a><span class="in">```</span></span>
+<span id="cb13-220"><a href="#cb13-220"></a></span>
+<span id="cb13-221"><a href="#cb13-221"></a><span class="fu">### Resource Management</span></span>
+<span id="cb13-222"><a href="#cb13-222"></a></span>
+<span id="cb13-223"><a href="#cb13-223"></a><span class="in">```bash</span></span>
+<span id="cb13-224"><a href="#cb13-224"></a><span class="co"># Limit CPU usage for parallel jobs</span></span>
+<span id="cb13-225"><a href="#cb13-225"></a><span class="ex">parallel</span> <span class="at">--load</span> 80% process_file ::: <span class="pp">*</span>.txt  <span class="co"># Don't exceed 80% load</span></span>
+<span id="cb13-226"><a href="#cb13-226"></a></span>
+<span id="cb13-227"><a href="#cb13-227"></a><span class="co"># Use 50% of available cores</span></span>
+<span id="cb13-228"><a href="#cb13-228"></a><span class="ex">parallel</span> <span class="at">-j</span> 50% process_file ::: <span class="pp">*</span>.txt</span>
+<span id="cb13-229"><a href="#cb13-229"></a><span class="in">```</span></span>
+<span id="cb13-230"><a href="#cb13-230"></a></span>
+<span id="cb13-231"><a href="#cb13-231"></a><span class="fu">## Integration with HPC Job Schedulers</span></span>
+<span id="cb13-232"><a href="#cb13-232"></a></span>
+<span id="cb13-233"><a href="#cb13-233"></a><span class="fu">### Parallel Processing within SLURM Jobs</span></span>
+<span id="cb13-234"><a href="#cb13-234"></a></span>
+<span id="cb13-235"><a href="#cb13-235"></a><span class="in">```bash</span></span>
+<span id="cb13-236"><a href="#cb13-236"></a><span class="co">#!/bin/bash</span></span>
+<span id="cb13-237"><a href="#cb13-237"></a><span class="co">#SBATCH --job-name=parallel_processing</span></span>
+<span id="cb13-238"><a href="#cb13-238"></a><span class="co">#SBATCH --nodes=1</span></span>
+<span id="cb13-239"><a href="#cb13-239"></a><span class="co">#SBATCH --ntasks-per-node=16</span></span>
+<span id="cb13-240"><a href="#cb13-240"></a><span class="co">#SBATCH --time=02:00:00</span></span>
+<span id="cb13-241"><a href="#cb13-241"></a></span>
+<span id="cb13-242"><a href="#cb13-242"></a><span class="co"># Use all allocated cores for parallel processing</span></span>
+<span id="cb13-243"><a href="#cb13-243"></a><span class="va">CORES</span><span class="op">=</span><span class="va">$SLURM_NTASKS_PER_NODE</span></span>
+<span id="cb13-244"><a href="#cb13-244"></a></span>
+<span id="cb13-245"><a href="#cb13-245"></a><span class="bu">echo</span> <span class="st">"Running parallel processing with </span><span class="va">$CORES</span><span class="st"> cores"</span></span>
+<span id="cb13-246"><a href="#cb13-246"></a></span>
+<span id="cb13-247"><a href="#cb13-247"></a><span class="co"># Using GNU Parallel</span></span>
+<span id="cb13-248"><a href="#cb13-248"></a><span class="ex">parallel</span> <span class="at">-j</span> <span class="st">"</span><span class="va">$CORES</span><span class="st">"</span> process_file ::: <span class="pp">*</span>.txt</span>
+<span id="cb13-249"><a href="#cb13-249"></a></span>
+<span id="cb13-250"><a href="#cb13-250"></a><span class="co"># Using xargs</span></span>
+<span id="cb13-251"><a href="#cb13-251"></a><span class="fu">find</span> . <span class="at">-name</span> <span class="st">"*.data"</span> <span class="kw">|</span> <span class="fu">xargs</span> <span class="at">-n</span> 1 <span class="at">-P</span> <span class="st">"</span><span class="va">$CORES</span><span class="st">"</span> analyze_data</span>
+<span id="cb13-252"><a href="#cb13-252"></a><span class="in">```</span></span>
+<span id="cb13-253"><a href="#cb13-253"></a></span>
+<span id="cb13-254"><a href="#cb13-254"></a><span class="fu">## Quick Reference: Parallel Processing Commands</span></span>
+<span id="cb13-255"><a href="#cb13-255"></a></span>
+<span id="cb13-256"><a href="#cb13-256"></a>| Task | Command | Example |</span>
+<span id="cb13-257"><a href="#cb13-257"></a>|------|---------|---------|</span>
+<span id="cb13-258"><a href="#cb13-258"></a>| Background job | <span class="in">`command &amp;`</span> | <span class="in">`long_process &amp;`</span> |</span>
+<span id="cb13-259"><a href="#cb13-259"></a>| Wait for jobs | <span class="in">`wait`</span> | <span class="in">`wait`</span> |</span>
+<span id="cb13-260"><a href="#cb13-260"></a>| List jobs | <span class="in">`jobs`</span> | <span class="in">`jobs`</span> |</span>
+<span id="cb13-261"><a href="#cb13-261"></a>| Parallel xargs | <span class="in">`xargs -P N`</span> | <span class="in">`ls *.txt \| xargs -P 4 wc -l`</span> |</span>
+<span id="cb13-262"><a href="#cb13-262"></a>| GNU Parallel | <span class="in">`parallel command ::: args`</span> | <span class="in">`parallel gzip ::: *.log`</span> |</span>
+<span id="cb13-263"><a href="#cb13-263"></a>| Limit jobs | <span class="in">`parallel -j N`</span> | <span class="in">`parallel -j 8 process ::: *.data`</span> |</span>
+<span id="cb13-264"><a href="#cb13-264"></a>| Progress monitor | <span class="in">`parallel --progress`</span> | <span class="in">`parallel --progress gzip ::: *.txt`</span> |</span>
+<span id="cb13-265"><a href="#cb13-265"></a></span>
+<span id="cb13-266"><a href="#cb13-266"></a><span class="fu">## Practice Exercises</span></span>
+<span id="cb13-267"><a href="#cb13-267"></a></span>
+<span id="cb13-268"><a href="#cb13-268"></a>:::{.callout-important}</span>
+<span id="cb13-269"><a href="#cb13-269"></a><span class="fu">## Your Parallel Processing Training</span></span>
+<span id="cb13-270"><a href="#cb13-270"></a></span>
+<span id="cb13-271"><a href="#cb13-271"></a><span class="ss">1. </span>**Basic parallel operations**</span>
+<span id="cb13-272"><a href="#cb13-272"></a><span class="ss">   - </span>Convert multiple images simultaneously</span>
+<span id="cb13-273"><a href="#cb13-273"></a><span class="ss">   - </span>Compress files in parallel</span>
+<span id="cb13-274"><a href="#cb13-274"></a><span class="ss">   - </span>Download multiple files concurrently</span>
+<span id="cb13-275"><a href="#cb13-275"></a></span>
+<span id="cb13-276"><a href="#cb13-276"></a><span class="ss">2. </span>**Advanced parallel workflows**</span>
+<span id="cb13-277"><a href="#cb13-277"></a><span class="ss">   - </span>Create a parallel data processing pipeline</span>
+<span id="cb13-278"><a href="#cb13-278"></a><span class="ss">   - </span>Implement error handling and retries</span>
+<span id="cb13-279"><a href="#cb13-279"></a><span class="ss">   - </span>Monitor resource usage during parallel execution</span>
+<span id="cb13-280"><a href="#cb13-280"></a></span>
+<span id="cb13-281"><a href="#cb13-281"></a><span class="ss">3. </span>**HPC integration**</span>
+<span id="cb13-282"><a href="#cb13-282"></a><span class="ss">   - </span>Write SLURM/LSF scripts with parallel processing</span>
+<span id="cb13-283"><a href="#cb13-283"></a><span class="ss">   - </span>Optimize job count based on available resources</span>
+<span id="cb13-284"><a href="#cb13-284"></a><span class="ss">   - </span>Create parallel job monitoring tools</span>
+<span id="cb13-285"><a href="#cb13-285"></a>:::</span>
+<span id="cb13-286"><a href="#cb13-286"></a></span>
+<span id="cb13-287"><a href="#cb13-287"></a><span class="fu">## What's Next?</span></span>
+<span id="cb13-288"><a href="#cb13-288"></a></span>
+<span id="cb13-289"><a href="#cb13-289"></a>Now that you've mastered parallel processing, you're ready to learn <span class="co">[</span><span class="ot">Bash scripting</span><span class="co">](11-bash-scripting.qmd)</span>. Parallel processing is a key component of advanced automation, and you'll use these skills to create sophisticated automated workflows.</span>
+<span id="cb13-290"><a href="#cb13-290"></a></span>
+<span id="cb13-291"><a href="#cb13-291"></a>Remember: Parallel processing is about working smarter, not harder. By coordinating multiple processes, you can dramatically reduce processing time and maximize resource utilization.</span>
+<span id="cb13-292"><a href="#cb13-292"></a></span>
+<span id="cb13-293"><a href="#cb13-293"></a>:::{.callout-tip}</span>
+<span id="cb13-294"><a href="#cb13-294"></a><span class="fu">## Parallel Processing Challenge</span></span>
+<span id="cb13-295"><a href="#cb13-295"></a>Before moving on, try this real-world scenario:</span>
+<span id="cb13-296"><a href="#cb13-296"></a><span class="ss">1. </span>Create a data processing pipeline that uses parallel processing</span>
+<span id="cb13-297"><a href="#cb13-297"></a><span class="ss">2. </span>Implement proper error handling and monitoring</span>
+<span id="cb13-298"><a href="#cb13-298"></a><span class="ss">3. </span>Optimize the number of parallel jobs for your system</span>
+<span id="cb13-299"><a href="#cb13-299"></a><span class="ss">4. </span>Measure the performance improvement over sequential processing</span>
+<span id="cb13-300"><a href="#cb13-300"></a>:::</span>
+<span id="cb13-301"><a href="#cb13-301"></a></span>
+<span id="cb13-302"><a href="#cb13-302"></a>---</span>
+<span id="cb13-303"><a href="#cb13-303"></a></span>
+<span id="cb13-304"><a href="#cb13-304"></a>*You've mastered the art of parallel processing – the ability to multiply your computational power. Next, we'll learn to weave these skills into sophisticated automated systems!* </span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div></div></div></div></div>
+</div> <!-- /content -->
+
+
+
+<script src="../../../site_libs/quarto-html/zenscroll-min.js"></script>
+</body></html>

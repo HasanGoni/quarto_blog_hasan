@@ -2,166 +2,218 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <url>
     <loc>https://hasangoni.quarto.pub/hasan-blog-post/index.html</loc>
-    <lastmod>2025-06-29T07:30:42.447Z</lastmod>
+    <lastmod>2025-06-29T09:17:52.291Z</lastmod>
   </url>
   <url>
     <loc>https://hasangoni.quarto.pub/hasan-blog-post/about.html</loc>
-    <lastmod>2025-06-29T07:30:39.359Z</lastmod>
+    <lastmod>2025-06-29T09:17:48.115Z</lastmod>
   </url>
   <url>
     <loc>https://hasangoni.quarto.pub/hasan-blog-post/notebooks/cv-foundations-08-first-cv-project.html</loc>
-    <lastmod>2025-06-29T07:30:38.851Z</lastmod>
+    <lastmod>2025-06-29T09:17:47.579Z</lastmod>
   </url>
   <url>
     <loc>https://hasangoni.quarto.pub/hasan-blog-post/notebooks/cv-foundations-04-finding-patterns.html</loc>
-    <lastmod>2025-06-29T07:30:38.335Z</lastmod>
+    <lastmod>2025-06-29T09:17:47.039Z</lastmod>
   </url>
   <url>
     <loc>https://hasangoni.quarto.pub/hasan-blog-post/notebooks/cv-foundations-01-why-computer-vision.html</loc>
-    <lastmod>2025-06-29T07:30:37.839Z</lastmod>
+    <lastmod>2025-06-29T09:17:46.487Z</lastmod>
   </url>
   <url>
     <loc>https://hasangoni.quarto.pub/hasan-blog-post/notebooks/cv-foundations-07-modern-vision-models.html</loc>
-    <lastmod>2025-06-29T07:30:37.315Z</lastmod>
+    <lastmod>2025-06-29T09:17:45.923Z</lastmod>
   </url>
   <url>
     <loc>https://hasangoni.quarto.pub/hasan-blog-post/posts/series/data-science-steps.html</loc>
-    <lastmod>2025-06-29T07:30:35.851Z</lastmod>
+    <lastmod>2025-06-29T09:17:44.339Z</lastmod>
   </url>
   <url>
-    <loc>https://hasangoni.quarto.pub/hasan-blog-post/posts/series/cv-foundations/08-modern-vision-models.html</loc>
-    <lastmod>2025-06-29T07:30:34.183Z</lastmod>
-  </url>
-  <url>
-    <loc>https://hasangoni.quarto.pub/hasan-blog-post/posts/series/cv-foundations/06-feature-magic.html</loc>
-    <lastmod>2025-06-29T07:30:31.255Z</lastmod>
-  </url>
-  <url>
-    <loc>https://hasangoni.quarto.pub/hasan-blog-post/posts/series/cv-foundations/09-first-cv-project.html</loc>
-    <lastmod>2025-06-29T07:30:28.207Z</lastmod>
-  </url>
-  <url>
-    <loc>https://hasangoni.quarto.pub/hasan-blog-post/posts/series/cv-foundations/01-why-computer-vision.html</loc>
-    <lastmod>2025-06-29T07:30:25.275Z</lastmod>
-  </url>
-  <url>
-    <loc>https://hasangoni.quarto.pub/hasan-blog-post/posts/series/cv-foundations/02-images-as-data.html</loc>
-    <lastmod>2025-06-29T07:30:22.563Z</lastmod>
-  </url>
-  <url>
-    <loc>https://hasangoni.quarto.pub/hasan-blog-post/posts/series/anomaly-detection/index.html</loc>
-    <lastmod>2025-06-29T07:30:19.811Z</lastmod>
-  </url>
-  <url>
-    <loc>https://hasangoni.quarto.pub/hasan-blog-post/posts/series/vlm.html</loc>
-    <lastmod>2025-06-29T07:30:17.639Z</lastmod>
-  </url>
-  <url>
-    <loc>https://hasangoni.quarto.pub/hasan-blog-post/posts/series/tools/intro.html</loc>
-    <lastmod>2025-06-29T07:30:15.995Z</lastmod>
-  </url>
-  <url>
-    <loc>https://hasangoni.quarto.pub/hasan-blog-post/posts/series/vlm-qwen3-14b/finetune-qwen3-14b.html</loc>
-    <lastmod>2025-06-29T07:30:14.407Z</lastmod>
-  </url>
-  <url>
-    <loc>https://hasangoni.quarto.pub/hasan-blog-post/posts/matrix_multiplication_from_fastai_course/index.html</loc>
-    <lastmod>2025-06-29T07:30:12.871Z</lastmod>
-  </url>
-  <url>
-    <loc>https://hasangoni.quarto.pub/hasan-blog-post/posts/data-science-steps-to-follow-part03/index.html</loc>
-    <lastmod>2025-06-29T07:30:11.223Z</lastmod>
-  </url>
-  <url>
-    <loc>https://hasangoni.quarto.pub/hasan-blog-post/posts/nougat-to-read-scientific-pdf-files/index.html</loc>
-    <lastmod>2025-06-29T07:30:08.719Z</lastmod>
-  </url>
-  <url>
-    <loc>https://hasangoni.quarto.pub/hasan-blog-post/posts/data-science-steps-to-follow-part04/index.html</loc>
-    <lastmod>2025-06-29T07:30:07.067Z</lastmod>
-  </url>
-  <url>
-    <loc>https://hasangoni.quarto.pub/hasan-blog-post/tags.html</loc>
-    <lastmod>2025-06-29T07:30:04.743Z</lastmod>
-  </url>
-  <url>
-    <loc>https://hasangoni.quarto.pub/hasan-blog-post/posts/data-science-steps-to-follow-part01/index.html</loc>
-    <lastmod>2025-06-29T07:30:06.107Z</lastmod>
-  </url>
-  <url>
-    <loc>https://hasangoni.quarto.pub/hasan-blog-post/posts/data-science-steps-to-follow-part05/index.html</loc>
-    <lastmod>2025-06-29T07:30:07.819Z</lastmod>
-  </url>
-  <url>
-    <loc>https://hasangoni.quarto.pub/hasan-blog-post/posts/data-science-steps-to-follow-part02/index.html</loc>
-    <lastmod>2025-06-29T07:30:09.967Z</lastmod>
-  </url>
-  <url>
-    <loc>https://hasangoni.quarto.pub/hasan-blog-post/posts/matrix_multiplication_from_fastai_course/00_matmul.html</loc>
-    <lastmod>2025-06-29T07:30:11.891Z</lastmod>
-  </url>
-  <url>
-    <loc>https://hasangoni.quarto.pub/hasan-blog-post/posts/welcome/index.html</loc>
-    <lastmod>2025-06-29T07:30:13.599Z</lastmod>
-  </url>
-  <url>
-    <loc>https://hasangoni.quarto.pub/hasan-blog-post/posts/series/vlm-qwen3-14b/index.html</loc>
-    <lastmod>2025-06-29T07:30:15.339Z</lastmod>
-  </url>
-  <url>
-    <loc>https://hasangoni.quarto.pub/hasan-blog-post/posts/series/tools/uv2.html</loc>
-    <lastmod>2025-06-29T07:30:16.871Z</lastmod>
-  </url>
-  <url>
-    <loc>https://hasangoni.quarto.pub/hasan-blog-post/posts/series/anomaly-detection/finding-the-oddballs.html</loc>
-    <lastmod>2025-06-29T07:30:19.111Z</lastmod>
-  </url>
-  <url>
-    <loc>https://hasangoni.quarto.pub/hasan-blog-post/posts/series/cv-foundations/07-why-deep-learning.html</loc>
-    <lastmod>2025-06-29T07:30:21.335Z</lastmod>
-  </url>
-  <url>
-    <loc>https://hasangoni.quarto.pub/hasan-blog-post/posts/series/cv-foundations/05-image-segmentation.html</loc>
-    <lastmod>2025-06-29T07:30:24.059Z</lastmod>
-  </url>
-  <url>
-    <loc>https://hasangoni.quarto.pub/hasan-blog-post/posts/series/cv-foundations/10-where-to-go-next.html</loc>
-    <lastmod>2025-06-29T07:30:26.791Z</lastmod>
-  </url>
-  <url>
-    <loc>https://hasangoni.quarto.pub/hasan-blog-post/posts/series/cv-foundations/04-finding-patterns.html</loc>
-    <lastmod>2025-06-29T07:30:29.763Z</lastmod>
+    <loc>https://hasangoni.quarto.pub/hasan-blog-post/posts/series/command-line-mastery.html</loc>
+    <lastmod>2025-06-29T09:17:42.451Z</lastmod>
   </url>
   <url>
     <loc>https://hasangoni.quarto.pub/hasan-blog-post/posts/series/cv-foundations/03-opencv-essentials.html</loc>
-    <lastmod>2025-06-29T07:30:32.691Z</lastmod>
+    <lastmod>2025-06-29T09:17:39.847Z</lastmod>
+  </url>
+  <url>
+    <loc>https://hasangoni.quarto.pub/hasan-blog-post/posts/series/cv-foundations/04-finding-patterns.html</loc>
+    <lastmod>2025-06-29T09:17:36.899Z</lastmod>
+  </url>
+  <url>
+    <loc>https://hasangoni.quarto.pub/hasan-blog-post/posts/series/cv-foundations/10-where-to-go-next.html</loc>
+    <lastmod>2025-06-29T09:17:33.943Z</lastmod>
+  </url>
+  <url>
+    <loc>https://hasangoni.quarto.pub/hasan-blog-post/posts/series/cv-foundations/05-image-segmentation.html</loc>
+    <lastmod>2025-06-29T09:17:31.211Z</lastmod>
+  </url>
+  <url>
+    <loc>https://hasangoni.quarto.pub/hasan-blog-post/posts/series/cv-foundations/07-why-deep-learning.html</loc>
+    <lastmod>2025-06-29T09:17:28.427Z</lastmod>
+  </url>
+  <url>
+    <loc>https://hasangoni.quarto.pub/hasan-blog-post/posts/series/command-line-mastery/06-ssh-remote-access.html</loc>
+    <lastmod>2025-06-29T09:17:25.891Z</lastmod>
+  </url>
+  <url>
+    <loc>https://hasangoni.quarto.pub/hasan-blog-post/posts/series/command-line-mastery/09-hpc-job-scheduling.html</loc>
+    <lastmod>2025-06-29T09:17:23.795Z</lastmod>
+  </url>
+  <url>
+    <loc>https://hasangoni.quarto.pub/hasan-blog-post/posts/series/command-line-mastery/04-text-processing.html</loc>
+    <lastmod>2025-06-29T09:17:21.531Z</lastmod>
+  </url>
+  <url>
+    <loc>https://hasangoni.quarto.pub/hasan-blog-post/posts/series/command-line-mastery/12-automation-excellence.html</loc>
+    <lastmod>2025-06-29T09:17:19.267Z</lastmod>
+  </url>
+  <url>
+    <loc>https://hasangoni.quarto.pub/hasan-blog-post/posts/series/command-line-mastery/08-environment-mastery.html</loc>
+    <lastmod>2025-06-29T09:17:17.191Z</lastmod>
+  </url>
+  <url>
+    <loc>https://hasangoni.quarto.pub/hasan-blog-post/posts/series/command-line-mastery/03-file-manipulation.html</loc>
+    <lastmod>2025-06-29T09:17:15.015Z</lastmod>
+  </url>
+  <url>
+    <loc>https://hasangoni.quarto.pub/hasan-blog-post/posts/series/anomaly-detection/finding-the-oddballs.html</loc>
+    <lastmod>2025-06-29T09:17:13.067Z</lastmod>
+  </url>
+  <url>
+    <loc>https://hasangoni.quarto.pub/hasan-blog-post/posts/series/tools/uv2.html</loc>
+    <lastmod>2025-06-29T09:17:10.891Z</lastmod>
+  </url>
+  <url>
+    <loc>https://hasangoni.quarto.pub/hasan-blog-post/posts/series/vlm-qwen3-14b/index.html</loc>
+    <lastmod>2025-06-29T09:17:09.035Z</lastmod>
+  </url>
+  <url>
+    <loc>https://hasangoni.quarto.pub/hasan-blog-post/posts/welcome/index.html</loc>
+    <lastmod>2025-06-29T09:17:07.267Z</lastmod>
+  </url>
+  <url>
+    <loc>https://hasangoni.quarto.pub/hasan-blog-post/posts/matrix_multiplication_from_fastai_course/00_matmul.html</loc>
+    <lastmod>2025-06-29T09:17:05.491Z</lastmod>
+  </url>
+  <url>
+    <loc>https://hasangoni.quarto.pub/hasan-blog-post/posts/data-science-steps-to-follow-part02/index.html</loc>
+    <lastmod>2025-06-29T09:17:03.703Z</lastmod>
+  </url>
+  <url>
+    <loc>https://hasangoni.quarto.pub/hasan-blog-post/posts/data-science-steps-to-follow-part05/index.html</loc>
+    <lastmod>2025-06-29T09:17:01.679Z</lastmod>
+  </url>
+  <url>
+    <loc>https://hasangoni.quarto.pub/hasan-blog-post/posts/data-science-steps-to-follow-part01/index.html</loc>
+    <lastmod>2025-06-29T09:16:59.935Z</lastmod>
+  </url>
+  <url>
+    <loc>https://hasangoni.quarto.pub/hasan-blog-post/tags.html</loc>
+    <lastmod>2025-06-29T09:16:58.691Z</lastmod>
+  </url>
+  <url>
+    <loc>https://hasangoni.quarto.pub/hasan-blog-post/posts/data-science-steps-to-follow-part04/index.html</loc>
+    <lastmod>2025-06-29T09:17:00.863Z</lastmod>
+  </url>
+  <url>
+    <loc>https://hasangoni.quarto.pub/hasan-blog-post/posts/nougat-to-read-scientific-pdf-files/index.html</loc>
+    <lastmod>2025-06-29T09:17:02.471Z</lastmod>
+  </url>
+  <url>
+    <loc>https://hasangoni.quarto.pub/hasan-blog-post/posts/data-science-steps-to-follow-part03/index.html</loc>
+    <lastmod>2025-06-29T09:17:04.887Z</lastmod>
+  </url>
+  <url>
+    <loc>https://hasangoni.quarto.pub/hasan-blog-post/posts/matrix_multiplication_from_fastai_course/index.html</loc>
+    <lastmod>2025-06-29T09:17:06.551Z</lastmod>
+  </url>
+  <url>
+    <loc>https://hasangoni.quarto.pub/hasan-blog-post/posts/series/vlm-qwen3-14b/finetune-qwen3-14b.html</loc>
+    <lastmod>2025-06-29T09:17:08.087Z</lastmod>
+  </url>
+  <url>
+    <loc>https://hasangoni.quarto.pub/hasan-blog-post/posts/series/tools/intro.html</loc>
+    <lastmod>2025-06-29T09:17:09.819Z</lastmod>
+  </url>
+  <url>
+    <loc>https://hasangoni.quarto.pub/hasan-blog-post/posts/series/vlm.html</loc>
+    <lastmod>2025-06-29T09:17:11.619Z</lastmod>
+  </url>
+  <url>
+    <loc>https://hasangoni.quarto.pub/hasan-blog-post/posts/series/anomaly-detection/index.html</loc>
+    <lastmod>2025-06-29T09:17:13.803Z</lastmod>
+  </url>
+  <url>
+    <loc>https://hasangoni.quarto.pub/hasan-blog-post/posts/series/command-line-mastery/02-file-detective.html</loc>
+    <lastmod>2025-06-29T09:17:16.195Z</lastmod>
+  </url>
+  <url>
+    <loc>https://hasangoni.quarto.pub/hasan-blog-post/posts/series/command-line-mastery/11-bash-scripting.html</loc>
+    <lastmod>2025-06-29T09:17:18.239Z</lastmod>
+  </url>
+  <url>
+    <loc>https://hasangoni.quarto.pub/hasan-blog-post/posts/series/command-line-mastery/07-file-transfer.html</loc>
+    <lastmod>2025-06-29T09:17:20.359Z</lastmod>
+  </url>
+  <url>
+    <loc>https://hasangoni.quarto.pub/hasan-blog-post/posts/series/command-line-mastery/01-digital-compass.html</loc>
+    <lastmod>2025-06-29T09:17:22.631Z</lastmod>
+  </url>
+  <url>
+    <loc>https://hasangoni.quarto.pub/hasan-blog-post/posts/series/command-line-mastery/10-parallel-processing.html</loc>
+    <lastmod>2025-06-29T09:17:24.743Z</lastmod>
+  </url>
+  <url>
+    <loc>https://hasangoni.quarto.pub/hasan-blog-post/posts/series/command-line-mastery/05-permission-wizardry.html</loc>
+    <lastmod>2025-06-29T09:17:27.007Z</lastmod>
+  </url>
+  <url>
+    <loc>https://hasangoni.quarto.pub/hasan-blog-post/posts/series/cv-foundations/02-images-as-data.html</loc>
+    <lastmod>2025-06-29T09:17:29.723Z</lastmod>
+  </url>
+  <url>
+    <loc>https://hasangoni.quarto.pub/hasan-blog-post/posts/series/cv-foundations/01-why-computer-vision.html</loc>
+    <lastmod>2025-06-29T09:17:32.491Z</lastmod>
+  </url>
+  <url>
+    <loc>https://hasangoni.quarto.pub/hasan-blog-post/posts/series/cv-foundations/09-first-cv-project.html</loc>
+    <lastmod>2025-06-29T09:17:35.523Z</lastmod>
+  </url>
+  <url>
+    <loc>https://hasangoni.quarto.pub/hasan-blog-post/posts/series/cv-foundations/06-feature-magic.html</loc>
+    <lastmod>2025-06-29T09:17:38.339Z</lastmod>
+  </url>
+  <url>
+    <loc>https://hasangoni.quarto.pub/hasan-blog-post/posts/series/cv-foundations/08-modern-vision-models.html</loc>
+    <lastmod>2025-06-29T09:17:41.303Z</lastmod>
   </url>
   <url>
     <loc>https://hasangoni.quarto.pub/hasan-blog-post/posts/series/computer-vision-foundations.html</loc>
-    <lastmod>2025-06-29T07:30:35.111Z</lastmod>
+    <lastmod>2025-06-29T09:17:43.519Z</lastmod>
   </url>
   <url>
     <loc>https://hasangoni.quarto.pub/hasan-blog-post/posts/data-science-steps-to-follow-part06/index.html</loc>
-    <lastmod>2025-06-29T07:30:36.795Z</lastmod>
+    <lastmod>2025-06-29T09:17:45.359Z</lastmod>
   </url>
   <url>
     <loc>https://hasangoni.quarto.pub/hasan-blog-post/notebooks/cv-foundations-06-why-deep-learning.html</loc>
-    <lastmod>2025-06-29T07:30:37.563Z</lastmod>
+    <lastmod>2025-06-29T09:17:46.187Z</lastmod>
   </url>
   <url>
     <loc>https://hasangoni.quarto.pub/hasan-blog-post/notebooks/cv-foundations-02-images-as-data.html</loc>
-    <lastmod>2025-06-29T07:30:38.087Z</lastmod>
+    <lastmod>2025-06-29T09:17:46.759Z</lastmod>
   </url>
   <url>
     <loc>https://hasangoni.quarto.pub/hasan-blog-post/notebooks/cv-foundations-03-opencv-essentials.html</loc>
-    <lastmod>2025-06-29T07:30:38.591Z</lastmod>
+    <lastmod>2025-06-29T09:17:47.311Z</lastmod>
   </url>
   <url>
     <loc>https://hasangoni.quarto.pub/hasan-blog-post/notebooks/cv-foundations-05-feature-magic.html</loc>
-    <lastmod>2025-06-29T07:30:39.107Z</lastmod>
+    <lastmod>2025-06-29T09:17:47.843Z</lastmod>
   </url>
   <url>
     <loc>https://hasangoni.quarto.pub/hasan-blog-post/categories.html</loc>
-    <lastmod>2025-06-29T07:30:40.171Z</lastmod>
+    <lastmod>2025-06-29T09:17:48.991Z</lastmod>
   </url>
 </urlset>

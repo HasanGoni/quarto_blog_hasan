@@ -1,0 +1,262 @@
+---
+title: "Your Digital Compass"
+description: "Master basic navigation in Unix systems. Learn to find your way around directories like a seasoned explorer, understand where you are, and move confidently through the file system."
+author: "Hasan"
+date: last-modified
+categories: [command-line, navigation, basics, unix]
+image: "https://images.unsplash.com/photo-1586281380349-632531db7ed4?ixlib=rb-4.0.3&auto=format&fit=crop&w=2000&q=80"
+toc: true
+---
+
+## The Story: Lost in Digital Space
+
+Imagine you're exploring a massive library with millions of books, but there are no signs, no maps, and no librarian to help. That's what the command line feels like initially – a vast digital space where you can easily get lost.
+
+But here's the thing: every expert navigator started exactly where you are now. They learned to read the digital landscape, understand the signs, and move with confidence. Today, you'll get your digital compass and learn to navigate like a pro.
+
+## Your First Command: Where Am I?
+
+In the real world, when you're lost, the first question is "Where am I?" The same applies to the command line. Let's start with the most fundamental command:
+
+```bash
+pwd
+```
+
+**What it does**: `pwd` stands for "Print Working Directory" – it tells you exactly where you are in the file system.
+
+**Real-world analogy**: It's like looking at a GPS to see your current location. Just as your GPS shows "123 Main Street, New York," `pwd` shows your current digital address.
+
+:::{.callout-tip}
+## Try It Now
+Open your terminal and type `pwd` then press Enter. You'll see something like:
+```
+/home/username
+```
+This is your current location in the digital world!
+:::
+
+## Understanding the Address System
+
+Unix file systems are organized like a city with a hierarchical address system:
+
+- **/** (root) = The entire country
+- **/home** = A state or province  
+- **/home/username** = Your city
+- **/home/username/Documents** = Your neighborhood
+- **/home/username/Documents/project** = Your street
+
+Think of it like a postal address, but written from biggest to smallest:
+- **Postal**: Country > State > City > Street > House Number
+- **Unix**: / > home > username > Documents > filename
+
+## Looking Around: What's Here?
+
+Once you know where you are, you want to see what's around you. In the real world, you'd look around. In the command line, you use:
+
+```bash
+ls
+```
+
+**What it does**: `ls` stands for "list" – it shows you all the files and directories in your current location.
+
+**Real-world analogy**: It's like scanning a room to see what furniture is there. You get a quick overview of your surroundings.
+
+### Making the List More Useful
+
+Just like you might want more details about what you're seeing, `ls` has options:
+
+```bash
+ls -l    # Long format (detailed view)
+ls -a    # Show all files (including hidden ones)
+ls -la   # Combine both: detailed view of all files
+```
+
+**Real-world analogy**: 
+- `ls` = Quick glance around the room
+- `ls -l` = Detailed inspection (size, age, permissions of each item)
+- `ls -a` = Looking behind furniture (finding hidden items)
+
+:::{.callout-note}
+## Understanding the Output
+When you run `ls -l`, you'll see something like:
+```
+drwxr-xr-x 2 user user 4096 Dec 15 10:30 Documents
+-rw-r--r-- 1 user user 1024 Dec 15 09:15 file.txt
+```
+
+Don't worry about all the details now – just know that:
+- Lines starting with 'd' are directories (folders)
+- Lines starting with '-' are files
+- The name is at the end
+:::
+
+## Moving Around: Your Digital Legs
+
+Now that you can see where you are and what's around you, let's learn to move. The command is:
+
+```bash
+cd directory_name
+```
+
+**What it does**: `cd` stands for "Change Directory" – it moves you to a different location.
+
+**Real-world analogy**: It's like walking from one room to another in a house, or driving from one neighborhood to another.
+
+### Essential Movement Patterns
+
+```bash
+cd Documents        # Go into the Documents directory
+cd ..              # Go up one level (to parent directory)
+cd ~               # Go to your home directory
+cd /               # Go to the root directory
+cd -               # Go back to previous directory
+```
+
+**Real-world analogies**:
+- `cd Documents` = Walking into a specific room
+- `cd ..` = Going upstairs to the floor above
+- `cd ~` = Going home (no matter where you are)
+- `cd /` = Going to the city center
+- `cd -` = Returning to where you just came from
+
+## Your Navigation Workflow
+
+Here's the basic pattern you'll use thousands of times:
+
+1. **Check where you are**: `pwd`
+2. **See what's available**: `ls`
+3. **Move to where you want to go**: `cd somewhere`
+4. **Repeat as needed**
+
+It's like the basic pattern of walking:
+1. Look around to orient yourself
+2. See what paths are available
+3. Choose a path and walk
+4. Repeat until you reach your destination
+
+## Practical Example: Finding Your Way to Data
+
+Let's say you're looking for a dataset on an HPC system. Here's how you'd explore:
+
+```bash
+# Where am I?
+pwd
+# Output: /home/username
+
+# What's here?
+ls
+# Output: Documents  Downloads  data  scripts
+
+# Let's check the data directory
+cd data
+pwd
+# Output: /home/username/data
+
+# What datasets are available?
+ls -l
+# Output: 
+# drwxr-xr-x 2 user user 4096 Dec 15 10:30 experiment_1
+# drwxr-xr-x 2 user user 4096 Dec 15 10:30 experiment_2
+# -rw-r--r-- 1 user user 1024 Dec 15 09:15 README.txt
+
+# Let's look at experiment_1
+cd experiment_1
+ls
+# Output: raw_data.csv  processed_data.csv  analysis.py
+```
+
+## Common Navigation Mistakes (And How to Fix Them)
+
+### Mistake 1: Getting Lost
+**Problem**: You've moved around and don't know where you are.
+**Solution**: Use `pwd` to see your current location, then `cd ~` to go home and start over.
+
+### Mistake 2: Typing Directory Names Wrong
+**Problem**: You type `cd Documets` instead of `cd Documents`.
+**Solution**: Use Tab completion! Type `cd Doc` and press Tab – the system will complete it for you.
+
+### Mistake 3: Trying to Go to Non-existent Places
+**Problem**: You get "No such file or directory" error.
+**Solution**: Use `ls` first to see what's actually available, then `cd` to one of those locations.
+
+## Tab Completion: Your Navigation Superpower
+
+This is the secret weapon that makes command line navigation fast:
+
+1. Start typing a directory name
+2. Press Tab
+3. The system completes it for you!
+
+**Example**:
+- Type: `cd Doc` + Tab
+- System completes: `cd Documents/`
+
+**Real-world analogy**: It's like having a GPS that predicts where you want to go and gives you turn-by-turn directions.
+
+## Practice Exercises
+
+:::{.callout-important}
+## Your First Navigation Mission
+Try these commands in order and observe what happens:
+
+1. `pwd` (note your starting location)
+2. `ls` (see what's available)
+3. `cd Documents` (or any directory you see)
+4. `pwd` (confirm you moved)
+5. `ls` (see what's in this new location)
+6. `cd ..` (go back up)
+7. `pwd` (confirm you're back)
+8. `cd ~` (go home)
+9. `pwd` (confirm you're home)
+
+Congratulations! You just completed your first navigation journey!
+:::
+
+## Building Your Mental Map
+
+As you practice, you'll start building a mental map of your system:
+
+```
+/ (root)
+├── home/
+│   └── username/
+│       ├── Documents/
+│       ├── Downloads/
+│       ├── data/
+│       │   ├── experiment_1/
+│       │   └── experiment_2/
+│       └── scripts/
+├── usr/
+├── var/
+└── tmp/
+```
+
+**Real-world analogy**: It's like learning the layout of a new city. At first, you need a map for everything. Eventually, you know the main streets and can navigate intuitively.
+
+## Quick Reference Card
+
+Keep this handy as you practice:
+
+| Command | Purpose | Example |
+|---------|---------|---------|
+| `pwd` | Where am I? | `pwd` |
+| `ls` | What's here? | `ls -la` |
+| `cd` | Go somewhere | `cd Documents` |
+| `cd ..` | Go up one level | `cd ..` |
+| `cd ~` | Go home | `cd ~` |
+| `cd -` | Go to previous location | `cd -` |
+
+## What's Next?
+
+Now that you have your digital compass and can navigate confidently, you're ready to become a file detective! In our next post, [File Detective Skills](02-file-detective.qmd), we'll learn how to find specific files among millions – a crucial skill for HPC work.
+
+Remember: every expert navigator started with these basic commands. Practice them until they become second nature, because they're the foundation for everything else we'll learn.
+
+:::{.callout-tip}
+## Practice Challenge
+Before moving to the next post, spend 10 minutes navigating around your system. Try to visit at least 5 different directories and always know where you are. This muscle memory will serve you well in complex HPC environments!
+:::
+
+---
+
+*You've taken your first steps into the command line world. The digital landscape is vast, but with your new navigation skills, you're ready to explore it confidently!* 

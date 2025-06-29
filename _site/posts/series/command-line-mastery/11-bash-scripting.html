@@ -1,0 +1,1793 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.3.450">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+<meta name="author" content="Hasan">
+<meta name="dcterms.date" content="2025-06-29">
+<meta name="description" content="Transform from manual command execution to automation wizard. Learn to create robust bash scripts that handle repetitive HPC tasks, process multiple files, and create reliable workflows that work even at 3 AM.">
+
+<title>Hasan’s Data Science &amp; AI Blog - Bash Scripting Essentials</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
+  vertical-align: middle;
+}
+/* CSS for syntax highlighting */
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+  }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+</style>
+
+
+<script src="../../../site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="../../../site_libs/quarto-nav/headroom.min.js"></script>
+<script src="../../../site_libs/clipboard/clipboard.min.js"></script>
+<script src="../../../site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="../../../site_libs/quarto-search/fuse.min.js"></script>
+<script src="../../../site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="../../../">
+<script src="../../../site_libs/quarto-html/quarto.js"></script>
+<script src="../../../site_libs/quarto-html/popper.min.js"></script>
+<script src="../../../site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="../../../site_libs/quarto-html/anchor.min.js"></script>
+<link href="../../../site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="../../../site_libs/quarto-html/quarto-syntax-highlighting.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="../../../site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="../../../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="../../../site_libs/bootstrap/bootstrap.min.css" rel="stylesheet" id="quarto-bootstrap" data-mode="light">
+<script id="quarto-search-options" type="application/json">{
+  "location": "navbar",
+  "copy-button": false,
+  "collapse-after": 3,
+  "panel-placement": "end",
+  "type": "overlay",
+  "limit": 20,
+  "language": {
+    "search-no-results-text": "No results",
+    "search-matching-documents-text": "matching documents",
+    "search-copy-link-title": "Copy link to search",
+    "search-hide-matches-text": "Hide additional matches",
+    "search-more-match-text": "more match in this document",
+    "search-more-matches-text": "more matches in this document",
+    "search-clear-button-title": "Clear",
+    "search-detached-cancel-button-title": "Cancel",
+    "search-submit-button-title": "Submit",
+    "search-label": "Search"
+  }
+}</script>
+<style>html{ scroll-behavior: smooth; }</style>
+<script async="" src="https://hypothes.is/embed.js"></script>
+
+
+<link rel="stylesheet" href="../../../styles.css">
+<meta property="og:title" content="Hasan’s Data Science &amp; AI Blog - Bash Scripting Essentials">
+<meta property="og:description" content="Transform from manual command execution to automation wizard. Learn to create robust bash scripts that handle repetitive HPC tasks, process multiple files, and create reliable workflows that work even at 3 AM.">
+<meta property="og:image" content="https://images.unsplash.com/photo-1555066931-4365d14bab8c?ixlib=rb-4.0.3&amp;auto=format&amp;fit=crop&amp;w=2000&amp;q=80">
+<meta property="og:site-name" content="Hasan's Data Science &amp; AI Blog">
+<meta name="twitter:title" content="Hasan’s Data Science &amp; AI Blog - Bash Scripting Essentials">
+<meta name="twitter:description" content="Transform from manual command execution to automation wizard. Learn to create robust bash scripts that handle repetitive HPC tasks, process multiple files, and create reliable workflows that work even at 3 AM.">
+<meta name="twitter:image" content="https://images.unsplash.com/photo-1555066931-4365d14bab8c?ixlib=rb-4.0.3&amp;auto=format&amp;fit=crop&amp;w=2000&amp;q=80">
+<meta name="twitter:card" content="summary_large_image">
+</head>
+
+<body class="nav-sidebar docked nav-fixed">
+
+<div id="quarto-search-results"></div>
+  <header id="quarto-header" class="headroom fixed-top">
+    <nav class="navbar navbar-expand-lg navbar-dark ">
+      <div class="navbar-container container-fluid">
+      <div class="navbar-brand-container">
+    <a class="navbar-brand" href="../../../index.html">
+    <span class="navbar-title">Hasan’s Data Science &amp; AI Blog</span>
+    </a>
+  </div>
+            <div id="quarto-search" class="" title="Search"></div>
+          <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCollapse" aria-controls="navbarCollapse" aria-expanded="false" aria-label="Toggle navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+  <span class="navbar-toggler-icon"></span>
+</button>
+          <div class="collapse navbar-collapse" id="navbarCollapse">
+            <ul class="navbar-nav navbar-nav-scroll me-auto">
+  <li class="nav-item">
+    <a class="nav-link" href="../../../index.html" rel="" target="">
+ <span class="menu-text">Home</span></a>
+  </li>  
+  <li class="nav-item dropdown ">
+    <a class="nav-link dropdown-toggle" href="#" id="nav-menu-series" role="button" data-bs-toggle="dropdown" aria-expanded="false" rel="" target="">
+ <span class="menu-text">Series</span>
+    </a>
+    <ul class="dropdown-menu" aria-labelledby="nav-menu-series">    
+        <li>
+    <a class="dropdown-item" href="../../../posts/series/command-line-mastery.html" rel="" target="">
+ <span class="dropdown-text">Command Line Mastery for HPC</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="../../../posts/series/data-science-steps.html" rel="" target="">
+ <span class="dropdown-text">Data Science Steps</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="../../../posts/series/computer-vision-foundations.html" rel="" target="">
+ <span class="dropdown-text">Computer Vision Foundations</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="../../../posts/series/vlm.html" rel="" target="">
+ <span class="dropdown-text">VLM Series</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="../../../posts/series/anomaly-detection/index.html" rel="" target="">
+ <span class="dropdown-text">Anomaly Detection</span></a>
+  </li>  
+    </ul>
+  </li>
+  <li class="nav-item">
+    <a class="nav-link" href="../../../categories.html" rel="" target="">
+ <span class="menu-text">Categories</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="../../../tags.html" rel="" target="">
+ <span class="menu-text">Tags</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="../../../about.html" rel="" target="">
+ <span class="menu-text">About</span></a>
+  </li>  
+</ul>
+            <ul class="navbar-nav navbar-nav-scroll ms-auto">
+  <li class="nav-item compact">
+    <a class="nav-link" href="https://github.com/HasanGoni" rel="" target=""><i class="bi bi-github" role="img">
+</i> 
+ <span class="menu-text"></span></a>
+  </li>  
+  <li class="nav-item compact">
+    <a class="nav-link" href="https://twitter.com/hasangoni" rel="" target=""><i class="bi bi-twitter" role="img">
+</i> 
+ <span class="menu-text"></span></a>
+  </li>  
+</ul>
+            <div class="quarto-navbar-tools">
+</div>
+          </div> <!-- /navcollapse -->
+      </div> <!-- /container-fluid -->
+    </nav>
+  <nav class="quarto-secondary-nav">
+    <div class="container-fluid d-flex">
+      <button type="button" class="quarto-btn-toggle btn" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar,#quarto-sidebar-glass" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+        <i class="bi bi-layout-text-sidebar-reverse"></i>
+      </button>
+      <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../../../posts/series/command-line-mastery.html">Command Line Mastery for HPC</a></li><li class="breadcrumb-item"><a href="../../../posts/series/command-line-mastery/11-bash-scripting.html">11. Bash Scripting Essentials</a></li></ol></nav>
+      <a class="flex-grow-1" role="button" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar,#quarto-sidebar-glass" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
+      </a>
+    </div>
+  </nav>
+</header>
+<!-- content -->
+<header id="title-block-header" class="quarto-title-block default page-columns page-full">
+  <div class="quarto-title-banner page-columns page-full">
+    <div class="quarto-title column-body">
+      <div class="quarto-title-block"><div><h1 class="title">Bash Scripting Essentials</h1><button type="button" class="btn code-tools-button" id="quarto-code-tools-source"><i class="bi"></i> Code</button></div></div>
+                  <div>
+        <div class="description">
+          Transform from manual command execution to automation wizard. Learn to create robust bash scripts that handle repetitive HPC tasks, process multiple files, and create reliable workflows that work even at 3 AM.
+        </div>
+      </div>
+                          <div class="quarto-categories">
+                <div class="quarto-category">command-line</div>
+                <div class="quarto-category">bash</div>
+                <div class="quarto-category">scripting</div>
+                <div class="quarto-category">automation</div>
+                <div class="quarto-category">hpc</div>
+              </div>
+                  </div>
+  </div>
+    
+  
+  <div class="quarto-title-meta">
+
+      <div>
+      <div class="quarto-title-meta-heading">Author</div>
+      <div class="quarto-title-meta-contents">
+               <p>Hasan </p>
+            </div>
+    </div>
+      
+      <div>
+      <div class="quarto-title-meta-heading">Published</div>
+      <div class="quarto-title-meta-contents">
+        <p class="date">June 29, 2025</p>
+      </div>
+    </div>
+    
+      <div>
+      <div class="quarto-title-meta-heading">Modified</div>
+      <div class="quarto-title-meta-contents">
+        <p class="date-modified">June 29, 2025</p>
+      </div>
+    </div>
+      
+    </div>
+    
+  
+  </header><div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article page-navbar">
+<!-- sidebar -->
+  <nav id="quarto-sidebar" class="sidebar collapse collapse-horizontal sidebar-navigation docked overflow-auto">
+    <div class="sidebar-menu-container"> 
+    <ul class="list-unstyled mt-1">
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-1" aria-expanded="true">
+ <span class="menu-text">Command Line Mastery for HPC</span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-1" aria-expanded="true" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-1" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../../posts/series/command-line-mastery.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Command Line Mastery for HPC Series</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../../posts/series/command-line-mastery/01-digital-compass.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">1. Digital Compass</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../../posts/series/command-line-mastery/02-file-detective.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">2. File Detective</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../../posts/series/command-line-mastery/03-file-manipulation.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">3. File Manipulation Magic</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../../posts/series/command-line-mastery/04-text-processing.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">4. Text Processing Power</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../../posts/series/command-line-mastery/05-permission-wizardry.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">5. Permission Wizardry</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../../posts/series/command-line-mastery/06-ssh-remote-access.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">6. SSH and Remote Access</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../../posts/series/command-line-mastery/07-file-transfer.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">7. File Transfer Mastery</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../../posts/series/command-line-mastery/08-environment-mastery.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">8. Environment Mastery</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../../posts/series/command-line-mastery/09-hpc-job-scheduling.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">9. HPC Job Scheduling</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../../posts/series/command-line-mastery/10-parallel-processing.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">10. Parallel Processing Power</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../../posts/series/command-line-mastery/11-bash-scripting.html" class="sidebar-item-text sidebar-link active">
+ <span class="menu-text">11. Bash Scripting Essentials</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../../posts/series/command-line-mastery/12-automation-excellence.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">12. Automation Excellence</span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-2" aria-expanded="true">
+ <span class="menu-text">Data Science</span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-2" aria-expanded="true" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-2" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../../posts/series/data-science-steps.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Data Science Steps Series</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../../posts/data-science-steps-to-follow-part01/index.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Data Science Steps to Follow - 01</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../../posts/data-science-steps-to-follow-part02/index.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Data Science Steps to Follow - 02</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../../posts/data-science-steps-to-follow-part03/index.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Data Science Steps to Follow - 03</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../../posts/data-science-steps-to-follow-part04/index.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Data Science Steps to Follow - 04</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../../posts/data-science-steps-to-follow-part05/index.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Data Science Steps to Follow - 05</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../../posts/data-science-steps-to-follow-part06/index.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Data Science Steps to Follow - 06</span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-3" aria-expanded="true">
+ <span class="menu-text">Computer Vision Foundations</span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-3" aria-expanded="true" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-3" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../../posts/series/computer-vision-foundations.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Computer Vision Foundations Series</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../../posts/series/cv-foundations/01-why-computer-vision.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">1. Why Computer Vision?</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../../posts/series/cv-foundations/02-images-as-data.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">2. Images as Data</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../../posts/series/cv-foundations/03-opencv-essentials.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">3. OpenCV Essentials</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../../posts/series/cv-foundations/04-finding-patterns.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">4. Finding Patterns</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../../posts/series/cv-foundations/05-image-segmentation.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">5. Image Segmentation</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../../posts/series/cv-foundations/06-feature-magic.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">6. Feature Magic</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../../posts/series/cv-foundations/07-why-deep-learning.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">7. Why Deep Learning?</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../../posts/series/cv-foundations/08-modern-vision-models.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">8. Modern Vision Models</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../../posts/series/cv-foundations/09-first-cv-project.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">9. First CV Project</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../../posts/series/cv-foundations/10-where-to-go-next.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">10. Where to Go Next</span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-4" aria-expanded="true">
+ <span class="menu-text">Anomaly Detection</span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-4" aria-expanded="true" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-4" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../../posts/series/anomaly-detection/index.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Introduction</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../../posts/series/anomaly-detection/finding-the-oddballs.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Finding the Oddballs</span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-5" aria-expanded="true">
+ <span class="menu-text">VLM Series</span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-5" aria-expanded="true" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-5" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../../posts/series/vlm.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Introduction</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../../posts/series/vlm-qwen3-14b/index.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Qwen3-14B</span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+    </ul>
+    </div>
+</nav>
+<div id="quarto-sidebar-glass" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar,#quarto-sidebar-glass"></div>
+<!-- margin-sidebar -->
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+        <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">On this page</h2>
+   
+  <ul>
+  <li><a href="#the-story-the-3-am-automation-test" id="toc-the-story-the-3-am-automation-test" class="nav-link active" data-scroll-target="#the-story-the-3-am-automation-test"><span class="header-section-number">0.1</span> The Story: The 3 AM Automation Test</a></li>
+  <li><a href="#why-bash-scripting-matters-in-hpc" id="toc-why-bash-scripting-matters-in-hpc" class="nav-link" data-scroll-target="#why-bash-scripting-matters-in-hpc"><span class="header-section-number">0.2</span> Why Bash Scripting Matters in HPC</a>
+  <ul class="collapse">
+  <li><a href="#the-automation-pyramid" id="toc-the-automation-pyramid" class="nav-link" data-scroll-target="#the-automation-pyramid"><span class="header-section-number">0.2.1</span> The Automation Pyramid</a></li>
+  </ul></li>
+  <li><a href="#your-first-bash-script" id="toc-your-first-bash-script" class="nav-link" data-scroll-target="#your-first-bash-script"><span class="header-section-number">0.3</span> Your First Bash Script</a></li>
+  <li><a href="#variables-your-scripts-memory" id="toc-variables-your-scripts-memory" class="nav-link" data-scroll-target="#variables-your-scripts-memory"><span class="header-section-number">0.4</span> Variables: Your Script’s Memory</a></li>
+  <li><a href="#getting-input-from-users" id="toc-getting-input-from-users" class="nav-link" data-scroll-target="#getting-input-from-users"><span class="header-section-number">0.5</span> Getting Input from Users</a></li>
+  <li><a href="#command-line-arguments-professional-input-handling" id="toc-command-line-arguments-professional-input-handling" class="nav-link" data-scroll-target="#command-line-arguments-professional-input-handling"><span class="header-section-number">0.6</span> Command Line Arguments: Professional Input Handling</a></li>
+  <li><a href="#conditional-logic-making-decisions" id="toc-conditional-logic-making-decisions" class="nav-link" data-scroll-target="#conditional-logic-making-decisions"><span class="header-section-number">0.7</span> Conditional Logic: Making Decisions</a></li>
+  <li><a href="#loops-repeating-tasks-efficiently" id="toc-loops-repeating-tasks-efficiently" class="nav-link" data-scroll-target="#loops-repeating-tasks-efficiently"><span class="header-section-number">0.8</span> Loops: Repeating Tasks Efficiently</a>
+  <ul class="collapse">
+  <li><a href="#processing-multiple-files" id="toc-processing-multiple-files" class="nav-link" data-scroll-target="#processing-multiple-files"><span class="header-section-number">0.8.1</span> Processing Multiple Files</a></li>
+  <li><a href="#numerical-loops" id="toc-numerical-loops" class="nav-link" data-scroll-target="#numerical-loops"><span class="header-section-number">0.8.2</span> Numerical Loops</a></li>
+  <li><a href="#while-loops-for-monitoring" id="toc-while-loops-for-monitoring" class="nav-link" data-scroll-target="#while-loops-for-monitoring"><span class="header-section-number">0.8.3</span> While Loops for Monitoring</a></li>
+  </ul></li>
+  <li><a href="#functions-organizing-your-code" id="toc-functions-organizing-your-code" class="nav-link" data-scroll-target="#functions-organizing-your-code"><span class="header-section-number">0.9</span> Functions: Organizing Your Code</a></li>
+  <li><a href="#error-handling-making-scripts-bulletproof" id="toc-error-handling-making-scripts-bulletproof" class="nav-link" data-scroll-target="#error-handling-making-scripts-bulletproof"><span class="header-section-number">0.10</span> Error Handling: Making Scripts Bulletproof</a></li>
+  <li><a href="#quick-reference-bash-scripting-cheat-sheet" id="toc-quick-reference-bash-scripting-cheat-sheet" class="nav-link" data-scroll-target="#quick-reference-bash-scripting-cheat-sheet"><span class="header-section-number">0.11</span> Quick Reference: Bash Scripting Cheat Sheet</a></li>
+  <li><a href="#practice-exercises" id="toc-practice-exercises" class="nav-link" data-scroll-target="#practice-exercises"><span class="header-section-number">0.12</span> Practice Exercises</a></li>
+  <li><a href="#whats-next" id="toc-whats-next" class="nav-link" data-scroll-target="#whats-next"><span class="header-section-number">0.13</span> What’s Next?</a></li>
+  </ul>
+</nav>
+    </div>
+<!-- main -->
+<main class="content quarto-banner-title-block" id="quarto-document-content">
+
+
+
+
+<section id="the-story-the-3-am-automation-test" class="level2" data-number="0.1">
+<h2 data-number="0.1" class="anchored" data-anchor-id="the-story-the-3-am-automation-test"><span class="header-section-number">0.1</span> The Story: The 3 AM Automation Test</h2>
+<p>Picture this: It’s 3 AM, you’re sound asleep, and your critical data processing pipeline needs to run. Your script needs to: - Check if new data has arrived - Process 500 files in a specific order - Handle errors gracefully - Send you a summary email - Clean up temporary files</p>
+<p>If you’ve written a good bash script, it handles all of this while you sleep peacefully. If not, you’ll wake up to chaos and missed deadlines. Today, you’ll learn to write scripts that pass the “3 AM test” – they work reliably even when you’re not there to babysit them.</p>
+</section>
+<section id="why-bash-scripting-matters-in-hpc" class="level2" data-number="0.2">
+<h2 data-number="0.2" class="anchored" data-anchor-id="why-bash-scripting-matters-in-hpc"><span class="header-section-number">0.2</span> Why Bash Scripting Matters in HPC</h2>
+<p><strong>Real-world analogy</strong>: Manual command execution is like cooking one meal at a time. Bash scripting is like having a recipe that can feed a banquet – it scales, it’s repeatable, and it frees you to focus on more important things.</p>
+<section id="the-automation-pyramid" class="level3" data-number="0.2.1">
+<h3 data-number="0.2.1" class="anchored" data-anchor-id="the-automation-pyramid"><span class="header-section-number">0.2.1</span> The Automation Pyramid</h3>
+<ol type="1">
+<li><strong>Manual execution</strong>: Typing commands one by one</li>
+<li><strong>Command history</strong>: Reusing previous commands</li>
+<li><strong>Simple scripts</strong>: Automating basic tasks</li>
+<li><strong>Robust scripts</strong>: Handling errors and edge cases</li>
+<li><strong>Professional workflows</strong>: Complex pipelines with monitoring</li>
+</ol>
+</section>
+</section>
+<section id="your-first-bash-script" class="level2" data-number="0.3">
+<h2 data-number="0.3" class="anchored" data-anchor-id="your-first-bash-script"><span class="header-section-number">0.3</span> Your First Bash Script</h2>
+<p>Let’s start with the classic “Hello World” but make it practical:</p>
+<div class="sourceCode" id="cb1"><pre class="sourceCode numberSource bash number-lines code-with-copy"><code class="sourceCode bash"><span id="cb1-1"><a href="#cb1-1"></a><span class="co">#!/bin/bash</span></span>
+<span id="cb1-2"><a href="#cb1-2"></a><span class="co"># hello_hpc.sh - Your first HPC script</span></span>
+<span id="cb1-3"><a href="#cb1-3"></a></span>
+<span id="cb1-4"><a href="#cb1-4"></a><span class="bu">echo</span> <span class="st">"Hello from </span><span class="va">$(</span><span class="fu">hostname</span><span class="va">)</span><span class="st">!"</span></span>
+<span id="cb1-5"><a href="#cb1-5"></a><span class="bu">echo</span> <span class="st">"Current user: </span><span class="va">$(</span><span class="fu">whoami</span><span class="va">)</span><span class="st">"</span></span>
+<span id="cb1-6"><a href="#cb1-6"></a><span class="bu">echo</span> <span class="st">"Current directory: </span><span class="va">$(</span><span class="bu">pwd</span><span class="va">)</span><span class="st">"</span></span>
+<span id="cb1-7"><a href="#cb1-7"></a><span class="bu">echo</span> <span class="st">"Current time: </span><span class="va">$(</span><span class="fu">date</span><span class="va">)</span><span class="st">"</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p><strong>The anatomy</strong>: - <code>#!/bin/bash</code>: The “shebang” – tells the system this is a bash script - <code>#</code>: Comments (document everything!) - <code>$()</code>: Command substitution – runs a command and uses its output</p>
+<p><strong>Make it executable and run</strong>:</p>
+<div class="sourceCode" id="cb2"><pre class="sourceCode numberSource bash number-lines code-with-copy"><code class="sourceCode bash"><span id="cb2-1"><a href="#cb2-1"></a><span class="fu">chmod</span> +x hello_hpc.sh</span>
+<span id="cb2-2"><a href="#cb2-2"></a><span class="ex">./hello_hpc.sh</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</section>
+<section id="variables-your-scripts-memory" class="level2" data-number="0.4">
+<h2 data-number="0.4" class="anchored" data-anchor-id="variables-your-scripts-memory"><span class="header-section-number">0.4</span> Variables: Your Script’s Memory</h2>
+<p>Variables store information your script can use later:</p>
+<div class="sourceCode" id="cb3"><pre class="sourceCode numberSource bash number-lines code-with-copy"><code class="sourceCode bash"><span id="cb3-1"><a href="#cb3-1"></a><span class="co">#!/bin/bash</span></span>
+<span id="cb3-2"><a href="#cb3-2"></a><span class="co"># variables_demo.sh</span></span>
+<span id="cb3-3"><a href="#cb3-3"></a></span>
+<span id="cb3-4"><a href="#cb3-4"></a><span class="co"># Define variables</span></span>
+<span id="cb3-5"><a href="#cb3-5"></a><span class="va">PROJECT_NAME</span><span class="op">=</span><span class="st">"experiment_2023"</span></span>
+<span id="cb3-6"><a href="#cb3-6"></a><span class="va">DATA_DIR</span><span class="op">=</span><span class="st">"/scratch/username/data"</span></span>
+<span id="cb3-7"><a href="#cb3-7"></a><span class="va">NUM_FILES</span><span class="op">=</span>100</span>
+<span id="cb3-8"><a href="#cb3-8"></a></span>
+<span id="cb3-9"><a href="#cb3-9"></a><span class="co"># Use variables</span></span>
+<span id="cb3-10"><a href="#cb3-10"></a><span class="bu">echo</span> <span class="st">"Processing project: </span><span class="va">$PROJECT_NAME</span><span class="st">"</span></span>
+<span id="cb3-11"><a href="#cb3-11"></a><span class="bu">echo</span> <span class="st">"Data location: </span><span class="va">$DATA_DIR</span><span class="st">"</span></span>
+<span id="cb3-12"><a href="#cb3-12"></a><span class="bu">echo</span> <span class="st">"Expected files: </span><span class="va">$NUM_FILES</span><span class="st">"</span></span>
+<span id="cb3-13"><a href="#cb3-13"></a></span>
+<span id="cb3-14"><a href="#cb3-14"></a><span class="co"># Command substitution into variables</span></span>
+<span id="cb3-15"><a href="#cb3-15"></a><span class="va">CURRENT_FILES</span><span class="op">=</span><span class="va">$(</span><span class="fu">ls</span> <span class="va">$DATA_DIR</span> <span class="kw">|</span> <span class="fu">wc</span> <span class="at">-l</span><span class="va">)</span></span>
+<span id="cb3-16"><a href="#cb3-16"></a><span class="bu">echo</span> <span class="st">"Actual files found: </span><span class="va">$CURRENT_FILES</span><span class="st">"</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p><strong>Variable best practices</strong>: - Use UPPERCASE for constants: <code>MAX_MEMORY=32000</code> - Use lowercase for local variables: <code>temp_file="temp.txt"</code> - Always quote variables: <code>"$DATA_DIR"</code> (handles spaces in paths)</p>
+</section>
+<section id="getting-input-from-users" class="level2" data-number="0.5">
+<h2 data-number="0.5" class="anchored" data-anchor-id="getting-input-from-users"><span class="header-section-number">0.5</span> Getting Input from Users</h2>
+<p>Make your scripts interactive and flexible:</p>
+<div class="sourceCode" id="cb4"><pre class="sourceCode numberSource bash number-lines code-with-copy"><code class="sourceCode bash"><span id="cb4-1"><a href="#cb4-1"></a><span class="co">#!/bin/bash</span></span>
+<span id="cb4-2"><a href="#cb4-2"></a><span class="co"># interactive_processing.sh</span></span>
+<span id="cb4-3"><a href="#cb4-3"></a></span>
+<span id="cb4-4"><a href="#cb4-4"></a><span class="co"># Get input from user</span></span>
+<span id="cb4-5"><a href="#cb4-5"></a><span class="bu">echo</span> <span class="st">"Enter experiment name:"</span></span>
+<span id="cb4-6"><a href="#cb4-6"></a><span class="bu">read</span> <span class="va">EXPERIMENT_NAME</span></span>
+<span id="cb4-7"><a href="#cb4-7"></a></span>
+<span id="cb4-8"><a href="#cb4-8"></a><span class="bu">echo</span> <span class="st">"Enter number of cores to use:"</span></span>
+<span id="cb4-9"><a href="#cb4-9"></a><span class="bu">read</span> <span class="va">NUM_CORES</span></span>
+<span id="cb4-10"><a href="#cb4-10"></a></span>
+<span id="cb4-11"><a href="#cb4-11"></a><span class="co"># Provide defaults</span></span>
+<span id="cb4-12"><a href="#cb4-12"></a><span class="va">DATA_DIR</span><span class="op">=</span><span class="va">${DATA_DIR</span><span class="op">:-</span><span class="st">"/scratch/</span><span class="va">$(</span><span class="fu">whoami</span><span class="va">)</span><span class="st">/data"</span><span class="va">}</span></span>
+<span id="cb4-13"><a href="#cb4-13"></a><span class="va">OUTPUT_DIR</span><span class="op">=</span><span class="va">${OUTPUT_DIR</span><span class="op">:-</span><span class="st">"results_</span><span class="va">$(</span><span class="fu">date</span> +%Y%m%d<span class="va">)</span><span class="st">"</span><span class="va">}</span></span>
+<span id="cb4-14"><a href="#cb4-14"></a></span>
+<span id="cb4-15"><a href="#cb4-15"></a><span class="bu">echo</span> <span class="st">"Processing </span><span class="va">$EXPERIMENT_NAME</span><span class="st"> with </span><span class="va">$NUM_CORES</span><span class="st"> cores"</span></span>
+<span id="cb4-16"><a href="#cb4-16"></a><span class="bu">echo</span> <span class="st">"Data from: </span><span class="va">$DATA_DIR</span><span class="st">"</span></span>
+<span id="cb4-17"><a href="#cb4-17"></a><span class="bu">echo</span> <span class="st">"Results to: </span><span class="va">$OUTPUT_DIR</span><span class="st">"</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</section>
+<section id="command-line-arguments-professional-input-handling" class="level2" data-number="0.6">
+<h2 data-number="0.6" class="anchored" data-anchor-id="command-line-arguments-professional-input-handling"><span class="header-section-number">0.6</span> Command Line Arguments: Professional Input Handling</h2>
+<div class="sourceCode" id="cb5"><pre class="sourceCode numberSource bash number-lines code-with-copy"><code class="sourceCode bash"><span id="cb5-1"><a href="#cb5-1"></a><span class="co">#!/bin/bash</span></span>
+<span id="cb5-2"><a href="#cb5-2"></a><span class="co"># process_data.sh - Professional argument handling</span></span>
+<span id="cb5-3"><a href="#cb5-3"></a></span>
+<span id="cb5-4"><a href="#cb5-4"></a><span class="co"># Check if enough arguments provided</span></span>
+<span id="cb5-5"><a href="#cb5-5"></a><span class="cf">if</span> <span class="bu">[</span> <span class="va">$#</span> <span class="ot">-lt</span> 2 <span class="bu">]</span><span class="kw">;</span> <span class="cf">then</span></span>
+<span id="cb5-6"><a href="#cb5-6"></a>    <span class="bu">echo</span> <span class="st">"Usage: </span><span class="va">$0</span><span class="st"> &lt;input_directory&gt; &lt;output_directory&gt; [num_cores]"</span></span>
+<span id="cb5-7"><a href="#cb5-7"></a>    <span class="bu">echo</span> <span class="st">"Example: </span><span class="va">$0</span><span class="st"> /data/experiment_1 /results/exp1 8"</span></span>
+<span id="cb5-8"><a href="#cb5-8"></a>    <span class="bu">exit</span> 1</span>
+<span id="cb5-9"><a href="#cb5-9"></a><span class="cf">fi</span></span>
+<span id="cb5-10"><a href="#cb5-10"></a></span>
+<span id="cb5-11"><a href="#cb5-11"></a><span class="co"># Assign arguments to meaningful names</span></span>
+<span id="cb5-12"><a href="#cb5-12"></a><span class="va">INPUT_DIR</span><span class="op">=</span><span class="st">"</span><span class="va">$1</span><span class="st">"</span></span>
+<span id="cb5-13"><a href="#cb5-13"></a><span class="va">OUTPUT_DIR</span><span class="op">=</span><span class="st">"</span><span class="va">$2</span><span class="st">"</span></span>
+<span id="cb5-14"><a href="#cb5-14"></a><span class="va">NUM_CORES</span><span class="op">=</span><span class="st">"</span><span class="va">${3</span><span class="op">:-</span>4<span class="va">}</span><span class="st">"</span>  <span class="co"># Default to 4 cores if not specified</span></span>
+<span id="cb5-15"><a href="#cb5-15"></a></span>
+<span id="cb5-16"><a href="#cb5-16"></a><span class="bu">echo</span> <span class="st">"Processing data from </span><span class="va">$INPUT_DIR</span><span class="st">"</span></span>
+<span id="cb5-17"><a href="#cb5-17"></a><span class="bu">echo</span> <span class="st">"Results will be saved to </span><span class="va">$OUTPUT_DIR</span><span class="st">"</span></span>
+<span id="cb5-18"><a href="#cb5-18"></a><span class="bu">echo</span> <span class="st">"Using </span><span class="va">$NUM_CORES</span><span class="st"> cores"</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p><strong>Argument variables</strong>: - <code>$0</code>: Script name - <code>$1, $2, $3...</code>: First, second, third arguments - <code>$#</code>: Number of arguments - <code>$@</code>: All arguments</p>
+</section>
+<section id="conditional-logic-making-decisions" class="level2" data-number="0.7">
+<h2 data-number="0.7" class="anchored" data-anchor-id="conditional-logic-making-decisions"><span class="header-section-number">0.7</span> Conditional Logic: Making Decisions</h2>
+<p>Your scripts need to make intelligent decisions:</p>
+<div class="sourceCode" id="cb6"><pre class="sourceCode numberSource bash number-lines code-with-copy"><code class="sourceCode bash"><span id="cb6-1"><a href="#cb6-1"></a><span class="co">#!/bin/bash</span></span>
+<span id="cb6-2"><a href="#cb6-2"></a><span class="co"># smart_processing.sh</span></span>
+<span id="cb6-3"><a href="#cb6-3"></a></span>
+<span id="cb6-4"><a href="#cb6-4"></a><span class="va">INPUT_DIR</span><span class="op">=</span><span class="st">"</span><span class="va">$1</span><span class="st">"</span></span>
+<span id="cb6-5"><a href="#cb6-5"></a></span>
+<span id="cb6-6"><a href="#cb6-6"></a><span class="co"># Check if directory exists</span></span>
+<span id="cb6-7"><a href="#cb6-7"></a><span class="cf">if</span> <span class="bu">[</span> <span class="ot">-d</span> <span class="st">"</span><span class="va">$INPUT_DIR</span><span class="st">"</span> <span class="bu">]</span><span class="kw">;</span> <span class="cf">then</span></span>
+<span id="cb6-8"><a href="#cb6-8"></a>    <span class="bu">echo</span> <span class="st">"Found input directory: </span><span class="va">$INPUT_DIR</span><span class="st">"</span></span>
+<span id="cb6-9"><a href="#cb6-9"></a><span class="cf">else</span></span>
+<span id="cb6-10"><a href="#cb6-10"></a>    <span class="bu">echo</span> <span class="st">"Error: Directory </span><span class="va">$INPUT_DIR</span><span class="st"> does not exist!"</span></span>
+<span id="cb6-11"><a href="#cb6-11"></a>    <span class="bu">exit</span> 1</span>
+<span id="cb6-12"><a href="#cb6-12"></a><span class="cf">fi</span></span>
+<span id="cb6-13"><a href="#cb6-13"></a></span>
+<span id="cb6-14"><a href="#cb6-14"></a><span class="co"># Check number of files</span></span>
+<span id="cb6-15"><a href="#cb6-15"></a><span class="va">FILE_COUNT</span><span class="op">=</span><span class="va">$(</span><span class="fu">ls</span> <span class="st">"</span><span class="va">$INPUT_DIR</span><span class="st">"</span>/<span class="pp">*</span>.csv <span class="dv">2</span><span class="op">&gt;</span>/dev/null <span class="kw">|</span> <span class="fu">wc</span> <span class="at">-l</span><span class="va">)</span></span>
+<span id="cb6-16"><a href="#cb6-16"></a></span>
+<span id="cb6-17"><a href="#cb6-17"></a><span class="cf">if</span> <span class="bu">[</span> <span class="va">$FILE_COUNT</span> <span class="ot">-eq</span> 0 <span class="bu">]</span><span class="kw">;</span> <span class="cf">then</span></span>
+<span id="cb6-18"><a href="#cb6-18"></a>    <span class="bu">echo</span> <span class="st">"No CSV files found in </span><span class="va">$INPUT_DIR</span><span class="st">"</span></span>
+<span id="cb6-19"><a href="#cb6-19"></a>    <span class="bu">exit</span> 1</span>
+<span id="cb6-20"><a href="#cb6-20"></a><span class="cf">elif</span> <span class="bu">[</span> <span class="va">$FILE_COUNT</span> <span class="ot">-lt</span> 10 <span class="bu">]</span><span class="kw">;</span> <span class="cf">then</span></span>
+<span id="cb6-21"><a href="#cb6-21"></a>    <span class="bu">echo</span> <span class="st">"Found </span><span class="va">$FILE_COUNT</span><span class="st"> files - using single core processing"</span></span>
+<span id="cb6-22"><a href="#cb6-22"></a>    <span class="va">CORES</span><span class="op">=</span>1</span>
+<span id="cb6-23"><a href="#cb6-23"></a><span class="cf">else</span></span>
+<span id="cb6-24"><a href="#cb6-24"></a>    <span class="bu">echo</span> <span class="st">"Found </span><span class="va">$FILE_COUNT</span><span class="st"> files - using parallel processing"</span></span>
+<span id="cb6-25"><a href="#cb6-25"></a>    <span class="va">CORES</span><span class="op">=</span>8</span>
+<span id="cb6-26"><a href="#cb6-26"></a><span class="cf">fi</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p><strong>Common test conditions</strong>: - <code>-d path</code>: Directory exists - <code>-f path</code>: File exists - <code>-r path</code>: File is readable - <code>-w path</code>: File is writable - <code>-z string</code>: String is empty - <code>-n string</code>: String is not empty - <code>$a -eq $b</code>: Numbers are equal - <code>$a -gt $b</code>: First number is greater</p>
+</section>
+<section id="loops-repeating-tasks-efficiently" class="level2" data-number="0.8">
+<h2 data-number="0.8" class="anchored" data-anchor-id="loops-repeating-tasks-efficiently"><span class="header-section-number">0.8</span> Loops: Repeating Tasks Efficiently</h2>
+<section id="processing-multiple-files" class="level3" data-number="0.8.1">
+<h3 data-number="0.8.1" class="anchored" data-anchor-id="processing-multiple-files"><span class="header-section-number">0.8.1</span> Processing Multiple Files</h3>
+<div class="sourceCode" id="cb7"><pre class="sourceCode numberSource bash number-lines code-with-copy"><code class="sourceCode bash"><span id="cb7-1"><a href="#cb7-1"></a><span class="co">#!/bin/bash</span></span>
+<span id="cb7-2"><a href="#cb7-2"></a><span class="co"># process_all_files.sh</span></span>
+<span id="cb7-3"><a href="#cb7-3"></a></span>
+<span id="cb7-4"><a href="#cb7-4"></a><span class="va">DATA_DIR</span><span class="op">=</span><span class="st">"</span><span class="va">$1</span><span class="st">"</span></span>
+<span id="cb7-5"><a href="#cb7-5"></a></span>
+<span id="cb7-6"><a href="#cb7-6"></a><span class="co"># Process each CSV file</span></span>
+<span id="cb7-7"><a href="#cb7-7"></a><span class="cf">for</span> file <span class="kw">in</span> <span class="st">"</span><span class="va">$DATA_DIR</span><span class="st">"</span>/<span class="pp">*</span>.csv<span class="kw">;</span> <span class="cf">do</span></span>
+<span id="cb7-8"><a href="#cb7-8"></a>    <span class="cf">if</span> <span class="bu">[</span> <span class="ot">-f</span> <span class="st">"</span><span class="va">$file</span><span class="st">"</span> <span class="bu">]</span><span class="kw">;</span> <span class="cf">then</span></span>
+<span id="cb7-9"><a href="#cb7-9"></a>        <span class="bu">echo</span> <span class="st">"Processing: </span><span class="va">$file</span><span class="st">"</span></span>
+<span id="cb7-10"><a href="#cb7-10"></a>        <span class="va">filename</span><span class="op">=</span><span class="va">$(</span><span class="fu">basename</span> <span class="st">"</span><span class="va">$file</span><span class="st">"</span> .csv<span class="va">)</span></span>
+<span id="cb7-11"><a href="#cb7-11"></a>        </span>
+<span id="cb7-12"><a href="#cb7-12"></a>        <span class="co"># Your processing command here</span></span>
+<span id="cb7-13"><a href="#cb7-13"></a>        <span class="ex">python</span> analyze.py <span class="at">--input</span> <span class="st">"</span><span class="va">$file</span><span class="st">"</span> <span class="at">--output</span> <span class="st">"results/</span><span class="va">${filename}</span><span class="st">_result.csv"</span></span>
+<span id="cb7-14"><a href="#cb7-14"></a>        </span>
+<span id="cb7-15"><a href="#cb7-15"></a>        <span class="bu">echo</span> <span class="st">"Completed: </span><span class="va">$filename</span><span class="st">"</span></span>
+<span id="cb7-16"><a href="#cb7-16"></a>    <span class="cf">fi</span></span>
+<span id="cb7-17"><a href="#cb7-17"></a><span class="cf">done</span></span>
+<span id="cb7-18"><a href="#cb7-18"></a></span>
+<span id="cb7-19"><a href="#cb7-19"></a><span class="bu">echo</span> <span class="st">"All files processed!"</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</section>
+<section id="numerical-loops" class="level3" data-number="0.8.2">
+<h3 data-number="0.8.2" class="anchored" data-anchor-id="numerical-loops"><span class="header-section-number">0.8.2</span> Numerical Loops</h3>
+<div class="sourceCode" id="cb8"><pre class="sourceCode numberSource bash number-lines code-with-copy"><code class="sourceCode bash"><span id="cb8-1"><a href="#cb8-1"></a><span class="co">#!/bin/bash</span></span>
+<span id="cb8-2"><a href="#cb8-2"></a><span class="co"># parameter_sweep.sh</span></span>
+<span id="cb8-3"><a href="#cb8-3"></a></span>
+<span id="cb8-4"><a href="#cb8-4"></a><span class="co"># Test different parameter values</span></span>
+<span id="cb8-5"><a href="#cb8-5"></a><span class="cf">for</span> param <span class="kw">in</span> <span class="va">$(</span><span class="fu">seq</span> 0.1 0.1 1.0<span class="va">)</span><span class="kw">;</span> <span class="cf">do</span></span>
+<span id="cb8-6"><a href="#cb8-6"></a>    <span class="bu">echo</span> <span class="st">"Testing parameter value: </span><span class="va">$param</span><span class="st">"</span></span>
+<span id="cb8-7"><a href="#cb8-7"></a>    </span>
+<span id="cb8-8"><a href="#cb8-8"></a>    <span class="co"># Submit HPC job for each parameter</span></span>
+<span id="cb8-9"><a href="#cb8-9"></a>    <span class="ex">bsub</span> <span class="at">-J</span> <span class="st">"param_</span><span class="va">$param</span><span class="st">"</span> <span class="dt">\</span></span>
+<span id="cb8-10"><a href="#cb8-10"></a>         <span class="at">-n</span> 4 <span class="at">-M</span> 8000 <span class="at">-W</span> 2:00 <span class="dt">\</span></span>
+<span id="cb8-11"><a href="#cb8-11"></a>         <span class="st">"python experiment.py --param </span><span class="va">$param</span><span class="st"> --output results_</span><span class="va">$param</span><span class="st">.csv"</span></span>
+<span id="cb8-12"><a href="#cb8-12"></a><span class="cf">done</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</section>
+<section id="while-loops-for-monitoring" class="level3" data-number="0.8.3">
+<h3 data-number="0.8.3" class="anchored" data-anchor-id="while-loops-for-monitoring"><span class="header-section-number">0.8.3</span> While Loops for Monitoring</h3>
+<div class="sourceCode" id="cb9"><pre class="sourceCode numberSource bash number-lines code-with-copy"><code class="sourceCode bash"><span id="cb9-1"><a href="#cb9-1"></a><span class="co">#!/bin/bash</span></span>
+<span id="cb9-2"><a href="#cb9-2"></a><span class="co"># monitor_jobs.sh</span></span>
+<span id="cb9-3"><a href="#cb9-3"></a></span>
+<span id="cb9-4"><a href="#cb9-4"></a><span class="va">JOB_NAME</span><span class="op">=</span><span class="st">"</span><span class="va">$1</span><span class="st">"</span></span>
+<span id="cb9-5"><a href="#cb9-5"></a></span>
+<span id="cb9-6"><a href="#cb9-6"></a><span class="bu">echo</span> <span class="st">"Monitoring jobs with name: </span><span class="va">$JOB_NAME</span><span class="st">"</span></span>
+<span id="cb9-7"><a href="#cb9-7"></a></span>
+<span id="cb9-8"><a href="#cb9-8"></a><span class="cf">while</span> <span class="fu">true</span><span class="kw">;</span> <span class="cf">do</span></span>
+<span id="cb9-9"><a href="#cb9-9"></a>    <span class="va">RUNNING_JOBS</span><span class="op">=</span><span class="va">$(</span><span class="ex">bjobs</span> <span class="at">-J</span> <span class="st">"</span><span class="va">$JOB_NAME</span><span class="st">"</span> <span class="dv">2</span><span class="op">&gt;</span>/dev/null <span class="kw">|</span> <span class="fu">grep</span> RUN <span class="kw">|</span> <span class="fu">wc</span> <span class="at">-l</span><span class="va">)</span></span>
+<span id="cb9-10"><a href="#cb9-10"></a>    <span class="va">PENDING_JOBS</span><span class="op">=</span><span class="va">$(</span><span class="ex">bjobs</span> <span class="at">-J</span> <span class="st">"</span><span class="va">$JOB_NAME</span><span class="st">"</span> <span class="dv">2</span><span class="op">&gt;</span>/dev/null <span class="kw">|</span> <span class="fu">grep</span> PEND <span class="kw">|</span> <span class="fu">wc</span> <span class="at">-l</span><span class="va">)</span></span>
+<span id="cb9-11"><a href="#cb9-11"></a>    </span>
+<span id="cb9-12"><a href="#cb9-12"></a>    <span class="cf">if</span> <span class="bu">[</span> <span class="va">$RUNNING_JOBS</span> <span class="ot">-eq</span> 0 <span class="bu">]</span> <span class="kw">&amp;&amp;</span> <span class="bu">[</span> <span class="va">$PENDING_JOBS</span> <span class="ot">-eq</span> 0 <span class="bu">]</span><span class="kw">;</span> <span class="cf">then</span></span>
+<span id="cb9-13"><a href="#cb9-13"></a>        <span class="bu">echo</span> <span class="st">"All jobs completed!"</span></span>
+<span id="cb9-14"><a href="#cb9-14"></a>        <span class="cf">break</span></span>
+<span id="cb9-15"><a href="#cb9-15"></a>    <span class="cf">fi</span></span>
+<span id="cb9-16"><a href="#cb9-16"></a>    </span>
+<span id="cb9-17"><a href="#cb9-17"></a>    <span class="bu">echo</span> <span class="st">"</span><span class="va">$(</span><span class="fu">date</span><span class="va">)</span><span class="st">: Running: </span><span class="va">$RUNNING_JOBS</span><span class="st">, Pending: </span><span class="va">$PENDING_JOBS</span><span class="st">"</span></span>
+<span id="cb9-18"><a href="#cb9-18"></a>    <span class="fu">sleep</span> 60  <span class="co"># Check every minute</span></span>
+<span id="cb9-19"><a href="#cb9-19"></a><span class="cf">done</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</section>
+</section>
+<section id="functions-organizing-your-code" class="level2" data-number="0.9">
+<h2 data-number="0.9" class="anchored" data-anchor-id="functions-organizing-your-code"><span class="header-section-number">0.9</span> Functions: Organizing Your Code</h2>
+<p>Break complex scripts into manageable pieces:</p>
+<div class="sourceCode" id="cb10"><pre class="sourceCode numberSource bash number-lines code-with-copy"><code class="sourceCode bash"><span id="cb10-1"><a href="#cb10-1"></a><span class="co">#!/bin/bash</span></span>
+<span id="cb10-2"><a href="#cb10-2"></a><span class="co"># organized_processing.sh</span></span>
+<span id="cb10-3"><a href="#cb10-3"></a></span>
+<span id="cb10-4"><a href="#cb10-4"></a><span class="co"># Function to check if required tools are available</span></span>
+<span id="cb10-5"><a href="#cb10-5"></a><span class="fu">check_prerequisites()</span> <span class="kw">{</span></span>
+<span id="cb10-6"><a href="#cb10-6"></a>    <span class="bu">local</span> <span class="va">missing_tools</span><span class="op">=</span>0</span>
+<span id="cb10-7"><a href="#cb10-7"></a>    </span>
+<span id="cb10-8"><a href="#cb10-8"></a>    <span class="cf">for</span> tool <span class="kw">in</span> python rsync bsub<span class="kw">;</span> <span class="cf">do</span></span>
+<span id="cb10-9"><a href="#cb10-9"></a>        <span class="cf">if</span> <span class="ot">! </span><span class="bu">command</span> <span class="at">-v</span> <span class="va">$tool</span> <span class="op">&amp;&gt;</span> /dev/null<span class="kw">;</span> <span class="cf">then</span></span>
+<span id="cb10-10"><a href="#cb10-10"></a>            <span class="bu">echo</span> <span class="st">"Error: </span><span class="va">$tool</span><span class="st"> is not installed or not in PATH"</span></span>
+<span id="cb10-11"><a href="#cb10-11"></a>            <span class="va">missing_tools</span><span class="op">=</span><span class="va">$((missing_tools</span> <span class="op">+</span> <span class="dv">1</span><span class="va">))</span></span>
+<span id="cb10-12"><a href="#cb10-12"></a>        <span class="cf">fi</span></span>
+<span id="cb10-13"><a href="#cb10-13"></a>    <span class="cf">done</span></span>
+<span id="cb10-14"><a href="#cb10-14"></a>    </span>
+<span id="cb10-15"><a href="#cb10-15"></a>    <span class="cf">if</span> <span class="bu">[</span> <span class="va">$missing_tools</span> <span class="ot">-gt</span> 0 <span class="bu">]</span><span class="kw">;</span> <span class="cf">then</span></span>
+<span id="cb10-16"><a href="#cb10-16"></a>        <span class="bu">echo</span> <span class="st">"Please install missing tools before continuing"</span></span>
+<span id="cb10-17"><a href="#cb10-17"></a>        <span class="bu">exit</span> 1</span>
+<span id="cb10-18"><a href="#cb10-18"></a>    <span class="cf">fi</span></span>
+<span id="cb10-19"><a href="#cb10-19"></a>    </span>
+<span id="cb10-20"><a href="#cb10-20"></a>    <span class="bu">echo</span> <span class="st">"All prerequisites satisfied"</span></span>
+<span id="cb10-21"><a href="#cb10-21"></a><span class="kw">}</span></span>
+<span id="cb10-22"><a href="#cb10-22"></a></span>
+<span id="cb10-23"><a href="#cb10-23"></a><span class="co"># Function to create output directories</span></span>
+<span id="cb10-24"><a href="#cb10-24"></a><span class="fu">setup_directories()</span> <span class="kw">{</span></span>
+<span id="cb10-25"><a href="#cb10-25"></a>    <span class="bu">local</span> <span class="va">base_dir</span><span class="op">=</span><span class="st">"</span><span class="va">$1</span><span class="st">"</span></span>
+<span id="cb10-26"><a href="#cb10-26"></a>    </span>
+<span id="cb10-27"><a href="#cb10-27"></a>    <span class="cf">for</span> subdir <span class="kw">in</span> raw processed results logs<span class="kw">;</span> <span class="cf">do</span></span>
+<span id="cb10-28"><a href="#cb10-28"></a>        <span class="fu">mkdir</span> <span class="at">-p</span> <span class="st">"</span><span class="va">$base_dir</span><span class="st">/</span><span class="va">$subdir</span><span class="st">"</span></span>
+<span id="cb10-29"><a href="#cb10-29"></a>        <span class="bu">echo</span> <span class="st">"Created directory: </span><span class="va">$base_dir</span><span class="st">/</span><span class="va">$subdir</span><span class="st">"</span></span>
+<span id="cb10-30"><a href="#cb10-30"></a>    <span class="cf">done</span></span>
+<span id="cb10-31"><a href="#cb10-31"></a><span class="kw">}</span></span>
+<span id="cb10-32"><a href="#cb10-32"></a></span>
+<span id="cb10-33"><a href="#cb10-33"></a><span class="co"># Function to submit processing jobs</span></span>
+<span id="cb10-34"><a href="#cb10-34"></a><span class="fu">submit_jobs()</span> <span class="kw">{</span></span>
+<span id="cb10-35"><a href="#cb10-35"></a>    <span class="bu">local</span> <span class="va">input_dir</span><span class="op">=</span><span class="st">"</span><span class="va">$1</span><span class="st">"</span></span>
+<span id="cb10-36"><a href="#cb10-36"></a>    <span class="bu">local</span> <span class="va">output_dir</span><span class="op">=</span><span class="st">"</span><span class="va">$2</span><span class="st">"</span></span>
+<span id="cb10-37"><a href="#cb10-37"></a>    </span>
+<span id="cb10-38"><a href="#cb10-38"></a>    <span class="cf">for</span> file <span class="kw">in</span> <span class="st">"</span><span class="va">$input_dir</span><span class="st">"</span>/<span class="pp">*</span>.csv<span class="kw">;</span> <span class="cf">do</span></span>
+<span id="cb10-39"><a href="#cb10-39"></a>        <span class="cf">if</span> <span class="bu">[</span> <span class="ot">-f</span> <span class="st">"</span><span class="va">$file</span><span class="st">"</span> <span class="bu">]</span><span class="kw">;</span> <span class="cf">then</span></span>
+<span id="cb10-40"><a href="#cb10-40"></a>            <span class="va">filename</span><span class="op">=</span><span class="va">$(</span><span class="fu">basename</span> <span class="st">"</span><span class="va">$file</span><span class="st">"</span> .csv<span class="va">)</span></span>
+<span id="cb10-41"><a href="#cb10-41"></a>            </span>
+<span id="cb10-42"><a href="#cb10-42"></a>            <span class="ex">bsub</span> <span class="at">-J</span> <span class="st">"process_</span><span class="va">$filename</span><span class="st">"</span> <span class="dt">\</span></span>
+<span id="cb10-43"><a href="#cb10-43"></a>                 <span class="at">-n</span> 4 <span class="at">-M</span> 8000 <span class="at">-W</span> 3:00 <span class="dt">\</span></span>
+<span id="cb10-44"><a href="#cb10-44"></a>                 <span class="at">-o</span> <span class="st">"</span><span class="va">$output_dir</span><span class="st">/logs/</span><span class="va">${filename}</span><span class="st">.out"</span> <span class="dt">\</span></span>
+<span id="cb10-45"><a href="#cb10-45"></a>                 <span class="at">-e</span> <span class="st">"</span><span class="va">$output_dir</span><span class="st">/logs/</span><span class="va">${filename}</span><span class="st">.err"</span> <span class="dt">\</span></span>
+<span id="cb10-46"><a href="#cb10-46"></a>                 <span class="st">"python process.py --input '</span><span class="va">$file</span><span class="st">' --output '</span><span class="va">$output_dir</span><span class="st">/processed/</span><span class="va">${filename}</span><span class="st">_processed.csv'"</span></span>
+<span id="cb10-47"><a href="#cb10-47"></a>        <span class="cf">fi</span></span>
+<span id="cb10-48"><a href="#cb10-48"></a>    <span class="cf">done</span></span>
+<span id="cb10-49"><a href="#cb10-49"></a><span class="kw">}</span></span>
+<span id="cb10-50"><a href="#cb10-50"></a></span>
+<span id="cb10-51"><a href="#cb10-51"></a><span class="co"># Main script execution</span></span>
+<span id="cb10-52"><a href="#cb10-52"></a><span class="fu">main()</span> <span class="kw">{</span></span>
+<span id="cb10-53"><a href="#cb10-53"></a>    <span class="bu">echo</span> <span class="st">"Starting data processing pipeline..."</span></span>
+<span id="cb10-54"><a href="#cb10-54"></a>    </span>
+<span id="cb10-55"><a href="#cb10-55"></a>    <span class="ex">check_prerequisites</span></span>
+<span id="cb10-56"><a href="#cb10-56"></a>    <span class="ex">setup_directories</span> <span class="st">"</span><span class="va">$(</span><span class="bu">pwd</span><span class="va">)</span><span class="st">/experiment_</span><span class="va">$(</span><span class="fu">date</span> +%Y%m%d<span class="va">)</span><span class="st">"</span></span>
+<span id="cb10-57"><a href="#cb10-57"></a>    <span class="ex">submit_jobs</span> <span class="st">"</span><span class="va">$1</span><span class="st">"</span> <span class="st">"</span><span class="va">$(</span><span class="bu">pwd</span><span class="va">)</span><span class="st">/experiment_</span><span class="va">$(</span><span class="fu">date</span> +%Y%m%d<span class="va">)</span><span class="st">"</span></span>
+<span id="cb10-58"><a href="#cb10-58"></a>    </span>
+<span id="cb10-59"><a href="#cb10-59"></a>    <span class="bu">echo</span> <span class="st">"Pipeline started. Monitor with: bjobs"</span></span>
+<span id="cb10-60"><a href="#cb10-60"></a><span class="kw">}</span></span>
+<span id="cb10-61"><a href="#cb10-61"></a></span>
+<span id="cb10-62"><a href="#cb10-62"></a><span class="co"># Run main function with all arguments</span></span>
+<span id="cb10-63"><a href="#cb10-63"></a><span class="ex">main</span> <span class="st">"</span><span class="va">$@</span><span class="st">"</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</section>
+<section id="error-handling-making-scripts-bulletproof" class="level2" data-number="0.10">
+<h2 data-number="0.10" class="anchored" data-anchor-id="error-handling-making-scripts-bulletproof"><span class="header-section-number">0.10</span> Error Handling: Making Scripts Bulletproof</h2>
+<p>Professional scripts handle errors gracefully:</p>
+<div class="sourceCode" id="cb11"><pre class="sourceCode numberSource bash number-lines code-with-copy"><code class="sourceCode bash"><span id="cb11-1"><a href="#cb11-1"></a><span class="co">#!/bin/bash</span></span>
+<span id="cb11-2"><a href="#cb11-2"></a><span class="co"># bulletproof_script.sh</span></span>
+<span id="cb11-3"><a href="#cb11-3"></a></span>
+<span id="cb11-4"><a href="#cb11-4"></a><span class="co"># Exit on any error</span></span>
+<span id="cb11-5"><a href="#cb11-5"></a><span class="bu">set</span> <span class="at">-e</span></span>
+<span id="cb11-6"><a href="#cb11-6"></a></span>
+<span id="cb11-7"><a href="#cb11-7"></a><span class="co"># Exit on undefined variables</span></span>
+<span id="cb11-8"><a href="#cb11-8"></a><span class="bu">set</span> <span class="at">-u</span></span>
+<span id="cb11-9"><a href="#cb11-9"></a></span>
+<span id="cb11-10"><a href="#cb11-10"></a><span class="co"># Make pipe failures cause script to fail</span></span>
+<span id="cb11-11"><a href="#cb11-11"></a><span class="bu">set</span> <span class="at">-o</span> pipefail</span>
+<span id="cb11-12"><a href="#cb11-12"></a></span>
+<span id="cb11-13"><a href="#cb11-13"></a><span class="co"># Function to handle cleanup on exit</span></span>
+<span id="cb11-14"><a href="#cb11-14"></a><span class="fu">cleanup()</span> <span class="kw">{</span></span>
+<span id="cb11-15"><a href="#cb11-15"></a>    <span class="bu">local</span> <span class="va">exit_code</span><span class="op">=</span><span class="va">$?</span></span>
+<span id="cb11-16"><a href="#cb11-16"></a>    </span>
+<span id="cb11-17"><a href="#cb11-17"></a>    <span class="cf">if</span> <span class="bu">[</span> <span class="va">$exit_code</span> <span class="ot">-ne</span> 0 <span class="bu">]</span><span class="kw">;</span> <span class="cf">then</span></span>
+<span id="cb11-18"><a href="#cb11-18"></a>        <span class="bu">echo</span> <span class="st">"Script failed with exit code </span><span class="va">$exit_code</span><span class="st">"</span></span>
+<span id="cb11-19"><a href="#cb11-19"></a>        <span class="bu">echo</span> <span class="st">"Cleaning up temporary files..."</span></span>
+<span id="cb11-20"><a href="#cb11-20"></a>        <span class="fu">rm</span> <span class="at">-f</span> /tmp/temp_<span class="va">$$</span>_<span class="pp">*</span></span>
+<span id="cb11-21"><a href="#cb11-21"></a>    <span class="cf">fi</span></span>
+<span id="cb11-22"><a href="#cb11-22"></a>    </span>
+<span id="cb11-23"><a href="#cb11-23"></a>    <span class="bu">echo</span> <span class="st">"Cleanup completed"</span></span>
+<span id="cb11-24"><a href="#cb11-24"></a>    <span class="bu">exit</span> <span class="va">$exit_code</span></span>
+<span id="cb11-25"><a href="#cb11-25"></a><span class="kw">}</span></span>
+<span id="cb11-26"><a href="#cb11-26"></a></span>
+<span id="cb11-27"><a href="#cb11-27"></a><span class="co"># Set trap to run cleanup on script exit</span></span>
+<span id="cb11-28"><a href="#cb11-28"></a><span class="bu">trap</span> cleanup EXIT</span>
+<span id="cb11-29"><a href="#cb11-29"></a></span>
+<span id="cb11-30"><a href="#cb11-30"></a><span class="co"># Function to log messages with timestamps</span></span>
+<span id="cb11-31"><a href="#cb11-31"></a><span class="fu">log()</span> <span class="kw">{</span></span>
+<span id="cb11-32"><a href="#cb11-32"></a>    <span class="bu">echo</span> <span class="st">"[</span><span class="va">$(</span><span class="fu">date</span> <span class="st">'+%Y-%m-%d %H:%M:%S'</span><span class="va">)</span><span class="st">] </span><span class="va">$1</span><span class="st">"</span></span>
+<span id="cb11-33"><a href="#cb11-33"></a><span class="kw">}</span></span>
+<span id="cb11-34"><a href="#cb11-34"></a></span>
+<span id="cb11-35"><a href="#cb11-35"></a><span class="co"># Main processing with error handling</span></span>
+<span id="cb11-36"><a href="#cb11-36"></a><span class="fu">process_data()</span> <span class="kw">{</span></span>
+<span id="cb11-37"><a href="#cb11-37"></a>    <span class="bu">local</span> <span class="va">input_file</span><span class="op">=</span><span class="st">"</span><span class="va">$1</span><span class="st">"</span></span>
+<span id="cb11-38"><a href="#cb11-38"></a>    <span class="bu">local</span> <span class="va">output_file</span><span class="op">=</span><span class="st">"</span><span class="va">$2</span><span class="st">"</span></span>
+<span id="cb11-39"><a href="#cb11-39"></a>    </span>
+<span id="cb11-40"><a href="#cb11-40"></a>    <span class="ex">log</span> <span class="st">"Starting processing of </span><span class="va">$input_file</span><span class="st">"</span></span>
+<span id="cb11-41"><a href="#cb11-41"></a>    </span>
+<span id="cb11-42"><a href="#cb11-42"></a>    <span class="co"># Check if input file exists</span></span>
+<span id="cb11-43"><a href="#cb11-43"></a>    <span class="cf">if</span> <span class="bu">[</span> <span class="ot">!</span> <span class="ot">-f</span> <span class="st">"</span><span class="va">$input_file</span><span class="st">"</span> <span class="bu">]</span><span class="kw">;</span> <span class="cf">then</span></span>
+<span id="cb11-44"><a href="#cb11-44"></a>        <span class="ex">log</span> <span class="st">"ERROR: Input file </span><span class="va">$input_file</span><span class="st"> not found"</span></span>
+<span id="cb11-45"><a href="#cb11-45"></a>        <span class="cf">return</span> <span class="dv">1</span></span>
+<span id="cb11-46"><a href="#cb11-46"></a>    <span class="cf">fi</span></span>
+<span id="cb11-47"><a href="#cb11-47"></a>    </span>
+<span id="cb11-48"><a href="#cb11-48"></a>    <span class="co"># Create temporary file</span></span>
+<span id="cb11-49"><a href="#cb11-49"></a>    <span class="bu">local</span> <span class="va">temp_file</span><span class="op">=</span><span class="st">"/tmp/temp_</span><span class="va">$$</span><span class="st">_</span><span class="va">$(</span><span class="fu">basename</span> <span class="st">"</span><span class="va">$input_file</span><span class="st">"</span><span class="va">)</span><span class="st">"</span></span>
+<span id="cb11-50"><a href="#cb11-50"></a>    </span>
+<span id="cb11-51"><a href="#cb11-51"></a>    <span class="co"># Process with error checking</span></span>
+<span id="cb11-52"><a href="#cb11-52"></a>    <span class="cf">if</span> <span class="ex">python</span> preprocess.py <span class="at">--input</span> <span class="st">"</span><span class="va">$input_file</span><span class="st">"</span> <span class="at">--output</span> <span class="st">"</span><span class="va">$temp_file</span><span class="st">"</span><span class="kw">;</span> <span class="cf">then</span></span>
+<span id="cb11-53"><a href="#cb11-53"></a>        <span class="ex">log</span> <span class="st">"Preprocessing completed successfully"</span></span>
+<span id="cb11-54"><a href="#cb11-54"></a>    <span class="cf">else</span></span>
+<span id="cb11-55"><a href="#cb11-55"></a>        <span class="ex">log</span> <span class="st">"ERROR: Preprocessing failed for </span><span class="va">$input_file</span><span class="st">"</span></span>
+<span id="cb11-56"><a href="#cb11-56"></a>        <span class="cf">return</span> <span class="dv">1</span></span>
+<span id="cb11-57"><a href="#cb11-57"></a>    <span class="cf">fi</span></span>
+<span id="cb11-58"><a href="#cb11-58"></a>    </span>
+<span id="cb11-59"><a href="#cb11-59"></a>    <span class="co"># Move to final location</span></span>
+<span id="cb11-60"><a href="#cb11-60"></a>    <span class="cf">if</span> <span class="fu">mv</span> <span class="st">"</span><span class="va">$temp_file</span><span class="st">"</span> <span class="st">"</span><span class="va">$output_file</span><span class="st">"</span><span class="kw">;</span> <span class="cf">then</span></span>
+<span id="cb11-61"><a href="#cb11-61"></a>        <span class="ex">log</span> <span class="st">"Processing completed: </span><span class="va">$output_file</span><span class="st">"</span></span>
+<span id="cb11-62"><a href="#cb11-62"></a>    <span class="cf">else</span></span>
+<span id="cb11-63"><a href="#cb11-63"></a>        <span class="ex">log</span> <span class="st">"ERROR: Failed to move result to </span><span class="va">$output_file</span><span class="st">"</span></span>
+<span id="cb11-64"><a href="#cb11-64"></a>        <span class="cf">return</span> <span class="dv">1</span></span>
+<span id="cb11-65"><a href="#cb11-65"></a>    <span class="cf">fi</span></span>
+<span id="cb11-66"><a href="#cb11-66"></a><span class="kw">}</span></span>
+<span id="cb11-67"><a href="#cb11-67"></a></span>
+<span id="cb11-68"><a href="#cb11-68"></a><span class="co"># Process all files with error handling</span></span>
+<span id="cb11-69"><a href="#cb11-69"></a><span class="cf">for</span> file <span class="kw">in</span> data/<span class="pp">*</span>.csv<span class="kw">;</span> <span class="cf">do</span></span>
+<span id="cb11-70"><a href="#cb11-70"></a>    <span class="cf">if</span> <span class="bu">[</span> <span class="ot">-f</span> <span class="st">"</span><span class="va">$file</span><span class="st">"</span> <span class="bu">]</span><span class="kw">;</span> <span class="cf">then</span></span>
+<span id="cb11-71"><a href="#cb11-71"></a>        <span class="va">filename</span><span class="op">=</span><span class="va">$(</span><span class="fu">basename</span> <span class="st">"</span><span class="va">$file</span><span class="st">"</span> .csv<span class="va">)</span></span>
+<span id="cb11-72"><a href="#cb11-72"></a>        <span class="cf">if</span> <span class="ot">! </span><span class="ex">process_data</span> <span class="st">"</span><span class="va">$file</span><span class="st">"</span> <span class="st">"results/</span><span class="va">${filename}</span><span class="st">_processed.csv"</span><span class="kw">;</span> <span class="cf">then</span></span>
+<span id="cb11-73"><a href="#cb11-73"></a>            <span class="ex">log</span> <span class="st">"Skipping </span><span class="va">$file</span><span class="st"> due to processing error"</span></span>
+<span id="cb11-74"><a href="#cb11-74"></a>            <span class="cf">continue</span></span>
+<span id="cb11-75"><a href="#cb11-75"></a>        <span class="cf">fi</span></span>
+<span id="cb11-76"><a href="#cb11-76"></a>    <span class="cf">fi</span></span>
+<span id="cb11-77"><a href="#cb11-77"></a><span class="cf">done</span></span>
+<span id="cb11-78"><a href="#cb11-78"></a></span>
+<span id="cb11-79"><a href="#cb11-79"></a><span class="ex">log</span> <span class="st">"All processing completed successfully"</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</section>
+<section id="quick-reference-bash-scripting-cheat-sheet" class="level2" data-number="0.11">
+<h2 data-number="0.11" class="anchored" data-anchor-id="quick-reference-bash-scripting-cheat-sheet"><span class="header-section-number">0.11</span> Quick Reference: Bash Scripting Cheat Sheet</h2>
+<table class="table">
+<colgroup>
+<col style="width: 34%">
+<col style="width: 30%">
+<col style="width: 34%">
+</colgroup>
+<thead>
+<tr class="header">
+<th>Element</th>
+<th>Syntax</th>
+<th>Example</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>Variables</td>
+<td><code>VAR=value</code></td>
+<td><code>NAME="experiment"</code></td>
+</tr>
+<tr class="even">
+<td>Command substitution</td>
+<td><code>$(command)</code></td>
+<td><code>FILES=$(ls *.csv)</code></td>
+</tr>
+<tr class="odd">
+<td>Conditionals</td>
+<td><code>if [ condition ]; then</code></td>
+<td><code>if [ -f "$file" ]; then</code></td>
+</tr>
+<tr class="even">
+<td>Loops</td>
+<td><code>for var in list; do</code></td>
+<td><code>for file in *.csv; do</code></td>
+</tr>
+<tr class="odd">
+<td>Functions</td>
+<td><code>function_name() { }</code></td>
+<td><code>process() { echo "processing"; }</code></td>
+</tr>
+<tr class="even">
+<td>Arguments</td>
+<td><code>$1, $2, $#, $@</code></td>
+<td><code>INPUT_DIR="$1"</code></td>
+</tr>
+<tr class="odd">
+<td>Error handling</td>
+<td><code>set -e</code></td>
+<td>Exit on error</td>
+</tr>
+<tr class="even">
+<td>Cleanup</td>
+<td><code>trap cleanup EXIT</code></td>
+<td>Run cleanup on exit</td>
+</tr>
+</tbody>
+</table>
+</section>
+<section id="practice-exercises" class="level2" data-number="0.12">
+<h2 data-number="0.12" class="anchored" data-anchor-id="practice-exercises"><span class="header-section-number">0.12</span> Practice Exercises</h2>
+<div class="callout callout-style-default callout-important callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Your Scripting Mastery Mission
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<ol type="1">
+<li><p><strong>Create a file processing script</strong></p>
+<div class="sourceCode" id="cb12"><pre class="sourceCode numberSource bash number-lines code-with-copy"><code class="sourceCode bash"><span id="cb12-1"><a href="#cb12-1"></a><span class="co">#!/bin/bash</span></span>
+<span id="cb12-2"><a href="#cb12-2"></a><span class="co"># Practice: Write a script that counts lines in all .txt files</span></span>
+<span id="cb12-3"><a href="#cb12-3"></a><span class="co"># and creates a summary report</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div></li>
+<li><p><strong>Build a job monitoring script</strong></p>
+<div class="sourceCode" id="cb13"><pre class="sourceCode numberSource bash number-lines code-with-copy"><code class="sourceCode bash"><span id="cb13-1"><a href="#cb13-1"></a><span class="co">#!/bin/bash</span></span>
+<span id="cb13-2"><a href="#cb13-2"></a><span class="co"># Practice: Create a script that monitors bsub jobs</span></span>
+<span id="cb13-3"><a href="#cb13-3"></a><span class="co"># and sends notification when all complete</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div></li>
+<li><p><strong>Design a backup automation script</strong></p>
+<div class="sourceCode" id="cb14"><pre class="sourceCode numberSource bash number-lines code-with-copy"><code class="sourceCode bash"><span id="cb14-1"><a href="#cb14-1"></a><span class="co">#!/bin/bash</span></span>
+<span id="cb14-2"><a href="#cb14-2"></a><span class="co"># Practice: Write a script that backs up important directories</span></span>
+<span id="cb14-3"><a href="#cb14-3"></a><span class="co"># with error handling and logging</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div></li>
+<li><p><strong>Create a parameter sweep script</strong></p>
+<div class="sourceCode" id="cb15"><pre class="sourceCode numberSource bash number-lines code-with-copy"><code class="sourceCode bash"><span id="cb15-1"><a href="#cb15-1"></a><span class="co">#!/bin/bash</span></span>
+<span id="cb15-2"><a href="#cb15-2"></a><span class="co"># Practice: Build a script that submits jobs with different</span></span>
+<span id="cb15-3"><a href="#cb15-3"></a><span class="co"># parameter values and organizes results</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div></li>
+</ol>
+</div>
+</div>
+</section>
+<section id="whats-next" class="level2" data-number="0.13">
+<h2 data-number="0.13" class="anchored" data-anchor-id="whats-next"><span class="header-section-number">0.13</span> What’s Next?</h2>
+<p>Now that you’ve mastered bash scripting, you’re ready for the final step: <a href="../../../posts/series/command-line-mastery/12-automation-excellence.html">Automation Excellence</a>. You’ll learn to weave together all your command line skills into sophisticated automated systems that monitor themselves, handle errors gracefully, and orchestrate complex workflows without human intervention.</p>
+<p>Bash scripting is the foundation of automation – next, you’ll become a digital automation architect!</p>
+<div class="callout callout-style-default callout-tip callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Final Mastery Challenge
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>Create a complete workflow script that: 1. Accepts command line arguments for input/output directories 2. Validates the environment and input files 3. Submits parallel processing jobs using bsub 4. Monitors job progress with status updates 5. Handles errors gracefully with cleanup 6. Generates a final summary report</p>
+<p>This will demonstrate your readiness for the final automation mastery level!</p>
+</div>
+</div>
+<hr>
+<p><em>You’ve mastered bash scripting – the foundation of all automation. Next, we’ll combine all your skills into sophisticated automated systems that work while you sleep!</em></p>
+
+
+<!-- -->
+
+</section>
+
+<div id="quarto-appendix" class="default"><section class="quarto-appendix-contents"><h2 class="anchored quarto-appendix-heading">Reuse</h2><div id="quarto-reuse" class="quarto-appendix-contents"><div>CC BY-NC-SA 4.0</div></div></section><section class="quarto-appendix-contents"><h2 class="anchored quarto-appendix-heading">Citation</h2><div><div class="quarto-appendix-secondary-label">BibTeX citation:</div><pre class="sourceCode code-with-copy quarto-appendix-bibtex"><code class="sourceCode bibtex">@online{2025,
+  author = {, Hasan},
+  title = {Bash {Scripting} {Essentials}},
+  date = {2025-06-29},
+  url = {https://hasangoni.quarto.pub/hasan-blog-post/posts/series/command-line-mastery/11-bash-scripting.html},
+  langid = {en}
+}
+</code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre><div class="quarto-appendix-secondary-label">For attribution, please cite this work as:</div><div id="ref-2025" class="csl-entry quarto-appendix-citeas" role="listitem">
+Hasan. 2025. <span>“Bash Scripting Essentials.”</span> June 29, 2025. <a href="https://hasangoni.quarto.pub/hasan-blog-post/posts/series/command-line-mastery/11-bash-scripting.html">https://hasangoni.quarto.pub/hasan-blog-post/posts/series/command-line-mastery/11-bash-scripting.html</a>.
+</div></div></section></div></main> <!-- /main -->
+<script id="quarto-html-after-body" type="application/javascript">
+window.document.addEventListener("DOMContentLoaded", function (event) {
+  const toggleBodyColorMode = (bsSheetEl) => {
+    const mode = bsSheetEl.getAttribute("data-mode");
+    const bodyEl = window.document.querySelector("body");
+    if (mode === "dark") {
+      bodyEl.classList.add("quarto-dark");
+      bodyEl.classList.remove("quarto-light");
+    } else {
+      bodyEl.classList.add("quarto-light");
+      bodyEl.classList.remove("quarto-dark");
+    }
+  }
+  const toggleBodyColorPrimary = () => {
+    const bsSheetEl = window.document.querySelector("link#quarto-bootstrap");
+    if (bsSheetEl) {
+      toggleBodyColorMode(bsSheetEl);
+    }
+  }
+  toggleBodyColorPrimary();  
+  const icon = "";
+  const anchorJS = new window.AnchorJS();
+  anchorJS.options = {
+    placement: 'right',
+    icon: icon
+  };
+  anchorJS.add('.anchored');
+  const isCodeAnnotation = (el) => {
+    for (const clz of el.classList) {
+      if (clz.startsWith('code-annotation-')) {                     
+        return true;
+      }
+    }
+    return false;
+  }
+  const clipboard = new window.ClipboardJS('.code-copy-button', {
+    text: function(trigger) {
+      const codeEl = trigger.previousElementSibling.cloneNode(true);
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
+        }
+      }
+      return codeEl.innerText;
+    }
+  });
+  clipboard.on('success', function(e) {
+    // button target
+    const button = e.trigger;
+    // don't keep focus
+    button.blur();
+    // flash "checked"
+    button.classList.add('code-copy-button-checked');
+    var currentTitle = button.getAttribute("title");
+    button.setAttribute("title", "Copied!");
+    let tooltip;
+    if (window.bootstrap) {
+      button.setAttribute("data-bs-toggle", "tooltip");
+      button.setAttribute("data-bs-placement", "left");
+      button.setAttribute("data-bs-title", "Copied!");
+      tooltip = new bootstrap.Tooltip(button, 
+        { trigger: "manual", 
+          customClass: "code-copy-button-tooltip",
+          offset: [0, -8]});
+      tooltip.show();    
+    }
+    setTimeout(function() {
+      if (tooltip) {
+        tooltip.hide();
+        button.removeAttribute("data-bs-title");
+        button.removeAttribute("data-bs-toggle");
+        button.removeAttribute("data-bs-placement");
+      }
+      button.setAttribute("title", currentTitle);
+      button.classList.remove('code-copy-button-checked');
+    }, 1000);
+    // clear code selection
+    e.clearSelection();
+  });
+  const viewSource = window.document.getElementById('quarto-view-source') ||
+                     window.document.getElementById('quarto-code-tools-source');
+  if (viewSource) {
+    const sourceUrl = viewSource.getAttribute("data-quarto-source-url");
+    viewSource.addEventListener("click", function(e) {
+      if (sourceUrl) {
+        // rstudio viewer pane
+        if (/\bcapabilities=\b/.test(window.location)) {
+          window.open(sourceUrl);
+        } else {
+          window.location.href = sourceUrl;
+        }
+      } else {
+        const modal = new bootstrap.Modal(document.getElementById('quarto-embedded-source-code-modal'));
+        modal.show();
+      }
+      return false;
+    });
+  }
+  function toggleCodeHandler(show) {
+    return function(e) {
+      const detailsSrc = window.document.querySelectorAll(".cell > details > .sourceCode");
+      for (let i=0; i<detailsSrc.length; i++) {
+        const details = detailsSrc[i].parentElement;
+        if (show) {
+          details.open = true;
+        } else {
+          details.removeAttribute("open");
+        }
+      }
+      const cellCodeDivs = window.document.querySelectorAll(".cell > .sourceCode");
+      const fromCls = show ? "hidden" : "unhidden";
+      const toCls = show ? "unhidden" : "hidden";
+      for (let i=0; i<cellCodeDivs.length; i++) {
+        const codeDiv = cellCodeDivs[i];
+        if (codeDiv.classList.contains(fromCls)) {
+          codeDiv.classList.remove(fromCls);
+          codeDiv.classList.add(toCls);
+        } 
+      }
+      return false;
+    }
+  }
+  const hideAllCode = window.document.getElementById("quarto-hide-all-code");
+  if (hideAllCode) {
+    hideAllCode.addEventListener("click", toggleCodeHandler(false));
+  }
+  const showAllCode = window.document.getElementById("quarto-show-all-code");
+  if (showAllCode) {
+    showAllCode.addEventListener("click", toggleCodeHandler(true));
+  }
+  function tippyHover(el, contentFn) {
+    const config = {
+      allowHTML: true,
+      content: contentFn,
+      maxWidth: 500,
+      delay: 100,
+      arrow: false,
+      appendTo: function(el) {
+          return el.parentElement;
+      },
+      interactive: true,
+      interactiveBorder: 10,
+      theme: 'quarto',
+      placement: 'bottom-start'
+    };
+    window.tippy(el, config); 
+  }
+  const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+  for (var i=0; i<noterefs.length; i++) {
+    const ref = noterefs[i];
+    tippyHover(ref, function() {
+      // use id or data attribute instead here
+      let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+      try { href = new URL(href).hash; } catch {}
+      const id = href.replace(/^#\/?/, "");
+      const note = window.document.getElementById(id);
+      return note.innerHTML;
+    });
+  }
+      let selectedAnnoteEl;
+      const selectorForAnnotation = ( cell, annotation) => {
+        let cellAttr = 'data-code-cell="' + cell + '"';
+        let lineAttr = 'data-code-annotation="' +  annotation + '"';
+        const selector = 'span[' + cellAttr + '][' + lineAttr + ']';
+        return selector;
+      }
+      const selectCodeLines = (annoteEl) => {
+        const doc = window.document;
+        const targetCell = annoteEl.getAttribute("data-target-cell");
+        const targetAnnotation = annoteEl.getAttribute("data-target-annotation");
+        const annoteSpan = window.document.querySelector(selectorForAnnotation(targetCell, targetAnnotation));
+        const lines = annoteSpan.getAttribute("data-code-lines").split(",");
+        const lineIds = lines.map((line) => {
+          return targetCell + "-" + line;
+        })
+        let top = null;
+        let height = null;
+        let parent = null;
+        if (lineIds.length > 0) {
+            //compute the position of the single el (top and bottom and make a div)
+            const el = window.document.getElementById(lineIds[0]);
+            top = el.offsetTop;
+            height = el.offsetHeight;
+            parent = el.parentElement.parentElement;
+          if (lineIds.length > 1) {
+            const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
+            const bottom = lastEl.offsetTop + lastEl.offsetHeight;
+            height = bottom - top;
+          }
+          if (top !== null && height !== null && parent !== null) {
+            // cook up a div (if necessary) and position it 
+            let div = window.document.getElementById("code-annotation-line-highlight");
+            if (div === null) {
+              div = window.document.createElement("div");
+              div.setAttribute("id", "code-annotation-line-highlight");
+              div.style.position = 'absolute';
+              parent.appendChild(div);
+            }
+            div.style.top = top - 2 + "px";
+            div.style.height = height + 4 + "px";
+            let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
+            if (gutterDiv === null) {
+              gutterDiv = window.document.createElement("div");
+              gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
+              gutterDiv.style.position = 'absolute';
+              const codeCell = window.document.getElementById(targetCell);
+              const gutter = codeCell.querySelector('.code-annotation-gutter');
+              gutter.appendChild(gutterDiv);
+            }
+            gutterDiv.style.top = top - 2 + "px";
+            gutterDiv.style.height = height + 4 + "px";
+          }
+          selectedAnnoteEl = annoteEl;
+        }
+      };
+      const unselectCodeLines = () => {
+        const elementsIds = ["code-annotation-line-highlight", "code-annotation-line-highlight-gutter"];
+        elementsIds.forEach((elId) => {
+          const div = window.document.getElementById(elId);
+          if (div) {
+            div.remove();
+          }
+        });
+        selectedAnnoteEl = undefined;
+      };
+      // Attach click handler to the DT
+      const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
+      for (const annoteDlNode of annoteDls) {
+        annoteDlNode.addEventListener('click', (event) => {
+          const clickedEl = event.target;
+          if (clickedEl !== selectedAnnoteEl) {
+            unselectCodeLines();
+            const activeEl = window.document.querySelector('dt[data-target-cell].code-annotation-active');
+            if (activeEl) {
+              activeEl.classList.remove('code-annotation-active');
+            }
+            selectCodeLines(clickedEl);
+            clickedEl.classList.add('code-annotation-active');
+          } else {
+            // Unselect the line
+            unselectCodeLines();
+            clickedEl.classList.remove('code-annotation-active');
+          }
+        });
+      }
+  const findCites = (el) => {
+    const parentEl = el.parentElement;
+    if (parentEl) {
+      const cites = parentEl.dataset.cites;
+      if (cites) {
+        return {
+          el,
+          cites: cites.split(' ')
+        };
+      } else {
+        return findCites(el.parentElement)
+      }
+    } else {
+      return undefined;
+    }
+  };
+  var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+  for (var i=0; i<bibliorefs.length; i++) {
+    const ref = bibliorefs[i];
+    const citeInfo = findCites(ref);
+    if (citeInfo) {
+      tippyHover(citeInfo.el, function() {
+        var popup = window.document.createElement('div');
+        citeInfo.cites.forEach(function(cite) {
+          var citeDiv = window.document.createElement('div');
+          citeDiv.classList.add('hanging-indent');
+          citeDiv.classList.add('csl-entry');
+          var biblioDiv = window.document.getElementById('ref-' + cite);
+          if (biblioDiv) {
+            citeDiv.innerHTML = biblioDiv.innerHTML;
+          }
+          popup.appendChild(citeDiv);
+        });
+        return popup.innerHTML;
+      });
+    }
+  }
+});
+</script>
+<script src="https://utteranc.es/client.js" repo="yourusername/quarto_blog_hasan" issue-term="pathname" theme="github-light" crossorigin="anonymous" async="">
+</script>
+<script src="https://giscus.app/client.js" data-repo="HasanGoni/quarto_blog_hasan" data-repo-id="" data-category="General" data-category-id="" data-mapping="title" data-reactions-enabled="1" data-emit-metadata="0" data-input-position="top" data-theme="light" data-lang="en" crossorigin="anonymous" async="">
+</script><div class="modal fade" id="quarto-embedded-source-code-modal" tabindex="-1" aria-labelledby="quarto-embedded-source-code-modal-label" aria-hidden="true"><div class="modal-dialog modal-dialog-scrollable"><div class="modal-content"><div class="modal-header"><h5 class="modal-title" id="quarto-embedded-source-code-modal-label">Source Code</h5><button class="btn-close" data-bs-dismiss="modal"></button></div><div class="modal-body"><div class="">
+<div class="sourceCode" id="cb16" data-shortcodes="false"><pre class="sourceCode numberSource markdown number-lines code-with-copy"><code class="sourceCode markdown"><span id="cb16-1"><a href="#cb16-1"></a><span class="co">---</span></span>
+<span id="cb16-2"><a href="#cb16-2"></a><span class="an">title:</span><span class="co"> "Bash Scripting Essentials"</span></span>
+<span id="cb16-3"><a href="#cb16-3"></a><span class="an">description:</span><span class="co"> "Transform from manual command execution to automation wizard. Learn to create robust bash scripts that handle repetitive HPC tasks, process multiple files, and create reliable workflows that work even at 3 AM."</span></span>
+<span id="cb16-4"><a href="#cb16-4"></a><span class="an">author:</span><span class="co"> "Hasan"</span></span>
+<span id="cb16-5"><a href="#cb16-5"></a><span class="an">date:</span><span class="co"> last-modified</span></span>
+<span id="cb16-6"><a href="#cb16-6"></a><span class="an">categories:</span><span class="co"> [command-line, bash, scripting, automation, hpc]</span></span>
+<span id="cb16-7"><a href="#cb16-7"></a><span class="an">image:</span><span class="co"> "https://images.unsplash.com/photo-1555066931-4365d14bab8c?ixlib=rb-4.0.3&amp;auto=format&amp;fit=crop&amp;w=2000&amp;q=80"</span></span>
+<span id="cb16-8"><a href="#cb16-8"></a><span class="an">toc:</span><span class="co"> true</span></span>
+<span id="cb16-9"><a href="#cb16-9"></a><span class="co">---</span></span>
+<span id="cb16-10"><a href="#cb16-10"></a></span>
+<span id="cb16-11"><a href="#cb16-11"></a><span class="fu">## The Story: The 3 AM Automation Test</span></span>
+<span id="cb16-12"><a href="#cb16-12"></a></span>
+<span id="cb16-13"><a href="#cb16-13"></a>Picture this: It's 3 AM, you're sound asleep, and your critical data processing pipeline needs to run. Your script needs to:</span>
+<span id="cb16-14"><a href="#cb16-14"></a><span class="ss">- </span>Check if new data has arrived</span>
+<span id="cb16-15"><a href="#cb16-15"></a><span class="ss">- </span>Process 500 files in a specific order</span>
+<span id="cb16-16"><a href="#cb16-16"></a><span class="ss">- </span>Handle errors gracefully</span>
+<span id="cb16-17"><a href="#cb16-17"></a><span class="ss">- </span>Send you a summary email</span>
+<span id="cb16-18"><a href="#cb16-18"></a><span class="ss">- </span>Clean up temporary files</span>
+<span id="cb16-19"><a href="#cb16-19"></a></span>
+<span id="cb16-20"><a href="#cb16-20"></a>If you've written a good bash script, it handles all of this while you sleep peacefully. If not, you'll wake up to chaos and missed deadlines. Today, you'll learn to write scripts that pass the "3 AM test" – they work reliably even when you're not there to babysit them.</span>
+<span id="cb16-21"><a href="#cb16-21"></a></span>
+<span id="cb16-22"><a href="#cb16-22"></a><span class="fu">## Why Bash Scripting Matters in HPC</span></span>
+<span id="cb16-23"><a href="#cb16-23"></a></span>
+<span id="cb16-24"><a href="#cb16-24"></a>**Real-world analogy**: Manual command execution is like cooking one meal at a time. Bash scripting is like having a recipe that can feed a banquet – it scales, it's repeatable, and it frees you to focus on more important things.</span>
+<span id="cb16-25"><a href="#cb16-25"></a></span>
+<span id="cb16-26"><a href="#cb16-26"></a><span class="fu">### The Automation Pyramid</span></span>
+<span id="cb16-27"><a href="#cb16-27"></a><span class="ss">1. </span>**Manual execution**: Typing commands one by one</span>
+<span id="cb16-28"><a href="#cb16-28"></a><span class="ss">2. </span>**Command history**: Reusing previous commands</span>
+<span id="cb16-29"><a href="#cb16-29"></a><span class="ss">3. </span>**Simple scripts**: Automating basic tasks</span>
+<span id="cb16-30"><a href="#cb16-30"></a><span class="ss">4. </span>**Robust scripts**: Handling errors and edge cases</span>
+<span id="cb16-31"><a href="#cb16-31"></a><span class="ss">5. </span>**Professional workflows**: Complex pipelines with monitoring</span>
+<span id="cb16-32"><a href="#cb16-32"></a></span>
+<span id="cb16-33"><a href="#cb16-33"></a><span class="fu">## Your First Bash Script</span></span>
+<span id="cb16-34"><a href="#cb16-34"></a></span>
+<span id="cb16-35"><a href="#cb16-35"></a>Let's start with the classic "Hello World" but make it practical:</span>
+<span id="cb16-36"><a href="#cb16-36"></a></span>
+<span id="cb16-37"><a href="#cb16-37"></a><span class="in">```bash</span></span>
+<span id="cb16-38"><a href="#cb16-38"></a><span class="co">#!/bin/bash</span></span>
+<span id="cb16-39"><a href="#cb16-39"></a><span class="co"># hello_hpc.sh - Your first HPC script</span></span>
+<span id="cb16-40"><a href="#cb16-40"></a></span>
+<span id="cb16-41"><a href="#cb16-41"></a><span class="bu">echo</span> <span class="st">"Hello from </span><span class="va">$(</span><span class="fu">hostname</span><span class="va">)</span><span class="st">!"</span></span>
+<span id="cb16-42"><a href="#cb16-42"></a><span class="bu">echo</span> <span class="st">"Current user: </span><span class="va">$(</span><span class="fu">whoami</span><span class="va">)</span><span class="st">"</span></span>
+<span id="cb16-43"><a href="#cb16-43"></a><span class="bu">echo</span> <span class="st">"Current directory: </span><span class="va">$(</span><span class="bu">pwd</span><span class="va">)</span><span class="st">"</span></span>
+<span id="cb16-44"><a href="#cb16-44"></a><span class="bu">echo</span> <span class="st">"Current time: </span><span class="va">$(</span><span class="fu">date</span><span class="va">)</span><span class="st">"</span></span>
+<span id="cb16-45"><a href="#cb16-45"></a><span class="in">```</span></span>
+<span id="cb16-46"><a href="#cb16-46"></a></span>
+<span id="cb16-47"><a href="#cb16-47"></a>**The anatomy**:</span>
+<span id="cb16-48"><a href="#cb16-48"></a><span class="ss">- </span><span class="in">`#!/bin/bash`</span>: The "shebang" – tells the system this is a bash script</span>
+<span id="cb16-49"><a href="#cb16-49"></a><span class="ss">- </span><span class="in">`#`</span>: Comments (document everything!)</span>
+<span id="cb16-50"><a href="#cb16-50"></a><span class="ss">- </span><span class="in">`$()`</span>: Command substitution – runs a command and uses its output</span>
+<span id="cb16-51"><a href="#cb16-51"></a></span>
+<span id="cb16-52"><a href="#cb16-52"></a>**Make it executable and run**:</span>
+<span id="cb16-53"><a href="#cb16-53"></a><span class="in">```bash</span></span>
+<span id="cb16-54"><a href="#cb16-54"></a><span class="fu">chmod</span> +x hello_hpc.sh</span>
+<span id="cb16-55"><a href="#cb16-55"></a><span class="ex">./hello_hpc.sh</span></span>
+<span id="cb16-56"><a href="#cb16-56"></a><span class="in">```</span></span>
+<span id="cb16-57"><a href="#cb16-57"></a></span>
+<span id="cb16-58"><a href="#cb16-58"></a><span class="fu">## Variables: Your Script's Memory</span></span>
+<span id="cb16-59"><a href="#cb16-59"></a></span>
+<span id="cb16-60"><a href="#cb16-60"></a>Variables store information your script can use later:</span>
+<span id="cb16-61"><a href="#cb16-61"></a></span>
+<span id="cb16-62"><a href="#cb16-62"></a><span class="in">```bash</span></span>
+<span id="cb16-63"><a href="#cb16-63"></a><span class="co">#!/bin/bash</span></span>
+<span id="cb16-64"><a href="#cb16-64"></a><span class="co"># variables_demo.sh</span></span>
+<span id="cb16-65"><a href="#cb16-65"></a></span>
+<span id="cb16-66"><a href="#cb16-66"></a><span class="co"># Define variables</span></span>
+<span id="cb16-67"><a href="#cb16-67"></a><span class="va">PROJECT_NAME</span><span class="op">=</span><span class="st">"experiment_2023"</span></span>
+<span id="cb16-68"><a href="#cb16-68"></a><span class="va">DATA_DIR</span><span class="op">=</span><span class="st">"/scratch/username/data"</span></span>
+<span id="cb16-69"><a href="#cb16-69"></a><span class="va">NUM_FILES</span><span class="op">=</span>100</span>
+<span id="cb16-70"><a href="#cb16-70"></a></span>
+<span id="cb16-71"><a href="#cb16-71"></a><span class="co"># Use variables</span></span>
+<span id="cb16-72"><a href="#cb16-72"></a><span class="bu">echo</span> <span class="st">"Processing project: </span><span class="va">$PROJECT_NAME</span><span class="st">"</span></span>
+<span id="cb16-73"><a href="#cb16-73"></a><span class="bu">echo</span> <span class="st">"Data location: </span><span class="va">$DATA_DIR</span><span class="st">"</span></span>
+<span id="cb16-74"><a href="#cb16-74"></a><span class="bu">echo</span> <span class="st">"Expected files: </span><span class="va">$NUM_FILES</span><span class="st">"</span></span>
+<span id="cb16-75"><a href="#cb16-75"></a></span>
+<span id="cb16-76"><a href="#cb16-76"></a><span class="co"># Command substitution into variables</span></span>
+<span id="cb16-77"><a href="#cb16-77"></a><span class="va">CURRENT_FILES</span><span class="op">=</span><span class="va">$(</span><span class="fu">ls</span> <span class="va">$DATA_DIR</span> <span class="kw">|</span> <span class="fu">wc</span> <span class="at">-l</span><span class="va">)</span></span>
+<span id="cb16-78"><a href="#cb16-78"></a><span class="bu">echo</span> <span class="st">"Actual files found: </span><span class="va">$CURRENT_FILES</span><span class="st">"</span></span>
+<span id="cb16-79"><a href="#cb16-79"></a><span class="in">```</span></span>
+<span id="cb16-80"><a href="#cb16-80"></a></span>
+<span id="cb16-81"><a href="#cb16-81"></a>**Variable best practices**:</span>
+<span id="cb16-82"><a href="#cb16-82"></a><span class="ss">- </span>Use UPPERCASE for constants: <span class="in">`MAX_MEMORY=32000`</span></span>
+<span id="cb16-83"><a href="#cb16-83"></a><span class="ss">- </span>Use lowercase for local variables: <span class="in">`temp_file="temp.txt"`</span></span>
+<span id="cb16-84"><a href="#cb16-84"></a><span class="ss">- </span>Always quote variables: <span class="in">`"$DATA_DIR"`</span> (handles spaces in paths)</span>
+<span id="cb16-85"><a href="#cb16-85"></a></span>
+<span id="cb16-86"><a href="#cb16-86"></a><span class="fu">## Getting Input from Users</span></span>
+<span id="cb16-87"><a href="#cb16-87"></a></span>
+<span id="cb16-88"><a href="#cb16-88"></a>Make your scripts interactive and flexible:</span>
+<span id="cb16-89"><a href="#cb16-89"></a></span>
+<span id="cb16-90"><a href="#cb16-90"></a><span class="in">```bash</span></span>
+<span id="cb16-91"><a href="#cb16-91"></a><span class="co">#!/bin/bash</span></span>
+<span id="cb16-92"><a href="#cb16-92"></a><span class="co"># interactive_processing.sh</span></span>
+<span id="cb16-93"><a href="#cb16-93"></a></span>
+<span id="cb16-94"><a href="#cb16-94"></a><span class="co"># Get input from user</span></span>
+<span id="cb16-95"><a href="#cb16-95"></a><span class="bu">echo</span> <span class="st">"Enter experiment name:"</span></span>
+<span id="cb16-96"><a href="#cb16-96"></a><span class="bu">read</span> <span class="va">EXPERIMENT_NAME</span></span>
+<span id="cb16-97"><a href="#cb16-97"></a></span>
+<span id="cb16-98"><a href="#cb16-98"></a><span class="bu">echo</span> <span class="st">"Enter number of cores to use:"</span></span>
+<span id="cb16-99"><a href="#cb16-99"></a><span class="bu">read</span> <span class="va">NUM_CORES</span></span>
+<span id="cb16-100"><a href="#cb16-100"></a></span>
+<span id="cb16-101"><a href="#cb16-101"></a><span class="co"># Provide defaults</span></span>
+<span id="cb16-102"><a href="#cb16-102"></a><span class="va">DATA_DIR</span><span class="op">=</span><span class="va">${DATA_DIR</span><span class="op">:-</span><span class="st">"/scratch/</span><span class="va">$(</span><span class="fu">whoami</span><span class="va">)</span><span class="st">/data"</span><span class="va">}</span></span>
+<span id="cb16-103"><a href="#cb16-103"></a><span class="va">OUTPUT_DIR</span><span class="op">=</span><span class="va">${OUTPUT_DIR</span><span class="op">:-</span><span class="st">"results_</span><span class="va">$(</span><span class="fu">date</span> +%Y%m%d<span class="va">)</span><span class="st">"</span><span class="va">}</span></span>
+<span id="cb16-104"><a href="#cb16-104"></a></span>
+<span id="cb16-105"><a href="#cb16-105"></a><span class="bu">echo</span> <span class="st">"Processing </span><span class="va">$EXPERIMENT_NAME</span><span class="st"> with </span><span class="va">$NUM_CORES</span><span class="st"> cores"</span></span>
+<span id="cb16-106"><a href="#cb16-106"></a><span class="bu">echo</span> <span class="st">"Data from: </span><span class="va">$DATA_DIR</span><span class="st">"</span></span>
+<span id="cb16-107"><a href="#cb16-107"></a><span class="bu">echo</span> <span class="st">"Results to: </span><span class="va">$OUTPUT_DIR</span><span class="st">"</span></span>
+<span id="cb16-108"><a href="#cb16-108"></a><span class="in">```</span></span>
+<span id="cb16-109"><a href="#cb16-109"></a></span>
+<span id="cb16-110"><a href="#cb16-110"></a><span class="fu">## Command Line Arguments: Professional Input Handling</span></span>
+<span id="cb16-111"><a href="#cb16-111"></a></span>
+<span id="cb16-112"><a href="#cb16-112"></a><span class="in">```bash</span></span>
+<span id="cb16-113"><a href="#cb16-113"></a><span class="co">#!/bin/bash</span></span>
+<span id="cb16-114"><a href="#cb16-114"></a><span class="co"># process_data.sh - Professional argument handling</span></span>
+<span id="cb16-115"><a href="#cb16-115"></a></span>
+<span id="cb16-116"><a href="#cb16-116"></a><span class="co"># Check if enough arguments provided</span></span>
+<span id="cb16-117"><a href="#cb16-117"></a><span class="cf">if</span> <span class="bu">[</span> <span class="va">$#</span> <span class="ot">-lt</span> 2 <span class="bu">]</span><span class="kw">;</span> <span class="cf">then</span></span>
+<span id="cb16-118"><a href="#cb16-118"></a>    <span class="bu">echo</span> <span class="st">"Usage: </span><span class="va">$0</span><span class="st"> &lt;input_directory&gt; &lt;output_directory&gt; [num_cores]"</span></span>
+<span id="cb16-119"><a href="#cb16-119"></a>    <span class="bu">echo</span> <span class="st">"Example: </span><span class="va">$0</span><span class="st"> /data/experiment_1 /results/exp1 8"</span></span>
+<span id="cb16-120"><a href="#cb16-120"></a>    <span class="bu">exit</span> 1</span>
+<span id="cb16-121"><a href="#cb16-121"></a><span class="cf">fi</span></span>
+<span id="cb16-122"><a href="#cb16-122"></a></span>
+<span id="cb16-123"><a href="#cb16-123"></a><span class="co"># Assign arguments to meaningful names</span></span>
+<span id="cb16-124"><a href="#cb16-124"></a><span class="va">INPUT_DIR</span><span class="op">=</span><span class="st">"</span><span class="va">$1</span><span class="st">"</span></span>
+<span id="cb16-125"><a href="#cb16-125"></a><span class="va">OUTPUT_DIR</span><span class="op">=</span><span class="st">"</span><span class="va">$2</span><span class="st">"</span></span>
+<span id="cb16-126"><a href="#cb16-126"></a><span class="va">NUM_CORES</span><span class="op">=</span><span class="st">"</span><span class="va">${3</span><span class="op">:-</span>4<span class="va">}</span><span class="st">"</span>  <span class="co"># Default to 4 cores if not specified</span></span>
+<span id="cb16-127"><a href="#cb16-127"></a></span>
+<span id="cb16-128"><a href="#cb16-128"></a><span class="bu">echo</span> <span class="st">"Processing data from </span><span class="va">$INPUT_DIR</span><span class="st">"</span></span>
+<span id="cb16-129"><a href="#cb16-129"></a><span class="bu">echo</span> <span class="st">"Results will be saved to </span><span class="va">$OUTPUT_DIR</span><span class="st">"</span></span>
+<span id="cb16-130"><a href="#cb16-130"></a><span class="bu">echo</span> <span class="st">"Using </span><span class="va">$NUM_CORES</span><span class="st"> cores"</span></span>
+<span id="cb16-131"><a href="#cb16-131"></a><span class="kw">```</span></span>
+<span id="cb16-132"><a href="#cb16-132"></a></span>
+<span id="cb16-133"><a href="#cb16-133"></a><span class="ex">**Argument</span> variables<span class="pp">**</span>:</span>
+<span id="cb16-134"><a href="#cb16-134"></a><span class="ex">-</span> <span class="kw">`</span><span class="va">$0</span><span class="kw">`</span><span class="bu">:</span> Script name</span>
+<span id="cb16-135"><a href="#cb16-135"></a><span class="ex">-</span> <span class="kw">`</span><span class="va">$1</span>, <span class="va">$2</span>, <span class="va">$3</span>...<span class="kw">`</span><span class="bu">:</span> First, second, third arguments</span>
+<span id="cb16-136"><a href="#cb16-136"></a><span class="ex">-</span> <span class="kw">`</span><span class="va">$#</span><span class="kw">`</span><span class="bu">:</span> Number of arguments</span>
+<span id="cb16-137"><a href="#cb16-137"></a><span class="ex">-</span> <span class="kw">`</span><span class="va">$@</span><span class="kw">`</span><span class="bu">:</span> All arguments</span>
+<span id="cb16-138"><a href="#cb16-138"></a></span>
+<span id="cb16-139"><a href="#cb16-139"></a><span class="co">## Conditional Logic: Making Decisions</span></span>
+<span id="cb16-140"><a href="#cb16-140"></a></span>
+<span id="cb16-141"><a href="#cb16-141"></a><span class="ex">Your</span> scripts need to make intelligent decisions:</span>
+<span id="cb16-142"><a href="#cb16-142"></a></span>
+<span id="cb16-143"><a href="#cb16-143"></a><span class="kw">```</span>bash</span>
+<span id="cb16-144"><a href="#cb16-144"></a><span class="co">#!/bin/bash</span></span>
+<span id="cb16-145"><a href="#cb16-145"></a><span class="co"># smart_processing.sh</span></span>
+<span id="cb16-146"><a href="#cb16-146"></a></span>
+<span id="cb16-147"><a href="#cb16-147"></a><span class="va">INPUT_DIR</span><span class="op">=</span><span class="st">"</span><span class="va">$1</span><span class="st">"</span></span>
+<span id="cb16-148"><a href="#cb16-148"></a></span>
+<span id="cb16-149"><a href="#cb16-149"></a><span class="co"># Check if directory exists</span></span>
+<span id="cb16-150"><a href="#cb16-150"></a><span class="cf">if</span> <span class="bu">[</span> <span class="ot">-d</span> <span class="st">"</span><span class="va">$INPUT_DIR</span><span class="st">"</span> <span class="bu">]</span><span class="kw">;</span> <span class="cf">then</span></span>
+<span id="cb16-151"><a href="#cb16-151"></a>    <span class="bu">echo</span> <span class="st">"Found input directory: </span><span class="va">$INPUT_DIR</span><span class="st">"</span></span>
+<span id="cb16-152"><a href="#cb16-152"></a><span class="cf">else</span></span>
+<span id="cb16-153"><a href="#cb16-153"></a>    <span class="bu">echo</span> <span class="st">"Error: Directory </span><span class="va">$INPUT_DIR</span><span class="st"> does not exist!"</span></span>
+<span id="cb16-154"><a href="#cb16-154"></a>    <span class="bu">exit</span> 1</span>
+<span id="cb16-155"><a href="#cb16-155"></a><span class="cf">fi</span></span>
+<span id="cb16-156"><a href="#cb16-156"></a></span>
+<span id="cb16-157"><a href="#cb16-157"></a><span class="co"># Check number of files</span></span>
+<span id="cb16-158"><a href="#cb16-158"></a><span class="va">FILE_COUNT</span><span class="op">=</span><span class="va">$(</span><span class="fu">ls</span> <span class="st">"</span><span class="va">$INPUT_DIR</span><span class="st">"</span>/<span class="pp">*</span>.csv <span class="dv">2</span><span class="op">&gt;</span>/dev/null <span class="kw">|</span> <span class="fu">wc</span> <span class="at">-l</span><span class="va">)</span></span>
+<span id="cb16-159"><a href="#cb16-159"></a></span>
+<span id="cb16-160"><a href="#cb16-160"></a><span class="cf">if</span> <span class="bu">[</span> <span class="va">$FILE_COUNT</span> <span class="ot">-eq</span> 0 <span class="bu">]</span><span class="kw">;</span> <span class="cf">then</span></span>
+<span id="cb16-161"><a href="#cb16-161"></a>    <span class="bu">echo</span> <span class="st">"No CSV files found in </span><span class="va">$INPUT_DIR</span><span class="st">"</span></span>
+<span id="cb16-162"><a href="#cb16-162"></a>    <span class="bu">exit</span> 1</span>
+<span id="cb16-163"><a href="#cb16-163"></a><span class="cf">elif</span> <span class="bu">[</span> <span class="va">$FILE_COUNT</span> <span class="ot">-lt</span> 10 <span class="bu">]</span><span class="kw">;</span> <span class="cf">then</span></span>
+<span id="cb16-164"><a href="#cb16-164"></a>    <span class="bu">echo</span> <span class="st">"Found </span><span class="va">$FILE_COUNT</span><span class="st"> files - using single core processing"</span></span>
+<span id="cb16-165"><a href="#cb16-165"></a>    <span class="va">CORES</span><span class="op">=</span>1</span>
+<span id="cb16-166"><a href="#cb16-166"></a><span class="cf">else</span></span>
+<span id="cb16-167"><a href="#cb16-167"></a>    <span class="bu">echo</span> <span class="st">"Found </span><span class="va">$FILE_COUNT</span><span class="st"> files - using parallel processing"</span></span>
+<span id="cb16-168"><a href="#cb16-168"></a>    <span class="va">CORES</span><span class="op">=</span>8</span>
+<span id="cb16-169"><a href="#cb16-169"></a><span class="cf">fi</span></span>
+<span id="cb16-170"><a href="#cb16-170"></a><span class="kw">```</span></span>
+<span id="cb16-171"><a href="#cb16-171"></a></span>
+<span id="cb16-172"><a href="#cb16-172"></a><span class="ex">**Common</span> test conditions<span class="pp">**</span>:</span>
+<span id="cb16-173"><a href="#cb16-173"></a><span class="ex">-</span> <span class="kw">`</span><span class="at">-d</span> path<span class="kw">`</span><span class="bu">:</span> Directory exists</span>
+<span id="cb16-174"><a href="#cb16-174"></a><span class="ex">-</span> <span class="kw">`</span><span class="at">-f</span> path<span class="kw">`</span><span class="bu">:</span> File exists</span>
+<span id="cb16-175"><a href="#cb16-175"></a><span class="ex">-</span> <span class="kw">`</span><span class="at">-r</span> path<span class="kw">`</span><span class="bu">:</span> File is readable</span>
+<span id="cb16-176"><a href="#cb16-176"></a><span class="ex">-</span> <span class="kw">`</span><span class="at">-w</span> path<span class="kw">`</span><span class="bu">:</span> File is writable</span>
+<span id="cb16-177"><a href="#cb16-177"></a><span class="ex">-</span> <span class="kw">`</span><span class="at">-z</span> string<span class="kw">`</span><span class="bu">:</span> String is empty</span>
+<span id="cb16-178"><a href="#cb16-178"></a><span class="ex">-</span> <span class="kw">`</span><span class="at">-n</span> string<span class="kw">`</span><span class="bu">:</span> String is not empty</span>
+<span id="cb16-179"><a href="#cb16-179"></a><span class="ex">-</span> <span class="kw">`</span><span class="va">$a</span> <span class="at">-eq</span> <span class="va">$b</span><span class="kw">`</span><span class="bu">:</span> Numbers are equal</span>
+<span id="cb16-180"><a href="#cb16-180"></a><span class="ex">-</span> <span class="kw">`</span><span class="va">$a</span> <span class="at">-gt</span> <span class="va">$b</span><span class="kw">`</span><span class="bu">:</span> First number is greater</span>
+<span id="cb16-181"><a href="#cb16-181"></a></span>
+<span id="cb16-182"><a href="#cb16-182"></a><span class="co">## Loops: Repeating Tasks Efficiently</span></span>
+<span id="cb16-183"><a href="#cb16-183"></a></span>
+<span id="cb16-184"><a href="#cb16-184"></a><span class="co">### Processing Multiple Files</span></span>
+<span id="cb16-185"><a href="#cb16-185"></a><span class="kw">```</span>bash</span>
+<span id="cb16-186"><a href="#cb16-186"></a><span class="co">#!/bin/bash</span></span>
+<span id="cb16-187"><a href="#cb16-187"></a><span class="co"># process_all_files.sh</span></span>
+<span id="cb16-188"><a href="#cb16-188"></a></span>
+<span id="cb16-189"><a href="#cb16-189"></a><span class="va">DATA_DIR</span><span class="op">=</span><span class="st">"</span><span class="va">$1</span><span class="st">"</span></span>
+<span id="cb16-190"><a href="#cb16-190"></a></span>
+<span id="cb16-191"><a href="#cb16-191"></a><span class="co"># Process each CSV file</span></span>
+<span id="cb16-192"><a href="#cb16-192"></a><span class="cf">for</span> file <span class="kw">in</span> <span class="st">"</span><span class="va">$DATA_DIR</span><span class="st">"</span>/<span class="pp">*</span>.csv<span class="kw">;</span> <span class="cf">do</span></span>
+<span id="cb16-193"><a href="#cb16-193"></a>    <span class="cf">if</span> <span class="bu">[</span> <span class="ot">-f</span> <span class="st">"</span><span class="va">$file</span><span class="st">"</span> <span class="bu">]</span><span class="kw">;</span> <span class="cf">then</span></span>
+<span id="cb16-194"><a href="#cb16-194"></a>        <span class="bu">echo</span> <span class="st">"Processing: </span><span class="va">$file</span><span class="st">"</span></span>
+<span id="cb16-195"><a href="#cb16-195"></a>        <span class="va">filename</span><span class="op">=</span><span class="va">$(</span><span class="fu">basename</span> <span class="st">"</span><span class="va">$file</span><span class="st">"</span> .csv<span class="va">)</span></span>
+<span id="cb16-196"><a href="#cb16-196"></a>        </span>
+<span id="cb16-197"><a href="#cb16-197"></a>        <span class="co"># Your processing command here</span></span>
+<span id="cb16-198"><a href="#cb16-198"></a>        <span class="ex">python</span> analyze.py <span class="at">--input</span> <span class="st">"</span><span class="va">$file</span><span class="st">"</span> <span class="at">--output</span> <span class="st">"results/</span><span class="va">${filename}</span><span class="st">_result.csv"</span></span>
+<span id="cb16-199"><a href="#cb16-199"></a>        </span>
+<span id="cb16-200"><a href="#cb16-200"></a>        <span class="bu">echo</span> <span class="st">"Completed: </span><span class="va">$filename</span><span class="st">"</span></span>
+<span id="cb16-201"><a href="#cb16-201"></a>    <span class="cf">fi</span></span>
+<span id="cb16-202"><a href="#cb16-202"></a><span class="cf">done</span></span>
+<span id="cb16-203"><a href="#cb16-203"></a></span>
+<span id="cb16-204"><a href="#cb16-204"></a><span class="bu">echo</span> <span class="st">"All files processed!"</span></span>
+<span id="cb16-205"><a href="#cb16-205"></a><span class="kw">```</span></span>
+<span id="cb16-206"><a href="#cb16-206"></a></span>
+<span id="cb16-207"><a href="#cb16-207"></a><span class="co">### Numerical Loops</span></span>
+<span id="cb16-208"><a href="#cb16-208"></a><span class="kw">```</span>bash</span>
+<span id="cb16-209"><a href="#cb16-209"></a><span class="co">#!/bin/bash</span></span>
+<span id="cb16-210"><a href="#cb16-210"></a><span class="co"># parameter_sweep.sh</span></span>
+<span id="cb16-211"><a href="#cb16-211"></a></span>
+<span id="cb16-212"><a href="#cb16-212"></a><span class="co"># Test different parameter values</span></span>
+<span id="cb16-213"><a href="#cb16-213"></a><span class="cf">for</span> param <span class="kw">in</span> <span class="va">$(</span><span class="fu">seq</span> 0.1 0.1 1.0<span class="va">)</span><span class="kw">;</span> <span class="cf">do</span></span>
+<span id="cb16-214"><a href="#cb16-214"></a>    <span class="bu">echo</span> <span class="st">"Testing parameter value: </span><span class="va">$param</span><span class="st">"</span></span>
+<span id="cb16-215"><a href="#cb16-215"></a>    </span>
+<span id="cb16-216"><a href="#cb16-216"></a>    <span class="co"># Submit HPC job for each parameter</span></span>
+<span id="cb16-217"><a href="#cb16-217"></a>    <span class="ex">bsub</span> <span class="at">-J</span> <span class="st">"param_</span><span class="va">$param</span><span class="st">"</span> <span class="dt">\</span></span>
+<span id="cb16-218"><a href="#cb16-218"></a>         <span class="at">-n</span> 4 <span class="at">-M</span> 8000 <span class="at">-W</span> 2:00 <span class="dt">\</span></span>
+<span id="cb16-219"><a href="#cb16-219"></a>         <span class="st">"python experiment.py --param </span><span class="va">$param</span><span class="st"> --output results_</span><span class="va">$param</span><span class="st">.csv"</span></span>
+<span id="cb16-220"><a href="#cb16-220"></a><span class="cf">done</span></span>
+<span id="cb16-221"><a href="#cb16-221"></a><span class="kw">```</span></span>
+<span id="cb16-222"><a href="#cb16-222"></a></span>
+<span id="cb16-223"><a href="#cb16-223"></a><span class="co">### While Loops for Monitoring</span></span>
+<span id="cb16-224"><a href="#cb16-224"></a><span class="kw">```</span>bash</span>
+<span id="cb16-225"><a href="#cb16-225"></a><span class="co">#!/bin/bash</span></span>
+<span id="cb16-226"><a href="#cb16-226"></a><span class="co"># monitor_jobs.sh</span></span>
+<span id="cb16-227"><a href="#cb16-227"></a></span>
+<span id="cb16-228"><a href="#cb16-228"></a><span class="va">JOB_NAME</span><span class="op">=</span><span class="st">"</span><span class="va">$1</span><span class="st">"</span></span>
+<span id="cb16-229"><a href="#cb16-229"></a></span>
+<span id="cb16-230"><a href="#cb16-230"></a><span class="bu">echo</span> <span class="st">"Monitoring jobs with name: </span><span class="va">$JOB_NAME</span><span class="st">"</span></span>
+<span id="cb16-231"><a href="#cb16-231"></a></span>
+<span id="cb16-232"><a href="#cb16-232"></a><span class="cf">while</span> <span class="fu">true</span><span class="kw">;</span> <span class="cf">do</span></span>
+<span id="cb16-233"><a href="#cb16-233"></a>    <span class="va">RUNNING_JOBS</span><span class="op">=</span><span class="va">$(</span><span class="ex">bjobs</span> <span class="at">-J</span> <span class="st">"</span><span class="va">$JOB_NAME</span><span class="st">"</span> <span class="dv">2</span><span class="op">&gt;</span>/dev/null <span class="kw">|</span> <span class="fu">grep</span> RUN <span class="kw">|</span> <span class="fu">wc</span> <span class="at">-l</span><span class="va">)</span></span>
+<span id="cb16-234"><a href="#cb16-234"></a>    <span class="va">PENDING_JOBS</span><span class="op">=</span><span class="va">$(</span><span class="ex">bjobs</span> <span class="at">-J</span> <span class="st">"</span><span class="va">$JOB_NAME</span><span class="st">"</span> <span class="dv">2</span><span class="op">&gt;</span>/dev/null <span class="kw">|</span> <span class="fu">grep</span> PEND <span class="kw">|</span> <span class="fu">wc</span> <span class="at">-l</span><span class="va">)</span></span>
+<span id="cb16-235"><a href="#cb16-235"></a>    </span>
+<span id="cb16-236"><a href="#cb16-236"></a>    <span class="cf">if</span> <span class="bu">[</span> <span class="va">$RUNNING_JOBS</span> <span class="ot">-eq</span> 0 <span class="bu">]</span> <span class="kw">&amp;&amp;</span> <span class="bu">[</span> <span class="va">$PENDING_JOBS</span> <span class="ot">-eq</span> 0 <span class="bu">]</span><span class="kw">;</span> <span class="cf">then</span></span>
+<span id="cb16-237"><a href="#cb16-237"></a>        <span class="bu">echo</span> <span class="st">"All jobs completed!"</span></span>
+<span id="cb16-238"><a href="#cb16-238"></a>        <span class="cf">break</span></span>
+<span id="cb16-239"><a href="#cb16-239"></a>    <span class="cf">fi</span></span>
+<span id="cb16-240"><a href="#cb16-240"></a>    </span>
+<span id="cb16-241"><a href="#cb16-241"></a>    <span class="bu">echo</span> <span class="st">"</span><span class="va">$(</span><span class="fu">date</span><span class="va">)</span><span class="st">: Running: </span><span class="va">$RUNNING_JOBS</span><span class="st">, Pending: </span><span class="va">$PENDING_JOBS</span><span class="st">"</span></span>
+<span id="cb16-242"><a href="#cb16-242"></a>    <span class="fu">sleep</span> 60  <span class="co"># Check every minute</span></span>
+<span id="cb16-243"><a href="#cb16-243"></a><span class="cf">done</span></span>
+<span id="cb16-244"><a href="#cb16-244"></a><span class="kw">```</span></span>
+<span id="cb16-245"><a href="#cb16-245"></a></span>
+<span id="cb16-246"><a href="#cb16-246"></a><span class="co">## Functions: Organizing Your Code</span></span>
+<span id="cb16-247"><a href="#cb16-247"></a></span>
+<span id="cb16-248"><a href="#cb16-248"></a><span class="ex">Break</span> complex scripts into manageable pieces:</span>
+<span id="cb16-249"><a href="#cb16-249"></a></span>
+<span id="cb16-250"><a href="#cb16-250"></a><span class="kw">```</span>bash</span>
+<span id="cb16-251"><a href="#cb16-251"></a><span class="co">#!/bin/bash</span></span>
+<span id="cb16-252"><a href="#cb16-252"></a><span class="co"># organized_processing.sh</span></span>
+<span id="cb16-253"><a href="#cb16-253"></a></span>
+<span id="cb16-254"><a href="#cb16-254"></a><span class="co"># Function to check if required tools are available</span></span>
+<span id="cb16-255"><a href="#cb16-255"></a><span class="fu">check_prerequisites()</span> <span class="kw">{</span></span>
+<span id="cb16-256"><a href="#cb16-256"></a>    <span class="bu">local</span> <span class="va">missing_tools</span><span class="op">=</span>0</span>
+<span id="cb16-257"><a href="#cb16-257"></a>    </span>
+<span id="cb16-258"><a href="#cb16-258"></a>    <span class="cf">for</span> tool <span class="kw">in</span> python rsync bsub<span class="kw">;</span> <span class="cf">do</span></span>
+<span id="cb16-259"><a href="#cb16-259"></a>        <span class="cf">if</span> <span class="ot">! </span><span class="bu">command</span> <span class="at">-v</span> <span class="va">$tool</span> <span class="op">&amp;&gt;</span> /dev/null<span class="kw">;</span> <span class="cf">then</span></span>
+<span id="cb16-260"><a href="#cb16-260"></a>            <span class="bu">echo</span> <span class="st">"Error: </span><span class="va">$tool</span><span class="st"> is not installed or not in PATH"</span></span>
+<span id="cb16-261"><a href="#cb16-261"></a>            <span class="va">missing_tools</span><span class="op">=</span><span class="va">$((missing_tools</span> <span class="op">+</span> <span class="dv">1</span><span class="va">))</span></span>
+<span id="cb16-262"><a href="#cb16-262"></a>        <span class="cf">fi</span></span>
+<span id="cb16-263"><a href="#cb16-263"></a>    <span class="cf">done</span></span>
+<span id="cb16-264"><a href="#cb16-264"></a>    </span>
+<span id="cb16-265"><a href="#cb16-265"></a>    <span class="cf">if</span> <span class="bu">[</span> <span class="va">$missing_tools</span> <span class="ot">-gt</span> 0 <span class="bu">]</span><span class="kw">;</span> <span class="cf">then</span></span>
+<span id="cb16-266"><a href="#cb16-266"></a>        <span class="bu">echo</span> <span class="st">"Please install missing tools before continuing"</span></span>
+<span id="cb16-267"><a href="#cb16-267"></a>        <span class="bu">exit</span> 1</span>
+<span id="cb16-268"><a href="#cb16-268"></a>    <span class="cf">fi</span></span>
+<span id="cb16-269"><a href="#cb16-269"></a>    </span>
+<span id="cb16-270"><a href="#cb16-270"></a>    <span class="bu">echo</span> <span class="st">"All prerequisites satisfied"</span></span>
+<span id="cb16-271"><a href="#cb16-271"></a><span class="kw">}</span></span>
+<span id="cb16-272"><a href="#cb16-272"></a></span>
+<span id="cb16-273"><a href="#cb16-273"></a><span class="co"># Function to create output directories</span></span>
+<span id="cb16-274"><a href="#cb16-274"></a><span class="fu">setup_directories()</span> <span class="kw">{</span></span>
+<span id="cb16-275"><a href="#cb16-275"></a>    <span class="bu">local</span> <span class="va">base_dir</span><span class="op">=</span><span class="st">"</span><span class="va">$1</span><span class="st">"</span></span>
+<span id="cb16-276"><a href="#cb16-276"></a>    </span>
+<span id="cb16-277"><a href="#cb16-277"></a>    <span class="cf">for</span> subdir <span class="kw">in</span> raw processed results logs<span class="kw">;</span> <span class="cf">do</span></span>
+<span id="cb16-278"><a href="#cb16-278"></a>        <span class="fu">mkdir</span> <span class="at">-p</span> <span class="st">"</span><span class="va">$base_dir</span><span class="st">/</span><span class="va">$subdir</span><span class="st">"</span></span>
+<span id="cb16-279"><a href="#cb16-279"></a>        <span class="bu">echo</span> <span class="st">"Created directory: </span><span class="va">$base_dir</span><span class="st">/</span><span class="va">$subdir</span><span class="st">"</span></span>
+<span id="cb16-280"><a href="#cb16-280"></a>    <span class="cf">done</span></span>
+<span id="cb16-281"><a href="#cb16-281"></a><span class="kw">}</span></span>
+<span id="cb16-282"><a href="#cb16-282"></a></span>
+<span id="cb16-283"><a href="#cb16-283"></a><span class="co"># Function to submit processing jobs</span></span>
+<span id="cb16-284"><a href="#cb16-284"></a><span class="fu">submit_jobs()</span> <span class="kw">{</span></span>
+<span id="cb16-285"><a href="#cb16-285"></a>    <span class="bu">local</span> <span class="va">input_dir</span><span class="op">=</span><span class="st">"</span><span class="va">$1</span><span class="st">"</span></span>
+<span id="cb16-286"><a href="#cb16-286"></a>    <span class="bu">local</span> <span class="va">output_dir</span><span class="op">=</span><span class="st">"</span><span class="va">$2</span><span class="st">"</span></span>
+<span id="cb16-287"><a href="#cb16-287"></a>    </span>
+<span id="cb16-288"><a href="#cb16-288"></a>    <span class="cf">for</span> file <span class="kw">in</span> <span class="st">"</span><span class="va">$input_dir</span><span class="st">"</span>/<span class="pp">*</span>.csv<span class="kw">;</span> <span class="cf">do</span></span>
+<span id="cb16-289"><a href="#cb16-289"></a>        <span class="cf">if</span> <span class="bu">[</span> <span class="ot">-f</span> <span class="st">"</span><span class="va">$file</span><span class="st">"</span> <span class="bu">]</span><span class="kw">;</span> <span class="cf">then</span></span>
+<span id="cb16-290"><a href="#cb16-290"></a>            <span class="va">filename</span><span class="op">=</span><span class="va">$(</span><span class="fu">basename</span> <span class="st">"</span><span class="va">$file</span><span class="st">"</span> .csv<span class="va">)</span></span>
+<span id="cb16-291"><a href="#cb16-291"></a>            </span>
+<span id="cb16-292"><a href="#cb16-292"></a>            <span class="ex">bsub</span> <span class="at">-J</span> <span class="st">"process_</span><span class="va">$filename</span><span class="st">"</span> <span class="dt">\</span></span>
+<span id="cb16-293"><a href="#cb16-293"></a>                 <span class="at">-n</span> 4 <span class="at">-M</span> 8000 <span class="at">-W</span> 3:00 <span class="dt">\</span></span>
+<span id="cb16-294"><a href="#cb16-294"></a>                 <span class="at">-o</span> <span class="st">"</span><span class="va">$output_dir</span><span class="st">/logs/</span><span class="va">${filename}</span><span class="st">.out"</span> <span class="dt">\</span></span>
+<span id="cb16-295"><a href="#cb16-295"></a>                 <span class="at">-e</span> <span class="st">"</span><span class="va">$output_dir</span><span class="st">/logs/</span><span class="va">${filename}</span><span class="st">.err"</span> <span class="dt">\</span></span>
+<span id="cb16-296"><a href="#cb16-296"></a>                 <span class="st">"python process.py --input '</span><span class="va">$file</span><span class="st">' --output '</span><span class="va">$output_dir</span><span class="st">/processed/</span><span class="va">${filename}</span><span class="st">_processed.csv'"</span></span>
+<span id="cb16-297"><a href="#cb16-297"></a>        <span class="cf">fi</span></span>
+<span id="cb16-298"><a href="#cb16-298"></a>    <span class="cf">done</span></span>
+<span id="cb16-299"><a href="#cb16-299"></a><span class="kw">}</span></span>
+<span id="cb16-300"><a href="#cb16-300"></a></span>
+<span id="cb16-301"><a href="#cb16-301"></a><span class="co"># Main script execution</span></span>
+<span id="cb16-302"><a href="#cb16-302"></a><span class="fu">main()</span> <span class="kw">{</span></span>
+<span id="cb16-303"><a href="#cb16-303"></a>    <span class="bu">echo</span> <span class="st">"Starting data processing pipeline..."</span></span>
+<span id="cb16-304"><a href="#cb16-304"></a>    </span>
+<span id="cb16-305"><a href="#cb16-305"></a>    <span class="ex">check_prerequisites</span></span>
+<span id="cb16-306"><a href="#cb16-306"></a>    <span class="ex">setup_directories</span> <span class="st">"</span><span class="va">$(</span><span class="bu">pwd</span><span class="va">)</span><span class="st">/experiment_</span><span class="va">$(</span><span class="fu">date</span> +%Y%m%d<span class="va">)</span><span class="st">"</span></span>
+<span id="cb16-307"><a href="#cb16-307"></a>    <span class="ex">submit_jobs</span> <span class="st">"</span><span class="va">$1</span><span class="st">"</span> <span class="st">"</span><span class="va">$(</span><span class="bu">pwd</span><span class="va">)</span><span class="st">/experiment_</span><span class="va">$(</span><span class="fu">date</span> +%Y%m%d<span class="va">)</span><span class="st">"</span></span>
+<span id="cb16-308"><a href="#cb16-308"></a>    </span>
+<span id="cb16-309"><a href="#cb16-309"></a>    <span class="bu">echo</span> <span class="st">"Pipeline started. Monitor with: bjobs"</span></span>
+<span id="cb16-310"><a href="#cb16-310"></a><span class="kw">}</span></span>
+<span id="cb16-311"><a href="#cb16-311"></a></span>
+<span id="cb16-312"><a href="#cb16-312"></a><span class="co"># Run main function with all arguments</span></span>
+<span id="cb16-313"><a href="#cb16-313"></a><span class="ex">main</span> <span class="st">"</span><span class="va">$@</span><span class="st">"</span></span>
+<span id="cb16-314"><a href="#cb16-314"></a><span class="kw">```</span></span>
+<span id="cb16-315"><a href="#cb16-315"></a></span>
+<span id="cb16-316"><a href="#cb16-316"></a><span class="co">## Error Handling: Making Scripts Bulletproof</span></span>
+<span id="cb16-317"><a href="#cb16-317"></a></span>
+<span id="cb16-318"><a href="#cb16-318"></a><span class="ex">Professional</span> scripts handle errors gracefully:</span>
+<span id="cb16-319"><a href="#cb16-319"></a></span>
+<span id="cb16-320"><a href="#cb16-320"></a><span class="kw">```</span>bash</span>
+<span id="cb16-321"><a href="#cb16-321"></a><span class="co">#!/bin/bash</span></span>
+<span id="cb16-322"><a href="#cb16-322"></a><span class="co"># bulletproof_script.sh</span></span>
+<span id="cb16-323"><a href="#cb16-323"></a></span>
+<span id="cb16-324"><a href="#cb16-324"></a><span class="co"># Exit on any error</span></span>
+<span id="cb16-325"><a href="#cb16-325"></a><span class="bu">set</span> <span class="at">-e</span></span>
+<span id="cb16-326"><a href="#cb16-326"></a></span>
+<span id="cb16-327"><a href="#cb16-327"></a><span class="co"># Exit on undefined variables</span></span>
+<span id="cb16-328"><a href="#cb16-328"></a><span class="bu">set</span> <span class="at">-u</span></span>
+<span id="cb16-329"><a href="#cb16-329"></a></span>
+<span id="cb16-330"><a href="#cb16-330"></a><span class="co"># Make pipe failures cause script to fail</span></span>
+<span id="cb16-331"><a href="#cb16-331"></a><span class="bu">set</span> <span class="at">-o</span> pipefail</span>
+<span id="cb16-332"><a href="#cb16-332"></a></span>
+<span id="cb16-333"><a href="#cb16-333"></a><span class="co"># Function to handle cleanup on exit</span></span>
+<span id="cb16-334"><a href="#cb16-334"></a><span class="fu">cleanup()</span> <span class="kw">{</span></span>
+<span id="cb16-335"><a href="#cb16-335"></a>    <span class="bu">local</span> <span class="va">exit_code</span><span class="op">=</span><span class="va">$?</span></span>
+<span id="cb16-336"><a href="#cb16-336"></a>    </span>
+<span id="cb16-337"><a href="#cb16-337"></a>    <span class="cf">if</span> <span class="bu">[</span> <span class="va">$exit_code</span> <span class="ot">-ne</span> 0 <span class="bu">]</span><span class="kw">;</span> <span class="cf">then</span></span>
+<span id="cb16-338"><a href="#cb16-338"></a>        <span class="bu">echo</span> <span class="st">"Script failed with exit code </span><span class="va">$exit_code</span><span class="st">"</span></span>
+<span id="cb16-339"><a href="#cb16-339"></a>        <span class="bu">echo</span> <span class="st">"Cleaning up temporary files..."</span></span>
+<span id="cb16-340"><a href="#cb16-340"></a>        <span class="fu">rm</span> <span class="at">-f</span> /tmp/temp_<span class="va">$$</span>_<span class="pp">*</span></span>
+<span id="cb16-341"><a href="#cb16-341"></a>    <span class="cf">fi</span></span>
+<span id="cb16-342"><a href="#cb16-342"></a>    </span>
+<span id="cb16-343"><a href="#cb16-343"></a>    <span class="bu">echo</span> <span class="st">"Cleanup completed"</span></span>
+<span id="cb16-344"><a href="#cb16-344"></a>    <span class="bu">exit</span> <span class="va">$exit_code</span></span>
+<span id="cb16-345"><a href="#cb16-345"></a><span class="kw">}</span></span>
+<span id="cb16-346"><a href="#cb16-346"></a></span>
+<span id="cb16-347"><a href="#cb16-347"></a><span class="co"># Set trap to run cleanup on script exit</span></span>
+<span id="cb16-348"><a href="#cb16-348"></a><span class="bu">trap</span> cleanup EXIT</span>
+<span id="cb16-349"><a href="#cb16-349"></a></span>
+<span id="cb16-350"><a href="#cb16-350"></a><span class="co"># Function to log messages with timestamps</span></span>
+<span id="cb16-351"><a href="#cb16-351"></a><span class="fu">log()</span> <span class="kw">{</span></span>
+<span id="cb16-352"><a href="#cb16-352"></a>    <span class="bu">echo</span> <span class="st">"[</span><span class="va">$(</span><span class="fu">date</span> <span class="st">'+%Y-%m-%d %H:%M:%S'</span><span class="va">)</span><span class="st">] </span><span class="va">$1</span><span class="st">"</span></span>
+<span id="cb16-353"><a href="#cb16-353"></a><span class="kw">}</span></span>
+<span id="cb16-354"><a href="#cb16-354"></a></span>
+<span id="cb16-355"><a href="#cb16-355"></a><span class="co"># Main processing with error handling</span></span>
+<span id="cb16-356"><a href="#cb16-356"></a><span class="fu">process_data()</span> <span class="kw">{</span></span>
+<span id="cb16-357"><a href="#cb16-357"></a>    <span class="bu">local</span> <span class="va">input_file</span><span class="op">=</span><span class="st">"</span><span class="va">$1</span><span class="st">"</span></span>
+<span id="cb16-358"><a href="#cb16-358"></a>    <span class="bu">local</span> <span class="va">output_file</span><span class="op">=</span><span class="st">"</span><span class="va">$2</span><span class="st">"</span></span>
+<span id="cb16-359"><a href="#cb16-359"></a>    </span>
+<span id="cb16-360"><a href="#cb16-360"></a>    <span class="ex">log</span> <span class="st">"Starting processing of </span><span class="va">$input_file</span><span class="st">"</span></span>
+<span id="cb16-361"><a href="#cb16-361"></a>    </span>
+<span id="cb16-362"><a href="#cb16-362"></a>    <span class="co"># Check if input file exists</span></span>
+<span id="cb16-363"><a href="#cb16-363"></a>    <span class="cf">if</span> <span class="bu">[</span> <span class="ot">!</span> <span class="ot">-f</span> <span class="st">"</span><span class="va">$input_file</span><span class="st">"</span> <span class="bu">]</span><span class="kw">;</span> <span class="cf">then</span></span>
+<span id="cb16-364"><a href="#cb16-364"></a>        <span class="ex">log</span> <span class="st">"ERROR: Input file </span><span class="va">$input_file</span><span class="st"> not found"</span></span>
+<span id="cb16-365"><a href="#cb16-365"></a>        <span class="cf">return</span> <span class="dv">1</span></span>
+<span id="cb16-366"><a href="#cb16-366"></a>    <span class="cf">fi</span></span>
+<span id="cb16-367"><a href="#cb16-367"></a>    </span>
+<span id="cb16-368"><a href="#cb16-368"></a>    <span class="co"># Create temporary file</span></span>
+<span id="cb16-369"><a href="#cb16-369"></a>    <span class="bu">local</span> <span class="va">temp_file</span><span class="op">=</span><span class="st">"/tmp/temp_</span><span class="va">$$</span><span class="st">_</span><span class="va">$(</span><span class="fu">basename</span> <span class="st">"</span><span class="va">$input_file</span><span class="st">"</span><span class="va">)</span><span class="st">"</span></span>
+<span id="cb16-370"><a href="#cb16-370"></a>    </span>
+<span id="cb16-371"><a href="#cb16-371"></a>    <span class="co"># Process with error checking</span></span>
+<span id="cb16-372"><a href="#cb16-372"></a>    <span class="cf">if</span> <span class="ex">python</span> preprocess.py <span class="at">--input</span> <span class="st">"</span><span class="va">$input_file</span><span class="st">"</span> <span class="at">--output</span> <span class="st">"</span><span class="va">$temp_file</span><span class="st">"</span><span class="kw">;</span> <span class="cf">then</span></span>
+<span id="cb16-373"><a href="#cb16-373"></a>        <span class="ex">log</span> <span class="st">"Preprocessing completed successfully"</span></span>
+<span id="cb16-374"><a href="#cb16-374"></a>    <span class="cf">else</span></span>
+<span id="cb16-375"><a href="#cb16-375"></a>        <span class="ex">log</span> <span class="st">"ERROR: Preprocessing failed for </span><span class="va">$input_file</span><span class="st">"</span></span>
+<span id="cb16-376"><a href="#cb16-376"></a>        <span class="cf">return</span> <span class="dv">1</span></span>
+<span id="cb16-377"><a href="#cb16-377"></a>    <span class="cf">fi</span></span>
+<span id="cb16-378"><a href="#cb16-378"></a>    </span>
+<span id="cb16-379"><a href="#cb16-379"></a>    <span class="co"># Move to final location</span></span>
+<span id="cb16-380"><a href="#cb16-380"></a>    <span class="cf">if</span> <span class="fu">mv</span> <span class="st">"</span><span class="va">$temp_file</span><span class="st">"</span> <span class="st">"</span><span class="va">$output_file</span><span class="st">"</span><span class="kw">;</span> <span class="cf">then</span></span>
+<span id="cb16-381"><a href="#cb16-381"></a>        <span class="ex">log</span> <span class="st">"Processing completed: </span><span class="va">$output_file</span><span class="st">"</span></span>
+<span id="cb16-382"><a href="#cb16-382"></a>    <span class="cf">else</span></span>
+<span id="cb16-383"><a href="#cb16-383"></a>        <span class="ex">log</span> <span class="st">"ERROR: Failed to move result to </span><span class="va">$output_file</span><span class="st">"</span></span>
+<span id="cb16-384"><a href="#cb16-384"></a>        <span class="cf">return</span> <span class="dv">1</span></span>
+<span id="cb16-385"><a href="#cb16-385"></a>    <span class="cf">fi</span></span>
+<span id="cb16-386"><a href="#cb16-386"></a><span class="kw">}</span></span>
+<span id="cb16-387"><a href="#cb16-387"></a></span>
+<span id="cb16-388"><a href="#cb16-388"></a><span class="co"># Process all files with error handling</span></span>
+<span id="cb16-389"><a href="#cb16-389"></a><span class="cf">for</span> file <span class="kw">in</span> data/<span class="pp">*</span>.csv<span class="kw">;</span> <span class="cf">do</span></span>
+<span id="cb16-390"><a href="#cb16-390"></a>    <span class="cf">if</span> <span class="bu">[</span> <span class="ot">-f</span> <span class="st">"</span><span class="va">$file</span><span class="st">"</span> <span class="bu">]</span><span class="kw">;</span> <span class="cf">then</span></span>
+<span id="cb16-391"><a href="#cb16-391"></a>        <span class="va">filename</span><span class="op">=</span><span class="va">$(</span><span class="fu">basename</span> <span class="st">"</span><span class="va">$file</span><span class="st">"</span> .csv<span class="va">)</span></span>
+<span id="cb16-392"><a href="#cb16-392"></a>        <span class="cf">if</span> <span class="ot">! </span><span class="ex">process_data</span> <span class="st">"</span><span class="va">$file</span><span class="st">"</span> <span class="st">"results/</span><span class="va">${filename}</span><span class="st">_processed.csv"</span><span class="kw">;</span> <span class="cf">then</span></span>
+<span id="cb16-393"><a href="#cb16-393"></a>            <span class="ex">log</span> <span class="st">"Skipping </span><span class="va">$file</span><span class="st"> due to processing error"</span></span>
+<span id="cb16-394"><a href="#cb16-394"></a>            <span class="cf">continue</span></span>
+<span id="cb16-395"><a href="#cb16-395"></a>        <span class="cf">fi</span></span>
+<span id="cb16-396"><a href="#cb16-396"></a>    <span class="cf">fi</span></span>
+<span id="cb16-397"><a href="#cb16-397"></a><span class="cf">done</span></span>
+<span id="cb16-398"><a href="#cb16-398"></a></span>
+<span id="cb16-399"><a href="#cb16-399"></a><span class="ex">log</span> <span class="st">"All processing completed successfully"</span></span>
+<span id="cb16-400"><a href="#cb16-400"></a><span class="kw">```</span></span>
+<span id="cb16-401"><a href="#cb16-401"></a></span>
+<span id="cb16-402"><a href="#cb16-402"></a><span class="co">## Quick Reference: Bash Scripting Cheat Sheet</span></span>
+<span id="cb16-403"><a href="#cb16-403"></a></span>
+<span id="cb16-404"><a href="#cb16-404"></a><span class="kw">|</span> <span class="ex">Element</span> <span class="kw">|</span> <span class="ex">Syntax</span> <span class="kw">|</span> <span class="ex">Example</span> <span class="kw">|</span></span>
+<span id="cb16-405"><a href="#cb16-405"></a><span class="kw">|</span><span class="ex">---------</span><span class="kw">|</span><span class="ex">--------</span><span class="kw">|</span><span class="ex">---------</span><span class="kw">|</span></span>
+<span id="cb16-406"><a href="#cb16-406"></a><span class="kw">|</span> <span class="ex">Variables</span> <span class="kw">|</span> <span class="kw">`</span>VAR=value<span class="kw">`</span> <span class="kw">|</span> <span class="kw">`</span>NAME=<span class="st">"experiment"</span><span class="kw">`</span> <span class="kw">|</span></span>
+<span id="cb16-407"><a href="#cb16-407"></a><span class="kw">|</span> <span class="ex">Command</span> substitution <span class="kw">|</span> <span class="kw">`</span><span class="va">$(</span><span class="bu">command</span><span class="va">)</span><span class="kw">`</span> <span class="kw">|</span> <span class="kw">`</span>FILES=<span class="va">$(</span><span class="fu">ls</span> <span class="pp">*</span>.csv<span class="va">)</span><span class="kw">`</span> <span class="kw">|</span></span>
+<span id="cb16-408"><a href="#cb16-408"></a><span class="kw">|</span> <span class="ex">Conditionals</span> <span class="kw">|</span> <span class="kw">`</span>if [ condition ]<span class="kw">;</span> <span class="cf">then</span><span class="kw">`</span> <span class="kw">|</span> <span class="kw">`</span>if [ <span class="at">-f</span> <span class="st">"</span><span class="va">$file</span><span class="st">"</span> ]<span class="kw">;</span> <span class="cf">then</span><span class="kw">`</span> <span class="kw">|</span></span>
+<span id="cb16-409"><a href="#cb16-409"></a><span class="kw">|</span> <span class="ex">Loops</span> <span class="kw">|</span> <span class="kw">`</span>for var in list<span class="kw">;</span> <span class="cf">do</span><span class="kw">`</span> <span class="kw">|</span> <span class="kw">`</span>for file in <span class="pp">*</span>.csv<span class="kw">;</span> <span class="cf">do</span><span class="kw">`</span> <span class="kw">|</span></span>
+<span id="cb16-410"><a href="#cb16-410"></a><span class="kw">|</span> <span class="ex">Functions</span> <span class="kw">|</span> <span class="kw">`</span>function_name<span class="er">(</span><span class="kw">)</span> <span class="kw">{</span> <span class="ex">}</span><span class="kw">`</span> <span class="kw">|</span> <span class="kw">`</span>process<span class="er">(</span><span class="kw">)</span> <span class="kw">{</span> <span class="bu">echo</span> <span class="st">"processing"</span><span class="kw">;</span> <span class="ex">}</span><span class="kw">`</span> <span class="kw">|</span></span>
+<span id="cb16-411"><a href="#cb16-411"></a><span class="kw">|</span> <span class="ex">Arguments</span> <span class="kw">|</span> <span class="kw">`</span><span class="va">$1</span>, <span class="va">$2</span>, <span class="va">$#</span>, <span class="va">$@</span><span class="kw">`</span> <span class="kw">|</span> <span class="kw">`</span>INPUT_DIR=<span class="st">"</span><span class="va">$1</span><span class="st">"</span><span class="kw">`</span> <span class="kw">|</span></span>
+<span id="cb16-412"><a href="#cb16-412"></a><span class="kw">|</span> <span class="ex">Error</span> handling <span class="kw">|</span> <span class="kw">`</span>set <span class="at">-e</span><span class="kw">`</span> <span class="kw">|</span> <span class="ex">Exit</span> on error <span class="kw">|</span></span>
+<span id="cb16-413"><a href="#cb16-413"></a><span class="kw">|</span> <span class="ex">Cleanup</span> <span class="kw">|</span> <span class="kw">`</span>trap cleanup EXIT<span class="kw">`</span> <span class="kw">|</span> <span class="ex">Run</span> cleanup on exit <span class="kw">|</span></span>
+<span id="cb16-414"><a href="#cb16-414"></a></span>
+<span id="cb16-415"><a href="#cb16-415"></a><span class="co">## Practice Exercises</span></span>
+<span id="cb16-416"><a href="#cb16-416"></a></span>
+<span id="cb16-417"><a href="#cb16-417"></a><span class="ex">:::{.callout-important}</span></span>
+<span id="cb16-418"><a href="#cb16-418"></a><span class="co">## Your Scripting Mastery Mission</span></span>
+<span id="cb16-419"><a href="#cb16-419"></a></span>
+<span id="cb16-420"><a href="#cb16-420"></a><span class="ex">1.</span> <span class="pp">**</span>Create a file processing script<span class="pp">**</span></span>
+<span id="cb16-421"><a href="#cb16-421"></a>   <span class="kw">```</span>bash</span>
+<span id="cb16-422"><a href="#cb16-422"></a>   <span class="co">#!/bin/bash</span></span>
+<span id="cb16-423"><a href="#cb16-423"></a>   <span class="co"># Practice: Write a script that counts lines in all .txt files</span></span>
+<span id="cb16-424"><a href="#cb16-424"></a>   <span class="co"># and creates a summary report</span></span>
+<span id="cb16-425"><a href="#cb16-425"></a>   <span class="kw">```</span></span>
+<span id="cb16-426"><a href="#cb16-426"></a></span>
+<span id="cb16-427"><a href="#cb16-427"></a><span class="ex">2.</span> <span class="pp">**</span>Build a job monitoring script<span class="pp">**</span></span>
+<span id="cb16-428"><a href="#cb16-428"></a>   <span class="kw">```</span>bash</span>
+<span id="cb16-429"><a href="#cb16-429"></a>   <span class="co">#!/bin/bash</span></span>
+<span id="cb16-430"><a href="#cb16-430"></a>   <span class="co"># Practice: Create a script that monitors bsub jobs</span></span>
+<span id="cb16-431"><a href="#cb16-431"></a>   <span class="co"># and sends notification when all complete</span></span>
+<span id="cb16-432"><a href="#cb16-432"></a>   <span class="kw">```</span></span>
+<span id="cb16-433"><a href="#cb16-433"></a></span>
+<span id="cb16-434"><a href="#cb16-434"></a><span class="ex">3.</span> <span class="pp">**</span>Design a backup automation script<span class="pp">**</span></span>
+<span id="cb16-435"><a href="#cb16-435"></a>   <span class="kw">```</span>bash</span>
+<span id="cb16-436"><a href="#cb16-436"></a>   <span class="co">#!/bin/bash</span></span>
+<span id="cb16-437"><a href="#cb16-437"></a>   <span class="co"># Practice: Write a script that backs up important directories</span></span>
+<span id="cb16-438"><a href="#cb16-438"></a>   <span class="co"># with error handling and logging</span></span>
+<span id="cb16-439"><a href="#cb16-439"></a>   <span class="kw">```</span></span>
+<span id="cb16-440"><a href="#cb16-440"></a></span>
+<span id="cb16-441"><a href="#cb16-441"></a><span class="ex">4.</span> <span class="pp">**</span>Create a parameter sweep script<span class="pp">**</span></span>
+<span id="cb16-442"><a href="#cb16-442"></a>   <span class="kw">```</span>bash</span>
+<span id="cb16-443"><a href="#cb16-443"></a>   <span class="co">#!/bin/bash</span></span>
+<span id="cb16-444"><a href="#cb16-444"></a>   <span class="co"># Practice: Build a script that submits jobs with different</span></span>
+<span id="cb16-445"><a href="#cb16-445"></a>   <span class="co"># parameter values and organizes results</span></span>
+<span id="cb16-446"><a href="#cb16-446"></a>   <span class="kw">```</span></span>
+<span id="cb16-447"><a href="#cb16-447"></a><span class="ex">:::</span></span>
+<span id="cb16-448"><a href="#cb16-448"></a></span>
+<span id="cb16-449"><a href="#cb16-449"></a><span class="co">## What's Next?</span></span>
+<span id="cb16-450"><a href="#cb16-450"></a></span>
+<span id="cb16-451"><a href="#cb16-451"></a><span class="ex">Now</span> that you<span class="st">'ve mastered bash scripting, you'</span>re ready for the final step: [Automation Excellence]<span class="er">(</span><span class="ex">12-automation-excellence.qmd</span><span class="kw">)</span><span class="bu">.</span> You<span class="st">'ll learn to weave together all your command line skills into sophisticated automated systems that monitor themselves, handle errors gracefully, and orchestrate complex workflows without human intervention.</span></span>
+<span id="cb16-452"><a href="#cb16-452"></a></span>
+<span id="cb16-453"><a href="#cb16-453"></a><span class="st">Bash scripting is the foundation of automation – next, you'</span>ll become a digital automation architect!</span>
+<span id="cb16-454"><a href="#cb16-454"></a></span>
+<span id="cb16-455"><a href="#cb16-455"></a><span class="ex">:::{.callout-tip}</span></span>
+<span id="cb16-456"><a href="#cb16-456"></a><span class="co">## Final Mastery Challenge</span></span>
+<span id="cb16-457"><a href="#cb16-457"></a><span class="ex">Create</span> a complete workflow script that:</span>
+<span id="cb16-458"><a href="#cb16-458"></a><span class="ex">1.</span> Accepts command line arguments for input/output directories</span>
+<span id="cb16-459"><a href="#cb16-459"></a><span class="ex">2.</span> Validates the environment and input files</span>
+<span id="cb16-460"><a href="#cb16-460"></a><span class="ex">3.</span> Submits parallel processing jobs using bsub</span>
+<span id="cb16-461"><a href="#cb16-461"></a><span class="ex">4.</span> Monitors job progress with status updates</span>
+<span id="cb16-462"><a href="#cb16-462"></a><span class="ex">5.</span> Handles errors gracefully with cleanup</span>
+<span id="cb16-463"><a href="#cb16-463"></a><span class="ex">6.</span> Generates a final summary report</span>
+<span id="cb16-464"><a href="#cb16-464"></a></span>
+<span id="cb16-465"><a href="#cb16-465"></a><span class="ex">This</span> will demonstrate your readiness for the final automation mastery level!</span>
+<span id="cb16-466"><a href="#cb16-466"></a><span class="ex">:::</span></span>
+<span id="cb16-467"><a href="#cb16-467"></a></span>
+<span id="cb16-468"><a href="#cb16-468"></a><span class="ex">---</span></span>
+<span id="cb16-469"><a href="#cb16-469"></a></span>
+<span id="cb16-470"><a href="#cb16-470"></a><span class="ex">*You</span><span class="st">'ve mastered bash scripting – the foundation of all automation. Next, we'</span><span class="ex">ll</span> combine all your skills into sophisticated automated systems that work while you sleep!<span class="pp">*</span> </span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div></div></div></div></div>
+</div> <!-- /content -->
+
+
+
+<script src="../../../site_libs/quarto-html/zenscroll-min.js"></script>
+</body></html>

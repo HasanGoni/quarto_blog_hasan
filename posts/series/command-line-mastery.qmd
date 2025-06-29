@@ -1,0 +1,135 @@
+---
+title: "Command Line Mastery for HPC Series"
+description: "From Windows Explorer to Unix HPC Warrior – Master the essential command line skills for high-performance computing and massive file operations. Learn the Pareto 20% that gives you 80% of the power."
+author: "Hasan"
+date: last-modified
+categories: [series, command-line, hpc, linux, bash, parallel-computing]
+image: "https://images.unsplash.com/photo-1629654297299-c8506221ca97?ixlib=rb-4.0.3&auto=format&fit=crop&w=2000&q=80"
+toc: true
+---
+
+## The Story Behind This Series
+
+Picture this: You're working with millions of files scattered across a Windows file share, and you need to find specific datasets and transfer them to a powerful Unix HPC cluster. Using a graphical interface would be like trying to count grains of sand with tweezers – technically possible, but painfully slow!
+
+This is where the command line becomes your superpower. It's like having a Swiss Army knife that can slice through massive datasets, find needles in digital haystacks, and orchestrate parallel operations that would take hours manually.
+
+This series follows the **Pareto Principle**: we'll master the 20% of command line skills that solve 80% of your HPC challenges. By the end, you'll navigate Unix systems like a digital ninja and handle massive file operations with confidence.
+
+## Learning Philosophy
+
+Following Jeremy Howard's fastai approach:
+- **Start with real problems**: Every command solves an actual HPC challenge
+- **Build muscle memory**: Practice with hands-on examples you'll use daily
+- **Understand the why**: Each tool explained with real-world analogies
+- **Progressive mastery**: From basic navigation to parallel processing wizardry
+
+## The Journey Ahead
+
+### 🗺️ **Phase 1: Digital Navigation**
+1. [**Your Digital Compass**](command-line-mastery/01-digital-compass.qmd) - Basic navigation and understanding your environment
+2. [**File Detective Skills**](command-line-mastery/02-file-detective.qmd) - Finding files and directories like a pro
+
+### 📁 **Phase 2: File Operations Mastery**
+3. [**File Manipulation Magic**](command-line-mastery/03-file-manipulation.qmd) - Creating, copying, moving, and organizing files
+4. [**Text Processing Power**](command-line-mastery/04-text-processing.qmd) - Searching, filtering, and transforming text data
+5. [**Permission Wizardry**](command-line-mastery/05-permission-wizardry.qmd) - Understanding and managing file permissions
+
+### 🔗 **Phase 3: Remote Operations**
+6. [**SSH and Remote Access**](command-line-mastery/06-ssh-remote-access.qmd) - Connecting to HPC clusters securely
+7. [**File Transfer Mastery**](command-line-mastery/07-file-transfer.qmd) - Moving millions of files efficiently (rsync, scp, and more)
+
+### ⚡ **Phase 4: Parallel Processing Power**
+8. [**Background Jobs and Process Control**](command-line-mastery/08-process-control.qmd) - Managing multiple tasks simultaneously
+9. [**HPC Job Scheduling with bsub**](command-line-mastery/09-hpc-job-scheduling.qmd) - Mastering cluster job submission
+10. [**Parallel Processing Patterns**](command-line-mastery/10-parallel-patterns.qmd) - GNU parallel and advanced techniques
+
+### 🛠️ **Phase 5: Automation and Scripting**
+11. [**Bash Scripting Essentials**](command-line-mastery/11-bash-scripting.qmd) - Automating repetitive tasks
+12. [**Advanced Scripting Patterns**](command-line-mastery/12-advanced-scripting.qmd) - Error handling, logging, and robust scripts
+
+## What You'll Master
+
+By the end of this series, you'll confidently:
+- **Navigate any Unix system** like it's your home directory
+- **Find specific files** among millions in seconds
+- **Transfer massive datasets** efficiently between systems
+- **Run parallel jobs** on HPC clusters using bsub
+- **Automate repetitive tasks** with robust bash scripts
+- **Troubleshoot problems** using command line diagnostic tools
+
+## Real-World Scenarios We'll Solve
+
+- **The Million File Challenge**: Finding specific research data among millions of files
+- **The Great Migration**: Transferring terabytes from Windows shares to HPC storage
+- **The Parallel Processing Pipeline**: Running hundreds of analysis jobs simultaneously
+- **The Monitoring Mission**: Keeping track of long-running computational tasks
+- **The Automation Adventure**: Creating scripts that work reliably at 3 AM
+
+## Prerequisites
+
+- **Basic computer literacy**: You can use Windows Explorer and understand files/folders
+- **Curiosity and patience**: The command line feels foreign at first (like learning to drive)
+- **Access to a Unix system**: We'll show you how to get started even on Windows
+
+## Tools We'll Master
+
+- **bash**: Your command line interpreter (like your car's steering wheel)
+- **ssh**: Secure remote access (your teleportation device)
+- **rsync**: Efficient file synchronization (the smart mover)
+- **find**: File searching wizard (your digital bloodhound)
+- **grep**: Text pattern matching (your content detective)
+- **awk/sed**: Text processing tools (your data sculptors)
+- **bsub**: HPC job scheduler (your computational orchestra conductor)
+- **GNU parallel**: Parallel processing made easy (your multitasking manager)
+
+## How to Use This Series
+
+1. **Read each post** like a detective story (every command has a purpose!)
+2. **Practice immediately** on a test system (muscle memory is everything)
+3. **Start with small files** before tackling millions (walk before you run)
+4. **Keep a command cheat sheet** (even experts use reference cards)
+5. **Ask questions** in the comments (every expert was once a beginner)
+
+## A Personal Note from Your Guide
+
+I remember my first day on a Unix system – it felt like being dropped in a foreign country where I couldn't even ask for directions! The black screen with the blinking cursor seemed intimidating, like a digital void waiting to swallow my mistakes.
+
+But here's the secret: the command line isn't about memorizing hundreds of commands. It's about understanding patterns and building intuition. Once you "get it," you'll wonder how you ever lived without this power.
+
+Think of this series as your friendly guide in a new city. I'll show you the essential neighborhoods (directories), teach you the local language (commands), and help you navigate like a local. We'll start with baby steps and gradually build your confidence until you're running marathons.
+
+## Real-World Analogies We'll Use
+
+- **Directories = City neighborhoods**: Each has its purpose and character
+- **Files = Houses**: They live in neighborhoods and have addresses
+- **Commands = Tools**: Each tool has a specific job, like a hammer or screwdriver
+- **Pipes = Assembly lines**: Connect tools to accomplish complex tasks
+- **Scripts = Recipes**: Step-by-step instructions for repeatable results
+
+:::{.callout-tip}
+## Quick Start Adventure
+Ready to begin? Start with [Your Digital Compass](command-line-mastery/01-digital-compass.qmd) where we'll take your first steps into the command line world. Don't worry – I'll be right there with you!
+:::
+
+## Getting Help Along the Way
+
+- 💬 **Comments**: Ask questions below each post (no question is too basic!)
+- 🐙 **GitHub**: Find all example scripts in our [repository](https://github.com/hasangoni/quarto_blog_hasan)
+- 📧 **Direct Help**: Reach out for specific HPC challenges
+- 🤝 **Community**: Connect with other learners in our discussion forum
+
+:::{.callout-note}
+## A Promise to You
+This series is designed for someone who has never touched a command line but needs to work with HPC systems. Every concept is explained with patience, every command is justified with real use cases, and every example is something you'll actually use in your research.
+
+We'll go at a comfortable pace, building confidence step by step. Remember: every Unix expert started exactly where you are now!
+:::
+
+## Series Updates
+
+This series grows based on your feedback and real HPC challenges. Your questions help make it better for everyone who follows this path. Let's master the command line together – one command at a time!
+
+---
+
+*Ready to transform from a GUI user to a command line warrior? Let's begin this adventure!* 

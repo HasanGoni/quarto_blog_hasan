@@ -1,0 +1,2001 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.3.450">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+<meta name="author" content="Hasan">
+<meta name="dcterms.date" content="2025-06-29">
+<meta name="description" content="Master the art of secure remote connections. Learn to work on distant HPC clusters as if they were sitting on your desk, with the security of a digital fortress and the convenience of local access.">
+
+<title>Hasan’s Data Science &amp; AI Blog - SSH and Remote Access</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
+  vertical-align: middle;
+}
+/* CSS for syntax highlighting */
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+  }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+</style>
+
+
+<script src="../../../site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="../../../site_libs/quarto-nav/headroom.min.js"></script>
+<script src="../../../site_libs/clipboard/clipboard.min.js"></script>
+<script src="../../../site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="../../../site_libs/quarto-search/fuse.min.js"></script>
+<script src="../../../site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="../../../">
+<script src="../../../site_libs/quarto-html/quarto.js"></script>
+<script src="../../../site_libs/quarto-html/popper.min.js"></script>
+<script src="../../../site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="../../../site_libs/quarto-html/anchor.min.js"></script>
+<link href="../../../site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="../../../site_libs/quarto-html/quarto-syntax-highlighting.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="../../../site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="../../../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="../../../site_libs/bootstrap/bootstrap.min.css" rel="stylesheet" id="quarto-bootstrap" data-mode="light">
+<script id="quarto-search-options" type="application/json">{
+  "location": "navbar",
+  "copy-button": false,
+  "collapse-after": 3,
+  "panel-placement": "end",
+  "type": "overlay",
+  "limit": 20,
+  "language": {
+    "search-no-results-text": "No results",
+    "search-matching-documents-text": "matching documents",
+    "search-copy-link-title": "Copy link to search",
+    "search-hide-matches-text": "Hide additional matches",
+    "search-more-match-text": "more match in this document",
+    "search-more-matches-text": "more matches in this document",
+    "search-clear-button-title": "Clear",
+    "search-detached-cancel-button-title": "Cancel",
+    "search-submit-button-title": "Submit",
+    "search-label": "Search"
+  }
+}</script>
+<style>html{ scroll-behavior: smooth; }</style>
+<script async="" src="https://hypothes.is/embed.js"></script>
+
+
+<link rel="stylesheet" href="../../../styles.css">
+<meta property="og:title" content="Hasan’s Data Science &amp; AI Blog - SSH and Remote Access">
+<meta property="og:description" content="Master the art of secure remote connections. Learn to work on distant HPC clusters as if they were sitting on your desk, with the security of a digital fortress and the convenience of local access.">
+<meta property="og:image" content="https://images.unsplash.com/photo-1558494949-ef010cbdcc31?ixlib=rb-4.0.3&amp;auto=format&amp;fit=crop&amp;w=2000&amp;q=80">
+<meta property="og:site-name" content="Hasan's Data Science &amp; AI Blog">
+<meta name="twitter:title" content="Hasan’s Data Science &amp; AI Blog - SSH and Remote Access">
+<meta name="twitter:description" content="Master the art of secure remote connections. Learn to work on distant HPC clusters as if they were sitting on your desk, with the security of a digital fortress and the convenience of local access.">
+<meta name="twitter:image" content="https://images.unsplash.com/photo-1558494949-ef010cbdcc31?ixlib=rb-4.0.3&amp;auto=format&amp;fit=crop&amp;w=2000&amp;q=80">
+<meta name="twitter:card" content="summary_large_image">
+</head>
+
+<body class="nav-sidebar docked nav-fixed">
+
+<div id="quarto-search-results"></div>
+  <header id="quarto-header" class="headroom fixed-top">
+    <nav class="navbar navbar-expand-lg navbar-dark ">
+      <div class="navbar-container container-fluid">
+      <div class="navbar-brand-container">
+    <a class="navbar-brand" href="../../../index.html">
+    <span class="navbar-title">Hasan’s Data Science &amp; AI Blog</span>
+    </a>
+  </div>
+            <div id="quarto-search" class="" title="Search"></div>
+          <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCollapse" aria-controls="navbarCollapse" aria-expanded="false" aria-label="Toggle navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+  <span class="navbar-toggler-icon"></span>
+</button>
+          <div class="collapse navbar-collapse" id="navbarCollapse">
+            <ul class="navbar-nav navbar-nav-scroll me-auto">
+  <li class="nav-item">
+    <a class="nav-link" href="../../../index.html" rel="" target="">
+ <span class="menu-text">Home</span></a>
+  </li>  
+  <li class="nav-item dropdown ">
+    <a class="nav-link dropdown-toggle" href="#" id="nav-menu-series" role="button" data-bs-toggle="dropdown" aria-expanded="false" rel="" target="">
+ <span class="menu-text">Series</span>
+    </a>
+    <ul class="dropdown-menu" aria-labelledby="nav-menu-series">    
+        <li>
+    <a class="dropdown-item" href="../../../posts/series/command-line-mastery.html" rel="" target="">
+ <span class="dropdown-text">Command Line Mastery for HPC</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="../../../posts/series/data-science-steps.html" rel="" target="">
+ <span class="dropdown-text">Data Science Steps</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="../../../posts/series/computer-vision-foundations.html" rel="" target="">
+ <span class="dropdown-text">Computer Vision Foundations</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="../../../posts/series/vlm.html" rel="" target="">
+ <span class="dropdown-text">VLM Series</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="../../../posts/series/anomaly-detection/index.html" rel="" target="">
+ <span class="dropdown-text">Anomaly Detection</span></a>
+  </li>  
+    </ul>
+  </li>
+  <li class="nav-item">
+    <a class="nav-link" href="../../../categories.html" rel="" target="">
+ <span class="menu-text">Categories</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="../../../tags.html" rel="" target="">
+ <span class="menu-text">Tags</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="../../../about.html" rel="" target="">
+ <span class="menu-text">About</span></a>
+  </li>  
+</ul>
+            <ul class="navbar-nav navbar-nav-scroll ms-auto">
+  <li class="nav-item compact">
+    <a class="nav-link" href="https://github.com/HasanGoni" rel="" target=""><i class="bi bi-github" role="img">
+</i> 
+ <span class="menu-text"></span></a>
+  </li>  
+  <li class="nav-item compact">
+    <a class="nav-link" href="https://twitter.com/hasangoni" rel="" target=""><i class="bi bi-twitter" role="img">
+</i> 
+ <span class="menu-text"></span></a>
+  </li>  
+</ul>
+            <div class="quarto-navbar-tools">
+</div>
+          </div> <!-- /navcollapse -->
+      </div> <!-- /container-fluid -->
+    </nav>
+  <nav class="quarto-secondary-nav">
+    <div class="container-fluid d-flex">
+      <button type="button" class="quarto-btn-toggle btn" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar,#quarto-sidebar-glass" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+        <i class="bi bi-layout-text-sidebar-reverse"></i>
+      </button>
+      <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../../../posts/series/command-line-mastery.html">Command Line Mastery for HPC</a></li><li class="breadcrumb-item"><a href="../../../posts/series/command-line-mastery/06-ssh-remote-access.html">6. SSH and Remote Access</a></li></ol></nav>
+      <a class="flex-grow-1" role="button" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar,#quarto-sidebar-glass" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
+      </a>
+    </div>
+  </nav>
+</header>
+<!-- content -->
+<header id="title-block-header" class="quarto-title-block default page-columns page-full">
+  <div class="quarto-title-banner page-columns page-full">
+    <div class="quarto-title column-body">
+      <div class="quarto-title-block"><div><h1 class="title">SSH and Remote Access</h1><button type="button" class="btn code-tools-button" id="quarto-code-tools-source"><i class="bi"></i> Code</button></div></div>
+                  <div>
+        <div class="description">
+          Master the art of secure remote connections. Learn to work on distant HPC clusters as if they were sitting on your desk, with the security of a digital fortress and the convenience of local access.
+        </div>
+      </div>
+                          <div class="quarto-categories">
+                <div class="quarto-category">command-line</div>
+                <div class="quarto-category">ssh</div>
+                <div class="quarto-category">remote-access</div>
+                <div class="quarto-category">security</div>
+                <div class="quarto-category">hpc</div>
+              </div>
+                  </div>
+  </div>
+    
+  
+  <div class="quarto-title-meta">
+
+      <div>
+      <div class="quarto-title-meta-heading">Author</div>
+      <div class="quarto-title-meta-contents">
+               <p>Hasan </p>
+            </div>
+    </div>
+      
+      <div>
+      <div class="quarto-title-meta-heading">Published</div>
+      <div class="quarto-title-meta-contents">
+        <p class="date">June 29, 2025</p>
+      </div>
+    </div>
+    
+      <div>
+      <div class="quarto-title-meta-heading">Modified</div>
+      <div class="quarto-title-meta-contents">
+        <p class="date-modified">June 29, 2025</p>
+      </div>
+    </div>
+      
+    </div>
+    
+  
+  </header><div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article page-navbar">
+<!-- sidebar -->
+  <nav id="quarto-sidebar" class="sidebar collapse collapse-horizontal sidebar-navigation docked overflow-auto">
+    <div class="sidebar-menu-container"> 
+    <ul class="list-unstyled mt-1">
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-1" aria-expanded="true">
+ <span class="menu-text">Command Line Mastery for HPC</span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-1" aria-expanded="true" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-1" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../../posts/series/command-line-mastery.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Command Line Mastery for HPC Series</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../../posts/series/command-line-mastery/01-digital-compass.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">1. Digital Compass</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../../posts/series/command-line-mastery/02-file-detective.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">2. File Detective</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../../posts/series/command-line-mastery/03-file-manipulation.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">3. File Manipulation Magic</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../../posts/series/command-line-mastery/04-text-processing.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">4. Text Processing Power</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../../posts/series/command-line-mastery/05-permission-wizardry.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">5. Permission Wizardry</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../../posts/series/command-line-mastery/06-ssh-remote-access.html" class="sidebar-item-text sidebar-link active">
+ <span class="menu-text">6. SSH and Remote Access</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../../posts/series/command-line-mastery/07-file-transfer.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">7. File Transfer Mastery</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../../posts/series/command-line-mastery/08-environment-mastery.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">8. Environment Mastery</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../../posts/series/command-line-mastery/09-hpc-job-scheduling.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">9. HPC Job Scheduling</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../../posts/series/command-line-mastery/10-parallel-processing.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">10. Parallel Processing Power</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../../posts/series/command-line-mastery/11-bash-scripting.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">11. Bash Scripting Essentials</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../../posts/series/command-line-mastery/12-automation-excellence.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">12. Automation Excellence</span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-2" aria-expanded="true">
+ <span class="menu-text">Data Science</span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-2" aria-expanded="true" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-2" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../../posts/series/data-science-steps.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Data Science Steps Series</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../../posts/data-science-steps-to-follow-part01/index.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Data Science Steps to Follow - 01</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../../posts/data-science-steps-to-follow-part02/index.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Data Science Steps to Follow - 02</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../../posts/data-science-steps-to-follow-part03/index.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Data Science Steps to Follow - 03</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../../posts/data-science-steps-to-follow-part04/index.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Data Science Steps to Follow - 04</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../../posts/data-science-steps-to-follow-part05/index.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Data Science Steps to Follow - 05</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../../posts/data-science-steps-to-follow-part06/index.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Data Science Steps to Follow - 06</span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-3" aria-expanded="true">
+ <span class="menu-text">Computer Vision Foundations</span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-3" aria-expanded="true" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-3" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../../posts/series/computer-vision-foundations.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Computer Vision Foundations Series</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../../posts/series/cv-foundations/01-why-computer-vision.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">1. Why Computer Vision?</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../../posts/series/cv-foundations/02-images-as-data.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">2. Images as Data</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../../posts/series/cv-foundations/03-opencv-essentials.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">3. OpenCV Essentials</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../../posts/series/cv-foundations/04-finding-patterns.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">4. Finding Patterns</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../../posts/series/cv-foundations/05-image-segmentation.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">5. Image Segmentation</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../../posts/series/cv-foundations/06-feature-magic.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">6. Feature Magic</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../../posts/series/cv-foundations/07-why-deep-learning.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">7. Why Deep Learning?</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../../posts/series/cv-foundations/08-modern-vision-models.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">8. Modern Vision Models</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../../posts/series/cv-foundations/09-first-cv-project.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">9. First CV Project</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../../posts/series/cv-foundations/10-where-to-go-next.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">10. Where to Go Next</span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-4" aria-expanded="true">
+ <span class="menu-text">Anomaly Detection</span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-4" aria-expanded="true" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-4" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../../posts/series/anomaly-detection/index.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Introduction</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../../posts/series/anomaly-detection/finding-the-oddballs.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Finding the Oddballs</span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-5" aria-expanded="true">
+ <span class="menu-text">VLM Series</span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-5" aria-expanded="true" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-5" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../../posts/series/vlm.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Introduction</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../../posts/series/vlm-qwen3-14b/index.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Qwen3-14B</span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+    </ul>
+    </div>
+</nav>
+<div id="quarto-sidebar-glass" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar,#quarto-sidebar-glass"></div>
+<!-- margin-sidebar -->
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+        <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">On this page</h2>
+   
+  <ul>
+  <li><a href="#the-story-the-digital-teleporter" id="toc-the-story-the-digital-teleporter" class="nav-link active" data-scroll-target="#the-story-the-digital-teleporter"><span class="header-section-number">0.1</span> The Story: The Digital Teleporter</a></li>
+  <li><a href="#understanding-ssh-your-digital-passport" id="toc-understanding-ssh-your-digital-passport" class="nav-link" data-scroll-target="#understanding-ssh-your-digital-passport"><span class="header-section-number">0.2</span> Understanding SSH: Your Digital Passport</a>
+  <ul class="collapse">
+  <li><a href="#the-ssh-architecture" id="toc-the-ssh-architecture" class="nav-link" data-scroll-target="#the-ssh-architecture"><span class="header-section-number">0.2.1</span> The SSH Architecture</a></li>
+  </ul></li>
+  <li><a href="#basic-ssh-connection" id="toc-basic-ssh-connection" class="nav-link" data-scroll-target="#basic-ssh-connection"><span class="header-section-number">0.3</span> Basic SSH Connection</a>
+  <ul class="collapse">
+  <li><a href="#your-first-remote-connection" id="toc-your-first-remote-connection" class="nav-link" data-scroll-target="#your-first-remote-connection"><span class="header-section-number">0.3.1</span> Your First Remote Connection</a></li>
+  <li><a href="#what-happens-during-connection" id="toc-what-happens-during-connection" class="nav-link" data-scroll-target="#what-happens-during-connection"><span class="header-section-number">0.3.2</span> What Happens During Connection</a></li>
+  </ul></li>
+  <li><a href="#ssh-key-authentication-the-master-key-system" id="toc-ssh-key-authentication-the-master-key-system" class="nav-link" data-scroll-target="#ssh-key-authentication-the-master-key-system"><span class="header-section-number">0.4</span> SSH Key Authentication: The Master Key System</a>
+  <ul class="collapse">
+  <li><a href="#generating-your-ssh-key-pair" id="toc-generating-your-ssh-key-pair" class="nav-link" data-scroll-target="#generating-your-ssh-key-pair"><span class="header-section-number">0.4.1</span> Generating Your SSH Key Pair</a></li>
+  <li><a href="#installing-your-public-key-on-remote-systems" id="toc-installing-your-public-key-on-remote-systems" class="nav-link" data-scroll-target="#installing-your-public-key-on-remote-systems"><span class="header-section-number">0.4.2</span> Installing Your Public Key on Remote Systems</a></li>
+  <li><a href="#testing-key-based-authentication" id="toc-testing-key-based-authentication" class="nav-link" data-scroll-target="#testing-key-based-authentication"><span class="header-section-number">0.4.3</span> Testing Key-Based Authentication</a></li>
+  </ul></li>
+  <li><a href="#ssh-configuration-your-connection-management-system" id="toc-ssh-configuration-your-connection-management-system" class="nav-link" data-scroll-target="#ssh-configuration-your-connection-management-system"><span class="header-section-number">0.5</span> SSH Configuration: Your Connection Management System</a>
+  <ul class="collapse">
+  <li><a href="#creating-ssh-config-file" id="toc-creating-ssh-config-file" class="nav-link" data-scroll-target="#creating-ssh-config-file"><span class="header-section-number">0.5.1</span> Creating SSH Config File</a></li>
+  <li><a href="#sample-ssh-configuration" id="toc-sample-ssh-configuration" class="nav-link" data-scroll-target="#sample-ssh-configuration"><span class="header-section-number">0.5.2</span> Sample SSH Configuration</a></li>
+  <li><a href="#using-ssh-config" id="toc-using-ssh-config" class="nav-link" data-scroll-target="#using-ssh-config"><span class="header-section-number">0.5.3</span> Using SSH Config</a></li>
+  </ul></li>
+  <li><a href="#advanced-ssh-techniques" id="toc-advanced-ssh-techniques" class="nav-link" data-scroll-target="#advanced-ssh-techniques"><span class="header-section-number">0.6</span> Advanced SSH Techniques</a>
+  <ul class="collapse">
+  <li><a href="#ssh-tunneling-creating-secure-pathways" id="toc-ssh-tunneling-creating-secure-pathways" class="nav-link" data-scroll-target="#ssh-tunneling-creating-secure-pathways"><span class="header-section-number">0.6.1</span> SSH Tunneling: Creating Secure Pathways</a></li>
+  <li><a href="#x11-forwarding-running-remote-gui-applications" id="toc-x11-forwarding-running-remote-gui-applications" class="nav-link" data-scroll-target="#x11-forwarding-running-remote-gui-applications"><span class="header-section-number">0.6.2</span> X11 Forwarding: Running Remote GUI Applications</a></li>
+  <li><a href="#ssh-agent-managing-multiple-keys" id="toc-ssh-agent-managing-multiple-keys" class="nav-link" data-scroll-target="#ssh-agent-managing-multiple-keys"><span class="header-section-number">0.6.3</span> SSH Agent: Managing Multiple Keys</a></li>
+  </ul></li>
+  <li><a href="#real-world-hpc-ssh-scenarios" id="toc-real-world-hpc-ssh-scenarios" class="nav-link" data-scroll-target="#real-world-hpc-ssh-scenarios"><span class="header-section-number">0.7</span> Real-World HPC SSH Scenarios</a>
+  <ul class="collapse">
+  <li><a href="#scenario-1-multi-hop-connection-to-secure-cluster" id="toc-scenario-1-multi-hop-connection-to-secure-cluster" class="nav-link" data-scroll-target="#scenario-1-multi-hop-connection-to-secure-cluster"><span class="header-section-number">0.7.1</span> Scenario 1: Multi-Hop Connection to Secure Cluster</a></li>
+  <li><a href="#scenario-2-automated-hpc-workflow-script" id="toc-scenario-2-automated-hpc-workflow-script" class="nav-link" data-scroll-target="#scenario-2-automated-hpc-workflow-script"><span class="header-section-number">0.7.2</span> Scenario 2: Automated HPC Workflow Script</a></li>
+  <li><a href="#scenario-3-interactive-hpc-session-with-screentmux" id="toc-scenario-3-interactive-hpc-session-with-screentmux" class="nav-link" data-scroll-target="#scenario-3-interactive-hpc-session-with-screentmux"><span class="header-section-number">0.7.3</span> Scenario 3: Interactive HPC Session with Screen/Tmux</a></li>
+  </ul></li>
+  <li><a href="#ssh-security-best-practices" id="toc-ssh-security-best-practices" class="nav-link" data-scroll-target="#ssh-security-best-practices"><span class="header-section-number">0.8</span> SSH Security Best Practices</a>
+  <ul class="collapse">
+  <li><a href="#hardening-ssh-configuration" id="toc-hardening-ssh-configuration" class="nav-link" data-scroll-target="#hardening-ssh-configuration"><span class="header-section-number">0.8.1</span> Hardening SSH Configuration</a></li>
+  <li><a href="#managing-ssh-keys-securely" id="toc-managing-ssh-keys-securely" class="nav-link" data-scroll-target="#managing-ssh-keys-securely"><span class="header-section-number">0.8.2</span> Managing SSH Keys Securely</a></li>
+  <li><a href="#ssh-key-management-script" id="toc-ssh-key-management-script" class="nav-link" data-scroll-target="#ssh-key-management-script"><span class="header-section-number">0.8.3</span> SSH Key Management Script</a></li>
+  </ul></li>
+  <li><a href="#troubleshooting-ssh-connections" id="toc-troubleshooting-ssh-connections" class="nav-link" data-scroll-target="#troubleshooting-ssh-connections"><span class="header-section-number">0.9</span> Troubleshooting SSH Connections</a>
+  <ul class="collapse">
+  <li><a href="#common-ssh-problems-and-solutions" id="toc-common-ssh-problems-and-solutions" class="nav-link" data-scroll-target="#common-ssh-problems-and-solutions"><span class="header-section-number">0.9.1</span> Common SSH Problems and Solutions</a></li>
+  <li><a href="#ssh-connection-debugging" id="toc-ssh-connection-debugging" class="nav-link" data-scroll-target="#ssh-connection-debugging"><span class="header-section-number">0.9.2</span> SSH Connection Debugging</a></li>
+  </ul></li>
+  <li><a href="#ssh-performance-optimization" id="toc-ssh-performance-optimization" class="nav-link" data-scroll-target="#ssh-performance-optimization"><span class="header-section-number">0.10</span> SSH Performance Optimization</a>
+  <ul class="collapse">
+  <li><a href="#speeding-up-ssh-connections" id="toc-speeding-up-ssh-connections" class="nav-link" data-scroll-target="#speeding-up-ssh-connections"><span class="header-section-number">0.10.1</span> Speeding Up SSH Connections</a></li>
+  <li><a href="#connection-multiplexing-setup" id="toc-connection-multiplexing-setup" class="nav-link" data-scroll-target="#connection-multiplexing-setup"><span class="header-section-number">0.10.2</span> Connection Multiplexing Setup</a></li>
+  </ul></li>
+  <li><a href="#quick-reference-ssh-command-cheat-sheet" id="toc-quick-reference-ssh-command-cheat-sheet" class="nav-link" data-scroll-target="#quick-reference-ssh-command-cheat-sheet"><span class="header-section-number">0.11</span> Quick Reference: SSH Command Cheat Sheet</a></li>
+  <li><a href="#practice-exercises" id="toc-practice-exercises" class="nav-link" data-scroll-target="#practice-exercises"><span class="header-section-number">0.12</span> Practice Exercises</a></li>
+  <li><a href="#whats-next" id="toc-whats-next" class="nav-link" data-scroll-target="#whats-next"><span class="header-section-number">0.13</span> What’s Next?</a></li>
+  </ul>
+</nav>
+    </div>
+<!-- main -->
+<main class="content quarto-banner-title-block" id="quarto-document-content">
+
+
+
+
+<section id="the-story-the-digital-teleporter" class="level2" data-number="0.1">
+<h2 data-number="0.1" class="anchored" data-anchor-id="the-story-the-digital-teleporter"><span class="header-section-number">0.1</span> The Story: The Digital Teleporter</h2>
+<p>Imagine you’re a researcher who needs to access powerful supercomputers located in data centers around the world. These machines have thousands of CPU cores and terabytes of memory, but they’re physically hundreds of miles away. You need a way to teleport your consciousness into these remote machines, work on them as if you were sitting right there, and do it all with bank-level security.</p>
+<p>This isn’t science fiction – it’s SSH (Secure Shell), the digital teleporter that has connected researchers to remote systems for decades. With SSH, your laptop becomes a window into any Unix system on the planet, allowing you to run experiments, transfer files, and manage data across continents as easily as working on your local machine.</p>
+<p>Today, you’ll master the art of secure remote access, becoming a digital nomad who can work anywhere, anytime, on any system.</p>
+</section>
+<section id="understanding-ssh-your-digital-passport" class="level2" data-number="0.2">
+<h2 data-number="0.2" class="anchored" data-anchor-id="understanding-ssh-your-digital-passport"><span class="header-section-number">0.2</span> Understanding SSH: Your Digital Passport</h2>
+<p>SSH is like having a secure, encrypted tunnel between your computer and a remote system. Everything you type is encrypted before leaving your machine, travels securely across the internet, and is decrypted only when it reaches the destination.</p>
+<p><strong>Real-world analogy</strong>: SSH is like having a private, armored car with tinted windows that can instantly transport you to any building in the world. Nobody can see what you’re doing inside, and you arrive safely at your destination.</p>
+<section id="the-ssh-architecture" class="level3" data-number="0.2.1">
+<h3 data-number="0.2.1" class="anchored" data-anchor-id="the-ssh-architecture"><span class="header-section-number">0.2.1</span> The SSH Architecture</h3>
+<pre><code>Your Computer  ←→  Internet  ←→  Remote HPC System
+    (Client)    [Encrypted]      (Server)</code></pre>
+</section>
+</section>
+<section id="basic-ssh-connection" class="level2" data-number="0.3">
+<h2 data-number="0.3" class="anchored" data-anchor-id="basic-ssh-connection"><span class="header-section-number">0.3</span> Basic SSH Connection</h2>
+<section id="your-first-remote-connection" class="level3" data-number="0.3.1">
+<h3 data-number="0.3.1" class="anchored" data-anchor-id="your-first-remote-connection"><span class="header-section-number">0.3.1</span> Your First Remote Connection</h3>
+<div class="sourceCode" id="cb2"><pre class="sourceCode numberSource bash number-lines code-with-copy"><code class="sourceCode bash"><span id="cb2-1"><a href="#cb2-1"></a><span class="co"># Basic SSH connection</span></span>
+<span id="cb2-2"><a href="#cb2-2"></a><span class="fu">ssh</span> username@remote-server.edu</span>
+<span id="cb2-3"><a href="#cb2-3"></a></span>
+<span id="cb2-4"><a href="#cb2-4"></a><span class="co"># SSH with specific port (if not default 22)</span></span>
+<span id="cb2-5"><a href="#cb2-5"></a><span class="fu">ssh</span> <span class="at">-p</span> 2222 username@remote-server.edu</span>
+<span id="cb2-6"><a href="#cb2-6"></a></span>
+<span id="cb2-7"><a href="#cb2-7"></a><span class="co"># SSH with verbose output (for troubleshooting)</span></span>
+<span id="cb2-8"><a href="#cb2-8"></a><span class="fu">ssh</span> <span class="at">-v</span> username@remote-server.edu</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</section>
+<section id="what-happens-during-connection" class="level3" data-number="0.3.2">
+<h3 data-number="0.3.2" class="anchored" data-anchor-id="what-happens-during-connection"><span class="header-section-number">0.3.2</span> What Happens During Connection</h3>
+<ol type="1">
+<li><strong>Authentication</strong>: You prove who you are (password or key)</li>
+<li><strong>Encryption</strong>: A secure tunnel is established</li>
+<li><strong>Shell</strong>: You get a command prompt on the remote system</li>
+<li><strong>Work</strong>: Everything you type runs on the remote machine</li>
+</ol>
+<p><strong>Real-world analogy</strong>: It’s like calling someone on the phone, but instead of just talking, you can actually control their computer as if you were sitting at their desk.</p>
+</section>
+</section>
+<section id="ssh-key-authentication-the-master-key-system" class="level2" data-number="0.4">
+<h2 data-number="0.4" class="anchored" data-anchor-id="ssh-key-authentication-the-master-key-system"><span class="header-section-number">0.4</span> SSH Key Authentication: The Master Key System</h2>
+<p>Password authentication is like having to show your ID every time you enter a building. SSH keys are like having a master key that automatically opens the door.</p>
+<section id="generating-your-ssh-key-pair" class="level3" data-number="0.4.1">
+<h3 data-number="0.4.1" class="anchored" data-anchor-id="generating-your-ssh-key-pair"><span class="header-section-number">0.4.1</span> Generating Your SSH Key Pair</h3>
+<div class="sourceCode" id="cb3"><pre class="sourceCode numberSource bash number-lines code-with-copy"><code class="sourceCode bash"><span id="cb3-1"><a href="#cb3-1"></a><span class="co"># Generate a new SSH key pair</span></span>
+<span id="cb3-2"><a href="#cb3-2"></a><span class="fu">ssh-keygen</span> <span class="at">-t</span> rsa <span class="at">-b</span> 4096 <span class="at">-C</span> <span class="st">"your_email@example.com"</span></span>
+<span id="cb3-3"><a href="#cb3-3"></a></span>
+<span id="cb3-4"><a href="#cb3-4"></a><span class="co"># Generate with specific filename</span></span>
+<span id="cb3-5"><a href="#cb3-5"></a><span class="fu">ssh-keygen</span> <span class="at">-t</span> rsa <span class="at">-b</span> 4096 <span class="at">-f</span> ~/.ssh/hpc_cluster_key</span>
+<span id="cb3-6"><a href="#cb3-6"></a></span>
+<span id="cb3-7"><a href="#cb3-7"></a><span class="co"># Generate Ed25519 key (more modern, shorter)</span></span>
+<span id="cb3-8"><a href="#cb3-8"></a><span class="fu">ssh-keygen</span> <span class="at">-t</span> ed25519 <span class="at">-C</span> <span class="st">"your_email@example.com"</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>This creates two files: - <strong>Private key</strong> (<code>~/.ssh/id_rsa</code>): Keep this secret! Never share it. - <strong>Public key</strong> (<code>~/.ssh/id_rsa.pub</code>): This is safe to share.</p>
+<p><strong>Real-world analogy</strong>: The private key is like your house key (keep it safe), and the public key is like giving the locksmith your lock’s specifications so they can verify your key works.</p>
+</section>
+<section id="installing-your-public-key-on-remote-systems" class="level3" data-number="0.4.2">
+<h3 data-number="0.4.2" class="anchored" data-anchor-id="installing-your-public-key-on-remote-systems"><span class="header-section-number">0.4.2</span> Installing Your Public Key on Remote Systems</h3>
+<div class="sourceCode" id="cb4"><pre class="sourceCode numberSource bash number-lines code-with-copy"><code class="sourceCode bash"><span id="cb4-1"><a href="#cb4-1"></a><span class="co"># Copy your public key to remote server</span></span>
+<span id="cb4-2"><a href="#cb4-2"></a><span class="ex">ssh-copy-id</span> username@remote-server.edu</span>
+<span id="cb4-3"><a href="#cb4-3"></a></span>
+<span id="cb4-4"><a href="#cb4-4"></a><span class="co"># Manual method if ssh-copy-id isn't available</span></span>
+<span id="cb4-5"><a href="#cb4-5"></a><span class="fu">cat</span> ~/.ssh/id_rsa.pub <span class="kw">|</span> <span class="fu">ssh</span> username@remote-server.edu <span class="st">"mkdir -p ~/.ssh &amp;&amp; cat &gt;&gt; ~/.ssh/authorized_keys"</span></span>
+<span id="cb4-6"><a href="#cb4-6"></a></span>
+<span id="cb4-7"><a href="#cb4-7"></a><span class="co"># Verify the key was installed</span></span>
+<span id="cb4-8"><a href="#cb4-8"></a><span class="fu">ssh</span> username@remote-server.edu <span class="st">"cat ~/.ssh/authorized_keys"</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</section>
+<section id="testing-key-based-authentication" class="level3" data-number="0.4.3">
+<h3 data-number="0.4.3" class="anchored" data-anchor-id="testing-key-based-authentication"><span class="header-section-number">0.4.3</span> Testing Key-Based Authentication</h3>
+<div class="sourceCode" id="cb5"><pre class="sourceCode numberSource bash number-lines code-with-copy"><code class="sourceCode bash"><span id="cb5-1"><a href="#cb5-1"></a><span class="co"># This should now work without asking for password</span></span>
+<span id="cb5-2"><a href="#cb5-2"></a><span class="fu">ssh</span> username@remote-server.edu</span>
+<span id="cb5-3"><a href="#cb5-3"></a></span>
+<span id="cb5-4"><a href="#cb5-4"></a><span class="co"># If it still asks for password, check permissions:</span></span>
+<span id="cb5-5"><a href="#cb5-5"></a><span class="fu">ssh</span> username@remote-server.edu <span class="st">"chmod 700 ~/.ssh &amp;&amp; chmod 600 ~/.ssh/authorized_keys"</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</section>
+</section>
+<section id="ssh-configuration-your-connection-management-system" class="level2" data-number="0.5">
+<h2 data-number="0.5" class="anchored" data-anchor-id="ssh-configuration-your-connection-management-system"><span class="header-section-number">0.5</span> SSH Configuration: Your Connection Management System</h2>
+<p>Instead of typing long SSH commands every time, create a configuration file that remembers your settings.</p>
+<section id="creating-ssh-config-file" class="level3" data-number="0.5.1">
+<h3 data-number="0.5.1" class="anchored" data-anchor-id="creating-ssh-config-file"><span class="header-section-number">0.5.1</span> Creating SSH Config File</h3>
+<div class="sourceCode" id="cb6"><pre class="sourceCode numberSource bash number-lines code-with-copy"><code class="sourceCode bash"><span id="cb6-1"><a href="#cb6-1"></a><span class="co"># Create/edit SSH config</span></span>
+<span id="cb6-2"><a href="#cb6-2"></a><span class="fu">nano</span> ~/.ssh/config</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</section>
+<section id="sample-ssh-configuration" class="level3" data-number="0.5.2">
+<h3 data-number="0.5.2" class="anchored" data-anchor-id="sample-ssh-configuration"><span class="header-section-number">0.5.2</span> Sample SSH Configuration</h3>
+<div class="sourceCode" id="cb7"><pre class="sourceCode numberSource bash number-lines code-with-copy"><code class="sourceCode bash"><span id="cb7-1"><a href="#cb7-1"></a><span class="co"># ~/.ssh/config</span></span>
+<span id="cb7-2"><a href="#cb7-2"></a></span>
+<span id="cb7-3"><a href="#cb7-3"></a><span class="co"># HPC Cluster</span></span>
+<span id="cb7-4"><a href="#cb7-4"></a><span class="ex">Host</span> hpc</span>
+<span id="cb7-5"><a href="#cb7-5"></a>    <span class="ex">HostName</span> cluster.university.edu</span>
+<span id="cb7-6"><a href="#cb7-6"></a>    <span class="ex">User</span> your_username</span>
+<span id="cb7-7"><a href="#cb7-7"></a>    <span class="ex">Port</span> 22</span>
+<span id="cb7-8"><a href="#cb7-8"></a>    <span class="ex">IdentityFile</span> ~/.ssh/hpc_cluster_key</span>
+<span id="cb7-9"><a href="#cb7-9"></a>    <span class="ex">ServerAliveInterval</span> 60</span>
+<span id="cb7-10"><a href="#cb7-10"></a>    <span class="ex">ServerAliveCountMax</span> 3</span>
+<span id="cb7-11"><a href="#cb7-11"></a></span>
+<span id="cb7-12"><a href="#cb7-12"></a><span class="co"># Development Server</span></span>
+<span id="cb7-13"><a href="#cb7-13"></a><span class="ex">Host</span> devserver</span>
+<span id="cb7-14"><a href="#cb7-14"></a>    <span class="ex">HostName</span> dev.company.com</span>
+<span id="cb7-15"><a href="#cb7-15"></a>    <span class="ex">User</span> developer</span>
+<span id="cb7-16"><a href="#cb7-16"></a>    <span class="ex">Port</span> 2222</span>
+<span id="cb7-17"><a href="#cb7-17"></a>    <span class="ex">IdentityFile</span> ~/.ssh/dev_key</span>
+<span id="cb7-18"><a href="#cb7-18"></a>    <span class="ex">ForwardX11</span> yes</span>
+<span id="cb7-19"><a href="#cb7-19"></a></span>
+<span id="cb7-20"><a href="#cb7-20"></a><span class="co"># Jump Host Configuration (for servers behind firewalls)</span></span>
+<span id="cb7-21"><a href="#cb7-21"></a><span class="ex">Host</span> internal-server</span>
+<span id="cb7-22"><a href="#cb7-22"></a>    <span class="ex">HostName</span> 192.168.1.100</span>
+<span id="cb7-23"><a href="#cb7-23"></a>    <span class="ex">User</span> researcher</span>
+<span id="cb7-24"><a href="#cb7-24"></a>    <span class="ex">ProxyJump</span> jumphost.university.edu</span>
+<span id="cb7-25"><a href="#cb7-25"></a></span>
+<span id="cb7-26"><a href="#cb7-26"></a><span class="co"># Default settings for all hosts</span></span>
+<span id="cb7-27"><a href="#cb7-27"></a><span class="ex">Host</span> <span class="pp">*</span></span>
+<span id="cb7-28"><a href="#cb7-28"></a>    <span class="ex">ServerAliveInterval</span> 60</span>
+<span id="cb7-29"><a href="#cb7-29"></a>    <span class="ex">ServerAliveCountMax</span> 3</span>
+<span id="cb7-30"><a href="#cb7-30"></a>    <span class="ex">Compression</span> yes</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</section>
+<section id="using-ssh-config" class="level3" data-number="0.5.3">
+<h3 data-number="0.5.3" class="anchored" data-anchor-id="using-ssh-config"><span class="header-section-number">0.5.3</span> Using SSH Config</h3>
+<div class="sourceCode" id="cb8"><pre class="sourceCode numberSource bash number-lines code-with-copy"><code class="sourceCode bash"><span id="cb8-1"><a href="#cb8-1"></a><span class="co"># Now you can connect with simple names</span></span>
+<span id="cb8-2"><a href="#cb8-2"></a><span class="fu">ssh</span> hpc              <span class="co"># Connects to cluster.university.edu</span></span>
+<span id="cb8-3"><a href="#cb8-3"></a><span class="fu">ssh</span> devserver        <span class="co"># Connects to dev.company.com</span></span>
+<span id="cb8-4"><a href="#cb8-4"></a><span class="fu">ssh</span> internal-server  <span class="co"># Connects through jump host</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p><strong>Real-world analogy</strong>: SSH config is like having speed dial for phone numbers – instead of remembering long numbers, you just press one button.</p>
+</section>
+</section>
+<section id="advanced-ssh-techniques" class="level2" data-number="0.6">
+<h2 data-number="0.6" class="anchored" data-anchor-id="advanced-ssh-techniques"><span class="header-section-number">0.6</span> Advanced SSH Techniques</h2>
+<section id="ssh-tunneling-creating-secure-pathways" class="level3" data-number="0.6.1">
+<h3 data-number="0.6.1" class="anchored" data-anchor-id="ssh-tunneling-creating-secure-pathways"><span class="header-section-number">0.6.1</span> SSH Tunneling: Creating Secure Pathways</h3>
+<p>SSH can create secure tunnels for various purposes:</p>
+<div class="sourceCode" id="cb9"><pre class="sourceCode numberSource bash number-lines code-with-copy"><code class="sourceCode bash"><span id="cb9-1"><a href="#cb9-1"></a><span class="co"># Local port forwarding (access remote service locally)</span></span>
+<span id="cb9-2"><a href="#cb9-2"></a><span class="fu">ssh</span> <span class="at">-L</span> 8080:localhost:80 username@remote-server.edu</span>
+<span id="cb9-3"><a href="#cb9-3"></a><span class="co"># Now http://localhost:8080 on your machine connects to port 80 on remote server</span></span>
+<span id="cb9-4"><a href="#cb9-4"></a></span>
+<span id="cb9-5"><a href="#cb9-5"></a><span class="co"># Remote port forwarding (make local service available remotely)</span></span>
+<span id="cb9-6"><a href="#cb9-6"></a><span class="fu">ssh</span> <span class="at">-R</span> 9090:localhost:3000 username@remote-server.edu</span>
+<span id="cb9-7"><a href="#cb9-7"></a><span class="co"># Now port 9090 on remote server connects to port 3000 on your machine</span></span>
+<span id="cb9-8"><a href="#cb9-8"></a></span>
+<span id="cb9-9"><a href="#cb9-9"></a><span class="co"># Dynamic port forwarding (SOCKS proxy)</span></span>
+<span id="cb9-10"><a href="#cb9-10"></a><span class="fu">ssh</span> <span class="at">-D</span> 1080 username@remote-server.edu</span>
+<span id="cb9-11"><a href="#cb9-11"></a><span class="co"># Use localhost:1080 as SOCKS proxy in your browser</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</section>
+<section id="x11-forwarding-running-remote-gui-applications" class="level3" data-number="0.6.2">
+<h3 data-number="0.6.2" class="anchored" data-anchor-id="x11-forwarding-running-remote-gui-applications"><span class="header-section-number">0.6.2</span> X11 Forwarding: Running Remote GUI Applications</h3>
+<div class="sourceCode" id="cb10"><pre class="sourceCode numberSource bash number-lines code-with-copy"><code class="sourceCode bash"><span id="cb10-1"><a href="#cb10-1"></a><span class="co"># Enable X11 forwarding</span></span>
+<span id="cb10-2"><a href="#cb10-2"></a><span class="fu">ssh</span> <span class="at">-X</span> username@remote-server.edu</span>
+<span id="cb10-3"><a href="#cb10-3"></a></span>
+<span id="cb10-4"><a href="#cb10-4"></a><span class="co"># Or in SSH config:</span></span>
+<span id="cb10-5"><a href="#cb10-5"></a><span class="ex">Host</span> hpc</span>
+<span id="cb10-6"><a href="#cb10-6"></a>    <span class="ex">ForwardX11</span> yes</span>
+<span id="cb10-7"><a href="#cb10-7"></a>    <span class="ex">ForwardX11Trusted</span> yes</span>
+<span id="cb10-8"><a href="#cb10-8"></a></span>
+<span id="cb10-9"><a href="#cb10-9"></a><span class="co"># Now you can run GUI applications remotely</span></span>
+<span id="cb10-10"><a href="#cb10-10"></a><span class="fu">ssh</span> hpc</span>
+<span id="cb10-11"><a href="#cb10-11"></a><span class="ex">firefox</span> <span class="kw">&amp;</span>          <span class="co"># Opens Firefox from remote server on your screen</span></span>
+<span id="cb10-12"><a href="#cb10-12"></a><span class="ex">matlab</span> <span class="kw">&amp;</span>           <span class="co"># Opens MATLAB GUI remotely</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</section>
+<section id="ssh-agent-managing-multiple-keys" class="level3" data-number="0.6.3">
+<h3 data-number="0.6.3" class="anchored" data-anchor-id="ssh-agent-managing-multiple-keys"><span class="header-section-number">0.6.3</span> SSH Agent: Managing Multiple Keys</h3>
+<div class="sourceCode" id="cb11"><pre class="sourceCode numberSource bash number-lines code-with-copy"><code class="sourceCode bash"><span id="cb11-1"><a href="#cb11-1"></a><span class="co"># Start SSH agent</span></span>
+<span id="cb11-2"><a href="#cb11-2"></a><span class="bu">eval</span> <span class="va">$(</span><span class="fu">ssh-agent</span><span class="va">)</span></span>
+<span id="cb11-3"><a href="#cb11-3"></a></span>
+<span id="cb11-4"><a href="#cb11-4"></a><span class="co"># Add your keys to agent</span></span>
+<span id="cb11-5"><a href="#cb11-5"></a><span class="fu">ssh-add</span> ~/.ssh/id_rsa</span>
+<span id="cb11-6"><a href="#cb11-6"></a><span class="fu">ssh-add</span> ~/.ssh/hpc_cluster_key</span>
+<span id="cb11-7"><a href="#cb11-7"></a></span>
+<span id="cb11-8"><a href="#cb11-8"></a><span class="co"># List loaded keys</span></span>
+<span id="cb11-9"><a href="#cb11-9"></a><span class="fu">ssh-add</span> <span class="at">-l</span></span>
+<span id="cb11-10"><a href="#cb11-10"></a></span>
+<span id="cb11-11"><a href="#cb11-11"></a><span class="co"># Remove all keys from agent</span></span>
+<span id="cb11-12"><a href="#cb11-12"></a><span class="fu">ssh-add</span> <span class="at">-D</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</section>
+</section>
+<section id="real-world-hpc-ssh-scenarios" class="level2" data-number="0.7">
+<h2 data-number="0.7" class="anchored" data-anchor-id="real-world-hpc-ssh-scenarios"><span class="header-section-number">0.7</span> Real-World HPC SSH Scenarios</h2>
+<section id="scenario-1-multi-hop-connection-to-secure-cluster" class="level3" data-number="0.7.1">
+<h3 data-number="0.7.1" class="anchored" data-anchor-id="scenario-1-multi-hop-connection-to-secure-cluster"><span class="header-section-number">0.7.1</span> Scenario 1: Multi-Hop Connection to Secure Cluster</h3>
+<div class="sourceCode" id="cb12"><pre class="sourceCode numberSource bash number-lines code-with-copy"><code class="sourceCode bash"><span id="cb12-1"><a href="#cb12-1"></a><span class="co"># ~/.ssh/config for complex HPC access</span></span>
+<span id="cb12-2"><a href="#cb12-2"></a></span>
+<span id="cb12-3"><a href="#cb12-3"></a><span class="co"># Jump host (gateway server)</span></span>
+<span id="cb12-4"><a href="#cb12-4"></a><span class="ex">Host</span> gateway</span>
+<span id="cb12-5"><a href="#cb12-5"></a>    <span class="ex">HostName</span> gateway.hpc-center.edu</span>
+<span id="cb12-6"><a href="#cb12-6"></a>    <span class="ex">User</span> your_username</span>
+<span id="cb12-7"><a href="#cb12-7"></a>    <span class="ex">IdentityFile</span> ~/.ssh/hpc_key</span>
+<span id="cb12-8"><a href="#cb12-8"></a>    <span class="ex">ServerAliveInterval</span> 30</span>
+<span id="cb12-9"><a href="#cb12-9"></a></span>
+<span id="cb12-10"><a href="#cb12-10"></a><span class="co"># Compute cluster (behind firewall)</span></span>
+<span id="cb12-11"><a href="#cb12-11"></a><span class="ex">Host</span> cluster</span>
+<span id="cb12-12"><a href="#cb12-12"></a>    <span class="ex">HostName</span> compute-cluster.internal</span>
+<span id="cb12-13"><a href="#cb12-13"></a>    <span class="ex">User</span> your_username</span>
+<span id="cb12-14"><a href="#cb12-14"></a>    <span class="ex">ProxyJump</span> gateway</span>
+<span id="cb12-15"><a href="#cb12-15"></a>    <span class="ex">IdentityFile</span> ~/.ssh/hpc_key</span>
+<span id="cb12-16"><a href="#cb12-16"></a>    <span class="ex">ServerAliveInterval</span> 30</span>
+<span id="cb12-17"><a href="#cb12-17"></a></span>
+<span id="cb12-18"><a href="#cb12-18"></a><span class="co"># Specific compute node</span></span>
+<span id="cb12-19"><a href="#cb12-19"></a><span class="ex">Host</span> node001</span>
+<span id="cb12-20"><a href="#cb12-20"></a>    <span class="ex">HostName</span> node001.compute-cluster.internal</span>
+<span id="cb12-21"><a href="#cb12-21"></a>    <span class="ex">User</span> your_username</span>
+<span id="cb12-22"><a href="#cb12-22"></a>    <span class="ex">ProxyJump</span> gateway</span>
+<span id="cb12-23"><a href="#cb12-23"></a>    <span class="ex">IdentityFile</span> ~/.ssh/hpc_key</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode" id="cb13"><pre class="sourceCode numberSource bash number-lines code-with-copy"><code class="sourceCode bash"><span id="cb13-1"><a href="#cb13-1"></a><span class="co"># Usage</span></span>
+<span id="cb13-2"><a href="#cb13-2"></a><span class="fu">ssh</span> cluster          <span class="co"># Connects through gateway automatically</span></span>
+<span id="cb13-3"><a href="#cb13-3"></a><span class="fu">ssh</span> node001          <span class="co"># Connects to specific compute node</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</section>
+<section id="scenario-2-automated-hpc-workflow-script" class="level3" data-number="0.7.2">
+<h3 data-number="0.7.2" class="anchored" data-anchor-id="scenario-2-automated-hpc-workflow-script"><span class="header-section-number">0.7.2</span> Scenario 2: Automated HPC Workflow Script</h3>
+<div class="sourceCode" id="cb14"><pre class="sourceCode numberSource bash number-lines code-with-copy"><code class="sourceCode bash"><span id="cb14-1"><a href="#cb14-1"></a><span class="co">#!/bin/bash</span></span>
+<span id="cb14-2"><a href="#cb14-2"></a><span class="co"># hpc_workflow.sh - Automated remote job submission and monitoring</span></span>
+<span id="cb14-3"><a href="#cb14-3"></a></span>
+<span id="cb14-4"><a href="#cb14-4"></a><span class="va">HPC_HOST</span><span class="op">=</span><span class="st">"cluster"</span></span>
+<span id="cb14-5"><a href="#cb14-5"></a><span class="va">JOB_DIR</span><span class="op">=</span><span class="st">"/scratch/username/current_job"</span></span>
+<span id="cb14-6"><a href="#cb14-6"></a><span class="va">LOCAL_SCRIPTS</span><span class="op">=</span><span class="st">"./scripts"</span></span>
+<span id="cb14-7"><a href="#cb14-7"></a></span>
+<span id="cb14-8"><a href="#cb14-8"></a><span class="bu">echo</span> <span class="st">"Starting HPC workflow..."</span></span>
+<span id="cb14-9"><a href="#cb14-9"></a></span>
+<span id="cb14-10"><a href="#cb14-10"></a><span class="co"># 1. Prepare remote environment</span></span>
+<span id="cb14-11"><a href="#cb14-11"></a><span class="fu">ssh</span> <span class="va">$HPC_HOST</span> <span class="st">"mkdir -p </span><span class="va">$JOB_DIR</span><span class="st">"</span></span>
+<span id="cb14-12"><a href="#cb14-12"></a></span>
+<span id="cb14-13"><a href="#cb14-13"></a><span class="co"># 2. Transfer job scripts</span></span>
+<span id="cb14-14"><a href="#cb14-14"></a><span class="fu">scp</span> <span class="at">-r</span> <span class="va">$LOCAL_SCRIPTS</span>/<span class="pp">*</span> <span class="va">$HPC_HOST</span>:<span class="va">$JOB_DIR</span>/</span>
+<span id="cb14-15"><a href="#cb14-15"></a></span>
+<span id="cb14-16"><a href="#cb14-16"></a><span class="co"># 3. Submit job and capture job ID</span></span>
+<span id="cb14-17"><a href="#cb14-17"></a><span class="va">JOB_ID</span><span class="op">=</span><span class="va">$(</span><span class="fu">ssh</span> <span class="va">$HPC_HOST</span> <span class="st">"cd </span><span class="va">$JOB_DIR</span><span class="st"> &amp;&amp; bsub &lt; job_script.sh"</span> <span class="kw">|</span> <span class="fu">grep</span> <span class="at">-oP</span> <span class="st">'(?&lt;=Job &lt;)\d+(?=&gt;)'</span><span class="va">)</span></span>
+<span id="cb14-18"><a href="#cb14-18"></a></span>
+<span id="cb14-19"><a href="#cb14-19"></a><span class="bu">echo</span> <span class="st">"Job submitted with ID: </span><span class="va">$JOB_ID</span><span class="st">"</span></span>
+<span id="cb14-20"><a href="#cb14-20"></a></span>
+<span id="cb14-21"><a href="#cb14-21"></a><span class="co"># 4. Monitor job status</span></span>
+<span id="cb14-22"><a href="#cb14-22"></a><span class="cf">while</span> <span class="fu">true</span><span class="kw">;</span> <span class="cf">do</span></span>
+<span id="cb14-23"><a href="#cb14-23"></a>    <span class="va">STATUS</span><span class="op">=</span><span class="va">$(</span><span class="fu">ssh</span> <span class="va">$HPC_HOST</span> <span class="st">"bjobs </span><span class="va">$JOB_ID</span><span class="st"> 2&gt;/dev/null | tail -n 1 | awk '{print </span><span class="dt">\$</span><span class="st">3}'"</span><span class="va">)</span></span>
+<span id="cb14-24"><a href="#cb14-24"></a>    </span>
+<span id="cb14-25"><a href="#cb14-25"></a>    <span class="cf">if</span> <span class="bu">[</span> <span class="st">"</span><span class="va">$STATUS</span><span class="st">"</span> <span class="ot">=</span> <span class="st">"DONE"</span> <span class="bu">]</span><span class="kw">;</span> <span class="cf">then</span></span>
+<span id="cb14-26"><a href="#cb14-26"></a>        <span class="bu">echo</span> <span class="st">"Job completed successfully!"</span></span>
+<span id="cb14-27"><a href="#cb14-27"></a>        <span class="cf">break</span></span>
+<span id="cb14-28"><a href="#cb14-28"></a>    <span class="cf">elif</span> <span class="bu">[</span> <span class="st">"</span><span class="va">$STATUS</span><span class="st">"</span> <span class="ot">=</span> <span class="st">"EXIT"</span> <span class="bu">]</span><span class="kw">;</span> <span class="cf">then</span></span>
+<span id="cb14-29"><a href="#cb14-29"></a>        <span class="bu">echo</span> <span class="st">"Job failed!"</span></span>
+<span id="cb14-30"><a href="#cb14-30"></a>        <span class="fu">ssh</span> <span class="va">$HPC_HOST</span> <span class="st">"cat </span><span class="va">$JOB_DIR</span><span class="st">/job_output.err"</span></span>
+<span id="cb14-31"><a href="#cb14-31"></a>        <span class="bu">exit</span> 1</span>
+<span id="cb14-32"><a href="#cb14-32"></a>    <span class="cf">else</span></span>
+<span id="cb14-33"><a href="#cb14-33"></a>        <span class="bu">echo</span> <span class="st">"Job status: </span><span class="va">$STATUS</span><span class="st">"</span></span>
+<span id="cb14-34"><a href="#cb14-34"></a>        <span class="fu">sleep</span> 30</span>
+<span id="cb14-35"><a href="#cb14-35"></a>    <span class="cf">fi</span></span>
+<span id="cb14-36"><a href="#cb14-36"></a><span class="cf">done</span></span>
+<span id="cb14-37"><a href="#cb14-37"></a></span>
+<span id="cb14-38"><a href="#cb14-38"></a><span class="co"># 5. Retrieve results</span></span>
+<span id="cb14-39"><a href="#cb14-39"></a><span class="fu">mkdir</span> <span class="at">-p</span> results/</span>
+<span id="cb14-40"><a href="#cb14-40"></a><span class="fu">scp</span> <span class="at">-r</span> <span class="va">$HPC_HOST</span>:<span class="va">$JOB_DIR</span>/output/<span class="pp">*</span> results/</span>
+<span id="cb14-41"><a href="#cb14-41"></a></span>
+<span id="cb14-42"><a href="#cb14-42"></a><span class="bu">echo</span> <span class="st">"Workflow completed. Results downloaded to ./results/"</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</section>
+<section id="scenario-3-interactive-hpc-session-with-screentmux" class="level3" data-number="0.7.3">
+<h3 data-number="0.7.3" class="anchored" data-anchor-id="scenario-3-interactive-hpc-session-with-screentmux"><span class="header-section-number">0.7.3</span> Scenario 3: Interactive HPC Session with Screen/Tmux</h3>
+<div class="sourceCode" id="cb15"><pre class="sourceCode numberSource bash number-lines code-with-copy"><code class="sourceCode bash"><span id="cb15-1"><a href="#cb15-1"></a><span class="co">#!/bin/bash</span></span>
+<span id="cb15-2"><a href="#cb15-2"></a><span class="co"># hpc_interactive.sh - Start persistent interactive session</span></span>
+<span id="cb15-3"><a href="#cb15-3"></a></span>
+<span id="cb15-4"><a href="#cb15-4"></a><span class="va">HPC_HOST</span><span class="op">=</span><span class="st">"cluster"</span></span>
+<span id="cb15-5"><a href="#cb15-5"></a><span class="va">SESSION_NAME</span><span class="op">=</span><span class="st">"research_</span><span class="va">$(</span><span class="fu">date</span> +%Y%m%d<span class="va">)</span><span class="st">"</span></span>
+<span id="cb15-6"><a href="#cb15-6"></a></span>
+<span id="cb15-7"><a href="#cb15-7"></a><span class="bu">echo</span> <span class="st">"Starting interactive HPC session..."</span></span>
+<span id="cb15-8"><a href="#cb15-8"></a></span>
+<span id="cb15-9"><a href="#cb15-9"></a><span class="co"># Connect and start tmux session</span></span>
+<span id="cb15-10"><a href="#cb15-10"></a><span class="fu">ssh</span> <span class="at">-t</span> <span class="va">$HPC_HOST</span> <span class="st">"tmux new-session -d -s </span><span class="va">$SESSION_NAME</span><span class="st"> &amp;&amp; tmux send-keys 'cd /scratch/</span><span class="dt">\$</span><span class="st">USER' Enter &amp;&amp; tmux attach -t </span><span class="va">$SESSION_NAME</span><span class="st">"</span></span>
+<span id="cb15-11"><a href="#cb15-11"></a></span>
+<span id="cb15-12"><a href="#cb15-12"></a><span class="co"># Alternative with screen</span></span>
+<span id="cb15-13"><a href="#cb15-13"></a><span class="co"># ssh -t $HPC_HOST "screen -S $SESSION_NAME"</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</section>
+</section>
+<section id="ssh-security-best-practices" class="level2" data-number="0.8">
+<h2 data-number="0.8" class="anchored" data-anchor-id="ssh-security-best-practices"><span class="header-section-number">0.8</span> SSH Security Best Practices</h2>
+<section id="hardening-ssh-configuration" class="level3" data-number="0.8.1">
+<h3 data-number="0.8.1" class="anchored" data-anchor-id="hardening-ssh-configuration"><span class="header-section-number">0.8.1</span> Hardening SSH Configuration</h3>
+<div class="sourceCode" id="cb16"><pre class="sourceCode numberSource bash number-lines code-with-copy"><code class="sourceCode bash"><span id="cb16-1"><a href="#cb16-1"></a><span class="co"># ~/.ssh/config security settings</span></span>
+<span id="cb16-2"><a href="#cb16-2"></a><span class="ex">Host</span> <span class="pp">*</span></span>
+<span id="cb16-3"><a href="#cb16-3"></a>    <span class="co"># Use only key authentication</span></span>
+<span id="cb16-4"><a href="#cb16-4"></a>    <span class="ex">PasswordAuthentication</span> no</span>
+<span id="cb16-5"><a href="#cb16-5"></a>    <span class="ex">PubkeyAuthentication</span> yes</span>
+<span id="cb16-6"><a href="#cb16-6"></a>    </span>
+<span id="cb16-7"><a href="#cb16-7"></a>    <span class="co"># Use strong ciphers</span></span>
+<span id="cb16-8"><a href="#cb16-8"></a>    <span class="ex">Ciphers</span> aes256-gcm@openssh.com,aes128-gcm@openssh.com,aes256-ctr,aes192-ctr,aes128-ctr</span>
+<span id="cb16-9"><a href="#cb16-9"></a>    </span>
+<span id="cb16-10"><a href="#cb16-10"></a>    <span class="co"># Disable weak algorithms</span></span>
+<span id="cb16-11"><a href="#cb16-11"></a>    <span class="ex">KexAlgorithms</span> curve25519-sha256@libssh.org,diffie-hellman-group16-sha512</span>
+<span id="cb16-12"><a href="#cb16-12"></a>    </span>
+<span id="cb16-13"><a href="#cb16-13"></a>    <span class="co"># Connection timeouts</span></span>
+<span id="cb16-14"><a href="#cb16-14"></a>    <span class="ex">ServerAliveInterval</span> 60</span>
+<span id="cb16-15"><a href="#cb16-15"></a>    <span class="ex">ServerAliveCountMax</span> 3</span>
+<span id="cb16-16"><a href="#cb16-16"></a>    <span class="ex">ConnectTimeout</span> 30</span>
+<span id="cb16-17"><a href="#cb16-17"></a>    </span>
+<span id="cb16-18"><a href="#cb16-18"></a>    <span class="co"># Disable X11 forwarding by default (enable per host if needed)</span></span>
+<span id="cb16-19"><a href="#cb16-19"></a>    <span class="ex">ForwardX11</span> no</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</section>
+<section id="managing-ssh-keys-securely" class="level3" data-number="0.8.2">
+<h3 data-number="0.8.2" class="anchored" data-anchor-id="managing-ssh-keys-securely"><span class="header-section-number">0.8.2</span> Managing SSH Keys Securely</h3>
+<div class="sourceCode" id="cb17"><pre class="sourceCode numberSource bash number-lines code-with-copy"><code class="sourceCode bash"><span id="cb17-1"><a href="#cb17-1"></a><span class="co"># Set proper permissions on SSH directory</span></span>
+<span id="cb17-2"><a href="#cb17-2"></a><span class="fu">chmod</span> 700 ~/.ssh</span>
+<span id="cb17-3"><a href="#cb17-3"></a><span class="fu">chmod</span> 600 ~/.ssh/config</span>
+<span id="cb17-4"><a href="#cb17-4"></a><span class="fu">chmod</span> 600 ~/.ssh/id_rsa          <span class="co"># Private key</span></span>
+<span id="cb17-5"><a href="#cb17-5"></a><span class="fu">chmod</span> 644 ~/.ssh/id_rsa.pub      <span class="co"># Public key</span></span>
+<span id="cb17-6"><a href="#cb17-6"></a><span class="fu">chmod</span> 600 ~/.ssh/authorized_keys</span>
+<span id="cb17-7"><a href="#cb17-7"></a><span class="fu">chmod</span> 600 ~/.ssh/known_hosts</span>
+<span id="cb17-8"><a href="#cb17-8"></a></span>
+<span id="cb17-9"><a href="#cb17-9"></a><span class="co"># Use passphrase-protected keys for sensitive systems</span></span>
+<span id="cb17-10"><a href="#cb17-10"></a><span class="fu">ssh-keygen</span> <span class="at">-t</span> ed25519 <span class="at">-f</span> ~/.ssh/sensitive_system_key</span>
+<span id="cb17-11"><a href="#cb17-11"></a><span class="co"># Enter strong passphrase when prompted</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</section>
+<section id="ssh-key-management-script" class="level3" data-number="0.8.3">
+<h3 data-number="0.8.3" class="anchored" data-anchor-id="ssh-key-management-script"><span class="header-section-number">0.8.3</span> SSH Key Management Script</h3>
+<div class="sourceCode" id="cb18"><pre class="sourceCode numberSource bash number-lines code-with-copy"><code class="sourceCode bash"><span id="cb18-1"><a href="#cb18-1"></a><span class="co">#!/bin/bash</span></span>
+<span id="cb18-2"><a href="#cb18-2"></a><span class="co"># manage_ssh_keys.sh - Manage SSH keys across multiple systems</span></span>
+<span id="cb18-3"><a href="#cb18-3"></a></span>
+<span id="cb18-4"><a href="#cb18-4"></a><span class="va">SYSTEMS</span><span class="op">=</span><span class="va">(</span><span class="st">"hpc1.edu"</span> <span class="st">"hpc2.edu"</span> <span class="st">"cluster.org"</span><span class="va">)</span></span>
+<span id="cb18-5"><a href="#cb18-5"></a><span class="va">PUBLIC_KEY</span><span class="op">=</span><span class="st">"</span><span class="va">$HOME</span><span class="st">/.ssh/id_rsa.pub"</span></span>
+<span id="cb18-6"><a href="#cb18-6"></a></span>
+<span id="cb18-7"><a href="#cb18-7"></a><span class="cf">if</span> <span class="bu">[</span> <span class="ot">!</span> <span class="ot">-f</span> <span class="st">"</span><span class="va">$PUBLIC_KEY</span><span class="st">"</span> <span class="bu">]</span><span class="kw">;</span> <span class="cf">then</span></span>
+<span id="cb18-8"><a href="#cb18-8"></a>    <span class="bu">echo</span> <span class="st">"Generating new SSH key..."</span></span>
+<span id="cb18-9"><a href="#cb18-9"></a>    <span class="fu">ssh-keygen</span> <span class="at">-t</span> rsa <span class="at">-b</span> 4096 <span class="at">-f</span> ~/.ssh/id_rsa</span>
+<span id="cb18-10"><a href="#cb18-10"></a><span class="cf">fi</span></span>
+<span id="cb18-11"><a href="#cb18-11"></a></span>
+<span id="cb18-12"><a href="#cb18-12"></a><span class="bu">echo</span> <span class="st">"Installing SSH key on remote systems..."</span></span>
+<span id="cb18-13"><a href="#cb18-13"></a><span class="cf">for</span> system <span class="kw">in</span> <span class="st">"</span><span class="va">${SYSTEMS</span><span class="op">[@]</span><span class="va">}</span><span class="st">"</span><span class="kw">;</span> <span class="cf">do</span></span>
+<span id="cb18-14"><a href="#cb18-14"></a>    <span class="bu">echo</span> <span class="st">"Installing key on </span><span class="va">$system</span><span class="st">..."</span></span>
+<span id="cb18-15"><a href="#cb18-15"></a>    <span class="ex">ssh-copy-id</span> <span class="at">-i</span> <span class="st">"</span><span class="va">$PUBLIC_KEY</span><span class="st">"</span> <span class="st">"</span><span class="va">$system</span><span class="st">"</span></span>
+<span id="cb18-16"><a href="#cb18-16"></a>    </span>
+<span id="cb18-17"><a href="#cb18-17"></a>    <span class="cf">if</span> <span class="bu">[</span> <span class="va">$?</span> <span class="ot">-eq</span> 0 <span class="bu">]</span><span class="kw">;</span> <span class="cf">then</span></span>
+<span id="cb18-18"><a href="#cb18-18"></a>        <span class="bu">echo</span> <span class="st">"✓ Key installed on </span><span class="va">$system</span><span class="st">"</span></span>
+<span id="cb18-19"><a href="#cb18-19"></a>    <span class="cf">else</span></span>
+<span id="cb18-20"><a href="#cb18-20"></a>        <span class="bu">echo</span> <span class="st">"✗ Failed to install key on </span><span class="va">$system</span><span class="st">"</span></span>
+<span id="cb18-21"><a href="#cb18-21"></a>    <span class="cf">fi</span></span>
+<span id="cb18-22"><a href="#cb18-22"></a><span class="cf">done</span></span>
+<span id="cb18-23"><a href="#cb18-23"></a></span>
+<span id="cb18-24"><a href="#cb18-24"></a><span class="bu">echo</span> <span class="st">"Testing connections..."</span></span>
+<span id="cb18-25"><a href="#cb18-25"></a><span class="cf">for</span> system <span class="kw">in</span> <span class="st">"</span><span class="va">${SYSTEMS</span><span class="op">[@]</span><span class="va">}</span><span class="st">"</span><span class="kw">;</span> <span class="cf">do</span></span>
+<span id="cb18-26"><a href="#cb18-26"></a>    <span class="bu">echo</span> <span class="at">-n</span> <span class="st">"Testing </span><span class="va">$system</span><span class="st">... "</span></span>
+<span id="cb18-27"><a href="#cb18-27"></a>    <span class="cf">if</span> <span class="fu">ssh</span> <span class="at">-o</span> ConnectTimeout=5 <span class="at">-o</span> BatchMode=yes <span class="st">"</span><span class="va">$system</span><span class="st">"</span> <span class="st">"echo 'OK'"</span> <span class="dv">2</span><span class="op">&gt;</span>/dev/null<span class="kw">;</span> <span class="cf">then</span></span>
+<span id="cb18-28"><a href="#cb18-28"></a>        <span class="bu">echo</span> <span class="st">"✓ Connected"</span></span>
+<span id="cb18-29"><a href="#cb18-29"></a>    <span class="cf">else</span></span>
+<span id="cb18-30"><a href="#cb18-30"></a>        <span class="bu">echo</span> <span class="st">"✗ Failed"</span></span>
+<span id="cb18-31"><a href="#cb18-31"></a>    <span class="cf">fi</span></span>
+<span id="cb18-32"><a href="#cb18-32"></a><span class="cf">done</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</section>
+</section>
+<section id="troubleshooting-ssh-connections" class="level2" data-number="0.9">
+<h2 data-number="0.9" class="anchored" data-anchor-id="troubleshooting-ssh-connections"><span class="header-section-number">0.9</span> Troubleshooting SSH Connections</h2>
+<section id="common-ssh-problems-and-solutions" class="level3" data-number="0.9.1">
+<h3 data-number="0.9.1" class="anchored" data-anchor-id="common-ssh-problems-and-solutions"><span class="header-section-number">0.9.1</span> Common SSH Problems and Solutions</h3>
+<section id="problem-1-permission-denied-publickey" class="level4" data-number="0.9.1.1">
+<h4 data-number="0.9.1.1" class="anchored" data-anchor-id="problem-1-permission-denied-publickey"><span class="header-section-number">0.9.1.1</span> Problem 1: “Permission denied (publickey)”</h4>
+<div class="sourceCode" id="cb19"><pre class="sourceCode numberSource bash number-lines code-with-copy"><code class="sourceCode bash"><span id="cb19-1"><a href="#cb19-1"></a><span class="co"># Check if key is loaded in SSH agent</span></span>
+<span id="cb19-2"><a href="#cb19-2"></a><span class="fu">ssh-add</span> <span class="at">-l</span></span>
+<span id="cb19-3"><a href="#cb19-3"></a></span>
+<span id="cb19-4"><a href="#cb19-4"></a><span class="co"># If not loaded, add it</span></span>
+<span id="cb19-5"><a href="#cb19-5"></a><span class="fu">ssh-add</span> ~/.ssh/id_rsa</span>
+<span id="cb19-6"><a href="#cb19-6"></a></span>
+<span id="cb19-7"><a href="#cb19-7"></a><span class="co"># Check remote server permissions</span></span>
+<span id="cb19-8"><a href="#cb19-8"></a><span class="fu">ssh</span> username@server <span class="st">"ls -la ~/.ssh/"</span></span>
+<span id="cb19-9"><a href="#cb19-9"></a><span class="co"># Should show:</span></span>
+<span id="cb19-10"><a href="#cb19-10"></a><span class="co"># drwx------  ~/.ssh/</span></span>
+<span id="cb19-11"><a href="#cb19-11"></a><span class="co"># -rw-------  ~/.ssh/authorized_keys</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</section>
+<section id="problem-2-connection-timed-out" class="level4" data-number="0.9.1.2">
+<h4 data-number="0.9.1.2" class="anchored" data-anchor-id="problem-2-connection-timed-out"><span class="header-section-number">0.9.1.2</span> Problem 2: “Connection timed out”</h4>
+<div class="sourceCode" id="cb20"><pre class="sourceCode numberSource bash number-lines code-with-copy"><code class="sourceCode bash"><span id="cb20-1"><a href="#cb20-1"></a><span class="co"># Test with verbose output</span></span>
+<span id="cb20-2"><a href="#cb20-2"></a><span class="fu">ssh</span> <span class="at">-v</span> username@server</span>
+<span id="cb20-3"><a href="#cb20-3"></a></span>
+<span id="cb20-4"><a href="#cb20-4"></a><span class="co"># Try different port</span></span>
+<span id="cb20-5"><a href="#cb20-5"></a><span class="fu">ssh</span> <span class="at">-p</span> 2222 username@server</span>
+<span id="cb20-6"><a href="#cb20-6"></a></span>
+<span id="cb20-7"><a href="#cb20-7"></a><span class="co"># Check if server is reachable</span></span>
+<span id="cb20-8"><a href="#cb20-8"></a><span class="fu">ping</span> server-hostname</span>
+<span id="cb20-9"><a href="#cb20-9"></a><span class="ex">telnet</span> server-hostname 22</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</section>
+<section id="problem-3-host-key-verification-failed" class="level4" data-number="0.9.1.3">
+<h4 data-number="0.9.1.3" class="anchored" data-anchor-id="problem-3-host-key-verification-failed"><span class="header-section-number">0.9.1.3</span> Problem 3: “Host key verification failed”</h4>
+<div class="sourceCode" id="cb21"><pre class="sourceCode numberSource bash number-lines code-with-copy"><code class="sourceCode bash"><span id="cb21-1"><a href="#cb21-1"></a><span class="co"># Remove old host key</span></span>
+<span id="cb21-2"><a href="#cb21-2"></a><span class="fu">ssh-keygen</span> <span class="at">-R</span> hostname</span>
+<span id="cb21-3"><a href="#cb21-3"></a></span>
+<span id="cb21-4"><a href="#cb21-4"></a><span class="co"># Or edit known_hosts file</span></span>
+<span id="cb21-5"><a href="#cb21-5"></a><span class="fu">nano</span> ~/.ssh/known_hosts</span>
+<span id="cb21-6"><a href="#cb21-6"></a><span class="co"># Remove the line with the problematic hostname</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</section>
+</section>
+<section id="ssh-connection-debugging" class="level3" data-number="0.9.2">
+<h3 data-number="0.9.2" class="anchored" data-anchor-id="ssh-connection-debugging"><span class="header-section-number">0.9.2</span> SSH Connection Debugging</h3>
+<div class="sourceCode" id="cb22"><pre class="sourceCode numberSource bash number-lines code-with-copy"><code class="sourceCode bash"><span id="cb22-1"><a href="#cb22-1"></a><span class="co"># Maximum verbosity for debugging</span></span>
+<span id="cb22-2"><a href="#cb22-2"></a><span class="fu">ssh</span> <span class="at">-vvv</span> username@server</span>
+<span id="cb22-3"><a href="#cb22-3"></a></span>
+<span id="cb22-4"><a href="#cb22-4"></a><span class="co"># Test specific configuration</span></span>
+<span id="cb22-5"><a href="#cb22-5"></a><span class="fu">ssh</span> <span class="at">-F</span> /path/to/config username@server</span>
+<span id="cb22-6"><a href="#cb22-6"></a></span>
+<span id="cb22-7"><a href="#cb22-7"></a><span class="co"># Ignore known_hosts (for testing only!)</span></span>
+<span id="cb22-8"><a href="#cb22-8"></a><span class="fu">ssh</span> <span class="at">-o</span> StrictHostKeyChecking=no <span class="at">-o</span> UserKnownHostsFile=/dev/null username@server</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</section>
+</section>
+<section id="ssh-performance-optimization" class="level2" data-number="0.10">
+<h2 data-number="0.10" class="anchored" data-anchor-id="ssh-performance-optimization"><span class="header-section-number">0.10</span> SSH Performance Optimization</h2>
+<section id="speeding-up-ssh-connections" class="level3" data-number="0.10.1">
+<h3 data-number="0.10.1" class="anchored" data-anchor-id="speeding-up-ssh-connections"><span class="header-section-number">0.10.1</span> Speeding Up SSH Connections</h3>
+<div class="sourceCode" id="cb23"><pre class="sourceCode numberSource bash number-lines code-with-copy"><code class="sourceCode bash"><span id="cb23-1"><a href="#cb23-1"></a><span class="co"># ~/.ssh/config optimizations</span></span>
+<span id="cb23-2"><a href="#cb23-2"></a><span class="ex">Host</span> <span class="pp">*</span></span>
+<span id="cb23-3"><a href="#cb23-3"></a>    <span class="co"># Reuse connections</span></span>
+<span id="cb23-4"><a href="#cb23-4"></a>    <span class="ex">ControlMaster</span> auto</span>
+<span id="cb23-5"><a href="#cb23-5"></a>    <span class="ex">ControlPath</span> ~/.ssh/sockets/%r@%h-%p</span>
+<span id="cb23-6"><a href="#cb23-6"></a>    <span class="ex">ControlPersist</span> 600</span>
+<span id="cb23-7"><a href="#cb23-7"></a>    </span>
+<span id="cb23-8"><a href="#cb23-8"></a>    <span class="co"># Enable compression</span></span>
+<span id="cb23-9"><a href="#cb23-9"></a>    <span class="ex">Compression</span> yes</span>
+<span id="cb23-10"><a href="#cb23-10"></a>    </span>
+<span id="cb23-11"><a href="#cb23-11"></a>    <span class="co"># Faster cipher (less secure, use only on trusted networks)</span></span>
+<span id="cb23-12"><a href="#cb23-12"></a>    <span class="co"># Cipher arcfour</span></span>
+<span id="cb23-13"><a href="#cb23-13"></a>    </span>
+<span id="cb23-14"><a href="#cb23-14"></a>    <span class="co"># Keep connections alive</span></span>
+<span id="cb23-15"><a href="#cb23-15"></a>    <span class="ex">ServerAliveInterval</span> 60</span>
+<span id="cb23-16"><a href="#cb23-16"></a>    <span class="ex">ServerAliveCountMax</span> 3</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</section>
+<section id="connection-multiplexing-setup" class="level3" data-number="0.10.2">
+<h3 data-number="0.10.2" class="anchored" data-anchor-id="connection-multiplexing-setup"><span class="header-section-number">0.10.2</span> Connection Multiplexing Setup</h3>
+<div class="sourceCode" id="cb24"><pre class="sourceCode numberSource bash number-lines code-with-copy"><code class="sourceCode bash"><span id="cb24-1"><a href="#cb24-1"></a><span class="co"># Create socket directory</span></span>
+<span id="cb24-2"><a href="#cb24-2"></a><span class="fu">mkdir</span> <span class="at">-p</span> ~/.ssh/sockets</span>
+<span id="cb24-3"><a href="#cb24-3"></a></span>
+<span id="cb24-4"><a href="#cb24-4"></a><span class="co"># First connection establishes master</span></span>
+<span id="cb24-5"><a href="#cb24-5"></a><span class="fu">ssh</span> hpc</span>
+<span id="cb24-6"><a href="#cb24-6"></a></span>
+<span id="cb24-7"><a href="#cb24-7"></a><span class="co"># Subsequent connections reuse the master (much faster)</span></span>
+<span id="cb24-8"><a href="#cb24-8"></a><span class="fu">ssh</span> hpc  <span class="co"># This will be instant!</span></span>
+<span id="cb24-9"><a href="#cb24-9"></a><span class="fu">scp</span> file.txt hpc:~/  <span class="co"># This will also be faster</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</section>
+</section>
+<section id="quick-reference-ssh-command-cheat-sheet" class="level2" data-number="0.11">
+<h2 data-number="0.11" class="anchored" data-anchor-id="quick-reference-ssh-command-cheat-sheet"><span class="header-section-number">0.11</span> Quick Reference: SSH Command Cheat Sheet</h2>
+<table class="table">
+<colgroup>
+<col style="width: 25%">
+<col style="width: 37%">
+<col style="width: 37%">
+</colgroup>
+<thead>
+<tr class="header">
+<th>Task</th>
+<th>Command</th>
+<th>Example</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>Basic connection</td>
+<td><code>ssh user@host</code></td>
+<td><code>ssh alice@hpc.edu</code></td>
+</tr>
+<tr class="even">
+<td>Connect with key</td>
+<td><code>ssh -i keyfile user@host</code></td>
+<td><code>ssh -i ~/.ssh/hpc_key alice@hpc.edu</code></td>
+</tr>
+<tr class="odd">
+<td>Connect to port</td>
+<td><code>ssh -p port user@host</code></td>
+<td><code>ssh -p 2222 alice@hpc.edu</code></td>
+</tr>
+<tr class="even">
+<td>X11 forwarding</td>
+<td><code>ssh -X user@host</code></td>
+<td><code>ssh -X alice@hpc.edu</code></td>
+</tr>
+<tr class="odd">
+<td>Local port forward</td>
+<td><code>ssh -L local:remote user@host</code></td>
+<td><code>ssh -L 8080:localhost:80 alice@hpc.edu</code></td>
+</tr>
+<tr class="even">
+<td>Generate key pair</td>
+<td><code>ssh-keygen -t type</code></td>
+<td><code>ssh-keygen -t rsa -b 4096</code></td>
+</tr>
+<tr class="odd">
+<td>Copy public key</td>
+<td><code>ssh-copy-id user@host</code></td>
+<td><code>ssh-copy-id alice@hpc.edu</code></td>
+</tr>
+<tr class="even">
+<td>Add key to agent</td>
+<td><code>ssh-add keyfile</code></td>
+<td><code>ssh-add ~/.ssh/id_rsa</code></td>
+</tr>
+</tbody>
+</table>
+</section>
+<section id="practice-exercises" class="level2" data-number="0.12">
+<h2 data-number="0.12" class="anchored" data-anchor-id="practice-exercises"><span class="header-section-number">0.12</span> Practice Exercises</h2>
+<div class="callout callout-style-default callout-important callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Your SSH Mastery Training
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<ol type="1">
+<li><p><strong>Set up key-based authentication</strong></p>
+<div class="sourceCode" id="cb25"><pre class="sourceCode numberSource bash number-lines code-with-copy"><code class="sourceCode bash"><span id="cb25-1"><a href="#cb25-1"></a><span class="co"># Generate SSH key pair</span></span>
+<span id="cb25-2"><a href="#cb25-2"></a><span class="co"># Install public key on a remote system</span></span>
+<span id="cb25-3"><a href="#cb25-3"></a><span class="co"># Test passwordless login</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div></li>
+<li><p><strong>Create SSH configuration</strong></p>
+<div class="sourceCode" id="cb26"><pre class="sourceCode numberSource bash number-lines code-with-copy"><code class="sourceCode bash"><span id="cb26-1"><a href="#cb26-1"></a><span class="co"># Set up ~/.ssh/config with:</span></span>
+<span id="cb26-2"><a href="#cb26-2"></a><span class="co"># - Host aliases</span></span>
+<span id="cb26-3"><a href="#cb26-3"></a><span class="co"># - Different keys for different systems</span></span>
+<span id="cb26-4"><a href="#cb26-4"></a><span class="co"># - Connection optimization settings</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div></li>
+<li><p><strong>Practice SSH tunneling</strong></p>
+<div class="sourceCode" id="cb27"><pre class="sourceCode numberSource bash number-lines code-with-copy"><code class="sourceCode bash"><span id="cb27-1"><a href="#cb27-1"></a><span class="co"># Set up port forwarding</span></span>
+<span id="cb27-2"><a href="#cb27-2"></a><span class="co"># Access a remote web service locally</span></span>
+<span id="cb27-3"><a href="#cb27-3"></a><span class="co"># Create a SOCKS proxy</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div></li>
+<li><p><strong>Automate remote tasks</strong></p>
+<div class="sourceCode" id="cb28"><pre class="sourceCode numberSource bash number-lines code-with-copy"><code class="sourceCode bash"><span id="cb28-1"><a href="#cb28-1"></a><span class="co"># Write a script that:</span></span>
+<span id="cb28-2"><a href="#cb28-2"></a><span class="co"># - Connects to remote system</span></span>
+<span id="cb28-3"><a href="#cb28-3"></a><span class="co"># - Runs commands</span></span>
+<span id="cb28-4"><a href="#cb28-4"></a><span class="co"># - Transfers files</span></span>
+<span id="cb28-5"><a href="#cb28-5"></a><span class="co"># - Reports results</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div></li>
+</ol>
+</div>
+</div>
+</section>
+<section id="whats-next" class="level2" data-number="0.13">
+<h2 data-number="0.13" class="anchored" data-anchor-id="whats-next"><span class="header-section-number">0.13</span> What’s Next?</h2>
+<p>Now that you’re an SSH master, you’re ready to learn about <a href="../../../posts/series/command-line-mastery/07-file-transfer.html">File Transfer Mastery</a>. SSH is the foundation for secure file transfers, and you’ll build on these skills to move massive amounts of data efficiently between systems.</p>
+<p>Remember: SSH is your gateway to the HPC world. Every data transfer, every remote job, every collaboration with distant systems starts with a secure SSH connection. Master these skills, and you’ll work seamlessly across any number of remote systems as if they were all sitting on your desk.</p>
+<div class="callout callout-style-default callout-tip callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+SSH Mastery Challenge
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>Before moving on, try this real-world scenario: 1. Set up passwordless access to a remote system 2. Create a complex SSH configuration with multiple hosts 3. Write a script that automates a multi-step remote workflow 4. Set up secure tunneling for a specific application</p>
+<p>This mirrors the daily work of HPC researchers who manage multiple remote systems!</p>
+</div>
+</div>
+<hr>
+<p><em>You’ve mastered the art of secure remote access – the ability to work anywhere in the digital universe. Next, we’ll learn to move your data across this universe with the speed and efficiency of a digital freight system!</em></p>
+
+
+<!-- -->
+
+</section>
+
+<div id="quarto-appendix" class="default"><section class="quarto-appendix-contents"><h2 class="anchored quarto-appendix-heading">Reuse</h2><div id="quarto-reuse" class="quarto-appendix-contents"><div>CC BY-NC-SA 4.0</div></div></section><section class="quarto-appendix-contents"><h2 class="anchored quarto-appendix-heading">Citation</h2><div><div class="quarto-appendix-secondary-label">BibTeX citation:</div><pre class="sourceCode code-with-copy quarto-appendix-bibtex"><code class="sourceCode bibtex">@online{2025,
+  author = {, Hasan},
+  title = {SSH and {Remote} {Access}},
+  date = {2025-06-29},
+  url = {https://hasangoni.quarto.pub/hasan-blog-post/posts/series/command-line-mastery/06-ssh-remote-access.html},
+  langid = {en}
+}
+</code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre><div class="quarto-appendix-secondary-label">For attribution, please cite this work as:</div><div id="ref-2025" class="csl-entry quarto-appendix-citeas" role="listitem">
+Hasan. 2025. <span>“SSH and Remote Access.”</span> June 29, 2025. <a href="https://hasangoni.quarto.pub/hasan-blog-post/posts/series/command-line-mastery/06-ssh-remote-access.html">https://hasangoni.quarto.pub/hasan-blog-post/posts/series/command-line-mastery/06-ssh-remote-access.html</a>.
+</div></div></section></div></main> <!-- /main -->
+<script id="quarto-html-after-body" type="application/javascript">
+window.document.addEventListener("DOMContentLoaded", function (event) {
+  const toggleBodyColorMode = (bsSheetEl) => {
+    const mode = bsSheetEl.getAttribute("data-mode");
+    const bodyEl = window.document.querySelector("body");
+    if (mode === "dark") {
+      bodyEl.classList.add("quarto-dark");
+      bodyEl.classList.remove("quarto-light");
+    } else {
+      bodyEl.classList.add("quarto-light");
+      bodyEl.classList.remove("quarto-dark");
+    }
+  }
+  const toggleBodyColorPrimary = () => {
+    const bsSheetEl = window.document.querySelector("link#quarto-bootstrap");
+    if (bsSheetEl) {
+      toggleBodyColorMode(bsSheetEl);
+    }
+  }
+  toggleBodyColorPrimary();  
+  const icon = "";
+  const anchorJS = new window.AnchorJS();
+  anchorJS.options = {
+    placement: 'right',
+    icon: icon
+  };
+  anchorJS.add('.anchored');
+  const isCodeAnnotation = (el) => {
+    for (const clz of el.classList) {
+      if (clz.startsWith('code-annotation-')) {                     
+        return true;
+      }
+    }
+    return false;
+  }
+  const clipboard = new window.ClipboardJS('.code-copy-button', {
+    text: function(trigger) {
+      const codeEl = trigger.previousElementSibling.cloneNode(true);
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
+        }
+      }
+      return codeEl.innerText;
+    }
+  });
+  clipboard.on('success', function(e) {
+    // button target
+    const button = e.trigger;
+    // don't keep focus
+    button.blur();
+    // flash "checked"
+    button.classList.add('code-copy-button-checked');
+    var currentTitle = button.getAttribute("title");
+    button.setAttribute("title", "Copied!");
+    let tooltip;
+    if (window.bootstrap) {
+      button.setAttribute("data-bs-toggle", "tooltip");
+      button.setAttribute("data-bs-placement", "left");
+      button.setAttribute("data-bs-title", "Copied!");
+      tooltip = new bootstrap.Tooltip(button, 
+        { trigger: "manual", 
+          customClass: "code-copy-button-tooltip",
+          offset: [0, -8]});
+      tooltip.show();    
+    }
+    setTimeout(function() {
+      if (tooltip) {
+        tooltip.hide();
+        button.removeAttribute("data-bs-title");
+        button.removeAttribute("data-bs-toggle");
+        button.removeAttribute("data-bs-placement");
+      }
+      button.setAttribute("title", currentTitle);
+      button.classList.remove('code-copy-button-checked');
+    }, 1000);
+    // clear code selection
+    e.clearSelection();
+  });
+  const viewSource = window.document.getElementById('quarto-view-source') ||
+                     window.document.getElementById('quarto-code-tools-source');
+  if (viewSource) {
+    const sourceUrl = viewSource.getAttribute("data-quarto-source-url");
+    viewSource.addEventListener("click", function(e) {
+      if (sourceUrl) {
+        // rstudio viewer pane
+        if (/\bcapabilities=\b/.test(window.location)) {
+          window.open(sourceUrl);
+        } else {
+          window.location.href = sourceUrl;
+        }
+      } else {
+        const modal = new bootstrap.Modal(document.getElementById('quarto-embedded-source-code-modal'));
+        modal.show();
+      }
+      return false;
+    });
+  }
+  function toggleCodeHandler(show) {
+    return function(e) {
+      const detailsSrc = window.document.querySelectorAll(".cell > details > .sourceCode");
+      for (let i=0; i<detailsSrc.length; i++) {
+        const details = detailsSrc[i].parentElement;
+        if (show) {
+          details.open = true;
+        } else {
+          details.removeAttribute("open");
+        }
+      }
+      const cellCodeDivs = window.document.querySelectorAll(".cell > .sourceCode");
+      const fromCls = show ? "hidden" : "unhidden";
+      const toCls = show ? "unhidden" : "hidden";
+      for (let i=0; i<cellCodeDivs.length; i++) {
+        const codeDiv = cellCodeDivs[i];
+        if (codeDiv.classList.contains(fromCls)) {
+          codeDiv.classList.remove(fromCls);
+          codeDiv.classList.add(toCls);
+        } 
+      }
+      return false;
+    }
+  }
+  const hideAllCode = window.document.getElementById("quarto-hide-all-code");
+  if (hideAllCode) {
+    hideAllCode.addEventListener("click", toggleCodeHandler(false));
+  }
+  const showAllCode = window.document.getElementById("quarto-show-all-code");
+  if (showAllCode) {
+    showAllCode.addEventListener("click", toggleCodeHandler(true));
+  }
+  function tippyHover(el, contentFn) {
+    const config = {
+      allowHTML: true,
+      content: contentFn,
+      maxWidth: 500,
+      delay: 100,
+      arrow: false,
+      appendTo: function(el) {
+          return el.parentElement;
+      },
+      interactive: true,
+      interactiveBorder: 10,
+      theme: 'quarto',
+      placement: 'bottom-start'
+    };
+    window.tippy(el, config); 
+  }
+  const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+  for (var i=0; i<noterefs.length; i++) {
+    const ref = noterefs[i];
+    tippyHover(ref, function() {
+      // use id or data attribute instead here
+      let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+      try { href = new URL(href).hash; } catch {}
+      const id = href.replace(/^#\/?/, "");
+      const note = window.document.getElementById(id);
+      return note.innerHTML;
+    });
+  }
+      let selectedAnnoteEl;
+      const selectorForAnnotation = ( cell, annotation) => {
+        let cellAttr = 'data-code-cell="' + cell + '"';
+        let lineAttr = 'data-code-annotation="' +  annotation + '"';
+        const selector = 'span[' + cellAttr + '][' + lineAttr + ']';
+        return selector;
+      }
+      const selectCodeLines = (annoteEl) => {
+        const doc = window.document;
+        const targetCell = annoteEl.getAttribute("data-target-cell");
+        const targetAnnotation = annoteEl.getAttribute("data-target-annotation");
+        const annoteSpan = window.document.querySelector(selectorForAnnotation(targetCell, targetAnnotation));
+        const lines = annoteSpan.getAttribute("data-code-lines").split(",");
+        const lineIds = lines.map((line) => {
+          return targetCell + "-" + line;
+        })
+        let top = null;
+        let height = null;
+        let parent = null;
+        if (lineIds.length > 0) {
+            //compute the position of the single el (top and bottom and make a div)
+            const el = window.document.getElementById(lineIds[0]);
+            top = el.offsetTop;
+            height = el.offsetHeight;
+            parent = el.parentElement.parentElement;
+          if (lineIds.length > 1) {
+            const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
+            const bottom = lastEl.offsetTop + lastEl.offsetHeight;
+            height = bottom - top;
+          }
+          if (top !== null && height !== null && parent !== null) {
+            // cook up a div (if necessary) and position it 
+            let div = window.document.getElementById("code-annotation-line-highlight");
+            if (div === null) {
+              div = window.document.createElement("div");
+              div.setAttribute("id", "code-annotation-line-highlight");
+              div.style.position = 'absolute';
+              parent.appendChild(div);
+            }
+            div.style.top = top - 2 + "px";
+            div.style.height = height + 4 + "px";
+            let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
+            if (gutterDiv === null) {
+              gutterDiv = window.document.createElement("div");
+              gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
+              gutterDiv.style.position = 'absolute';
+              const codeCell = window.document.getElementById(targetCell);
+              const gutter = codeCell.querySelector('.code-annotation-gutter');
+              gutter.appendChild(gutterDiv);
+            }
+            gutterDiv.style.top = top - 2 + "px";
+            gutterDiv.style.height = height + 4 + "px";
+          }
+          selectedAnnoteEl = annoteEl;
+        }
+      };
+      const unselectCodeLines = () => {
+        const elementsIds = ["code-annotation-line-highlight", "code-annotation-line-highlight-gutter"];
+        elementsIds.forEach((elId) => {
+          const div = window.document.getElementById(elId);
+          if (div) {
+            div.remove();
+          }
+        });
+        selectedAnnoteEl = undefined;
+      };
+      // Attach click handler to the DT
+      const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
+      for (const annoteDlNode of annoteDls) {
+        annoteDlNode.addEventListener('click', (event) => {
+          const clickedEl = event.target;
+          if (clickedEl !== selectedAnnoteEl) {
+            unselectCodeLines();
+            const activeEl = window.document.querySelector('dt[data-target-cell].code-annotation-active');
+            if (activeEl) {
+              activeEl.classList.remove('code-annotation-active');
+            }
+            selectCodeLines(clickedEl);
+            clickedEl.classList.add('code-annotation-active');
+          } else {
+            // Unselect the line
+            unselectCodeLines();
+            clickedEl.classList.remove('code-annotation-active');
+          }
+        });
+      }
+  const findCites = (el) => {
+    const parentEl = el.parentElement;
+    if (parentEl) {
+      const cites = parentEl.dataset.cites;
+      if (cites) {
+        return {
+          el,
+          cites: cites.split(' ')
+        };
+      } else {
+        return findCites(el.parentElement)
+      }
+    } else {
+      return undefined;
+    }
+  };
+  var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+  for (var i=0; i<bibliorefs.length; i++) {
+    const ref = bibliorefs[i];
+    const citeInfo = findCites(ref);
+    if (citeInfo) {
+      tippyHover(citeInfo.el, function() {
+        var popup = window.document.createElement('div');
+        citeInfo.cites.forEach(function(cite) {
+          var citeDiv = window.document.createElement('div');
+          citeDiv.classList.add('hanging-indent');
+          citeDiv.classList.add('csl-entry');
+          var biblioDiv = window.document.getElementById('ref-' + cite);
+          if (biblioDiv) {
+            citeDiv.innerHTML = biblioDiv.innerHTML;
+          }
+          popup.appendChild(citeDiv);
+        });
+        return popup.innerHTML;
+      });
+    }
+  }
+});
+</script>
+<script src="https://utteranc.es/client.js" repo="yourusername/quarto_blog_hasan" issue-term="pathname" theme="github-light" crossorigin="anonymous" async="">
+</script>
+<script src="https://giscus.app/client.js" data-repo="HasanGoni/quarto_blog_hasan" data-repo-id="" data-category="General" data-category-id="" data-mapping="title" data-reactions-enabled="1" data-emit-metadata="0" data-input-position="top" data-theme="light" data-lang="en" crossorigin="anonymous" async="">
+</script><div class="modal fade" id="quarto-embedded-source-code-modal" tabindex="-1" aria-labelledby="quarto-embedded-source-code-modal-label" aria-hidden="true"><div class="modal-dialog modal-dialog-scrollable"><div class="modal-content"><div class="modal-header"><h5 class="modal-title" id="quarto-embedded-source-code-modal-label">Source Code</h5><button class="btn-close" data-bs-dismiss="modal"></button></div><div class="modal-body"><div class="">
+<div class="sourceCode" id="cb29" data-shortcodes="false"><pre class="sourceCode numberSource markdown number-lines code-with-copy"><code class="sourceCode markdown"><span id="cb29-1"><a href="#cb29-1"></a><span class="co">---</span></span>
+<span id="cb29-2"><a href="#cb29-2"></a><span class="an">title:</span><span class="co"> "SSH and Remote Access"</span></span>
+<span id="cb29-3"><a href="#cb29-3"></a><span class="an">description:</span><span class="co"> "Master the art of secure remote connections. Learn to work on distant HPC clusters as if they were sitting on your desk, with the security of a digital fortress and the convenience of local access."</span></span>
+<span id="cb29-4"><a href="#cb29-4"></a><span class="an">author:</span><span class="co"> "Hasan"</span></span>
+<span id="cb29-5"><a href="#cb29-5"></a><span class="an">date:</span><span class="co"> last-modified</span></span>
+<span id="cb29-6"><a href="#cb29-6"></a><span class="an">categories:</span><span class="co"> [command-line, ssh, remote-access, security, hpc]</span></span>
+<span id="cb29-7"><a href="#cb29-7"></a><span class="an">image:</span><span class="co"> "https://images.unsplash.com/photo-1558494949-ef010cbdcc31?ixlib=rb-4.0.3&amp;auto=format&amp;fit=crop&amp;w=2000&amp;q=80"</span></span>
+<span id="cb29-8"><a href="#cb29-8"></a><span class="an">toc:</span><span class="co"> true</span></span>
+<span id="cb29-9"><a href="#cb29-9"></a><span class="co">---</span></span>
+<span id="cb29-10"><a href="#cb29-10"></a></span>
+<span id="cb29-11"><a href="#cb29-11"></a><span class="fu">## The Story: The Digital Teleporter</span></span>
+<span id="cb29-12"><a href="#cb29-12"></a></span>
+<span id="cb29-13"><a href="#cb29-13"></a>Imagine you're a researcher who needs to access powerful supercomputers located in data centers around the world. These machines have thousands of CPU cores and terabytes of memory, but they're physically hundreds of miles away. You need a way to teleport your consciousness into these remote machines, work on them as if you were sitting right there, and do it all with bank-level security.</span>
+<span id="cb29-14"><a href="#cb29-14"></a></span>
+<span id="cb29-15"><a href="#cb29-15"></a>This isn't science fiction – it's SSH (Secure Shell), the digital teleporter that has connected researchers to remote systems for decades. With SSH, your laptop becomes a window into any Unix system on the planet, allowing you to run experiments, transfer files, and manage data across continents as easily as working on your local machine.</span>
+<span id="cb29-16"><a href="#cb29-16"></a></span>
+<span id="cb29-17"><a href="#cb29-17"></a>Today, you'll master the art of secure remote access, becoming a digital nomad who can work anywhere, anytime, on any system.</span>
+<span id="cb29-18"><a href="#cb29-18"></a></span>
+<span id="cb29-19"><a href="#cb29-19"></a><span class="fu">## Understanding SSH: Your Digital Passport</span></span>
+<span id="cb29-20"><a href="#cb29-20"></a></span>
+<span id="cb29-21"><a href="#cb29-21"></a>SSH is like having a secure, encrypted tunnel between your computer and a remote system. Everything you type is encrypted before leaving your machine, travels securely across the internet, and is decrypted only when it reaches the destination.</span>
+<span id="cb29-22"><a href="#cb29-22"></a></span>
+<span id="cb29-23"><a href="#cb29-23"></a>**Real-world analogy**: SSH is like having a private, armored car with tinted windows that can instantly transport you to any building in the world. Nobody can see what you're doing inside, and you arrive safely at your destination.</span>
+<span id="cb29-24"><a href="#cb29-24"></a></span>
+<span id="cb29-25"><a href="#cb29-25"></a><span class="fu">### The SSH Architecture</span></span>
+<span id="cb29-26"><a href="#cb29-26"></a></span>
+<span id="cb29-27"><a href="#cb29-27"></a><span class="in">```</span></span>
+<span id="cb29-28"><a href="#cb29-28"></a><span class="in">Your Computer  ←→  Internet  ←→  Remote HPC System</span></span>
+<span id="cb29-29"><a href="#cb29-29"></a><span class="in">    (Client)    [Encrypted]      (Server)</span></span>
+<span id="cb29-30"><a href="#cb29-30"></a><span class="in">```</span></span>
+<span id="cb29-31"><a href="#cb29-31"></a></span>
+<span id="cb29-32"><a href="#cb29-32"></a><span class="fu">## Basic SSH Connection</span></span>
+<span id="cb29-33"><a href="#cb29-33"></a></span>
+<span id="cb29-34"><a href="#cb29-34"></a><span class="fu">### Your First Remote Connection</span></span>
+<span id="cb29-35"><a href="#cb29-35"></a></span>
+<span id="cb29-36"><a href="#cb29-36"></a><span class="in">```bash</span></span>
+<span id="cb29-37"><a href="#cb29-37"></a><span class="co"># Basic SSH connection</span></span>
+<span id="cb29-38"><a href="#cb29-38"></a><span class="fu">ssh</span> username@remote-server.edu</span>
+<span id="cb29-39"><a href="#cb29-39"></a></span>
+<span id="cb29-40"><a href="#cb29-40"></a><span class="co"># SSH with specific port (if not default 22)</span></span>
+<span id="cb29-41"><a href="#cb29-41"></a><span class="fu">ssh</span> <span class="at">-p</span> 2222 username@remote-server.edu</span>
+<span id="cb29-42"><a href="#cb29-42"></a></span>
+<span id="cb29-43"><a href="#cb29-43"></a><span class="co"># SSH with verbose output (for troubleshooting)</span></span>
+<span id="cb29-44"><a href="#cb29-44"></a><span class="fu">ssh</span> <span class="at">-v</span> username@remote-server.edu</span>
+<span id="cb29-45"><a href="#cb29-45"></a><span class="in">```</span></span>
+<span id="cb29-46"><a href="#cb29-46"></a></span>
+<span id="cb29-47"><a href="#cb29-47"></a><span class="fu">### What Happens During Connection</span></span>
+<span id="cb29-48"><a href="#cb29-48"></a></span>
+<span id="cb29-49"><a href="#cb29-49"></a><span class="ss">1. </span>**Authentication**: You prove who you are (password or key)</span>
+<span id="cb29-50"><a href="#cb29-50"></a><span class="ss">2. </span>**Encryption**: A secure tunnel is established</span>
+<span id="cb29-51"><a href="#cb29-51"></a><span class="ss">3. </span>**Shell**: You get a command prompt on the remote system</span>
+<span id="cb29-52"><a href="#cb29-52"></a><span class="ss">4. </span>**Work**: Everything you type runs on the remote machine</span>
+<span id="cb29-53"><a href="#cb29-53"></a></span>
+<span id="cb29-54"><a href="#cb29-54"></a>**Real-world analogy**: It's like calling someone on the phone, but instead of just talking, you can actually control their computer as if you were sitting at their desk.</span>
+<span id="cb29-55"><a href="#cb29-55"></a></span>
+<span id="cb29-56"><a href="#cb29-56"></a><span class="fu">## SSH Key Authentication: The Master Key System</span></span>
+<span id="cb29-57"><a href="#cb29-57"></a></span>
+<span id="cb29-58"><a href="#cb29-58"></a>Password authentication is like having to show your ID every time you enter a building. SSH keys are like having a master key that automatically opens the door.</span>
+<span id="cb29-59"><a href="#cb29-59"></a></span>
+<span id="cb29-60"><a href="#cb29-60"></a><span class="fu">### Generating Your SSH Key Pair</span></span>
+<span id="cb29-61"><a href="#cb29-61"></a></span>
+<span id="cb29-62"><a href="#cb29-62"></a><span class="in">```bash</span></span>
+<span id="cb29-63"><a href="#cb29-63"></a><span class="co"># Generate a new SSH key pair</span></span>
+<span id="cb29-64"><a href="#cb29-64"></a><span class="fu">ssh-keygen</span> <span class="at">-t</span> rsa <span class="at">-b</span> 4096 <span class="at">-C</span> <span class="st">"your_email@example.com"</span></span>
+<span id="cb29-65"><a href="#cb29-65"></a></span>
+<span id="cb29-66"><a href="#cb29-66"></a><span class="co"># Generate with specific filename</span></span>
+<span id="cb29-67"><a href="#cb29-67"></a><span class="fu">ssh-keygen</span> <span class="at">-t</span> rsa <span class="at">-b</span> 4096 <span class="at">-f</span> ~/.ssh/hpc_cluster_key</span>
+<span id="cb29-68"><a href="#cb29-68"></a></span>
+<span id="cb29-69"><a href="#cb29-69"></a><span class="co"># Generate Ed25519 key (more modern, shorter)</span></span>
+<span id="cb29-70"><a href="#cb29-70"></a><span class="fu">ssh-keygen</span> <span class="at">-t</span> ed25519 <span class="at">-C</span> <span class="st">"your_email@example.com"</span></span>
+<span id="cb29-71"><a href="#cb29-71"></a><span class="in">```</span></span>
+<span id="cb29-72"><a href="#cb29-72"></a></span>
+<span id="cb29-73"><a href="#cb29-73"></a>This creates two files:</span>
+<span id="cb29-74"><a href="#cb29-74"></a><span class="ss">- </span>**Private key** (<span class="in">`~/.ssh/id_rsa`</span>): Keep this secret! Never share it.</span>
+<span id="cb29-75"><a href="#cb29-75"></a><span class="ss">- </span>**Public key** (<span class="in">`~/.ssh/id_rsa.pub`</span>): This is safe to share.</span>
+<span id="cb29-76"><a href="#cb29-76"></a></span>
+<span id="cb29-77"><a href="#cb29-77"></a>**Real-world analogy**: The private key is like your house key (keep it safe), and the public key is like giving the locksmith your lock's specifications so they can verify your key works.</span>
+<span id="cb29-78"><a href="#cb29-78"></a></span>
+<span id="cb29-79"><a href="#cb29-79"></a><span class="fu">### Installing Your Public Key on Remote Systems</span></span>
+<span id="cb29-80"><a href="#cb29-80"></a></span>
+<span id="cb29-81"><a href="#cb29-81"></a><span class="in">```bash</span></span>
+<span id="cb29-82"><a href="#cb29-82"></a><span class="co"># Copy your public key to remote server</span></span>
+<span id="cb29-83"><a href="#cb29-83"></a><span class="ex">ssh-copy-id</span> username@remote-server.edu</span>
+<span id="cb29-84"><a href="#cb29-84"></a></span>
+<span id="cb29-85"><a href="#cb29-85"></a><span class="co"># Manual method if ssh-copy-id isn't available</span></span>
+<span id="cb29-86"><a href="#cb29-86"></a><span class="fu">cat</span> ~/.ssh/id_rsa.pub <span class="kw">|</span> <span class="fu">ssh</span> username@remote-server.edu <span class="st">"mkdir -p ~/.ssh &amp;&amp; cat &gt;&gt; ~/.ssh/authorized_keys"</span></span>
+<span id="cb29-87"><a href="#cb29-87"></a></span>
+<span id="cb29-88"><a href="#cb29-88"></a><span class="co"># Verify the key was installed</span></span>
+<span id="cb29-89"><a href="#cb29-89"></a><span class="fu">ssh</span> username@remote-server.edu <span class="st">"cat ~/.ssh/authorized_keys"</span></span>
+<span id="cb29-90"><a href="#cb29-90"></a><span class="in">```</span></span>
+<span id="cb29-91"><a href="#cb29-91"></a></span>
+<span id="cb29-92"><a href="#cb29-92"></a><span class="fu">### Testing Key-Based Authentication</span></span>
+<span id="cb29-93"><a href="#cb29-93"></a></span>
+<span id="cb29-94"><a href="#cb29-94"></a><span class="in">```bash</span></span>
+<span id="cb29-95"><a href="#cb29-95"></a><span class="co"># This should now work without asking for password</span></span>
+<span id="cb29-96"><a href="#cb29-96"></a><span class="fu">ssh</span> username@remote-server.edu</span>
+<span id="cb29-97"><a href="#cb29-97"></a></span>
+<span id="cb29-98"><a href="#cb29-98"></a><span class="co"># If it still asks for password, check permissions:</span></span>
+<span id="cb29-99"><a href="#cb29-99"></a><span class="fu">ssh</span> username@remote-server.edu <span class="st">"chmod 700 ~/.ssh &amp;&amp; chmod 600 ~/.ssh/authorized_keys"</span></span>
+<span id="cb29-100"><a href="#cb29-100"></a><span class="in">```</span></span>
+<span id="cb29-101"><a href="#cb29-101"></a></span>
+<span id="cb29-102"><a href="#cb29-102"></a><span class="fu">## SSH Configuration: Your Connection Management System</span></span>
+<span id="cb29-103"><a href="#cb29-103"></a></span>
+<span id="cb29-104"><a href="#cb29-104"></a>Instead of typing long SSH commands every time, create a configuration file that remembers your settings.</span>
+<span id="cb29-105"><a href="#cb29-105"></a></span>
+<span id="cb29-106"><a href="#cb29-106"></a><span class="fu">### Creating SSH Config File</span></span>
+<span id="cb29-107"><a href="#cb29-107"></a></span>
+<span id="cb29-108"><a href="#cb29-108"></a><span class="in">```bash</span></span>
+<span id="cb29-109"><a href="#cb29-109"></a><span class="co"># Create/edit SSH config</span></span>
+<span id="cb29-110"><a href="#cb29-110"></a><span class="fu">nano</span> ~/.ssh/config</span>
+<span id="cb29-111"><a href="#cb29-111"></a><span class="in">```</span></span>
+<span id="cb29-112"><a href="#cb29-112"></a></span>
+<span id="cb29-113"><a href="#cb29-113"></a><span class="fu">### Sample SSH Configuration</span></span>
+<span id="cb29-114"><a href="#cb29-114"></a></span>
+<span id="cb29-115"><a href="#cb29-115"></a><span class="in">```bash</span></span>
+<span id="cb29-116"><a href="#cb29-116"></a><span class="co"># ~/.ssh/config</span></span>
+<span id="cb29-117"><a href="#cb29-117"></a></span>
+<span id="cb29-118"><a href="#cb29-118"></a><span class="co"># HPC Cluster</span></span>
+<span id="cb29-119"><a href="#cb29-119"></a><span class="ex">Host</span> hpc</span>
+<span id="cb29-120"><a href="#cb29-120"></a>    <span class="ex">HostName</span> cluster.university.edu</span>
+<span id="cb29-121"><a href="#cb29-121"></a>    <span class="ex">User</span> your_username</span>
+<span id="cb29-122"><a href="#cb29-122"></a>    <span class="ex">Port</span> 22</span>
+<span id="cb29-123"><a href="#cb29-123"></a>    <span class="ex">IdentityFile</span> ~/.ssh/hpc_cluster_key</span>
+<span id="cb29-124"><a href="#cb29-124"></a>    <span class="ex">ServerAliveInterval</span> 60</span>
+<span id="cb29-125"><a href="#cb29-125"></a>    <span class="ex">ServerAliveCountMax</span> 3</span>
+<span id="cb29-126"><a href="#cb29-126"></a></span>
+<span id="cb29-127"><a href="#cb29-127"></a><span class="co"># Development Server</span></span>
+<span id="cb29-128"><a href="#cb29-128"></a><span class="ex">Host</span> devserver</span>
+<span id="cb29-129"><a href="#cb29-129"></a>    <span class="ex">HostName</span> dev.company.com</span>
+<span id="cb29-130"><a href="#cb29-130"></a>    <span class="ex">User</span> developer</span>
+<span id="cb29-131"><a href="#cb29-131"></a>    <span class="ex">Port</span> 2222</span>
+<span id="cb29-132"><a href="#cb29-132"></a>    <span class="ex">IdentityFile</span> ~/.ssh/dev_key</span>
+<span id="cb29-133"><a href="#cb29-133"></a>    <span class="ex">ForwardX11</span> yes</span>
+<span id="cb29-134"><a href="#cb29-134"></a></span>
+<span id="cb29-135"><a href="#cb29-135"></a><span class="co"># Jump Host Configuration (for servers behind firewalls)</span></span>
+<span id="cb29-136"><a href="#cb29-136"></a><span class="ex">Host</span> internal-server</span>
+<span id="cb29-137"><a href="#cb29-137"></a>    <span class="ex">HostName</span> 192.168.1.100</span>
+<span id="cb29-138"><a href="#cb29-138"></a>    <span class="ex">User</span> researcher</span>
+<span id="cb29-139"><a href="#cb29-139"></a>    <span class="ex">ProxyJump</span> jumphost.university.edu</span>
+<span id="cb29-140"><a href="#cb29-140"></a></span>
+<span id="cb29-141"><a href="#cb29-141"></a><span class="co"># Default settings for all hosts</span></span>
+<span id="cb29-142"><a href="#cb29-142"></a><span class="ex">Host</span> <span class="pp">*</span></span>
+<span id="cb29-143"><a href="#cb29-143"></a>    <span class="ex">ServerAliveInterval</span> 60</span>
+<span id="cb29-144"><a href="#cb29-144"></a>    <span class="ex">ServerAliveCountMax</span> 3</span>
+<span id="cb29-145"><a href="#cb29-145"></a>    <span class="ex">Compression</span> yes</span>
+<span id="cb29-146"><a href="#cb29-146"></a><span class="in">```</span></span>
+<span id="cb29-147"><a href="#cb29-147"></a></span>
+<span id="cb29-148"><a href="#cb29-148"></a><span class="fu">### Using SSH Config</span></span>
+<span id="cb29-149"><a href="#cb29-149"></a></span>
+<span id="cb29-150"><a href="#cb29-150"></a><span class="in">```bash</span></span>
+<span id="cb29-151"><a href="#cb29-151"></a><span class="co"># Now you can connect with simple names</span></span>
+<span id="cb29-152"><a href="#cb29-152"></a><span class="fu">ssh</span> hpc              <span class="co"># Connects to cluster.university.edu</span></span>
+<span id="cb29-153"><a href="#cb29-153"></a><span class="fu">ssh</span> devserver        <span class="co"># Connects to dev.company.com</span></span>
+<span id="cb29-154"><a href="#cb29-154"></a><span class="fu">ssh</span> internal-server  <span class="co"># Connects through jump host</span></span>
+<span id="cb29-155"><a href="#cb29-155"></a><span class="in">```</span></span>
+<span id="cb29-156"><a href="#cb29-156"></a></span>
+<span id="cb29-157"><a href="#cb29-157"></a>**Real-world analogy**: SSH config is like having speed dial for phone numbers – instead of remembering long numbers, you just press one button.</span>
+<span id="cb29-158"><a href="#cb29-158"></a></span>
+<span id="cb29-159"><a href="#cb29-159"></a><span class="fu">## Advanced SSH Techniques</span></span>
+<span id="cb29-160"><a href="#cb29-160"></a></span>
+<span id="cb29-161"><a href="#cb29-161"></a><span class="fu">### SSH Tunneling: Creating Secure Pathways</span></span>
+<span id="cb29-162"><a href="#cb29-162"></a></span>
+<span id="cb29-163"><a href="#cb29-163"></a>SSH can create secure tunnels for various purposes:</span>
+<span id="cb29-164"><a href="#cb29-164"></a></span>
+<span id="cb29-165"><a href="#cb29-165"></a><span class="in">```bash</span></span>
+<span id="cb29-166"><a href="#cb29-166"></a><span class="co"># Local port forwarding (access remote service locally)</span></span>
+<span id="cb29-167"><a href="#cb29-167"></a><span class="fu">ssh</span> <span class="at">-L</span> 8080:localhost:80 username@remote-server.edu</span>
+<span id="cb29-168"><a href="#cb29-168"></a><span class="co"># Now http://localhost:8080 on your machine connects to port 80 on remote server</span></span>
+<span id="cb29-169"><a href="#cb29-169"></a></span>
+<span id="cb29-170"><a href="#cb29-170"></a><span class="co"># Remote port forwarding (make local service available remotely)</span></span>
+<span id="cb29-171"><a href="#cb29-171"></a><span class="fu">ssh</span> <span class="at">-R</span> 9090:localhost:3000 username@remote-server.edu</span>
+<span id="cb29-172"><a href="#cb29-172"></a><span class="co"># Now port 9090 on remote server connects to port 3000 on your machine</span></span>
+<span id="cb29-173"><a href="#cb29-173"></a></span>
+<span id="cb29-174"><a href="#cb29-174"></a><span class="co"># Dynamic port forwarding (SOCKS proxy)</span></span>
+<span id="cb29-175"><a href="#cb29-175"></a><span class="fu">ssh</span> <span class="at">-D</span> 1080 username@remote-server.edu</span>
+<span id="cb29-176"><a href="#cb29-176"></a><span class="co"># Use localhost:1080 as SOCKS proxy in your browser</span></span>
+<span id="cb29-177"><a href="#cb29-177"></a><span class="in">```</span></span>
+<span id="cb29-178"><a href="#cb29-178"></a></span>
+<span id="cb29-179"><a href="#cb29-179"></a><span class="fu">### X11 Forwarding: Running Remote GUI Applications</span></span>
+<span id="cb29-180"><a href="#cb29-180"></a></span>
+<span id="cb29-181"><a href="#cb29-181"></a><span class="in">```bash</span></span>
+<span id="cb29-182"><a href="#cb29-182"></a><span class="co"># Enable X11 forwarding</span></span>
+<span id="cb29-183"><a href="#cb29-183"></a><span class="fu">ssh</span> <span class="at">-X</span> username@remote-server.edu</span>
+<span id="cb29-184"><a href="#cb29-184"></a></span>
+<span id="cb29-185"><a href="#cb29-185"></a><span class="co"># Or in SSH config:</span></span>
+<span id="cb29-186"><a href="#cb29-186"></a><span class="ex">Host</span> hpc</span>
+<span id="cb29-187"><a href="#cb29-187"></a>    <span class="ex">ForwardX11</span> yes</span>
+<span id="cb29-188"><a href="#cb29-188"></a>    <span class="ex">ForwardX11Trusted</span> yes</span>
+<span id="cb29-189"><a href="#cb29-189"></a></span>
+<span id="cb29-190"><a href="#cb29-190"></a><span class="co"># Now you can run GUI applications remotely</span></span>
+<span id="cb29-191"><a href="#cb29-191"></a><span class="fu">ssh</span> hpc</span>
+<span id="cb29-192"><a href="#cb29-192"></a><span class="ex">firefox</span> <span class="kw">&amp;</span>          <span class="co"># Opens Firefox from remote server on your screen</span></span>
+<span id="cb29-193"><a href="#cb29-193"></a><span class="ex">matlab</span> <span class="kw">&amp;</span>           <span class="co"># Opens MATLAB GUI remotely</span></span>
+<span id="cb29-194"><a href="#cb29-194"></a><span class="in">```</span></span>
+<span id="cb29-195"><a href="#cb29-195"></a></span>
+<span id="cb29-196"><a href="#cb29-196"></a><span class="fu">### SSH Agent: Managing Multiple Keys</span></span>
+<span id="cb29-197"><a href="#cb29-197"></a></span>
+<span id="cb29-198"><a href="#cb29-198"></a><span class="in">```bash</span></span>
+<span id="cb29-199"><a href="#cb29-199"></a><span class="co"># Start SSH agent</span></span>
+<span id="cb29-200"><a href="#cb29-200"></a><span class="bu">eval</span> <span class="va">$(</span><span class="fu">ssh-agent</span><span class="va">)</span></span>
+<span id="cb29-201"><a href="#cb29-201"></a></span>
+<span id="cb29-202"><a href="#cb29-202"></a><span class="co"># Add your keys to agent</span></span>
+<span id="cb29-203"><a href="#cb29-203"></a><span class="fu">ssh-add</span> ~/.ssh/id_rsa</span>
+<span id="cb29-204"><a href="#cb29-204"></a><span class="fu">ssh-add</span> ~/.ssh/hpc_cluster_key</span>
+<span id="cb29-205"><a href="#cb29-205"></a></span>
+<span id="cb29-206"><a href="#cb29-206"></a><span class="co"># List loaded keys</span></span>
+<span id="cb29-207"><a href="#cb29-207"></a><span class="fu">ssh-add</span> <span class="at">-l</span></span>
+<span id="cb29-208"><a href="#cb29-208"></a></span>
+<span id="cb29-209"><a href="#cb29-209"></a><span class="co"># Remove all keys from agent</span></span>
+<span id="cb29-210"><a href="#cb29-210"></a><span class="fu">ssh-add</span> <span class="at">-D</span></span>
+<span id="cb29-211"><a href="#cb29-211"></a><span class="in">```</span></span>
+<span id="cb29-212"><a href="#cb29-212"></a></span>
+<span id="cb29-213"><a href="#cb29-213"></a><span class="fu">## Real-World HPC SSH Scenarios</span></span>
+<span id="cb29-214"><a href="#cb29-214"></a></span>
+<span id="cb29-215"><a href="#cb29-215"></a><span class="fu">### Scenario 1: Multi-Hop Connection to Secure Cluster</span></span>
+<span id="cb29-216"><a href="#cb29-216"></a></span>
+<span id="cb29-217"><a href="#cb29-217"></a><span class="in">```bash</span></span>
+<span id="cb29-218"><a href="#cb29-218"></a><span class="co"># ~/.ssh/config for complex HPC access</span></span>
+<span id="cb29-219"><a href="#cb29-219"></a></span>
+<span id="cb29-220"><a href="#cb29-220"></a><span class="co"># Jump host (gateway server)</span></span>
+<span id="cb29-221"><a href="#cb29-221"></a><span class="ex">Host</span> gateway</span>
+<span id="cb29-222"><a href="#cb29-222"></a>    <span class="ex">HostName</span> gateway.hpc-center.edu</span>
+<span id="cb29-223"><a href="#cb29-223"></a>    <span class="ex">User</span> your_username</span>
+<span id="cb29-224"><a href="#cb29-224"></a>    <span class="ex">IdentityFile</span> ~/.ssh/hpc_key</span>
+<span id="cb29-225"><a href="#cb29-225"></a>    <span class="ex">ServerAliveInterval</span> 30</span>
+<span id="cb29-226"><a href="#cb29-226"></a></span>
+<span id="cb29-227"><a href="#cb29-227"></a><span class="co"># Compute cluster (behind firewall)</span></span>
+<span id="cb29-228"><a href="#cb29-228"></a><span class="ex">Host</span> cluster</span>
+<span id="cb29-229"><a href="#cb29-229"></a>    <span class="ex">HostName</span> compute-cluster.internal</span>
+<span id="cb29-230"><a href="#cb29-230"></a>    <span class="ex">User</span> your_username</span>
+<span id="cb29-231"><a href="#cb29-231"></a>    <span class="ex">ProxyJump</span> gateway</span>
+<span id="cb29-232"><a href="#cb29-232"></a>    <span class="ex">IdentityFile</span> ~/.ssh/hpc_key</span>
+<span id="cb29-233"><a href="#cb29-233"></a>    <span class="ex">ServerAliveInterval</span> 30</span>
+<span id="cb29-234"><a href="#cb29-234"></a></span>
+<span id="cb29-235"><a href="#cb29-235"></a><span class="co"># Specific compute node</span></span>
+<span id="cb29-236"><a href="#cb29-236"></a><span class="ex">Host</span> node001</span>
+<span id="cb29-237"><a href="#cb29-237"></a>    <span class="ex">HostName</span> node001.compute-cluster.internal</span>
+<span id="cb29-238"><a href="#cb29-238"></a>    <span class="ex">User</span> your_username</span>
+<span id="cb29-239"><a href="#cb29-239"></a>    <span class="ex">ProxyJump</span> gateway</span>
+<span id="cb29-240"><a href="#cb29-240"></a>    <span class="ex">IdentityFile</span> ~/.ssh/hpc_key</span>
+<span id="cb29-241"><a href="#cb29-241"></a><span class="in">```</span></span>
+<span id="cb29-242"><a href="#cb29-242"></a></span>
+<span id="cb29-243"><a href="#cb29-243"></a><span class="in">```bash</span></span>
+<span id="cb29-244"><a href="#cb29-244"></a><span class="co"># Usage</span></span>
+<span id="cb29-245"><a href="#cb29-245"></a><span class="fu">ssh</span> cluster          <span class="co"># Connects through gateway automatically</span></span>
+<span id="cb29-246"><a href="#cb29-246"></a><span class="fu">ssh</span> node001          <span class="co"># Connects to specific compute node</span></span>
+<span id="cb29-247"><a href="#cb29-247"></a><span class="in">```</span></span>
+<span id="cb29-248"><a href="#cb29-248"></a></span>
+<span id="cb29-249"><a href="#cb29-249"></a><span class="fu">### Scenario 2: Automated HPC Workflow Script</span></span>
+<span id="cb29-250"><a href="#cb29-250"></a></span>
+<span id="cb29-251"><a href="#cb29-251"></a><span class="in">```bash</span></span>
+<span id="cb29-252"><a href="#cb29-252"></a><span class="co">#!/bin/bash</span></span>
+<span id="cb29-253"><a href="#cb29-253"></a><span class="co"># hpc_workflow.sh - Automated remote job submission and monitoring</span></span>
+<span id="cb29-254"><a href="#cb29-254"></a></span>
+<span id="cb29-255"><a href="#cb29-255"></a><span class="va">HPC_HOST</span><span class="op">=</span><span class="st">"cluster"</span></span>
+<span id="cb29-256"><a href="#cb29-256"></a><span class="va">JOB_DIR</span><span class="op">=</span><span class="st">"/scratch/username/current_job"</span></span>
+<span id="cb29-257"><a href="#cb29-257"></a><span class="va">LOCAL_SCRIPTS</span><span class="op">=</span><span class="st">"./scripts"</span></span>
+<span id="cb29-258"><a href="#cb29-258"></a></span>
+<span id="cb29-259"><a href="#cb29-259"></a><span class="bu">echo</span> <span class="st">"Starting HPC workflow..."</span></span>
+<span id="cb29-260"><a href="#cb29-260"></a></span>
+<span id="cb29-261"><a href="#cb29-261"></a><span class="co"># 1. Prepare remote environment</span></span>
+<span id="cb29-262"><a href="#cb29-262"></a><span class="fu">ssh</span> <span class="va">$HPC_HOST</span> <span class="st">"mkdir -p </span><span class="va">$JOB_DIR</span><span class="st">"</span></span>
+<span id="cb29-263"><a href="#cb29-263"></a></span>
+<span id="cb29-264"><a href="#cb29-264"></a><span class="co"># 2. Transfer job scripts</span></span>
+<span id="cb29-265"><a href="#cb29-265"></a><span class="fu">scp</span> <span class="at">-r</span> <span class="va">$LOCAL_SCRIPTS</span>/<span class="pp">*</span> <span class="va">$HPC_HOST</span>:<span class="va">$JOB_DIR</span>/</span>
+<span id="cb29-266"><a href="#cb29-266"></a></span>
+<span id="cb29-267"><a href="#cb29-267"></a><span class="co"># 3. Submit job and capture job ID</span></span>
+<span id="cb29-268"><a href="#cb29-268"></a><span class="va">JOB_ID</span><span class="op">=</span><span class="va">$(</span><span class="fu">ssh</span> <span class="va">$HPC_HOST</span> <span class="st">"cd </span><span class="va">$JOB_DIR</span><span class="st"> &amp;&amp; bsub &lt; job_script.sh"</span> <span class="kw">|</span> <span class="fu">grep</span> <span class="at">-oP</span> <span class="st">'(?&lt;=Job &lt;)\d+(?=&gt;)'</span><span class="va">)</span></span>
+<span id="cb29-269"><a href="#cb29-269"></a></span>
+<span id="cb29-270"><a href="#cb29-270"></a><span class="bu">echo</span> <span class="st">"Job submitted with ID: </span><span class="va">$JOB_ID</span><span class="st">"</span></span>
+<span id="cb29-271"><a href="#cb29-271"></a></span>
+<span id="cb29-272"><a href="#cb29-272"></a><span class="co"># 4. Monitor job status</span></span>
+<span id="cb29-273"><a href="#cb29-273"></a><span class="cf">while</span> <span class="fu">true</span><span class="kw">;</span> <span class="cf">do</span></span>
+<span id="cb29-274"><a href="#cb29-274"></a>    <span class="va">STATUS</span><span class="op">=</span><span class="va">$(</span><span class="fu">ssh</span> <span class="va">$HPC_HOST</span> <span class="st">"bjobs </span><span class="va">$JOB_ID</span><span class="st"> 2&gt;/dev/null | tail -n 1 | awk '{print </span><span class="dt">\$</span><span class="st">3}'"</span><span class="va">)</span></span>
+<span id="cb29-275"><a href="#cb29-275"></a>    </span>
+<span id="cb29-276"><a href="#cb29-276"></a>    <span class="cf">if</span> <span class="bu">[</span> <span class="st">"</span><span class="va">$STATUS</span><span class="st">"</span> <span class="ot">=</span> <span class="st">"DONE"</span> <span class="bu">]</span><span class="kw">;</span> <span class="cf">then</span></span>
+<span id="cb29-277"><a href="#cb29-277"></a>        <span class="bu">echo</span> <span class="st">"Job completed successfully!"</span></span>
+<span id="cb29-278"><a href="#cb29-278"></a>        <span class="cf">break</span></span>
+<span id="cb29-279"><a href="#cb29-279"></a>    <span class="cf">elif</span> <span class="bu">[</span> <span class="st">"</span><span class="va">$STATUS</span><span class="st">"</span> <span class="ot">=</span> <span class="st">"EXIT"</span> <span class="bu">]</span><span class="kw">;</span> <span class="cf">then</span></span>
+<span id="cb29-280"><a href="#cb29-280"></a>        <span class="bu">echo</span> <span class="st">"Job failed!"</span></span>
+<span id="cb29-281"><a href="#cb29-281"></a>        <span class="fu">ssh</span> <span class="va">$HPC_HOST</span> <span class="st">"cat </span><span class="va">$JOB_DIR</span><span class="st">/job_output.err"</span></span>
+<span id="cb29-282"><a href="#cb29-282"></a>        <span class="bu">exit</span> 1</span>
+<span id="cb29-283"><a href="#cb29-283"></a>    <span class="cf">else</span></span>
+<span id="cb29-284"><a href="#cb29-284"></a>        <span class="bu">echo</span> <span class="st">"Job status: </span><span class="va">$STATUS</span><span class="st">"</span></span>
+<span id="cb29-285"><a href="#cb29-285"></a>        <span class="fu">sleep</span> 30</span>
+<span id="cb29-286"><a href="#cb29-286"></a>    <span class="cf">fi</span></span>
+<span id="cb29-287"><a href="#cb29-287"></a><span class="cf">done</span></span>
+<span id="cb29-288"><a href="#cb29-288"></a></span>
+<span id="cb29-289"><a href="#cb29-289"></a><span class="co"># 5. Retrieve results</span></span>
+<span id="cb29-290"><a href="#cb29-290"></a><span class="fu">mkdir</span> <span class="at">-p</span> results/</span>
+<span id="cb29-291"><a href="#cb29-291"></a><span class="fu">scp</span> <span class="at">-r</span> <span class="va">$HPC_HOST</span>:<span class="va">$JOB_DIR</span>/output/<span class="pp">*</span> results/</span>
+<span id="cb29-292"><a href="#cb29-292"></a></span>
+<span id="cb29-293"><a href="#cb29-293"></a><span class="bu">echo</span> <span class="st">"Workflow completed. Results downloaded to ./results/"</span></span>
+<span id="cb29-294"><a href="#cb29-294"></a><span class="kw">```</span></span>
+<span id="cb29-295"><a href="#cb29-295"></a></span>
+<span id="cb29-296"><a href="#cb29-296"></a><span class="co">### Scenario 3: Interactive HPC Session with Screen/Tmux</span></span>
+<span id="cb29-297"><a href="#cb29-297"></a></span>
+<span id="cb29-298"><a href="#cb29-298"></a><span class="kw">```</span>bash</span>
+<span id="cb29-299"><a href="#cb29-299"></a><span class="co">#!/bin/bash</span></span>
+<span id="cb29-300"><a href="#cb29-300"></a><span class="co"># hpc_interactive.sh - Start persistent interactive session</span></span>
+<span id="cb29-301"><a href="#cb29-301"></a></span>
+<span id="cb29-302"><a href="#cb29-302"></a><span class="va">HPC_HOST</span><span class="op">=</span><span class="st">"cluster"</span></span>
+<span id="cb29-303"><a href="#cb29-303"></a><span class="va">SESSION_NAME</span><span class="op">=</span><span class="st">"research_</span><span class="va">$(</span><span class="fu">date</span> +%Y%m%d<span class="va">)</span><span class="st">"</span></span>
+<span id="cb29-304"><a href="#cb29-304"></a></span>
+<span id="cb29-305"><a href="#cb29-305"></a><span class="bu">echo</span> <span class="st">"Starting interactive HPC session..."</span></span>
+<span id="cb29-306"><a href="#cb29-306"></a></span>
+<span id="cb29-307"><a href="#cb29-307"></a><span class="co"># Connect and start tmux session</span></span>
+<span id="cb29-308"><a href="#cb29-308"></a><span class="fu">ssh</span> <span class="at">-t</span> <span class="va">$HPC_HOST</span> <span class="st">"tmux new-session -d -s </span><span class="va">$SESSION_NAME</span><span class="st"> &amp;&amp; tmux send-keys 'cd /scratch/</span><span class="dt">\$</span><span class="st">USER' Enter &amp;&amp; tmux attach -t </span><span class="va">$SESSION_NAME</span><span class="st">"</span></span>
+<span id="cb29-309"><a href="#cb29-309"></a></span>
+<span id="cb29-310"><a href="#cb29-310"></a><span class="co"># Alternative with screen</span></span>
+<span id="cb29-311"><a href="#cb29-311"></a><span class="co"># ssh -t $HPC_HOST "screen -S $SESSION_NAME"</span></span>
+<span id="cb29-312"><a href="#cb29-312"></a><span class="kw">```</span></span>
+<span id="cb29-313"><a href="#cb29-313"></a></span>
+<span id="cb29-314"><a href="#cb29-314"></a><span class="co">## SSH Security Best Practices</span></span>
+<span id="cb29-315"><a href="#cb29-315"></a></span>
+<span id="cb29-316"><a href="#cb29-316"></a><span class="co">### Hardening SSH Configuration</span></span>
+<span id="cb29-317"><a href="#cb29-317"></a></span>
+<span id="cb29-318"><a href="#cb29-318"></a><span class="kw">```</span>bash</span>
+<span id="cb29-319"><a href="#cb29-319"></a><span class="co"># ~/.ssh/config security settings</span></span>
+<span id="cb29-320"><a href="#cb29-320"></a><span class="ex">Host</span> <span class="pp">*</span></span>
+<span id="cb29-321"><a href="#cb29-321"></a>    <span class="co"># Use only key authentication</span></span>
+<span id="cb29-322"><a href="#cb29-322"></a>    <span class="ex">PasswordAuthentication</span> no</span>
+<span id="cb29-323"><a href="#cb29-323"></a>    <span class="ex">PubkeyAuthentication</span> yes</span>
+<span id="cb29-324"><a href="#cb29-324"></a>    </span>
+<span id="cb29-325"><a href="#cb29-325"></a>    <span class="co"># Use strong ciphers</span></span>
+<span id="cb29-326"><a href="#cb29-326"></a>    <span class="ex">Ciphers</span> aes256-gcm@openssh.com,aes128-gcm@openssh.com,aes256-ctr,aes192-ctr,aes128-ctr</span>
+<span id="cb29-327"><a href="#cb29-327"></a>    </span>
+<span id="cb29-328"><a href="#cb29-328"></a>    <span class="co"># Disable weak algorithms</span></span>
+<span id="cb29-329"><a href="#cb29-329"></a>    <span class="ex">KexAlgorithms</span> curve25519-sha256@libssh.org,diffie-hellman-group16-sha512</span>
+<span id="cb29-330"><a href="#cb29-330"></a>    </span>
+<span id="cb29-331"><a href="#cb29-331"></a>    <span class="co"># Connection timeouts</span></span>
+<span id="cb29-332"><a href="#cb29-332"></a>    <span class="ex">ServerAliveInterval</span> 60</span>
+<span id="cb29-333"><a href="#cb29-333"></a>    <span class="ex">ServerAliveCountMax</span> 3</span>
+<span id="cb29-334"><a href="#cb29-334"></a>    <span class="ex">ConnectTimeout</span> 30</span>
+<span id="cb29-335"><a href="#cb29-335"></a>    </span>
+<span id="cb29-336"><a href="#cb29-336"></a>    <span class="co"># Disable X11 forwarding by default (enable per host if needed)</span></span>
+<span id="cb29-337"><a href="#cb29-337"></a>    <span class="ex">ForwardX11</span> no</span>
+<span id="cb29-338"><a href="#cb29-338"></a><span class="kw">```</span></span>
+<span id="cb29-339"><a href="#cb29-339"></a></span>
+<span id="cb29-340"><a href="#cb29-340"></a><span class="co">### Managing SSH Keys Securely</span></span>
+<span id="cb29-341"><a href="#cb29-341"></a></span>
+<span id="cb29-342"><a href="#cb29-342"></a><span class="kw">```</span>bash</span>
+<span id="cb29-343"><a href="#cb29-343"></a><span class="co"># Set proper permissions on SSH directory</span></span>
+<span id="cb29-344"><a href="#cb29-344"></a><span class="fu">chmod</span> 700 ~/.ssh</span>
+<span id="cb29-345"><a href="#cb29-345"></a><span class="fu">chmod</span> 600 ~/.ssh/config</span>
+<span id="cb29-346"><a href="#cb29-346"></a><span class="fu">chmod</span> 600 ~/.ssh/id_rsa          <span class="co"># Private key</span></span>
+<span id="cb29-347"><a href="#cb29-347"></a><span class="fu">chmod</span> 644 ~/.ssh/id_rsa.pub      <span class="co"># Public key</span></span>
+<span id="cb29-348"><a href="#cb29-348"></a><span class="fu">chmod</span> 600 ~/.ssh/authorized_keys</span>
+<span id="cb29-349"><a href="#cb29-349"></a><span class="fu">chmod</span> 600 ~/.ssh/known_hosts</span>
+<span id="cb29-350"><a href="#cb29-350"></a></span>
+<span id="cb29-351"><a href="#cb29-351"></a><span class="co"># Use passphrase-protected keys for sensitive systems</span></span>
+<span id="cb29-352"><a href="#cb29-352"></a><span class="fu">ssh-keygen</span> <span class="at">-t</span> ed25519 <span class="at">-f</span> ~/.ssh/sensitive_system_key</span>
+<span id="cb29-353"><a href="#cb29-353"></a><span class="co"># Enter strong passphrase when prompted</span></span>
+<span id="cb29-354"><a href="#cb29-354"></a><span class="kw">```</span></span>
+<span id="cb29-355"><a href="#cb29-355"></a></span>
+<span id="cb29-356"><a href="#cb29-356"></a><span class="co">### SSH Key Management Script</span></span>
+<span id="cb29-357"><a href="#cb29-357"></a></span>
+<span id="cb29-358"><a href="#cb29-358"></a><span class="kw">```</span>bash</span>
+<span id="cb29-359"><a href="#cb29-359"></a><span class="co">#!/bin/bash</span></span>
+<span id="cb29-360"><a href="#cb29-360"></a><span class="co"># manage_ssh_keys.sh - Manage SSH keys across multiple systems</span></span>
+<span id="cb29-361"><a href="#cb29-361"></a></span>
+<span id="cb29-362"><a href="#cb29-362"></a><span class="va">SYSTEMS</span><span class="op">=</span><span class="va">(</span><span class="st">"hpc1.edu"</span> <span class="st">"hpc2.edu"</span> <span class="st">"cluster.org"</span><span class="va">)</span></span>
+<span id="cb29-363"><a href="#cb29-363"></a><span class="va">PUBLIC_KEY</span><span class="op">=</span><span class="st">"</span><span class="va">$HOME</span><span class="st">/.ssh/id_rsa.pub"</span></span>
+<span id="cb29-364"><a href="#cb29-364"></a></span>
+<span id="cb29-365"><a href="#cb29-365"></a><span class="cf">if</span> <span class="bu">[</span> <span class="ot">!</span> <span class="ot">-f</span> <span class="st">"</span><span class="va">$PUBLIC_KEY</span><span class="st">"</span> <span class="bu">]</span><span class="kw">;</span> <span class="cf">then</span></span>
+<span id="cb29-366"><a href="#cb29-366"></a>    <span class="bu">echo</span> <span class="st">"Generating new SSH key..."</span></span>
+<span id="cb29-367"><a href="#cb29-367"></a>    <span class="fu">ssh-keygen</span> <span class="at">-t</span> rsa <span class="at">-b</span> 4096 <span class="at">-f</span> ~/.ssh/id_rsa</span>
+<span id="cb29-368"><a href="#cb29-368"></a><span class="cf">fi</span></span>
+<span id="cb29-369"><a href="#cb29-369"></a></span>
+<span id="cb29-370"><a href="#cb29-370"></a><span class="bu">echo</span> <span class="st">"Installing SSH key on remote systems..."</span></span>
+<span id="cb29-371"><a href="#cb29-371"></a><span class="cf">for</span> system <span class="kw">in</span> <span class="st">"</span><span class="va">${SYSTEMS</span><span class="op">[@]</span><span class="va">}</span><span class="st">"</span><span class="kw">;</span> <span class="cf">do</span></span>
+<span id="cb29-372"><a href="#cb29-372"></a>    <span class="bu">echo</span> <span class="st">"Installing key on </span><span class="va">$system</span><span class="st">..."</span></span>
+<span id="cb29-373"><a href="#cb29-373"></a>    <span class="ex">ssh-copy-id</span> <span class="at">-i</span> <span class="st">"</span><span class="va">$PUBLIC_KEY</span><span class="st">"</span> <span class="st">"</span><span class="va">$system</span><span class="st">"</span></span>
+<span id="cb29-374"><a href="#cb29-374"></a>    </span>
+<span id="cb29-375"><a href="#cb29-375"></a>    <span class="cf">if</span> <span class="bu">[</span> <span class="va">$?</span> <span class="ot">-eq</span> 0 <span class="bu">]</span><span class="kw">;</span> <span class="cf">then</span></span>
+<span id="cb29-376"><a href="#cb29-376"></a>        <span class="bu">echo</span> <span class="st">"✓ Key installed on </span><span class="va">$system</span><span class="st">"</span></span>
+<span id="cb29-377"><a href="#cb29-377"></a>    <span class="cf">else</span></span>
+<span id="cb29-378"><a href="#cb29-378"></a>        <span class="bu">echo</span> <span class="st">"✗ Failed to install key on </span><span class="va">$system</span><span class="st">"</span></span>
+<span id="cb29-379"><a href="#cb29-379"></a>    <span class="cf">fi</span></span>
+<span id="cb29-380"><a href="#cb29-380"></a><span class="cf">done</span></span>
+<span id="cb29-381"><a href="#cb29-381"></a></span>
+<span id="cb29-382"><a href="#cb29-382"></a><span class="bu">echo</span> <span class="st">"Testing connections..."</span></span>
+<span id="cb29-383"><a href="#cb29-383"></a><span class="cf">for</span> system <span class="kw">in</span> <span class="st">"</span><span class="va">${SYSTEMS</span><span class="op">[@]</span><span class="va">}</span><span class="st">"</span><span class="kw">;</span> <span class="cf">do</span></span>
+<span id="cb29-384"><a href="#cb29-384"></a>    <span class="bu">echo</span> <span class="at">-n</span> <span class="st">"Testing </span><span class="va">$system</span><span class="st">... "</span></span>
+<span id="cb29-385"><a href="#cb29-385"></a>    <span class="cf">if</span> <span class="fu">ssh</span> <span class="at">-o</span> ConnectTimeout=5 <span class="at">-o</span> BatchMode=yes <span class="st">"</span><span class="va">$system</span><span class="st">"</span> <span class="st">"echo 'OK'"</span> <span class="dv">2</span><span class="op">&gt;</span>/dev/null<span class="kw">;</span> <span class="cf">then</span></span>
+<span id="cb29-386"><a href="#cb29-386"></a>        <span class="bu">echo</span> <span class="st">"✓ Connected"</span></span>
+<span id="cb29-387"><a href="#cb29-387"></a>    <span class="cf">else</span></span>
+<span id="cb29-388"><a href="#cb29-388"></a>        <span class="bu">echo</span> <span class="st">"✗ Failed"</span></span>
+<span id="cb29-389"><a href="#cb29-389"></a>    <span class="cf">fi</span></span>
+<span id="cb29-390"><a href="#cb29-390"></a><span class="cf">done</span></span>
+<span id="cb29-391"><a href="#cb29-391"></a><span class="kw">```</span></span>
+<span id="cb29-392"><a href="#cb29-392"></a></span>
+<span id="cb29-393"><a href="#cb29-393"></a><span class="co">## Troubleshooting SSH Connections</span></span>
+<span id="cb29-394"><a href="#cb29-394"></a></span>
+<span id="cb29-395"><a href="#cb29-395"></a><span class="co">### Common SSH Problems and Solutions</span></span>
+<span id="cb29-396"><a href="#cb29-396"></a></span>
+<span id="cb29-397"><a href="#cb29-397"></a><span class="co">#### Problem 1: "Permission denied (publickey)"</span></span>
+<span id="cb29-398"><a href="#cb29-398"></a></span>
+<span id="cb29-399"><a href="#cb29-399"></a><span class="kw">```</span>bash</span>
+<span id="cb29-400"><a href="#cb29-400"></a><span class="co"># Check if key is loaded in SSH agent</span></span>
+<span id="cb29-401"><a href="#cb29-401"></a><span class="fu">ssh-add</span> <span class="at">-l</span></span>
+<span id="cb29-402"><a href="#cb29-402"></a></span>
+<span id="cb29-403"><a href="#cb29-403"></a><span class="co"># If not loaded, add it</span></span>
+<span id="cb29-404"><a href="#cb29-404"></a><span class="fu">ssh-add</span> ~/.ssh/id_rsa</span>
+<span id="cb29-405"><a href="#cb29-405"></a></span>
+<span id="cb29-406"><a href="#cb29-406"></a><span class="co"># Check remote server permissions</span></span>
+<span id="cb29-407"><a href="#cb29-407"></a><span class="fu">ssh</span> username@server <span class="st">"ls -la ~/.ssh/"</span></span>
+<span id="cb29-408"><a href="#cb29-408"></a><span class="co"># Should show:</span></span>
+<span id="cb29-409"><a href="#cb29-409"></a><span class="co"># drwx------  ~/.ssh/</span></span>
+<span id="cb29-410"><a href="#cb29-410"></a><span class="co"># -rw-------  ~/.ssh/authorized_keys</span></span>
+<span id="cb29-411"><a href="#cb29-411"></a><span class="kw">```</span></span>
+<span id="cb29-412"><a href="#cb29-412"></a></span>
+<span id="cb29-413"><a href="#cb29-413"></a><span class="co">#### Problem 2: "Connection timed out"</span></span>
+<span id="cb29-414"><a href="#cb29-414"></a></span>
+<span id="cb29-415"><a href="#cb29-415"></a><span class="kw">```</span>bash</span>
+<span id="cb29-416"><a href="#cb29-416"></a><span class="co"># Test with verbose output</span></span>
+<span id="cb29-417"><a href="#cb29-417"></a><span class="fu">ssh</span> <span class="at">-v</span> username@server</span>
+<span id="cb29-418"><a href="#cb29-418"></a></span>
+<span id="cb29-419"><a href="#cb29-419"></a><span class="co"># Try different port</span></span>
+<span id="cb29-420"><a href="#cb29-420"></a><span class="fu">ssh</span> <span class="at">-p</span> 2222 username@server</span>
+<span id="cb29-421"><a href="#cb29-421"></a></span>
+<span id="cb29-422"><a href="#cb29-422"></a><span class="co"># Check if server is reachable</span></span>
+<span id="cb29-423"><a href="#cb29-423"></a><span class="fu">ping</span> server-hostname</span>
+<span id="cb29-424"><a href="#cb29-424"></a><span class="ex">telnet</span> server-hostname 22</span>
+<span id="cb29-425"><a href="#cb29-425"></a><span class="kw">```</span></span>
+<span id="cb29-426"><a href="#cb29-426"></a></span>
+<span id="cb29-427"><a href="#cb29-427"></a><span class="co">#### Problem 3: "Host key verification failed"</span></span>
+<span id="cb29-428"><a href="#cb29-428"></a></span>
+<span id="cb29-429"><a href="#cb29-429"></a><span class="kw">```</span>bash</span>
+<span id="cb29-430"><a href="#cb29-430"></a><span class="co"># Remove old host key</span></span>
+<span id="cb29-431"><a href="#cb29-431"></a><span class="fu">ssh-keygen</span> <span class="at">-R</span> hostname</span>
+<span id="cb29-432"><a href="#cb29-432"></a></span>
+<span id="cb29-433"><a href="#cb29-433"></a><span class="co"># Or edit known_hosts file</span></span>
+<span id="cb29-434"><a href="#cb29-434"></a><span class="fu">nano</span> ~/.ssh/known_hosts</span>
+<span id="cb29-435"><a href="#cb29-435"></a><span class="co"># Remove the line with the problematic hostname</span></span>
+<span id="cb29-436"><a href="#cb29-436"></a><span class="kw">```</span></span>
+<span id="cb29-437"><a href="#cb29-437"></a></span>
+<span id="cb29-438"><a href="#cb29-438"></a><span class="co">### SSH Connection Debugging</span></span>
+<span id="cb29-439"><a href="#cb29-439"></a></span>
+<span id="cb29-440"><a href="#cb29-440"></a><span class="kw">```</span>bash</span>
+<span id="cb29-441"><a href="#cb29-441"></a><span class="co"># Maximum verbosity for debugging</span></span>
+<span id="cb29-442"><a href="#cb29-442"></a><span class="fu">ssh</span> <span class="at">-vvv</span> username@server</span>
+<span id="cb29-443"><a href="#cb29-443"></a></span>
+<span id="cb29-444"><a href="#cb29-444"></a><span class="co"># Test specific configuration</span></span>
+<span id="cb29-445"><a href="#cb29-445"></a><span class="fu">ssh</span> <span class="at">-F</span> /path/to/config username@server</span>
+<span id="cb29-446"><a href="#cb29-446"></a></span>
+<span id="cb29-447"><a href="#cb29-447"></a><span class="co"># Ignore known_hosts (for testing only!)</span></span>
+<span id="cb29-448"><a href="#cb29-448"></a><span class="fu">ssh</span> <span class="at">-o</span> StrictHostKeyChecking=no <span class="at">-o</span> UserKnownHostsFile=/dev/null username@server</span>
+<span id="cb29-449"><a href="#cb29-449"></a><span class="kw">```</span></span>
+<span id="cb29-450"><a href="#cb29-450"></a></span>
+<span id="cb29-451"><a href="#cb29-451"></a><span class="co">## SSH Performance Optimization</span></span>
+<span id="cb29-452"><a href="#cb29-452"></a></span>
+<span id="cb29-453"><a href="#cb29-453"></a><span class="co">### Speeding Up SSH Connections</span></span>
+<span id="cb29-454"><a href="#cb29-454"></a></span>
+<span id="cb29-455"><a href="#cb29-455"></a><span class="kw">```</span>bash</span>
+<span id="cb29-456"><a href="#cb29-456"></a><span class="co"># ~/.ssh/config optimizations</span></span>
+<span id="cb29-457"><a href="#cb29-457"></a><span class="ex">Host</span> <span class="pp">*</span></span>
+<span id="cb29-458"><a href="#cb29-458"></a>    <span class="co"># Reuse connections</span></span>
+<span id="cb29-459"><a href="#cb29-459"></a>    <span class="ex">ControlMaster</span> auto</span>
+<span id="cb29-460"><a href="#cb29-460"></a>    <span class="ex">ControlPath</span> ~/.ssh/sockets/%r@%h-%p</span>
+<span id="cb29-461"><a href="#cb29-461"></a>    <span class="ex">ControlPersist</span> 600</span>
+<span id="cb29-462"><a href="#cb29-462"></a>    </span>
+<span id="cb29-463"><a href="#cb29-463"></a>    <span class="co"># Enable compression</span></span>
+<span id="cb29-464"><a href="#cb29-464"></a>    <span class="ex">Compression</span> yes</span>
+<span id="cb29-465"><a href="#cb29-465"></a>    </span>
+<span id="cb29-466"><a href="#cb29-466"></a>    <span class="co"># Faster cipher (less secure, use only on trusted networks)</span></span>
+<span id="cb29-467"><a href="#cb29-467"></a>    <span class="co"># Cipher arcfour</span></span>
+<span id="cb29-468"><a href="#cb29-468"></a>    </span>
+<span id="cb29-469"><a href="#cb29-469"></a>    <span class="co"># Keep connections alive</span></span>
+<span id="cb29-470"><a href="#cb29-470"></a>    <span class="ex">ServerAliveInterval</span> 60</span>
+<span id="cb29-471"><a href="#cb29-471"></a>    <span class="ex">ServerAliveCountMax</span> 3</span>
+<span id="cb29-472"><a href="#cb29-472"></a><span class="kw">```</span></span>
+<span id="cb29-473"><a href="#cb29-473"></a></span>
+<span id="cb29-474"><a href="#cb29-474"></a><span class="co">### Connection Multiplexing Setup</span></span>
+<span id="cb29-475"><a href="#cb29-475"></a></span>
+<span id="cb29-476"><a href="#cb29-476"></a><span class="kw">```</span>bash</span>
+<span id="cb29-477"><a href="#cb29-477"></a><span class="co"># Create socket directory</span></span>
+<span id="cb29-478"><a href="#cb29-478"></a><span class="fu">mkdir</span> <span class="at">-p</span> ~/.ssh/sockets</span>
+<span id="cb29-479"><a href="#cb29-479"></a></span>
+<span id="cb29-480"><a href="#cb29-480"></a><span class="co"># First connection establishes master</span></span>
+<span id="cb29-481"><a href="#cb29-481"></a><span class="fu">ssh</span> hpc</span>
+<span id="cb29-482"><a href="#cb29-482"></a></span>
+<span id="cb29-483"><a href="#cb29-483"></a><span class="co"># Subsequent connections reuse the master (much faster)</span></span>
+<span id="cb29-484"><a href="#cb29-484"></a><span class="fu">ssh</span> hpc  <span class="co"># This will be instant!</span></span>
+<span id="cb29-485"><a href="#cb29-485"></a><span class="fu">scp</span> file.txt hpc:~/  <span class="co"># This will also be faster</span></span>
+<span id="cb29-486"><a href="#cb29-486"></a><span class="kw">```</span></span>
+<span id="cb29-487"><a href="#cb29-487"></a></span>
+<span id="cb29-488"><a href="#cb29-488"></a><span class="co">## Quick Reference: SSH Command Cheat Sheet</span></span>
+<span id="cb29-489"><a href="#cb29-489"></a></span>
+<span id="cb29-490"><a href="#cb29-490"></a><span class="kw">|</span> <span class="ex">Task</span> <span class="kw">|</span> <span class="ex">Command</span> <span class="kw">|</span> <span class="ex">Example</span> <span class="kw">|</span></span>
+<span id="cb29-491"><a href="#cb29-491"></a><span class="kw">|</span><span class="ex">------</span><span class="kw">|</span><span class="ex">---------</span><span class="kw">|</span><span class="ex">---------</span><span class="kw">|</span></span>
+<span id="cb29-492"><a href="#cb29-492"></a><span class="kw">|</span> <span class="ex">Basic</span> connection <span class="kw">|</span> <span class="kw">`</span>ssh user@host<span class="kw">`</span> <span class="kw">|</span> <span class="kw">`</span>ssh alice@hpc.edu<span class="kw">`</span> <span class="kw">|</span></span>
+<span id="cb29-493"><a href="#cb29-493"></a><span class="kw">|</span> <span class="ex">Connect</span> with key <span class="kw">|</span> <span class="kw">`</span>ssh <span class="at">-i</span> keyfile user@host<span class="kw">`</span> <span class="kw">|</span> <span class="kw">`</span>ssh <span class="at">-i</span> ~/.ssh/hpc_key alice@hpc.edu<span class="kw">`</span> <span class="kw">|</span></span>
+<span id="cb29-494"><a href="#cb29-494"></a><span class="kw">|</span> <span class="ex">Connect</span> to port <span class="kw">|</span> <span class="kw">`</span>ssh <span class="at">-p</span> port user@host<span class="kw">`</span> <span class="kw">|</span> <span class="kw">`</span>ssh <span class="at">-p</span> 2222 alice@hpc.edu<span class="kw">`</span> <span class="kw">|</span></span>
+<span id="cb29-495"><a href="#cb29-495"></a><span class="kw">|</span> <span class="ex">X11</span> forwarding <span class="kw">|</span> <span class="kw">`</span>ssh <span class="at">-X</span> user@host<span class="kw">`</span> <span class="kw">|</span> <span class="kw">`</span>ssh <span class="at">-X</span> alice@hpc.edu<span class="kw">`</span> <span class="kw">|</span></span>
+<span id="cb29-496"><a href="#cb29-496"></a><span class="kw">|</span> <span class="ex">Local</span> port forward <span class="kw">|</span> <span class="kw">`</span>ssh <span class="at">-L</span> local:remote user@host<span class="kw">`</span> <span class="kw">|</span> <span class="kw">`</span>ssh <span class="at">-L</span> 8080:localhost:80 alice@hpc.edu<span class="kw">`</span> <span class="kw">|</span></span>
+<span id="cb29-497"><a href="#cb29-497"></a><span class="kw">|</span> <span class="ex">Generate</span> key pair <span class="kw">|</span> <span class="kw">`</span>ssh-keygen <span class="at">-t</span> type<span class="kw">`</span> <span class="kw">|</span> <span class="kw">`</span>ssh-keygen <span class="at">-t</span> rsa <span class="at">-b</span> 4096<span class="kw">`</span> <span class="kw">|</span></span>
+<span id="cb29-498"><a href="#cb29-498"></a><span class="kw">|</span> <span class="ex">Copy</span> public key <span class="kw">|</span> <span class="kw">`</span>ssh-copy-id user@host<span class="kw">`</span> <span class="kw">|</span> <span class="kw">`</span>ssh-copy-id alice@hpc.edu<span class="kw">`</span> <span class="kw">|</span></span>
+<span id="cb29-499"><a href="#cb29-499"></a><span class="kw">|</span> <span class="ex">Add</span> key to agent <span class="kw">|</span> <span class="kw">`</span>ssh-add keyfile<span class="kw">`</span> <span class="kw">|</span> <span class="kw">`</span>ssh-add ~/.ssh/id_rsa<span class="kw">`</span> <span class="kw">|</span></span>
+<span id="cb29-500"><a href="#cb29-500"></a></span>
+<span id="cb29-501"><a href="#cb29-501"></a><span class="co">## Practice Exercises</span></span>
+<span id="cb29-502"><a href="#cb29-502"></a></span>
+<span id="cb29-503"><a href="#cb29-503"></a><span class="ex">:::{.callout-important}</span></span>
+<span id="cb29-504"><a href="#cb29-504"></a><span class="co">## Your SSH Mastery Training</span></span>
+<span id="cb29-505"><a href="#cb29-505"></a></span>
+<span id="cb29-506"><a href="#cb29-506"></a><span class="ex">1.</span> <span class="pp">**</span>Set up key-based authentication<span class="pp">**</span></span>
+<span id="cb29-507"><a href="#cb29-507"></a>   <span class="kw">```</span>bash</span>
+<span id="cb29-508"><a href="#cb29-508"></a>   <span class="co"># Generate SSH key pair</span></span>
+<span id="cb29-509"><a href="#cb29-509"></a>   <span class="co"># Install public key on a remote system</span></span>
+<span id="cb29-510"><a href="#cb29-510"></a>   <span class="co"># Test passwordless login</span></span>
+<span id="cb29-511"><a href="#cb29-511"></a>   <span class="kw">```</span></span>
+<span id="cb29-512"><a href="#cb29-512"></a></span>
+<span id="cb29-513"><a href="#cb29-513"></a><span class="ex">2.</span> <span class="pp">**</span>Create SSH configuration<span class="pp">**</span></span>
+<span id="cb29-514"><a href="#cb29-514"></a>   <span class="kw">```</span>bash</span>
+<span id="cb29-515"><a href="#cb29-515"></a>   <span class="co"># Set up ~/.ssh/config with:</span></span>
+<span id="cb29-516"><a href="#cb29-516"></a>   <span class="co"># - Host aliases</span></span>
+<span id="cb29-517"><a href="#cb29-517"></a>   <span class="co"># - Different keys for different systems</span></span>
+<span id="cb29-518"><a href="#cb29-518"></a>   <span class="co"># - Connection optimization settings</span></span>
+<span id="cb29-519"><a href="#cb29-519"></a>   <span class="kw">```</span></span>
+<span id="cb29-520"><a href="#cb29-520"></a></span>
+<span id="cb29-521"><a href="#cb29-521"></a><span class="ex">3.</span> <span class="pp">**</span>Practice SSH tunneling<span class="pp">**</span></span>
+<span id="cb29-522"><a href="#cb29-522"></a>   <span class="kw">```</span>bash</span>
+<span id="cb29-523"><a href="#cb29-523"></a>   <span class="co"># Set up port forwarding</span></span>
+<span id="cb29-524"><a href="#cb29-524"></a>   <span class="co"># Access a remote web service locally</span></span>
+<span id="cb29-525"><a href="#cb29-525"></a>   <span class="co"># Create a SOCKS proxy</span></span>
+<span id="cb29-526"><a href="#cb29-526"></a>   <span class="kw">```</span></span>
+<span id="cb29-527"><a href="#cb29-527"></a></span>
+<span id="cb29-528"><a href="#cb29-528"></a><span class="ex">4.</span> <span class="pp">**</span>Automate remote tasks<span class="pp">**</span></span>
+<span id="cb29-529"><a href="#cb29-529"></a>   <span class="kw">```</span>bash</span>
+<span id="cb29-530"><a href="#cb29-530"></a>   <span class="co"># Write a script that:</span></span>
+<span id="cb29-531"><a href="#cb29-531"></a>   <span class="co"># - Connects to remote system</span></span>
+<span id="cb29-532"><a href="#cb29-532"></a>   <span class="co"># - Runs commands</span></span>
+<span id="cb29-533"><a href="#cb29-533"></a>   <span class="co"># - Transfers files</span></span>
+<span id="cb29-534"><a href="#cb29-534"></a>   <span class="co"># - Reports results</span></span>
+<span id="cb29-535"><a href="#cb29-535"></a>   <span class="kw">```</span></span>
+<span id="cb29-536"><a href="#cb29-536"></a><span class="ex">:::</span></span>
+<span id="cb29-537"><a href="#cb29-537"></a></span>
+<span id="cb29-538"><a href="#cb29-538"></a><span class="co">## What's Next?</span></span>
+<span id="cb29-539"><a href="#cb29-539"></a></span>
+<span id="cb29-540"><a href="#cb29-540"></a><span class="ex">Now</span> that you<span class="st">'re an SSH master, you'</span>re ready to learn about [File Transfer Mastery]<span class="er">(</span><span class="ex">07-file-transfer.qmd</span><span class="kw">)</span><span class="bu">.</span> SSH is the foundation for secure file transfers, and you<span class="st">'ll build on these skills to move massive amounts of data efficiently between systems.</span></span>
+<span id="cb29-541"><a href="#cb29-541"></a></span>
+<span id="cb29-542"><a href="#cb29-542"></a><span class="st">Remember: SSH is your gateway to the HPC world. Every data transfer, every remote job, every collaboration with distant systems starts with a secure SSH connection. Master these skills, and you'</span>ll work seamlessly across any number of remote systems as if they were all sitting on your desk.</span>
+<span id="cb29-543"><a href="#cb29-543"></a></span>
+<span id="cb29-544"><a href="#cb29-544"></a><span class="ex">:::{.callout-tip}</span></span>
+<span id="cb29-545"><a href="#cb29-545"></a><span class="co">## SSH Mastery Challenge</span></span>
+<span id="cb29-546"><a href="#cb29-546"></a><span class="ex">Before</span> moving on, try this real-world scenario:</span>
+<span id="cb29-547"><a href="#cb29-547"></a><span class="ex">1.</span> Set up passwordless access to a remote system</span>
+<span id="cb29-548"><a href="#cb29-548"></a><span class="ex">2.</span> Create a complex SSH configuration with multiple hosts</span>
+<span id="cb29-549"><a href="#cb29-549"></a><span class="ex">3.</span> Write a script that automates a multi-step remote workflow</span>
+<span id="cb29-550"><a href="#cb29-550"></a><span class="ex">4.</span> Set up secure tunneling for a specific application</span>
+<span id="cb29-551"><a href="#cb29-551"></a></span>
+<span id="cb29-552"><a href="#cb29-552"></a><span class="ex">This</span> mirrors the daily work of HPC researchers who manage multiple remote systems!</span>
+<span id="cb29-553"><a href="#cb29-553"></a><span class="ex">:::</span></span>
+<span id="cb29-554"><a href="#cb29-554"></a></span>
+<span id="cb29-555"><a href="#cb29-555"></a><span class="ex">---</span></span>
+<span id="cb29-556"><a href="#cb29-556"></a></span>
+<span id="cb29-557"><a href="#cb29-557"></a><span class="ex">*You</span><span class="st">'ve mastered the art of secure remote access – the ability to work anywhere in the digital universe. Next, we'</span><span class="ex">ll</span> learn to move your data across this universe with the speed and efficiency of a digital freight system!<span class="pp">*</span> </span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div></div></div></div></div>
+</div> <!-- /content -->
+
+
+
+<script src="../../../site_libs/quarto-html/zenscroll-min.js"></script>
+</body></html>

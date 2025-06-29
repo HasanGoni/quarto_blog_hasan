@@ -1,0 +1,287 @@
+---
+title: "Environment Mastery"
+description: "Master your digital workspace. Learn to customize your shell environment, manage variables, and create a personalized command line experience that adapts to your workflow like a perfectly tailored laboratory."
+author: "Hasan"
+date: last-modified
+categories: [command-line, environment, bash, variables, configuration]
+image: "https://images.unsplash.com/photo-1629654297299-c8506221ca97?ixlib=rb-4.0.3&auto=format&fit=crop&w=2000&q=80"
+toc: true
+---
+
+## The Story: The Digital Laboratory Designer
+
+Imagine you're setting up the perfect research laboratory. You want your most-used tools within arm's reach, your workspace organized exactly how you think, and your environment configured to automatically adapt to different types of experiments. Some days you're doing data analysis, other days you're running simulations, and sometimes you're collaborating with teams using different software stacks.
+
+In the physical world, this would require multiple specialized labs. But in the Unix command line, you can create a single, infinitely adaptable workspace that transforms itself based on your needs. Your shell environment is like having a smart laboratory that remembers your preferences, loads the right tools automatically, and even adapts its behavior based on what you're working on.
+
+Today, you'll become a master laboratory designer, creating a personalized command line environment that works exactly the way you think.
+
+## Understanding Your Shell Environment
+
+Your shell environment is like the atmosphere of your digital workspace – it contains all the settings, variables, and configurations that determine how your commands behave.
+
+### The Environment Ecosystem
+
+```bash
+# See all environment variables
+env
+
+# See shell variables (includes environment variables)
+set
+
+# See specific variable
+echo $HOME
+echo $PATH
+echo $USER
+```
+
+**Real-world analogy**: Environment variables are like the settings on all the equipment in your lab – the temperature, pressure, lighting, and tool configurations that everything else depends on.
+
+### Key Environment Variables
+
+```bash
+# Essential environment variables
+echo $HOME        # Your home directory
+echo $USER        # Your username
+echo $PATH        # Where the shell looks for commands
+echo $SHELL       # Your current shell
+echo $PWD         # Current working directory
+echo $OLDPWD      # Previous working directory
+echo $LANG        # Language and locale settings
+echo $TERM        # Terminal type
+```
+
+## The PATH: Your Command Highway System
+
+The `PATH` variable is like a highway system that tells your shell where to find commands.
+
+### Understanding PATH
+
+```bash
+# View your current PATH
+echo $PATH
+
+# PATH is a colon-separated list of directories
+# /usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin
+
+# See which version of a command will run
+which python
+which gcc
+which ls
+
+# See all versions of a command in PATH
+whereis python
+```
+
+### Modifying PATH
+
+```bash
+# Add directory to beginning of PATH (highest priority)
+export PATH="/new/directory:$PATH"
+
+# Add directory to end of PATH (lowest priority)
+export PATH="$PATH:/another/directory"
+
+# Add multiple directories
+export PATH="/opt/local/bin:/usr/local/bin:$PATH"
+
+# Temporarily modify PATH for one command
+PATH="/special/path:$PATH" special_command
+```
+
+## Shell Configuration Files
+
+Your shell reads configuration files when it starts, like a laboratory that runs a checklist every time you enter.
+
+### The Configuration File Hierarchy
+
+```bash
+# System-wide configuration (affects all users)
+/etc/profile
+/etc/bash.bashrc
+
+# User-specific configuration (in your home directory)
+~/.bash_profile    # Login shells
+~/.bashrc          # Interactive shells
+~/.bash_logout     # When you log out
+~/.profile         # POSIX-compliant (works with any shell)
+```
+
+### Sample .bashrc Configuration
+
+```bash
+# ~/.bashrc - Your personal shell configuration
+
+# Source global definitions
+if [ -f /etc/bashrc ]; then
+    . /etc/bashrc
+fi
+
+# ===============================
+# ENVIRONMENT VARIABLES
+# ===============================
+
+# Set default editor
+export EDITOR=nano
+export VISUAL=nano
+
+# Set PATH additions
+export PATH="$HOME/bin:$HOME/.local/bin:$PATH"
+
+# Research-specific environment
+export RESEARCH_DATA="$HOME/research/data"
+export SCRATCH_DIR="/scratch/$USER"
+export PROJECT_ROOT="$HOME/projects/current"
+
+# ===============================
+# ALIASES
+# ===============================
+
+# Safety aliases
+alias rm='rm -i'
+alias cp='cp -i'
+alias mv='mv -i'
+
+# Convenience aliases
+alias ll='ls -alF'
+alias la='ls -A'
+alias ..='cd ..'
+alias ...='cd ../..'
+
+# Directory shortcuts
+alias home='cd ~'
+alias data='cd $RESEARCH_DATA'
+alias scratch='cd $SCRATCH_DIR'
+alias project='cd $PROJECT_ROOT'
+
+# Development aliases
+alias py='python'
+alias py3='python3'
+alias ipy='ipython'
+
+# Git aliases
+alias gs='git status'
+alias ga='git add'
+alias gc='git commit'
+
+# ===============================
+# FUNCTIONS
+# ===============================
+
+# Quick directory creation and navigation
+mkcd() {
+    mkdir -p "$1" && cd "$1"
+}
+
+# Find files by name
+ff() {
+    find . -name "*$1*" -type f
+}
+
+# Extract various archive formats
+extract() {
+    if [ -f "$1" ]; then
+        case "$1" in
+            *.tar.bz2)   tar xjf "$1"     ;;
+            *.tar.gz)    tar xzf "$1"     ;;
+            *.zip)       unzip "$1"       ;;
+            *)           echo "Cannot extract '$1'" ;;
+        esac
+    fi
+}
+
+# ===============================
+# PROMPT CUSTOMIZATION
+# ===============================
+
+# Colors for prompt
+RED='\[\033[0;31m\]'
+GREEN='\[\033[0;32m\]'
+BLUE='\[\033[0;34m\]'
+RESET='\[\033[0m\]'
+
+# Custom prompt
+PS1="${GREEN}\u@\h${RESET}:${BLUE}\w${RESET}\$ "
+```
+
+## Advanced Environment Management
+
+### Project-Specific Environments
+
+```bash
+# Project-specific environment setup
+setup_project() {
+    local project_name="$1"
+    local project_dir="$HOME/projects/$project_name"
+    
+    if [ -d "$project_dir" ]; then
+        export PROJECT_NAME="$project_name"
+        export PROJECT_ROOT="$project_dir"
+        export PROJECT_DATA="$project_dir/data"
+        export PROJECT_SCRIPTS="$project_dir/scripts"
+        
+        # Add project scripts to PATH
+        export PATH="$PROJECT_SCRIPTS:$PATH"
+        
+        cd "$project_dir"
+        echo "Environment set up for project: $project_name"
+    fi
+}
+```
+
+### Module System Integration
+
+```bash
+# Function to load standard research environment
+load_research_env() {
+    module purge
+    module load gcc/9.3.0
+    module load python/3.9.2
+    module load R/4.1.0
+    echo "Research environment loaded"
+}
+
+# Aliases for quick environment switching
+alias resenv='load_research_env'
+```
+
+## Quick Reference: Environment Management
+
+| Task | Command | Example |
+|------|---------|---------|
+| View environment | `env` | `env \| grep PATH` |
+| Set variable | `export VAR=value` | `export EDITOR=nano` |
+| View variable | `echo $VAR` | `echo $HOME` |
+| Add to PATH | `export PATH="dir:$PATH"` | `export PATH="$HOME/bin:$PATH"` |
+| Edit .bashrc | `nano ~/.bashrc` | `nano ~/.bashrc` |
+| Reload config | `source ~/.bashrc` | `source ~/.bashrc` |
+| Create alias | `alias name='command'` | `alias ll='ls -la'` |
+
+## Practice Exercises
+
+:::{.callout-important}
+## Your Environment Mastery Training
+
+1. **Customize your .bashrc**
+   - Add useful aliases and functions
+   - Create shortcuts for common workflows
+   - Set up a custom prompt
+
+2. **Create project environments**
+   - Write functions to set up different projects
+   - Practice switching between software stacks
+   - Create directory shortcuts
+
+3. **Debug environment issues**
+   - Practice finding why commands aren't found
+   - Debug PATH issues
+   - Monitor environment changes
+:::
+
+## What's Next?
+
+Now that you've mastered your environment, you're ready to learn [Job Scheduling Power](09-hpc-job-scheduling.qmd). A well-configured environment is essential for managing complex parallel workflows.
+
+---
+
+*You've mastered the art of environment design – creating a digital workspace that thinks like you do. Next, we'll learn to harness parallel processing power!* 

@@ -1,0 +1,486 @@
+---
+title: "HPC Job Scheduling with bsub"
+description: "Master the art of submitting and managing computational jobs on HPC clusters using bsub. Learn to orchestrate hundreds of parallel jobs, monitor resources, and handle complex workflows like a professional researcher."
+author: "Hasan"
+date: last-modified
+categories: [command-line, hpc, bsub, job-scheduling, parallel-computing]
+image: "https://images.unsplash.com/photo-1629654297299-c8506221ca97?ixlib=rb-4.0.3&auto=format&fit=crop&w=2000&q=80"
+toc: true
+---
+
+## The Story: The Computational Orchestra
+
+Imagine you're a conductor of a massive orchestra with 1,000 musicians (CPU cores), but instead of playing music, they're processing your research data. You need to coordinate when each musician plays, what piece they perform, and ensure they don't interfere with each other. Some pieces need the entire string section, others just a solo violin.
+
+This is exactly what HPC job scheduling is about. The `bsub` command is your conductor's baton, allowing you to orchestrate computational jobs across hundreds or thousands of processors. Today, you'll learn to conduct your own computational symphony.
+
+## Understanding HPC Job Scheduling
+
+### Why We Need Job Schedulers
+
+In the old days, if you wanted to run a program, you just typed its name and it ran immediately. But on HPC systems with hundreds of users and thousands of cores, we need a traffic controller:
+
+**Real-world analogy**: It's like an airport control tower. Planes (jobs) can't just land whenever they want – they need permission, runway assignments, and coordination to avoid crashes.
+
+### The LSF (Load Sharing Facility) System
+
+`bsub` is part of the LSF job scheduling system, which manages:
+- **Queue management**: Different types of jobs go to different queues
+- **Resource allocation**: Memory, CPU cores, time limits
+- **Priority handling**: Important jobs get preference
+- **Load balancing**: Distributing work across the cluster
+
+## Your First bsub Command
+
+Let's start with the simplest possible job submission:
+
+```bash
+bsub "echo 'Hello HPC World!'"
+```
+
+**What happens**:
+1. Your job gets assigned a unique ID
+2. It goes into a queue waiting for resources
+3. When resources are available, it runs
+4. Output gets saved to a file
+
+**Real-world analogy**: It's like ordering food at a busy restaurant – you get a ticket number, wait in line, and eventually your order is prepared.
+
+## Understanding Job Output
+
+When your job runs, LSF creates output files:
+- `LSFOUT.jobid` - Standard output (what your program prints)
+- `LSFERR.jobid` - Error messages (if something goes wrong)
+
+```bash
+# Check your job output
+cat LSFOUT.12345    # Replace 12345 with your actual job ID
+```
+
+## Essential bsub Options
+
+### Specifying Resources
+
+```bash
+# Request specific number of cores
+bsub -n 4 "my_parallel_program"
+
+# Request specific amount of memory
+bsub -M 8000 "memory_intensive_program"    # 8GB memory
+
+# Request specific runtime
+bsub -W 2:00 "quick_job"                   # 2 hours max
+```
+
+**Real-world analogy**: It's like making a restaurant reservation – you tell them how many people (cores), what kind of table (memory), and how long you'll stay (time).
+
+### Choosing Queues
+
+```bash
+# Submit to specific queue
+bsub -q normal "standard_job"
+bsub -q short "quick_analysis"
+bsub -q long "week_long_simulation"
+```
+
+Different queues have different characteristics:
+- **short**: Quick jobs, limited time, fast turnaround
+- **normal**: Standard jobs, moderate resources
+- **long**: Extended jobs, more time allowed
+- **gpu**: Jobs requiring GPU resources
+
+### Naming Your Jobs
+
+```bash
+# Give your job a meaningful name
+bsub -J "data_analysis_2023" "python analyze_data.py"
+```
+
+**Real-world analogy**: It's like labeling boxes when moving – you'll thank yourself later when you need to find something specific.
+
+## Real-World HPC Scenarios
+
+### Scenario 1: Single Analysis Job
+
+```bash
+# Analyze a large dataset
+bsub -J "experiment_1_analysis" \
+     -n 8 \
+     -M 16000 \
+     -W 4:00 \
+     -o analysis_%J.out \
+     -e analysis_%J.err \
+     "python analyze_experiment.py --input data/experiment_1.csv"
+```
+
+**Breaking it down**:
+- `-J`: Job name for easy identification
+- `-n 8`: Use 8 CPU cores
+- `-M 16000`: Request 16GB memory
+- `-W 4:00`: Maximum 4 hours runtime
+- `-o/-e`: Custom output/error file names
+- `%J`: Gets replaced with job ID
+
+### Scenario 2: Array Jobs (Processing Multiple Files)
+
+```bash
+# Process 100 different input files
+bsub -J "process_files[1-100]" \
+     -n 1 \
+     -M 4000 \
+     -W 1:00 \
+     -o output_%I.out \
+     -e error_%I.err \
+     "python process_single_file.py --file data/file_\$LSB_JOBINDEX.csv"
+```
+
+**Array job magic**:
+- `[1-100]`: Creates 100 separate jobs
+- `%I`: Gets replaced with array index (1, 2, 3, ...)
+- `$LSB_JOBINDEX`: Environment variable containing the array index
+
+**Real-world analogy**: It's like having 100 identical tasks and hiring 100 workers to do them simultaneously, each with a different input file.
+
+### Scenario 3: GPU Jobs
+
+```bash
+# Machine learning training on GPU
+bsub -J "ml_training" \
+     -q gpu \
+     -gpu "num=1:mode=exclusive_process" \
+     -n 4 \
+     -M 32000 \
+     -W 12:00 \
+     "python train_model.py --epochs 100"
+```
+
+## Job Monitoring and Management
+
+### Checking Job Status
+
+```bash
+bjobs                    # Show all your jobs
+bjobs -u all            # Show all users' jobs
+bjobs -r                # Show only running jobs
+bjobs -p                # Show only pending jobs
+bjobs 12345             # Show specific job details
+```
+
+**Job states you'll see**:
+- **PEND**: Waiting in queue
+- **RUN**: Currently running
+- **DONE**: Completed successfully
+- **EXIT**: Failed with error
+
+### Detailed Job Information
+
+```bash
+# Get detailed information about a job
+bjobs -l 12345          # Long format with all details
+bpeek 12345             # Peek at current output while job runs
+```
+
+### Managing Running Jobs
+
+```bash
+# Kill a job
+bkill 12345             # Kill specific job
+bkill -J "job_name"     # Kill job by name
+bkill 0                 # Kill all your jobs (careful!)
+
+# Suspend and resume jobs
+bstop 12345             # Suspend job
+bresume 12345           # Resume suspended job
+```
+
+**Real-world analogy**: It's like having a remote control for your computational tasks – pause, stop, or check status anytime.
+
+## Advanced bsub Techniques
+
+### Job Dependencies
+
+```bash
+# Job B waits for Job A to complete
+JOB_A=$(bsub -J "prepare_data" "python prepare.py" | grep -o '[0-9]*')
+bsub -J "analyze_data" -w "done($JOB_A)" "python analyze.py"
+```
+
+**Real-world analogy**: It's like a cooking recipe where you can't start step 3 until step 2 is finished.
+
+### Resource Specifications
+
+```bash
+# Complex resource requirements
+bsub -J "complex_job" \
+     -n 16 \
+     -R "span[hosts=1]" \
+     -R "rusage[mem=4000]" \
+     -R "select[model==Intel_Platinum]" \
+     -W 24:00 \
+     "mpi_program"
+```
+
+**Resource options explained**:
+- `span[hosts=1]`: All cores on same physical machine
+- `rusage[mem=4000]`: 4GB memory per core
+- `select[model==Intel_Platinum]`: Specific CPU type
+
+### Interactive Jobs
+
+```bash
+# Get interactive shell on compute node
+bsub -Is -n 4 -M 8000 -W 2:00 bash
+
+# Interactive with X11 forwarding (for GUI applications)
+bsub -Is -XF -n 1 -M 4000 -W 1:00 bash
+```
+
+**Real-world analogy**: Instead of sending a letter (batch job), you're making a phone call (interactive session).
+
+## Professional Job Submission Scripts
+
+### The Standard Job Script Template
+
+```bash
+#!/bin/bash
+#BSUB -J "my_analysis"
+#BSUB -n 8
+#BSUB -M 16000
+#BSUB -W 6:00
+#BSUB -o output_%J.out
+#BSUB -e error_%J.err
+#BSUB -q normal
+
+# Load required modules
+module load python/3.9
+module load numpy/1.21
+
+# Set up environment
+export OMP_NUM_THREADS=8
+cd /scratch/username/project
+
+# Run the analysis
+echo "Starting analysis at $(date)"
+python analyze_data.py --input data/experiment.csv --output results/
+echo "Analysis completed at $(date)"
+```
+
+**Usage**:
+```bash
+chmod +x job_script.sh
+bsub < job_script.sh
+```
+
+### Array Job Script for Multiple Files
+
+```bash
+#!/bin/bash
+#BSUB -J "process_files[1-50]"
+#BSUB -n 1
+#BSUB -M 4000
+#BSUB -W 2:00
+#BSUB -o output_%I.out
+#BSUB -e error_%I.err
+
+# Load modules
+module load python/3.9
+
+# Get the input file for this array job
+INPUT_FILE="data/file_${LSB_JOBINDEX}.csv"
+OUTPUT_FILE="results/result_${LSB_JOBINDEX}.csv"
+
+# Process the file
+echo "Processing $INPUT_FILE"
+python process_single.py --input $INPUT_FILE --output $OUTPUT_FILE
+echo "Completed processing $INPUT_FILE"
+```
+
+## Monitoring System Resources
+
+### Cluster Status
+
+```bash
+# Check queue status
+bqueues                 # Show all queues and their status
+bhosts                  # Show compute nodes and their status
+lsload                  # Show current system load
+```
+
+### Your Resource Usage
+
+```bash
+# Check your job history
+bhist                   # Recent job history
+bhist -l 12345         # Detailed history for specific job
+
+# Check current usage
+busers                  # Show user resource usage
+```
+
+## Common HPC Job Patterns
+
+### Pattern 1: Parameter Sweep
+
+```bash
+# Test different parameters
+for param in 0.1 0.5 1.0 2.0 5.0; do
+    bsub -J "param_$param" \
+         -n 4 -M 8000 -W 3:00 \
+         "python experiment.py --parameter $param"
+done
+```
+
+### Pattern 2: Pipeline Processing
+
+```bash
+# Multi-stage pipeline
+STAGE1=$(bsub -J "stage1" "python preprocess.py" | grep -o '[0-9]*')
+STAGE2=$(bsub -J "stage2" -w "done($STAGE1)" "python analyze.py" | grep -o '[0-9]*')
+bsub -J "stage3" -w "done($STAGE2)" "python visualize.py"
+```
+
+### Pattern 3: Embarrassingly Parallel
+
+```bash
+# Process 1000 independent tasks
+bsub -J "parallel_tasks[1-1000]" \
+     -n 1 -M 2000 -W 0:30 \
+     "python independent_task.py --task_id \$LSB_JOBINDEX"
+```
+
+## Troubleshooting Common Issues
+
+### Problem 1: Job Stays in PEND State
+**Symptoms**: Job never starts running
+**Possible causes**:
+- Requesting too many resources
+- Wrong queue selection
+- System maintenance
+
+**Solutions**:
+```bash
+# Check why job is pending
+bjobs -p -l 12345       # Look for pending reason
+
+# Try smaller resource request
+bsub -n 2 -M 4000 "program"    # Instead of -n 16 -M 64000
+```
+
+### Problem 2: Job Exits Immediately
+**Symptoms**: Job shows EXIT status quickly
+**Solutions**:
+```bash
+# Check error output
+cat LSFERR.12345
+
+# Common issues:
+# - Wrong file paths
+# - Missing modules
+# - Insufficient memory
+```
+
+### Problem 3: Out of Memory Errors
+**Symptoms**: Job killed due to memory usage
+**Solutions**:
+```bash
+# Request more memory
+bsub -M 32000 "memory_intensive_program"
+
+# Or optimize your program to use less memory
+```
+
+## Best Practices for HPC Job Management
+
+### 1. Resource Estimation
+- **Start small**: Test with small datasets first
+- **Monitor usage**: Check actual resource consumption
+- **Scale appropriately**: Don't over-request resources
+
+### 2. Job Organization
+```bash
+# Use meaningful names
+bsub -J "experiment_2023_12_15_batch_1" "program"
+
+# Organize output files
+bsub -o logs/output_%J.out -e logs/error_%J.err "program"
+```
+
+### 3. Error Handling
+```bash
+# Add error checking to your scripts
+#!/bin/bash
+set -e                  # Exit on any error
+set -u                  # Exit on undefined variables
+
+# Your commands here
+python analysis.py || { echo "Analysis failed"; exit 1; }
+```
+
+## Quick Reference: bsub Command Cheat Sheet
+
+| Task | Command | Purpose |
+|------|---------|---------|
+| Submit simple job | `bsub "command"` | Basic job submission |
+| Request resources | `bsub -n 4 -M 8000 "cmd"` | 4 cores, 8GB memory |
+| Set time limit | `bsub -W 2:00 "cmd"` | 2 hour maximum |
+| Choose queue | `bsub -q gpu "cmd"` | Submit to GPU queue |
+| Array jobs | `bsub -J "job[1-100]" "cmd"` | 100 parallel jobs |
+| Job dependency | `bsub -w "done(123)" "cmd"` | Wait for job 123 |
+| Interactive job | `bsub -Is bash` | Interactive session |
+| Check jobs | `bjobs` | Show job status |
+| Kill job | `bkill 12345` | Cancel job |
+| Job details | `bjobs -l 12345` | Detailed information |
+
+## Practice Exercises
+
+:::{.callout-important}
+## Your HPC Orchestra Training
+
+1. **Submit your first job**
+   ```bash
+   bsub -J "hello_hpc" "echo 'Hello from HPC cluster!'"
+   bjobs    # Check status
+   ```
+
+2. **Create an array job**
+   ```bash
+   bsub -J "test_array[1-5]" "echo 'Task number \$LSB_JOBINDEX'"
+   bjobs    # Watch multiple jobs
+   ```
+
+3. **Submit a resource-intensive job**
+   ```bash
+   bsub -J "resource_test" -n 4 -M 8000 -W 0:10 "sleep 300"
+   bjobs -l [job_id]    # Check resource allocation
+   ```
+
+4. **Practice job control**
+   ```bash
+   bsub -J "long_job" "sleep 600"    # Submit long job
+   bjobs                             # Note job ID
+   bstop [job_id]                   # Suspend it
+   bresume [job_id]                 # Resume it
+   bkill [job_id]                   # Kill it
+   ```
+:::
+
+## What's Next?
+
+Now that you can orchestrate computational jobs like a professional, you're ready to learn [Parallel Processing Patterns](10-parallel-processing.qmd). We'll explore GNU parallel and advanced techniques for maximizing your computational throughput.
+
+Remember: HPC job scheduling is about being a good citizen in a shared computational environment while maximizing your research productivity. Master these patterns, and you'll be able to handle computational workloads that would be impossible on a single machine.
+
+:::{.callout-tip}
+## HPC Mastery Challenge
+Before moving on, try these real-world scenarios:
+1. Submit 10 jobs that each process a different parameter value
+2. Create a pipeline where job B waits for job A to complete
+3. Submit an interactive job and explore the compute node
+4. Monitor resource usage of a running job
+
+This practice will prepare you for managing complex computational workflows!
+:::
+
+---
+
+*You've learned to conduct your computational orchestra with bsub. Next, we'll explore advanced parallel processing techniques that will make your HPC workflows even more powerful!* 

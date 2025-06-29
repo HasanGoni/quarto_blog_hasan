@@ -2,52 +2,19 @@
   {
     "listing": "/index.html",
     "items": [
-      "/posts/series/computer-vision-foundations.html",
-      "/posts/series/vlm.html",
-      "/posts/series/vlm-qwen3-14b/finetune-qwen3-14b.html",
-      "/posts/series/vlm-qwen3-14b/index.html",
-      "/posts/series/anomaly-detection/finding-the-oddballs.html",
-      "/posts/series/anomaly-detection/index.html",
-      "/posts/series/data-science-steps.html",
-      "/posts/series/cv-foundations/05-image-segmentation.html",
-      "/posts/series/cv-foundations/07-why-deep-learning.html",
-      "/posts/series/cv-foundations/10-where-to-go-next.html",
-      "/posts/series/cv-foundations/09-first-cv-project.html",
-      "/posts/series/cv-foundations/04-finding-patterns.html",
-      "/posts/series/cv-foundations/06-feature-magic.html",
-      "/posts/series/cv-foundations/03-opencv-essentials.html",
-      "/posts/series/cv-foundations/08-modern-vision-models.html",
-      "/posts/series/cv-foundations/02-images-as-data.html",
-      "/posts/series/cv-foundations/01-why-computer-vision.html",
-      "/posts/series/tools/uv2.html",
-      "/posts/matrix_multiplication_from_fastai_course/00_matmul.html",
-      "/posts/series/tools/intro.html",
-      "/posts/matrix_multiplication_from_fastai_course/index.html",
-      "/posts/nougat-to-read-scientific-pdf-files/index.html",
-      "/posts/welcome/index.html",
-      "/posts/data-science-steps-to-follow-part05/index.html",
-      "/posts/data-science-steps-to-follow-part06/index.html",
-      "/posts/data-science-steps-to-follow-part04/index.html",
-      "/posts/data-science-steps-to-follow-part03/index.html",
-      "/posts/data-science-steps-to-follow-part02/index.html",
-      "/posts/data-science-steps-to-follow-part01/index.html"
-    ]
-  },
-  {
-    "listing": "/posts/data-science-steps-to-follow-part03/index.html",
-    "items": []
-  },
-  {
-    "listing": "/posts/nougat-to-read-scientific-pdf-files/index.html",
-    "items": []
-  },
-  {
-    "listing": "/posts/data-science-steps-to-follow-part04/index.html",
-    "items": []
-  },
-  {
-    "listing": "/tags.html",
-    "items": [
+      "/posts/series/command-line-mastery/08-environment-mastery.html",
+      "/posts/series/command-line-mastery/09-hpc-job-scheduling.html",
+      "/posts/series/command-line-mastery/10-parallel-processing.html",
+      "/posts/series/command-line-mastery/11-bash-scripting.html",
+      "/posts/series/command-line-mastery/07-file-transfer.html",
+      "/posts/series/command-line-mastery/06-ssh-remote-access.html",
+      "/posts/series/command-line-mastery/12-automation-excellence.html",
+      "/posts/series/command-line-mastery/05-permission-wizardry.html",
+      "/posts/series/command-line-mastery/04-text-processing.html",
+      "/posts/series/command-line-mastery/03-file-manipulation.html",
+      "/posts/series/command-line-mastery/02-file-detective.html",
+      "/posts/series/command-line-mastery/01-digital-compass.html",
+      "/posts/series/command-line-mastery.html",
       "/posts/series/computer-vision-foundations.html",
       "/posts/series/vlm.html",
       "/posts/series/vlm-qwen3-14b/finetune-qwen3-14b.html",
@@ -81,6 +48,65 @@
   },
   {
     "listing": "/posts/data-science-steps-to-follow-part05/index.html",
+    "items": []
+  },
+  {
+    "listing": "/tags.html",
+    "items": [
+      "/posts/series/command-line-mastery/08-environment-mastery.html",
+      "/posts/series/command-line-mastery/09-hpc-job-scheduling.html",
+      "/posts/series/command-line-mastery/10-parallel-processing.html",
+      "/posts/series/command-line-mastery/11-bash-scripting.html",
+      "/posts/series/command-line-mastery/07-file-transfer.html",
+      "/posts/series/command-line-mastery/06-ssh-remote-access.html",
+      "/posts/series/command-line-mastery/12-automation-excellence.html",
+      "/posts/series/command-line-mastery/05-permission-wizardry.html",
+      "/posts/series/command-line-mastery/04-text-processing.html",
+      "/posts/series/command-line-mastery/03-file-manipulation.html",
+      "/posts/series/command-line-mastery/02-file-detective.html",
+      "/posts/series/command-line-mastery/01-digital-compass.html",
+      "/posts/series/command-line-mastery.html",
+      "/posts/series/computer-vision-foundations.html",
+      "/posts/series/vlm.html",
+      "/posts/series/vlm-qwen3-14b/finetune-qwen3-14b.html",
+      "/posts/series/vlm-qwen3-14b/index.html",
+      "/posts/series/anomaly-detection/finding-the-oddballs.html",
+      "/posts/series/anomaly-detection/index.html",
+      "/posts/series/data-science-steps.html",
+      "/posts/series/cv-foundations/05-image-segmentation.html",
+      "/posts/series/cv-foundations/07-why-deep-learning.html",
+      "/posts/series/cv-foundations/10-where-to-go-next.html",
+      "/posts/series/cv-foundations/09-first-cv-project.html",
+      "/posts/series/cv-foundations/04-finding-patterns.html",
+      "/posts/series/cv-foundations/06-feature-magic.html",
+      "/posts/series/cv-foundations/03-opencv-essentials.html",
+      "/posts/series/cv-foundations/08-modern-vision-models.html",
+      "/posts/series/cv-foundations/02-images-as-data.html",
+      "/posts/series/cv-foundations/01-why-computer-vision.html",
+      "/posts/series/tools/uv2.html",
+      "/posts/matrix_multiplication_from_fastai_course/00_matmul.html",
+      "/posts/series/tools/intro.html",
+      "/posts/matrix_multiplication_from_fastai_course/index.html",
+      "/posts/nougat-to-read-scientific-pdf-files/index.html",
+      "/posts/welcome/index.html",
+      "/posts/data-science-steps-to-follow-part05/index.html",
+      "/posts/data-science-steps-to-follow-part06/index.html",
+      "/posts/data-science-steps-to-follow-part04/index.html",
+      "/posts/data-science-steps-to-follow-part03/index.html",
+      "/posts/data-science-steps-to-follow-part02/index.html",
+      "/posts/data-science-steps-to-follow-part01/index.html"
+    ]
+  },
+  {
+    "listing": "/posts/data-science-steps-to-follow-part04/index.html",
+    "items": []
+  },
+  {
+    "listing": "/posts/nougat-to-read-scientific-pdf-files/index.html",
+    "items": []
+  },
+  {
+    "listing": "/posts/data-science-steps-to-follow-part03/index.html",
     "items": []
   },
   {

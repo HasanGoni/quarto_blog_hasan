@@ -1,0 +1,483 @@
+---
+title: "File Manipulation Magic"
+description: "Master the art of creating, copying, moving, and organizing files like a digital wizard. Learn to handle thousands of files efficiently with commands that make Windows Explorer look like a toy."
+author: "Hasan"
+date: last-modified
+categories: [command-line, file-operations, cp, mv, mkdir, rm]
+image: "https://images.unsplash.com/photo-1618477247222-acbdb0e159b3?ixlib=rb-4.0.3&auto=format&fit=crop&w=2000&q=80"
+toc: true
+---
+
+## The Story: The Digital Architect
+
+Imagine you're an architect, but instead of building with bricks and mortar, you're constructing digital structures with files and directories. You need to create project folders, organize thousands of research files, duplicate important datasets, and sometimes demolish outdated structures to make room for new ones.
+
+With Windows Explorer, this would be like building a skyscraper one brick at a time. But with command line file manipulation, you become a digital wizard who can construct entire file hierarchies, organize massive datasets, and reshape digital landscapes with just a few keystrokes.
+
+Today, you'll learn the magic spells that transform you from a file user into a file master.
+
+## The File Manipulation Toolkit
+
+Just like a craftsperson has different tools for different jobs, you have specialized commands for file operations:
+
+- **`mkdir`**: The architect (creates directories/folders)
+- **`touch`**: The creator (creates empty files)
+- **`cp`**: The duplicator (copies files and directories)
+- **`mv`**: The mover/renamer (moves and renames)
+- **`rm`**: The demolisher (removes files and directories)
+- **`ln`**: The connector (creates links between files)
+
+**Real-world analogy**: These commands are like having a construction crew where each worker has a specific specialty – one builds frameworks, another moves materials, one makes copies of blueprints, and so on.
+
+## Creating Digital Structures
+
+### Building Directory Hierarchies
+
+```bash
+# Create a single directory
+mkdir project_2023
+
+# Create multiple directories at once
+mkdir data results scripts logs
+
+# Create nested directory structure in one command
+mkdir -p experiment_2023/{raw_data,processed_data,analysis/{plots,tables,reports}}
+```
+
+**What `-p` does**: Creates parent directories as needed and doesn't complain if directories already exist.
+
+**Real-world analogy**: It's like telling a construction crew "build me a house with these rooms, and if you need to build the foundation first, just do it."
+
+### The Power of Brace Expansion
+
+```bash
+# Create organized experiment structure
+mkdir -p research_project/{data/{raw,processed,backup},results/{2023,2024},scripts/{python,bash,r}}
+
+# Create monthly directories for a year
+mkdir -p reports_2023/{jan,feb,mar,apr,may,jun,jul,aug,sep,oct,nov,dec}
+
+# Create numbered directories
+mkdir -p experiment_{01..10}
+```
+
+**Real-world analogy**: Brace expansion is like having a smart assistant who understands patterns. You say "create rooms 1 through 10" and they build them all without you having to specify each one.
+
+### Creating Files
+
+```bash
+# Create empty files
+touch experiment_log.txt analysis_notes.md
+
+# Create multiple files at once
+touch data_{01..05}.csv
+
+# Create files with timestamps in names
+touch "experiment_$(date +%Y%m%d).log"
+```
+
+**Real-world analogy**: `touch` is like having a magic wand that creates empty containers ready to be filled with content.
+
+## The Art of Copying
+
+### Basic Copying Operations
+
+```bash
+# Copy a single file
+cp source_file.txt destination_file.txt
+
+# Copy file to a directory
+cp important_data.csv backup/
+
+# Copy multiple files to a directory
+cp *.csv data_backup/
+```
+
+### Advanced Copying Techniques
+
+```bash
+# Copy entire directory structure
+cp -r project_folder project_backup
+
+# Copy with preservation of attributes (timestamps, permissions)
+cp -p original_file.txt preserved_copy.txt
+
+# Copy with verbose output (see what's being copied)
+cp -v *.txt text_files/
+
+# Interactive copying (ask before overwriting)
+cp -i important_file.txt existing_file.txt
+```
+
+**Essential cp options**:
+- `-r` (recursive): Copy directories and their contents
+- `-p` (preserve): Keep original timestamps and permissions
+- `-v` (verbose): Show what's being copied
+- `-i` (interactive): Ask before overwriting existing files
+- `-u` (update): Only copy if source is newer than destination
+
+### Professional Copying Patterns
+
+```bash
+# Backup with timestamp
+cp -r important_project important_project_backup_$(date +%Y%m%d)
+
+# Copy only specific file types
+cp *.{csv,txt,log} data_archive/
+
+# Copy files modified in last 7 days
+find . -name "*.py" -mtime -7 -exec cp {} recent_scripts/ \;
+```
+
+**Real-world analogy**: Advanced copying is like having a professional moving service that can handle delicate items, make inventories, and only move things that actually need moving.
+
+## The Moving and Renaming Dance
+
+### Basic Moving Operations
+
+```bash
+# Move (rename) a file
+mv old_name.txt new_name.txt
+
+# Move files to a directory
+mv *.csv data/
+
+# Move and rename simultaneously
+mv messy_filename.txt clean_experiment_data.csv
+```
+
+### Batch Renaming Strategies
+
+```bash
+# Rename files with a pattern
+for file in *.txt; do
+    mv "$file" "${file%.txt}_processed.txt"
+done
+
+# Add prefix to all files
+for file in *.csv; do
+    mv "$file" "experiment_$file"
+done
+
+# Change file extensions
+for file in *.dat; do
+    mv "$file" "${file%.dat}.csv"
+done
+```
+
+**Real-world analogy**: Batch renaming is like having a labeling machine that can systematically relabel hundreds of items according to your specifications.
+
+### Organizing Files by Date
+
+```bash
+# Move files to directories based on modification date
+for file in *.log; do
+    year=$(date -r "$file" +%Y)
+    month=$(date -r "$file" +%m)
+    mkdir -p "logs/$year/$month"
+    mv "$file" "logs/$year/$month/"
+done
+```
+
+## Safe Destruction: The `rm` Command
+
+### Basic Removal
+
+```bash
+# Remove a single file
+rm unwanted_file.txt
+
+# Remove multiple files
+rm *.tmp temp_*.log
+
+# Remove empty directory
+rmdir empty_folder
+
+# Remove directory and all contents
+rm -r old_project_folder
+```
+
+### Safety First: Protective Removal
+
+```bash
+# Interactive removal (ask for each file)
+rm -i *.txt
+
+# Verbose removal (show what's being deleted)
+rm -v temporary_files/*
+
+# The safest approach: move to trash instead
+mkdir -p ~/.trash
+mv unwanted_files/* ~/.trash/
+```
+
+**Critical safety tip**: There's no "recycle bin" in Unix! Once you `rm` something, it's gone forever. Always double-check your commands.
+
+**Real-world analogy**: Using `rm` is like using a paper shredder – once you feed something in, there's no getting it back. Always be sure!
+
+## Advanced File Operations
+
+### Creating Symbolic Links
+
+```bash
+# Create a symbolic link (shortcut)
+ln -s /long/path/to/important/data data_link
+
+# Create links to frequently used directories
+ln -s /scratch/username/current_project current
+ln -s /home/username/scripts/analysis.py analyze
+```
+
+**Real-world analogy**: Symbolic links are like having multiple doorways into the same room. You can access the same content from different locations.
+
+### File Permissions and Ownership
+
+```bash
+# Make a file executable
+chmod +x my_script.sh
+
+# Set specific permissions
+chmod 755 public_script.sh    # rwxr-xr-x
+chmod 644 data_file.csv       # rw-r--r--
+
+# Change ownership (if you have permission)
+chown username:groupname important_file.txt
+```
+
+## Real-World HPC Scenarios
+
+### Scenario 1: Organizing Experimental Data
+
+```bash
+#!/bin/bash
+# organize_experiment.sh - Organize messy experimental data
+
+# Create organized structure
+mkdir -p experiment_2023/{raw_data,processed_data,analysis,results,scripts,logs}
+
+# Move files by type
+mv *.csv experiment_2023/raw_data/
+mv *.py experiment_2023/scripts/
+mv *.log experiment_2023/logs/
+mv *.txt experiment_2023/analysis/
+
+# Create backup
+cp -r experiment_2023 experiment_2023_backup_$(date +%Y%m%d)
+
+echo "Experiment data organized successfully!"
+```
+
+### Scenario 2: Batch Processing Setup
+
+```bash
+#!/bin/bash
+# setup_batch_processing.sh - Prepare files for parallel processing
+
+INPUT_DIR="raw_data"
+OUTPUT_DIR="processing_jobs"
+
+# Create job directories
+mkdir -p $OUTPUT_DIR
+
+# Split large dataset into smaller chunks for parallel processing
+split_size=1000  # lines per file
+
+for large_file in $INPUT_DIR/*.csv; do
+    filename=$(basename "$large_file" .csv)
+    
+    # Split file into chunks
+    split -l $split_size "$large_file" "$OUTPUT_DIR/${filename}_chunk_"
+    
+    # Rename chunks with proper extension
+    for chunk in "$OUTPUT_DIR/${filename}_chunk_"*; do
+        mv "$chunk" "${chunk}.csv"
+    done
+    
+    echo "Split $large_file into chunks"
+done
+```
+
+### Scenario 3: Results Consolidation
+
+```bash
+#!/bin/bash
+# consolidate_results.sh - Gather results from parallel jobs
+
+RESULTS_DIR="job_results"
+FINAL_DIR="consolidated_results"
+
+mkdir -p $FINAL_DIR
+
+# Consolidate CSV results
+cat $RESULTS_DIR/*.csv > $FINAL_DIR/all_results.csv
+
+# Organize by experiment type
+for result_file in $RESULTS_DIR/*.out; do
+    experiment_type=$(grep "Experiment:" "$result_file" | cut -d: -f2 | tr -d ' ')
+    mkdir -p "$FINAL_DIR/$experiment_type"
+    cp "$result_file" "$FINAL_DIR/$experiment_type/"
+done
+
+# Create summary
+echo "Results consolidated on $(date)" > $FINAL_DIR/consolidation_summary.txt
+echo "Total result files: $(ls $RESULTS_DIR/*.out | wc -l)" >> $FINAL_DIR/consolidation_summary.txt
+```
+
+## Pro Tips for Efficient File Manipulation
+
+### 1. Use Wildcards Effectively
+
+```bash
+# Select files by pattern
+cp experiment_*.csv backup/          # Files starting with "experiment_"
+mv *_temp.* temp_files/             # Files ending with "_temp"
+rm *.{tmp,log,bak}                  # Multiple extensions
+
+# More complex patterns
+cp [0-9][0-9][0-9]_data.csv archive/    # Three-digit numbers
+mv *[!0-9].txt text_files/              # Files NOT ending with numbers
+```
+
+### 2. Combine Commands for Power
+
+```bash
+# Find and copy files modified today
+find . -name "*.py" -mtime -1 -exec cp {} today_scripts/ \;
+
+# Move large files to archive
+find . -size +100M -exec mv {} archive/ \;
+
+# Copy files but skip existing ones
+cp -n source/* destination/    # -n = no-clobber (don't overwrite)
+```
+
+### 3. Use Command Substitution
+
+```bash
+# Copy files to date-based directories
+cp important_files/* backup_$(date +%Y%m%d)/
+
+# Move files based on their content
+for file in *.txt; do
+    if grep -q "experiment_1" "$file"; then
+        mv "$file" experiment_1_results/
+    fi
+done
+```
+
+## Common Mistakes and How to Avoid Them
+
+### Mistake 1: Destructive Operations Without Backup
+
+**Problem**: Running `rm -rf` or `mv` commands that destroy data
+**Solution**: Always backup first, use `-i` flag for interactive mode
+
+```bash
+# BAD: Dangerous removal
+rm -rf important_directory/
+
+# GOOD: Safe approach
+cp -r important_directory important_directory_backup
+rm -ri important_directory/    # Interactive removal
+```
+
+### Mistake 2: Not Handling Spaces in Filenames
+
+**Problem**: Commands fail with filenames containing spaces
+**Solution**: Always quote variables and filenames
+
+```bash
+# BAD: Fails with spaces
+cp $filename destination/
+
+# GOOD: Handles spaces
+cp "$filename" destination/
+```
+
+### Mistake 3: Overwriting Important Files
+
+**Problem**: Accidentally overwriting existing files
+**Solution**: Use `-i` (interactive) or `-n` (no-clobber) flags
+
+```bash
+# GOOD: Ask before overwriting
+cp -i source.txt destination.txt
+
+# GOOD: Never overwrite existing files
+cp -n source.txt destination.txt
+```
+
+## Quick Reference: File Manipulation Cheat Sheet
+
+| Task | Command | Example |
+|------|---------|---------|
+| Create directory | `mkdir dirname` | `mkdir experiment_2023` |
+| Create nested dirs | `mkdir -p path/to/dir` | `mkdir -p data/raw/2023` |
+| Create empty file | `touch filename` | `touch experiment.log` |
+| Copy file | `cp source dest` | `cp data.csv backup.csv` |
+| Copy directory | `cp -r sourcedir destdir` | `cp -r project project_backup` |
+| Move/rename | `mv source dest` | `mv old.txt new.txt` |
+| Remove file | `rm filename` | `rm temp.txt` |
+| Remove directory | `rm -r dirname` | `rm -r old_project` |
+| Safe removal | `rm -i filename` | `rm -i *.tmp` |
+| Create link | `ln -s target linkname` | `ln -s /data/project current` |
+
+## Practice Exercises
+
+:::{.callout-important}
+## Your File Manipulation Training
+
+1. **Create a project structure**
+   ```bash
+   # Create this structure:
+   # my_project/
+   # ├── data/
+   # │   ├── raw/
+   # │   └── processed/
+   # ├── scripts/
+   # ├── results/
+   # └── docs/
+   ```
+
+2. **Practice safe file operations**
+   ```bash
+   # Create some test files, copy them, rename them, and organize them
+   touch test_{1..5}.txt
+   # Now organize these files into appropriate directories
+   ```
+
+3. **Batch rename exercise**
+   ```bash
+   # Create files with messy names and clean them up
+   touch "messy file name.txt" "another-bad_name.txt" "UPPERCASE.TXT"
+   # Rename them to follow a consistent naming convention
+   ```
+
+4. **Backup and cleanup**
+   ```bash
+   # Create a backup strategy for important files
+   # Then safely remove temporary files
+   ```
+:::
+
+## What's Next?
+
+Now that you're a file manipulation wizard, you're ready to learn [Text Processing Power](04-text-processing.qmd). We'll discover how to search through, filter, and transform the content inside those files you can now handle so expertly.
+
+Remember: File manipulation is the foundation of all HPC work. Every data analysis, every backup, every organization task builds on these basic operations. Master these commands, and you'll handle thousands of files as easily as you once handled one.
+
+:::{.callout-tip}
+## File Manipulation Challenge
+Before moving on, try this real-world scenario:
+1. Create a project structure for a research experiment
+2. Generate some test data files with different extensions
+3. Organize them by type and date
+4. Create a backup with today's date
+5. Clean up any temporary files
+
+This mirrors what you'll do constantly in HPC environments!
+:::
+
+---
+
+*You've mastered the art of digital construction and organization. Next, we'll learn to peek inside these files and transform their contents with text processing magic!* 

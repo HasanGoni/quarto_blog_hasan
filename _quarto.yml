@@ -12,6 +12,8 @@ website:
         file: index.qmd
       - text: "Series"
         menu:
+          - text: "Command Line Mastery for HPC"
+            file: posts/series/command-line-mastery.qmd
           - text: "Data Science Steps"
             file: posts/series/data-science-steps.qmd
           - text: "Computer Vision Foundations"
@@ -35,6 +37,35 @@ website:
   sidebar:
     style: "docked"
     contents:
+      - section: "Command Line Mastery for HPC"
+        collapse: true
+        collapsed: true
+        contents:
+          - posts/series/command-line-mastery.qmd
+          - text: "1. Digital Compass"
+            href: posts/series/command-line-mastery/01-digital-compass.qmd
+          - text: "2. File Detective"
+            href: posts/series/command-line-mastery/02-file-detective.qmd
+          - text: "3. File Manipulation Magic"
+            href: posts/series/command-line-mastery/03-file-manipulation.qmd
+          - text: "4. Text Processing Power"
+            href: posts/series/command-line-mastery/04-text-processing.qmd
+          - text: "5. Permission Wizardry"
+            href: posts/series/command-line-mastery/05-permission-wizardry.qmd
+          - text: "6. SSH and Remote Access"
+            href: posts/series/command-line-mastery/06-ssh-remote-access.qmd
+          - text: "7. File Transfer Mastery"
+            href: posts/series/command-line-mastery/07-file-transfer.qmd
+          - text: "8. Environment Mastery"
+            href: posts/series/command-line-mastery/08-environment-mastery.qmd
+          - text: "9. HPC Job Scheduling"
+            href: posts/series/command-line-mastery/09-hpc-job-scheduling.qmd
+          - text: "10. Parallel Processing Power"
+            href: posts/series/command-line-mastery/10-parallel-processing.qmd
+          - text: "11. Bash Scripting Essentials"
+            href: posts/series/command-line-mastery/11-bash-scripting.qmd
+          - text: "12. Automation Excellence"
+            href: posts/series/command-line-mastery/12-automation-excellence.qmd
       - section: "Data Science"
         collapse: true
         collapsed: true

@@ -1,0 +1,1972 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.3.450">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+<meta name="author" content="Hasan">
+<meta name="dcterms.date" content="2025-06-29">
+<meta name="description" content="Master the ancient art of Unix permissions. Learn to control who can read, write, and execute your files with the precision of a digital locksmith. Essential knowledge for secure HPC environments.">
+
+<title>Hasan’s Data Science &amp; AI Blog - Permission Wizardry</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
+  vertical-align: middle;
+}
+/* CSS for syntax highlighting */
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+  }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+</style>
+
+
+<script src="../../../site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="../../../site_libs/quarto-nav/headroom.min.js"></script>
+<script src="../../../site_libs/clipboard/clipboard.min.js"></script>
+<script src="../../../site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="../../../site_libs/quarto-search/fuse.min.js"></script>
+<script src="../../../site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="../../../">
+<script src="../../../site_libs/quarto-html/quarto.js"></script>
+<script src="../../../site_libs/quarto-html/popper.min.js"></script>
+<script src="../../../site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="../../../site_libs/quarto-html/anchor.min.js"></script>
+<link href="../../../site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="../../../site_libs/quarto-html/quarto-syntax-highlighting.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="../../../site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="../../../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="../../../site_libs/bootstrap/bootstrap.min.css" rel="stylesheet" id="quarto-bootstrap" data-mode="light">
+<script id="quarto-search-options" type="application/json">{
+  "location": "navbar",
+  "copy-button": false,
+  "collapse-after": 3,
+  "panel-placement": "end",
+  "type": "overlay",
+  "limit": 20,
+  "language": {
+    "search-no-results-text": "No results",
+    "search-matching-documents-text": "matching documents",
+    "search-copy-link-title": "Copy link to search",
+    "search-hide-matches-text": "Hide additional matches",
+    "search-more-match-text": "more match in this document",
+    "search-more-matches-text": "more matches in this document",
+    "search-clear-button-title": "Clear",
+    "search-detached-cancel-button-title": "Cancel",
+    "search-submit-button-title": "Submit",
+    "search-label": "Search"
+  }
+}</script>
+<style>html{ scroll-behavior: smooth; }</style>
+<script async="" src="https://hypothes.is/embed.js"></script>
+
+
+<link rel="stylesheet" href="../../../styles.css">
+<meta property="og:title" content="Hasan’s Data Science &amp; AI Blog - Permission Wizardry">
+<meta property="og:description" content="Master the ancient art of Unix permissions. Learn to control who can read, write, and execute your files with the precision of a digital locksmith. Essential knowledge for secure HPC environments.">
+<meta property="og:image" content="https://images.unsplash.com/photo-1614064641938-3bbee52942c7?ixlib=rb-4.0.3&amp;auto=format&amp;fit=crop&amp;w=2000&amp;q=80">
+<meta property="og:site-name" content="Hasan's Data Science &amp; AI Blog">
+<meta name="twitter:title" content="Hasan’s Data Science &amp; AI Blog - Permission Wizardry">
+<meta name="twitter:description" content="Master the ancient art of Unix permissions. Learn to control who can read, write, and execute your files with the precision of a digital locksmith. Essential knowledge for secure HPC environments.">
+<meta name="twitter:image" content="https://images.unsplash.com/photo-1614064641938-3bbee52942c7?ixlib=rb-4.0.3&amp;auto=format&amp;fit=crop&amp;w=2000&amp;q=80">
+<meta name="twitter:card" content="summary_large_image">
+</head>
+
+<body class="nav-sidebar docked nav-fixed">
+
+<div id="quarto-search-results"></div>
+  <header id="quarto-header" class="headroom fixed-top">
+    <nav class="navbar navbar-expand-lg navbar-dark ">
+      <div class="navbar-container container-fluid">
+      <div class="navbar-brand-container">
+    <a class="navbar-brand" href="../../../index.html">
+    <span class="navbar-title">Hasan’s Data Science &amp; AI Blog</span>
+    </a>
+  </div>
+            <div id="quarto-search" class="" title="Search"></div>
+          <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCollapse" aria-controls="navbarCollapse" aria-expanded="false" aria-label="Toggle navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+  <span class="navbar-toggler-icon"></span>
+</button>
+          <div class="collapse navbar-collapse" id="navbarCollapse">
+            <ul class="navbar-nav navbar-nav-scroll me-auto">
+  <li class="nav-item">
+    <a class="nav-link" href="../../../index.html" rel="" target="">
+ <span class="menu-text">Home</span></a>
+  </li>  
+  <li class="nav-item dropdown ">
+    <a class="nav-link dropdown-toggle" href="#" id="nav-menu-series" role="button" data-bs-toggle="dropdown" aria-expanded="false" rel="" target="">
+ <span class="menu-text">Series</span>
+    </a>
+    <ul class="dropdown-menu" aria-labelledby="nav-menu-series">    
+        <li>
+    <a class="dropdown-item" href="../../../posts/series/command-line-mastery.html" rel="" target="">
+ <span class="dropdown-text">Command Line Mastery for HPC</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="../../../posts/series/data-science-steps.html" rel="" target="">
+ <span class="dropdown-text">Data Science Steps</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="../../../posts/series/computer-vision-foundations.html" rel="" target="">
+ <span class="dropdown-text">Computer Vision Foundations</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="../../../posts/series/vlm.html" rel="" target="">
+ <span class="dropdown-text">VLM Series</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="../../../posts/series/anomaly-detection/index.html" rel="" target="">
+ <span class="dropdown-text">Anomaly Detection</span></a>
+  </li>  
+    </ul>
+  </li>
+  <li class="nav-item">
+    <a class="nav-link" href="../../../categories.html" rel="" target="">
+ <span class="menu-text">Categories</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="../../../tags.html" rel="" target="">
+ <span class="menu-text">Tags</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="../../../about.html" rel="" target="">
+ <span class="menu-text">About</span></a>
+  </li>  
+</ul>
+            <ul class="navbar-nav navbar-nav-scroll ms-auto">
+  <li class="nav-item compact">
+    <a class="nav-link" href="https://github.com/HasanGoni" rel="" target=""><i class="bi bi-github" role="img">
+</i> 
+ <span class="menu-text"></span></a>
+  </li>  
+  <li class="nav-item compact">
+    <a class="nav-link" href="https://twitter.com/hasangoni" rel="" target=""><i class="bi bi-twitter" role="img">
+</i> 
+ <span class="menu-text"></span></a>
+  </li>  
+</ul>
+            <div class="quarto-navbar-tools">
+</div>
+          </div> <!-- /navcollapse -->
+      </div> <!-- /container-fluid -->
+    </nav>
+  <nav class="quarto-secondary-nav">
+    <div class="container-fluid d-flex">
+      <button type="button" class="quarto-btn-toggle btn" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar,#quarto-sidebar-glass" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+        <i class="bi bi-layout-text-sidebar-reverse"></i>
+      </button>
+      <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../../../posts/series/command-line-mastery.html">Command Line Mastery for HPC</a></li><li class="breadcrumb-item"><a href="../../../posts/series/command-line-mastery/05-permission-wizardry.html">5. Permission Wizardry</a></li></ol></nav>
+      <a class="flex-grow-1" role="button" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar,#quarto-sidebar-glass" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
+      </a>
+    </div>
+  </nav>
+</header>
+<!-- content -->
+<header id="title-block-header" class="quarto-title-block default page-columns page-full">
+  <div class="quarto-title-banner page-columns page-full">
+    <div class="quarto-title column-body">
+      <div class="quarto-title-block"><div><h1 class="title">Permission Wizardry</h1><button type="button" class="btn code-tools-button" id="quarto-code-tools-source"><i class="bi"></i> Code</button></div></div>
+                  <div>
+        <div class="description">
+          Master the ancient art of Unix permissions. Learn to control who can read, write, and execute your files with the precision of a digital locksmith. Essential knowledge for secure HPC environments.
+        </div>
+      </div>
+                          <div class="quarto-categories">
+                <div class="quarto-category">command-line</div>
+                <div class="quarto-category">permissions</div>
+                <div class="quarto-category">chmod</div>
+                <div class="quarto-category">chown</div>
+                <div class="quarto-category">security</div>
+              </div>
+                  </div>
+  </div>
+    
+  
+  <div class="quarto-title-meta">
+
+      <div>
+      <div class="quarto-title-meta-heading">Author</div>
+      <div class="quarto-title-meta-contents">
+               <p>Hasan </p>
+            </div>
+    </div>
+      
+      <div>
+      <div class="quarto-title-meta-heading">Published</div>
+      <div class="quarto-title-meta-contents">
+        <p class="date">June 29, 2025</p>
+      </div>
+    </div>
+    
+      <div>
+      <div class="quarto-title-meta-heading">Modified</div>
+      <div class="quarto-title-meta-contents">
+        <p class="date-modified">June 29, 2025</p>
+      </div>
+    </div>
+      
+    </div>
+    
+  
+  </header><div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article page-navbar">
+<!-- sidebar -->
+  <nav id="quarto-sidebar" class="sidebar collapse collapse-horizontal sidebar-navigation docked overflow-auto">
+    <div class="sidebar-menu-container"> 
+    <ul class="list-unstyled mt-1">
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-1" aria-expanded="true">
+ <span class="menu-text">Command Line Mastery for HPC</span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-1" aria-expanded="true" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-1" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../../posts/series/command-line-mastery.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Command Line Mastery for HPC Series</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../../posts/series/command-line-mastery/01-digital-compass.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">1. Digital Compass</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../../posts/series/command-line-mastery/02-file-detective.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">2. File Detective</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../../posts/series/command-line-mastery/03-file-manipulation.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">3. File Manipulation Magic</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../../posts/series/command-line-mastery/04-text-processing.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">4. Text Processing Power</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../../posts/series/command-line-mastery/05-permission-wizardry.html" class="sidebar-item-text sidebar-link active">
+ <span class="menu-text">5. Permission Wizardry</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../../posts/series/command-line-mastery/06-ssh-remote-access.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">6. SSH and Remote Access</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../../posts/series/command-line-mastery/07-file-transfer.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">7. File Transfer Mastery</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../../posts/series/command-line-mastery/08-environment-mastery.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">8. Environment Mastery</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../../posts/series/command-line-mastery/09-hpc-job-scheduling.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">9. HPC Job Scheduling</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../../posts/series/command-line-mastery/10-parallel-processing.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">10. Parallel Processing Power</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../../posts/series/command-line-mastery/11-bash-scripting.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">11. Bash Scripting Essentials</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../../posts/series/command-line-mastery/12-automation-excellence.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">12. Automation Excellence</span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-2" aria-expanded="true">
+ <span class="menu-text">Data Science</span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-2" aria-expanded="true" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-2" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../../posts/series/data-science-steps.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Data Science Steps Series</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../../posts/data-science-steps-to-follow-part01/index.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Data Science Steps to Follow - 01</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../../posts/data-science-steps-to-follow-part02/index.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Data Science Steps to Follow - 02</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../../posts/data-science-steps-to-follow-part03/index.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Data Science Steps to Follow - 03</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../../posts/data-science-steps-to-follow-part04/index.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Data Science Steps to Follow - 04</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../../posts/data-science-steps-to-follow-part05/index.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Data Science Steps to Follow - 05</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../../posts/data-science-steps-to-follow-part06/index.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Data Science Steps to Follow - 06</span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-3" aria-expanded="true">
+ <span class="menu-text">Computer Vision Foundations</span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-3" aria-expanded="true" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-3" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../../posts/series/computer-vision-foundations.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Computer Vision Foundations Series</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../../posts/series/cv-foundations/01-why-computer-vision.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">1. Why Computer Vision?</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../../posts/series/cv-foundations/02-images-as-data.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">2. Images as Data</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../../posts/series/cv-foundations/03-opencv-essentials.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">3. OpenCV Essentials</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../../posts/series/cv-foundations/04-finding-patterns.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">4. Finding Patterns</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../../posts/series/cv-foundations/05-image-segmentation.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">5. Image Segmentation</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../../posts/series/cv-foundations/06-feature-magic.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">6. Feature Magic</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../../posts/series/cv-foundations/07-why-deep-learning.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">7. Why Deep Learning?</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../../posts/series/cv-foundations/08-modern-vision-models.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">8. Modern Vision Models</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../../posts/series/cv-foundations/09-first-cv-project.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">9. First CV Project</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../../posts/series/cv-foundations/10-where-to-go-next.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">10. Where to Go Next</span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-4" aria-expanded="true">
+ <span class="menu-text">Anomaly Detection</span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-4" aria-expanded="true" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-4" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../../posts/series/anomaly-detection/index.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Introduction</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../../posts/series/anomaly-detection/finding-the-oddballs.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Finding the Oddballs</span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-5" aria-expanded="true">
+ <span class="menu-text">VLM Series</span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-5" aria-expanded="true" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-5" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../../posts/series/vlm.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Introduction</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../../posts/series/vlm-qwen3-14b/index.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Qwen3-14B</span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+    </ul>
+    </div>
+</nav>
+<div id="quarto-sidebar-glass" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar,#quarto-sidebar-glass"></div>
+<!-- margin-sidebar -->
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+        <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">On this page</h2>
+   
+  <ul>
+  <li><a href="#the-story-the-digital-locksmith" id="toc-the-story-the-digital-locksmith" class="nav-link active" data-scroll-target="#the-story-the-digital-locksmith"><span class="header-section-number">0.1</span> The Story: The Digital Locksmith</a></li>
+  <li><a href="#understanding-the-permission-landscape" id="toc-understanding-the-permission-landscape" class="nav-link" data-scroll-target="#understanding-the-permission-landscape"><span class="header-section-number">0.2</span> Understanding the Permission Landscape</a>
+  <ul class="collapse">
+  <li><a href="#the-three-realms-of-access" id="toc-the-three-realms-of-access" class="nav-link" data-scroll-target="#the-three-realms-of-access"><span class="header-section-number">0.2.1</span> The Three Realms of Access</a></li>
+  <li><a href="#the-three-powers-of-permission" id="toc-the-three-powers-of-permission" class="nav-link" data-scroll-target="#the-three-powers-of-permission"><span class="header-section-number">0.2.2</span> The Three Powers of Permission</a></li>
+  </ul></li>
+  <li><a href="#decoding-permission-hieroglyphics" id="toc-decoding-permission-hieroglyphics" class="nav-link" data-scroll-target="#decoding-permission-hieroglyphics"><span class="header-section-number">0.3</span> Decoding Permission Hieroglyphics</a>
+  <ul class="collapse">
+  <li><a href="#breaking-down-the-permission-code" id="toc-breaking-down-the-permission-code" class="nav-link" data-scroll-target="#breaking-down-the-permission-code"><span class="header-section-number">0.3.1</span> Breaking Down the Permission Code</a></li>
+  </ul></li>
+  <li><a href="#the-permission-calculator" id="toc-the-permission-calculator" class="nav-link" data-scroll-target="#the-permission-calculator"><span class="header-section-number">0.4</span> The Permission Calculator</a>
+  <ul class="collapse">
+  <li><a href="#numeric-permission-system" id="toc-numeric-permission-system" class="nav-link" data-scroll-target="#numeric-permission-system"><span class="header-section-number">0.4.1</span> Numeric Permission System</a></li>
+  </ul></li>
+  <li><a href="#the-permission-toolkit" id="toc-the-permission-toolkit" class="nav-link" data-scroll-target="#the-permission-toolkit"><span class="header-section-number">0.5</span> The Permission Toolkit</a>
+  <ul class="collapse">
+  <li><a href="#viewing-permissions" id="toc-viewing-permissions" class="nav-link" data-scroll-target="#viewing-permissions"><span class="header-section-number">0.5.1</span> Viewing Permissions</a></li>
+  <li><a href="#the-master-key-chmod" id="toc-the-master-key-chmod" class="nav-link" data-scroll-target="#the-master-key-chmod"><span class="header-section-number">0.5.2</span> The Master Key: <code>chmod</code></a></li>
+  <li><a href="#advanced-chmod-patterns" id="toc-advanced-chmod-patterns" class="nav-link" data-scroll-target="#advanced-chmod-patterns"><span class="header-section-number">0.5.3</span> Advanced chmod Patterns</a></li>
+  </ul></li>
+  <li><a href="#real-world-hpc-permission-scenarios" id="toc-real-world-hpc-permission-scenarios" class="nav-link" data-scroll-target="#real-world-hpc-permission-scenarios"><span class="header-section-number">0.6</span> Real-World HPC Permission Scenarios</a>
+  <ul class="collapse">
+  <li><a href="#scenario-1-setting-up-a-research-project" id="toc-scenario-1-setting-up-a-research-project" class="nav-link" data-scroll-target="#scenario-1-setting-up-a-research-project"><span class="header-section-number">0.6.1</span> Scenario 1: Setting Up a Research Project</a></li>
+  <li><a href="#scenario-2-securing-sensitive-data" id="toc-scenario-2-securing-sensitive-data" class="nav-link" data-scroll-target="#scenario-2-securing-sensitive-data"><span class="header-section-number">0.6.2</span> Scenario 2: Securing Sensitive Data</a></li>
+  <li><a href="#scenario-3-collaborative-script-sharing" id="toc-scenario-3-collaborative-script-sharing" class="nav-link" data-scroll-target="#scenario-3-collaborative-script-sharing"><span class="header-section-number">0.6.3</span> Scenario 3: Collaborative Script Sharing</a></li>
+  </ul></li>
+  <li><a href="#understanding-directory-permissions" id="toc-understanding-directory-permissions" class="nav-link" data-scroll-target="#understanding-directory-permissions"><span class="header-section-number">0.7</span> Understanding Directory Permissions</a>
+  <ul class="collapse">
+  <li><a href="#directory-permission-meanings" id="toc-directory-permission-meanings" class="nav-link" data-scroll-target="#directory-permission-meanings"><span class="header-section-number">0.7.1</span> Directory Permission Meanings</a></li>
+  <li><a href="#important-directory-permission-combinations" id="toc-important-directory-permission-combinations" class="nav-link" data-scroll-target="#important-directory-permission-combinations"><span class="header-section-number">0.7.2</span> Important Directory Permission Combinations</a></li>
+  <li><a href="#the-directory-permission-trap" id="toc-the-directory-permission-trap" class="nav-link" data-scroll-target="#the-directory-permission-trap"><span class="header-section-number">0.7.3</span> The Directory Permission Trap</a></li>
+  </ul></li>
+  <li><a href="#ownership-control-chown-and-chgrp" id="toc-ownership-control-chown-and-chgrp" class="nav-link" data-scroll-target="#ownership-control-chown-and-chgrp"><span class="header-section-number">0.8</span> Ownership Control: <code>chown</code> and <code>chgrp</code></a>
+  <ul class="collapse">
+  <li><a href="#changing-ownership" id="toc-changing-ownership" class="nav-link" data-scroll-target="#changing-ownership"><span class="header-section-number">0.8.1</span> Changing Ownership</a></li>
+  <li><a href="#practical-ownership-scenarios" id="toc-practical-ownership-scenarios" class="nav-link" data-scroll-target="#practical-ownership-scenarios"><span class="header-section-number">0.8.2</span> Practical Ownership Scenarios</a></li>
+  </ul></li>
+  <li><a href="#special-permissions-the-advanced-techniques" id="toc-special-permissions-the-advanced-techniques" class="nav-link" data-scroll-target="#special-permissions-the-advanced-techniques"><span class="header-section-number">0.9</span> Special Permissions: The Advanced Techniques</a>
+  <ul class="collapse">
+  <li><a href="#the-sticky-bit" id="toc-the-sticky-bit" class="nav-link" data-scroll-target="#the-sticky-bit"><span class="header-section-number">0.9.1</span> The Sticky Bit</a></li>
+  <li><a href="#setuid-and-setgid" id="toc-setuid-and-setgid" class="nav-link" data-scroll-target="#setuid-and-setgid"><span class="header-section-number">0.9.2</span> SetUID and SetGID</a></li>
+  </ul></li>
+  <li><a href="#permission-troubleshooting" id="toc-permission-troubleshooting" class="nav-link" data-scroll-target="#permission-troubleshooting"><span class="header-section-number">0.10</span> Permission Troubleshooting</a>
+  <ul class="collapse">
+  <li><a href="#common-permission-problems" id="toc-common-permission-problems" class="nav-link" data-scroll-target="#common-permission-problems"><span class="header-section-number">0.10.1</span> Common Permission Problems</a></li>
+  </ul></li>
+  <li><a href="#security-best-practices-for-hpc" id="toc-security-best-practices-for-hpc" class="nav-link" data-scroll-target="#security-best-practices-for-hpc"><span class="header-section-number">0.11</span> Security Best Practices for HPC</a>
+  <ul class="collapse">
+  <li><a href="#the-principle-of-least-privilege" id="toc-the-principle-of-least-privilege" class="nav-link" data-scroll-target="#the-principle-of-least-privilege"><span class="header-section-number">0.11.1</span> The Principle of Least Privilege</a></li>
+  <li><a href="#regular-permission-audits" id="toc-regular-permission-audits" class="nav-link" data-scroll-target="#regular-permission-audits"><span class="header-section-number">0.11.2</span> Regular Permission Audits</a></li>
+  <li><a href="#safe-permission-defaults" id="toc-safe-permission-defaults" class="nav-link" data-scroll-target="#safe-permission-defaults"><span class="header-section-number">0.11.3</span> Safe Permission Defaults</a></li>
+  </ul></li>
+  <li><a href="#quick-reference-permission-cheat-sheet" id="toc-quick-reference-permission-cheat-sheet" class="nav-link" data-scroll-target="#quick-reference-permission-cheat-sheet"><span class="header-section-number">0.12</span> Quick Reference: Permission Cheat Sheet</a>
+  <ul class="collapse">
+  <li><a href="#common-permission-patterns" id="toc-common-permission-patterns" class="nav-link" data-scroll-target="#common-permission-patterns"><span class="header-section-number">0.12.1</span> Common Permission Patterns</a></li>
+  </ul></li>
+  <li><a href="#practice-exercises" id="toc-practice-exercises" class="nav-link" data-scroll-target="#practice-exercises"><span class="header-section-number">0.13</span> Practice Exercises</a></li>
+  <li><a href="#whats-next" id="toc-whats-next" class="nav-link" data-scroll-target="#whats-next"><span class="header-section-number">0.14</span> What’s Next?</a></li>
+  </ul>
+</nav>
+    </div>
+<!-- main -->
+<main class="content quarto-banner-title-block" id="quarto-document-content">
+
+
+
+
+<section id="the-story-the-digital-locksmith" class="level2" data-number="0.1">
+<h2 data-number="0.1" class="anchored" data-anchor-id="the-story-the-digital-locksmith"><span class="header-section-number">0.1</span> The Story: The Digital Locksmith</h2>
+<p>Imagine you’re the security chief of a massive digital vault containing millions of valuable research files. Some files are public knowledge, others are confidential research data, and some are powerful tools that could cause damage if misused. You need a sophisticated lock system that can control exactly who can look at files, who can modify them, and who can execute programs.</p>
+<p>In the Windows world, file security is often an afterthought – a simple “read-only” checkbox or sharing dialog. But in Unix HPC environments, you’re dealing with multi-user systems where hundreds of researchers share the same computers. Here, file permissions are your first line of defense and your key to collaborative success.</p>
+<p>Today, you’ll become a digital locksmith, mastering the ancient Unix permission system that has protected files for over 50 years.</p>
+</section>
+<section id="understanding-the-permission-landscape" class="level2" data-number="0.2">
+<h2 data-number="0.2" class="anchored" data-anchor-id="understanding-the-permission-landscape"><span class="header-section-number">0.2</span> Understanding the Permission Landscape</h2>
+<section id="the-three-realms-of-access" class="level3" data-number="0.2.1">
+<h3 data-number="0.2.1" class="anchored" data-anchor-id="the-three-realms-of-access"><span class="header-section-number">0.2.1</span> The Three Realms of Access</h3>
+<p>Every file and directory in Unix has three types of users:</p>
+<ul>
+<li><strong>Owner (u)</strong>: The person who created the file (usually you)</li>
+<li><strong>Group (g)</strong>: People in the same research group or project</li>
+<li><strong>Others (o)</strong>: Everyone else on the system</li>
+</ul>
+<p><strong>Real-world analogy</strong>: Think of a laboratory where you have your personal desk (owner), your research team has access to shared equipment (group), and some areas are open to all visitors (others).</p>
+</section>
+<section id="the-three-powers-of-permission" class="level3" data-number="0.2.2">
+<h3 data-number="0.2.2" class="anchored" data-anchor-id="the-three-powers-of-permission"><span class="header-section-number">0.2.2</span> The Three Powers of Permission</h3>
+<p>For each realm, there are three types of access:</p>
+<ul>
+<li><strong>Read (r)</strong>: Can view the contents</li>
+<li><strong>Write (w)</strong>: Can modify or delete</li>
+<li><strong>Execute (x)</strong>: Can run the file as a program (or enter a directory)</li>
+</ul>
+<p><strong>Real-world analogy</strong>: It’s like having different keys: - <strong>Read key</strong>: Opens the display case (you can look but not touch) - <strong>Write key</strong>: Opens the editing room (you can make changes) - <strong>Execute key</strong>: Starts the machinery (you can run programs)</p>
+</section>
+</section>
+<section id="decoding-permission-hieroglyphics" class="level2" data-number="0.3">
+<h2 data-number="0.3" class="anchored" data-anchor-id="decoding-permission-hieroglyphics"><span class="header-section-number">0.3</span> Decoding Permission Hieroglyphics</h2>
+<p>When you run <code>ls -l</code>, you see mysterious symbols like <code>-rwxr-xr--</code>. Let’s decode this ancient script:</p>
+<div class="sourceCode" id="cb1"><pre class="sourceCode numberSource bash number-lines code-with-copy"><code class="sourceCode bash"><span id="cb1-1"><a href="#cb1-1"></a><span class="fu">ls</span> <span class="at">-l</span> example_file.txt</span>
+<span id="cb1-2"><a href="#cb1-2"></a><span class="ex">-rwxr-xr--</span> 1 username groupname 1024 Dec 15 10:30 example_file.txt</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<section id="breaking-down-the-permission-code" class="level3" data-number="0.3.1">
+<h3 data-number="0.3.1" class="anchored" data-anchor-id="breaking-down-the-permission-code"><span class="header-section-number">0.3.1</span> Breaking Down the Permission Code</h3>
+<pre><code>-rwxr-xr--
+│└┬┘└┬┘└┬┘
+│ │  │  └── Others permissions (r--)
+│ │  └───── Group permissions (r-x)
+│ └──────── Owner permissions (rwx)
+└─────────── File type (- = file, d = directory)</code></pre>
+<p><strong>Translation</strong>: - <strong>Owner</strong>: Can read, write, and execute (rwx) - <strong>Group</strong>: Can read and execute, but not write (r-x) - <strong>Others</strong>: Can only read (r–)</p>
+<p><strong>Real-world analogy</strong>: It’s like a key card system where your card (owner) opens everything, your team’s cards (group) open most doors, and visitor cards (others) only open the lobby.</p>
+</section>
+</section>
+<section id="the-permission-calculator" class="level2" data-number="0.4">
+<h2 data-number="0.4" class="anchored" data-anchor-id="the-permission-calculator"><span class="header-section-number">0.4</span> The Permission Calculator</h2>
+<section id="numeric-permission-system" class="level3" data-number="0.4.1">
+<h3 data-number="0.4.1" class="anchored" data-anchor-id="numeric-permission-system"><span class="header-section-number">0.4.1</span> Numeric Permission System</h3>
+<p>Unix also uses numbers to represent permissions, which is often faster for setting permissions:</p>
+<ul>
+<li><strong>Read = 4</strong></li>
+<li><strong>Write = 2</strong><br>
+</li>
+<li><strong>Execute = 1</strong></li>
+</ul>
+<p>You add these numbers together: - <strong>7</strong> = 4+2+1 = Read, Write, Execute (rwx) - <strong>6</strong> = 4+2 = Read, Write (rw-) - <strong>5</strong> = 4+1 = Read, Execute (r-x) - <strong>4</strong> = 4 = Read only (r–) - <strong>0</strong> = No permissions (—)</p>
+<p><strong>Common permission combinations</strong>: - <strong>755</strong>: Owner can do everything, group and others can read and execute - <strong>644</strong>: Owner can read and write, group and others can only read - <strong>600</strong>: Only owner can read and write, others have no access - <strong>777</strong>: Everyone can do everything (dangerous!)</p>
+<p><strong>Real-world analogy</strong>: It’s like having numbered security clearance levels – level 7 gives you full access, level 4 gives you viewing rights only.</p>
+</section>
+</section>
+<section id="the-permission-toolkit" class="level2" data-number="0.5">
+<h2 data-number="0.5" class="anchored" data-anchor-id="the-permission-toolkit"><span class="header-section-number">0.5</span> The Permission Toolkit</h2>
+<section id="viewing-permissions" class="level3" data-number="0.5.1">
+<h3 data-number="0.5.1" class="anchored" data-anchor-id="viewing-permissions"><span class="header-section-number">0.5.1</span> Viewing Permissions</h3>
+<div class="sourceCode" id="cb3"><pre class="sourceCode numberSource bash number-lines code-with-copy"><code class="sourceCode bash"><span id="cb3-1"><a href="#cb3-1"></a><span class="co"># See permissions for files in current directory</span></span>
+<span id="cb3-2"><a href="#cb3-2"></a><span class="fu">ls</span> <span class="at">-l</span></span>
+<span id="cb3-3"><a href="#cb3-3"></a></span>
+<span id="cb3-4"><a href="#cb3-4"></a><span class="co"># See permissions for specific file</span></span>
+<span id="cb3-5"><a href="#cb3-5"></a><span class="fu">ls</span> <span class="at">-l</span> important_file.txt</span>
+<span id="cb3-6"><a href="#cb3-6"></a></span>
+<span id="cb3-7"><a href="#cb3-7"></a><span class="co"># See permissions for directories</span></span>
+<span id="cb3-8"><a href="#cb3-8"></a><span class="fu">ls</span> <span class="at">-ld</span> my_directory/</span>
+<span id="cb3-9"><a href="#cb3-9"></a></span>
+<span id="cb3-10"><a href="#cb3-10"></a><span class="co"># See permissions recursively</span></span>
+<span id="cb3-11"><a href="#cb3-11"></a><span class="fu">ls</span> <span class="at">-lR</span> project_folder/</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</section>
+<section id="the-master-key-chmod" class="level3" data-number="0.5.2">
+<h3 data-number="0.5.2" class="anchored" data-anchor-id="the-master-key-chmod"><span class="header-section-number">0.5.2</span> The Master Key: <code>chmod</code></h3>
+<p><code>chmod</code> (change mode) is your primary tool for setting permissions:</p>
+<div class="sourceCode" id="cb4"><pre class="sourceCode numberSource bash number-lines code-with-copy"><code class="sourceCode bash"><span id="cb4-1"><a href="#cb4-1"></a><span class="co"># Using numeric notation</span></span>
+<span id="cb4-2"><a href="#cb4-2"></a><span class="fu">chmod</span> 755 script.sh          <span class="co"># rwxr-xr-x</span></span>
+<span id="cb4-3"><a href="#cb4-3"></a><span class="fu">chmod</span> 644 data.txt           <span class="co"># rw-r--r--</span></span>
+<span id="cb4-4"><a href="#cb4-4"></a><span class="fu">chmod</span> 600 secret.txt         <span class="co"># rw-------</span></span>
+<span id="cb4-5"><a href="#cb4-5"></a></span>
+<span id="cb4-6"><a href="#cb4-6"></a><span class="co"># Using symbolic notation</span></span>
+<span id="cb4-7"><a href="#cb4-7"></a><span class="fu">chmod</span> u+x script.sh          <span class="co"># Add execute for owner</span></span>
+<span id="cb4-8"><a href="#cb4-8"></a><span class="fu">chmod</span> g-w data.txt           <span class="co"># Remove write for group</span></span>
+<span id="cb4-9"><a href="#cb4-9"></a><span class="fu">chmod</span> o-r secret.txt         <span class="co"># Remove read for others</span></span>
+<span id="cb4-10"><a href="#cb4-10"></a><span class="fu">chmod</span> a+r public.txt         <span class="co"># Add read for all (a = all)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</section>
+<section id="advanced-chmod-patterns" class="level3" data-number="0.5.3">
+<h3 data-number="0.5.3" class="anchored" data-anchor-id="advanced-chmod-patterns"><span class="header-section-number">0.5.3</span> Advanced chmod Patterns</h3>
+<div class="sourceCode" id="cb5"><pre class="sourceCode numberSource bash number-lines code-with-copy"><code class="sourceCode bash"><span id="cb5-1"><a href="#cb5-1"></a><span class="co"># Set permissions for multiple files</span></span>
+<span id="cb5-2"><a href="#cb5-2"></a><span class="fu">chmod</span> 644 <span class="pp">*</span>.txt              <span class="co"># All text files readable by all</span></span>
+<span id="cb5-3"><a href="#cb5-3"></a><span class="fu">chmod</span> 755 <span class="pp">*</span>.sh               <span class="co"># All scripts executable</span></span>
+<span id="cb5-4"><a href="#cb5-4"></a></span>
+<span id="cb5-5"><a href="#cb5-5"></a><span class="co"># Recursive permission changes</span></span>
+<span id="cb5-6"><a href="#cb5-6"></a><span class="fu">chmod</span> <span class="at">-R</span> 755 project_folder/ <span class="co"># Apply to folder and all contents</span></span>
+<span id="cb5-7"><a href="#cb5-7"></a></span>
+<span id="cb5-8"><a href="#cb5-8"></a><span class="co"># Copy permissions from one file to another</span></span>
+<span id="cb5-9"><a href="#cb5-9"></a><span class="fu">chmod</span> <span class="at">--reference</span><span class="op">=</span>template.txt new_file.txt</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</section>
+</section>
+<section id="real-world-hpc-permission-scenarios" class="level2" data-number="0.6">
+<h2 data-number="0.6" class="anchored" data-anchor-id="real-world-hpc-permission-scenarios"><span class="header-section-number">0.6</span> Real-World HPC Permission Scenarios</h2>
+<section id="scenario-1-setting-up-a-research-project" class="level3" data-number="0.6.1">
+<h3 data-number="0.6.1" class="anchored" data-anchor-id="scenario-1-setting-up-a-research-project"><span class="header-section-number">0.6.1</span> Scenario 1: Setting Up a Research Project</h3>
+<div class="sourceCode" id="cb6"><pre class="sourceCode numberSource bash number-lines code-with-copy"><code class="sourceCode bash"><span id="cb6-1"><a href="#cb6-1"></a><span class="co">#!/bin/bash</span></span>
+<span id="cb6-2"><a href="#cb6-2"></a><span class="co"># setup_project_permissions.sh - Set up proper permissions for research project</span></span>
+<span id="cb6-3"><a href="#cb6-3"></a></span>
+<span id="cb6-4"><a href="#cb6-4"></a><span class="va">PROJECT_DIR</span><span class="op">=</span><span class="st">"experiment_2023"</span></span>
+<span id="cb6-5"><a href="#cb6-5"></a></span>
+<span id="cb6-6"><a href="#cb6-6"></a><span class="co"># Create project structure</span></span>
+<span id="cb6-7"><a href="#cb6-7"></a><span class="fu">mkdir</span> <span class="at">-p</span> <span class="va">$PROJECT_DIR</span>/<span class="dt">{data</span><span class="op">,</span><span class="dt">scripts</span><span class="op">,</span><span class="dt">results</span><span class="op">,</span><span class="dt">docs}</span></span>
+<span id="cb6-8"><a href="#cb6-8"></a></span>
+<span id="cb6-9"><a href="#cb6-9"></a><span class="co"># Set directory permissions</span></span>
+<span id="cb6-10"><a href="#cb6-10"></a><span class="fu">chmod</span> 755 <span class="va">$PROJECT_DIR</span>                    <span class="co"># Everyone can enter and list</span></span>
+<span id="cb6-11"><a href="#cb6-11"></a><span class="fu">chmod</span> 750 <span class="va">$PROJECT_DIR</span>/<span class="dt">{data</span><span class="op">,</span><span class="dt">results}</span>     <span class="co"># Only owner and group can access</span></span>
+<span id="cb6-12"><a href="#cb6-12"></a><span class="fu">chmod</span> 755 <span class="va">$PROJECT_DIR</span>/<span class="dt">{scripts</span><span class="op">,</span><span class="dt">docs}</span>     <span class="co"># Scripts and docs are public</span></span>
+<span id="cb6-13"><a href="#cb6-13"></a></span>
+<span id="cb6-14"><a href="#cb6-14"></a><span class="co"># Set default file permissions</span></span>
+<span id="cb6-15"><a href="#cb6-15"></a><span class="fu">touch</span> <span class="va">$PROJECT_DIR</span>/data/experiment.csv</span>
+<span id="cb6-16"><a href="#cb6-16"></a><span class="fu">chmod</span> 640 <span class="va">$PROJECT_DIR</span>/data/experiment.csv    <span class="co"># Group can read, others cannot</span></span>
+<span id="cb6-17"><a href="#cb6-17"></a></span>
+<span id="cb6-18"><a href="#cb6-18"></a><span class="fu">touch</span> <span class="va">$PROJECT_DIR</span>/scripts/analyze.py</span>
+<span id="cb6-19"><a href="#cb6-19"></a><span class="fu">chmod</span> 754 <span class="va">$PROJECT_DIR</span>/scripts/analyze.py     <span class="co"># Everyone can execute</span></span>
+<span id="cb6-20"><a href="#cb6-20"></a></span>
+<span id="cb6-21"><a href="#cb6-21"></a><span class="fu">touch</span> <span class="va">$PROJECT_DIR</span>/docs/README.txt</span>
+<span id="cb6-22"><a href="#cb6-22"></a><span class="fu">chmod</span> 644 <span class="va">$PROJECT_DIR</span>/docs/README.txt        <span class="co"># Everyone can read</span></span>
+<span id="cb6-23"><a href="#cb6-23"></a></span>
+<span id="cb6-24"><a href="#cb6-24"></a><span class="bu">echo</span> <span class="st">"Project permissions set up successfully!"</span></span>
+<span id="cb6-25"><a href="#cb6-25"></a><span class="fu">ls</span> <span class="at">-la</span> <span class="va">$PROJECT_DIR</span>/</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</section>
+<section id="scenario-2-securing-sensitive-data" class="level3" data-number="0.6.2">
+<h3 data-number="0.6.2" class="anchored" data-anchor-id="scenario-2-securing-sensitive-data"><span class="header-section-number">0.6.2</span> Scenario 2: Securing Sensitive Data</h3>
+<div class="sourceCode" id="cb7"><pre class="sourceCode numberSource bash number-lines code-with-copy"><code class="sourceCode bash"><span id="cb7-1"><a href="#cb7-1"></a><span class="co">#!/bin/bash</span></span>
+<span id="cb7-2"><a href="#cb7-2"></a><span class="co"># secure_sensitive_data.sh - Lock down confidential research data</span></span>
+<span id="cb7-3"><a href="#cb7-3"></a></span>
+<span id="cb7-4"><a href="#cb7-4"></a><span class="va">SENSITIVE_DIR</span><span class="op">=</span><span class="st">"confidential_data"</span></span>
+<span id="cb7-5"><a href="#cb7-5"></a></span>
+<span id="cb7-6"><a href="#cb7-6"></a><span class="co"># Create secure directory</span></span>
+<span id="cb7-7"><a href="#cb7-7"></a><span class="fu">mkdir</span> <span class="at">-p</span> <span class="va">$SENSITIVE_DIR</span></span>
+<span id="cb7-8"><a href="#cb7-8"></a><span class="fu">chmod</span> 700 <span class="va">$SENSITIVE_DIR</span>              <span class="co"># Only owner can access</span></span>
+<span id="cb7-9"><a href="#cb7-9"></a></span>
+<span id="cb7-10"><a href="#cb7-10"></a><span class="co"># Move sensitive files and secure them</span></span>
+<span id="cb7-11"><a href="#cb7-11"></a><span class="fu">mv</span> patient_data.csv <span class="va">$SENSITIVE_DIR</span>/</span>
+<span id="cb7-12"><a href="#cb7-12"></a><span class="fu">mv</span> preliminary_results.txt <span class="va">$SENSITIVE_DIR</span>/</span>
+<span id="cb7-13"><a href="#cb7-13"></a></span>
+<span id="cb7-14"><a href="#cb7-14"></a><span class="co"># Set strict permissions on sensitive files</span></span>
+<span id="cb7-15"><a href="#cb7-15"></a><span class="fu">chmod</span> 600 <span class="va">$SENSITIVE_DIR</span>/<span class="pp">*</span>            <span class="co"># Only owner can read/write</span></span>
+<span id="cb7-16"><a href="#cb7-16"></a></span>
+<span id="cb7-17"><a href="#cb7-17"></a><span class="co"># Create a secure backup</span></span>
+<span id="cb7-18"><a href="#cb7-18"></a><span class="fu">tar</span> <span class="at">-czf</span> sensitive_backup_<span class="va">$(</span><span class="fu">date</span> +%Y%m%d<span class="va">)</span>.tar.gz <span class="va">$SENSITIVE_DIR</span>/</span>
+<span id="cb7-19"><a href="#cb7-19"></a><span class="fu">chmod</span> 600 sensitive_backup_<span class="pp">*</span>.tar.gz</span>
+<span id="cb7-20"><a href="#cb7-20"></a></span>
+<span id="cb7-21"><a href="#cb7-21"></a><span class="bu">echo</span> <span class="st">"Sensitive data secured!"</span></span>
+<span id="cb7-22"><a href="#cb7-22"></a><span class="bu">echo</span> <span class="st">"Directory permissions:"</span></span>
+<span id="cb7-23"><a href="#cb7-23"></a><span class="fu">ls</span> <span class="at">-ld</span> <span class="va">$SENSITIVE_DIR</span></span>
+<span id="cb7-24"><a href="#cb7-24"></a><span class="bu">echo</span> <span class="st">"File permissions:"</span></span>
+<span id="cb7-25"><a href="#cb7-25"></a><span class="fu">ls</span> <span class="at">-l</span> <span class="va">$SENSITIVE_DIR</span>/</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</section>
+<section id="scenario-3-collaborative-script-sharing" class="level3" data-number="0.6.3">
+<h3 data-number="0.6.3" class="anchored" data-anchor-id="scenario-3-collaborative-script-sharing"><span class="header-section-number">0.6.3</span> Scenario 3: Collaborative Script Sharing</h3>
+<div class="sourceCode" id="cb8"><pre class="sourceCode numberSource bash number-lines code-with-copy"><code class="sourceCode bash"><span id="cb8-1"><a href="#cb8-1"></a><span class="co">#!/bin/bash</span></span>
+<span id="cb8-2"><a href="#cb8-2"></a><span class="co"># setup_shared_scripts.sh - Set up scripts for team collaboration</span></span>
+<span id="cb8-3"><a href="#cb8-3"></a></span>
+<span id="cb8-4"><a href="#cb8-4"></a><span class="va">SCRIPTS_DIR</span><span class="op">=</span><span class="st">"shared_scripts"</span></span>
+<span id="cb8-5"><a href="#cb8-5"></a><span class="va">GROUP_NAME</span><span class="op">=</span><span class="st">"research_team"</span></span>
+<span id="cb8-6"><a href="#cb8-6"></a></span>
+<span id="cb8-7"><a href="#cb8-7"></a><span class="co"># Create shared directory</span></span>
+<span id="cb8-8"><a href="#cb8-8"></a><span class="fu">mkdir</span> <span class="at">-p</span> <span class="va">$SCRIPTS_DIR</span></span>
+<span id="cb8-9"><a href="#cb8-9"></a><span class="fu">chmod</span> 775 <span class="va">$SCRIPTS_DIR</span>                <span class="co"># Group can write, others can read</span></span>
+<span id="cb8-10"><a href="#cb8-10"></a></span>
+<span id="cb8-11"><a href="#cb8-11"></a><span class="co"># Set group ownership (if you have permission)</span></span>
+<span id="cb8-12"><a href="#cb8-12"></a><span class="fu">chgrp</span> <span class="va">$GROUP_NAME</span> <span class="va">$SCRIPTS_DIR</span></span>
+<span id="cb8-13"><a href="#cb8-13"></a></span>
+<span id="cb8-14"><a href="#cb8-14"></a><span class="co"># Process all Python scripts</span></span>
+<span id="cb8-15"><a href="#cb8-15"></a><span class="cf">for</span> script <span class="kw">in</span> <span class="pp">*</span>.py<span class="kw">;</span> <span class="cf">do</span></span>
+<span id="cb8-16"><a href="#cb8-16"></a>    <span class="cf">if</span> <span class="bu">[</span> <span class="ot">-f</span> <span class="st">"</span><span class="va">$script</span><span class="st">"</span> <span class="bu">]</span><span class="kw">;</span> <span class="cf">then</span></span>
+<span id="cb8-17"><a href="#cb8-17"></a>        <span class="fu">cp</span> <span class="st">"</span><span class="va">$script</span><span class="st">"</span> <span class="va">$SCRIPTS_DIR</span>/</span>
+<span id="cb8-18"><a href="#cb8-18"></a>        <span class="fu">chmod</span> 754 <span class="va">$SCRIPTS_DIR</span>/<span class="st">"</span><span class="va">$script</span><span class="st">"</span>    <span class="co"># Group and others can execute</span></span>
+<span id="cb8-19"><a href="#cb8-19"></a>        <span class="fu">chgrp</span> <span class="va">$GROUP_NAME</span> <span class="va">$SCRIPTS_DIR</span>/<span class="st">"</span><span class="va">$script</span><span class="st">"</span></span>
+<span id="cb8-20"><a href="#cb8-20"></a>    <span class="cf">fi</span></span>
+<span id="cb8-21"><a href="#cb8-21"></a><span class="cf">done</span></span>
+<span id="cb8-22"><a href="#cb8-22"></a></span>
+<span id="cb8-23"><a href="#cb8-23"></a><span class="co"># Create a README with usage instructions</span></span>
+<span id="cb8-24"><a href="#cb8-24"></a><span class="fu">cat</span> <span class="op">&gt;</span> <span class="va">$SCRIPTS_DIR</span>/README.txt <span class="op">&lt;&lt; EOF</span></span>
+<span id="cb8-25"><a href="#cb8-25"></a><span class="st">Shared Scripts Directory</span></span>
+<span id="cb8-26"><a href="#cb8-26"></a><span class="st">========================</span></span>
+<span id="cb8-27"><a href="#cb8-27"></a></span>
+<span id="cb8-28"><a href="#cb8-28"></a><span class="st">These scripts are available for the entire research team.</span></span>
+<span id="cb8-29"><a href="#cb8-29"></a></span>
+<span id="cb8-30"><a href="#cb8-30"></a><span class="st">Permissions:</span></span>
+<span id="cb8-31"><a href="#cb8-31"></a><span class="st">- Team members can read and execute all scripts</span></span>
+<span id="cb8-32"><a href="#cb8-32"></a><span class="st">- Only script owners can modify their scripts</span></span>
+<span id="cb8-33"><a href="#cb8-33"></a><span class="st">- Others can execute but not modify</span></span>
+<span id="cb8-34"><a href="#cb8-34"></a></span>
+<span id="cb8-35"><a href="#cb8-35"></a><span class="st">To add a new script:</span></span>
+<span id="cb8-36"><a href="#cb8-36"></a><span class="st">1. Copy it to this directory</span></span>
+<span id="cb8-37"><a href="#cb8-37"></a><span class="st">2. Set permissions: chmod 754 script_name.py</span></span>
+<span id="cb8-38"><a href="#cb8-38"></a><span class="st">3. Set group: chgrp </span><span class="va">$GROUP_NAME</span><span class="st"> script_name.py</span></span>
+<span id="cb8-39"><a href="#cb8-39"></a><span class="op">EOF</span></span>
+<span id="cb8-40"><a href="#cb8-40"></a></span>
+<span id="cb8-41"><a href="#cb8-41"></a><span class="fu">chmod</span> 644 <span class="va">$SCRIPTS_DIR</span>/README.txt</span>
+<span id="cb8-42"><a href="#cb8-42"></a></span>
+<span id="cb8-43"><a href="#cb8-43"></a><span class="bu">echo</span> <span class="st">"Shared scripts directory set up!"</span></span>
+<span id="cb8-44"><a href="#cb8-44"></a><span class="fu">ls</span> <span class="at">-la</span> <span class="va">$SCRIPTS_DIR</span>/</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</section>
+</section>
+<section id="understanding-directory-permissions" class="level2" data-number="0.7">
+<h2 data-number="0.7" class="anchored" data-anchor-id="understanding-directory-permissions"><span class="header-section-number">0.7</span> Understanding Directory Permissions</h2>
+<p>Directories have special permission rules that often confuse newcomers:</p>
+<section id="directory-permission-meanings" class="level3" data-number="0.7.1">
+<h3 data-number="0.7.1" class="anchored" data-anchor-id="directory-permission-meanings"><span class="header-section-number">0.7.1</span> Directory Permission Meanings</h3>
+<ul>
+<li><strong>Read (r)</strong>: Can list the contents of the directory</li>
+<li><strong>Write (w)</strong>: Can create, delete, or rename files in the directory</li>
+<li><strong>Execute (x)</strong>: Can enter the directory (cd into it)</li>
+</ul>
+</section>
+<section id="important-directory-permission-combinations" class="level3" data-number="0.7.2">
+<h3 data-number="0.7.2" class="anchored" data-anchor-id="important-directory-permission-combinations"><span class="header-section-number">0.7.2</span> Important Directory Permission Combinations</h3>
+<div class="sourceCode" id="cb9"><pre class="sourceCode numberSource bash number-lines code-with-copy"><code class="sourceCode bash"><span id="cb9-1"><a href="#cb9-1"></a><span class="co"># Common directory permissions</span></span>
+<span id="cb9-2"><a href="#cb9-2"></a><span class="fu">chmod</span> 755 public_dir/         <span class="co"># Everyone can enter and list</span></span>
+<span id="cb9-3"><a href="#cb9-3"></a><span class="fu">chmod</span> 750 team_dir/           <span class="co"># Only owner and group can access</span></span>
+<span id="cb9-4"><a href="#cb9-4"></a><span class="fu">chmod</span> 700 private_dir/        <span class="co"># Only owner can access</span></span>
+<span id="cb9-5"><a href="#cb9-5"></a><span class="fu">chmod</span> 555 read_only_dir/      <span class="co"># Everyone can enter and list, nobody can modify</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</section>
+<section id="the-directory-permission-trap" class="level3" data-number="0.7.3">
+<h3 data-number="0.7.3" class="anchored" data-anchor-id="the-directory-permission-trap"><span class="header-section-number">0.7.3</span> The Directory Permission Trap</h3>
+<div class="sourceCode" id="cb10"><pre class="sourceCode numberSource bash number-lines code-with-copy"><code class="sourceCode bash"><span id="cb10-1"><a href="#cb10-1"></a><span class="co"># This creates a weird situation:</span></span>
+<span id="cb10-2"><a href="#cb10-2"></a><span class="fu">chmod</span> 644 weird_dir/          <span class="co"># Can list contents but can't enter!</span></span>
+<span id="cb10-3"><a href="#cb10-3"></a></span>
+<span id="cb10-4"><a href="#cb10-4"></a><span class="co"># You need execute permission to enter a directory</span></span>
+<span id="cb10-5"><a href="#cb10-5"></a><span class="fu">ls</span> weird_dir/                 <span class="co"># This works (can list)</span></span>
+<span id="cb10-6"><a href="#cb10-6"></a><span class="bu">cd</span> weird_dir/                 <span class="co"># This fails! (can't enter)</span></span>
+<span id="cb10-7"><a href="#cb10-7"></a></span>
+<span id="cb10-8"><a href="#cb10-8"></a><span class="co"># Fix it:</span></span>
+<span id="cb10-9"><a href="#cb10-9"></a><span class="fu">chmod</span> 755 weird_dir/          <span class="co"># Now you can enter and list</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p><strong>Real-world analogy</strong>: It’s like having a glass door where you can see inside (read) but the door is locked (no execute), so you can’t actually enter the room.</p>
+</section>
+</section>
+<section id="ownership-control-chown-and-chgrp" class="level2" data-number="0.8">
+<h2 data-number="0.8" class="anchored" data-anchor-id="ownership-control-chown-and-chgrp"><span class="header-section-number">0.8</span> Ownership Control: <code>chown</code> and <code>chgrp</code></h2>
+<p>Sometimes you need to change who owns files or what group they belong to:</p>
+<section id="changing-ownership" class="level3" data-number="0.8.1">
+<h3 data-number="0.8.1" class="anchored" data-anchor-id="changing-ownership"><span class="header-section-number">0.8.1</span> Changing Ownership</h3>
+<div class="sourceCode" id="cb11"><pre class="sourceCode numberSource bash number-lines code-with-copy"><code class="sourceCode bash"><span id="cb11-1"><a href="#cb11-1"></a><span class="co"># Change owner (requires appropriate permissions)</span></span>
+<span id="cb11-2"><a href="#cb11-2"></a><span class="fu">chown</span> newowner file.txt</span>
+<span id="cb11-3"><a href="#cb11-3"></a></span>
+<span id="cb11-4"><a href="#cb11-4"></a><span class="co"># Change owner and group</span></span>
+<span id="cb11-5"><a href="#cb11-5"></a><span class="fu">chown</span> newowner:newgroup file.txt</span>
+<span id="cb11-6"><a href="#cb11-6"></a></span>
+<span id="cb11-7"><a href="#cb11-7"></a><span class="co"># Change only group</span></span>
+<span id="cb11-8"><a href="#cb11-8"></a><span class="fu">chgrp</span> newgroup file.txt</span>
+<span id="cb11-9"><a href="#cb11-9"></a></span>
+<span id="cb11-10"><a href="#cb11-10"></a><span class="co"># Recursive ownership changes</span></span>
+<span id="cb11-11"><a href="#cb11-11"></a><span class="fu">chown</span> <span class="at">-R</span> username:groupname project_folder/</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</section>
+<section id="practical-ownership-scenarios" class="level3" data-number="0.8.2">
+<h3 data-number="0.8.2" class="anchored" data-anchor-id="practical-ownership-scenarios"><span class="header-section-number">0.8.2</span> Practical Ownership Scenarios</h3>
+<div class="sourceCode" id="cb12"><pre class="sourceCode numberSource bash number-lines code-with-copy"><code class="sourceCode bash"><span id="cb12-1"><a href="#cb12-1"></a><span class="co"># Transfer project to new team lead</span></span>
+<span id="cb12-2"><a href="#cb12-2"></a><span class="fu">chown</span> <span class="at">-R</span> new_lead:research_team experiment_data/</span>
+<span id="cb12-3"><a href="#cb12-3"></a></span>
+<span id="cb12-4"><a href="#cb12-4"></a><span class="co"># Make files accessible to web server</span></span>
+<span id="cb12-5"><a href="#cb12-5"></a><span class="fu">chown</span> <span class="at">-R</span> www-data:www-data web_files/</span>
+<span id="cb12-6"><a href="#cb12-6"></a></span>
+<span id="cb12-7"><a href="#cb12-7"></a><span class="co"># Fix ownership after copying from another user</span></span>
+<span id="cb12-8"><a href="#cb12-8"></a><span class="fu">chown</span> <span class="va">$(</span><span class="fu">whoami</span><span class="va">)</span>:<span class="va">$(</span><span class="fu">id</span> <span class="at">-gn</span><span class="va">)</span> copied_files/<span class="pp">*</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</section>
+</section>
+<section id="special-permissions-the-advanced-techniques" class="level2" data-number="0.9">
+<h2 data-number="0.9" class="anchored" data-anchor-id="special-permissions-the-advanced-techniques"><span class="header-section-number">0.9</span> Special Permissions: The Advanced Techniques</h2>
+<section id="the-sticky-bit" class="level3" data-number="0.9.1">
+<h3 data-number="0.9.1" class="anchored" data-anchor-id="the-sticky-bit"><span class="header-section-number">0.9.1</span> The Sticky Bit</h3>
+<p>The sticky bit is used on directories to prevent users from deleting files they don’t own:</p>
+<div class="sourceCode" id="cb13"><pre class="sourceCode numberSource bash number-lines code-with-copy"><code class="sourceCode bash"><span id="cb13-1"><a href="#cb13-1"></a><span class="co"># Set sticky bit (often used on /tmp)</span></span>
+<span id="cb13-2"><a href="#cb13-2"></a><span class="fu">chmod</span> +t shared_directory/</span>
+<span id="cb13-3"><a href="#cb13-3"></a><span class="fu">chmod</span> 1755 shared_directory/      <span class="co"># Alternative notation</span></span>
+<span id="cb13-4"><a href="#cb13-4"></a></span>
+<span id="cb13-5"><a href="#cb13-5"></a><span class="co"># Check for sticky bit (shows as 't' in permissions)</span></span>
+<span id="cb13-6"><a href="#cb13-6"></a><span class="fu">ls</span> <span class="at">-ld</span> shared_directory/</span>
+<span id="cb13-7"><a href="#cb13-7"></a><span class="ex">drwxr-xr-t</span> 2 user group 4096 Dec 15 10:30 shared_directory/</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p><strong>Real-world analogy</strong>: It’s like a shared bulletin board where anyone can post notices, but only the person who posted a notice can remove it.</p>
+</section>
+<section id="setuid-and-setgid" class="level3" data-number="0.9.2">
+<h3 data-number="0.9.2" class="anchored" data-anchor-id="setuid-and-setgid"><span class="header-section-number">0.9.2</span> SetUID and SetGID</h3>
+<p>These advanced permissions allow programs to run with different privileges:</p>
+<div class="sourceCode" id="cb14"><pre class="sourceCode numberSource bash number-lines code-with-copy"><code class="sourceCode bash"><span id="cb14-1"><a href="#cb14-1"></a><span class="co"># SetUID - program runs as file owner</span></span>
+<span id="cb14-2"><a href="#cb14-2"></a><span class="fu">chmod</span> u+s program</span>
+<span id="cb14-3"><a href="#cb14-3"></a><span class="fu">chmod</span> 4755 program</span>
+<span id="cb14-4"><a href="#cb14-4"></a></span>
+<span id="cb14-5"><a href="#cb14-5"></a><span class="co"># SetGID - program runs as file group</span></span>
+<span id="cb14-6"><a href="#cb14-6"></a><span class="fu">chmod</span> g+s program</span>
+<span id="cb14-7"><a href="#cb14-7"></a><span class="fu">chmod</span> 2755 program</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p><strong>Note</strong>: These are advanced features mainly used by system administrators. In HPC environments, you’ll rarely need to set these.</p>
+</section>
+</section>
+<section id="permission-troubleshooting" class="level2" data-number="0.10">
+<h2 data-number="0.10" class="anchored" data-anchor-id="permission-troubleshooting"><span class="header-section-number">0.10</span> Permission Troubleshooting</h2>
+<section id="common-permission-problems" class="level3" data-number="0.10.1">
+<h3 data-number="0.10.1" class="anchored" data-anchor-id="common-permission-problems"><span class="header-section-number">0.10.1</span> Common Permission Problems</h3>
+<section id="problem-1-permission-denied-when-running-script" class="level4" data-number="0.10.1.1">
+<h4 data-number="0.10.1.1" class="anchored" data-anchor-id="problem-1-permission-denied-when-running-script"><span class="header-section-number">0.10.1.1</span> Problem 1: “Permission Denied” when running script</h4>
+<div class="sourceCode" id="cb15"><pre class="sourceCode numberSource bash number-lines code-with-copy"><code class="sourceCode bash"><span id="cb15-1"><a href="#cb15-1"></a><span class="co"># Symptom: ./my_script.sh gives "Permission denied"</span></span>
+<span id="cb15-2"><a href="#cb15-2"></a><span class="fu">ls</span> <span class="at">-l</span> my_script.sh</span>
+<span id="cb15-3"><a href="#cb15-3"></a><span class="ex">-rw-r--r--</span> 1 user group 150 Dec 15 10:30 my_script.sh</span>
+<span id="cb15-4"><a href="#cb15-4"></a></span>
+<span id="cb15-5"><a href="#cb15-5"></a><span class="co"># Solution: Add execute permission</span></span>
+<span id="cb15-6"><a href="#cb15-6"></a><span class="fu">chmod</span> +x my_script.sh</span>
+<span id="cb15-7"><a href="#cb15-7"></a><span class="co"># or</span></span>
+<span id="cb15-8"><a href="#cb15-8"></a><span class="fu">chmod</span> 755 my_script.sh</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</section>
+<section id="problem-2-cant-modify-file-in-shared-directory" class="level4" data-number="0.10.1.2">
+<h4 data-number="0.10.1.2" class="anchored" data-anchor-id="problem-2-cant-modify-file-in-shared-directory"><span class="header-section-number">0.10.1.2</span> Problem 2: Can’t modify file in shared directory</h4>
+<div class="sourceCode" id="cb16"><pre class="sourceCode numberSource bash number-lines code-with-copy"><code class="sourceCode bash"><span id="cb16-1"><a href="#cb16-1"></a><span class="co"># Check directory permissions</span></span>
+<span id="cb16-2"><a href="#cb16-2"></a><span class="fu">ls</span> <span class="at">-ld</span> shared_folder/</span>
+<span id="cb16-3"><a href="#cb16-3"></a><span class="ex">drwxr-xr-x</span> 2 otheruser group 4096 Dec 15 10:30 shared_folder/</span>
+<span id="cb16-4"><a href="#cb16-4"></a></span>
+<span id="cb16-5"><a href="#cb16-5"></a><span class="co"># Problem: Directory doesn't have write permission for group</span></span>
+<span id="cb16-6"><a href="#cb16-6"></a><span class="co"># Solution: </span></span>
+<span id="cb16-7"><a href="#cb16-7"></a><span class="fu">chmod</span> 775 shared_folder/</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</section>
+<section id="problem-3-others-can-see-sensitive-files" class="level4" data-number="0.10.1.3">
+<h4 data-number="0.10.1.3" class="anchored" data-anchor-id="problem-3-others-can-see-sensitive-files"><span class="header-section-number">0.10.1.3</span> Problem 3: Others can see sensitive files</h4>
+<div class="sourceCode" id="cb17"><pre class="sourceCode numberSource bash number-lines code-with-copy"><code class="sourceCode bash"><span id="cb17-1"><a href="#cb17-1"></a><span class="co"># Check current permissions</span></span>
+<span id="cb17-2"><a href="#cb17-2"></a><span class="fu">ls</span> <span class="at">-l</span> sensitive_data.txt</span>
+<span id="cb17-3"><a href="#cb17-3"></a><span class="ex">-rw-r--r--</span> 1 user group 1024 Dec 15 10:30 sensitive_data.txt</span>
+<span id="cb17-4"><a href="#cb17-4"></a></span>
+<span id="cb17-5"><a href="#cb17-5"></a><span class="co"># Problem: Others can read the file</span></span>
+<span id="cb17-6"><a href="#cb17-6"></a><span class="co"># Solution: Remove read permission for others</span></span>
+<span id="cb17-7"><a href="#cb17-7"></a><span class="fu">chmod</span> 640 sensitive_data.txt</span>
+<span id="cb17-8"><a href="#cb17-8"></a><span class="co"># or be more restrictive:</span></span>
+<span id="cb17-9"><a href="#cb17-9"></a><span class="fu">chmod</span> 600 sensitive_data.txt</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</section>
+</section>
+</section>
+<section id="security-best-practices-for-hpc" class="level2" data-number="0.11">
+<h2 data-number="0.11" class="anchored" data-anchor-id="security-best-practices-for-hpc"><span class="header-section-number">0.11</span> Security Best Practices for HPC</h2>
+<section id="the-principle-of-least-privilege" class="level3" data-number="0.11.1">
+<h3 data-number="0.11.1" class="anchored" data-anchor-id="the-principle-of-least-privilege"><span class="header-section-number">0.11.1</span> The Principle of Least Privilege</h3>
+<p>Give the minimum permissions necessary for the task:</p>
+<div class="sourceCode" id="cb18"><pre class="sourceCode numberSource bash number-lines code-with-copy"><code class="sourceCode bash"><span id="cb18-1"><a href="#cb18-1"></a><span class="co"># Good: Restrictive by default</span></span>
+<span id="cb18-2"><a href="#cb18-2"></a><span class="fu">chmod</span> 600 new_file.txt        <span class="co"># Start restrictive</span></span>
+<span id="cb18-3"><a href="#cb18-3"></a><span class="fu">chmod</span> g+r new_file.txt        <span class="co"># Add group read if needed</span></span>
+<span id="cb18-4"><a href="#cb18-4"></a></span>
+<span id="cb18-5"><a href="#cb18-5"></a><span class="co"># Bad: Permissive by default</span></span>
+<span id="cb18-6"><a href="#cb18-6"></a><span class="fu">chmod</span> 777 new_file.txt        <span class="co"># Everyone can do everything (dangerous!)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</section>
+<section id="regular-permission-audits" class="level3" data-number="0.11.2">
+<h3 data-number="0.11.2" class="anchored" data-anchor-id="regular-permission-audits"><span class="header-section-number">0.11.2</span> Regular Permission Audits</h3>
+<div class="sourceCode" id="cb19"><pre class="sourceCode numberSource bash number-lines code-with-copy"><code class="sourceCode bash"><span id="cb19-1"><a href="#cb19-1"></a><span class="co">#!/bin/bash</span></span>
+<span id="cb19-2"><a href="#cb19-2"></a><span class="co"># audit_permissions.sh - Check for potentially dangerous permissions</span></span>
+<span id="cb19-3"><a href="#cb19-3"></a></span>
+<span id="cb19-4"><a href="#cb19-4"></a><span class="bu">echo</span> <span class="st">"Files with world-write permissions (dangerous):"</span></span>
+<span id="cb19-5"><a href="#cb19-5"></a><span class="fu">find</span> . <span class="at">-type</span> f <span class="at">-perm</span> <span class="at">-002</span> <span class="at">-ls</span></span>
+<span id="cb19-6"><a href="#cb19-6"></a></span>
+<span id="cb19-7"><a href="#cb19-7"></a><span class="bu">echo</span> <span class="at">-e</span> <span class="st">"\nFiles with unusual permissions:"</span></span>
+<span id="cb19-8"><a href="#cb19-8"></a><span class="fu">find</span> . <span class="at">-type</span> f <span class="dt">\(</span> <span class="at">-perm</span> <span class="at">-4000</span> <span class="at">-o</span> <span class="at">-perm</span> <span class="at">-2000</span> <span class="dt">\)</span> <span class="at">-ls</span></span>
+<span id="cb19-9"><a href="#cb19-9"></a></span>
+<span id="cb19-10"><a href="#cb19-10"></a><span class="bu">echo</span> <span class="at">-e</span> <span class="st">"\nDirectories accessible to everyone:"</span></span>
+<span id="cb19-11"><a href="#cb19-11"></a><span class="fu">find</span> . <span class="at">-type</span> d <span class="at">-perm</span> <span class="at">-755</span> <span class="at">-ls</span></span>
+<span id="cb19-12"><a href="#cb19-12"></a></span>
+<span id="cb19-13"><a href="#cb19-13"></a><span class="bu">echo</span> <span class="at">-e</span> <span class="st">"\nFiles readable by everyone:"</span></span>
+<span id="cb19-14"><a href="#cb19-14"></a><span class="fu">find</span> . <span class="at">-type</span> f <span class="at">-perm</span> <span class="at">-044</span> <span class="at">-ls</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</section>
+<section id="safe-permission-defaults" class="level3" data-number="0.11.3">
+<h3 data-number="0.11.3" class="anchored" data-anchor-id="safe-permission-defaults"><span class="header-section-number">0.11.3</span> Safe Permission Defaults</h3>
+<div class="sourceCode" id="cb20"><pre class="sourceCode numberSource bash number-lines code-with-copy"><code class="sourceCode bash"><span id="cb20-1"><a href="#cb20-1"></a><span class="co"># Set secure defaults for new files</span></span>
+<span id="cb20-2"><a href="#cb20-2"></a><span class="bu">umask</span> 022                     <span class="co"># New files will be 644, directories 755</span></span>
+<span id="cb20-3"><a href="#cb20-3"></a></span>
+<span id="cb20-4"><a href="#cb20-4"></a><span class="co"># Or more restrictive:</span></span>
+<span id="cb20-5"><a href="#cb20-5"></a><span class="bu">umask</span> 077                     <span class="co"># New files will be 600, directories 700</span></span>
+<span id="cb20-6"><a href="#cb20-6"></a></span>
+<span id="cb20-7"><a href="#cb20-7"></a><span class="co"># Add to your .bashrc to make it permanent</span></span>
+<span id="cb20-8"><a href="#cb20-8"></a><span class="bu">echo</span> <span class="st">"umask 022"</span> <span class="op">&gt;&gt;</span> ~/.bashrc</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</section>
+</section>
+<section id="quick-reference-permission-cheat-sheet" class="level2" data-number="0.12">
+<h2 data-number="0.12" class="anchored" data-anchor-id="quick-reference-permission-cheat-sheet"><span class="header-section-number">0.12</span> Quick Reference: Permission Cheat Sheet</h2>
+<table class="table">
+<thead>
+<tr class="header">
+<th>Task</th>
+<th>Command</th>
+<th>Example</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>View permissions</td>
+<td><code>ls -l filename</code></td>
+<td><code>ls -l script.sh</code></td>
+</tr>
+<tr class="even">
+<td>Set permissions (numeric)</td>
+<td><code>chmod 755 file</code></td>
+<td><code>chmod 644 data.txt</code></td>
+</tr>
+<tr class="odd">
+<td>Add permission</td>
+<td><code>chmod +x file</code></td>
+<td><code>chmod u+w file.txt</code></td>
+</tr>
+<tr class="even">
+<td>Remove permission</td>
+<td><code>chmod -w file</code></td>
+<td><code>chmod o-r secret.txt</code></td>
+</tr>
+<tr class="odd">
+<td>Recursive permissions</td>
+<td><code>chmod -R 755 dir/</code></td>
+<td><code>chmod -R 644 *.txt</code></td>
+</tr>
+<tr class="even">
+<td>Change owner</td>
+<td><code>chown user file</code></td>
+<td><code>chown alice data.txt</code></td>
+</tr>
+<tr class="odd">
+<td>Change group</td>
+<td><code>chgrp group file</code></td>
+<td><code>chgrp team project/</code></td>
+</tr>
+<tr class="even">
+<td>Change both</td>
+<td><code>chown user:group file</code></td>
+<td><code>chown alice:team file.txt</code></td>
+</tr>
+</tbody>
+</table>
+<section id="common-permission-patterns" class="level3" data-number="0.12.1">
+<h3 data-number="0.12.1" class="anchored" data-anchor-id="common-permission-patterns"><span class="header-section-number">0.12.1</span> Common Permission Patterns</h3>
+<table class="table">
+<thead>
+<tr class="header">
+<th>Permission</th>
+<th>Numeric</th>
+<th>Use Case</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><code>rwx------</code></td>
+<td>700</td>
+<td>Private directories</td>
+</tr>
+<tr class="even">
+<td><code>rw-------</code></td>
+<td>600</td>
+<td>Private files</td>
+</tr>
+<tr class="odd">
+<td><code>rwxr-xr-x</code></td>
+<td>755</td>
+<td>Public programs/directories</td>
+</tr>
+<tr class="even">
+<td><code>rw-r--r--</code></td>
+<td>644</td>
+<td>Public readable files</td>
+</tr>
+<tr class="odd">
+<td><code>rwxrwx---</code></td>
+<td>770</td>
+<td>Team directories</td>
+</tr>
+<tr class="even">
+<td><code>rw-rw----</code></td>
+<td>660</td>
+<td>Team files</td>
+</tr>
+</tbody>
+</table>
+</section>
+</section>
+<section id="practice-exercises" class="level2" data-number="0.13">
+<h2 data-number="0.13" class="anchored" data-anchor-id="practice-exercises"><span class="header-section-number">0.13</span> Practice Exercises</h2>
+<div class="callout callout-style-default callout-important callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Your Permission Mastery Training
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<ol type="1">
+<li><p><strong>Create a secure project structure</strong></p>
+<div class="sourceCode" id="cb21"><pre class="sourceCode numberSource bash number-lines code-with-copy"><code class="sourceCode bash"><span id="cb21-1"><a href="#cb21-1"></a><span class="co"># Create directories with appropriate permissions:</span></span>
+<span id="cb21-2"><a href="#cb21-2"></a><span class="co"># - Public documentation (everyone can read)</span></span>
+<span id="cb21-3"><a href="#cb21-3"></a><span class="co"># - Team scripts (team can execute)</span></span>
+<span id="cb21-4"><a href="#cb21-4"></a><span class="co"># - Private data (only you can access)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div></li>
+<li><p><strong>Fix permission problems</strong></p>
+<div class="sourceCode" id="cb22"><pre class="sourceCode numberSource bash number-lines code-with-copy"><code class="sourceCode bash"><span id="cb22-1"><a href="#cb22-1"></a><span class="co"># Create files with wrong permissions and fix them:</span></span>
+<span id="cb22-2"><a href="#cb22-2"></a><span class="fu">touch</span> script.sh <span class="kw">&amp;&amp;</span> <span class="fu">chmod</span> 644 script.sh  <span class="co"># Can't execute</span></span>
+<span id="cb22-3"><a href="#cb22-3"></a><span class="fu">touch</span> data.txt <span class="kw">&amp;&amp;</span> <span class="fu">chmod</span> 777 data.txt    <span class="co"># Too permissive</span></span>
+<span id="cb22-4"><a href="#cb22-4"></a><span class="fu">mkdir</span> dir <span class="kw">&amp;&amp;</span> <span class="fu">chmod</span> 644 dir               <span class="co"># Can't enter</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div></li>
+<li><p><strong>Audit existing permissions</strong></p>
+<div class="sourceCode" id="cb23"><pre class="sourceCode numberSource bash number-lines code-with-copy"><code class="sourceCode bash"><span id="cb23-1"><a href="#cb23-1"></a><span class="co"># Check your home directory for:</span></span>
+<span id="cb23-2"><a href="#cb23-2"></a><span class="co"># - World-writable files (dangerous)</span></span>
+<span id="cb23-3"><a href="#cb23-3"></a><span class="co"># - Executable text files</span></span>
+<span id="cb23-4"><a href="#cb23-4"></a><span class="co"># - Directories you can't enter</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div></li>
+<li><p><strong>Collaborative setup</strong></p>
+<div class="sourceCode" id="cb24"><pre class="sourceCode numberSource bash number-lines code-with-copy"><code class="sourceCode bash"><span id="cb24-1"><a href="#cb24-1"></a><span class="co"># Set up a shared directory where:</span></span>
+<span id="cb24-2"><a href="#cb24-2"></a><span class="co"># - Team members can add files</span></span>
+<span id="cb24-3"><a href="#cb24-3"></a><span class="co"># - Everyone can read files</span></span>
+<span id="cb24-4"><a href="#cb24-4"></a><span class="co"># - Only file owners can delete their files</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div></li>
+</ol>
+</div>
+</div>
+</section>
+<section id="whats-next" class="level2" data-number="0.14">
+<h2 data-number="0.14" class="anchored" data-anchor-id="whats-next"><span class="header-section-number">0.14</span> What’s Next?</h2>
+<p>Now that you’re a permission wizard, you’re ready to learn <a href="../../../posts/series/command-line-mastery/06-ssh-remote-access.html">SSH and Remote Access</a>. Understanding permissions is crucial for secure remote connections to HPC systems, where you’ll need to manage access across multiple machines and users.</p>
+<p>Remember: Permissions are the foundation of Unix security. In HPC environments where you’re sharing systems with many other researchers, proper permission management protects your work and enables effective collaboration. Master these concepts, and you’ll never accidentally expose sensitive data or lock yourself out of your own files.</p>
+<div class="callout callout-style-default callout-tip callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Permission Mastery Challenge
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>Before moving on, try this security scenario: 1. Create a research project with different sensitivity levels 2. Set up proper permissions for team collaboration 3. Create a script that audits and reports permission issues 4. Practice fixing common permission problems</p>
+<p>This mirrors real-world HPC security management!</p>
+</div>
+</div>
+<hr>
+<p><em>You’ve mastered the ancient art of Unix permissions – the keys to the digital kingdom. Next, we’ll learn to use these skills across networks as we explore secure remote access to HPC systems!</em></p>
+
+
+<!-- -->
+
+</section>
+
+<div id="quarto-appendix" class="default"><section class="quarto-appendix-contents"><h2 class="anchored quarto-appendix-heading">Reuse</h2><div id="quarto-reuse" class="quarto-appendix-contents"><div>CC BY-NC-SA 4.0</div></div></section><section class="quarto-appendix-contents"><h2 class="anchored quarto-appendix-heading">Citation</h2><div><div class="quarto-appendix-secondary-label">BibTeX citation:</div><pre class="sourceCode code-with-copy quarto-appendix-bibtex"><code class="sourceCode bibtex">@online{2025,
+  author = {, Hasan},
+  title = {Permission {Wizardry}},
+  date = {2025-06-29},
+  url = {https://hasangoni.quarto.pub/hasan-blog-post/posts/series/command-line-mastery/05-permission-wizardry.html},
+  langid = {en}
+}
+</code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre><div class="quarto-appendix-secondary-label">For attribution, please cite this work as:</div><div id="ref-2025" class="csl-entry quarto-appendix-citeas" role="listitem">
+Hasan. 2025. <span>“Permission Wizardry.”</span> June 29, 2025. <a href="https://hasangoni.quarto.pub/hasan-blog-post/posts/series/command-line-mastery/05-permission-wizardry.html">https://hasangoni.quarto.pub/hasan-blog-post/posts/series/command-line-mastery/05-permission-wizardry.html</a>.
+</div></div></section></div></main> <!-- /main -->
+<script id="quarto-html-after-body" type="application/javascript">
+window.document.addEventListener("DOMContentLoaded", function (event) {
+  const toggleBodyColorMode = (bsSheetEl) => {
+    const mode = bsSheetEl.getAttribute("data-mode");
+    const bodyEl = window.document.querySelector("body");
+    if (mode === "dark") {
+      bodyEl.classList.add("quarto-dark");
+      bodyEl.classList.remove("quarto-light");
+    } else {
+      bodyEl.classList.add("quarto-light");
+      bodyEl.classList.remove("quarto-dark");
+    }
+  }
+  const toggleBodyColorPrimary = () => {
+    const bsSheetEl = window.document.querySelector("link#quarto-bootstrap");
+    if (bsSheetEl) {
+      toggleBodyColorMode(bsSheetEl);
+    }
+  }
+  toggleBodyColorPrimary();  
+  const icon = "";
+  const anchorJS = new window.AnchorJS();
+  anchorJS.options = {
+    placement: 'right',
+    icon: icon
+  };
+  anchorJS.add('.anchored');
+  const isCodeAnnotation = (el) => {
+    for (const clz of el.classList) {
+      if (clz.startsWith('code-annotation-')) {                     
+        return true;
+      }
+    }
+    return false;
+  }
+  const clipboard = new window.ClipboardJS('.code-copy-button', {
+    text: function(trigger) {
+      const codeEl = trigger.previousElementSibling.cloneNode(true);
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
+        }
+      }
+      return codeEl.innerText;
+    }
+  });
+  clipboard.on('success', function(e) {
+    // button target
+    const button = e.trigger;
+    // don't keep focus
+    button.blur();
+    // flash "checked"
+    button.classList.add('code-copy-button-checked');
+    var currentTitle = button.getAttribute("title");
+    button.setAttribute("title", "Copied!");
+    let tooltip;
+    if (window.bootstrap) {
+      button.setAttribute("data-bs-toggle", "tooltip");
+      button.setAttribute("data-bs-placement", "left");
+      button.setAttribute("data-bs-title", "Copied!");
+      tooltip = new bootstrap.Tooltip(button, 
+        { trigger: "manual", 
+          customClass: "code-copy-button-tooltip",
+          offset: [0, -8]});
+      tooltip.show();    
+    }
+    setTimeout(function() {
+      if (tooltip) {
+        tooltip.hide();
+        button.removeAttribute("data-bs-title");
+        button.removeAttribute("data-bs-toggle");
+        button.removeAttribute("data-bs-placement");
+      }
+      button.setAttribute("title", currentTitle);
+      button.classList.remove('code-copy-button-checked');
+    }, 1000);
+    // clear code selection
+    e.clearSelection();
+  });
+  const viewSource = window.document.getElementById('quarto-view-source') ||
+                     window.document.getElementById('quarto-code-tools-source');
+  if (viewSource) {
+    const sourceUrl = viewSource.getAttribute("data-quarto-source-url");
+    viewSource.addEventListener("click", function(e) {
+      if (sourceUrl) {
+        // rstudio viewer pane
+        if (/\bcapabilities=\b/.test(window.location)) {
+          window.open(sourceUrl);
+        } else {
+          window.location.href = sourceUrl;
+        }
+      } else {
+        const modal = new bootstrap.Modal(document.getElementById('quarto-embedded-source-code-modal'));
+        modal.show();
+      }
+      return false;
+    });
+  }
+  function toggleCodeHandler(show) {
+    return function(e) {
+      const detailsSrc = window.document.querySelectorAll(".cell > details > .sourceCode");
+      for (let i=0; i<detailsSrc.length; i++) {
+        const details = detailsSrc[i].parentElement;
+        if (show) {
+          details.open = true;
+        } else {
+          details.removeAttribute("open");
+        }
+      }
+      const cellCodeDivs = window.document.querySelectorAll(".cell > .sourceCode");
+      const fromCls = show ? "hidden" : "unhidden";
+      const toCls = show ? "unhidden" : "hidden";
+      for (let i=0; i<cellCodeDivs.length; i++) {
+        const codeDiv = cellCodeDivs[i];
+        if (codeDiv.classList.contains(fromCls)) {
+          codeDiv.classList.remove(fromCls);
+          codeDiv.classList.add(toCls);
+        } 
+      }
+      return false;
+    }
+  }
+  const hideAllCode = window.document.getElementById("quarto-hide-all-code");
+  if (hideAllCode) {
+    hideAllCode.addEventListener("click", toggleCodeHandler(false));
+  }
+  const showAllCode = window.document.getElementById("quarto-show-all-code");
+  if (showAllCode) {
+    showAllCode.addEventListener("click", toggleCodeHandler(true));
+  }
+  function tippyHover(el, contentFn) {
+    const config = {
+      allowHTML: true,
+      content: contentFn,
+      maxWidth: 500,
+      delay: 100,
+      arrow: false,
+      appendTo: function(el) {
+          return el.parentElement;
+      },
+      interactive: true,
+      interactiveBorder: 10,
+      theme: 'quarto',
+      placement: 'bottom-start'
+    };
+    window.tippy(el, config); 
+  }
+  const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+  for (var i=0; i<noterefs.length; i++) {
+    const ref = noterefs[i];
+    tippyHover(ref, function() {
+      // use id or data attribute instead here
+      let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+      try { href = new URL(href).hash; } catch {}
+      const id = href.replace(/^#\/?/, "");
+      const note = window.document.getElementById(id);
+      return note.innerHTML;
+    });
+  }
+      let selectedAnnoteEl;
+      const selectorForAnnotation = ( cell, annotation) => {
+        let cellAttr = 'data-code-cell="' + cell + '"';
+        let lineAttr = 'data-code-annotation="' +  annotation + '"';
+        const selector = 'span[' + cellAttr + '][' + lineAttr + ']';
+        return selector;
+      }
+      const selectCodeLines = (annoteEl) => {
+        const doc = window.document;
+        const targetCell = annoteEl.getAttribute("data-target-cell");
+        const targetAnnotation = annoteEl.getAttribute("data-target-annotation");
+        const annoteSpan = window.document.querySelector(selectorForAnnotation(targetCell, targetAnnotation));
+        const lines = annoteSpan.getAttribute("data-code-lines").split(",");
+        const lineIds = lines.map((line) => {
+          return targetCell + "-" + line;
+        })
+        let top = null;
+        let height = null;
+        let parent = null;
+        if (lineIds.length > 0) {
+            //compute the position of the single el (top and bottom and make a div)
+            const el = window.document.getElementById(lineIds[0]);
+            top = el.offsetTop;
+            height = el.offsetHeight;
+            parent = el.parentElement.parentElement;
+          if (lineIds.length > 1) {
+            const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
+            const bottom = lastEl.offsetTop + lastEl.offsetHeight;
+            height = bottom - top;
+          }
+          if (top !== null && height !== null && parent !== null) {
+            // cook up a div (if necessary) and position it 
+            let div = window.document.getElementById("code-annotation-line-highlight");
+            if (div === null) {
+              div = window.document.createElement("div");
+              div.setAttribute("id", "code-annotation-line-highlight");
+              div.style.position = 'absolute';
+              parent.appendChild(div);
+            }
+            div.style.top = top - 2 + "px";
+            div.style.height = height + 4 + "px";
+            let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
+            if (gutterDiv === null) {
+              gutterDiv = window.document.createElement("div");
+              gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
+              gutterDiv.style.position = 'absolute';
+              const codeCell = window.document.getElementById(targetCell);
+              const gutter = codeCell.querySelector('.code-annotation-gutter');
+              gutter.appendChild(gutterDiv);
+            }
+            gutterDiv.style.top = top - 2 + "px";
+            gutterDiv.style.height = height + 4 + "px";
+          }
+          selectedAnnoteEl = annoteEl;
+        }
+      };
+      const unselectCodeLines = () => {
+        const elementsIds = ["code-annotation-line-highlight", "code-annotation-line-highlight-gutter"];
+        elementsIds.forEach((elId) => {
+          const div = window.document.getElementById(elId);
+          if (div) {
+            div.remove();
+          }
+        });
+        selectedAnnoteEl = undefined;
+      };
+      // Attach click handler to the DT
+      const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
+      for (const annoteDlNode of annoteDls) {
+        annoteDlNode.addEventListener('click', (event) => {
+          const clickedEl = event.target;
+          if (clickedEl !== selectedAnnoteEl) {
+            unselectCodeLines();
+            const activeEl = window.document.querySelector('dt[data-target-cell].code-annotation-active');
+            if (activeEl) {
+              activeEl.classList.remove('code-annotation-active');
+            }
+            selectCodeLines(clickedEl);
+            clickedEl.classList.add('code-annotation-active');
+          } else {
+            // Unselect the line
+            unselectCodeLines();
+            clickedEl.classList.remove('code-annotation-active');
+          }
+        });
+      }
+  const findCites = (el) => {
+    const parentEl = el.parentElement;
+    if (parentEl) {
+      const cites = parentEl.dataset.cites;
+      if (cites) {
+        return {
+          el,
+          cites: cites.split(' ')
+        };
+      } else {
+        return findCites(el.parentElement)
+      }
+    } else {
+      return undefined;
+    }
+  };
+  var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+  for (var i=0; i<bibliorefs.length; i++) {
+    const ref = bibliorefs[i];
+    const citeInfo = findCites(ref);
+    if (citeInfo) {
+      tippyHover(citeInfo.el, function() {
+        var popup = window.document.createElement('div');
+        citeInfo.cites.forEach(function(cite) {
+          var citeDiv = window.document.createElement('div');
+          citeDiv.classList.add('hanging-indent');
+          citeDiv.classList.add('csl-entry');
+          var biblioDiv = window.document.getElementById('ref-' + cite);
+          if (biblioDiv) {
+            citeDiv.innerHTML = biblioDiv.innerHTML;
+          }
+          popup.appendChild(citeDiv);
+        });
+        return popup.innerHTML;
+      });
+    }
+  }
+});
+</script>
+<script src="https://utteranc.es/client.js" repo="yourusername/quarto_blog_hasan" issue-term="pathname" theme="github-light" crossorigin="anonymous" async="">
+</script>
+<script src="https://giscus.app/client.js" data-repo="HasanGoni/quarto_blog_hasan" data-repo-id="" data-category="General" data-category-id="" data-mapping="title" data-reactions-enabled="1" data-emit-metadata="0" data-input-position="top" data-theme="light" data-lang="en" crossorigin="anonymous" async="">
+</script><div class="modal fade" id="quarto-embedded-source-code-modal" tabindex="-1" aria-labelledby="quarto-embedded-source-code-modal-label" aria-hidden="true"><div class="modal-dialog modal-dialog-scrollable"><div class="modal-content"><div class="modal-header"><h5 class="modal-title" id="quarto-embedded-source-code-modal-label">Source Code</h5><button class="btn-close" data-bs-dismiss="modal"></button></div><div class="modal-body"><div class="">
+<div class="sourceCode" id="cb25" data-shortcodes="false"><pre class="sourceCode numberSource markdown number-lines code-with-copy"><code class="sourceCode markdown"><span id="cb25-1"><a href="#cb25-1"></a><span class="co">---</span></span>
+<span id="cb25-2"><a href="#cb25-2"></a><span class="an">title:</span><span class="co"> "Permission Wizardry"</span></span>
+<span id="cb25-3"><a href="#cb25-3"></a><span class="an">description:</span><span class="co"> "Master the ancient art of Unix permissions. Learn to control who can read, write, and execute your files with the precision of a digital locksmith. Essential knowledge for secure HPC environments."</span></span>
+<span id="cb25-4"><a href="#cb25-4"></a><span class="an">author:</span><span class="co"> "Hasan"</span></span>
+<span id="cb25-5"><a href="#cb25-5"></a><span class="an">date:</span><span class="co"> last-modified</span></span>
+<span id="cb25-6"><a href="#cb25-6"></a><span class="an">categories:</span><span class="co"> [command-line, permissions, chmod, chown, security]</span></span>
+<span id="cb25-7"><a href="#cb25-7"></a><span class="an">image:</span><span class="co"> "https://images.unsplash.com/photo-1614064641938-3bbee52942c7?ixlib=rb-4.0.3&amp;auto=format&amp;fit=crop&amp;w=2000&amp;q=80"</span></span>
+<span id="cb25-8"><a href="#cb25-8"></a><span class="an">toc:</span><span class="co"> true</span></span>
+<span id="cb25-9"><a href="#cb25-9"></a><span class="co">---</span></span>
+<span id="cb25-10"><a href="#cb25-10"></a></span>
+<span id="cb25-11"><a href="#cb25-11"></a><span class="fu">## The Story: The Digital Locksmith</span></span>
+<span id="cb25-12"><a href="#cb25-12"></a></span>
+<span id="cb25-13"><a href="#cb25-13"></a>Imagine you're the security chief of a massive digital vault containing millions of valuable research files. Some files are public knowledge, others are confidential research data, and some are powerful tools that could cause damage if misused. You need a sophisticated lock system that can control exactly who can look at files, who can modify them, and who can execute programs.</span>
+<span id="cb25-14"><a href="#cb25-14"></a></span>
+<span id="cb25-15"><a href="#cb25-15"></a>In the Windows world, file security is often an afterthought – a simple "read-only" checkbox or sharing dialog. But in Unix HPC environments, you're dealing with multi-user systems where hundreds of researchers share the same computers. Here, file permissions are your first line of defense and your key to collaborative success.</span>
+<span id="cb25-16"><a href="#cb25-16"></a></span>
+<span id="cb25-17"><a href="#cb25-17"></a>Today, you'll become a digital locksmith, mastering the ancient Unix permission system that has protected files for over 50 years.</span>
+<span id="cb25-18"><a href="#cb25-18"></a></span>
+<span id="cb25-19"><a href="#cb25-19"></a><span class="fu">## Understanding the Permission Landscape</span></span>
+<span id="cb25-20"><a href="#cb25-20"></a></span>
+<span id="cb25-21"><a href="#cb25-21"></a><span class="fu">### The Three Realms of Access</span></span>
+<span id="cb25-22"><a href="#cb25-22"></a></span>
+<span id="cb25-23"><a href="#cb25-23"></a>Every file and directory in Unix has three types of users:</span>
+<span id="cb25-24"><a href="#cb25-24"></a></span>
+<span id="cb25-25"><a href="#cb25-25"></a><span class="ss">- </span>**Owner (u)**: The person who created the file (usually you)</span>
+<span id="cb25-26"><a href="#cb25-26"></a><span class="ss">- </span>**Group (g)**: People in the same research group or project</span>
+<span id="cb25-27"><a href="#cb25-27"></a><span class="ss">- </span>**Others (o)**: Everyone else on the system</span>
+<span id="cb25-28"><a href="#cb25-28"></a></span>
+<span id="cb25-29"><a href="#cb25-29"></a>**Real-world analogy**: Think of a laboratory where you have your personal desk (owner), your research team has access to shared equipment (group), and some areas are open to all visitors (others).</span>
+<span id="cb25-30"><a href="#cb25-30"></a></span>
+<span id="cb25-31"><a href="#cb25-31"></a><span class="fu">### The Three Powers of Permission</span></span>
+<span id="cb25-32"><a href="#cb25-32"></a></span>
+<span id="cb25-33"><a href="#cb25-33"></a>For each realm, there are three types of access:</span>
+<span id="cb25-34"><a href="#cb25-34"></a></span>
+<span id="cb25-35"><a href="#cb25-35"></a><span class="ss">- </span>**Read (r)**: Can view the contents</span>
+<span id="cb25-36"><a href="#cb25-36"></a><span class="ss">- </span>**Write (w)**: Can modify or delete</span>
+<span id="cb25-37"><a href="#cb25-37"></a><span class="ss">- </span>**Execute (x)**: Can run the file as a program (or enter a directory)</span>
+<span id="cb25-38"><a href="#cb25-38"></a></span>
+<span id="cb25-39"><a href="#cb25-39"></a>**Real-world analogy**: It's like having different keys:</span>
+<span id="cb25-40"><a href="#cb25-40"></a><span class="ss">- </span>**Read key**: Opens the display case (you can look but not touch)</span>
+<span id="cb25-41"><a href="#cb25-41"></a><span class="ss">- </span>**Write key**: Opens the editing room (you can make changes)</span>
+<span id="cb25-42"><a href="#cb25-42"></a><span class="ss">- </span>**Execute key**: Starts the machinery (you can run programs)</span>
+<span id="cb25-43"><a href="#cb25-43"></a></span>
+<span id="cb25-44"><a href="#cb25-44"></a><span class="fu">## Decoding Permission Hieroglyphics</span></span>
+<span id="cb25-45"><a href="#cb25-45"></a></span>
+<span id="cb25-46"><a href="#cb25-46"></a>When you run <span class="in">`ls -l`</span>, you see mysterious symbols like <span class="in">`-rwxr-xr--`</span>. Let's decode this ancient script:</span>
+<span id="cb25-47"><a href="#cb25-47"></a></span>
+<span id="cb25-48"><a href="#cb25-48"></a><span class="in">```bash</span></span>
+<span id="cb25-49"><a href="#cb25-49"></a><span class="fu">ls</span> <span class="at">-l</span> example_file.txt</span>
+<span id="cb25-50"><a href="#cb25-50"></a><span class="ex">-rwxr-xr--</span> 1 username groupname 1024 Dec 15 10:30 example_file.txt</span>
+<span id="cb25-51"><a href="#cb25-51"></a><span class="in">```</span></span>
+<span id="cb25-52"><a href="#cb25-52"></a></span>
+<span id="cb25-53"><a href="#cb25-53"></a><span class="fu">### Breaking Down the Permission Code</span></span>
+<span id="cb25-54"><a href="#cb25-54"></a></span>
+<span id="cb25-55"><a href="#cb25-55"></a><span class="in">```</span></span>
+<span id="cb25-56"><a href="#cb25-56"></a><span class="in">-rwxr-xr--</span></span>
+<span id="cb25-57"><a href="#cb25-57"></a><span class="in">│└┬┘└┬┘└┬┘</span></span>
+<span id="cb25-58"><a href="#cb25-58"></a><span class="in">│ │  │  └── Others permissions (r--)</span></span>
+<span id="cb25-59"><a href="#cb25-59"></a><span class="in">│ │  └───── Group permissions (r-x)</span></span>
+<span id="cb25-60"><a href="#cb25-60"></a><span class="in">│ └──────── Owner permissions (rwx)</span></span>
+<span id="cb25-61"><a href="#cb25-61"></a><span class="in">└─────────── File type (- = file, d = directory)</span></span>
+<span id="cb25-62"><a href="#cb25-62"></a><span class="in">```</span></span>
+<span id="cb25-63"><a href="#cb25-63"></a></span>
+<span id="cb25-64"><a href="#cb25-64"></a>**Translation**:</span>
+<span id="cb25-65"><a href="#cb25-65"></a><span class="ss">- </span>**Owner**: Can read, write, and execute (rwx)</span>
+<span id="cb25-66"><a href="#cb25-66"></a><span class="ss">- </span>**Group**: Can read and execute, but not write (r-x)</span>
+<span id="cb25-67"><a href="#cb25-67"></a><span class="ss">- </span>**Others**: Can only read (r--)</span>
+<span id="cb25-68"><a href="#cb25-68"></a></span>
+<span id="cb25-69"><a href="#cb25-69"></a>**Real-world analogy**: It's like a key card system where your card (owner) opens everything, your team's cards (group) open most doors, and visitor cards (others) only open the lobby.</span>
+<span id="cb25-70"><a href="#cb25-70"></a></span>
+<span id="cb25-71"><a href="#cb25-71"></a><span class="fu">## The Permission Calculator</span></span>
+<span id="cb25-72"><a href="#cb25-72"></a></span>
+<span id="cb25-73"><a href="#cb25-73"></a><span class="fu">### Numeric Permission System</span></span>
+<span id="cb25-74"><a href="#cb25-74"></a></span>
+<span id="cb25-75"><a href="#cb25-75"></a>Unix also uses numbers to represent permissions, which is often faster for setting permissions:</span>
+<span id="cb25-76"><a href="#cb25-76"></a></span>
+<span id="cb25-77"><a href="#cb25-77"></a><span class="ss">- </span>**Read = 4**</span>
+<span id="cb25-78"><a href="#cb25-78"></a><span class="ss">- </span>**Write = 2**  </span>
+<span id="cb25-79"><a href="#cb25-79"></a><span class="ss">- </span>**Execute = 1**</span>
+<span id="cb25-80"><a href="#cb25-80"></a></span>
+<span id="cb25-81"><a href="#cb25-81"></a>You add these numbers together:</span>
+<span id="cb25-82"><a href="#cb25-82"></a><span class="ss">- </span>**7** = 4+2+1 = Read, Write, Execute (rwx)</span>
+<span id="cb25-83"><a href="#cb25-83"></a><span class="ss">- </span>**6** = 4+2 = Read, Write (rw-)</span>
+<span id="cb25-84"><a href="#cb25-84"></a><span class="ss">- </span>**5** = 4+1 = Read, Execute (r-x)</span>
+<span id="cb25-85"><a href="#cb25-85"></a><span class="ss">- </span>**4** = 4 = Read only (r--)</span>
+<span id="cb25-86"><a href="#cb25-86"></a><span class="ss">- </span>**0** = No permissions (---)</span>
+<span id="cb25-87"><a href="#cb25-87"></a></span>
+<span id="cb25-88"><a href="#cb25-88"></a>**Common permission combinations**:</span>
+<span id="cb25-89"><a href="#cb25-89"></a><span class="ss">- </span>**755**: Owner can do everything, group and others can read and execute</span>
+<span id="cb25-90"><a href="#cb25-90"></a><span class="ss">- </span>**644**: Owner can read and write, group and others can only read</span>
+<span id="cb25-91"><a href="#cb25-91"></a><span class="ss">- </span>**600**: Only owner can read and write, others have no access</span>
+<span id="cb25-92"><a href="#cb25-92"></a><span class="ss">- </span>**777**: Everyone can do everything (dangerous!)</span>
+<span id="cb25-93"><a href="#cb25-93"></a></span>
+<span id="cb25-94"><a href="#cb25-94"></a>**Real-world analogy**: It's like having numbered security clearance levels – level 7 gives you full access, level 4 gives you viewing rights only.</span>
+<span id="cb25-95"><a href="#cb25-95"></a></span>
+<span id="cb25-96"><a href="#cb25-96"></a><span class="fu">## The Permission Toolkit</span></span>
+<span id="cb25-97"><a href="#cb25-97"></a></span>
+<span id="cb25-98"><a href="#cb25-98"></a><span class="fu">### Viewing Permissions</span></span>
+<span id="cb25-99"><a href="#cb25-99"></a></span>
+<span id="cb25-100"><a href="#cb25-100"></a><span class="in">```bash</span></span>
+<span id="cb25-101"><a href="#cb25-101"></a><span class="co"># See permissions for files in current directory</span></span>
+<span id="cb25-102"><a href="#cb25-102"></a><span class="fu">ls</span> <span class="at">-l</span></span>
+<span id="cb25-103"><a href="#cb25-103"></a></span>
+<span id="cb25-104"><a href="#cb25-104"></a><span class="co"># See permissions for specific file</span></span>
+<span id="cb25-105"><a href="#cb25-105"></a><span class="fu">ls</span> <span class="at">-l</span> important_file.txt</span>
+<span id="cb25-106"><a href="#cb25-106"></a></span>
+<span id="cb25-107"><a href="#cb25-107"></a><span class="co"># See permissions for directories</span></span>
+<span id="cb25-108"><a href="#cb25-108"></a><span class="fu">ls</span> <span class="at">-ld</span> my_directory/</span>
+<span id="cb25-109"><a href="#cb25-109"></a></span>
+<span id="cb25-110"><a href="#cb25-110"></a><span class="co"># See permissions recursively</span></span>
+<span id="cb25-111"><a href="#cb25-111"></a><span class="fu">ls</span> <span class="at">-lR</span> project_folder/</span>
+<span id="cb25-112"><a href="#cb25-112"></a><span class="in">```</span></span>
+<span id="cb25-113"><a href="#cb25-113"></a></span>
+<span id="cb25-114"><a href="#cb25-114"></a><span class="fu">### The Master Key: `chmod`</span></span>
+<span id="cb25-115"><a href="#cb25-115"></a></span>
+<span id="cb25-116"><a href="#cb25-116"></a><span class="in">`chmod`</span> (change mode) is your primary tool for setting permissions:</span>
+<span id="cb25-117"><a href="#cb25-117"></a></span>
+<span id="cb25-118"><a href="#cb25-118"></a><span class="in">```bash</span></span>
+<span id="cb25-119"><a href="#cb25-119"></a><span class="co"># Using numeric notation</span></span>
+<span id="cb25-120"><a href="#cb25-120"></a><span class="fu">chmod</span> 755 script.sh          <span class="co"># rwxr-xr-x</span></span>
+<span id="cb25-121"><a href="#cb25-121"></a><span class="fu">chmod</span> 644 data.txt           <span class="co"># rw-r--r--</span></span>
+<span id="cb25-122"><a href="#cb25-122"></a><span class="fu">chmod</span> 600 secret.txt         <span class="co"># rw-------</span></span>
+<span id="cb25-123"><a href="#cb25-123"></a></span>
+<span id="cb25-124"><a href="#cb25-124"></a><span class="co"># Using symbolic notation</span></span>
+<span id="cb25-125"><a href="#cb25-125"></a><span class="fu">chmod</span> u+x script.sh          <span class="co"># Add execute for owner</span></span>
+<span id="cb25-126"><a href="#cb25-126"></a><span class="fu">chmod</span> g-w data.txt           <span class="co"># Remove write for group</span></span>
+<span id="cb25-127"><a href="#cb25-127"></a><span class="fu">chmod</span> o-r secret.txt         <span class="co"># Remove read for others</span></span>
+<span id="cb25-128"><a href="#cb25-128"></a><span class="fu">chmod</span> a+r public.txt         <span class="co"># Add read for all (a = all)</span></span>
+<span id="cb25-129"><a href="#cb25-129"></a><span class="in">```</span></span>
+<span id="cb25-130"><a href="#cb25-130"></a></span>
+<span id="cb25-131"><a href="#cb25-131"></a><span class="fu">### Advanced chmod Patterns</span></span>
+<span id="cb25-132"><a href="#cb25-132"></a></span>
+<span id="cb25-133"><a href="#cb25-133"></a><span class="in">```bash</span></span>
+<span id="cb25-134"><a href="#cb25-134"></a><span class="co"># Set permissions for multiple files</span></span>
+<span id="cb25-135"><a href="#cb25-135"></a><span class="fu">chmod</span> 644 <span class="pp">*</span>.txt              <span class="co"># All text files readable by all</span></span>
+<span id="cb25-136"><a href="#cb25-136"></a><span class="fu">chmod</span> 755 <span class="pp">*</span>.sh               <span class="co"># All scripts executable</span></span>
+<span id="cb25-137"><a href="#cb25-137"></a></span>
+<span id="cb25-138"><a href="#cb25-138"></a><span class="co"># Recursive permission changes</span></span>
+<span id="cb25-139"><a href="#cb25-139"></a><span class="fu">chmod</span> <span class="at">-R</span> 755 project_folder/ <span class="co"># Apply to folder and all contents</span></span>
+<span id="cb25-140"><a href="#cb25-140"></a></span>
+<span id="cb25-141"><a href="#cb25-141"></a><span class="co"># Copy permissions from one file to another</span></span>
+<span id="cb25-142"><a href="#cb25-142"></a><span class="fu">chmod</span> <span class="at">--reference</span><span class="op">=</span>template.txt new_file.txt</span>
+<span id="cb25-143"><a href="#cb25-143"></a><span class="in">```</span></span>
+<span id="cb25-144"><a href="#cb25-144"></a></span>
+<span id="cb25-145"><a href="#cb25-145"></a><span class="fu">## Real-World HPC Permission Scenarios</span></span>
+<span id="cb25-146"><a href="#cb25-146"></a></span>
+<span id="cb25-147"><a href="#cb25-147"></a><span class="fu">### Scenario 1: Setting Up a Research Project</span></span>
+<span id="cb25-148"><a href="#cb25-148"></a></span>
+<span id="cb25-149"><a href="#cb25-149"></a><span class="in">```bash</span></span>
+<span id="cb25-150"><a href="#cb25-150"></a><span class="co">#!/bin/bash</span></span>
+<span id="cb25-151"><a href="#cb25-151"></a><span class="co"># setup_project_permissions.sh - Set up proper permissions for research project</span></span>
+<span id="cb25-152"><a href="#cb25-152"></a></span>
+<span id="cb25-153"><a href="#cb25-153"></a><span class="va">PROJECT_DIR</span><span class="op">=</span><span class="st">"experiment_2023"</span></span>
+<span id="cb25-154"><a href="#cb25-154"></a></span>
+<span id="cb25-155"><a href="#cb25-155"></a><span class="co"># Create project structure</span></span>
+<span id="cb25-156"><a href="#cb25-156"></a><span class="fu">mkdir</span> <span class="at">-p</span> <span class="va">$PROJECT_DIR</span>/<span class="dt">{data</span><span class="op">,</span><span class="dt">scripts</span><span class="op">,</span><span class="dt">results</span><span class="op">,</span><span class="dt">docs}</span></span>
+<span id="cb25-157"><a href="#cb25-157"></a></span>
+<span id="cb25-158"><a href="#cb25-158"></a><span class="co"># Set directory permissions</span></span>
+<span id="cb25-159"><a href="#cb25-159"></a><span class="fu">chmod</span> 755 <span class="va">$PROJECT_DIR</span>                    <span class="co"># Everyone can enter and list</span></span>
+<span id="cb25-160"><a href="#cb25-160"></a><span class="fu">chmod</span> 750 <span class="va">$PROJECT_DIR</span>/<span class="dt">{data</span><span class="op">,</span><span class="dt">results}</span>     <span class="co"># Only owner and group can access</span></span>
+<span id="cb25-161"><a href="#cb25-161"></a><span class="fu">chmod</span> 755 <span class="va">$PROJECT_DIR</span>/<span class="dt">{scripts</span><span class="op">,</span><span class="dt">docs}</span>     <span class="co"># Scripts and docs are public</span></span>
+<span id="cb25-162"><a href="#cb25-162"></a></span>
+<span id="cb25-163"><a href="#cb25-163"></a><span class="co"># Set default file permissions</span></span>
+<span id="cb25-164"><a href="#cb25-164"></a><span class="fu">touch</span> <span class="va">$PROJECT_DIR</span>/data/experiment.csv</span>
+<span id="cb25-165"><a href="#cb25-165"></a><span class="fu">chmod</span> 640 <span class="va">$PROJECT_DIR</span>/data/experiment.csv    <span class="co"># Group can read, others cannot</span></span>
+<span id="cb25-166"><a href="#cb25-166"></a></span>
+<span id="cb25-167"><a href="#cb25-167"></a><span class="fu">touch</span> <span class="va">$PROJECT_DIR</span>/scripts/analyze.py</span>
+<span id="cb25-168"><a href="#cb25-168"></a><span class="fu">chmod</span> 754 <span class="va">$PROJECT_DIR</span>/scripts/analyze.py     <span class="co"># Everyone can execute</span></span>
+<span id="cb25-169"><a href="#cb25-169"></a></span>
+<span id="cb25-170"><a href="#cb25-170"></a><span class="fu">touch</span> <span class="va">$PROJECT_DIR</span>/docs/README.txt</span>
+<span id="cb25-171"><a href="#cb25-171"></a><span class="fu">chmod</span> 644 <span class="va">$PROJECT_DIR</span>/docs/README.txt        <span class="co"># Everyone can read</span></span>
+<span id="cb25-172"><a href="#cb25-172"></a></span>
+<span id="cb25-173"><a href="#cb25-173"></a><span class="bu">echo</span> <span class="st">"Project permissions set up successfully!"</span></span>
+<span id="cb25-174"><a href="#cb25-174"></a><span class="fu">ls</span> <span class="at">-la</span> <span class="va">$PROJECT_DIR</span>/</span>
+<span id="cb25-175"><a href="#cb25-175"></a><span class="in">```</span></span>
+<span id="cb25-176"><a href="#cb25-176"></a></span>
+<span id="cb25-177"><a href="#cb25-177"></a><span class="fu">### Scenario 2: Securing Sensitive Data</span></span>
+<span id="cb25-178"><a href="#cb25-178"></a></span>
+<span id="cb25-179"><a href="#cb25-179"></a><span class="in">```bash</span></span>
+<span id="cb25-180"><a href="#cb25-180"></a><span class="co">#!/bin/bash</span></span>
+<span id="cb25-181"><a href="#cb25-181"></a><span class="co"># secure_sensitive_data.sh - Lock down confidential research data</span></span>
+<span id="cb25-182"><a href="#cb25-182"></a></span>
+<span id="cb25-183"><a href="#cb25-183"></a><span class="va">SENSITIVE_DIR</span><span class="op">=</span><span class="st">"confidential_data"</span></span>
+<span id="cb25-184"><a href="#cb25-184"></a></span>
+<span id="cb25-185"><a href="#cb25-185"></a><span class="co"># Create secure directory</span></span>
+<span id="cb25-186"><a href="#cb25-186"></a><span class="fu">mkdir</span> <span class="at">-p</span> <span class="va">$SENSITIVE_DIR</span></span>
+<span id="cb25-187"><a href="#cb25-187"></a><span class="fu">chmod</span> 700 <span class="va">$SENSITIVE_DIR</span>              <span class="co"># Only owner can access</span></span>
+<span id="cb25-188"><a href="#cb25-188"></a></span>
+<span id="cb25-189"><a href="#cb25-189"></a><span class="co"># Move sensitive files and secure them</span></span>
+<span id="cb25-190"><a href="#cb25-190"></a><span class="fu">mv</span> patient_data.csv <span class="va">$SENSITIVE_DIR</span>/</span>
+<span id="cb25-191"><a href="#cb25-191"></a><span class="fu">mv</span> preliminary_results.txt <span class="va">$SENSITIVE_DIR</span>/</span>
+<span id="cb25-192"><a href="#cb25-192"></a></span>
+<span id="cb25-193"><a href="#cb25-193"></a><span class="co"># Set strict permissions on sensitive files</span></span>
+<span id="cb25-194"><a href="#cb25-194"></a><span class="fu">chmod</span> 600 <span class="va">$SENSITIVE_DIR</span>/<span class="pp">*</span>            <span class="co"># Only owner can read/write</span></span>
+<span id="cb25-195"><a href="#cb25-195"></a></span>
+<span id="cb25-196"><a href="#cb25-196"></a><span class="co"># Create a secure backup</span></span>
+<span id="cb25-197"><a href="#cb25-197"></a><span class="fu">tar</span> <span class="at">-czf</span> sensitive_backup_<span class="va">$(</span><span class="fu">date</span> +%Y%m%d<span class="va">)</span>.tar.gz <span class="va">$SENSITIVE_DIR</span>/</span>
+<span id="cb25-198"><a href="#cb25-198"></a><span class="fu">chmod</span> 600 sensitive_backup_<span class="pp">*</span>.tar.gz</span>
+<span id="cb25-199"><a href="#cb25-199"></a></span>
+<span id="cb25-200"><a href="#cb25-200"></a><span class="bu">echo</span> <span class="st">"Sensitive data secured!"</span></span>
+<span id="cb25-201"><a href="#cb25-201"></a><span class="bu">echo</span> <span class="st">"Directory permissions:"</span></span>
+<span id="cb25-202"><a href="#cb25-202"></a><span class="fu">ls</span> <span class="at">-ld</span> <span class="va">$SENSITIVE_DIR</span></span>
+<span id="cb25-203"><a href="#cb25-203"></a><span class="bu">echo</span> <span class="st">"File permissions:"</span></span>
+<span id="cb25-204"><a href="#cb25-204"></a><span class="fu">ls</span> <span class="at">-l</span> <span class="va">$SENSITIVE_DIR</span>/</span>
+<span id="cb25-205"><a href="#cb25-205"></a><span class="in">```</span></span>
+<span id="cb25-206"><a href="#cb25-206"></a></span>
+<span id="cb25-207"><a href="#cb25-207"></a><span class="fu">### Scenario 3: Collaborative Script Sharing</span></span>
+<span id="cb25-208"><a href="#cb25-208"></a></span>
+<span id="cb25-209"><a href="#cb25-209"></a><span class="in">```bash</span></span>
+<span id="cb25-210"><a href="#cb25-210"></a><span class="co">#!/bin/bash</span></span>
+<span id="cb25-211"><a href="#cb25-211"></a><span class="co"># setup_shared_scripts.sh - Set up scripts for team collaboration</span></span>
+<span id="cb25-212"><a href="#cb25-212"></a></span>
+<span id="cb25-213"><a href="#cb25-213"></a><span class="va">SCRIPTS_DIR</span><span class="op">=</span><span class="st">"shared_scripts"</span></span>
+<span id="cb25-214"><a href="#cb25-214"></a><span class="va">GROUP_NAME</span><span class="op">=</span><span class="st">"research_team"</span></span>
+<span id="cb25-215"><a href="#cb25-215"></a></span>
+<span id="cb25-216"><a href="#cb25-216"></a><span class="co"># Create shared directory</span></span>
+<span id="cb25-217"><a href="#cb25-217"></a><span class="fu">mkdir</span> <span class="at">-p</span> <span class="va">$SCRIPTS_DIR</span></span>
+<span id="cb25-218"><a href="#cb25-218"></a><span class="fu">chmod</span> 775 <span class="va">$SCRIPTS_DIR</span>                <span class="co"># Group can write, others can read</span></span>
+<span id="cb25-219"><a href="#cb25-219"></a></span>
+<span id="cb25-220"><a href="#cb25-220"></a><span class="co"># Set group ownership (if you have permission)</span></span>
+<span id="cb25-221"><a href="#cb25-221"></a><span class="fu">chgrp</span> <span class="va">$GROUP_NAME</span> <span class="va">$SCRIPTS_DIR</span></span>
+<span id="cb25-222"><a href="#cb25-222"></a></span>
+<span id="cb25-223"><a href="#cb25-223"></a><span class="co"># Process all Python scripts</span></span>
+<span id="cb25-224"><a href="#cb25-224"></a><span class="cf">for</span> script <span class="kw">in</span> <span class="pp">*</span>.py<span class="kw">;</span> <span class="cf">do</span></span>
+<span id="cb25-225"><a href="#cb25-225"></a>    <span class="cf">if</span> <span class="bu">[</span> <span class="ot">-f</span> <span class="st">"</span><span class="va">$script</span><span class="st">"</span> <span class="bu">]</span><span class="kw">;</span> <span class="cf">then</span></span>
+<span id="cb25-226"><a href="#cb25-226"></a>        <span class="fu">cp</span> <span class="st">"</span><span class="va">$script</span><span class="st">"</span> <span class="va">$SCRIPTS_DIR</span>/</span>
+<span id="cb25-227"><a href="#cb25-227"></a>        <span class="fu">chmod</span> 754 <span class="va">$SCRIPTS_DIR</span>/<span class="st">"</span><span class="va">$script</span><span class="st">"</span>    <span class="co"># Group and others can execute</span></span>
+<span id="cb25-228"><a href="#cb25-228"></a>        <span class="fu">chgrp</span> <span class="va">$GROUP_NAME</span> <span class="va">$SCRIPTS_DIR</span>/<span class="st">"</span><span class="va">$script</span><span class="st">"</span></span>
+<span id="cb25-229"><a href="#cb25-229"></a>    <span class="cf">fi</span></span>
+<span id="cb25-230"><a href="#cb25-230"></a><span class="cf">done</span></span>
+<span id="cb25-231"><a href="#cb25-231"></a></span>
+<span id="cb25-232"><a href="#cb25-232"></a><span class="co"># Create a README with usage instructions</span></span>
+<span id="cb25-233"><a href="#cb25-233"></a><span class="fu">cat</span> <span class="op">&gt;</span> <span class="va">$SCRIPTS_DIR</span>/README.txt <span class="op">&lt;&lt; EOF</span></span>
+<span id="cb25-234"><a href="#cb25-234"></a><span class="st">Shared Scripts Directory</span></span>
+<span id="cb25-235"><a href="#cb25-235"></a><span class="st">========================</span></span>
+<span id="cb25-236"><a href="#cb25-236"></a></span>
+<span id="cb25-237"><a href="#cb25-237"></a><span class="st">These scripts are available for the entire research team.</span></span>
+<span id="cb25-238"><a href="#cb25-238"></a></span>
+<span id="cb25-239"><a href="#cb25-239"></a><span class="st">Permissions:</span></span>
+<span id="cb25-240"><a href="#cb25-240"></a><span class="st">- Team members can read and execute all scripts</span></span>
+<span id="cb25-241"><a href="#cb25-241"></a><span class="st">- Only script owners can modify their scripts</span></span>
+<span id="cb25-242"><a href="#cb25-242"></a><span class="st">- Others can execute but not modify</span></span>
+<span id="cb25-243"><a href="#cb25-243"></a></span>
+<span id="cb25-244"><a href="#cb25-244"></a><span class="st">To add a new script:</span></span>
+<span id="cb25-245"><a href="#cb25-245"></a><span class="st">1. Copy it to this directory</span></span>
+<span id="cb25-246"><a href="#cb25-246"></a><span class="st">2. Set permissions: chmod 754 script_name.py</span></span>
+<span id="cb25-247"><a href="#cb25-247"></a><span class="st">3. Set group: chgrp </span><span class="va">$GROUP_NAME</span><span class="st"> script_name.py</span></span>
+<span id="cb25-248"><a href="#cb25-248"></a><span class="op">EOF</span></span>
+<span id="cb25-249"><a href="#cb25-249"></a></span>
+<span id="cb25-250"><a href="#cb25-250"></a><span class="fu">chmod</span> 644 <span class="va">$SCRIPTS_DIR</span>/README.txt</span>
+<span id="cb25-251"><a href="#cb25-251"></a></span>
+<span id="cb25-252"><a href="#cb25-252"></a><span class="bu">echo</span> <span class="st">"Shared scripts directory set up!"</span></span>
+<span id="cb25-253"><a href="#cb25-253"></a><span class="fu">ls</span> <span class="at">-la</span> <span class="va">$SCRIPTS_DIR</span>/</span>
+<span id="cb25-254"><a href="#cb25-254"></a><span class="kw">```</span></span>
+<span id="cb25-255"><a href="#cb25-255"></a></span>
+<span id="cb25-256"><a href="#cb25-256"></a><span class="co">## Understanding Directory Permissions</span></span>
+<span id="cb25-257"><a href="#cb25-257"></a></span>
+<span id="cb25-258"><a href="#cb25-258"></a><span class="ex">Directories</span> have special permission rules that often confuse newcomers:</span>
+<span id="cb25-259"><a href="#cb25-259"></a></span>
+<span id="cb25-260"><a href="#cb25-260"></a><span class="co">### Directory Permission Meanings</span></span>
+<span id="cb25-261"><a href="#cb25-261"></a></span>
+<span id="cb25-262"><a href="#cb25-262"></a><span class="ex">-</span> <span class="pp">**</span>Read <span class="er">(</span><span class="ex">r</span><span class="kw">)</span><span class="ex">**:</span> Can list the contents of the directory</span>
+<span id="cb25-263"><a href="#cb25-263"></a><span class="ex">-</span> <span class="pp">**</span>Write <span class="er">(</span><span class="fu">w</span><span class="kw">)</span><span class="ex">**:</span> Can create, delete, or rename files in the directory</span>
+<span id="cb25-264"><a href="#cb25-264"></a><span class="ex">-</span> <span class="pp">**</span>Execute <span class="er">(</span><span class="ex">x</span><span class="kw">)</span><span class="ex">**:</span> Can enter the directory <span class="er">(</span><span class="bu">cd</span> into it<span class="kw">)</span></span>
+<span id="cb25-265"><a href="#cb25-265"></a></span>
+<span id="cb25-266"><a href="#cb25-266"></a><span class="co">### Important Directory Permission Combinations</span></span>
+<span id="cb25-267"><a href="#cb25-267"></a></span>
+<span id="cb25-268"><a href="#cb25-268"></a><span class="kw">```</span>bash</span>
+<span id="cb25-269"><a href="#cb25-269"></a><span class="co"># Common directory permissions</span></span>
+<span id="cb25-270"><a href="#cb25-270"></a><span class="fu">chmod</span> 755 public_dir/         <span class="co"># Everyone can enter and list</span></span>
+<span id="cb25-271"><a href="#cb25-271"></a><span class="fu">chmod</span> 750 team_dir/           <span class="co"># Only owner and group can access</span></span>
+<span id="cb25-272"><a href="#cb25-272"></a><span class="fu">chmod</span> 700 private_dir/        <span class="co"># Only owner can access</span></span>
+<span id="cb25-273"><a href="#cb25-273"></a><span class="fu">chmod</span> 555 read_only_dir/      <span class="co"># Everyone can enter and list, nobody can modify</span></span>
+<span id="cb25-274"><a href="#cb25-274"></a><span class="kw">```</span></span>
+<span id="cb25-275"><a href="#cb25-275"></a></span>
+<span id="cb25-276"><a href="#cb25-276"></a><span class="co">### The Directory Permission Trap</span></span>
+<span id="cb25-277"><a href="#cb25-277"></a></span>
+<span id="cb25-278"><a href="#cb25-278"></a><span class="kw">```</span>bash</span>
+<span id="cb25-279"><a href="#cb25-279"></a><span class="co"># This creates a weird situation:</span></span>
+<span id="cb25-280"><a href="#cb25-280"></a><span class="fu">chmod</span> 644 weird_dir/          <span class="co"># Can list contents but can't enter!</span></span>
+<span id="cb25-281"><a href="#cb25-281"></a></span>
+<span id="cb25-282"><a href="#cb25-282"></a><span class="co"># You need execute permission to enter a directory</span></span>
+<span id="cb25-283"><a href="#cb25-283"></a><span class="fu">ls</span> weird_dir/                 <span class="co"># This works (can list)</span></span>
+<span id="cb25-284"><a href="#cb25-284"></a><span class="bu">cd</span> weird_dir/                 <span class="co"># This fails! (can't enter)</span></span>
+<span id="cb25-285"><a href="#cb25-285"></a></span>
+<span id="cb25-286"><a href="#cb25-286"></a><span class="co"># Fix it:</span></span>
+<span id="cb25-287"><a href="#cb25-287"></a><span class="fu">chmod</span> 755 weird_dir/          <span class="co"># Now you can enter and list</span></span>
+<span id="cb25-288"><a href="#cb25-288"></a><span class="kw">```</span></span>
+<span id="cb25-289"><a href="#cb25-289"></a></span>
+<span id="cb25-290"><a href="#cb25-290"></a><span class="ex">**Real-world</span> analogy<span class="pp">**</span>: It<span class="st">'s like having a glass door where you can see inside (read) but the door is locked (no execute), so you can'</span>t actually enter the room.</span>
+<span id="cb25-291"><a href="#cb25-291"></a></span>
+<span id="cb25-292"><a href="#cb25-292"></a><span class="co">## Ownership Control: </span><span class="kw">`</span>chown<span class="kw">`</span> <span class="ex">and</span> <span class="kw">`</span>chgrp<span class="kw">`</span></span>
+<span id="cb25-293"><a href="#cb25-293"></a></span>
+<span id="cb25-294"><a href="#cb25-294"></a><span class="ex">Sometimes</span> you need to change who owns files or what group they belong to:</span>
+<span id="cb25-295"><a href="#cb25-295"></a></span>
+<span id="cb25-296"><a href="#cb25-296"></a><span class="co">### Changing Ownership</span></span>
+<span id="cb25-297"><a href="#cb25-297"></a></span>
+<span id="cb25-298"><a href="#cb25-298"></a><span class="kw">```</span>bash</span>
+<span id="cb25-299"><a href="#cb25-299"></a><span class="co"># Change owner (requires appropriate permissions)</span></span>
+<span id="cb25-300"><a href="#cb25-300"></a><span class="fu">chown</span> newowner file.txt</span>
+<span id="cb25-301"><a href="#cb25-301"></a></span>
+<span id="cb25-302"><a href="#cb25-302"></a><span class="co"># Change owner and group</span></span>
+<span id="cb25-303"><a href="#cb25-303"></a><span class="fu">chown</span> newowner:newgroup file.txt</span>
+<span id="cb25-304"><a href="#cb25-304"></a></span>
+<span id="cb25-305"><a href="#cb25-305"></a><span class="co"># Change only group</span></span>
+<span id="cb25-306"><a href="#cb25-306"></a><span class="fu">chgrp</span> newgroup file.txt</span>
+<span id="cb25-307"><a href="#cb25-307"></a></span>
+<span id="cb25-308"><a href="#cb25-308"></a><span class="co"># Recursive ownership changes</span></span>
+<span id="cb25-309"><a href="#cb25-309"></a><span class="fu">chown</span> <span class="at">-R</span> username:groupname project_folder/</span>
+<span id="cb25-310"><a href="#cb25-310"></a><span class="kw">```</span></span>
+<span id="cb25-311"><a href="#cb25-311"></a></span>
+<span id="cb25-312"><a href="#cb25-312"></a><span class="co">### Practical Ownership Scenarios</span></span>
+<span id="cb25-313"><a href="#cb25-313"></a></span>
+<span id="cb25-314"><a href="#cb25-314"></a><span class="kw">```</span>bash</span>
+<span id="cb25-315"><a href="#cb25-315"></a><span class="co"># Transfer project to new team lead</span></span>
+<span id="cb25-316"><a href="#cb25-316"></a><span class="fu">chown</span> <span class="at">-R</span> new_lead:research_team experiment_data/</span>
+<span id="cb25-317"><a href="#cb25-317"></a></span>
+<span id="cb25-318"><a href="#cb25-318"></a><span class="co"># Make files accessible to web server</span></span>
+<span id="cb25-319"><a href="#cb25-319"></a><span class="fu">chown</span> <span class="at">-R</span> www-data:www-data web_files/</span>
+<span id="cb25-320"><a href="#cb25-320"></a></span>
+<span id="cb25-321"><a href="#cb25-321"></a><span class="co"># Fix ownership after copying from another user</span></span>
+<span id="cb25-322"><a href="#cb25-322"></a><span class="fu">chown</span> <span class="va">$(</span><span class="fu">whoami</span><span class="va">)</span>:<span class="va">$(</span><span class="fu">id</span> <span class="at">-gn</span><span class="va">)</span> copied_files/<span class="pp">*</span></span>
+<span id="cb25-323"><a href="#cb25-323"></a><span class="kw">```</span></span>
+<span id="cb25-324"><a href="#cb25-324"></a></span>
+<span id="cb25-325"><a href="#cb25-325"></a><span class="co">## Special Permissions: The Advanced Techniques</span></span>
+<span id="cb25-326"><a href="#cb25-326"></a></span>
+<span id="cb25-327"><a href="#cb25-327"></a><span class="co">### The Sticky Bit</span></span>
+<span id="cb25-328"><a href="#cb25-328"></a></span>
+<span id="cb25-329"><a href="#cb25-329"></a><span class="ex">The</span> sticky bit is used on directories to prevent users from deleting files they don<span class="st">'t own:</span></span>
+<span id="cb25-330"><a href="#cb25-330"></a></span>
+<span id="cb25-331"><a href="#cb25-331"></a><span class="st">```bash</span></span>
+<span id="cb25-332"><a href="#cb25-332"></a><span class="st"># Set sticky bit (often used on /tmp)</span></span>
+<span id="cb25-333"><a href="#cb25-333"></a><span class="st">chmod +t shared_directory/</span></span>
+<span id="cb25-334"><a href="#cb25-334"></a><span class="st">chmod 1755 shared_directory/      # Alternative notation</span></span>
+<span id="cb25-335"><a href="#cb25-335"></a></span>
+<span id="cb25-336"><a href="#cb25-336"></a><span class="st"># Check for sticky bit (shows as '</span>t<span class="st">' in permissions)</span></span>
+<span id="cb25-337"><a href="#cb25-337"></a><span class="st">ls -ld shared_directory/</span></span>
+<span id="cb25-338"><a href="#cb25-338"></a><span class="st">drwxr-xr-t 2 user group 4096 Dec 15 10:30 shared_directory/</span></span>
+<span id="cb25-339"><a href="#cb25-339"></a><span class="st">```</span></span>
+<span id="cb25-340"><a href="#cb25-340"></a></span>
+<span id="cb25-341"><a href="#cb25-341"></a><span class="st">**Real-world analogy**: It'</span>s like a shared bulletin board where anyone can post notices, but only the person who posted a notice can remove it.</span>
+<span id="cb25-342"><a href="#cb25-342"></a></span>
+<span id="cb25-343"><a href="#cb25-343"></a><span class="co">### SetUID and SetGID</span></span>
+<span id="cb25-344"><a href="#cb25-344"></a></span>
+<span id="cb25-345"><a href="#cb25-345"></a><span class="ex">These</span> advanced permissions allow programs to run with different privileges:</span>
+<span id="cb25-346"><a href="#cb25-346"></a></span>
+<span id="cb25-347"><a href="#cb25-347"></a><span class="kw">```</span>bash</span>
+<span id="cb25-348"><a href="#cb25-348"></a><span class="co"># SetUID - program runs as file owner</span></span>
+<span id="cb25-349"><a href="#cb25-349"></a><span class="fu">chmod</span> u+s program</span>
+<span id="cb25-350"><a href="#cb25-350"></a><span class="fu">chmod</span> 4755 program</span>
+<span id="cb25-351"><a href="#cb25-351"></a></span>
+<span id="cb25-352"><a href="#cb25-352"></a><span class="co"># SetGID - program runs as file group</span></span>
+<span id="cb25-353"><a href="#cb25-353"></a><span class="fu">chmod</span> g+s program</span>
+<span id="cb25-354"><a href="#cb25-354"></a><span class="fu">chmod</span> 2755 program</span>
+<span id="cb25-355"><a href="#cb25-355"></a><span class="kw">```</span></span>
+<span id="cb25-356"><a href="#cb25-356"></a></span>
+<span id="cb25-357"><a href="#cb25-357"></a><span class="ex">**Note**:</span> These are advanced features mainly used by system administrators. In HPC environments, you<span class="st">'ll rarely need to set these.</span></span>
+<span id="cb25-358"><a href="#cb25-358"></a></span>
+<span id="cb25-359"><a href="#cb25-359"></a><span class="st">## Permission Troubleshooting</span></span>
+<span id="cb25-360"><a href="#cb25-360"></a></span>
+<span id="cb25-361"><a href="#cb25-361"></a><span class="st">### Common Permission Problems</span></span>
+<span id="cb25-362"><a href="#cb25-362"></a></span>
+<span id="cb25-363"><a href="#cb25-363"></a><span class="st">#### Problem 1: "Permission Denied" when running script</span></span>
+<span id="cb25-364"><a href="#cb25-364"></a></span>
+<span id="cb25-365"><a href="#cb25-365"></a><span class="st">```bash</span></span>
+<span id="cb25-366"><a href="#cb25-366"></a><span class="st"># Symptom: ./my_script.sh gives "Permission denied"</span></span>
+<span id="cb25-367"><a href="#cb25-367"></a><span class="st">ls -l my_script.sh</span></span>
+<span id="cb25-368"><a href="#cb25-368"></a><span class="st">-rw-r--r-- 1 user group 150 Dec 15 10:30 my_script.sh</span></span>
+<span id="cb25-369"><a href="#cb25-369"></a></span>
+<span id="cb25-370"><a href="#cb25-370"></a><span class="st"># Solution: Add execute permission</span></span>
+<span id="cb25-371"><a href="#cb25-371"></a><span class="st">chmod +x my_script.sh</span></span>
+<span id="cb25-372"><a href="#cb25-372"></a><span class="st"># or</span></span>
+<span id="cb25-373"><a href="#cb25-373"></a><span class="st">chmod 755 my_script.sh</span></span>
+<span id="cb25-374"><a href="#cb25-374"></a><span class="st">```</span></span>
+<span id="cb25-375"><a href="#cb25-375"></a></span>
+<span id="cb25-376"><a href="#cb25-376"></a><span class="st">#### Problem 2: Can'</span>t modify file in shared directory</span>
+<span id="cb25-377"><a href="#cb25-377"></a></span>
+<span id="cb25-378"><a href="#cb25-378"></a><span class="kw">```</span>bash</span>
+<span id="cb25-379"><a href="#cb25-379"></a><span class="co"># Check directory permissions</span></span>
+<span id="cb25-380"><a href="#cb25-380"></a><span class="fu">ls</span> <span class="at">-ld</span> shared_folder/</span>
+<span id="cb25-381"><a href="#cb25-381"></a><span class="ex">drwxr-xr-x</span> 2 otheruser group 4096 Dec 15 10:30 shared_folder/</span>
+<span id="cb25-382"><a href="#cb25-382"></a></span>
+<span id="cb25-383"><a href="#cb25-383"></a><span class="co"># Problem: Directory doesn't have write permission for group</span></span>
+<span id="cb25-384"><a href="#cb25-384"></a><span class="co"># Solution: </span></span>
+<span id="cb25-385"><a href="#cb25-385"></a><span class="fu">chmod</span> 775 shared_folder/</span>
+<span id="cb25-386"><a href="#cb25-386"></a><span class="kw">```</span></span>
+<span id="cb25-387"><a href="#cb25-387"></a></span>
+<span id="cb25-388"><a href="#cb25-388"></a><span class="co">#### Problem 3: Others can see sensitive files</span></span>
+<span id="cb25-389"><a href="#cb25-389"></a></span>
+<span id="cb25-390"><a href="#cb25-390"></a><span class="kw">```</span>bash</span>
+<span id="cb25-391"><a href="#cb25-391"></a><span class="co"># Check current permissions</span></span>
+<span id="cb25-392"><a href="#cb25-392"></a><span class="fu">ls</span> <span class="at">-l</span> sensitive_data.txt</span>
+<span id="cb25-393"><a href="#cb25-393"></a><span class="ex">-rw-r--r--</span> 1 user group 1024 Dec 15 10:30 sensitive_data.txt</span>
+<span id="cb25-394"><a href="#cb25-394"></a></span>
+<span id="cb25-395"><a href="#cb25-395"></a><span class="co"># Problem: Others can read the file</span></span>
+<span id="cb25-396"><a href="#cb25-396"></a><span class="co"># Solution: Remove read permission for others</span></span>
+<span id="cb25-397"><a href="#cb25-397"></a><span class="fu">chmod</span> 640 sensitive_data.txt</span>
+<span id="cb25-398"><a href="#cb25-398"></a><span class="co"># or be more restrictive:</span></span>
+<span id="cb25-399"><a href="#cb25-399"></a><span class="fu">chmod</span> 600 sensitive_data.txt</span>
+<span id="cb25-400"><a href="#cb25-400"></a><span class="kw">```</span></span>
+<span id="cb25-401"><a href="#cb25-401"></a></span>
+<span id="cb25-402"><a href="#cb25-402"></a><span class="co">## Security Best Practices for HPC</span></span>
+<span id="cb25-403"><a href="#cb25-403"></a></span>
+<span id="cb25-404"><a href="#cb25-404"></a><span class="co">### The Principle of Least Privilege</span></span>
+<span id="cb25-405"><a href="#cb25-405"></a></span>
+<span id="cb25-406"><a href="#cb25-406"></a><span class="ex">Give</span> the minimum permissions necessary for the task:</span>
+<span id="cb25-407"><a href="#cb25-407"></a></span>
+<span id="cb25-408"><a href="#cb25-408"></a><span class="kw">```</span>bash</span>
+<span id="cb25-409"><a href="#cb25-409"></a><span class="co"># Good: Restrictive by default</span></span>
+<span id="cb25-410"><a href="#cb25-410"></a><span class="fu">chmod</span> 600 new_file.txt        <span class="co"># Start restrictive</span></span>
+<span id="cb25-411"><a href="#cb25-411"></a><span class="fu">chmod</span> g+r new_file.txt        <span class="co"># Add group read if needed</span></span>
+<span id="cb25-412"><a href="#cb25-412"></a></span>
+<span id="cb25-413"><a href="#cb25-413"></a><span class="co"># Bad: Permissive by default</span></span>
+<span id="cb25-414"><a href="#cb25-414"></a><span class="fu">chmod</span> 777 new_file.txt        <span class="co"># Everyone can do everything (dangerous!)</span></span>
+<span id="cb25-415"><a href="#cb25-415"></a><span class="kw">```</span></span>
+<span id="cb25-416"><a href="#cb25-416"></a></span>
+<span id="cb25-417"><a href="#cb25-417"></a><span class="co">### Regular Permission Audits</span></span>
+<span id="cb25-418"><a href="#cb25-418"></a></span>
+<span id="cb25-419"><a href="#cb25-419"></a><span class="kw">```</span>bash</span>
+<span id="cb25-420"><a href="#cb25-420"></a><span class="co">#!/bin/bash</span></span>
+<span id="cb25-421"><a href="#cb25-421"></a><span class="co"># audit_permissions.sh - Check for potentially dangerous permissions</span></span>
+<span id="cb25-422"><a href="#cb25-422"></a></span>
+<span id="cb25-423"><a href="#cb25-423"></a><span class="bu">echo</span> <span class="st">"Files with world-write permissions (dangerous):"</span></span>
+<span id="cb25-424"><a href="#cb25-424"></a><span class="fu">find</span> . <span class="at">-type</span> f <span class="at">-perm</span> <span class="at">-002</span> <span class="at">-ls</span></span>
+<span id="cb25-425"><a href="#cb25-425"></a></span>
+<span id="cb25-426"><a href="#cb25-426"></a><span class="bu">echo</span> <span class="at">-e</span> <span class="st">"\nFiles with unusual permissions:"</span></span>
+<span id="cb25-427"><a href="#cb25-427"></a><span class="fu">find</span> . <span class="at">-type</span> f <span class="dt">\(</span> <span class="at">-perm</span> <span class="at">-4000</span> <span class="at">-o</span> <span class="at">-perm</span> <span class="at">-2000</span> <span class="dt">\)</span> <span class="at">-ls</span></span>
+<span id="cb25-428"><a href="#cb25-428"></a></span>
+<span id="cb25-429"><a href="#cb25-429"></a><span class="bu">echo</span> <span class="at">-e</span> <span class="st">"\nDirectories accessible to everyone:"</span></span>
+<span id="cb25-430"><a href="#cb25-430"></a><span class="fu">find</span> . <span class="at">-type</span> d <span class="at">-perm</span> <span class="at">-755</span> <span class="at">-ls</span></span>
+<span id="cb25-431"><a href="#cb25-431"></a></span>
+<span id="cb25-432"><a href="#cb25-432"></a><span class="bu">echo</span> <span class="at">-e</span> <span class="st">"\nFiles readable by everyone:"</span></span>
+<span id="cb25-433"><a href="#cb25-433"></a><span class="fu">find</span> . <span class="at">-type</span> f <span class="at">-perm</span> <span class="at">-044</span> <span class="at">-ls</span></span>
+<span id="cb25-434"><a href="#cb25-434"></a><span class="kw">```</span></span>
+<span id="cb25-435"><a href="#cb25-435"></a></span>
+<span id="cb25-436"><a href="#cb25-436"></a><span class="co">### Safe Permission Defaults</span></span>
+<span id="cb25-437"><a href="#cb25-437"></a></span>
+<span id="cb25-438"><a href="#cb25-438"></a><span class="kw">```</span>bash</span>
+<span id="cb25-439"><a href="#cb25-439"></a><span class="co"># Set secure defaults for new files</span></span>
+<span id="cb25-440"><a href="#cb25-440"></a><span class="bu">umask</span> 022                     <span class="co"># New files will be 644, directories 755</span></span>
+<span id="cb25-441"><a href="#cb25-441"></a></span>
+<span id="cb25-442"><a href="#cb25-442"></a><span class="co"># Or more restrictive:</span></span>
+<span id="cb25-443"><a href="#cb25-443"></a><span class="bu">umask</span> 077                     <span class="co"># New files will be 600, directories 700</span></span>
+<span id="cb25-444"><a href="#cb25-444"></a></span>
+<span id="cb25-445"><a href="#cb25-445"></a><span class="co"># Add to your .bashrc to make it permanent</span></span>
+<span id="cb25-446"><a href="#cb25-446"></a><span class="bu">echo</span> <span class="st">"umask 022"</span> <span class="op">&gt;&gt;</span> ~/.bashrc</span>
+<span id="cb25-447"><a href="#cb25-447"></a><span class="kw">```</span></span>
+<span id="cb25-448"><a href="#cb25-448"></a></span>
+<span id="cb25-449"><a href="#cb25-449"></a><span class="co">## Quick Reference: Permission Cheat Sheet</span></span>
+<span id="cb25-450"><a href="#cb25-450"></a></span>
+<span id="cb25-451"><a href="#cb25-451"></a><span class="kw">|</span> <span class="ex">Task</span> <span class="kw">|</span> <span class="ex">Command</span> <span class="kw">|</span> <span class="ex">Example</span> <span class="kw">|</span></span>
+<span id="cb25-452"><a href="#cb25-452"></a><span class="kw">|</span><span class="ex">------</span><span class="kw">|</span><span class="ex">---------</span><span class="kw">|</span><span class="ex">---------</span><span class="kw">|</span></span>
+<span id="cb25-453"><a href="#cb25-453"></a><span class="kw">|</span> <span class="ex">View</span> permissions <span class="kw">|</span> <span class="kw">`</span>ls <span class="at">-l</span> filename<span class="kw">`</span> <span class="kw">|</span> <span class="kw">`</span>ls <span class="at">-l</span> script.sh<span class="kw">`</span> <span class="kw">|</span></span>
+<span id="cb25-454"><a href="#cb25-454"></a><span class="kw">|</span> <span class="ex">Set</span> permissions <span class="er">(</span><span class="ex">numeric</span><span class="kw">)</span> <span class="kw">|</span> <span class="kw">`</span>chmod 755 file<span class="kw">`</span> <span class="kw">|</span> <span class="kw">`</span>chmod 644 data.txt<span class="kw">`</span> <span class="kw">|</span></span>
+<span id="cb25-455"><a href="#cb25-455"></a><span class="kw">|</span> <span class="ex">Add</span> permission <span class="kw">|</span> <span class="kw">`</span>chmod +x file<span class="kw">`</span> <span class="kw">|</span> <span class="kw">`</span>chmod u+w file.txt<span class="kw">`</span> <span class="kw">|</span></span>
+<span id="cb25-456"><a href="#cb25-456"></a><span class="kw">|</span> <span class="ex">Remove</span> permission <span class="kw">|</span> <span class="kw">`</span>chmod <span class="at">-w</span> file<span class="kw">`</span> <span class="kw">|</span> <span class="kw">`</span>chmod o-r secret.txt<span class="kw">`</span> <span class="kw">|</span></span>
+<span id="cb25-457"><a href="#cb25-457"></a><span class="kw">|</span> <span class="ex">Recursive</span> permissions <span class="kw">|</span> <span class="kw">`</span>chmod <span class="at">-R</span> 755 dir/<span class="kw">`</span> <span class="kw">|</span> <span class="kw">`</span>chmod <span class="at">-R</span> 644 <span class="pp">*</span>.txt<span class="kw">`</span> <span class="kw">|</span></span>
+<span id="cb25-458"><a href="#cb25-458"></a><span class="kw">|</span> <span class="ex">Change</span> owner <span class="kw">|</span> <span class="kw">`</span>chown user file<span class="kw">`</span> <span class="kw">|</span> <span class="kw">`</span>chown alice data.txt<span class="kw">`</span> <span class="kw">|</span></span>
+<span id="cb25-459"><a href="#cb25-459"></a><span class="kw">|</span> <span class="ex">Change</span> group <span class="kw">|</span> <span class="kw">`</span>chgrp group file<span class="kw">`</span> <span class="kw">|</span> <span class="kw">`</span>chgrp team project/<span class="kw">`</span> <span class="kw">|</span></span>
+<span id="cb25-460"><a href="#cb25-460"></a><span class="kw">|</span> <span class="ex">Change</span> both <span class="kw">|</span> <span class="kw">`</span>chown user:group file<span class="kw">`</span> <span class="kw">|</span> <span class="kw">`</span>chown alice:team file.txt<span class="kw">`</span> <span class="kw">|</span></span>
+<span id="cb25-461"><a href="#cb25-461"></a></span>
+<span id="cb25-462"><a href="#cb25-462"></a><span class="co">### Common Permission Patterns</span></span>
+<span id="cb25-463"><a href="#cb25-463"></a></span>
+<span id="cb25-464"><a href="#cb25-464"></a><span class="kw">|</span> <span class="ex">Permission</span> <span class="kw">|</span> <span class="ex">Numeric</span> <span class="kw">|</span> <span class="ex">Use</span> Case <span class="kw">|</span></span>
+<span id="cb25-465"><a href="#cb25-465"></a><span class="kw">|</span><span class="ex">------------</span><span class="kw">|</span><span class="ex">---------</span><span class="kw">|</span><span class="ex">----------</span><span class="kw">|</span></span>
+<span id="cb25-466"><a href="#cb25-466"></a><span class="kw">|</span> <span class="kw">`</span>rwx------<span class="kw">`</span> <span class="kw">|</span> <span class="ex">700</span> <span class="kw">|</span> <span class="ex">Private</span> directories <span class="kw">|</span></span>
+<span id="cb25-467"><a href="#cb25-467"></a><span class="kw">|</span> <span class="kw">`</span>rw-------<span class="kw">`</span> <span class="kw">|</span> <span class="ex">600</span> <span class="kw">|</span> <span class="ex">Private</span> files <span class="kw">|</span></span>
+<span id="cb25-468"><a href="#cb25-468"></a><span class="kw">|</span> <span class="kw">`</span>rwxr-xr-x<span class="kw">`</span> <span class="kw">|</span> <span class="ex">755</span> <span class="kw">|</span> <span class="ex">Public</span> programs/directories <span class="kw">|</span></span>
+<span id="cb25-469"><a href="#cb25-469"></a><span class="kw">|</span> <span class="kw">`</span>rw-r--r--<span class="kw">`</span> <span class="kw">|</span> <span class="ex">644</span> <span class="kw">|</span> <span class="ex">Public</span> readable files <span class="kw">|</span></span>
+<span id="cb25-470"><a href="#cb25-470"></a><span class="kw">|</span> <span class="kw">`</span>rwxrwx---<span class="kw">`</span> <span class="kw">|</span> <span class="ex">770</span> <span class="kw">|</span> <span class="ex">Team</span> directories <span class="kw">|</span></span>
+<span id="cb25-471"><a href="#cb25-471"></a><span class="kw">|</span> <span class="kw">`</span>rw-rw----<span class="kw">`</span> <span class="kw">|</span> <span class="ex">660</span> <span class="kw">|</span> <span class="ex">Team</span> files <span class="kw">|</span></span>
+<span id="cb25-472"><a href="#cb25-472"></a></span>
+<span id="cb25-473"><a href="#cb25-473"></a><span class="co">## Practice Exercises</span></span>
+<span id="cb25-474"><a href="#cb25-474"></a></span>
+<span id="cb25-475"><a href="#cb25-475"></a><span class="ex">:::{.callout-important}</span></span>
+<span id="cb25-476"><a href="#cb25-476"></a><span class="co">## Your Permission Mastery Training</span></span>
+<span id="cb25-477"><a href="#cb25-477"></a></span>
+<span id="cb25-478"><a href="#cb25-478"></a><span class="ex">1.</span> <span class="pp">**</span>Create a secure project structure<span class="pp">**</span></span>
+<span id="cb25-479"><a href="#cb25-479"></a>   <span class="kw">```</span>bash</span>
+<span id="cb25-480"><a href="#cb25-480"></a>   <span class="co"># Create directories with appropriate permissions:</span></span>
+<span id="cb25-481"><a href="#cb25-481"></a>   <span class="co"># - Public documentation (everyone can read)</span></span>
+<span id="cb25-482"><a href="#cb25-482"></a>   <span class="co"># - Team scripts (team can execute)</span></span>
+<span id="cb25-483"><a href="#cb25-483"></a>   <span class="co"># - Private data (only you can access)</span></span>
+<span id="cb25-484"><a href="#cb25-484"></a>   <span class="kw">```</span></span>
+<span id="cb25-485"><a href="#cb25-485"></a></span>
+<span id="cb25-486"><a href="#cb25-486"></a><span class="ex">2.</span> <span class="pp">**</span>Fix permission problems<span class="pp">**</span></span>
+<span id="cb25-487"><a href="#cb25-487"></a>   <span class="kw">```</span>bash</span>
+<span id="cb25-488"><a href="#cb25-488"></a>   <span class="co"># Create files with wrong permissions and fix them:</span></span>
+<span id="cb25-489"><a href="#cb25-489"></a>   <span class="fu">touch</span> script.sh <span class="kw">&amp;&amp;</span> <span class="fu">chmod</span> 644 script.sh  <span class="co"># Can't execute</span></span>
+<span id="cb25-490"><a href="#cb25-490"></a>   <span class="fu">touch</span> data.txt <span class="kw">&amp;&amp;</span> <span class="fu">chmod</span> 777 data.txt    <span class="co"># Too permissive</span></span>
+<span id="cb25-491"><a href="#cb25-491"></a>   <span class="fu">mkdir</span> dir <span class="kw">&amp;&amp;</span> <span class="fu">chmod</span> 644 dir               <span class="co"># Can't enter</span></span>
+<span id="cb25-492"><a href="#cb25-492"></a>   <span class="kw">```</span></span>
+<span id="cb25-493"><a href="#cb25-493"></a></span>
+<span id="cb25-494"><a href="#cb25-494"></a><span class="ex">3.</span> <span class="pp">**</span>Audit existing permissions<span class="pp">**</span></span>
+<span id="cb25-495"><a href="#cb25-495"></a>   <span class="kw">```</span>bash</span>
+<span id="cb25-496"><a href="#cb25-496"></a>   <span class="co"># Check your home directory for:</span></span>
+<span id="cb25-497"><a href="#cb25-497"></a>   <span class="co"># - World-writable files (dangerous)</span></span>
+<span id="cb25-498"><a href="#cb25-498"></a>   <span class="co"># - Executable text files</span></span>
+<span id="cb25-499"><a href="#cb25-499"></a>   <span class="co"># - Directories you can't enter</span></span>
+<span id="cb25-500"><a href="#cb25-500"></a>   <span class="kw">```</span></span>
+<span id="cb25-501"><a href="#cb25-501"></a></span>
+<span id="cb25-502"><a href="#cb25-502"></a><span class="ex">4.</span> <span class="pp">**</span>Collaborative setup<span class="pp">**</span></span>
+<span id="cb25-503"><a href="#cb25-503"></a>   <span class="kw">```</span>bash</span>
+<span id="cb25-504"><a href="#cb25-504"></a>   <span class="co"># Set up a shared directory where:</span></span>
+<span id="cb25-505"><a href="#cb25-505"></a>   <span class="co"># - Team members can add files</span></span>
+<span id="cb25-506"><a href="#cb25-506"></a>   <span class="co"># - Everyone can read files</span></span>
+<span id="cb25-507"><a href="#cb25-507"></a>   <span class="co"># - Only file owners can delete their files</span></span>
+<span id="cb25-508"><a href="#cb25-508"></a>   <span class="kw">```</span></span>
+<span id="cb25-509"><a href="#cb25-509"></a><span class="ex">:::</span></span>
+<span id="cb25-510"><a href="#cb25-510"></a></span>
+<span id="cb25-511"><a href="#cb25-511"></a><span class="co">## What's Next?</span></span>
+<span id="cb25-512"><a href="#cb25-512"></a></span>
+<span id="cb25-513"><a href="#cb25-513"></a><span class="ex">Now</span> that you<span class="st">'re a permission wizard, you'</span>re ready to learn [SSH and Remote Access]<span class="er">(</span><span class="ex">06-ssh-remote-access.qmd</span><span class="kw">)</span><span class="bu">.</span> Understanding permissions is crucial for secure remote connections to HPC systems, where you<span class="st">'ll need to manage access across multiple machines and users.</span></span>
+<span id="cb25-514"><a href="#cb25-514"></a></span>
+<span id="cb25-515"><a href="#cb25-515"></a><span class="st">Remember: Permissions are the foundation of Unix security. In HPC environments where you'</span>re sharing systems with many other researchers, proper permission management protects your work and enables effective collaboration. Master these concepts, and you<span class="st">'ll never accidentally expose sensitive data or lock yourself out of your own files.</span></span>
+<span id="cb25-516"><a href="#cb25-516"></a></span>
+<span id="cb25-517"><a href="#cb25-517"></a><span class="st">:::{.callout-tip}</span></span>
+<span id="cb25-518"><a href="#cb25-518"></a><span class="st">## Permission Mastery Challenge</span></span>
+<span id="cb25-519"><a href="#cb25-519"></a><span class="st">Before moving on, try this security scenario:</span></span>
+<span id="cb25-520"><a href="#cb25-520"></a><span class="st">1. Create a research project with different sensitivity levels</span></span>
+<span id="cb25-521"><a href="#cb25-521"></a><span class="st">2. Set up proper permissions for team collaboration</span></span>
+<span id="cb25-522"><a href="#cb25-522"></a><span class="st">3. Create a script that audits and reports permission issues</span></span>
+<span id="cb25-523"><a href="#cb25-523"></a><span class="st">4. Practice fixing common permission problems</span></span>
+<span id="cb25-524"><a href="#cb25-524"></a></span>
+<span id="cb25-525"><a href="#cb25-525"></a><span class="st">This mirrors real-world HPC security management!</span></span>
+<span id="cb25-526"><a href="#cb25-526"></a><span class="st">:::</span></span>
+<span id="cb25-527"><a href="#cb25-527"></a></span>
+<span id="cb25-528"><a href="#cb25-528"></a><span class="st">---</span></span>
+<span id="cb25-529"><a href="#cb25-529"></a></span>
+<span id="cb25-530"><a href="#cb25-530"></a><span class="st">*You'</span>ve mastered the ancient art of Unix permissions – the keys to the digital kingdom. Next, we<span class="st">'ll learn to use these skills across networks as we explore secure remote access to HPC systems!* </span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div></div></div></div></div>
+</div> <!-- /content -->
+
+
+
+<script src="../../../site_libs/quarto-html/zenscroll-min.js"></script>
+</body></html>

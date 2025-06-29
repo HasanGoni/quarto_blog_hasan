@@ -1,0 +1,339 @@
+---
+title: "File Detective Skills"
+description: "Master the art of finding files among millions. Learn to use find, locate, and grep to track down specific files faster than any GUI could ever manage. Essential skills for HPC environments."
+author: "Hasan"
+date: last-modified
+categories: [command-line, find, search, hpc]
+image: "https://images.unsplash.com/photo-1575505586569-646b2ca898fc?ixlib=rb-4.0.3&auto=format&fit=crop&w=2000&q=80"
+toc: true
+---
+
+## The Story: The Million File Challenge
+
+Picture this: You're working with a massive HPC system that contains 2.5 million files spread across thousands of directories. Your supervisor asks you to find all CSV files from a specific experiment that were created last Tuesday. Using a graphical file browser would be like trying to find a specific grain of sand on a beach – theoretically possible, but practically impossible.
+
+This is where you transform from a casual computer user into a digital detective. Today, you'll learn the investigative tools that make Unix systems incredibly powerful for handling massive datasets.
+
+## Your Primary Detective Tool: `find`
+
+The `find` command is like having a super-powered search engine that can locate files based on virtually any criteria. Let's start with the basics:
+
+```bash
+find . -name "filename.txt"
+```
+
+**What it does**: Searches for files named exactly "filename.txt" starting from the current directory (`.`) and looking in all subdirectories.
+
+**Real-world analogy**: It's like having a detective who can search every room in a massive building, looking for a specific object by name.
+
+### Understanding the `find` Syntax
+
+The basic pattern is:
+```bash
+find [where_to_search] [search_criteria] [what_to_do]
+```
+
+- **Where to search**: `.` (current directory), `~` (home), `/` (entire system)
+- **Search criteria**: Name, size, date, type, permissions
+- **What to do**: Usually just display the results (default)
+
+## Finding Files by Name
+
+### Exact Name Match
+```bash
+find . -name "data.csv"
+```
+Finds files named exactly "data.csv"
+
+### Pattern Matching (Wildcards)
+```bash
+find . -name "*.csv"           # All CSV files
+find . -name "experiment_*"    # Files starting with "experiment_"
+find . -name "*2023*"         # Files containing "2023" in the name
+```
+
+**Real-world analogy**: Wildcards are like giving a detective a description instead of an exact name. "Find me all files that end with .csv" is like saying "Find me all people wearing red hats."
+
+### Case-Insensitive Search
+```bash
+find . -iname "*.CSV"    # Finds .csv, .CSV, .Csv, etc.
+```
+
+## Finding Files by Type
+
+```bash
+find . -type f    # Files only
+find . -type d    # Directories only
+find . -type l    # Symbolic links only
+```
+
+**Real-world analogy**: It's like asking a detective to "find me all the books" vs "find me all the filing cabinets" in a building.
+
+## Finding Files by Size
+
+This is incredibly useful for HPC work where you might need to find large datasets or clean up small temporary files:
+
+```bash
+find . -size +100M     # Files larger than 100 MB
+find . -size -1k       # Files smaller than 1 KB
+find . -size +1G       # Files larger than 1 GB
+```
+
+**Size units**:
+- `c` = bytes
+- `k` = kilobytes  
+- `M` = megabytes
+- `G` = gigabytes
+
+**Real-world analogy**: It's like asking "Show me all packages heavier than 10 pounds" in a warehouse.
+
+## Finding Files by Date
+
+Critical for HPC work when you need files from specific time periods:
+
+```bash
+find . -mtime -7       # Modified in last 7 days
+find . -mtime +30      # Modified more than 30 days ago
+find . -mtime 1        # Modified exactly 1 day ago
+find . -newer file.txt # Modified after file.txt
+```
+
+**Time options**:
+- `-mtime` = modification time
+- `-atime` = access time
+- `-ctime` = change time (permissions, ownership)
+
+**Real-world analogy**: It's like asking "Show me all documents that were edited last week" in a massive filing system.
+
+## Combining Search Criteria
+
+Here's where `find` becomes incredibly powerful – you can combine multiple criteria:
+
+```bash
+# Find large CSV files modified in the last week
+find . -name "*.csv" -size +10M -mtime -7
+
+# Find directories containing "experiment" created in last month
+find . -type d -name "*experiment*" -mtime -30
+
+# Find Python files larger than 1MB
+find . -name "*.py" -size +1M
+```
+
+**Real-world analogy**: It's like giving a detective multiple clues: "Find me all red cars, made by Toyota, from 2020, in the downtown area."
+
+## Practical HPC Scenarios
+
+### Scenario 1: Finding Specific Experiment Data
+```bash
+# Find all CSV files from experiment_2023 directories
+find /data -path "*experiment_2023*" -name "*.csv"
+
+# Find results files from the last 3 days
+find /results -name "*.out" -mtime -3
+```
+
+### Scenario 2: Cleaning Up Old Files
+```bash
+# Find temporary files older than 7 days
+find /tmp -name "*.tmp" -mtime +7
+
+# Find log files larger than 100MB
+find /var/log -name "*.log" -size +100M
+```
+
+### Scenario 3: Data Migration Planning
+```bash
+# Find all files larger than 1GB (need special handling)
+find /data -size +1G
+
+# Count files by type
+find /data -name "*.csv" | wc -l    # Count CSV files
+find /data -name "*.txt" | wc -l    # Count text files
+```
+
+## The Speed Demon: `locate`
+
+For frequently used files, there's a faster alternative:
+
+```bash
+locate filename.txt
+```
+
+**What it does**: Searches a pre-built database of all files on the system.
+
+**Pros**: Lightning fast (searches database, not actual files)
+**Cons**: Database might be outdated (usually updated daily)
+
+**Real-world analogy**: It's like using a phone book vs. going door-to-door. The phone book is much faster, but it might have outdated information.
+
+### Updating the locate database
+```bash
+sudo updatedb    # Updates the database (run as admin)
+```
+
+## Advanced Find Techniques
+
+### Execute Commands on Found Files
+```bash
+# Find and delete old temporary files
+find /tmp -name "*.tmp" -mtime +7 -delete
+
+# Find and copy all CSV files to a backup directory
+find . -name "*.csv" -exec cp {} /backup/ \;
+
+# Find and show details of large files
+find . -size +100M -exec ls -lh {} \;
+```
+
+**Real-world analogy**: It's like having a detective who not only finds what you're looking for but also performs actions on each item found.
+
+### Using `find` with Other Commands
+
+```bash
+# Find files and count them
+find . -name "*.py" | wc -l
+
+# Find files and get total size
+find . -name "*.csv" -exec du -ch {} + | tail -1
+
+# Find files and search within them
+find . -name "*.txt" -exec grep "error" {} +
+```
+
+## Content Detective: `grep`
+
+Sometimes you need to find files based on what's inside them:
+
+```bash
+grep "pattern" filename.txt        # Search within a specific file
+grep "error" *.log                 # Search in all log files
+grep -r "TODO" .                   # Recursively search all files
+```
+
+**Real-world analogy**: It's like having a detective who can read through documents and find specific phrases or keywords.
+
+### Useful `grep` Options
+```bash
+grep -i "pattern" file.txt         # Case-insensitive search
+grep -n "pattern" file.txt         # Show line numbers
+grep -v "pattern" file.txt         # Show lines that DON'T match
+grep -l "pattern" *.txt            # Show only filenames that match
+```
+
+## Combining Find and Grep: The Ultimate Detective Combo
+
+```bash
+# Find Python files containing "import pandas"
+find . -name "*.py" -exec grep -l "import pandas" {} \;
+
+# Find log files with error messages from last week
+find /var/log -name "*.log" -mtime -7 -exec grep -l "ERROR" {} \;
+
+# Find configuration files containing specific settings
+find /etc -name "*.conf" -exec grep -l "database" {} \;
+```
+
+## Real-World HPC Example: The Data Migration Mission
+
+Let's say you need to migrate all experimental data from 2023 that's larger than 100MB:
+
+```bash
+# Step 1: Find the files
+find /data -path "*2023*" -size +100M -name "*.csv" > large_2023_files.txt
+
+# Step 2: Check how many files and total size
+cat large_2023_files.txt | wc -l                    # Count files
+find /data -path "*2023*" -size +100M -name "*.csv" -exec du -ch {} + | tail -1  # Total size
+
+# Step 3: Create destination directory
+mkdir -p /backup/2023_large_data
+
+# Step 4: Copy the files (we'll learn better methods later)
+find /data -path "*2023*" -size +100M -name "*.csv" -exec cp {} /backup/2023_large_data/ \;
+```
+
+## Common Detective Mistakes (And How to Avoid Them)
+
+### Mistake 1: Searching the Entire System
+**Problem**: Running `find / -name "*.txt"` takes forever and searches system files.
+**Solution**: Always specify a reasonable starting directory like `find ~/data` or `find /project`.
+
+### Mistake 2: Forgetting Quotes
+**Problem**: `find . -name *.txt` might not work as expected.
+**Solution**: Always quote patterns: `find . -name "*.txt"`.
+
+### Mistake 3: Case Sensitivity
+**Problem**: Looking for "Data.CSV" but files are named "data.csv".
+**Solution**: Use `-iname` for case-insensitive searches.
+
+## Performance Tips for Large Systems
+
+1. **Be specific about search locations**: Don't search `/` when you mean `/home/username/data`
+2. **Use multiple criteria to narrow results**: Combine name, size, and date filters
+3. **Consider `locate` for frequently searched files**: Much faster for simple name searches
+4. **Use `find` with `-maxdepth` to limit search depth**: `find . -maxdepth 2 -name "*.csv"`
+
+## Quick Reference: Your Detective Toolkit
+
+| Task | Command | Example |
+|------|---------|---------|
+| Find by name | `find . -name "pattern"` | `find . -name "*.csv"` |
+| Find by size | `find . -size +100M` | `find . -size +100M` |
+| Find by date | `find . -mtime -7` | `find . -mtime -7` |
+| Find by type | `find . -type f` | `find . -type f` |
+| Fast name search | `locate filename` | `locate data.csv` |
+| Search file contents | `grep "pattern" files` | `grep "error" *.log` |
+| Recursive content search | `grep -r "pattern" .` | `grep -r "TODO" .` |
+
+## Practice Exercises
+
+:::{.callout-important}
+## Your Detective Training Mission
+
+1. **Find all files in your home directory larger than 10MB**
+   ```bash
+   find ~ -size +10M
+   ```
+
+2. **Find all files modified in the last 24 hours**
+   ```bash
+   find ~ -mtime -1
+   ```
+
+3. **Find all Python files containing the word "import"**
+   ```bash
+   find ~ -name "*.py" -exec grep -l "import" {} \;
+   ```
+
+4. **Count how many text files you have**
+   ```bash
+   find ~ -name "*.txt" | wc -l
+   ```
+
+5. **Find the largest file in your home directory**
+   ```bash
+   find ~ -type f -exec ls -lS {} + | head -1
+   ```
+:::
+
+## What's Next?
+
+Now that you're a skilled file detective, you're ready to learn [File Manipulation Magic](03-file-manipulation.qmd) – how to create, copy, move, and organize files efficiently. These skills combined with your detective abilities will make you incredibly productive in HPC environments.
+
+Remember: Finding files efficiently is one of the most valuable skills in HPC work. Practice these commands until they become instinctive – your future self will thank you when you need to locate specific data among millions of files!
+
+:::{.callout-tip}
+## Detective Challenge
+Before moving on, try to find:
+1. The largest file on your system (in a reasonable location)
+2. All files modified today
+3. All files with "config" in their name
+4. Files larger than 1MB but smaller than 10MB
+
+This practice will build the muscle memory you need for real HPC detective work!
+:::
+
+---
+
+*You've developed your file detective skills – the ability to find needles in digital haystacks. Next, we'll learn how to manipulate those files once you've found them!* 

@@ -1,0 +1,578 @@
+---
+title: "Text Processing Power"
+description: "Unlock the secrets hidden in your data files. Learn to search, filter, sort, and transform text like a digital archaeologist, extracting insights from millions of lines with surgical precision."
+author: "Hasan"
+date: last-modified
+categories: [command-line, text-processing, grep, awk, sed, sort]
+image: "https://images.unsplash.com/photo-1516321318423-f06f85e504b3?ixlib=rb-4.0.3&auto=format&fit=crop&w=2000&q=80"
+toc: true
+---
+
+## The Story: The Digital Archaeologist
+
+Imagine you're an archaeologist, but instead of digging through ancient ruins, you're excavating insights from massive text files containing millions of lines of research data. Your tools aren't brushes and trowels – they're powerful text processing commands that can sift through gigabytes of data in seconds, finding patterns, extracting specific information, and transforming raw data into meaningful insights.
+
+With Windows Notepad or Excel, analyzing large text files would be like excavating a pyramid with a teaspoon. But with Unix text processing tools, you become a digital archaeologist with laser scanners and precision instruments, capable of extracting exactly what you need from the vast digital landscape.
+
+Today, you'll master the ancient arts of text manipulation that turn you from a data observer into a data wizard.
+
+## The Text Processing Arsenal
+
+Your text processing toolkit contains specialized instruments, each designed for specific tasks:
+
+- **`cat`**: The reader (displays file contents)
+- **`head/tail`**: The samplers (show beginning/end of files)
+- **`grep`**: The hunter (searches for patterns)
+- **`sort`**: The organizer (arranges data in order)
+- **`uniq`**: The deduplicator (removes duplicates)
+- **`cut`**: The column extractor (selects specific fields)
+- **`awk`**: The data sculptor (processes structured text)
+- **`sed`**: The transformer (edits text streams)
+- **`wc`**: The counter (counts lines, words, characters)
+
+**Real-world analogy**: These tools are like having a complete laboratory where each instrument has a specific purpose – microscopes for detailed inspection, filters for separation, scales for measurement, and computers for complex analysis.
+
+## Basic Text Inspection
+
+### Looking at File Contents
+
+```bash
+# Display entire file (careful with large files!)
+cat data.txt
+
+# Display file with line numbers
+cat -n experiment_log.txt
+
+# Display first 10 lines
+head data.csv
+
+# Display first 20 lines
+head -n 20 data.csv
+
+# Display last 10 lines
+tail results.log
+
+# Follow a growing file (like watching a log in real-time)
+tail -f experiment.log
+```
+
+**Real-world analogy**: These commands are like different ways of reading a book – sometimes you want to read the whole thing, sometimes just the first chapter, sometimes just the conclusion, and sometimes you want to watch as new pages are being written.
+
+### Quick File Statistics
+
+```bash
+# Count lines, words, and characters
+wc data.txt
+
+# Count only lines
+wc -l *.csv
+
+# Count files in directory
+ls *.txt | wc -l
+
+# Get file size in human-readable format
+du -h large_dataset.csv
+```
+
+## The Pattern Hunter: `grep`
+
+`grep` is your digital bloodhound, capable of sniffing out specific patterns in massive files.
+
+### Basic Pattern Searching
+
+```bash
+# Find lines containing "error"
+grep "error" log_file.txt
+
+# Case-insensitive search
+grep -i "ERROR" log_file.txt
+
+# Search in multiple files
+grep "experiment_1" *.txt
+
+# Show line numbers
+grep -n "important" data.txt
+
+# Show lines that DON'T match
+grep -v "comment" data.csv
+```
+
+### Advanced Pattern Hunting
+
+```bash
+# Count matching lines
+grep -c "success" results.log
+
+# Show only filenames that contain pattern
+grep -l "error" *.log
+
+# Show context around matches
+grep -A 3 -B 3 "error" log.txt    # 3 lines after and before
+
+# Search recursively in directories
+grep -r "TODO" project_files/
+
+# Use regular expressions
+grep "^[0-9]" data.txt           # Lines starting with numbers
+grep "[0-9]$" data.txt           # Lines ending with numbers
+```
+
+**Real-world analogy**: Advanced grep is like having a detective who can not only find what you're looking for but also show you the surrounding evidence and tell you exactly where and how many times they found it.
+
+## The Data Organizer: `sort`
+
+Sorting is fundamental to data analysis – it reveals patterns and makes data searchable.
+
+### Basic Sorting
+
+```bash
+# Sort lines alphabetically
+sort names.txt
+
+# Sort in reverse order
+sort -r scores.txt
+
+# Sort numerically (not alphabetically)
+sort -n numbers.txt
+
+# Sort by specific column (space-separated)
+sort -k 2 data.txt               # Sort by second column
+
+# Sort CSV by specific column
+sort -t ',' -k 3 data.csv        # Sort by third column, comma-separated
+```
+
+### Advanced Sorting Strategies
+
+```bash
+# Sort by multiple columns
+sort -k 1,1 -k 2,2n data.txt     # First by column 1 (text), then by column 2 (numeric)
+
+# Sort by file size
+ls -l | sort -k 5 -n             # Sort files by size
+
+# Sort unique values
+sort data.txt | uniq
+
+# Sort and count occurrences
+sort data.txt | uniq -c | sort -nr
+```
+
+**Real-world analogy**: Sorting is like organizing a library – you can arrange books by title, author, publication date, or size, making it easy to find what you need and spot patterns.
+
+## The Column Surgeon: `cut`
+
+`cut` extracts specific columns from structured text, like a precision scalpel for data.
+
+### Basic Column Extraction
+
+```bash
+# Extract first column (space-separated)
+cut -d ' ' -f 1 data.txt
+
+# Extract multiple columns
+cut -d ',' -f 1,3,5 data.csv      # Columns 1, 3, and 5 from CSV
+
+# Extract character ranges
+cut -c 1-10 fixed_width.txt       # Characters 1-10 from each line
+
+# Extract from specific character to end
+cut -c 15- data.txt               # From character 15 to end of line
+```
+
+### Real-World Data Extraction
+
+```bash
+# Extract usernames from system log
+cut -d ':' -f 1 /etc/passwd
+
+# Get just the filenames from ls -l output
+ls -l | cut -d ' ' -f 9
+
+# Extract specific fields from CSV
+cut -d ',' -f 2,4 experiment_data.csv > selected_columns.csv
+```
+
+## The Duplicate Detective: `uniq`
+
+`uniq` finds and manages duplicate lines in your data.
+
+```bash
+# Remove consecutive duplicate lines
+uniq data.txt
+
+# Count occurrences of each unique line
+uniq -c data.txt
+
+# Show only duplicate lines
+uniq -d data.txt
+
+# Show only unique lines (no duplicates)
+uniq -u data.txt
+
+# Case-insensitive uniqueness
+uniq -i data.txt
+```
+
+**Important**: `uniq` only works on consecutive duplicate lines, so usually you need to sort first:
+
+```bash
+# Proper way to find all unique values
+sort data.txt | uniq
+
+# Count all occurrences
+sort data.txt | uniq -c | sort -nr
+```
+
+## The Data Sculptor: `awk`
+
+`awk` is like having a programmable data processing workshop. It can perform complex operations on structured text.
+
+### Basic AWK Operations
+
+```bash
+# Print specific columns
+awk '{print $1, $3}' data.txt    # Print columns 1 and 3
+
+# Print with custom formatting
+awk '{print "Name:", $1, "Score:", $2}' scores.txt
+
+# Process CSV files
+awk -F ',' '{print $1, $3}' data.csv
+
+# Add line numbers
+awk '{print NR, $0}' data.txt
+```
+
+### AWK Power Features
+
+```bash
+# Conditional processing
+awk '$2 > 100 {print $1, $2}' scores.txt    # Print if second column > 100
+
+# Calculate sums
+awk '{sum += $2} END {print "Total:", sum}' numbers.txt
+
+# Count occurrences
+awk '{count[$1]++} END {for (i in count) print i, count[i]}' data.txt
+
+# Process specific lines
+awk 'NR > 1 {print}' data.csv    # Skip header line
+```
+
+**Real-world analogy**: AWK is like having a Swiss Army knife that can cut, measure, calculate, and transform your data all in one tool.
+
+## The Text Transformer: `sed`
+
+`sed` (stream editor) modifies text as it flows through, like having a assembly line that transforms your data.
+
+### Basic Text Substitution
+
+```bash
+# Replace first occurrence per line
+sed 's/old/new/' data.txt
+
+# Replace all occurrences
+sed 's/old/new/g' data.txt
+
+# Replace and save to new file
+sed 's/old/new/g' input.txt > output.txt
+
+# Replace in-place (modify original file)
+sed -i 's/old/new/g' data.txt
+```
+
+### Advanced Text Transformation
+
+```bash
+# Delete lines containing pattern
+sed '/pattern/d' data.txt
+
+# Delete empty lines
+sed '/^$/d' data.txt
+
+# Insert text before/after pattern
+sed '/pattern/i\New line before' data.txt
+sed '/pattern/a\New line after' data.txt
+
+# Extract lines between patterns
+sed -n '/START/,/END/p' data.txt
+```
+
+## Real-World HPC Text Processing Scenarios
+
+### Scenario 1: Log File Analysis
+
+```bash
+#!/bin/bash
+# analyze_experiment_logs.sh - Extract insights from experiment logs
+
+LOG_FILE="experiment.log"
+REPORT_FILE="log_analysis_$(date +%Y%m%d).txt"
+
+echo "Experiment Log Analysis - $(date)" > $REPORT_FILE
+echo "=================================" >> $REPORT_FILE
+
+# Count total entries
+echo "Total log entries: $(wc -l < $LOG_FILE)" >> $REPORT_FILE
+
+# Count errors and warnings
+echo "Errors: $(grep -c "ERROR" $LOG_FILE)" >> $REPORT_FILE
+echo "Warnings: $(grep -c "WARNING" $LOG_FILE)" >> $REPORT_FILE
+
+# Most common error types
+echo -e "\nTop Error Types:" >> $REPORT_FILE
+grep "ERROR" $LOG_FILE | cut -d ':' -f 3 | sort | uniq -c | sort -nr | head -5 >> $REPORT_FILE
+
+# Processing times analysis
+echo -e "\nProcessing Times (seconds):" >> $REPORT_FILE
+grep "Processing time" $LOG_FILE | awk '{print $4}' | sort -n | awk '
+{
+    sum += $1
+    count++
+    values[count] = $1
+}
+END {
+    print "Average:", sum/count
+    print "Minimum:", values[1]
+    print "Maximum:", values[count]
+    print "Median:", values[int(count/2)]
+}' >> $REPORT_FILE
+
+echo "Analysis complete. Report saved to $REPORT_FILE"
+```
+
+### Scenario 2: CSV Data Processing
+
+```bash
+#!/bin/bash
+# process_experimental_data.sh - Clean and analyze CSV data
+
+INPUT_FILE="raw_experiment_data.csv"
+CLEAN_FILE="clean_data.csv"
+SUMMARY_FILE="data_summary.txt"
+
+# Remove header for processing, then add it back
+head -n 1 $INPUT_FILE > $CLEAN_FILE
+
+# Clean data: remove empty lines, sort by timestamp
+tail -n +2 $INPUT_FILE | \
+    grep -v '^$' | \
+    sort -t ',' -k 1 >> $CLEAN_FILE
+
+# Generate summary statistics
+echo "Data Summary for $(basename $INPUT_FILE)" > $SUMMARY_FILE
+echo "Generated: $(date)" >> $SUMMARY_FILE
+echo "=================================" >> $SUMMARY_FILE
+
+# Count records
+echo "Total records: $(tail -n +2 $CLEAN_FILE | wc -l)" >> $SUMMARY_FILE
+
+# Unique subjects
+echo "Unique subjects: $(cut -d ',' -f 2 $CLEAN_FILE | tail -n +2 | sort | uniq | wc -l)" >> $SUMMARY_FILE
+
+# Date range
+echo "Date range:" >> $SUMMARY_FILE
+echo "  From: $(cut -d ',' -f 1 $CLEAN_FILE | tail -n +2 | head -n 1)" >> $SUMMARY_FILE
+echo "  To:   $(cut -d ',' -f 1 $CLEAN_FILE | tail -n +2 | tail -n 1)" >> $SUMMARY_FILE
+
+# Value statistics (assuming numeric data in column 3)
+echo -e "\nValue Statistics:" >> $SUMMARY_FILE
+cut -d ',' -f 3 $CLEAN_FILE | tail -n +2 | sort -n | awk '
+{
+    sum += $1
+    count++
+    values[count] = $1
+}
+END {
+    print "Count:", count
+    print "Sum:", sum
+    print "Average:", sum/count
+    print "Min:", values[1]
+    print "Max:", values[count]
+}' >> $SUMMARY_FILE
+
+echo "Data processing complete!"
+echo "Clean data: $CLEAN_FILE"
+echo "Summary: $SUMMARY_FILE"
+```
+
+### Scenario 3: Results Aggregation
+
+```bash
+#!/bin/bash
+# aggregate_results.sh - Combine and summarize multiple result files
+
+RESULTS_DIR="job_results"
+OUTPUT_FILE="aggregated_results.csv"
+SUMMARY_FILE="results_summary.txt"
+
+# Create header
+echo "job_id,parameter,result,processing_time" > $OUTPUT_FILE
+
+# Process all result files
+for result_file in $RESULTS_DIR/*.out; do
+    if [ -f "$result_file" ]; then
+        job_id=$(basename "$result_file" .out)
+        
+        # Extract key information using different tools
+        parameter=$(grep "Parameter:" "$result_file" | cut -d ':' -f 2 | tr -d ' ')
+        result=$(grep "Final result:" "$result_file" | awk '{print $3}')
+        time=$(grep "Processing time:" "$result_file" | awk '{print $3}')
+        
+        # Add to aggregated file
+        echo "$job_id,$parameter,$result,$time" >> $OUTPUT_FILE
+    fi
+done
+
+# Generate summary
+echo "Results Aggregation Summary" > $SUMMARY_FILE
+echo "Generated: $(date)" >> $SUMMARY_FILE
+echo "===========================" >> $SUMMARY_FILE
+
+total_jobs=$(tail -n +2 $OUTPUT_FILE | wc -l)
+echo "Total jobs processed: $total_jobs" >> $SUMMARY_FILE
+
+# Parameter distribution
+echo -e "\nParameter Distribution:" >> $SUMMARY_FILE
+cut -d ',' -f 2 $OUTPUT_FILE | tail -n +2 | sort | uniq -c | sort -nr >> $SUMMARY_FILE
+
+# Result statistics
+echo -e "\nResult Statistics:" >> $SUMMARY_FILE
+cut -d ',' -f 3 $OUTPUT_FILE | tail -n +2 | sort -n | awk '
+{
+    sum += $1
+    count++
+    values[count] = $1
+}
+END {
+    print "Count:", count
+    print "Average:", sum/count
+    print "Min:", values[1]
+    print "Max:", values[count]
+    print "Std Dev: (calculated separately)"
+}' >> $SUMMARY_FILE
+
+echo "Aggregation complete!"
+echo "Results file: $OUTPUT_FILE"
+echo "Summary: $SUMMARY_FILE"
+```
+
+## Power Combinations: Pipes and Chains
+
+The real magic happens when you combine tools using pipes (`|`):
+
+```bash
+# Find most common words in a file
+cat text_file.txt | tr ' ' '\n' | sort | uniq -c | sort -nr | head -10
+
+# Analyze web server logs
+cat access.log | grep "404" | cut -d ' ' -f 1 | sort | uniq -c | sort -nr
+
+# Process CSV data
+cat data.csv | cut -d ',' -f 2,4 | grep -v "^$" | sort | uniq -c
+
+# Monitor system processes
+ps aux | grep python | awk '{print $2, $11}' | sort
+
+# Analyze file sizes by extension
+find . -name "*.*" | sed 's/.*\.//' | sort | uniq -c | sort -nr
+```
+
+**Real-world analogy**: Pipes are like assembly lines in a factory – each station performs one specific operation, and the product moves smoothly from one stage to the next until you get the final result.
+
+## Performance Tips for Large Files
+
+### Efficient Processing Strategies
+
+```bash
+# For very large files, use head/tail to sample first
+head -n 1000 huge_file.txt | grep "pattern"
+
+# Use grep before other operations to reduce data size
+grep "relevant_pattern" large_file.txt | sort | uniq -c
+
+# Process files in chunks
+split -l 10000 huge_file.txt chunk_
+for chunk in chunk_*; do
+    process_chunk "$chunk"
+done
+
+# Use specific tools for specific tasks
+# grep is faster than awk for simple pattern matching
+# cut is faster than awk for simple column extraction
+```
+
+## Quick Reference: Text Processing Cheat Sheet
+
+| Task | Command | Example |
+|------|---------|---------|
+| View file | `cat filename` | `cat data.txt` |
+| First/last lines | `head -n 10 file` | `head -n 20 data.csv` |
+| Search pattern | `grep "pattern" file` | `grep "error" log.txt` |
+| Sort lines | `sort filename` | `sort -n numbers.txt` |
+| Remove duplicates | `sort file \| uniq` | `sort names.txt \| uniq` |
+| Extract columns | `cut -d ',' -f 1,3 file` | `cut -d ',' -f 2 data.csv` |
+| Count lines/words | `wc -l filename` | `wc -l *.txt` |
+| Replace text | `sed 's/old/new/g' file` | `sed 's/error/ERROR/g' log.txt` |
+| Process columns | `awk '{print $1, $3}' file` | `awk '{sum+=$2} END {print sum}' data.txt` |
+
+## Practice Exercises
+
+:::{.callout-important}
+## Your Text Processing Training
+
+1. **Log Analysis Challenge**
+   ```bash
+   # Create a sample log file and practice extracting:
+   # - Count of different message types
+   # - Most active time periods
+   # - Top error sources
+   ```
+
+2. **CSV Data Exploration**
+   ```bash
+   # Download or create a CSV file and practice:
+   # - Extracting specific columns
+   # - Finding unique values
+   # - Calculating basic statistics
+   ```
+
+3. **Text Transformation**
+   ```bash
+   # Practice cleaning messy data:
+   # - Remove empty lines
+   # - Standardize formatting
+   # - Extract specific patterns
+   ```
+
+4. **Pipeline Building**
+   ```bash
+   # Create complex pipelines that:
+   # - Filter → Sort → Count → Report
+   # - Process multiple files
+   # - Generate summaries
+   ```
+:::
+
+## What's Next?
+
+Now that you're a text processing wizard, you're ready to learn [Permission Wizardry](05-permission-wizardry.qmd). Understanding file permissions is crucial for HPC environments where security and access control are paramount.
+
+Remember: Text processing is the heart of data analysis. Whether you're analyzing experimental results, processing log files, or cleaning datasets, these tools will be your constant companions. Master them, and you'll extract insights from data that others might miss entirely.
+
+:::{.callout-tip}
+## Text Processing Challenge
+Before moving on, try this real-world scenario:
+1. Create or find a large text file (log file, CSV data, etc.)
+2. Extract specific information using grep
+3. Sort and summarize the data
+4. Create a report with statistics
+5. Automate the process with a script
+
+This mirrors the daily work of data analysis in HPC environments!
+:::
+
+---
+
+*You've unlocked the secrets of text processing – the ability to extract meaning from digital noise. Next, we'll learn to control who can access and modify your precious data discoveries!* 

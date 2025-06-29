@@ -1,0 +1,470 @@
+---
+title: "Bash Scripting Essentials"
+description: "Transform from manual command execution to automation wizard. Learn to create robust bash scripts that handle repetitive HPC tasks, process multiple files, and create reliable workflows that work even at 3 AM."
+author: "Hasan"
+date: last-modified
+categories: [command-line, bash, scripting, automation, hpc]
+image: "https://images.unsplash.com/photo-1555066931-4365d14bab8c?ixlib=rb-4.0.3&auto=format&fit=crop&w=2000&q=80"
+toc: true
+---
+
+## The Story: The 3 AM Automation Test
+
+Picture this: It's 3 AM, you're sound asleep, and your critical data processing pipeline needs to run. Your script needs to:
+- Check if new data has arrived
+- Process 500 files in a specific order
+- Handle errors gracefully
+- Send you a summary email
+- Clean up temporary files
+
+If you've written a good bash script, it handles all of this while you sleep peacefully. If not, you'll wake up to chaos and missed deadlines. Today, you'll learn to write scripts that pass the "3 AM test" – they work reliably even when you're not there to babysit them.
+
+## Why Bash Scripting Matters in HPC
+
+**Real-world analogy**: Manual command execution is like cooking one meal at a time. Bash scripting is like having a recipe that can feed a banquet – it scales, it's repeatable, and it frees you to focus on more important things.
+
+### The Automation Pyramid
+1. **Manual execution**: Typing commands one by one
+2. **Command history**: Reusing previous commands
+3. **Simple scripts**: Automating basic tasks
+4. **Robust scripts**: Handling errors and edge cases
+5. **Professional workflows**: Complex pipelines with monitoring
+
+## Your First Bash Script
+
+Let's start with the classic "Hello World" but make it practical:
+
+```bash
+#!/bin/bash
+# hello_hpc.sh - Your first HPC script
+
+echo "Hello from $(hostname)!"
+echo "Current user: $(whoami)"
+echo "Current directory: $(pwd)"
+echo "Current time: $(date)"
+```
+
+**The anatomy**:
+- `#!/bin/bash`: The "shebang" – tells the system this is a bash script
+- `#`: Comments (document everything!)
+- `$()`: Command substitution – runs a command and uses its output
+
+**Make it executable and run**:
+```bash
+chmod +x hello_hpc.sh
+./hello_hpc.sh
+```
+
+## Variables: Your Script's Memory
+
+Variables store information your script can use later:
+
+```bash
+#!/bin/bash
+# variables_demo.sh
+
+# Define variables
+PROJECT_NAME="experiment_2023"
+DATA_DIR="/scratch/username/data"
+NUM_FILES=100
+
+# Use variables
+echo "Processing project: $PROJECT_NAME"
+echo "Data location: $DATA_DIR"
+echo "Expected files: $NUM_FILES"
+
+# Command substitution into variables
+CURRENT_FILES=$(ls $DATA_DIR | wc -l)
+echo "Actual files found: $CURRENT_FILES"
+```
+
+**Variable best practices**:
+- Use UPPERCASE for constants: `MAX_MEMORY=32000`
+- Use lowercase for local variables: `temp_file="temp.txt"`
+- Always quote variables: `"$DATA_DIR"` (handles spaces in paths)
+
+## Getting Input from Users
+
+Make your scripts interactive and flexible:
+
+```bash
+#!/bin/bash
+# interactive_processing.sh
+
+# Get input from user
+echo "Enter experiment name:"
+read EXPERIMENT_NAME
+
+echo "Enter number of cores to use:"
+read NUM_CORES
+
+# Provide defaults
+DATA_DIR=${DATA_DIR:-"/scratch/$(whoami)/data"}
+OUTPUT_DIR=${OUTPUT_DIR:-"results_$(date +%Y%m%d)"}
+
+echo "Processing $EXPERIMENT_NAME with $NUM_CORES cores"
+echo "Data from: $DATA_DIR"
+echo "Results to: $OUTPUT_DIR"
+```
+
+## Command Line Arguments: Professional Input Handling
+
+```bash
+#!/bin/bash
+# process_data.sh - Professional argument handling
+
+# Check if enough arguments provided
+if [ $# -lt 2 ]; then
+    echo "Usage: $0 <input_directory> <output_directory> [num_cores]"
+    echo "Example: $0 /data/experiment_1 /results/exp1 8"
+    exit 1
+fi
+
+# Assign arguments to meaningful names
+INPUT_DIR="$1"
+OUTPUT_DIR="$2"
+NUM_CORES="${3:-4}"  # Default to 4 cores if not specified
+
+echo "Processing data from $INPUT_DIR"
+echo "Results will be saved to $OUTPUT_DIR"
+echo "Using $NUM_CORES cores"
+```
+
+**Argument variables**:
+- `$0`: Script name
+- `$1, $2, $3...`: First, second, third arguments
+- `$#`: Number of arguments
+- `$@`: All arguments
+
+## Conditional Logic: Making Decisions
+
+Your scripts need to make intelligent decisions:
+
+```bash
+#!/bin/bash
+# smart_processing.sh
+
+INPUT_DIR="$1"
+
+# Check if directory exists
+if [ -d "$INPUT_DIR" ]; then
+    echo "Found input directory: $INPUT_DIR"
+else
+    echo "Error: Directory $INPUT_DIR does not exist!"
+    exit 1
+fi
+
+# Check number of files
+FILE_COUNT=$(ls "$INPUT_DIR"/*.csv 2>/dev/null | wc -l)
+
+if [ $FILE_COUNT -eq 0 ]; then
+    echo "No CSV files found in $INPUT_DIR"
+    exit 1
+elif [ $FILE_COUNT -lt 10 ]; then
+    echo "Found $FILE_COUNT files - using single core processing"
+    CORES=1
+else
+    echo "Found $FILE_COUNT files - using parallel processing"
+    CORES=8
+fi
+```
+
+**Common test conditions**:
+- `-d path`: Directory exists
+- `-f path`: File exists
+- `-r path`: File is readable
+- `-w path`: File is writable
+- `-z string`: String is empty
+- `-n string`: String is not empty
+- `$a -eq $b`: Numbers are equal
+- `$a -gt $b`: First number is greater
+
+## Loops: Repeating Tasks Efficiently
+
+### Processing Multiple Files
+```bash
+#!/bin/bash
+# process_all_files.sh
+
+DATA_DIR="$1"
+
+# Process each CSV file
+for file in "$DATA_DIR"/*.csv; do
+    if [ -f "$file" ]; then
+        echo "Processing: $file"
+        filename=$(basename "$file" .csv)
+        
+        # Your processing command here
+        python analyze.py --input "$file" --output "results/${filename}_result.csv"
+        
+        echo "Completed: $filename"
+    fi
+done
+
+echo "All files processed!"
+```
+
+### Numerical Loops
+```bash
+#!/bin/bash
+# parameter_sweep.sh
+
+# Test different parameter values
+for param in $(seq 0.1 0.1 1.0); do
+    echo "Testing parameter value: $param"
+    
+    # Submit HPC job for each parameter
+    bsub -J "param_$param" \
+         -n 4 -M 8000 -W 2:00 \
+         "python experiment.py --param $param --output results_$param.csv"
+done
+```
+
+### While Loops for Monitoring
+```bash
+#!/bin/bash
+# monitor_jobs.sh
+
+JOB_NAME="$1"
+
+echo "Monitoring jobs with name: $JOB_NAME"
+
+while true; do
+    RUNNING_JOBS=$(bjobs -J "$JOB_NAME" 2>/dev/null | grep RUN | wc -l)
+    PENDING_JOBS=$(bjobs -J "$JOB_NAME" 2>/dev/null | grep PEND | wc -l)
+    
+    if [ $RUNNING_JOBS -eq 0 ] && [ $PENDING_JOBS -eq 0 ]; then
+        echo "All jobs completed!"
+        break
+    fi
+    
+    echo "$(date): Running: $RUNNING_JOBS, Pending: $PENDING_JOBS"
+    sleep 60  # Check every minute
+done
+```
+
+## Functions: Organizing Your Code
+
+Break complex scripts into manageable pieces:
+
+```bash
+#!/bin/bash
+# organized_processing.sh
+
+# Function to check if required tools are available
+check_prerequisites() {
+    local missing_tools=0
+    
+    for tool in python rsync bsub; do
+        if ! command -v $tool &> /dev/null; then
+            echo "Error: $tool is not installed or not in PATH"
+            missing_tools=$((missing_tools + 1))
+        fi
+    done
+    
+    if [ $missing_tools -gt 0 ]; then
+        echo "Please install missing tools before continuing"
+        exit 1
+    fi
+    
+    echo "All prerequisites satisfied"
+}
+
+# Function to create output directories
+setup_directories() {
+    local base_dir="$1"
+    
+    for subdir in raw processed results logs; do
+        mkdir -p "$base_dir/$subdir"
+        echo "Created directory: $base_dir/$subdir"
+    done
+}
+
+# Function to submit processing jobs
+submit_jobs() {
+    local input_dir="$1"
+    local output_dir="$2"
+    
+    for file in "$input_dir"/*.csv; do
+        if [ -f "$file" ]; then
+            filename=$(basename "$file" .csv)
+            
+            bsub -J "process_$filename" \
+                 -n 4 -M 8000 -W 3:00 \
+                 -o "$output_dir/logs/${filename}.out" \
+                 -e "$output_dir/logs/${filename}.err" \
+                 "python process.py --input '$file' --output '$output_dir/processed/${filename}_processed.csv'"
+        fi
+    done
+}
+
+# Main script execution
+main() {
+    echo "Starting data processing pipeline..."
+    
+    check_prerequisites
+    setup_directories "$(pwd)/experiment_$(date +%Y%m%d)"
+    submit_jobs "$1" "$(pwd)/experiment_$(date +%Y%m%d)"
+    
+    echo "Pipeline started. Monitor with: bjobs"
+}
+
+# Run main function with all arguments
+main "$@"
+```
+
+## Error Handling: Making Scripts Bulletproof
+
+Professional scripts handle errors gracefully:
+
+```bash
+#!/bin/bash
+# bulletproof_script.sh
+
+# Exit on any error
+set -e
+
+# Exit on undefined variables
+set -u
+
+# Make pipe failures cause script to fail
+set -o pipefail
+
+# Function to handle cleanup on exit
+cleanup() {
+    local exit_code=$?
+    
+    if [ $exit_code -ne 0 ]; then
+        echo "Script failed with exit code $exit_code"
+        echo "Cleaning up temporary files..."
+        rm -f /tmp/temp_$$_*
+    fi
+    
+    echo "Cleanup completed"
+    exit $exit_code
+}
+
+# Set trap to run cleanup on script exit
+trap cleanup EXIT
+
+# Function to log messages with timestamps
+log() {
+    echo "[$(date '+%Y-%m-%d %H:%M:%S')] $1"
+}
+
+# Main processing with error handling
+process_data() {
+    local input_file="$1"
+    local output_file="$2"
+    
+    log "Starting processing of $input_file"
+    
+    # Check if input file exists
+    if [ ! -f "$input_file" ]; then
+        log "ERROR: Input file $input_file not found"
+        return 1
+    fi
+    
+    # Create temporary file
+    local temp_file="/tmp/temp_$$_$(basename "$input_file")"
+    
+    # Process with error checking
+    if python preprocess.py --input "$input_file" --output "$temp_file"; then
+        log "Preprocessing completed successfully"
+    else
+        log "ERROR: Preprocessing failed for $input_file"
+        return 1
+    fi
+    
+    # Move to final location
+    if mv "$temp_file" "$output_file"; then
+        log "Processing completed: $output_file"
+    else
+        log "ERROR: Failed to move result to $output_file"
+        return 1
+    fi
+}
+
+# Process all files with error handling
+for file in data/*.csv; do
+    if [ -f "$file" ]; then
+        filename=$(basename "$file" .csv)
+        if ! process_data "$file" "results/${filename}_processed.csv"; then
+            log "Skipping $file due to processing error"
+            continue
+        fi
+    fi
+done
+
+log "All processing completed successfully"
+```
+
+## Quick Reference: Bash Scripting Cheat Sheet
+
+| Element | Syntax | Example |
+|---------|--------|---------|
+| Variables | `VAR=value` | `NAME="experiment"` |
+| Command substitution | `$(command)` | `FILES=$(ls *.csv)` |
+| Conditionals | `if [ condition ]; then` | `if [ -f "$file" ]; then` |
+| Loops | `for var in list; do` | `for file in *.csv; do` |
+| Functions | `function_name() { }` | `process() { echo "processing"; }` |
+| Arguments | `$1, $2, $#, $@` | `INPUT_DIR="$1"` |
+| Error handling | `set -e` | Exit on error |
+| Cleanup | `trap cleanup EXIT` | Run cleanup on exit |
+
+## Practice Exercises
+
+:::{.callout-important}
+## Your Scripting Mastery Mission
+
+1. **Create a file processing script**
+   ```bash
+   #!/bin/bash
+   # Practice: Write a script that counts lines in all .txt files
+   # and creates a summary report
+   ```
+
+2. **Build a job monitoring script**
+   ```bash
+   #!/bin/bash
+   # Practice: Create a script that monitors bsub jobs
+   # and sends notification when all complete
+   ```
+
+3. **Design a backup automation script**
+   ```bash
+   #!/bin/bash
+   # Practice: Write a script that backs up important directories
+   # with error handling and logging
+   ```
+
+4. **Create a parameter sweep script**
+   ```bash
+   #!/bin/bash
+   # Practice: Build a script that submits jobs with different
+   # parameter values and organizes results
+   ```
+:::
+
+## What's Next?
+
+Now that you've mastered bash scripting, you're ready for the final step: [Automation Excellence](12-automation-excellence.qmd). You'll learn to weave together all your command line skills into sophisticated automated systems that monitor themselves, handle errors gracefully, and orchestrate complex workflows without human intervention.
+
+Bash scripting is the foundation of automation – next, you'll become a digital automation architect!
+
+:::{.callout-tip}
+## Final Mastery Challenge
+Create a complete workflow script that:
+1. Accepts command line arguments for input/output directories
+2. Validates the environment and input files
+3. Submits parallel processing jobs using bsub
+4. Monitors job progress with status updates
+5. Handles errors gracefully with cleanup
+6. Generates a final summary report
+
+This will demonstrate your readiness for the final automation mastery level!
+:::
+
+---
+
+*You've mastered bash scripting – the foundation of all automation. Next, we'll combine all your skills into sophisticated automated systems that work while you sleep!* 

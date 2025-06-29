@@ -1,0 +1,2045 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.3.450">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+<meta name="author" content="Hasan">
+<meta name="dcterms.date" content="2025-06-29">
+<meta name="description" content="Unlock the secrets hidden in your data files. Learn to search, filter, sort, and transform text like a digital archaeologist, extracting insights from millions of lines with surgical precision.">
+
+<title>Hasan’s Data Science &amp; AI Blog - Text Processing Power</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
+  vertical-align: middle;
+}
+/* CSS for syntax highlighting */
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+  }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+</style>
+
+
+<script src="../../../site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="../../../site_libs/quarto-nav/headroom.min.js"></script>
+<script src="../../../site_libs/clipboard/clipboard.min.js"></script>
+<script src="../../../site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="../../../site_libs/quarto-search/fuse.min.js"></script>
+<script src="../../../site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="../../../">
+<script src="../../../site_libs/quarto-html/quarto.js"></script>
+<script src="../../../site_libs/quarto-html/popper.min.js"></script>
+<script src="../../../site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="../../../site_libs/quarto-html/anchor.min.js"></script>
+<link href="../../../site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="../../../site_libs/quarto-html/quarto-syntax-highlighting.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="../../../site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="../../../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="../../../site_libs/bootstrap/bootstrap.min.css" rel="stylesheet" id="quarto-bootstrap" data-mode="light">
+<script id="quarto-search-options" type="application/json">{
+  "location": "navbar",
+  "copy-button": false,
+  "collapse-after": 3,
+  "panel-placement": "end",
+  "type": "overlay",
+  "limit": 20,
+  "language": {
+    "search-no-results-text": "No results",
+    "search-matching-documents-text": "matching documents",
+    "search-copy-link-title": "Copy link to search",
+    "search-hide-matches-text": "Hide additional matches",
+    "search-more-match-text": "more match in this document",
+    "search-more-matches-text": "more matches in this document",
+    "search-clear-button-title": "Clear",
+    "search-detached-cancel-button-title": "Cancel",
+    "search-submit-button-title": "Submit",
+    "search-label": "Search"
+  }
+}</script>
+<style>html{ scroll-behavior: smooth; }</style>
+<script async="" src="https://hypothes.is/embed.js"></script>
+
+
+<link rel="stylesheet" href="../../../styles.css">
+<meta property="og:title" content="Hasan’s Data Science &amp; AI Blog - Text Processing Power">
+<meta property="og:description" content="Unlock the secrets hidden in your data files. Learn to search, filter, sort, and transform text like a digital archaeologist, extracting insights from millions of lines with surgical precision.">
+<meta property="og:image" content="https://images.unsplash.com/photo-1516321318423-f06f85e504b3?ixlib=rb-4.0.3&amp;auto=format&amp;fit=crop&amp;w=2000&amp;q=80">
+<meta property="og:site-name" content="Hasan's Data Science &amp; AI Blog">
+<meta name="twitter:title" content="Hasan’s Data Science &amp; AI Blog - Text Processing Power">
+<meta name="twitter:description" content="Unlock the secrets hidden in your data files. Learn to search, filter, sort, and transform text like a digital archaeologist, extracting insights from millions of lines with surgical precision.">
+<meta name="twitter:image" content="https://images.unsplash.com/photo-1516321318423-f06f85e504b3?ixlib=rb-4.0.3&amp;auto=format&amp;fit=crop&amp;w=2000&amp;q=80">
+<meta name="twitter:card" content="summary_large_image">
+</head>
+
+<body class="nav-sidebar docked nav-fixed">
+
+<div id="quarto-search-results"></div>
+  <header id="quarto-header" class="headroom fixed-top">
+    <nav class="navbar navbar-expand-lg navbar-dark ">
+      <div class="navbar-container container-fluid">
+      <div class="navbar-brand-container">
+    <a class="navbar-brand" href="../../../index.html">
+    <span class="navbar-title">Hasan’s Data Science &amp; AI Blog</span>
+    </a>
+  </div>
+            <div id="quarto-search" class="" title="Search"></div>
+          <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCollapse" aria-controls="navbarCollapse" aria-expanded="false" aria-label="Toggle navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+  <span class="navbar-toggler-icon"></span>
+</button>
+          <div class="collapse navbar-collapse" id="navbarCollapse">
+            <ul class="navbar-nav navbar-nav-scroll me-auto">
+  <li class="nav-item">
+    <a class="nav-link" href="../../../index.html" rel="" target="">
+ <span class="menu-text">Home</span></a>
+  </li>  
+  <li class="nav-item dropdown ">
+    <a class="nav-link dropdown-toggle" href="#" id="nav-menu-series" role="button" data-bs-toggle="dropdown" aria-expanded="false" rel="" target="">
+ <span class="menu-text">Series</span>
+    </a>
+    <ul class="dropdown-menu" aria-labelledby="nav-menu-series">    
+        <li>
+    <a class="dropdown-item" href="../../../posts/series/command-line-mastery.html" rel="" target="">
+ <span class="dropdown-text">Command Line Mastery for HPC</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="../../../posts/series/data-science-steps.html" rel="" target="">
+ <span class="dropdown-text">Data Science Steps</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="../../../posts/series/computer-vision-foundations.html" rel="" target="">
+ <span class="dropdown-text">Computer Vision Foundations</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="../../../posts/series/vlm.html" rel="" target="">
+ <span class="dropdown-text">VLM Series</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="../../../posts/series/anomaly-detection/index.html" rel="" target="">
+ <span class="dropdown-text">Anomaly Detection</span></a>
+  </li>  
+    </ul>
+  </li>
+  <li class="nav-item">
+    <a class="nav-link" href="../../../categories.html" rel="" target="">
+ <span class="menu-text">Categories</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="../../../tags.html" rel="" target="">
+ <span class="menu-text">Tags</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="../../../about.html" rel="" target="">
+ <span class="menu-text">About</span></a>
+  </li>  
+</ul>
+            <ul class="navbar-nav navbar-nav-scroll ms-auto">
+  <li class="nav-item compact">
+    <a class="nav-link" href="https://github.com/HasanGoni" rel="" target=""><i class="bi bi-github" role="img">
+</i> 
+ <span class="menu-text"></span></a>
+  </li>  
+  <li class="nav-item compact">
+    <a class="nav-link" href="https://twitter.com/hasangoni" rel="" target=""><i class="bi bi-twitter" role="img">
+</i> 
+ <span class="menu-text"></span></a>
+  </li>  
+</ul>
+            <div class="quarto-navbar-tools">
+</div>
+          </div> <!-- /navcollapse -->
+      </div> <!-- /container-fluid -->
+    </nav>
+  <nav class="quarto-secondary-nav">
+    <div class="container-fluid d-flex">
+      <button type="button" class="quarto-btn-toggle btn" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar,#quarto-sidebar-glass" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+        <i class="bi bi-layout-text-sidebar-reverse"></i>
+      </button>
+      <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../../../posts/series/command-line-mastery.html">Command Line Mastery for HPC</a></li><li class="breadcrumb-item"><a href="../../../posts/series/command-line-mastery/04-text-processing.html">4. Text Processing Power</a></li></ol></nav>
+      <a class="flex-grow-1" role="button" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar,#quarto-sidebar-glass" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
+      </a>
+    </div>
+  </nav>
+</header>
+<!-- content -->
+<header id="title-block-header" class="quarto-title-block default page-columns page-full">
+  <div class="quarto-title-banner page-columns page-full">
+    <div class="quarto-title column-body">
+      <div class="quarto-title-block"><div><h1 class="title">Text Processing Power</h1><button type="button" class="btn code-tools-button" id="quarto-code-tools-source"><i class="bi"></i> Code</button></div></div>
+                  <div>
+        <div class="description">
+          Unlock the secrets hidden in your data files. Learn to search, filter, sort, and transform text like a digital archaeologist, extracting insights from millions of lines with surgical precision.
+        </div>
+      </div>
+                          <div class="quarto-categories">
+                <div class="quarto-category">command-line</div>
+                <div class="quarto-category">text-processing</div>
+                <div class="quarto-category">grep</div>
+                <div class="quarto-category">awk</div>
+                <div class="quarto-category">sed</div>
+                <div class="quarto-category">sort</div>
+              </div>
+                  </div>
+  </div>
+    
+  
+  <div class="quarto-title-meta">
+
+      <div>
+      <div class="quarto-title-meta-heading">Author</div>
+      <div class="quarto-title-meta-contents">
+               <p>Hasan </p>
+            </div>
+    </div>
+      
+      <div>
+      <div class="quarto-title-meta-heading">Published</div>
+      <div class="quarto-title-meta-contents">
+        <p class="date">June 29, 2025</p>
+      </div>
+    </div>
+    
+      <div>
+      <div class="quarto-title-meta-heading">Modified</div>
+      <div class="quarto-title-meta-contents">
+        <p class="date-modified">June 29, 2025</p>
+      </div>
+    </div>
+      
+    </div>
+    
+  
+  </header><div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article page-navbar">
+<!-- sidebar -->
+  <nav id="quarto-sidebar" class="sidebar collapse collapse-horizontal sidebar-navigation docked overflow-auto">
+    <div class="sidebar-menu-container"> 
+    <ul class="list-unstyled mt-1">
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-1" aria-expanded="true">
+ <span class="menu-text">Command Line Mastery for HPC</span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-1" aria-expanded="true" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-1" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../../posts/series/command-line-mastery.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Command Line Mastery for HPC Series</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../../posts/series/command-line-mastery/01-digital-compass.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">1. Digital Compass</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../../posts/series/command-line-mastery/02-file-detective.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">2. File Detective</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../../posts/series/command-line-mastery/03-file-manipulation.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">3. File Manipulation Magic</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../../posts/series/command-line-mastery/04-text-processing.html" class="sidebar-item-text sidebar-link active">
+ <span class="menu-text">4. Text Processing Power</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../../posts/series/command-line-mastery/05-permission-wizardry.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">5. Permission Wizardry</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../../posts/series/command-line-mastery/06-ssh-remote-access.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">6. SSH and Remote Access</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../../posts/series/command-line-mastery/07-file-transfer.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">7. File Transfer Mastery</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../../posts/series/command-line-mastery/08-environment-mastery.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">8. Environment Mastery</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../../posts/series/command-line-mastery/09-hpc-job-scheduling.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">9. HPC Job Scheduling</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../../posts/series/command-line-mastery/10-parallel-processing.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">10. Parallel Processing Power</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../../posts/series/command-line-mastery/11-bash-scripting.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">11. Bash Scripting Essentials</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../../posts/series/command-line-mastery/12-automation-excellence.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">12. Automation Excellence</span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-2" aria-expanded="true">
+ <span class="menu-text">Data Science</span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-2" aria-expanded="true" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-2" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../../posts/series/data-science-steps.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Data Science Steps Series</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../../posts/data-science-steps-to-follow-part01/index.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Data Science Steps to Follow - 01</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../../posts/data-science-steps-to-follow-part02/index.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Data Science Steps to Follow - 02</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../../posts/data-science-steps-to-follow-part03/index.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Data Science Steps to Follow - 03</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../../posts/data-science-steps-to-follow-part04/index.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Data Science Steps to Follow - 04</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../../posts/data-science-steps-to-follow-part05/index.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Data Science Steps to Follow - 05</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../../posts/data-science-steps-to-follow-part06/index.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Data Science Steps to Follow - 06</span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-3" aria-expanded="true">
+ <span class="menu-text">Computer Vision Foundations</span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-3" aria-expanded="true" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-3" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../../posts/series/computer-vision-foundations.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Computer Vision Foundations Series</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../../posts/series/cv-foundations/01-why-computer-vision.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">1. Why Computer Vision?</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../../posts/series/cv-foundations/02-images-as-data.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">2. Images as Data</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../../posts/series/cv-foundations/03-opencv-essentials.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">3. OpenCV Essentials</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../../posts/series/cv-foundations/04-finding-patterns.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">4. Finding Patterns</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../../posts/series/cv-foundations/05-image-segmentation.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">5. Image Segmentation</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../../posts/series/cv-foundations/06-feature-magic.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">6. Feature Magic</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../../posts/series/cv-foundations/07-why-deep-learning.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">7. Why Deep Learning?</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../../posts/series/cv-foundations/08-modern-vision-models.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">8. Modern Vision Models</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../../posts/series/cv-foundations/09-first-cv-project.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">9. First CV Project</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../../posts/series/cv-foundations/10-where-to-go-next.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">10. Where to Go Next</span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-4" aria-expanded="true">
+ <span class="menu-text">Anomaly Detection</span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-4" aria-expanded="true" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-4" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../../posts/series/anomaly-detection/index.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Introduction</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../../posts/series/anomaly-detection/finding-the-oddballs.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Finding the Oddballs</span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-5" aria-expanded="true">
+ <span class="menu-text">VLM Series</span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-5" aria-expanded="true" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-5" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../../posts/series/vlm.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Introduction</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../../posts/series/vlm-qwen3-14b/index.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Qwen3-14B</span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+    </ul>
+    </div>
+</nav>
+<div id="quarto-sidebar-glass" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar,#quarto-sidebar-glass"></div>
+<!-- margin-sidebar -->
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+        <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">On this page</h2>
+   
+  <ul>
+  <li><a href="#the-story-the-digital-archaeologist" id="toc-the-story-the-digital-archaeologist" class="nav-link active" data-scroll-target="#the-story-the-digital-archaeologist"><span class="header-section-number">0.1</span> The Story: The Digital Archaeologist</a></li>
+  <li><a href="#the-text-processing-arsenal" id="toc-the-text-processing-arsenal" class="nav-link" data-scroll-target="#the-text-processing-arsenal"><span class="header-section-number">0.2</span> The Text Processing Arsenal</a></li>
+  <li><a href="#basic-text-inspection" id="toc-basic-text-inspection" class="nav-link" data-scroll-target="#basic-text-inspection"><span class="header-section-number">0.3</span> Basic Text Inspection</a>
+  <ul class="collapse">
+  <li><a href="#looking-at-file-contents" id="toc-looking-at-file-contents" class="nav-link" data-scroll-target="#looking-at-file-contents"><span class="header-section-number">0.3.1</span> Looking at File Contents</a></li>
+  <li><a href="#quick-file-statistics" id="toc-quick-file-statistics" class="nav-link" data-scroll-target="#quick-file-statistics"><span class="header-section-number">0.3.2</span> Quick File Statistics</a></li>
+  </ul></li>
+  <li><a href="#the-pattern-hunter-grep" id="toc-the-pattern-hunter-grep" class="nav-link" data-scroll-target="#the-pattern-hunter-grep"><span class="header-section-number">0.4</span> The Pattern Hunter: <code>grep</code></a>
+  <ul class="collapse">
+  <li><a href="#basic-pattern-searching" id="toc-basic-pattern-searching" class="nav-link" data-scroll-target="#basic-pattern-searching"><span class="header-section-number">0.4.1</span> Basic Pattern Searching</a></li>
+  <li><a href="#advanced-pattern-hunting" id="toc-advanced-pattern-hunting" class="nav-link" data-scroll-target="#advanced-pattern-hunting"><span class="header-section-number">0.4.2</span> Advanced Pattern Hunting</a></li>
+  </ul></li>
+  <li><a href="#the-data-organizer-sort" id="toc-the-data-organizer-sort" class="nav-link" data-scroll-target="#the-data-organizer-sort"><span class="header-section-number">0.5</span> The Data Organizer: <code>sort</code></a>
+  <ul class="collapse">
+  <li><a href="#basic-sorting" id="toc-basic-sorting" class="nav-link" data-scroll-target="#basic-sorting"><span class="header-section-number">0.5.1</span> Basic Sorting</a></li>
+  <li><a href="#advanced-sorting-strategies" id="toc-advanced-sorting-strategies" class="nav-link" data-scroll-target="#advanced-sorting-strategies"><span class="header-section-number">0.5.2</span> Advanced Sorting Strategies</a></li>
+  </ul></li>
+  <li><a href="#the-column-surgeon-cut" id="toc-the-column-surgeon-cut" class="nav-link" data-scroll-target="#the-column-surgeon-cut"><span class="header-section-number">0.6</span> The Column Surgeon: <code>cut</code></a>
+  <ul class="collapse">
+  <li><a href="#basic-column-extraction" id="toc-basic-column-extraction" class="nav-link" data-scroll-target="#basic-column-extraction"><span class="header-section-number">0.6.1</span> Basic Column Extraction</a></li>
+  <li><a href="#real-world-data-extraction" id="toc-real-world-data-extraction" class="nav-link" data-scroll-target="#real-world-data-extraction"><span class="header-section-number">0.6.2</span> Real-World Data Extraction</a></li>
+  </ul></li>
+  <li><a href="#the-duplicate-detective-uniq" id="toc-the-duplicate-detective-uniq" class="nav-link" data-scroll-target="#the-duplicate-detective-uniq"><span class="header-section-number">0.7</span> The Duplicate Detective: <code>uniq</code></a></li>
+  <li><a href="#the-data-sculptor-awk" id="toc-the-data-sculptor-awk" class="nav-link" data-scroll-target="#the-data-sculptor-awk"><span class="header-section-number">0.8</span> The Data Sculptor: <code>awk</code></a>
+  <ul class="collapse">
+  <li><a href="#basic-awk-operations" id="toc-basic-awk-operations" class="nav-link" data-scroll-target="#basic-awk-operations"><span class="header-section-number">0.8.1</span> Basic AWK Operations</a></li>
+  <li><a href="#awk-power-features" id="toc-awk-power-features" class="nav-link" data-scroll-target="#awk-power-features"><span class="header-section-number">0.8.2</span> AWK Power Features</a></li>
+  </ul></li>
+  <li><a href="#the-text-transformer-sed" id="toc-the-text-transformer-sed" class="nav-link" data-scroll-target="#the-text-transformer-sed"><span class="header-section-number">0.9</span> The Text Transformer: <code>sed</code></a>
+  <ul class="collapse">
+  <li><a href="#basic-text-substitution" id="toc-basic-text-substitution" class="nav-link" data-scroll-target="#basic-text-substitution"><span class="header-section-number">0.9.1</span> Basic Text Substitution</a></li>
+  <li><a href="#advanced-text-transformation" id="toc-advanced-text-transformation" class="nav-link" data-scroll-target="#advanced-text-transformation"><span class="header-section-number">0.9.2</span> Advanced Text Transformation</a></li>
+  </ul></li>
+  <li><a href="#real-world-hpc-text-processing-scenarios" id="toc-real-world-hpc-text-processing-scenarios" class="nav-link" data-scroll-target="#real-world-hpc-text-processing-scenarios"><span class="header-section-number">0.10</span> Real-World HPC Text Processing Scenarios</a>
+  <ul class="collapse">
+  <li><a href="#scenario-1-log-file-analysis" id="toc-scenario-1-log-file-analysis" class="nav-link" data-scroll-target="#scenario-1-log-file-analysis"><span class="header-section-number">0.10.1</span> Scenario 1: Log File Analysis</a></li>
+  <li><a href="#scenario-2-csv-data-processing" id="toc-scenario-2-csv-data-processing" class="nav-link" data-scroll-target="#scenario-2-csv-data-processing"><span class="header-section-number">0.10.2</span> Scenario 2: CSV Data Processing</a></li>
+  <li><a href="#scenario-3-results-aggregation" id="toc-scenario-3-results-aggregation" class="nav-link" data-scroll-target="#scenario-3-results-aggregation"><span class="header-section-number">0.10.3</span> Scenario 3: Results Aggregation</a></li>
+  </ul></li>
+  <li><a href="#power-combinations-pipes-and-chains" id="toc-power-combinations-pipes-and-chains" class="nav-link" data-scroll-target="#power-combinations-pipes-and-chains"><span class="header-section-number">0.11</span> Power Combinations: Pipes and Chains</a></li>
+  <li><a href="#performance-tips-for-large-files" id="toc-performance-tips-for-large-files" class="nav-link" data-scroll-target="#performance-tips-for-large-files"><span class="header-section-number">0.12</span> Performance Tips for Large Files</a>
+  <ul class="collapse">
+  <li><a href="#efficient-processing-strategies" id="toc-efficient-processing-strategies" class="nav-link" data-scroll-target="#efficient-processing-strategies"><span class="header-section-number">0.12.1</span> Efficient Processing Strategies</a></li>
+  </ul></li>
+  <li><a href="#quick-reference-text-processing-cheat-sheet" id="toc-quick-reference-text-processing-cheat-sheet" class="nav-link" data-scroll-target="#quick-reference-text-processing-cheat-sheet"><span class="header-section-number">0.13</span> Quick Reference: Text Processing Cheat Sheet</a></li>
+  <li><a href="#practice-exercises" id="toc-practice-exercises" class="nav-link" data-scroll-target="#practice-exercises"><span class="header-section-number">0.14</span> Practice Exercises</a></li>
+  <li><a href="#whats-next" id="toc-whats-next" class="nav-link" data-scroll-target="#whats-next"><span class="header-section-number">0.15</span> What’s Next?</a></li>
+  </ul>
+</nav>
+    </div>
+<!-- main -->
+<main class="content quarto-banner-title-block" id="quarto-document-content">
+
+
+
+
+<section id="the-story-the-digital-archaeologist" class="level2" data-number="0.1">
+<h2 data-number="0.1" class="anchored" data-anchor-id="the-story-the-digital-archaeologist"><span class="header-section-number">0.1</span> The Story: The Digital Archaeologist</h2>
+<p>Imagine you’re an archaeologist, but instead of digging through ancient ruins, you’re excavating insights from massive text files containing millions of lines of research data. Your tools aren’t brushes and trowels – they’re powerful text processing commands that can sift through gigabytes of data in seconds, finding patterns, extracting specific information, and transforming raw data into meaningful insights.</p>
+<p>With Windows Notepad or Excel, analyzing large text files would be like excavating a pyramid with a teaspoon. But with Unix text processing tools, you become a digital archaeologist with laser scanners and precision instruments, capable of extracting exactly what you need from the vast digital landscape.</p>
+<p>Today, you’ll master the ancient arts of text manipulation that turn you from a data observer into a data wizard.</p>
+</section>
+<section id="the-text-processing-arsenal" class="level2" data-number="0.2">
+<h2 data-number="0.2" class="anchored" data-anchor-id="the-text-processing-arsenal"><span class="header-section-number">0.2</span> The Text Processing Arsenal</h2>
+<p>Your text processing toolkit contains specialized instruments, each designed for specific tasks:</p>
+<ul>
+<li><strong><code>cat</code></strong>: The reader (displays file contents)</li>
+<li><strong><code>head/tail</code></strong>: The samplers (show beginning/end of files)</li>
+<li><strong><code>grep</code></strong>: The hunter (searches for patterns)</li>
+<li><strong><code>sort</code></strong>: The organizer (arranges data in order)</li>
+<li><strong><code>uniq</code></strong>: The deduplicator (removes duplicates)</li>
+<li><strong><code>cut</code></strong>: The column extractor (selects specific fields)</li>
+<li><strong><code>awk</code></strong>: The data sculptor (processes structured text)</li>
+<li><strong><code>sed</code></strong>: The transformer (edits text streams)</li>
+<li><strong><code>wc</code></strong>: The counter (counts lines, words, characters)</li>
+</ul>
+<p><strong>Real-world analogy</strong>: These tools are like having a complete laboratory where each instrument has a specific purpose – microscopes for detailed inspection, filters for separation, scales for measurement, and computers for complex analysis.</p>
+</section>
+<section id="basic-text-inspection" class="level2" data-number="0.3">
+<h2 data-number="0.3" class="anchored" data-anchor-id="basic-text-inspection"><span class="header-section-number">0.3</span> Basic Text Inspection</h2>
+<section id="looking-at-file-contents" class="level3" data-number="0.3.1">
+<h3 data-number="0.3.1" class="anchored" data-anchor-id="looking-at-file-contents"><span class="header-section-number">0.3.1</span> Looking at File Contents</h3>
+<div class="sourceCode" id="cb1"><pre class="sourceCode numberSource bash number-lines code-with-copy"><code class="sourceCode bash"><span id="cb1-1"><a href="#cb1-1"></a><span class="co"># Display entire file (careful with large files!)</span></span>
+<span id="cb1-2"><a href="#cb1-2"></a><span class="fu">cat</span> data.txt</span>
+<span id="cb1-3"><a href="#cb1-3"></a></span>
+<span id="cb1-4"><a href="#cb1-4"></a><span class="co"># Display file with line numbers</span></span>
+<span id="cb1-5"><a href="#cb1-5"></a><span class="fu">cat</span> <span class="at">-n</span> experiment_log.txt</span>
+<span id="cb1-6"><a href="#cb1-6"></a></span>
+<span id="cb1-7"><a href="#cb1-7"></a><span class="co"># Display first 10 lines</span></span>
+<span id="cb1-8"><a href="#cb1-8"></a><span class="fu">head</span> data.csv</span>
+<span id="cb1-9"><a href="#cb1-9"></a></span>
+<span id="cb1-10"><a href="#cb1-10"></a><span class="co"># Display first 20 lines</span></span>
+<span id="cb1-11"><a href="#cb1-11"></a><span class="fu">head</span> <span class="at">-n</span> 20 data.csv</span>
+<span id="cb1-12"><a href="#cb1-12"></a></span>
+<span id="cb1-13"><a href="#cb1-13"></a><span class="co"># Display last 10 lines</span></span>
+<span id="cb1-14"><a href="#cb1-14"></a><span class="fu">tail</span> results.log</span>
+<span id="cb1-15"><a href="#cb1-15"></a></span>
+<span id="cb1-16"><a href="#cb1-16"></a><span class="co"># Follow a growing file (like watching a log in real-time)</span></span>
+<span id="cb1-17"><a href="#cb1-17"></a><span class="fu">tail</span> <span class="at">-f</span> experiment.log</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p><strong>Real-world analogy</strong>: These commands are like different ways of reading a book – sometimes you want to read the whole thing, sometimes just the first chapter, sometimes just the conclusion, and sometimes you want to watch as new pages are being written.</p>
+</section>
+<section id="quick-file-statistics" class="level3" data-number="0.3.2">
+<h3 data-number="0.3.2" class="anchored" data-anchor-id="quick-file-statistics"><span class="header-section-number">0.3.2</span> Quick File Statistics</h3>
+<div class="sourceCode" id="cb2"><pre class="sourceCode numberSource bash number-lines code-with-copy"><code class="sourceCode bash"><span id="cb2-1"><a href="#cb2-1"></a><span class="co"># Count lines, words, and characters</span></span>
+<span id="cb2-2"><a href="#cb2-2"></a><span class="fu">wc</span> data.txt</span>
+<span id="cb2-3"><a href="#cb2-3"></a></span>
+<span id="cb2-4"><a href="#cb2-4"></a><span class="co"># Count only lines</span></span>
+<span id="cb2-5"><a href="#cb2-5"></a><span class="fu">wc</span> <span class="at">-l</span> <span class="pp">*</span>.csv</span>
+<span id="cb2-6"><a href="#cb2-6"></a></span>
+<span id="cb2-7"><a href="#cb2-7"></a><span class="co"># Count files in directory</span></span>
+<span id="cb2-8"><a href="#cb2-8"></a><span class="fu">ls</span> <span class="pp">*</span>.txt <span class="kw">|</span> <span class="fu">wc</span> <span class="at">-l</span></span>
+<span id="cb2-9"><a href="#cb2-9"></a></span>
+<span id="cb2-10"><a href="#cb2-10"></a><span class="co"># Get file size in human-readable format</span></span>
+<span id="cb2-11"><a href="#cb2-11"></a><span class="fu">du</span> <span class="at">-h</span> large_dataset.csv</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</section>
+</section>
+<section id="the-pattern-hunter-grep" class="level2" data-number="0.4">
+<h2 data-number="0.4" class="anchored" data-anchor-id="the-pattern-hunter-grep"><span class="header-section-number">0.4</span> The Pattern Hunter: <code>grep</code></h2>
+<p><code>grep</code> is your digital bloodhound, capable of sniffing out specific patterns in massive files.</p>
+<section id="basic-pattern-searching" class="level3" data-number="0.4.1">
+<h3 data-number="0.4.1" class="anchored" data-anchor-id="basic-pattern-searching"><span class="header-section-number">0.4.1</span> Basic Pattern Searching</h3>
+<div class="sourceCode" id="cb3"><pre class="sourceCode numberSource bash number-lines code-with-copy"><code class="sourceCode bash"><span id="cb3-1"><a href="#cb3-1"></a><span class="co"># Find lines containing "error"</span></span>
+<span id="cb3-2"><a href="#cb3-2"></a><span class="fu">grep</span> <span class="st">"error"</span> log_file.txt</span>
+<span id="cb3-3"><a href="#cb3-3"></a></span>
+<span id="cb3-4"><a href="#cb3-4"></a><span class="co"># Case-insensitive search</span></span>
+<span id="cb3-5"><a href="#cb3-5"></a><span class="fu">grep</span> <span class="at">-i</span> <span class="st">"ERROR"</span> log_file.txt</span>
+<span id="cb3-6"><a href="#cb3-6"></a></span>
+<span id="cb3-7"><a href="#cb3-7"></a><span class="co"># Search in multiple files</span></span>
+<span id="cb3-8"><a href="#cb3-8"></a><span class="fu">grep</span> <span class="st">"experiment_1"</span> <span class="pp">*</span>.txt</span>
+<span id="cb3-9"><a href="#cb3-9"></a></span>
+<span id="cb3-10"><a href="#cb3-10"></a><span class="co"># Show line numbers</span></span>
+<span id="cb3-11"><a href="#cb3-11"></a><span class="fu">grep</span> <span class="at">-n</span> <span class="st">"important"</span> data.txt</span>
+<span id="cb3-12"><a href="#cb3-12"></a></span>
+<span id="cb3-13"><a href="#cb3-13"></a><span class="co"># Show lines that DON'T match</span></span>
+<span id="cb3-14"><a href="#cb3-14"></a><span class="fu">grep</span> <span class="at">-v</span> <span class="st">"comment"</span> data.csv</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</section>
+<section id="advanced-pattern-hunting" class="level3" data-number="0.4.2">
+<h3 data-number="0.4.2" class="anchored" data-anchor-id="advanced-pattern-hunting"><span class="header-section-number">0.4.2</span> Advanced Pattern Hunting</h3>
+<div class="sourceCode" id="cb4"><pre class="sourceCode numberSource bash number-lines code-with-copy"><code class="sourceCode bash"><span id="cb4-1"><a href="#cb4-1"></a><span class="co"># Count matching lines</span></span>
+<span id="cb4-2"><a href="#cb4-2"></a><span class="fu">grep</span> <span class="at">-c</span> <span class="st">"success"</span> results.log</span>
+<span id="cb4-3"><a href="#cb4-3"></a></span>
+<span id="cb4-4"><a href="#cb4-4"></a><span class="co"># Show only filenames that contain pattern</span></span>
+<span id="cb4-5"><a href="#cb4-5"></a><span class="fu">grep</span> <span class="at">-l</span> <span class="st">"error"</span> <span class="pp">*</span>.log</span>
+<span id="cb4-6"><a href="#cb4-6"></a></span>
+<span id="cb4-7"><a href="#cb4-7"></a><span class="co"># Show context around matches</span></span>
+<span id="cb4-8"><a href="#cb4-8"></a><span class="fu">grep</span> <span class="at">-A</span> 3 <span class="at">-B</span> 3 <span class="st">"error"</span> log.txt    <span class="co"># 3 lines after and before</span></span>
+<span id="cb4-9"><a href="#cb4-9"></a></span>
+<span id="cb4-10"><a href="#cb4-10"></a><span class="co"># Search recursively in directories</span></span>
+<span id="cb4-11"><a href="#cb4-11"></a><span class="fu">grep</span> <span class="at">-r</span> <span class="st">"TODO"</span> project_files/</span>
+<span id="cb4-12"><a href="#cb4-12"></a></span>
+<span id="cb4-13"><a href="#cb4-13"></a><span class="co"># Use regular expressions</span></span>
+<span id="cb4-14"><a href="#cb4-14"></a><span class="fu">grep</span> <span class="st">"^[0-9]"</span> data.txt           <span class="co"># Lines starting with numbers</span></span>
+<span id="cb4-15"><a href="#cb4-15"></a><span class="fu">grep</span> <span class="st">"[0-9]$"</span> data.txt           <span class="co"># Lines ending with numbers</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p><strong>Real-world analogy</strong>: Advanced grep is like having a detective who can not only find what you’re looking for but also show you the surrounding evidence and tell you exactly where and how many times they found it.</p>
+</section>
+</section>
+<section id="the-data-organizer-sort" class="level2" data-number="0.5">
+<h2 data-number="0.5" class="anchored" data-anchor-id="the-data-organizer-sort"><span class="header-section-number">0.5</span> The Data Organizer: <code>sort</code></h2>
+<p>Sorting is fundamental to data analysis – it reveals patterns and makes data searchable.</p>
+<section id="basic-sorting" class="level3" data-number="0.5.1">
+<h3 data-number="0.5.1" class="anchored" data-anchor-id="basic-sorting"><span class="header-section-number">0.5.1</span> Basic Sorting</h3>
+<div class="sourceCode" id="cb5"><pre class="sourceCode numberSource bash number-lines code-with-copy"><code class="sourceCode bash"><span id="cb5-1"><a href="#cb5-1"></a><span class="co"># Sort lines alphabetically</span></span>
+<span id="cb5-2"><a href="#cb5-2"></a><span class="fu">sort</span> names.txt</span>
+<span id="cb5-3"><a href="#cb5-3"></a></span>
+<span id="cb5-4"><a href="#cb5-4"></a><span class="co"># Sort in reverse order</span></span>
+<span id="cb5-5"><a href="#cb5-5"></a><span class="fu">sort</span> <span class="at">-r</span> scores.txt</span>
+<span id="cb5-6"><a href="#cb5-6"></a></span>
+<span id="cb5-7"><a href="#cb5-7"></a><span class="co"># Sort numerically (not alphabetically)</span></span>
+<span id="cb5-8"><a href="#cb5-8"></a><span class="fu">sort</span> <span class="at">-n</span> numbers.txt</span>
+<span id="cb5-9"><a href="#cb5-9"></a></span>
+<span id="cb5-10"><a href="#cb5-10"></a><span class="co"># Sort by specific column (space-separated)</span></span>
+<span id="cb5-11"><a href="#cb5-11"></a><span class="fu">sort</span> <span class="at">-k</span> 2 data.txt               <span class="co"># Sort by second column</span></span>
+<span id="cb5-12"><a href="#cb5-12"></a></span>
+<span id="cb5-13"><a href="#cb5-13"></a><span class="co"># Sort CSV by specific column</span></span>
+<span id="cb5-14"><a href="#cb5-14"></a><span class="fu">sort</span> <span class="at">-t</span> <span class="st">','</span> <span class="at">-k</span> 3 data.csv        <span class="co"># Sort by third column, comma-separated</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</section>
+<section id="advanced-sorting-strategies" class="level3" data-number="0.5.2">
+<h3 data-number="0.5.2" class="anchored" data-anchor-id="advanced-sorting-strategies"><span class="header-section-number">0.5.2</span> Advanced Sorting Strategies</h3>
+<div class="sourceCode" id="cb6"><pre class="sourceCode numberSource bash number-lines code-with-copy"><code class="sourceCode bash"><span id="cb6-1"><a href="#cb6-1"></a><span class="co"># Sort by multiple columns</span></span>
+<span id="cb6-2"><a href="#cb6-2"></a><span class="fu">sort</span> <span class="at">-k</span> 1,1 <span class="at">-k</span> 2,2n data.txt     <span class="co"># First by column 1 (text), then by column 2 (numeric)</span></span>
+<span id="cb6-3"><a href="#cb6-3"></a></span>
+<span id="cb6-4"><a href="#cb6-4"></a><span class="co"># Sort by file size</span></span>
+<span id="cb6-5"><a href="#cb6-5"></a><span class="fu">ls</span> <span class="at">-l</span> <span class="kw">|</span> <span class="fu">sort</span> <span class="at">-k</span> 5 <span class="at">-n</span>             <span class="co"># Sort files by size</span></span>
+<span id="cb6-6"><a href="#cb6-6"></a></span>
+<span id="cb6-7"><a href="#cb6-7"></a><span class="co"># Sort unique values</span></span>
+<span id="cb6-8"><a href="#cb6-8"></a><span class="fu">sort</span> data.txt <span class="kw">|</span> <span class="fu">uniq</span></span>
+<span id="cb6-9"><a href="#cb6-9"></a></span>
+<span id="cb6-10"><a href="#cb6-10"></a><span class="co"># Sort and count occurrences</span></span>
+<span id="cb6-11"><a href="#cb6-11"></a><span class="fu">sort</span> data.txt <span class="kw">|</span> <span class="fu">uniq</span> <span class="at">-c</span> <span class="kw">|</span> <span class="fu">sort</span> <span class="at">-nr</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p><strong>Real-world analogy</strong>: Sorting is like organizing a library – you can arrange books by title, author, publication date, or size, making it easy to find what you need and spot patterns.</p>
+</section>
+</section>
+<section id="the-column-surgeon-cut" class="level2" data-number="0.6">
+<h2 data-number="0.6" class="anchored" data-anchor-id="the-column-surgeon-cut"><span class="header-section-number">0.6</span> The Column Surgeon: <code>cut</code></h2>
+<p><code>cut</code> extracts specific columns from structured text, like a precision scalpel for data.</p>
+<section id="basic-column-extraction" class="level3" data-number="0.6.1">
+<h3 data-number="0.6.1" class="anchored" data-anchor-id="basic-column-extraction"><span class="header-section-number">0.6.1</span> Basic Column Extraction</h3>
+<div class="sourceCode" id="cb7"><pre class="sourceCode numberSource bash number-lines code-with-copy"><code class="sourceCode bash"><span id="cb7-1"><a href="#cb7-1"></a><span class="co"># Extract first column (space-separated)</span></span>
+<span id="cb7-2"><a href="#cb7-2"></a><span class="fu">cut</span> <span class="at">-d</span> <span class="st">' '</span> <span class="at">-f</span> 1 data.txt</span>
+<span id="cb7-3"><a href="#cb7-3"></a></span>
+<span id="cb7-4"><a href="#cb7-4"></a><span class="co"># Extract multiple columns</span></span>
+<span id="cb7-5"><a href="#cb7-5"></a><span class="fu">cut</span> <span class="at">-d</span> <span class="st">','</span> <span class="at">-f</span> 1,3,5 data.csv      <span class="co"># Columns 1, 3, and 5 from CSV</span></span>
+<span id="cb7-6"><a href="#cb7-6"></a></span>
+<span id="cb7-7"><a href="#cb7-7"></a><span class="co"># Extract character ranges</span></span>
+<span id="cb7-8"><a href="#cb7-8"></a><span class="fu">cut</span> <span class="at">-c</span> 1-10 fixed_width.txt       <span class="co"># Characters 1-10 from each line</span></span>
+<span id="cb7-9"><a href="#cb7-9"></a></span>
+<span id="cb7-10"><a href="#cb7-10"></a><span class="co"># Extract from specific character to end</span></span>
+<span id="cb7-11"><a href="#cb7-11"></a><span class="fu">cut</span> <span class="at">-c</span> 15- data.txt               <span class="co"># From character 15 to end of line</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</section>
+<section id="real-world-data-extraction" class="level3" data-number="0.6.2">
+<h3 data-number="0.6.2" class="anchored" data-anchor-id="real-world-data-extraction"><span class="header-section-number">0.6.2</span> Real-World Data Extraction</h3>
+<div class="sourceCode" id="cb8"><pre class="sourceCode numberSource bash number-lines code-with-copy"><code class="sourceCode bash"><span id="cb8-1"><a href="#cb8-1"></a><span class="co"># Extract usernames from system log</span></span>
+<span id="cb8-2"><a href="#cb8-2"></a><span class="fu">cut</span> <span class="at">-d</span> <span class="st">':'</span> <span class="at">-f</span> 1 /etc/passwd</span>
+<span id="cb8-3"><a href="#cb8-3"></a></span>
+<span id="cb8-4"><a href="#cb8-4"></a><span class="co"># Get just the filenames from ls -l output</span></span>
+<span id="cb8-5"><a href="#cb8-5"></a><span class="fu">ls</span> <span class="at">-l</span> <span class="kw">|</span> <span class="fu">cut</span> <span class="at">-d</span> <span class="st">' '</span> <span class="at">-f</span> 9</span>
+<span id="cb8-6"><a href="#cb8-6"></a></span>
+<span id="cb8-7"><a href="#cb8-7"></a><span class="co"># Extract specific fields from CSV</span></span>
+<span id="cb8-8"><a href="#cb8-8"></a><span class="fu">cut</span> <span class="at">-d</span> <span class="st">','</span> <span class="at">-f</span> 2,4 experiment_data.csv <span class="op">&gt;</span> selected_columns.csv</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</section>
+</section>
+<section id="the-duplicate-detective-uniq" class="level2" data-number="0.7">
+<h2 data-number="0.7" class="anchored" data-anchor-id="the-duplicate-detective-uniq"><span class="header-section-number">0.7</span> The Duplicate Detective: <code>uniq</code></h2>
+<p><code>uniq</code> finds and manages duplicate lines in your data.</p>
+<div class="sourceCode" id="cb9"><pre class="sourceCode numberSource bash number-lines code-with-copy"><code class="sourceCode bash"><span id="cb9-1"><a href="#cb9-1"></a><span class="co"># Remove consecutive duplicate lines</span></span>
+<span id="cb9-2"><a href="#cb9-2"></a><span class="fu">uniq</span> data.txt</span>
+<span id="cb9-3"><a href="#cb9-3"></a></span>
+<span id="cb9-4"><a href="#cb9-4"></a><span class="co"># Count occurrences of each unique line</span></span>
+<span id="cb9-5"><a href="#cb9-5"></a><span class="fu">uniq</span> <span class="at">-c</span> data.txt</span>
+<span id="cb9-6"><a href="#cb9-6"></a></span>
+<span id="cb9-7"><a href="#cb9-7"></a><span class="co"># Show only duplicate lines</span></span>
+<span id="cb9-8"><a href="#cb9-8"></a><span class="fu">uniq</span> <span class="at">-d</span> data.txt</span>
+<span id="cb9-9"><a href="#cb9-9"></a></span>
+<span id="cb9-10"><a href="#cb9-10"></a><span class="co"># Show only unique lines (no duplicates)</span></span>
+<span id="cb9-11"><a href="#cb9-11"></a><span class="fu">uniq</span> <span class="at">-u</span> data.txt</span>
+<span id="cb9-12"><a href="#cb9-12"></a></span>
+<span id="cb9-13"><a href="#cb9-13"></a><span class="co"># Case-insensitive uniqueness</span></span>
+<span id="cb9-14"><a href="#cb9-14"></a><span class="fu">uniq</span> <span class="at">-i</span> data.txt</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p><strong>Important</strong>: <code>uniq</code> only works on consecutive duplicate lines, so usually you need to sort first:</p>
+<div class="sourceCode" id="cb10"><pre class="sourceCode numberSource bash number-lines code-with-copy"><code class="sourceCode bash"><span id="cb10-1"><a href="#cb10-1"></a><span class="co"># Proper way to find all unique values</span></span>
+<span id="cb10-2"><a href="#cb10-2"></a><span class="fu">sort</span> data.txt <span class="kw">|</span> <span class="fu">uniq</span></span>
+<span id="cb10-3"><a href="#cb10-3"></a></span>
+<span id="cb10-4"><a href="#cb10-4"></a><span class="co"># Count all occurrences</span></span>
+<span id="cb10-5"><a href="#cb10-5"></a><span class="fu">sort</span> data.txt <span class="kw">|</span> <span class="fu">uniq</span> <span class="at">-c</span> <span class="kw">|</span> <span class="fu">sort</span> <span class="at">-nr</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</section>
+<section id="the-data-sculptor-awk" class="level2" data-number="0.8">
+<h2 data-number="0.8" class="anchored" data-anchor-id="the-data-sculptor-awk"><span class="header-section-number">0.8</span> The Data Sculptor: <code>awk</code></h2>
+<p><code>awk</code> is like having a programmable data processing workshop. It can perform complex operations on structured text.</p>
+<section id="basic-awk-operations" class="level3" data-number="0.8.1">
+<h3 data-number="0.8.1" class="anchored" data-anchor-id="basic-awk-operations"><span class="header-section-number">0.8.1</span> Basic AWK Operations</h3>
+<div class="sourceCode" id="cb11"><pre class="sourceCode numberSource bash number-lines code-with-copy"><code class="sourceCode bash"><span id="cb11-1"><a href="#cb11-1"></a><span class="co"># Print specific columns</span></span>
+<span id="cb11-2"><a href="#cb11-2"></a><span class="fu">awk</span> <span class="st">'{print $1, $3}'</span> data.txt    <span class="co"># Print columns 1 and 3</span></span>
+<span id="cb11-3"><a href="#cb11-3"></a></span>
+<span id="cb11-4"><a href="#cb11-4"></a><span class="co"># Print with custom formatting</span></span>
+<span id="cb11-5"><a href="#cb11-5"></a><span class="fu">awk</span> <span class="st">'{print "Name:", $1, "Score:", $2}'</span> scores.txt</span>
+<span id="cb11-6"><a href="#cb11-6"></a></span>
+<span id="cb11-7"><a href="#cb11-7"></a><span class="co"># Process CSV files</span></span>
+<span id="cb11-8"><a href="#cb11-8"></a><span class="fu">awk</span> <span class="at">-F</span> <span class="st">','</span> <span class="st">'{print $1, $3}'</span> data.csv</span>
+<span id="cb11-9"><a href="#cb11-9"></a></span>
+<span id="cb11-10"><a href="#cb11-10"></a><span class="co"># Add line numbers</span></span>
+<span id="cb11-11"><a href="#cb11-11"></a><span class="fu">awk</span> <span class="st">'{print NR, $0}'</span> data.txt</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</section>
+<section id="awk-power-features" class="level3" data-number="0.8.2">
+<h3 data-number="0.8.2" class="anchored" data-anchor-id="awk-power-features"><span class="header-section-number">0.8.2</span> AWK Power Features</h3>
+<div class="sourceCode" id="cb12"><pre class="sourceCode numberSource bash number-lines code-with-copy"><code class="sourceCode bash"><span id="cb12-1"><a href="#cb12-1"></a><span class="co"># Conditional processing</span></span>
+<span id="cb12-2"><a href="#cb12-2"></a><span class="fu">awk</span> <span class="st">'$2 &gt; 100 {print $1, $2}'</span> scores.txt    <span class="co"># Print if second column &gt; 100</span></span>
+<span id="cb12-3"><a href="#cb12-3"></a></span>
+<span id="cb12-4"><a href="#cb12-4"></a><span class="co"># Calculate sums</span></span>
+<span id="cb12-5"><a href="#cb12-5"></a><span class="fu">awk</span> <span class="st">'{sum += $2} END {print "Total:", sum}'</span> numbers.txt</span>
+<span id="cb12-6"><a href="#cb12-6"></a></span>
+<span id="cb12-7"><a href="#cb12-7"></a><span class="co"># Count occurrences</span></span>
+<span id="cb12-8"><a href="#cb12-8"></a><span class="fu">awk</span> <span class="st">'{count[$1]++} END {for (i in count) print i, count[i]}'</span> data.txt</span>
+<span id="cb12-9"><a href="#cb12-9"></a></span>
+<span id="cb12-10"><a href="#cb12-10"></a><span class="co"># Process specific lines</span></span>
+<span id="cb12-11"><a href="#cb12-11"></a><span class="fu">awk</span> <span class="st">'NR &gt; 1 {print}'</span> data.csv    <span class="co"># Skip header line</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p><strong>Real-world analogy</strong>: AWK is like having a Swiss Army knife that can cut, measure, calculate, and transform your data all in one tool.</p>
+</section>
+</section>
+<section id="the-text-transformer-sed" class="level2" data-number="0.9">
+<h2 data-number="0.9" class="anchored" data-anchor-id="the-text-transformer-sed"><span class="header-section-number">0.9</span> The Text Transformer: <code>sed</code></h2>
+<p><code>sed</code> (stream editor) modifies text as it flows through, like having a assembly line that transforms your data.</p>
+<section id="basic-text-substitution" class="level3" data-number="0.9.1">
+<h3 data-number="0.9.1" class="anchored" data-anchor-id="basic-text-substitution"><span class="header-section-number">0.9.1</span> Basic Text Substitution</h3>
+<div class="sourceCode" id="cb13"><pre class="sourceCode numberSource bash number-lines code-with-copy"><code class="sourceCode bash"><span id="cb13-1"><a href="#cb13-1"></a><span class="co"># Replace first occurrence per line</span></span>
+<span id="cb13-2"><a href="#cb13-2"></a><span class="fu">sed</span> <span class="st">'s/old/new/'</span> data.txt</span>
+<span id="cb13-3"><a href="#cb13-3"></a></span>
+<span id="cb13-4"><a href="#cb13-4"></a><span class="co"># Replace all occurrences</span></span>
+<span id="cb13-5"><a href="#cb13-5"></a><span class="fu">sed</span> <span class="st">'s/old/new/g'</span> data.txt</span>
+<span id="cb13-6"><a href="#cb13-6"></a></span>
+<span id="cb13-7"><a href="#cb13-7"></a><span class="co"># Replace and save to new file</span></span>
+<span id="cb13-8"><a href="#cb13-8"></a><span class="fu">sed</span> <span class="st">'s/old/new/g'</span> input.txt <span class="op">&gt;</span> output.txt</span>
+<span id="cb13-9"><a href="#cb13-9"></a></span>
+<span id="cb13-10"><a href="#cb13-10"></a><span class="co"># Replace in-place (modify original file)</span></span>
+<span id="cb13-11"><a href="#cb13-11"></a><span class="fu">sed</span> <span class="at">-i</span> <span class="st">'s/old/new/g'</span> data.txt</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</section>
+<section id="advanced-text-transformation" class="level3" data-number="0.9.2">
+<h3 data-number="0.9.2" class="anchored" data-anchor-id="advanced-text-transformation"><span class="header-section-number">0.9.2</span> Advanced Text Transformation</h3>
+<div class="sourceCode" id="cb14"><pre class="sourceCode numberSource bash number-lines code-with-copy"><code class="sourceCode bash"><span id="cb14-1"><a href="#cb14-1"></a><span class="co"># Delete lines containing pattern</span></span>
+<span id="cb14-2"><a href="#cb14-2"></a><span class="fu">sed</span> <span class="st">'/pattern/d'</span> data.txt</span>
+<span id="cb14-3"><a href="#cb14-3"></a></span>
+<span id="cb14-4"><a href="#cb14-4"></a><span class="co"># Delete empty lines</span></span>
+<span id="cb14-5"><a href="#cb14-5"></a><span class="fu">sed</span> <span class="st">'/^$/d'</span> data.txt</span>
+<span id="cb14-6"><a href="#cb14-6"></a></span>
+<span id="cb14-7"><a href="#cb14-7"></a><span class="co"># Insert text before/after pattern</span></span>
+<span id="cb14-8"><a href="#cb14-8"></a><span class="fu">sed</span> <span class="st">'/pattern/i\New line before'</span> data.txt</span>
+<span id="cb14-9"><a href="#cb14-9"></a><span class="fu">sed</span> <span class="st">'/pattern/a\New line after'</span> data.txt</span>
+<span id="cb14-10"><a href="#cb14-10"></a></span>
+<span id="cb14-11"><a href="#cb14-11"></a><span class="co"># Extract lines between patterns</span></span>
+<span id="cb14-12"><a href="#cb14-12"></a><span class="fu">sed</span> <span class="at">-n</span> <span class="st">'/START/,/END/p'</span> data.txt</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</section>
+</section>
+<section id="real-world-hpc-text-processing-scenarios" class="level2" data-number="0.10">
+<h2 data-number="0.10" class="anchored" data-anchor-id="real-world-hpc-text-processing-scenarios"><span class="header-section-number">0.10</span> Real-World HPC Text Processing Scenarios</h2>
+<section id="scenario-1-log-file-analysis" class="level3" data-number="0.10.1">
+<h3 data-number="0.10.1" class="anchored" data-anchor-id="scenario-1-log-file-analysis"><span class="header-section-number">0.10.1</span> Scenario 1: Log File Analysis</h3>
+<div class="sourceCode" id="cb15"><pre class="sourceCode numberSource bash number-lines code-with-copy"><code class="sourceCode bash"><span id="cb15-1"><a href="#cb15-1"></a><span class="co">#!/bin/bash</span></span>
+<span id="cb15-2"><a href="#cb15-2"></a><span class="co"># analyze_experiment_logs.sh - Extract insights from experiment logs</span></span>
+<span id="cb15-3"><a href="#cb15-3"></a></span>
+<span id="cb15-4"><a href="#cb15-4"></a><span class="va">LOG_FILE</span><span class="op">=</span><span class="st">"experiment.log"</span></span>
+<span id="cb15-5"><a href="#cb15-5"></a><span class="va">REPORT_FILE</span><span class="op">=</span><span class="st">"log_analysis_</span><span class="va">$(</span><span class="fu">date</span> +%Y%m%d<span class="va">)</span><span class="st">.txt"</span></span>
+<span id="cb15-6"><a href="#cb15-6"></a></span>
+<span id="cb15-7"><a href="#cb15-7"></a><span class="bu">echo</span> <span class="st">"Experiment Log Analysis - </span><span class="va">$(</span><span class="fu">date</span><span class="va">)</span><span class="st">"</span> <span class="op">&gt;</span> <span class="va">$REPORT_FILE</span></span>
+<span id="cb15-8"><a href="#cb15-8"></a><span class="bu">echo</span> <span class="st">"================================="</span> <span class="op">&gt;&gt;</span> <span class="va">$REPORT_FILE</span></span>
+<span id="cb15-9"><a href="#cb15-9"></a></span>
+<span id="cb15-10"><a href="#cb15-10"></a><span class="co"># Count total entries</span></span>
+<span id="cb15-11"><a href="#cb15-11"></a><span class="bu">echo</span> <span class="st">"Total log entries: </span><span class="va">$(</span><span class="fu">wc</span> <span class="at">-l</span> <span class="op">&lt;</span> <span class="va">$LOG_FILE)</span><span class="st">"</span> <span class="op">&gt;&gt;</span> <span class="va">$REPORT_FILE</span></span>
+<span id="cb15-12"><a href="#cb15-12"></a></span>
+<span id="cb15-13"><a href="#cb15-13"></a><span class="co"># Count errors and warnings</span></span>
+<span id="cb15-14"><a href="#cb15-14"></a><span class="bu">echo</span> <span class="st">"Errors: </span><span class="va">$(</span><span class="fu">grep</span> <span class="at">-c</span> <span class="st">"ERROR"</span> <span class="va">$LOG_FILE)</span><span class="st">"</span> <span class="op">&gt;&gt;</span> <span class="va">$REPORT_FILE</span></span>
+<span id="cb15-15"><a href="#cb15-15"></a><span class="bu">echo</span> <span class="st">"Warnings: </span><span class="va">$(</span><span class="fu">grep</span> <span class="at">-c</span> <span class="st">"WARNING"</span> <span class="va">$LOG_FILE)</span><span class="st">"</span> <span class="op">&gt;&gt;</span> <span class="va">$REPORT_FILE</span></span>
+<span id="cb15-16"><a href="#cb15-16"></a></span>
+<span id="cb15-17"><a href="#cb15-17"></a><span class="co"># Most common error types</span></span>
+<span id="cb15-18"><a href="#cb15-18"></a><span class="bu">echo</span> <span class="at">-e</span> <span class="st">"\nTop Error Types:"</span> <span class="op">&gt;&gt;</span> <span class="va">$REPORT_FILE</span></span>
+<span id="cb15-19"><a href="#cb15-19"></a><span class="fu">grep</span> <span class="st">"ERROR"</span> <span class="va">$LOG_FILE</span> <span class="kw">|</span> <span class="fu">cut</span> <span class="at">-d</span> <span class="st">':'</span> <span class="at">-f</span> 3 <span class="kw">|</span> <span class="fu">sort</span> <span class="kw">|</span> <span class="fu">uniq</span> <span class="at">-c</span> <span class="kw">|</span> <span class="fu">sort</span> <span class="at">-nr</span> <span class="kw">|</span> <span class="fu">head</span> <span class="at">-5</span> <span class="op">&gt;&gt;</span> <span class="va">$REPORT_FILE</span></span>
+<span id="cb15-20"><a href="#cb15-20"></a></span>
+<span id="cb15-21"><a href="#cb15-21"></a><span class="co"># Processing times analysis</span></span>
+<span id="cb15-22"><a href="#cb15-22"></a><span class="bu">echo</span> <span class="at">-e</span> <span class="st">"\nProcessing Times (seconds):"</span> <span class="op">&gt;&gt;</span> <span class="va">$REPORT_FILE</span></span>
+<span id="cb15-23"><a href="#cb15-23"></a><span class="fu">grep</span> <span class="st">"Processing time"</span> <span class="va">$LOG_FILE</span> <span class="kw">|</span> <span class="fu">awk</span> <span class="st">'{print $4}'</span> <span class="kw">|</span> <span class="fu">sort</span> <span class="at">-n</span> <span class="kw">|</span> <span class="fu">awk</span> <span class="st">'</span></span>
+<span id="cb15-24"><a href="#cb15-24"></a><span class="st">{</span></span>
+<span id="cb15-25"><a href="#cb15-25"></a><span class="st">    sum += $1</span></span>
+<span id="cb15-26"><a href="#cb15-26"></a><span class="st">    count++</span></span>
+<span id="cb15-27"><a href="#cb15-27"></a><span class="st">    values[count] = $1</span></span>
+<span id="cb15-28"><a href="#cb15-28"></a><span class="st">}</span></span>
+<span id="cb15-29"><a href="#cb15-29"></a><span class="st">END {</span></span>
+<span id="cb15-30"><a href="#cb15-30"></a><span class="st">    print "Average:", sum/count</span></span>
+<span id="cb15-31"><a href="#cb15-31"></a><span class="st">    print "Minimum:", values[1]</span></span>
+<span id="cb15-32"><a href="#cb15-32"></a><span class="st">    print "Maximum:", values[count]</span></span>
+<span id="cb15-33"><a href="#cb15-33"></a><span class="st">    print "Median:", values[int(count/2)]</span></span>
+<span id="cb15-34"><a href="#cb15-34"></a><span class="st">}'</span> <span class="op">&gt;&gt;</span> <span class="va">$REPORT_FILE</span></span>
+<span id="cb15-35"><a href="#cb15-35"></a></span>
+<span id="cb15-36"><a href="#cb15-36"></a><span class="bu">echo</span> <span class="st">"Analysis complete. Report saved to </span><span class="va">$REPORT_FILE</span><span class="st">"</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</section>
+<section id="scenario-2-csv-data-processing" class="level3" data-number="0.10.2">
+<h3 data-number="0.10.2" class="anchored" data-anchor-id="scenario-2-csv-data-processing"><span class="header-section-number">0.10.2</span> Scenario 2: CSV Data Processing</h3>
+<div class="sourceCode" id="cb16"><pre class="sourceCode numberSource bash number-lines code-with-copy"><code class="sourceCode bash"><span id="cb16-1"><a href="#cb16-1"></a><span class="co">#!/bin/bash</span></span>
+<span id="cb16-2"><a href="#cb16-2"></a><span class="co"># process_experimental_data.sh - Clean and analyze CSV data</span></span>
+<span id="cb16-3"><a href="#cb16-3"></a></span>
+<span id="cb16-4"><a href="#cb16-4"></a><span class="va">INPUT_FILE</span><span class="op">=</span><span class="st">"raw_experiment_data.csv"</span></span>
+<span id="cb16-5"><a href="#cb16-5"></a><span class="va">CLEAN_FILE</span><span class="op">=</span><span class="st">"clean_data.csv"</span></span>
+<span id="cb16-6"><a href="#cb16-6"></a><span class="va">SUMMARY_FILE</span><span class="op">=</span><span class="st">"data_summary.txt"</span></span>
+<span id="cb16-7"><a href="#cb16-7"></a></span>
+<span id="cb16-8"><a href="#cb16-8"></a><span class="co"># Remove header for processing, then add it back</span></span>
+<span id="cb16-9"><a href="#cb16-9"></a><span class="fu">head</span> <span class="at">-n</span> 1 <span class="va">$INPUT_FILE</span> <span class="op">&gt;</span> <span class="va">$CLEAN_FILE</span></span>
+<span id="cb16-10"><a href="#cb16-10"></a></span>
+<span id="cb16-11"><a href="#cb16-11"></a><span class="co"># Clean data: remove empty lines, sort by timestamp</span></span>
+<span id="cb16-12"><a href="#cb16-12"></a><span class="fu">tail</span> <span class="at">-n</span> +2 <span class="va">$INPUT_FILE</span> <span class="kw">|</span> <span class="dt">\</span></span>
+<span id="cb16-13"><a href="#cb16-13"></a>    <span class="fu">grep</span> <span class="at">-v</span> <span class="st">'^$'</span> <span class="kw">|</span> <span class="dt">\</span></span>
+<span id="cb16-14"><a href="#cb16-14"></a>    <span class="fu">sort</span> <span class="at">-t</span> <span class="st">','</span> <span class="at">-k</span> 1 <span class="op">&gt;&gt;</span> <span class="va">$CLEAN_FILE</span></span>
+<span id="cb16-15"><a href="#cb16-15"></a></span>
+<span id="cb16-16"><a href="#cb16-16"></a><span class="co"># Generate summary statistics</span></span>
+<span id="cb16-17"><a href="#cb16-17"></a><span class="bu">echo</span> <span class="st">"Data Summary for </span><span class="va">$(</span><span class="fu">basename</span> <span class="va">$INPUT_FILE)</span><span class="st">"</span> <span class="op">&gt;</span> <span class="va">$SUMMARY_FILE</span></span>
+<span id="cb16-18"><a href="#cb16-18"></a><span class="bu">echo</span> <span class="st">"Generated: </span><span class="va">$(</span><span class="fu">date</span><span class="va">)</span><span class="st">"</span> <span class="op">&gt;&gt;</span> <span class="va">$SUMMARY_FILE</span></span>
+<span id="cb16-19"><a href="#cb16-19"></a><span class="bu">echo</span> <span class="st">"================================="</span> <span class="op">&gt;&gt;</span> <span class="va">$SUMMARY_FILE</span></span>
+<span id="cb16-20"><a href="#cb16-20"></a></span>
+<span id="cb16-21"><a href="#cb16-21"></a><span class="co"># Count records</span></span>
+<span id="cb16-22"><a href="#cb16-22"></a><span class="bu">echo</span> <span class="st">"Total records: </span><span class="va">$(</span><span class="fu">tail</span> <span class="at">-n</span> +2 <span class="va">$CLEAN_FILE</span> <span class="kw">|</span> <span class="fu">wc</span> <span class="at">-l</span><span class="va">)</span><span class="st">"</span> <span class="op">&gt;&gt;</span> <span class="va">$SUMMARY_FILE</span></span>
+<span id="cb16-23"><a href="#cb16-23"></a></span>
+<span id="cb16-24"><a href="#cb16-24"></a><span class="co"># Unique subjects</span></span>
+<span id="cb16-25"><a href="#cb16-25"></a><span class="bu">echo</span> <span class="st">"Unique subjects: </span><span class="va">$(</span><span class="fu">cut</span> <span class="at">-d</span> <span class="st">','</span> <span class="at">-f</span> 2 <span class="va">$CLEAN_FILE</span> <span class="kw">|</span> <span class="fu">tail</span> <span class="at">-n</span> +2 <span class="kw">|</span> <span class="fu">sort</span> <span class="kw">|</span> <span class="fu">uniq</span> <span class="kw">|</span> <span class="fu">wc</span> <span class="at">-l</span><span class="va">)</span><span class="st">"</span> <span class="op">&gt;&gt;</span> <span class="va">$SUMMARY_FILE</span></span>
+<span id="cb16-26"><a href="#cb16-26"></a></span>
+<span id="cb16-27"><a href="#cb16-27"></a><span class="co"># Date range</span></span>
+<span id="cb16-28"><a href="#cb16-28"></a><span class="bu">echo</span> <span class="st">"Date range:"</span> <span class="op">&gt;&gt;</span> <span class="va">$SUMMARY_FILE</span></span>
+<span id="cb16-29"><a href="#cb16-29"></a><span class="bu">echo</span> <span class="st">"  From: </span><span class="va">$(</span><span class="fu">cut</span> <span class="at">-d</span> <span class="st">','</span> <span class="at">-f</span> 1 <span class="va">$CLEAN_FILE</span> <span class="kw">|</span> <span class="fu">tail</span> <span class="at">-n</span> +2 <span class="kw">|</span> <span class="fu">head</span> <span class="at">-n</span> 1<span class="va">)</span><span class="st">"</span> <span class="op">&gt;&gt;</span> <span class="va">$SUMMARY_FILE</span></span>
+<span id="cb16-30"><a href="#cb16-30"></a><span class="bu">echo</span> <span class="st">"  To:   </span><span class="va">$(</span><span class="fu">cut</span> <span class="at">-d</span> <span class="st">','</span> <span class="at">-f</span> 1 <span class="va">$CLEAN_FILE</span> <span class="kw">|</span> <span class="fu">tail</span> <span class="at">-n</span> +2 <span class="kw">|</span> <span class="fu">tail</span> <span class="at">-n</span> 1<span class="va">)</span><span class="st">"</span> <span class="op">&gt;&gt;</span> <span class="va">$SUMMARY_FILE</span></span>
+<span id="cb16-31"><a href="#cb16-31"></a></span>
+<span id="cb16-32"><a href="#cb16-32"></a><span class="co"># Value statistics (assuming numeric data in column 3)</span></span>
+<span id="cb16-33"><a href="#cb16-33"></a><span class="bu">echo</span> <span class="at">-e</span> <span class="st">"\nValue Statistics:"</span> <span class="op">&gt;&gt;</span> <span class="va">$SUMMARY_FILE</span></span>
+<span id="cb16-34"><a href="#cb16-34"></a><span class="fu">cut</span> <span class="at">-d</span> <span class="st">','</span> <span class="at">-f</span> 3 <span class="va">$CLEAN_FILE</span> <span class="kw">|</span> <span class="fu">tail</span> <span class="at">-n</span> +2 <span class="kw">|</span> <span class="fu">sort</span> <span class="at">-n</span> <span class="kw">|</span> <span class="fu">awk</span> <span class="st">'</span></span>
+<span id="cb16-35"><a href="#cb16-35"></a><span class="st">{</span></span>
+<span id="cb16-36"><a href="#cb16-36"></a><span class="st">    sum += $1</span></span>
+<span id="cb16-37"><a href="#cb16-37"></a><span class="st">    count++</span></span>
+<span id="cb16-38"><a href="#cb16-38"></a><span class="st">    values[count] = $1</span></span>
+<span id="cb16-39"><a href="#cb16-39"></a><span class="st">}</span></span>
+<span id="cb16-40"><a href="#cb16-40"></a><span class="st">END {</span></span>
+<span id="cb16-41"><a href="#cb16-41"></a><span class="st">    print "Count:", count</span></span>
+<span id="cb16-42"><a href="#cb16-42"></a><span class="st">    print "Sum:", sum</span></span>
+<span id="cb16-43"><a href="#cb16-43"></a><span class="st">    print "Average:", sum/count</span></span>
+<span id="cb16-44"><a href="#cb16-44"></a><span class="st">    print "Min:", values[1]</span></span>
+<span id="cb16-45"><a href="#cb16-45"></a><span class="st">    print "Max:", values[count]</span></span>
+<span id="cb16-46"><a href="#cb16-46"></a><span class="st">}'</span> <span class="op">&gt;&gt;</span> <span class="va">$SUMMARY_FILE</span></span>
+<span id="cb16-47"><a href="#cb16-47"></a></span>
+<span id="cb16-48"><a href="#cb16-48"></a><span class="bu">echo</span> <span class="st">"Data processing complete!"</span></span>
+<span id="cb16-49"><a href="#cb16-49"></a><span class="bu">echo</span> <span class="st">"Clean data: </span><span class="va">$CLEAN_FILE</span><span class="st">"</span></span>
+<span id="cb16-50"><a href="#cb16-50"></a><span class="bu">echo</span> <span class="st">"Summary: </span><span class="va">$SUMMARY_FILE</span><span class="st">"</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</section>
+<section id="scenario-3-results-aggregation" class="level3" data-number="0.10.3">
+<h3 data-number="0.10.3" class="anchored" data-anchor-id="scenario-3-results-aggregation"><span class="header-section-number">0.10.3</span> Scenario 3: Results Aggregation</h3>
+<div class="sourceCode" id="cb17"><pre class="sourceCode numberSource bash number-lines code-with-copy"><code class="sourceCode bash"><span id="cb17-1"><a href="#cb17-1"></a><span class="co">#!/bin/bash</span></span>
+<span id="cb17-2"><a href="#cb17-2"></a><span class="co"># aggregate_results.sh - Combine and summarize multiple result files</span></span>
+<span id="cb17-3"><a href="#cb17-3"></a></span>
+<span id="cb17-4"><a href="#cb17-4"></a><span class="va">RESULTS_DIR</span><span class="op">=</span><span class="st">"job_results"</span></span>
+<span id="cb17-5"><a href="#cb17-5"></a><span class="va">OUTPUT_FILE</span><span class="op">=</span><span class="st">"aggregated_results.csv"</span></span>
+<span id="cb17-6"><a href="#cb17-6"></a><span class="va">SUMMARY_FILE</span><span class="op">=</span><span class="st">"results_summary.txt"</span></span>
+<span id="cb17-7"><a href="#cb17-7"></a></span>
+<span id="cb17-8"><a href="#cb17-8"></a><span class="co"># Create header</span></span>
+<span id="cb17-9"><a href="#cb17-9"></a><span class="bu">echo</span> <span class="st">"job_id,parameter,result,processing_time"</span> <span class="op">&gt;</span> <span class="va">$OUTPUT_FILE</span></span>
+<span id="cb17-10"><a href="#cb17-10"></a></span>
+<span id="cb17-11"><a href="#cb17-11"></a><span class="co"># Process all result files</span></span>
+<span id="cb17-12"><a href="#cb17-12"></a><span class="cf">for</span> result_file <span class="kw">in</span> <span class="va">$RESULTS_DIR</span>/<span class="pp">*</span>.out<span class="kw">;</span> <span class="cf">do</span></span>
+<span id="cb17-13"><a href="#cb17-13"></a>    <span class="cf">if</span> <span class="bu">[</span> <span class="ot">-f</span> <span class="st">"</span><span class="va">$result_file</span><span class="st">"</span> <span class="bu">]</span><span class="kw">;</span> <span class="cf">then</span></span>
+<span id="cb17-14"><a href="#cb17-14"></a>        <span class="va">job_id</span><span class="op">=</span><span class="va">$(</span><span class="fu">basename</span> <span class="st">"</span><span class="va">$result_file</span><span class="st">"</span> .out<span class="va">)</span></span>
+<span id="cb17-15"><a href="#cb17-15"></a>        </span>
+<span id="cb17-16"><a href="#cb17-16"></a>        <span class="co"># Extract key information using different tools</span></span>
+<span id="cb17-17"><a href="#cb17-17"></a>        <span class="va">parameter</span><span class="op">=</span><span class="va">$(</span><span class="fu">grep</span> <span class="st">"Parameter:"</span> <span class="st">"</span><span class="va">$result_file</span><span class="st">"</span> <span class="kw">|</span> <span class="fu">cut</span> <span class="at">-d</span> <span class="st">':'</span> <span class="at">-f</span> 2 <span class="kw">|</span> <span class="fu">tr</span> <span class="at">-d</span> <span class="st">' '</span><span class="va">)</span></span>
+<span id="cb17-18"><a href="#cb17-18"></a>        <span class="va">result</span><span class="op">=</span><span class="va">$(</span><span class="fu">grep</span> <span class="st">"Final result:"</span> <span class="st">"</span><span class="va">$result_file</span><span class="st">"</span> <span class="kw">|</span> <span class="fu">awk</span> <span class="st">'{print $3}'</span><span class="va">)</span></span>
+<span id="cb17-19"><a href="#cb17-19"></a>        <span class="va">time</span><span class="op">=</span><span class="va">$(</span><span class="fu">grep</span> <span class="st">"Processing time:"</span> <span class="st">"</span><span class="va">$result_file</span><span class="st">"</span> <span class="kw">|</span> <span class="fu">awk</span> <span class="st">'{print $3}'</span><span class="va">)</span></span>
+<span id="cb17-20"><a href="#cb17-20"></a>        </span>
+<span id="cb17-21"><a href="#cb17-21"></a>        <span class="co"># Add to aggregated file</span></span>
+<span id="cb17-22"><a href="#cb17-22"></a>        <span class="bu">echo</span> <span class="st">"</span><span class="va">$job_id</span><span class="st">,</span><span class="va">$parameter</span><span class="st">,</span><span class="va">$result</span><span class="st">,</span><span class="va">$time</span><span class="st">"</span> <span class="op">&gt;&gt;</span> <span class="va">$OUTPUT_FILE</span></span>
+<span id="cb17-23"><a href="#cb17-23"></a>    <span class="cf">fi</span></span>
+<span id="cb17-24"><a href="#cb17-24"></a><span class="cf">done</span></span>
+<span id="cb17-25"><a href="#cb17-25"></a></span>
+<span id="cb17-26"><a href="#cb17-26"></a><span class="co"># Generate summary</span></span>
+<span id="cb17-27"><a href="#cb17-27"></a><span class="bu">echo</span> <span class="st">"Results Aggregation Summary"</span> <span class="op">&gt;</span> <span class="va">$SUMMARY_FILE</span></span>
+<span id="cb17-28"><a href="#cb17-28"></a><span class="bu">echo</span> <span class="st">"Generated: </span><span class="va">$(</span><span class="fu">date</span><span class="va">)</span><span class="st">"</span> <span class="op">&gt;&gt;</span> <span class="va">$SUMMARY_FILE</span></span>
+<span id="cb17-29"><a href="#cb17-29"></a><span class="bu">echo</span> <span class="st">"==========================="</span> <span class="op">&gt;&gt;</span> <span class="va">$SUMMARY_FILE</span></span>
+<span id="cb17-30"><a href="#cb17-30"></a></span>
+<span id="cb17-31"><a href="#cb17-31"></a><span class="va">total_jobs</span><span class="op">=</span><span class="va">$(</span><span class="fu">tail</span> <span class="at">-n</span> +2 <span class="va">$OUTPUT_FILE</span> <span class="kw">|</span> <span class="fu">wc</span> <span class="at">-l</span><span class="va">)</span></span>
+<span id="cb17-32"><a href="#cb17-32"></a><span class="bu">echo</span> <span class="st">"Total jobs processed: </span><span class="va">$total_jobs</span><span class="st">"</span> <span class="op">&gt;&gt;</span> <span class="va">$SUMMARY_FILE</span></span>
+<span id="cb17-33"><a href="#cb17-33"></a></span>
+<span id="cb17-34"><a href="#cb17-34"></a><span class="co"># Parameter distribution</span></span>
+<span id="cb17-35"><a href="#cb17-35"></a><span class="bu">echo</span> <span class="at">-e</span> <span class="st">"\nParameter Distribution:"</span> <span class="op">&gt;&gt;</span> <span class="va">$SUMMARY_FILE</span></span>
+<span id="cb17-36"><a href="#cb17-36"></a><span class="fu">cut</span> <span class="at">-d</span> <span class="st">','</span> <span class="at">-f</span> 2 <span class="va">$OUTPUT_FILE</span> <span class="kw">|</span> <span class="fu">tail</span> <span class="at">-n</span> +2 <span class="kw">|</span> <span class="fu">sort</span> <span class="kw">|</span> <span class="fu">uniq</span> <span class="at">-c</span> <span class="kw">|</span> <span class="fu">sort</span> <span class="at">-nr</span> <span class="op">&gt;&gt;</span> <span class="va">$SUMMARY_FILE</span></span>
+<span id="cb17-37"><a href="#cb17-37"></a></span>
+<span id="cb17-38"><a href="#cb17-38"></a><span class="co"># Result statistics</span></span>
+<span id="cb17-39"><a href="#cb17-39"></a><span class="bu">echo</span> <span class="at">-e</span> <span class="st">"\nResult Statistics:"</span> <span class="op">&gt;&gt;</span> <span class="va">$SUMMARY_FILE</span></span>
+<span id="cb17-40"><a href="#cb17-40"></a><span class="fu">cut</span> <span class="at">-d</span> <span class="st">','</span> <span class="at">-f</span> 3 <span class="va">$OUTPUT_FILE</span> <span class="kw">|</span> <span class="fu">tail</span> <span class="at">-n</span> +2 <span class="kw">|</span> <span class="fu">sort</span> <span class="at">-n</span> <span class="kw">|</span> <span class="fu">awk</span> <span class="st">'</span></span>
+<span id="cb17-41"><a href="#cb17-41"></a><span class="st">{</span></span>
+<span id="cb17-42"><a href="#cb17-42"></a><span class="st">    sum += $1</span></span>
+<span id="cb17-43"><a href="#cb17-43"></a><span class="st">    count++</span></span>
+<span id="cb17-44"><a href="#cb17-44"></a><span class="st">    values[count] = $1</span></span>
+<span id="cb17-45"><a href="#cb17-45"></a><span class="st">}</span></span>
+<span id="cb17-46"><a href="#cb17-46"></a><span class="st">END {</span></span>
+<span id="cb17-47"><a href="#cb17-47"></a><span class="st">    print "Count:", count</span></span>
+<span id="cb17-48"><a href="#cb17-48"></a><span class="st">    print "Average:", sum/count</span></span>
+<span id="cb17-49"><a href="#cb17-49"></a><span class="st">    print "Min:", values[1]</span></span>
+<span id="cb17-50"><a href="#cb17-50"></a><span class="st">    print "Max:", values[count]</span></span>
+<span id="cb17-51"><a href="#cb17-51"></a><span class="st">    print "Std Dev: (calculated separately)"</span></span>
+<span id="cb17-52"><a href="#cb17-52"></a><span class="st">}'</span> <span class="op">&gt;&gt;</span> <span class="va">$SUMMARY_FILE</span></span>
+<span id="cb17-53"><a href="#cb17-53"></a></span>
+<span id="cb17-54"><a href="#cb17-54"></a><span class="bu">echo</span> <span class="st">"Aggregation complete!"</span></span>
+<span id="cb17-55"><a href="#cb17-55"></a><span class="bu">echo</span> <span class="st">"Results file: </span><span class="va">$OUTPUT_FILE</span><span class="st">"</span></span>
+<span id="cb17-56"><a href="#cb17-56"></a><span class="bu">echo</span> <span class="st">"Summary: </span><span class="va">$SUMMARY_FILE</span><span class="st">"</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</section>
+</section>
+<section id="power-combinations-pipes-and-chains" class="level2" data-number="0.11">
+<h2 data-number="0.11" class="anchored" data-anchor-id="power-combinations-pipes-and-chains"><span class="header-section-number">0.11</span> Power Combinations: Pipes and Chains</h2>
+<p>The real magic happens when you combine tools using pipes (<code>|</code>):</p>
+<div class="sourceCode" id="cb18"><pre class="sourceCode numberSource bash number-lines code-with-copy"><code class="sourceCode bash"><span id="cb18-1"><a href="#cb18-1"></a><span class="co"># Find most common words in a file</span></span>
+<span id="cb18-2"><a href="#cb18-2"></a><span class="fu">cat</span> text_file.txt <span class="kw">|</span> <span class="fu">tr</span> <span class="st">' '</span> <span class="st">'\n'</span> <span class="kw">|</span> <span class="fu">sort</span> <span class="kw">|</span> <span class="fu">uniq</span> <span class="at">-c</span> <span class="kw">|</span> <span class="fu">sort</span> <span class="at">-nr</span> <span class="kw">|</span> <span class="fu">head</span> <span class="at">-10</span></span>
+<span id="cb18-3"><a href="#cb18-3"></a></span>
+<span id="cb18-4"><a href="#cb18-4"></a><span class="co"># Analyze web server logs</span></span>
+<span id="cb18-5"><a href="#cb18-5"></a><span class="fu">cat</span> access.log <span class="kw">|</span> <span class="fu">grep</span> <span class="st">"404"</span> <span class="kw">|</span> <span class="fu">cut</span> <span class="at">-d</span> <span class="st">' '</span> <span class="at">-f</span> 1 <span class="kw">|</span> <span class="fu">sort</span> <span class="kw">|</span> <span class="fu">uniq</span> <span class="at">-c</span> <span class="kw">|</span> <span class="fu">sort</span> <span class="at">-nr</span></span>
+<span id="cb18-6"><a href="#cb18-6"></a></span>
+<span id="cb18-7"><a href="#cb18-7"></a><span class="co"># Process CSV data</span></span>
+<span id="cb18-8"><a href="#cb18-8"></a><span class="fu">cat</span> data.csv <span class="kw">|</span> <span class="fu">cut</span> <span class="at">-d</span> <span class="st">','</span> <span class="at">-f</span> 2,4 <span class="kw">|</span> <span class="fu">grep</span> <span class="at">-v</span> <span class="st">"^$"</span> <span class="kw">|</span> <span class="fu">sort</span> <span class="kw">|</span> <span class="fu">uniq</span> <span class="at">-c</span></span>
+<span id="cb18-9"><a href="#cb18-9"></a></span>
+<span id="cb18-10"><a href="#cb18-10"></a><span class="co"># Monitor system processes</span></span>
+<span id="cb18-11"><a href="#cb18-11"></a><span class="fu">ps</span> aux <span class="kw">|</span> <span class="fu">grep</span> python <span class="kw">|</span> <span class="fu">awk</span> <span class="st">'{print $2, $11}'</span> <span class="kw">|</span> <span class="fu">sort</span></span>
+<span id="cb18-12"><a href="#cb18-12"></a></span>
+<span id="cb18-13"><a href="#cb18-13"></a><span class="co"># Analyze file sizes by extension</span></span>
+<span id="cb18-14"><a href="#cb18-14"></a><span class="fu">find</span> . <span class="at">-name</span> <span class="st">"*.*"</span> <span class="kw">|</span> <span class="fu">sed</span> <span class="st">'s/.*\.//'</span> <span class="kw">|</span> <span class="fu">sort</span> <span class="kw">|</span> <span class="fu">uniq</span> <span class="at">-c</span> <span class="kw">|</span> <span class="fu">sort</span> <span class="at">-nr</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p><strong>Real-world analogy</strong>: Pipes are like assembly lines in a factory – each station performs one specific operation, and the product moves smoothly from one stage to the next until you get the final result.</p>
+</section>
+<section id="performance-tips-for-large-files" class="level2" data-number="0.12">
+<h2 data-number="0.12" class="anchored" data-anchor-id="performance-tips-for-large-files"><span class="header-section-number">0.12</span> Performance Tips for Large Files</h2>
+<section id="efficient-processing-strategies" class="level3" data-number="0.12.1">
+<h3 data-number="0.12.1" class="anchored" data-anchor-id="efficient-processing-strategies"><span class="header-section-number">0.12.1</span> Efficient Processing Strategies</h3>
+<div class="sourceCode" id="cb19"><pre class="sourceCode numberSource bash number-lines code-with-copy"><code class="sourceCode bash"><span id="cb19-1"><a href="#cb19-1"></a><span class="co"># For very large files, use head/tail to sample first</span></span>
+<span id="cb19-2"><a href="#cb19-2"></a><span class="fu">head</span> <span class="at">-n</span> 1000 huge_file.txt <span class="kw">|</span> <span class="fu">grep</span> <span class="st">"pattern"</span></span>
+<span id="cb19-3"><a href="#cb19-3"></a></span>
+<span id="cb19-4"><a href="#cb19-4"></a><span class="co"># Use grep before other operations to reduce data size</span></span>
+<span id="cb19-5"><a href="#cb19-5"></a><span class="fu">grep</span> <span class="st">"relevant_pattern"</span> large_file.txt <span class="kw">|</span> <span class="fu">sort</span> <span class="kw">|</span> <span class="fu">uniq</span> <span class="at">-c</span></span>
+<span id="cb19-6"><a href="#cb19-6"></a></span>
+<span id="cb19-7"><a href="#cb19-7"></a><span class="co"># Process files in chunks</span></span>
+<span id="cb19-8"><a href="#cb19-8"></a><span class="fu">split</span> <span class="at">-l</span> 10000 huge_file.txt chunk_</span>
+<span id="cb19-9"><a href="#cb19-9"></a><span class="cf">for</span> chunk <span class="kw">in</span> chunk_<span class="pp">*</span><span class="kw">;</span> <span class="cf">do</span></span>
+<span id="cb19-10"><a href="#cb19-10"></a>    <span class="ex">process_chunk</span> <span class="st">"</span><span class="va">$chunk</span><span class="st">"</span></span>
+<span id="cb19-11"><a href="#cb19-11"></a><span class="cf">done</span></span>
+<span id="cb19-12"><a href="#cb19-12"></a></span>
+<span id="cb19-13"><a href="#cb19-13"></a><span class="co"># Use specific tools for specific tasks</span></span>
+<span id="cb19-14"><a href="#cb19-14"></a><span class="co"># grep is faster than awk for simple pattern matching</span></span>
+<span id="cb19-15"><a href="#cb19-15"></a><span class="co"># cut is faster than awk for simple column extraction</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</section>
+</section>
+<section id="quick-reference-text-processing-cheat-sheet" class="level2" data-number="0.13">
+<h2 data-number="0.13" class="anchored" data-anchor-id="quick-reference-text-processing-cheat-sheet"><span class="header-section-number">0.13</span> Quick Reference: Text Processing Cheat Sheet</h2>
+<table class="table">
+<colgroup>
+<col style="width: 25%">
+<col style="width: 37%">
+<col style="width: 37%">
+</colgroup>
+<thead>
+<tr class="header">
+<th>Task</th>
+<th>Command</th>
+<th>Example</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>View file</td>
+<td><code>cat filename</code></td>
+<td><code>cat data.txt</code></td>
+</tr>
+<tr class="even">
+<td>First/last lines</td>
+<td><code>head -n 10 file</code></td>
+<td><code>head -n 20 data.csv</code></td>
+</tr>
+<tr class="odd">
+<td>Search pattern</td>
+<td><code>grep "pattern" file</code></td>
+<td><code>grep "error" log.txt</code></td>
+</tr>
+<tr class="even">
+<td>Sort lines</td>
+<td><code>sort filename</code></td>
+<td><code>sort -n numbers.txt</code></td>
+</tr>
+<tr class="odd">
+<td>Remove duplicates</td>
+<td><code>sort file \| uniq</code></td>
+<td><code>sort names.txt \| uniq</code></td>
+</tr>
+<tr class="even">
+<td>Extract columns</td>
+<td><code>cut -d ',' -f 1,3 file</code></td>
+<td><code>cut -d ',' -f 2 data.csv</code></td>
+</tr>
+<tr class="odd">
+<td>Count lines/words</td>
+<td><code>wc -l filename</code></td>
+<td><code>wc -l *.txt</code></td>
+</tr>
+<tr class="even">
+<td>Replace text</td>
+<td><code>sed 's/old/new/g' file</code></td>
+<td><code>sed 's/error/ERROR/g' log.txt</code></td>
+</tr>
+<tr class="odd">
+<td>Process columns</td>
+<td><code>awk '{print $1, $3}' file</code></td>
+<td><code>awk '{sum+=$2} END {print sum}' data.txt</code></td>
+</tr>
+</tbody>
+</table>
+</section>
+<section id="practice-exercises" class="level2" data-number="0.14">
+<h2 data-number="0.14" class="anchored" data-anchor-id="practice-exercises"><span class="header-section-number">0.14</span> Practice Exercises</h2>
+<div class="callout callout-style-default callout-important callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Your Text Processing Training
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<ol type="1">
+<li><p><strong>Log Analysis Challenge</strong></p>
+<div class="sourceCode" id="cb20"><pre class="sourceCode numberSource bash number-lines code-with-copy"><code class="sourceCode bash"><span id="cb20-1"><a href="#cb20-1"></a><span class="co"># Create a sample log file and practice extracting:</span></span>
+<span id="cb20-2"><a href="#cb20-2"></a><span class="co"># - Count of different message types</span></span>
+<span id="cb20-3"><a href="#cb20-3"></a><span class="co"># - Most active time periods</span></span>
+<span id="cb20-4"><a href="#cb20-4"></a><span class="co"># - Top error sources</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div></li>
+<li><p><strong>CSV Data Exploration</strong></p>
+<div class="sourceCode" id="cb21"><pre class="sourceCode numberSource bash number-lines code-with-copy"><code class="sourceCode bash"><span id="cb21-1"><a href="#cb21-1"></a><span class="co"># Download or create a CSV file and practice:</span></span>
+<span id="cb21-2"><a href="#cb21-2"></a><span class="co"># - Extracting specific columns</span></span>
+<span id="cb21-3"><a href="#cb21-3"></a><span class="co"># - Finding unique values</span></span>
+<span id="cb21-4"><a href="#cb21-4"></a><span class="co"># - Calculating basic statistics</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div></li>
+<li><p><strong>Text Transformation</strong></p>
+<div class="sourceCode" id="cb22"><pre class="sourceCode numberSource bash number-lines code-with-copy"><code class="sourceCode bash"><span id="cb22-1"><a href="#cb22-1"></a><span class="co"># Practice cleaning messy data:</span></span>
+<span id="cb22-2"><a href="#cb22-2"></a><span class="co"># - Remove empty lines</span></span>
+<span id="cb22-3"><a href="#cb22-3"></a><span class="co"># - Standardize formatting</span></span>
+<span id="cb22-4"><a href="#cb22-4"></a><span class="co"># - Extract specific patterns</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div></li>
+<li><p><strong>Pipeline Building</strong></p>
+<div class="sourceCode" id="cb23"><pre class="sourceCode numberSource bash number-lines code-with-copy"><code class="sourceCode bash"><span id="cb23-1"><a href="#cb23-1"></a><span class="co"># Create complex pipelines that:</span></span>
+<span id="cb23-2"><a href="#cb23-2"></a><span class="co"># - Filter → Sort → Count → Report</span></span>
+<span id="cb23-3"><a href="#cb23-3"></a><span class="co"># - Process multiple files</span></span>
+<span id="cb23-4"><a href="#cb23-4"></a><span class="co"># - Generate summaries</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div></li>
+</ol>
+</div>
+</div>
+</section>
+<section id="whats-next" class="level2" data-number="0.15">
+<h2 data-number="0.15" class="anchored" data-anchor-id="whats-next"><span class="header-section-number">0.15</span> What’s Next?</h2>
+<p>Now that you’re a text processing wizard, you’re ready to learn <a href="../../../posts/series/command-line-mastery/05-permission-wizardry.html">Permission Wizardry</a>. Understanding file permissions is crucial for HPC environments where security and access control are paramount.</p>
+<p>Remember: Text processing is the heart of data analysis. Whether you’re analyzing experimental results, processing log files, or cleaning datasets, these tools will be your constant companions. Master them, and you’ll extract insights from data that others might miss entirely.</p>
+<div class="callout callout-style-default callout-tip callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Text Processing Challenge
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>Before moving on, try this real-world scenario: 1. Create or find a large text file (log file, CSV data, etc.) 2. Extract specific information using grep 3. Sort and summarize the data 4. Create a report with statistics 5. Automate the process with a script</p>
+<p>This mirrors the daily work of data analysis in HPC environments!</p>
+</div>
+</div>
+<hr>
+<p><em>You’ve unlocked the secrets of text processing – the ability to extract meaning from digital noise. Next, we’ll learn to control who can access and modify your precious data discoveries!</em></p>
+
+
+<!-- -->
+
+</section>
+
+<div id="quarto-appendix" class="default"><section class="quarto-appendix-contents"><h2 class="anchored quarto-appendix-heading">Reuse</h2><div id="quarto-reuse" class="quarto-appendix-contents"><div>CC BY-NC-SA 4.0</div></div></section><section class="quarto-appendix-contents"><h2 class="anchored quarto-appendix-heading">Citation</h2><div><div class="quarto-appendix-secondary-label">BibTeX citation:</div><pre class="sourceCode code-with-copy quarto-appendix-bibtex"><code class="sourceCode bibtex">@online{2025,
+  author = {, Hasan},
+  title = {Text {Processing} {Power}},
+  date = {2025-06-29},
+  url = {https://hasangoni.quarto.pub/hasan-blog-post/posts/series/command-line-mastery/04-text-processing.html},
+  langid = {en}
+}
+</code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre><div class="quarto-appendix-secondary-label">For attribution, please cite this work as:</div><div id="ref-2025" class="csl-entry quarto-appendix-citeas" role="listitem">
+Hasan. 2025. <span>“Text Processing Power.”</span> June 29, 2025. <a href="https://hasangoni.quarto.pub/hasan-blog-post/posts/series/command-line-mastery/04-text-processing.html">https://hasangoni.quarto.pub/hasan-blog-post/posts/series/command-line-mastery/04-text-processing.html</a>.
+</div></div></section></div></main> <!-- /main -->
+<script id="quarto-html-after-body" type="application/javascript">
+window.document.addEventListener("DOMContentLoaded", function (event) {
+  const toggleBodyColorMode = (bsSheetEl) => {
+    const mode = bsSheetEl.getAttribute("data-mode");
+    const bodyEl = window.document.querySelector("body");
+    if (mode === "dark") {
+      bodyEl.classList.add("quarto-dark");
+      bodyEl.classList.remove("quarto-light");
+    } else {
+      bodyEl.classList.add("quarto-light");
+      bodyEl.classList.remove("quarto-dark");
+    }
+  }
+  const toggleBodyColorPrimary = () => {
+    const bsSheetEl = window.document.querySelector("link#quarto-bootstrap");
+    if (bsSheetEl) {
+      toggleBodyColorMode(bsSheetEl);
+    }
+  }
+  toggleBodyColorPrimary();  
+  const icon = "";
+  const anchorJS = new window.AnchorJS();
+  anchorJS.options = {
+    placement: 'right',
+    icon: icon
+  };
+  anchorJS.add('.anchored');
+  const isCodeAnnotation = (el) => {
+    for (const clz of el.classList) {
+      if (clz.startsWith('code-annotation-')) {                     
+        return true;
+      }
+    }
+    return false;
+  }
+  const clipboard = new window.ClipboardJS('.code-copy-button', {
+    text: function(trigger) {
+      const codeEl = trigger.previousElementSibling.cloneNode(true);
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
+        }
+      }
+      return codeEl.innerText;
+    }
+  });
+  clipboard.on('success', function(e) {
+    // button target
+    const button = e.trigger;
+    // don't keep focus
+    button.blur();
+    // flash "checked"
+    button.classList.add('code-copy-button-checked');
+    var currentTitle = button.getAttribute("title");
+    button.setAttribute("title", "Copied!");
+    let tooltip;
+    if (window.bootstrap) {
+      button.setAttribute("data-bs-toggle", "tooltip");
+      button.setAttribute("data-bs-placement", "left");
+      button.setAttribute("data-bs-title", "Copied!");
+      tooltip = new bootstrap.Tooltip(button, 
+        { trigger: "manual", 
+          customClass: "code-copy-button-tooltip",
+          offset: [0, -8]});
+      tooltip.show();    
+    }
+    setTimeout(function() {
+      if (tooltip) {
+        tooltip.hide();
+        button.removeAttribute("data-bs-title");
+        button.removeAttribute("data-bs-toggle");
+        button.removeAttribute("data-bs-placement");
+      }
+      button.setAttribute("title", currentTitle);
+      button.classList.remove('code-copy-button-checked');
+    }, 1000);
+    // clear code selection
+    e.clearSelection();
+  });
+  const viewSource = window.document.getElementById('quarto-view-source') ||
+                     window.document.getElementById('quarto-code-tools-source');
+  if (viewSource) {
+    const sourceUrl = viewSource.getAttribute("data-quarto-source-url");
+    viewSource.addEventListener("click", function(e) {
+      if (sourceUrl) {
+        // rstudio viewer pane
+        if (/\bcapabilities=\b/.test(window.location)) {
+          window.open(sourceUrl);
+        } else {
+          window.location.href = sourceUrl;
+        }
+      } else {
+        const modal = new bootstrap.Modal(document.getElementById('quarto-embedded-source-code-modal'));
+        modal.show();
+      }
+      return false;
+    });
+  }
+  function toggleCodeHandler(show) {
+    return function(e) {
+      const detailsSrc = window.document.querySelectorAll(".cell > details > .sourceCode");
+      for (let i=0; i<detailsSrc.length; i++) {
+        const details = detailsSrc[i].parentElement;
+        if (show) {
+          details.open = true;
+        } else {
+          details.removeAttribute("open");
+        }
+      }
+      const cellCodeDivs = window.document.querySelectorAll(".cell > .sourceCode");
+      const fromCls = show ? "hidden" : "unhidden";
+      const toCls = show ? "unhidden" : "hidden";
+      for (let i=0; i<cellCodeDivs.length; i++) {
+        const codeDiv = cellCodeDivs[i];
+        if (codeDiv.classList.contains(fromCls)) {
+          codeDiv.classList.remove(fromCls);
+          codeDiv.classList.add(toCls);
+        } 
+      }
+      return false;
+    }
+  }
+  const hideAllCode = window.document.getElementById("quarto-hide-all-code");
+  if (hideAllCode) {
+    hideAllCode.addEventListener("click", toggleCodeHandler(false));
+  }
+  const showAllCode = window.document.getElementById("quarto-show-all-code");
+  if (showAllCode) {
+    showAllCode.addEventListener("click", toggleCodeHandler(true));
+  }
+  function tippyHover(el, contentFn) {
+    const config = {
+      allowHTML: true,
+      content: contentFn,
+      maxWidth: 500,
+      delay: 100,
+      arrow: false,
+      appendTo: function(el) {
+          return el.parentElement;
+      },
+      interactive: true,
+      interactiveBorder: 10,
+      theme: 'quarto',
+      placement: 'bottom-start'
+    };
+    window.tippy(el, config); 
+  }
+  const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+  for (var i=0; i<noterefs.length; i++) {
+    const ref = noterefs[i];
+    tippyHover(ref, function() {
+      // use id or data attribute instead here
+      let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+      try { href = new URL(href).hash; } catch {}
+      const id = href.replace(/^#\/?/, "");
+      const note = window.document.getElementById(id);
+      return note.innerHTML;
+    });
+  }
+      let selectedAnnoteEl;
+      const selectorForAnnotation = ( cell, annotation) => {
+        let cellAttr = 'data-code-cell="' + cell + '"';
+        let lineAttr = 'data-code-annotation="' +  annotation + '"';
+        const selector = 'span[' + cellAttr + '][' + lineAttr + ']';
+        return selector;
+      }
+      const selectCodeLines = (annoteEl) => {
+        const doc = window.document;
+        const targetCell = annoteEl.getAttribute("data-target-cell");
+        const targetAnnotation = annoteEl.getAttribute("data-target-annotation");
+        const annoteSpan = window.document.querySelector(selectorForAnnotation(targetCell, targetAnnotation));
+        const lines = annoteSpan.getAttribute("data-code-lines").split(",");
+        const lineIds = lines.map((line) => {
+          return targetCell + "-" + line;
+        })
+        let top = null;
+        let height = null;
+        let parent = null;
+        if (lineIds.length > 0) {
+            //compute the position of the single el (top and bottom and make a div)
+            const el = window.document.getElementById(lineIds[0]);
+            top = el.offsetTop;
+            height = el.offsetHeight;
+            parent = el.parentElement.parentElement;
+          if (lineIds.length > 1) {
+            const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
+            const bottom = lastEl.offsetTop + lastEl.offsetHeight;
+            height = bottom - top;
+          }
+          if (top !== null && height !== null && parent !== null) {
+            // cook up a div (if necessary) and position it 
+            let div = window.document.getElementById("code-annotation-line-highlight");
+            if (div === null) {
+              div = window.document.createElement("div");
+              div.setAttribute("id", "code-annotation-line-highlight");
+              div.style.position = 'absolute';
+              parent.appendChild(div);
+            }
+            div.style.top = top - 2 + "px";
+            div.style.height = height + 4 + "px";
+            let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
+            if (gutterDiv === null) {
+              gutterDiv = window.document.createElement("div");
+              gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
+              gutterDiv.style.position = 'absolute';
+              const codeCell = window.document.getElementById(targetCell);
+              const gutter = codeCell.querySelector('.code-annotation-gutter');
+              gutter.appendChild(gutterDiv);
+            }
+            gutterDiv.style.top = top - 2 + "px";
+            gutterDiv.style.height = height + 4 + "px";
+          }
+          selectedAnnoteEl = annoteEl;
+        }
+      };
+      const unselectCodeLines = () => {
+        const elementsIds = ["code-annotation-line-highlight", "code-annotation-line-highlight-gutter"];
+        elementsIds.forEach((elId) => {
+          const div = window.document.getElementById(elId);
+          if (div) {
+            div.remove();
+          }
+        });
+        selectedAnnoteEl = undefined;
+      };
+      // Attach click handler to the DT
+      const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
+      for (const annoteDlNode of annoteDls) {
+        annoteDlNode.addEventListener('click', (event) => {
+          const clickedEl = event.target;
+          if (clickedEl !== selectedAnnoteEl) {
+            unselectCodeLines();
+            const activeEl = window.document.querySelector('dt[data-target-cell].code-annotation-active');
+            if (activeEl) {
+              activeEl.classList.remove('code-annotation-active');
+            }
+            selectCodeLines(clickedEl);
+            clickedEl.classList.add('code-annotation-active');
+          } else {
+            // Unselect the line
+            unselectCodeLines();
+            clickedEl.classList.remove('code-annotation-active');
+          }
+        });
+      }
+  const findCites = (el) => {
+    const parentEl = el.parentElement;
+    if (parentEl) {
+      const cites = parentEl.dataset.cites;
+      if (cites) {
+        return {
+          el,
+          cites: cites.split(' ')
+        };
+      } else {
+        return findCites(el.parentElement)
+      }
+    } else {
+      return undefined;
+    }
+  };
+  var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+  for (var i=0; i<bibliorefs.length; i++) {
+    const ref = bibliorefs[i];
+    const citeInfo = findCites(ref);
+    if (citeInfo) {
+      tippyHover(citeInfo.el, function() {
+        var popup = window.document.createElement('div');
+        citeInfo.cites.forEach(function(cite) {
+          var citeDiv = window.document.createElement('div');
+          citeDiv.classList.add('hanging-indent');
+          citeDiv.classList.add('csl-entry');
+          var biblioDiv = window.document.getElementById('ref-' + cite);
+          if (biblioDiv) {
+            citeDiv.innerHTML = biblioDiv.innerHTML;
+          }
+          popup.appendChild(citeDiv);
+        });
+        return popup.innerHTML;
+      });
+    }
+  }
+});
+</script>
+<script src="https://utteranc.es/client.js" repo="yourusername/quarto_blog_hasan" issue-term="pathname" theme="github-light" crossorigin="anonymous" async="">
+</script>
+<script src="https://giscus.app/client.js" data-repo="HasanGoni/quarto_blog_hasan" data-repo-id="" data-category="General" data-category-id="" data-mapping="title" data-reactions-enabled="1" data-emit-metadata="0" data-input-position="top" data-theme="light" data-lang="en" crossorigin="anonymous" async="">
+</script><div class="modal fade" id="quarto-embedded-source-code-modal" tabindex="-1" aria-labelledby="quarto-embedded-source-code-modal-label" aria-hidden="true"><div class="modal-dialog modal-dialog-scrollable"><div class="modal-content"><div class="modal-header"><h5 class="modal-title" id="quarto-embedded-source-code-modal-label">Source Code</h5><button class="btn-close" data-bs-dismiss="modal"></button></div><div class="modal-body"><div class="">
+<div class="sourceCode" id="cb24" data-shortcodes="false"><pre class="sourceCode numberSource markdown number-lines code-with-copy"><code class="sourceCode markdown"><span id="cb24-1"><a href="#cb24-1"></a><span class="co">---</span></span>
+<span id="cb24-2"><a href="#cb24-2"></a><span class="an">title:</span><span class="co"> "Text Processing Power"</span></span>
+<span id="cb24-3"><a href="#cb24-3"></a><span class="an">description:</span><span class="co"> "Unlock the secrets hidden in your data files. Learn to search, filter, sort, and transform text like a digital archaeologist, extracting insights from millions of lines with surgical precision."</span></span>
+<span id="cb24-4"><a href="#cb24-4"></a><span class="an">author:</span><span class="co"> "Hasan"</span></span>
+<span id="cb24-5"><a href="#cb24-5"></a><span class="an">date:</span><span class="co"> last-modified</span></span>
+<span id="cb24-6"><a href="#cb24-6"></a><span class="an">categories:</span><span class="co"> [command-line, text-processing, grep, awk, sed, sort]</span></span>
+<span id="cb24-7"><a href="#cb24-7"></a><span class="an">image:</span><span class="co"> "https://images.unsplash.com/photo-1516321318423-f06f85e504b3?ixlib=rb-4.0.3&amp;auto=format&amp;fit=crop&amp;w=2000&amp;q=80"</span></span>
+<span id="cb24-8"><a href="#cb24-8"></a><span class="an">toc:</span><span class="co"> true</span></span>
+<span id="cb24-9"><a href="#cb24-9"></a><span class="co">---</span></span>
+<span id="cb24-10"><a href="#cb24-10"></a></span>
+<span id="cb24-11"><a href="#cb24-11"></a><span class="fu">## The Story: The Digital Archaeologist</span></span>
+<span id="cb24-12"><a href="#cb24-12"></a></span>
+<span id="cb24-13"><a href="#cb24-13"></a>Imagine you're an archaeologist, but instead of digging through ancient ruins, you're excavating insights from massive text files containing millions of lines of research data. Your tools aren't brushes and trowels – they're powerful text processing commands that can sift through gigabytes of data in seconds, finding patterns, extracting specific information, and transforming raw data into meaningful insights.</span>
+<span id="cb24-14"><a href="#cb24-14"></a></span>
+<span id="cb24-15"><a href="#cb24-15"></a>With Windows Notepad or Excel, analyzing large text files would be like excavating a pyramid with a teaspoon. But with Unix text processing tools, you become a digital archaeologist with laser scanners and precision instruments, capable of extracting exactly what you need from the vast digital landscape.</span>
+<span id="cb24-16"><a href="#cb24-16"></a></span>
+<span id="cb24-17"><a href="#cb24-17"></a>Today, you'll master the ancient arts of text manipulation that turn you from a data observer into a data wizard.</span>
+<span id="cb24-18"><a href="#cb24-18"></a></span>
+<span id="cb24-19"><a href="#cb24-19"></a><span class="fu">## The Text Processing Arsenal</span></span>
+<span id="cb24-20"><a href="#cb24-20"></a></span>
+<span id="cb24-21"><a href="#cb24-21"></a>Your text processing toolkit contains specialized instruments, each designed for specific tasks:</span>
+<span id="cb24-22"><a href="#cb24-22"></a></span>
+<span id="cb24-23"><a href="#cb24-23"></a><span class="ss">- </span>**`cat`**: The reader (displays file contents)</span>
+<span id="cb24-24"><a href="#cb24-24"></a><span class="ss">- </span>**`head/tail`**: The samplers (show beginning/end of files)</span>
+<span id="cb24-25"><a href="#cb24-25"></a><span class="ss">- </span>**`grep`**: The hunter (searches for patterns)</span>
+<span id="cb24-26"><a href="#cb24-26"></a><span class="ss">- </span>**`sort`**: The organizer (arranges data in order)</span>
+<span id="cb24-27"><a href="#cb24-27"></a><span class="ss">- </span>**`uniq`**: The deduplicator (removes duplicates)</span>
+<span id="cb24-28"><a href="#cb24-28"></a><span class="ss">- </span>**`cut`**: The column extractor (selects specific fields)</span>
+<span id="cb24-29"><a href="#cb24-29"></a><span class="ss">- </span>**`awk`**: The data sculptor (processes structured text)</span>
+<span id="cb24-30"><a href="#cb24-30"></a><span class="ss">- </span>**`sed`**: The transformer (edits text streams)</span>
+<span id="cb24-31"><a href="#cb24-31"></a><span class="ss">- </span>**`wc`**: The counter (counts lines, words, characters)</span>
+<span id="cb24-32"><a href="#cb24-32"></a></span>
+<span id="cb24-33"><a href="#cb24-33"></a>**Real-world analogy**: These tools are like having a complete laboratory where each instrument has a specific purpose – microscopes for detailed inspection, filters for separation, scales for measurement, and computers for complex analysis.</span>
+<span id="cb24-34"><a href="#cb24-34"></a></span>
+<span id="cb24-35"><a href="#cb24-35"></a><span class="fu">## Basic Text Inspection</span></span>
+<span id="cb24-36"><a href="#cb24-36"></a></span>
+<span id="cb24-37"><a href="#cb24-37"></a><span class="fu">### Looking at File Contents</span></span>
+<span id="cb24-38"><a href="#cb24-38"></a></span>
+<span id="cb24-39"><a href="#cb24-39"></a><span class="in">```bash</span></span>
+<span id="cb24-40"><a href="#cb24-40"></a><span class="co"># Display entire file (careful with large files!)</span></span>
+<span id="cb24-41"><a href="#cb24-41"></a><span class="fu">cat</span> data.txt</span>
+<span id="cb24-42"><a href="#cb24-42"></a></span>
+<span id="cb24-43"><a href="#cb24-43"></a><span class="co"># Display file with line numbers</span></span>
+<span id="cb24-44"><a href="#cb24-44"></a><span class="fu">cat</span> <span class="at">-n</span> experiment_log.txt</span>
+<span id="cb24-45"><a href="#cb24-45"></a></span>
+<span id="cb24-46"><a href="#cb24-46"></a><span class="co"># Display first 10 lines</span></span>
+<span id="cb24-47"><a href="#cb24-47"></a><span class="fu">head</span> data.csv</span>
+<span id="cb24-48"><a href="#cb24-48"></a></span>
+<span id="cb24-49"><a href="#cb24-49"></a><span class="co"># Display first 20 lines</span></span>
+<span id="cb24-50"><a href="#cb24-50"></a><span class="fu">head</span> <span class="at">-n</span> 20 data.csv</span>
+<span id="cb24-51"><a href="#cb24-51"></a></span>
+<span id="cb24-52"><a href="#cb24-52"></a><span class="co"># Display last 10 lines</span></span>
+<span id="cb24-53"><a href="#cb24-53"></a><span class="fu">tail</span> results.log</span>
+<span id="cb24-54"><a href="#cb24-54"></a></span>
+<span id="cb24-55"><a href="#cb24-55"></a><span class="co"># Follow a growing file (like watching a log in real-time)</span></span>
+<span id="cb24-56"><a href="#cb24-56"></a><span class="fu">tail</span> <span class="at">-f</span> experiment.log</span>
+<span id="cb24-57"><a href="#cb24-57"></a><span class="in">```</span></span>
+<span id="cb24-58"><a href="#cb24-58"></a></span>
+<span id="cb24-59"><a href="#cb24-59"></a>**Real-world analogy**: These commands are like different ways of reading a book – sometimes you want to read the whole thing, sometimes just the first chapter, sometimes just the conclusion, and sometimes you want to watch as new pages are being written.</span>
+<span id="cb24-60"><a href="#cb24-60"></a></span>
+<span id="cb24-61"><a href="#cb24-61"></a><span class="fu">### Quick File Statistics</span></span>
+<span id="cb24-62"><a href="#cb24-62"></a></span>
+<span id="cb24-63"><a href="#cb24-63"></a><span class="in">```bash</span></span>
+<span id="cb24-64"><a href="#cb24-64"></a><span class="co"># Count lines, words, and characters</span></span>
+<span id="cb24-65"><a href="#cb24-65"></a><span class="fu">wc</span> data.txt</span>
+<span id="cb24-66"><a href="#cb24-66"></a></span>
+<span id="cb24-67"><a href="#cb24-67"></a><span class="co"># Count only lines</span></span>
+<span id="cb24-68"><a href="#cb24-68"></a><span class="fu">wc</span> <span class="at">-l</span> <span class="pp">*</span>.csv</span>
+<span id="cb24-69"><a href="#cb24-69"></a></span>
+<span id="cb24-70"><a href="#cb24-70"></a><span class="co"># Count files in directory</span></span>
+<span id="cb24-71"><a href="#cb24-71"></a><span class="fu">ls</span> <span class="pp">*</span>.txt <span class="kw">|</span> <span class="fu">wc</span> <span class="at">-l</span></span>
+<span id="cb24-72"><a href="#cb24-72"></a></span>
+<span id="cb24-73"><a href="#cb24-73"></a><span class="co"># Get file size in human-readable format</span></span>
+<span id="cb24-74"><a href="#cb24-74"></a><span class="fu">du</span> <span class="at">-h</span> large_dataset.csv</span>
+<span id="cb24-75"><a href="#cb24-75"></a><span class="in">```</span></span>
+<span id="cb24-76"><a href="#cb24-76"></a></span>
+<span id="cb24-77"><a href="#cb24-77"></a><span class="fu">## The Pattern Hunter: `grep`</span></span>
+<span id="cb24-78"><a href="#cb24-78"></a></span>
+<span id="cb24-79"><a href="#cb24-79"></a><span class="in">`grep`</span> is your digital bloodhound, capable of sniffing out specific patterns in massive files.</span>
+<span id="cb24-80"><a href="#cb24-80"></a></span>
+<span id="cb24-81"><a href="#cb24-81"></a><span class="fu">### Basic Pattern Searching</span></span>
+<span id="cb24-82"><a href="#cb24-82"></a></span>
+<span id="cb24-83"><a href="#cb24-83"></a><span class="in">```bash</span></span>
+<span id="cb24-84"><a href="#cb24-84"></a><span class="co"># Find lines containing "error"</span></span>
+<span id="cb24-85"><a href="#cb24-85"></a><span class="fu">grep</span> <span class="st">"error"</span> log_file.txt</span>
+<span id="cb24-86"><a href="#cb24-86"></a></span>
+<span id="cb24-87"><a href="#cb24-87"></a><span class="co"># Case-insensitive search</span></span>
+<span id="cb24-88"><a href="#cb24-88"></a><span class="fu">grep</span> <span class="at">-i</span> <span class="st">"ERROR"</span> log_file.txt</span>
+<span id="cb24-89"><a href="#cb24-89"></a></span>
+<span id="cb24-90"><a href="#cb24-90"></a><span class="co"># Search in multiple files</span></span>
+<span id="cb24-91"><a href="#cb24-91"></a><span class="fu">grep</span> <span class="st">"experiment_1"</span> <span class="pp">*</span>.txt</span>
+<span id="cb24-92"><a href="#cb24-92"></a></span>
+<span id="cb24-93"><a href="#cb24-93"></a><span class="co"># Show line numbers</span></span>
+<span id="cb24-94"><a href="#cb24-94"></a><span class="fu">grep</span> <span class="at">-n</span> <span class="st">"important"</span> data.txt</span>
+<span id="cb24-95"><a href="#cb24-95"></a></span>
+<span id="cb24-96"><a href="#cb24-96"></a><span class="co"># Show lines that DON'T match</span></span>
+<span id="cb24-97"><a href="#cb24-97"></a><span class="fu">grep</span> <span class="at">-v</span> <span class="st">"comment"</span> data.csv</span>
+<span id="cb24-98"><a href="#cb24-98"></a><span class="in">```</span></span>
+<span id="cb24-99"><a href="#cb24-99"></a></span>
+<span id="cb24-100"><a href="#cb24-100"></a><span class="fu">### Advanced Pattern Hunting</span></span>
+<span id="cb24-101"><a href="#cb24-101"></a></span>
+<span id="cb24-102"><a href="#cb24-102"></a><span class="in">```bash</span></span>
+<span id="cb24-103"><a href="#cb24-103"></a><span class="co"># Count matching lines</span></span>
+<span id="cb24-104"><a href="#cb24-104"></a><span class="fu">grep</span> <span class="at">-c</span> <span class="st">"success"</span> results.log</span>
+<span id="cb24-105"><a href="#cb24-105"></a></span>
+<span id="cb24-106"><a href="#cb24-106"></a><span class="co"># Show only filenames that contain pattern</span></span>
+<span id="cb24-107"><a href="#cb24-107"></a><span class="fu">grep</span> <span class="at">-l</span> <span class="st">"error"</span> <span class="pp">*</span>.log</span>
+<span id="cb24-108"><a href="#cb24-108"></a></span>
+<span id="cb24-109"><a href="#cb24-109"></a><span class="co"># Show context around matches</span></span>
+<span id="cb24-110"><a href="#cb24-110"></a><span class="fu">grep</span> <span class="at">-A</span> 3 <span class="at">-B</span> 3 <span class="st">"error"</span> log.txt    <span class="co"># 3 lines after and before</span></span>
+<span id="cb24-111"><a href="#cb24-111"></a></span>
+<span id="cb24-112"><a href="#cb24-112"></a><span class="co"># Search recursively in directories</span></span>
+<span id="cb24-113"><a href="#cb24-113"></a><span class="fu">grep</span> <span class="at">-r</span> <span class="st">"TODO"</span> project_files/</span>
+<span id="cb24-114"><a href="#cb24-114"></a></span>
+<span id="cb24-115"><a href="#cb24-115"></a><span class="co"># Use regular expressions</span></span>
+<span id="cb24-116"><a href="#cb24-116"></a><span class="fu">grep</span> <span class="st">"^[0-9]"</span> data.txt           <span class="co"># Lines starting with numbers</span></span>
+<span id="cb24-117"><a href="#cb24-117"></a><span class="fu">grep</span> <span class="st">"[0-9]$"</span> data.txt           <span class="co"># Lines ending with numbers</span></span>
+<span id="cb24-118"><a href="#cb24-118"></a><span class="in">```</span></span>
+<span id="cb24-119"><a href="#cb24-119"></a></span>
+<span id="cb24-120"><a href="#cb24-120"></a>**Real-world analogy**: Advanced grep is like having a detective who can not only find what you're looking for but also show you the surrounding evidence and tell you exactly where and how many times they found it.</span>
+<span id="cb24-121"><a href="#cb24-121"></a></span>
+<span id="cb24-122"><a href="#cb24-122"></a><span class="fu">## The Data Organizer: `sort`</span></span>
+<span id="cb24-123"><a href="#cb24-123"></a></span>
+<span id="cb24-124"><a href="#cb24-124"></a>Sorting is fundamental to data analysis – it reveals patterns and makes data searchable.</span>
+<span id="cb24-125"><a href="#cb24-125"></a></span>
+<span id="cb24-126"><a href="#cb24-126"></a><span class="fu">### Basic Sorting</span></span>
+<span id="cb24-127"><a href="#cb24-127"></a></span>
+<span id="cb24-128"><a href="#cb24-128"></a><span class="in">```bash</span></span>
+<span id="cb24-129"><a href="#cb24-129"></a><span class="co"># Sort lines alphabetically</span></span>
+<span id="cb24-130"><a href="#cb24-130"></a><span class="fu">sort</span> names.txt</span>
+<span id="cb24-131"><a href="#cb24-131"></a></span>
+<span id="cb24-132"><a href="#cb24-132"></a><span class="co"># Sort in reverse order</span></span>
+<span id="cb24-133"><a href="#cb24-133"></a><span class="fu">sort</span> <span class="at">-r</span> scores.txt</span>
+<span id="cb24-134"><a href="#cb24-134"></a></span>
+<span id="cb24-135"><a href="#cb24-135"></a><span class="co"># Sort numerically (not alphabetically)</span></span>
+<span id="cb24-136"><a href="#cb24-136"></a><span class="fu">sort</span> <span class="at">-n</span> numbers.txt</span>
+<span id="cb24-137"><a href="#cb24-137"></a></span>
+<span id="cb24-138"><a href="#cb24-138"></a><span class="co"># Sort by specific column (space-separated)</span></span>
+<span id="cb24-139"><a href="#cb24-139"></a><span class="fu">sort</span> <span class="at">-k</span> 2 data.txt               <span class="co"># Sort by second column</span></span>
+<span id="cb24-140"><a href="#cb24-140"></a></span>
+<span id="cb24-141"><a href="#cb24-141"></a><span class="co"># Sort CSV by specific column</span></span>
+<span id="cb24-142"><a href="#cb24-142"></a><span class="fu">sort</span> <span class="at">-t</span> <span class="st">','</span> <span class="at">-k</span> 3 data.csv        <span class="co"># Sort by third column, comma-separated</span></span>
+<span id="cb24-143"><a href="#cb24-143"></a><span class="in">```</span></span>
+<span id="cb24-144"><a href="#cb24-144"></a></span>
+<span id="cb24-145"><a href="#cb24-145"></a><span class="fu">### Advanced Sorting Strategies</span></span>
+<span id="cb24-146"><a href="#cb24-146"></a></span>
+<span id="cb24-147"><a href="#cb24-147"></a><span class="in">```bash</span></span>
+<span id="cb24-148"><a href="#cb24-148"></a><span class="co"># Sort by multiple columns</span></span>
+<span id="cb24-149"><a href="#cb24-149"></a><span class="fu">sort</span> <span class="at">-k</span> 1,1 <span class="at">-k</span> 2,2n data.txt     <span class="co"># First by column 1 (text), then by column 2 (numeric)</span></span>
+<span id="cb24-150"><a href="#cb24-150"></a></span>
+<span id="cb24-151"><a href="#cb24-151"></a><span class="co"># Sort by file size</span></span>
+<span id="cb24-152"><a href="#cb24-152"></a><span class="fu">ls</span> <span class="at">-l</span> <span class="kw">|</span> <span class="fu">sort</span> <span class="at">-k</span> 5 <span class="at">-n</span>             <span class="co"># Sort files by size</span></span>
+<span id="cb24-153"><a href="#cb24-153"></a></span>
+<span id="cb24-154"><a href="#cb24-154"></a><span class="co"># Sort unique values</span></span>
+<span id="cb24-155"><a href="#cb24-155"></a><span class="fu">sort</span> data.txt <span class="kw">|</span> <span class="fu">uniq</span></span>
+<span id="cb24-156"><a href="#cb24-156"></a></span>
+<span id="cb24-157"><a href="#cb24-157"></a><span class="co"># Sort and count occurrences</span></span>
+<span id="cb24-158"><a href="#cb24-158"></a><span class="fu">sort</span> data.txt <span class="kw">|</span> <span class="fu">uniq</span> <span class="at">-c</span> <span class="kw">|</span> <span class="fu">sort</span> <span class="at">-nr</span></span>
+<span id="cb24-159"><a href="#cb24-159"></a><span class="in">```</span></span>
+<span id="cb24-160"><a href="#cb24-160"></a></span>
+<span id="cb24-161"><a href="#cb24-161"></a>**Real-world analogy**: Sorting is like organizing a library – you can arrange books by title, author, publication date, or size, making it easy to find what you need and spot patterns.</span>
+<span id="cb24-162"><a href="#cb24-162"></a></span>
+<span id="cb24-163"><a href="#cb24-163"></a><span class="fu">## The Column Surgeon: `cut`</span></span>
+<span id="cb24-164"><a href="#cb24-164"></a></span>
+<span id="cb24-165"><a href="#cb24-165"></a><span class="in">`cut`</span> extracts specific columns from structured text, like a precision scalpel for data.</span>
+<span id="cb24-166"><a href="#cb24-166"></a></span>
+<span id="cb24-167"><a href="#cb24-167"></a><span class="fu">### Basic Column Extraction</span></span>
+<span id="cb24-168"><a href="#cb24-168"></a></span>
+<span id="cb24-169"><a href="#cb24-169"></a><span class="in">```bash</span></span>
+<span id="cb24-170"><a href="#cb24-170"></a><span class="co"># Extract first column (space-separated)</span></span>
+<span id="cb24-171"><a href="#cb24-171"></a><span class="fu">cut</span> <span class="at">-d</span> <span class="st">' '</span> <span class="at">-f</span> 1 data.txt</span>
+<span id="cb24-172"><a href="#cb24-172"></a></span>
+<span id="cb24-173"><a href="#cb24-173"></a><span class="co"># Extract multiple columns</span></span>
+<span id="cb24-174"><a href="#cb24-174"></a><span class="fu">cut</span> <span class="at">-d</span> <span class="st">','</span> <span class="at">-f</span> 1,3,5 data.csv      <span class="co"># Columns 1, 3, and 5 from CSV</span></span>
+<span id="cb24-175"><a href="#cb24-175"></a></span>
+<span id="cb24-176"><a href="#cb24-176"></a><span class="co"># Extract character ranges</span></span>
+<span id="cb24-177"><a href="#cb24-177"></a><span class="fu">cut</span> <span class="at">-c</span> 1-10 fixed_width.txt       <span class="co"># Characters 1-10 from each line</span></span>
+<span id="cb24-178"><a href="#cb24-178"></a></span>
+<span id="cb24-179"><a href="#cb24-179"></a><span class="co"># Extract from specific character to end</span></span>
+<span id="cb24-180"><a href="#cb24-180"></a><span class="fu">cut</span> <span class="at">-c</span> 15- data.txt               <span class="co"># From character 15 to end of line</span></span>
+<span id="cb24-181"><a href="#cb24-181"></a><span class="in">```</span></span>
+<span id="cb24-182"><a href="#cb24-182"></a></span>
+<span id="cb24-183"><a href="#cb24-183"></a><span class="fu">### Real-World Data Extraction</span></span>
+<span id="cb24-184"><a href="#cb24-184"></a></span>
+<span id="cb24-185"><a href="#cb24-185"></a><span class="in">```bash</span></span>
+<span id="cb24-186"><a href="#cb24-186"></a><span class="co"># Extract usernames from system log</span></span>
+<span id="cb24-187"><a href="#cb24-187"></a><span class="fu">cut</span> <span class="at">-d</span> <span class="st">':'</span> <span class="at">-f</span> 1 /etc/passwd</span>
+<span id="cb24-188"><a href="#cb24-188"></a></span>
+<span id="cb24-189"><a href="#cb24-189"></a><span class="co"># Get just the filenames from ls -l output</span></span>
+<span id="cb24-190"><a href="#cb24-190"></a><span class="fu">ls</span> <span class="at">-l</span> <span class="kw">|</span> <span class="fu">cut</span> <span class="at">-d</span> <span class="st">' '</span> <span class="at">-f</span> 9</span>
+<span id="cb24-191"><a href="#cb24-191"></a></span>
+<span id="cb24-192"><a href="#cb24-192"></a><span class="co"># Extract specific fields from CSV</span></span>
+<span id="cb24-193"><a href="#cb24-193"></a><span class="fu">cut</span> <span class="at">-d</span> <span class="st">','</span> <span class="at">-f</span> 2,4 experiment_data.csv <span class="op">&gt;</span> selected_columns.csv</span>
+<span id="cb24-194"><a href="#cb24-194"></a><span class="in">```</span></span>
+<span id="cb24-195"><a href="#cb24-195"></a></span>
+<span id="cb24-196"><a href="#cb24-196"></a><span class="fu">## The Duplicate Detective: `uniq`</span></span>
+<span id="cb24-197"><a href="#cb24-197"></a></span>
+<span id="cb24-198"><a href="#cb24-198"></a><span class="in">`uniq`</span> finds and manages duplicate lines in your data.</span>
+<span id="cb24-199"><a href="#cb24-199"></a></span>
+<span id="cb24-200"><a href="#cb24-200"></a><span class="in">```bash</span></span>
+<span id="cb24-201"><a href="#cb24-201"></a><span class="co"># Remove consecutive duplicate lines</span></span>
+<span id="cb24-202"><a href="#cb24-202"></a><span class="fu">uniq</span> data.txt</span>
+<span id="cb24-203"><a href="#cb24-203"></a></span>
+<span id="cb24-204"><a href="#cb24-204"></a><span class="co"># Count occurrences of each unique line</span></span>
+<span id="cb24-205"><a href="#cb24-205"></a><span class="fu">uniq</span> <span class="at">-c</span> data.txt</span>
+<span id="cb24-206"><a href="#cb24-206"></a></span>
+<span id="cb24-207"><a href="#cb24-207"></a><span class="co"># Show only duplicate lines</span></span>
+<span id="cb24-208"><a href="#cb24-208"></a><span class="fu">uniq</span> <span class="at">-d</span> data.txt</span>
+<span id="cb24-209"><a href="#cb24-209"></a></span>
+<span id="cb24-210"><a href="#cb24-210"></a><span class="co"># Show only unique lines (no duplicates)</span></span>
+<span id="cb24-211"><a href="#cb24-211"></a><span class="fu">uniq</span> <span class="at">-u</span> data.txt</span>
+<span id="cb24-212"><a href="#cb24-212"></a></span>
+<span id="cb24-213"><a href="#cb24-213"></a><span class="co"># Case-insensitive uniqueness</span></span>
+<span id="cb24-214"><a href="#cb24-214"></a><span class="fu">uniq</span> <span class="at">-i</span> data.txt</span>
+<span id="cb24-215"><a href="#cb24-215"></a><span class="in">```</span></span>
+<span id="cb24-216"><a href="#cb24-216"></a></span>
+<span id="cb24-217"><a href="#cb24-217"></a>**Important**: <span class="in">`uniq`</span> only works on consecutive duplicate lines, so usually you need to sort first:</span>
+<span id="cb24-218"><a href="#cb24-218"></a></span>
+<span id="cb24-219"><a href="#cb24-219"></a><span class="in">```bash</span></span>
+<span id="cb24-220"><a href="#cb24-220"></a><span class="co"># Proper way to find all unique values</span></span>
+<span id="cb24-221"><a href="#cb24-221"></a><span class="fu">sort</span> data.txt <span class="kw">|</span> <span class="fu">uniq</span></span>
+<span id="cb24-222"><a href="#cb24-222"></a></span>
+<span id="cb24-223"><a href="#cb24-223"></a><span class="co"># Count all occurrences</span></span>
+<span id="cb24-224"><a href="#cb24-224"></a><span class="fu">sort</span> data.txt <span class="kw">|</span> <span class="fu">uniq</span> <span class="at">-c</span> <span class="kw">|</span> <span class="fu">sort</span> <span class="at">-nr</span></span>
+<span id="cb24-225"><a href="#cb24-225"></a><span class="in">```</span></span>
+<span id="cb24-226"><a href="#cb24-226"></a></span>
+<span id="cb24-227"><a href="#cb24-227"></a><span class="fu">## The Data Sculptor: `awk`</span></span>
+<span id="cb24-228"><a href="#cb24-228"></a></span>
+<span id="cb24-229"><a href="#cb24-229"></a><span class="in">`awk`</span> is like having a programmable data processing workshop. It can perform complex operations on structured text.</span>
+<span id="cb24-230"><a href="#cb24-230"></a></span>
+<span id="cb24-231"><a href="#cb24-231"></a><span class="fu">### Basic AWK Operations</span></span>
+<span id="cb24-232"><a href="#cb24-232"></a></span>
+<span id="cb24-233"><a href="#cb24-233"></a><span class="in">```bash</span></span>
+<span id="cb24-234"><a href="#cb24-234"></a><span class="co"># Print specific columns</span></span>
+<span id="cb24-235"><a href="#cb24-235"></a><span class="fu">awk</span> <span class="st">'{print $1, $3}'</span> data.txt    <span class="co"># Print columns 1 and 3</span></span>
+<span id="cb24-236"><a href="#cb24-236"></a></span>
+<span id="cb24-237"><a href="#cb24-237"></a><span class="co"># Print with custom formatting</span></span>
+<span id="cb24-238"><a href="#cb24-238"></a><span class="fu">awk</span> <span class="st">'{print "Name:", $1, "Score:", $2}'</span> scores.txt</span>
+<span id="cb24-239"><a href="#cb24-239"></a></span>
+<span id="cb24-240"><a href="#cb24-240"></a><span class="co"># Process CSV files</span></span>
+<span id="cb24-241"><a href="#cb24-241"></a><span class="fu">awk</span> <span class="at">-F</span> <span class="st">','</span> <span class="st">'{print $1, $3}'</span> data.csv</span>
+<span id="cb24-242"><a href="#cb24-242"></a></span>
+<span id="cb24-243"><a href="#cb24-243"></a><span class="co"># Add line numbers</span></span>
+<span id="cb24-244"><a href="#cb24-244"></a><span class="fu">awk</span> <span class="st">'{print NR, $0}'</span> data.txt</span>
+<span id="cb24-245"><a href="#cb24-245"></a><span class="in">```</span></span>
+<span id="cb24-246"><a href="#cb24-246"></a></span>
+<span id="cb24-247"><a href="#cb24-247"></a><span class="fu">### AWK Power Features</span></span>
+<span id="cb24-248"><a href="#cb24-248"></a></span>
+<span id="cb24-249"><a href="#cb24-249"></a><span class="in">```bash</span></span>
+<span id="cb24-250"><a href="#cb24-250"></a><span class="co"># Conditional processing</span></span>
+<span id="cb24-251"><a href="#cb24-251"></a><span class="fu">awk</span> <span class="st">'$2 &gt; 100 {print $1, $2}'</span> scores.txt    <span class="co"># Print if second column &gt; 100</span></span>
+<span id="cb24-252"><a href="#cb24-252"></a></span>
+<span id="cb24-253"><a href="#cb24-253"></a><span class="co"># Calculate sums</span></span>
+<span id="cb24-254"><a href="#cb24-254"></a><span class="fu">awk</span> <span class="st">'{sum += $2} END {print "Total:", sum}'</span> numbers.txt</span>
+<span id="cb24-255"><a href="#cb24-255"></a></span>
+<span id="cb24-256"><a href="#cb24-256"></a><span class="co"># Count occurrences</span></span>
+<span id="cb24-257"><a href="#cb24-257"></a><span class="fu">awk</span> <span class="st">'{count[$1]++} END {for (i in count) print i, count[i]}'</span> data.txt</span>
+<span id="cb24-258"><a href="#cb24-258"></a></span>
+<span id="cb24-259"><a href="#cb24-259"></a><span class="co"># Process specific lines</span></span>
+<span id="cb24-260"><a href="#cb24-260"></a><span class="fu">awk</span> <span class="st">'NR &gt; 1 {print}'</span> data.csv    <span class="co"># Skip header line</span></span>
+<span id="cb24-261"><a href="#cb24-261"></a><span class="in">```</span></span>
+<span id="cb24-262"><a href="#cb24-262"></a></span>
+<span id="cb24-263"><a href="#cb24-263"></a>**Real-world analogy**: AWK is like having a Swiss Army knife that can cut, measure, calculate, and transform your data all in one tool.</span>
+<span id="cb24-264"><a href="#cb24-264"></a></span>
+<span id="cb24-265"><a href="#cb24-265"></a><span class="fu">## The Text Transformer: `sed`</span></span>
+<span id="cb24-266"><a href="#cb24-266"></a></span>
+<span id="cb24-267"><a href="#cb24-267"></a><span class="in">`sed`</span> (stream editor) modifies text as it flows through, like having a assembly line that transforms your data.</span>
+<span id="cb24-268"><a href="#cb24-268"></a></span>
+<span id="cb24-269"><a href="#cb24-269"></a><span class="fu">### Basic Text Substitution</span></span>
+<span id="cb24-270"><a href="#cb24-270"></a></span>
+<span id="cb24-271"><a href="#cb24-271"></a><span class="in">```bash</span></span>
+<span id="cb24-272"><a href="#cb24-272"></a><span class="co"># Replace first occurrence per line</span></span>
+<span id="cb24-273"><a href="#cb24-273"></a><span class="fu">sed</span> <span class="st">'s/old/new/'</span> data.txt</span>
+<span id="cb24-274"><a href="#cb24-274"></a></span>
+<span id="cb24-275"><a href="#cb24-275"></a><span class="co"># Replace all occurrences</span></span>
+<span id="cb24-276"><a href="#cb24-276"></a><span class="fu">sed</span> <span class="st">'s/old/new/g'</span> data.txt</span>
+<span id="cb24-277"><a href="#cb24-277"></a></span>
+<span id="cb24-278"><a href="#cb24-278"></a><span class="co"># Replace and save to new file</span></span>
+<span id="cb24-279"><a href="#cb24-279"></a><span class="fu">sed</span> <span class="st">'s/old/new/g'</span> input.txt <span class="op">&gt;</span> output.txt</span>
+<span id="cb24-280"><a href="#cb24-280"></a></span>
+<span id="cb24-281"><a href="#cb24-281"></a><span class="co"># Replace in-place (modify original file)</span></span>
+<span id="cb24-282"><a href="#cb24-282"></a><span class="fu">sed</span> <span class="at">-i</span> <span class="st">'s/old/new/g'</span> data.txt</span>
+<span id="cb24-283"><a href="#cb24-283"></a><span class="in">```</span></span>
+<span id="cb24-284"><a href="#cb24-284"></a></span>
+<span id="cb24-285"><a href="#cb24-285"></a><span class="fu">### Advanced Text Transformation</span></span>
+<span id="cb24-286"><a href="#cb24-286"></a></span>
+<span id="cb24-287"><a href="#cb24-287"></a><span class="in">```bash</span></span>
+<span id="cb24-288"><a href="#cb24-288"></a><span class="co"># Delete lines containing pattern</span></span>
+<span id="cb24-289"><a href="#cb24-289"></a><span class="fu">sed</span> <span class="st">'/pattern/d'</span> data.txt</span>
+<span id="cb24-290"><a href="#cb24-290"></a></span>
+<span id="cb24-291"><a href="#cb24-291"></a><span class="co"># Delete empty lines</span></span>
+<span id="cb24-292"><a href="#cb24-292"></a><span class="fu">sed</span> <span class="st">'/^$/d'</span> data.txt</span>
+<span id="cb24-293"><a href="#cb24-293"></a></span>
+<span id="cb24-294"><a href="#cb24-294"></a><span class="co"># Insert text before/after pattern</span></span>
+<span id="cb24-295"><a href="#cb24-295"></a><span class="fu">sed</span> <span class="st">'/pattern/i\New line before'</span> data.txt</span>
+<span id="cb24-296"><a href="#cb24-296"></a><span class="fu">sed</span> <span class="st">'/pattern/a\New line after'</span> data.txt</span>
+<span id="cb24-297"><a href="#cb24-297"></a></span>
+<span id="cb24-298"><a href="#cb24-298"></a><span class="co"># Extract lines between patterns</span></span>
+<span id="cb24-299"><a href="#cb24-299"></a><span class="fu">sed</span> <span class="at">-n</span> <span class="st">'/START/,/END/p'</span> data.txt</span>
+<span id="cb24-300"><a href="#cb24-300"></a><span class="in">```</span></span>
+<span id="cb24-301"><a href="#cb24-301"></a></span>
+<span id="cb24-302"><a href="#cb24-302"></a><span class="fu">## Real-World HPC Text Processing Scenarios</span></span>
+<span id="cb24-303"><a href="#cb24-303"></a></span>
+<span id="cb24-304"><a href="#cb24-304"></a><span class="fu">### Scenario 1: Log File Analysis</span></span>
+<span id="cb24-305"><a href="#cb24-305"></a></span>
+<span id="cb24-306"><a href="#cb24-306"></a><span class="in">```bash</span></span>
+<span id="cb24-307"><a href="#cb24-307"></a><span class="co">#!/bin/bash</span></span>
+<span id="cb24-308"><a href="#cb24-308"></a><span class="co"># analyze_experiment_logs.sh - Extract insights from experiment logs</span></span>
+<span id="cb24-309"><a href="#cb24-309"></a></span>
+<span id="cb24-310"><a href="#cb24-310"></a><span class="va">LOG_FILE</span><span class="op">=</span><span class="st">"experiment.log"</span></span>
+<span id="cb24-311"><a href="#cb24-311"></a><span class="va">REPORT_FILE</span><span class="op">=</span><span class="st">"log_analysis_</span><span class="va">$(</span><span class="fu">date</span> +%Y%m%d<span class="va">)</span><span class="st">.txt"</span></span>
+<span id="cb24-312"><a href="#cb24-312"></a></span>
+<span id="cb24-313"><a href="#cb24-313"></a><span class="bu">echo</span> <span class="st">"Experiment Log Analysis - </span><span class="va">$(</span><span class="fu">date</span><span class="va">)</span><span class="st">"</span> <span class="op">&gt;</span> <span class="va">$REPORT_FILE</span></span>
+<span id="cb24-314"><a href="#cb24-314"></a><span class="bu">echo</span> <span class="st">"================================="</span> <span class="op">&gt;&gt;</span> <span class="va">$REPORT_FILE</span></span>
+<span id="cb24-315"><a href="#cb24-315"></a></span>
+<span id="cb24-316"><a href="#cb24-316"></a><span class="co"># Count total entries</span></span>
+<span id="cb24-317"><a href="#cb24-317"></a><span class="bu">echo</span> <span class="st">"Total log entries: </span><span class="va">$(</span><span class="fu">wc</span> <span class="at">-l</span> <span class="op">&lt;</span> <span class="va">$LOG_FILE)</span><span class="st">"</span> <span class="op">&gt;&gt;</span> <span class="va">$REPORT_FILE</span></span>
+<span id="cb24-318"><a href="#cb24-318"></a></span>
+<span id="cb24-319"><a href="#cb24-319"></a><span class="co"># Count errors and warnings</span></span>
+<span id="cb24-320"><a href="#cb24-320"></a><span class="bu">echo</span> <span class="st">"Errors: </span><span class="va">$(</span><span class="fu">grep</span> <span class="at">-c</span> <span class="st">"ERROR"</span> <span class="va">$LOG_FILE)</span><span class="st">"</span> <span class="op">&gt;&gt;</span> <span class="va">$REPORT_FILE</span></span>
+<span id="cb24-321"><a href="#cb24-321"></a><span class="bu">echo</span> <span class="st">"Warnings: </span><span class="va">$(</span><span class="fu">grep</span> <span class="at">-c</span> <span class="st">"WARNING"</span> <span class="va">$LOG_FILE)</span><span class="st">"</span> <span class="op">&gt;&gt;</span> <span class="va">$REPORT_FILE</span></span>
+<span id="cb24-322"><a href="#cb24-322"></a></span>
+<span id="cb24-323"><a href="#cb24-323"></a><span class="co"># Most common error types</span></span>
+<span id="cb24-324"><a href="#cb24-324"></a><span class="bu">echo</span> <span class="at">-e</span> <span class="st">"\nTop Error Types:"</span> <span class="op">&gt;&gt;</span> <span class="va">$REPORT_FILE</span></span>
+<span id="cb24-325"><a href="#cb24-325"></a><span class="fu">grep</span> <span class="st">"ERROR"</span> <span class="va">$LOG_FILE</span> <span class="kw">|</span> <span class="fu">cut</span> <span class="at">-d</span> <span class="st">':'</span> <span class="at">-f</span> 3 <span class="kw">|</span> <span class="fu">sort</span> <span class="kw">|</span> <span class="fu">uniq</span> <span class="at">-c</span> <span class="kw">|</span> <span class="fu">sort</span> <span class="at">-nr</span> <span class="kw">|</span> <span class="fu">head</span> <span class="at">-5</span> <span class="op">&gt;&gt;</span> <span class="va">$REPORT_FILE</span></span>
+<span id="cb24-326"><a href="#cb24-326"></a></span>
+<span id="cb24-327"><a href="#cb24-327"></a><span class="co"># Processing times analysis</span></span>
+<span id="cb24-328"><a href="#cb24-328"></a><span class="bu">echo</span> <span class="at">-e</span> <span class="st">"\nProcessing Times (seconds):"</span> <span class="op">&gt;&gt;</span> <span class="va">$REPORT_FILE</span></span>
+<span id="cb24-329"><a href="#cb24-329"></a><span class="fu">grep</span> <span class="st">"Processing time"</span> <span class="va">$LOG_FILE</span> <span class="kw">|</span> <span class="fu">awk</span> <span class="st">'{print $4}'</span> <span class="kw">|</span> <span class="fu">sort</span> <span class="at">-n</span> <span class="kw">|</span> <span class="fu">awk</span> <span class="st">'</span></span>
+<span id="cb24-330"><a href="#cb24-330"></a><span class="st">{</span></span>
+<span id="cb24-331"><a href="#cb24-331"></a><span class="st">    sum += $1</span></span>
+<span id="cb24-332"><a href="#cb24-332"></a><span class="st">    count++</span></span>
+<span id="cb24-333"><a href="#cb24-333"></a><span class="st">    values[count] = $1</span></span>
+<span id="cb24-334"><a href="#cb24-334"></a><span class="st">}</span></span>
+<span id="cb24-335"><a href="#cb24-335"></a><span class="st">END {</span></span>
+<span id="cb24-336"><a href="#cb24-336"></a><span class="st">    print "Average:", sum/count</span></span>
+<span id="cb24-337"><a href="#cb24-337"></a><span class="st">    print "Minimum:", values[1]</span></span>
+<span id="cb24-338"><a href="#cb24-338"></a><span class="st">    print "Maximum:", values[count]</span></span>
+<span id="cb24-339"><a href="#cb24-339"></a><span class="st">    print "Median:", values[int(count/2)]</span></span>
+<span id="cb24-340"><a href="#cb24-340"></a><span class="st">}'</span> <span class="op">&gt;&gt;</span> <span class="va">$REPORT_FILE</span></span>
+<span id="cb24-341"><a href="#cb24-341"></a></span>
+<span id="cb24-342"><a href="#cb24-342"></a><span class="bu">echo</span> <span class="st">"Analysis complete. Report saved to </span><span class="va">$REPORT_FILE</span><span class="st">"</span></span>
+<span id="cb24-343"><a href="#cb24-343"></a><span class="in">```</span></span>
+<span id="cb24-344"><a href="#cb24-344"></a></span>
+<span id="cb24-345"><a href="#cb24-345"></a><span class="fu">### Scenario 2: CSV Data Processing</span></span>
+<span id="cb24-346"><a href="#cb24-346"></a></span>
+<span id="cb24-347"><a href="#cb24-347"></a><span class="in">```bash</span></span>
+<span id="cb24-348"><a href="#cb24-348"></a><span class="co">#!/bin/bash</span></span>
+<span id="cb24-349"><a href="#cb24-349"></a><span class="co"># process_experimental_data.sh - Clean and analyze CSV data</span></span>
+<span id="cb24-350"><a href="#cb24-350"></a></span>
+<span id="cb24-351"><a href="#cb24-351"></a><span class="va">INPUT_FILE</span><span class="op">=</span><span class="st">"raw_experiment_data.csv"</span></span>
+<span id="cb24-352"><a href="#cb24-352"></a><span class="va">CLEAN_FILE</span><span class="op">=</span><span class="st">"clean_data.csv"</span></span>
+<span id="cb24-353"><a href="#cb24-353"></a><span class="va">SUMMARY_FILE</span><span class="op">=</span><span class="st">"data_summary.txt"</span></span>
+<span id="cb24-354"><a href="#cb24-354"></a></span>
+<span id="cb24-355"><a href="#cb24-355"></a><span class="co"># Remove header for processing, then add it back</span></span>
+<span id="cb24-356"><a href="#cb24-356"></a><span class="fu">head</span> <span class="at">-n</span> 1 <span class="va">$INPUT_FILE</span> <span class="op">&gt;</span> <span class="va">$CLEAN_FILE</span></span>
+<span id="cb24-357"><a href="#cb24-357"></a></span>
+<span id="cb24-358"><a href="#cb24-358"></a><span class="co"># Clean data: remove empty lines, sort by timestamp</span></span>
+<span id="cb24-359"><a href="#cb24-359"></a><span class="fu">tail</span> <span class="at">-n</span> +2 <span class="va">$INPUT_FILE</span> <span class="kw">|</span> <span class="dt">\</span></span>
+<span id="cb24-360"><a href="#cb24-360"></a>    <span class="fu">grep</span> <span class="at">-v</span> <span class="st">'^$'</span> <span class="kw">|</span> <span class="dt">\</span></span>
+<span id="cb24-361"><a href="#cb24-361"></a>    <span class="fu">sort</span> <span class="at">-t</span> <span class="st">','</span> <span class="at">-k</span> 1 <span class="op">&gt;&gt;</span> <span class="va">$CLEAN_FILE</span></span>
+<span id="cb24-362"><a href="#cb24-362"></a></span>
+<span id="cb24-363"><a href="#cb24-363"></a><span class="co"># Generate summary statistics</span></span>
+<span id="cb24-364"><a href="#cb24-364"></a><span class="bu">echo</span> <span class="st">"Data Summary for </span><span class="va">$(</span><span class="fu">basename</span> <span class="va">$INPUT_FILE)</span><span class="st">"</span> <span class="op">&gt;</span> <span class="va">$SUMMARY_FILE</span></span>
+<span id="cb24-365"><a href="#cb24-365"></a><span class="bu">echo</span> <span class="st">"Generated: </span><span class="va">$(</span><span class="fu">date</span><span class="va">)</span><span class="st">"</span> <span class="op">&gt;&gt;</span> <span class="va">$SUMMARY_FILE</span></span>
+<span id="cb24-366"><a href="#cb24-366"></a><span class="bu">echo</span> <span class="st">"================================="</span> <span class="op">&gt;&gt;</span> <span class="va">$SUMMARY_FILE</span></span>
+<span id="cb24-367"><a href="#cb24-367"></a></span>
+<span id="cb24-368"><a href="#cb24-368"></a><span class="co"># Count records</span></span>
+<span id="cb24-369"><a href="#cb24-369"></a><span class="bu">echo</span> <span class="st">"Total records: </span><span class="va">$(</span><span class="fu">tail</span> <span class="at">-n</span> +2 <span class="va">$CLEAN_FILE</span> <span class="kw">|</span> <span class="fu">wc</span> <span class="at">-l</span><span class="va">)</span><span class="st">"</span> <span class="op">&gt;&gt;</span> <span class="va">$SUMMARY_FILE</span></span>
+<span id="cb24-370"><a href="#cb24-370"></a></span>
+<span id="cb24-371"><a href="#cb24-371"></a><span class="co"># Unique subjects</span></span>
+<span id="cb24-372"><a href="#cb24-372"></a><span class="bu">echo</span> <span class="st">"Unique subjects: </span><span class="va">$(</span><span class="fu">cut</span> <span class="at">-d</span> <span class="st">','</span> <span class="at">-f</span> 2 <span class="va">$CLEAN_FILE</span> <span class="kw">|</span> <span class="fu">tail</span> <span class="at">-n</span> +2 <span class="kw">|</span> <span class="fu">sort</span> <span class="kw">|</span> <span class="fu">uniq</span> <span class="kw">|</span> <span class="fu">wc</span> <span class="at">-l</span><span class="va">)</span><span class="st">"</span> <span class="op">&gt;&gt;</span> <span class="va">$SUMMARY_FILE</span></span>
+<span id="cb24-373"><a href="#cb24-373"></a></span>
+<span id="cb24-374"><a href="#cb24-374"></a><span class="co"># Date range</span></span>
+<span id="cb24-375"><a href="#cb24-375"></a><span class="bu">echo</span> <span class="st">"Date range:"</span> <span class="op">&gt;&gt;</span> <span class="va">$SUMMARY_FILE</span></span>
+<span id="cb24-376"><a href="#cb24-376"></a><span class="bu">echo</span> <span class="st">"  From: </span><span class="va">$(</span><span class="fu">cut</span> <span class="at">-d</span> <span class="st">','</span> <span class="at">-f</span> 1 <span class="va">$CLEAN_FILE</span> <span class="kw">|</span> <span class="fu">tail</span> <span class="at">-n</span> +2 <span class="kw">|</span> <span class="fu">head</span> <span class="at">-n</span> 1<span class="va">)</span><span class="st">"</span> <span class="op">&gt;&gt;</span> <span class="va">$SUMMARY_FILE</span></span>
+<span id="cb24-377"><a href="#cb24-377"></a><span class="bu">echo</span> <span class="st">"  To:   </span><span class="va">$(</span><span class="fu">cut</span> <span class="at">-d</span> <span class="st">','</span> <span class="at">-f</span> 1 <span class="va">$CLEAN_FILE</span> <span class="kw">|</span> <span class="fu">tail</span> <span class="at">-n</span> +2 <span class="kw">|</span> <span class="fu">tail</span> <span class="at">-n</span> 1<span class="va">)</span><span class="st">"</span> <span class="op">&gt;&gt;</span> <span class="va">$SUMMARY_FILE</span></span>
+<span id="cb24-378"><a href="#cb24-378"></a></span>
+<span id="cb24-379"><a href="#cb24-379"></a><span class="co"># Value statistics (assuming numeric data in column 3)</span></span>
+<span id="cb24-380"><a href="#cb24-380"></a><span class="bu">echo</span> <span class="at">-e</span> <span class="st">"\nValue Statistics:"</span> <span class="op">&gt;&gt;</span> <span class="va">$SUMMARY_FILE</span></span>
+<span id="cb24-381"><a href="#cb24-381"></a><span class="fu">cut</span> <span class="at">-d</span> <span class="st">','</span> <span class="at">-f</span> 3 <span class="va">$CLEAN_FILE</span> <span class="kw">|</span> <span class="fu">tail</span> <span class="at">-n</span> +2 <span class="kw">|</span> <span class="fu">sort</span> <span class="at">-n</span> <span class="kw">|</span> <span class="fu">awk</span> <span class="st">'</span></span>
+<span id="cb24-382"><a href="#cb24-382"></a><span class="st">{</span></span>
+<span id="cb24-383"><a href="#cb24-383"></a><span class="st">    sum += $1</span></span>
+<span id="cb24-384"><a href="#cb24-384"></a><span class="st">    count++</span></span>
+<span id="cb24-385"><a href="#cb24-385"></a><span class="st">    values[count] = $1</span></span>
+<span id="cb24-386"><a href="#cb24-386"></a><span class="st">}</span></span>
+<span id="cb24-387"><a href="#cb24-387"></a><span class="st">END {</span></span>
+<span id="cb24-388"><a href="#cb24-388"></a><span class="st">    print "Count:", count</span></span>
+<span id="cb24-389"><a href="#cb24-389"></a><span class="st">    print "Sum:", sum</span></span>
+<span id="cb24-390"><a href="#cb24-390"></a><span class="st">    print "Average:", sum/count</span></span>
+<span id="cb24-391"><a href="#cb24-391"></a><span class="st">    print "Min:", values[1]</span></span>
+<span id="cb24-392"><a href="#cb24-392"></a><span class="st">    print "Max:", values[count]</span></span>
+<span id="cb24-393"><a href="#cb24-393"></a><span class="st">}'</span> <span class="op">&gt;&gt;</span> <span class="va">$SUMMARY_FILE</span></span>
+<span id="cb24-394"><a href="#cb24-394"></a></span>
+<span id="cb24-395"><a href="#cb24-395"></a><span class="bu">echo</span> <span class="st">"Data processing complete!"</span></span>
+<span id="cb24-396"><a href="#cb24-396"></a><span class="bu">echo</span> <span class="st">"Clean data: </span><span class="va">$CLEAN_FILE</span><span class="st">"</span></span>
+<span id="cb24-397"><a href="#cb24-397"></a><span class="bu">echo</span> <span class="st">"Summary: </span><span class="va">$SUMMARY_FILE</span><span class="st">"</span></span>
+<span id="cb24-398"><a href="#cb24-398"></a><span class="in">```</span></span>
+<span id="cb24-399"><a href="#cb24-399"></a></span>
+<span id="cb24-400"><a href="#cb24-400"></a><span class="fu">### Scenario 3: Results Aggregation</span></span>
+<span id="cb24-401"><a href="#cb24-401"></a></span>
+<span id="cb24-402"><a href="#cb24-402"></a><span class="in">```bash</span></span>
+<span id="cb24-403"><a href="#cb24-403"></a><span class="co">#!/bin/bash</span></span>
+<span id="cb24-404"><a href="#cb24-404"></a><span class="co"># aggregate_results.sh - Combine and summarize multiple result files</span></span>
+<span id="cb24-405"><a href="#cb24-405"></a></span>
+<span id="cb24-406"><a href="#cb24-406"></a><span class="va">RESULTS_DIR</span><span class="op">=</span><span class="st">"job_results"</span></span>
+<span id="cb24-407"><a href="#cb24-407"></a><span class="va">OUTPUT_FILE</span><span class="op">=</span><span class="st">"aggregated_results.csv"</span></span>
+<span id="cb24-408"><a href="#cb24-408"></a><span class="va">SUMMARY_FILE</span><span class="op">=</span><span class="st">"results_summary.txt"</span></span>
+<span id="cb24-409"><a href="#cb24-409"></a></span>
+<span id="cb24-410"><a href="#cb24-410"></a><span class="co"># Create header</span></span>
+<span id="cb24-411"><a href="#cb24-411"></a><span class="bu">echo</span> <span class="st">"job_id,parameter,result,processing_time"</span> <span class="op">&gt;</span> <span class="va">$OUTPUT_FILE</span></span>
+<span id="cb24-412"><a href="#cb24-412"></a></span>
+<span id="cb24-413"><a href="#cb24-413"></a><span class="co"># Process all result files</span></span>
+<span id="cb24-414"><a href="#cb24-414"></a><span class="cf">for</span> result_file <span class="kw">in</span> <span class="va">$RESULTS_DIR</span>/<span class="pp">*</span>.out<span class="kw">;</span> <span class="cf">do</span></span>
+<span id="cb24-415"><a href="#cb24-415"></a>    <span class="cf">if</span> <span class="bu">[</span> <span class="ot">-f</span> <span class="st">"</span><span class="va">$result_file</span><span class="st">"</span> <span class="bu">]</span><span class="kw">;</span> <span class="cf">then</span></span>
+<span id="cb24-416"><a href="#cb24-416"></a>        <span class="va">job_id</span><span class="op">=</span><span class="va">$(</span><span class="fu">basename</span> <span class="st">"</span><span class="va">$result_file</span><span class="st">"</span> .out<span class="va">)</span></span>
+<span id="cb24-417"><a href="#cb24-417"></a>        </span>
+<span id="cb24-418"><a href="#cb24-418"></a>        <span class="co"># Extract key information using different tools</span></span>
+<span id="cb24-419"><a href="#cb24-419"></a>        <span class="va">parameter</span><span class="op">=</span><span class="va">$(</span><span class="fu">grep</span> <span class="st">"Parameter:"</span> <span class="st">"</span><span class="va">$result_file</span><span class="st">"</span> <span class="kw">|</span> <span class="fu">cut</span> <span class="at">-d</span> <span class="st">':'</span> <span class="at">-f</span> 2 <span class="kw">|</span> <span class="fu">tr</span> <span class="at">-d</span> <span class="st">' '</span><span class="va">)</span></span>
+<span id="cb24-420"><a href="#cb24-420"></a>        <span class="va">result</span><span class="op">=</span><span class="va">$(</span><span class="fu">grep</span> <span class="st">"Final result:"</span> <span class="st">"</span><span class="va">$result_file</span><span class="st">"</span> <span class="kw">|</span> <span class="fu">awk</span> <span class="st">'{print $3}'</span><span class="va">)</span></span>
+<span id="cb24-421"><a href="#cb24-421"></a>        <span class="va">time</span><span class="op">=</span><span class="va">$(</span><span class="fu">grep</span> <span class="st">"Processing time:"</span> <span class="st">"</span><span class="va">$result_file</span><span class="st">"</span> <span class="kw">|</span> <span class="fu">awk</span> <span class="st">'{print $3}'</span><span class="va">)</span></span>
+<span id="cb24-422"><a href="#cb24-422"></a>        </span>
+<span id="cb24-423"><a href="#cb24-423"></a>        <span class="co"># Add to aggregated file</span></span>
+<span id="cb24-424"><a href="#cb24-424"></a>        <span class="bu">echo</span> <span class="st">"</span><span class="va">$job_id</span><span class="st">,</span><span class="va">$parameter</span><span class="st">,</span><span class="va">$result</span><span class="st">,</span><span class="va">$time</span><span class="st">"</span> <span class="op">&gt;&gt;</span> <span class="va">$OUTPUT_FILE</span></span>
+<span id="cb24-425"><a href="#cb24-425"></a>    <span class="cf">fi</span></span>
+<span id="cb24-426"><a href="#cb24-426"></a><span class="cf">done</span></span>
+<span id="cb24-427"><a href="#cb24-427"></a></span>
+<span id="cb24-428"><a href="#cb24-428"></a><span class="co"># Generate summary</span></span>
+<span id="cb24-429"><a href="#cb24-429"></a><span class="bu">echo</span> <span class="st">"Results Aggregation Summary"</span> <span class="op">&gt;</span> <span class="va">$SUMMARY_FILE</span></span>
+<span id="cb24-430"><a href="#cb24-430"></a><span class="bu">echo</span> <span class="st">"Generated: </span><span class="va">$(</span><span class="fu">date</span><span class="va">)</span><span class="st">"</span> <span class="op">&gt;&gt;</span> <span class="va">$SUMMARY_FILE</span></span>
+<span id="cb24-431"><a href="#cb24-431"></a><span class="bu">echo</span> <span class="st">"==========================="</span> <span class="op">&gt;&gt;</span> <span class="va">$SUMMARY_FILE</span></span>
+<span id="cb24-432"><a href="#cb24-432"></a></span>
+<span id="cb24-433"><a href="#cb24-433"></a><span class="va">total_jobs</span><span class="op">=</span><span class="va">$(</span><span class="fu">tail</span> <span class="at">-n</span> +2 <span class="va">$OUTPUT_FILE</span> <span class="kw">|</span> <span class="fu">wc</span> <span class="at">-l</span><span class="va">)</span></span>
+<span id="cb24-434"><a href="#cb24-434"></a><span class="bu">echo</span> <span class="st">"Total jobs processed: </span><span class="va">$total_jobs</span><span class="st">"</span> <span class="op">&gt;&gt;</span> <span class="va">$SUMMARY_FILE</span></span>
+<span id="cb24-435"><a href="#cb24-435"></a></span>
+<span id="cb24-436"><a href="#cb24-436"></a><span class="co"># Parameter distribution</span></span>
+<span id="cb24-437"><a href="#cb24-437"></a><span class="bu">echo</span> <span class="at">-e</span> <span class="st">"\nParameter Distribution:"</span> <span class="op">&gt;&gt;</span> <span class="va">$SUMMARY_FILE</span></span>
+<span id="cb24-438"><a href="#cb24-438"></a><span class="fu">cut</span> <span class="at">-d</span> <span class="st">','</span> <span class="at">-f</span> 2 <span class="va">$OUTPUT_FILE</span> <span class="kw">|</span> <span class="fu">tail</span> <span class="at">-n</span> +2 <span class="kw">|</span> <span class="fu">sort</span> <span class="kw">|</span> <span class="fu">uniq</span> <span class="at">-c</span> <span class="kw">|</span> <span class="fu">sort</span> <span class="at">-nr</span> <span class="op">&gt;&gt;</span> <span class="va">$SUMMARY_FILE</span></span>
+<span id="cb24-439"><a href="#cb24-439"></a></span>
+<span id="cb24-440"><a href="#cb24-440"></a><span class="co"># Result statistics</span></span>
+<span id="cb24-441"><a href="#cb24-441"></a><span class="bu">echo</span> <span class="at">-e</span> <span class="st">"\nResult Statistics:"</span> <span class="op">&gt;&gt;</span> <span class="va">$SUMMARY_FILE</span></span>
+<span id="cb24-442"><a href="#cb24-442"></a><span class="fu">cut</span> <span class="at">-d</span> <span class="st">','</span> <span class="at">-f</span> 3 <span class="va">$OUTPUT_FILE</span> <span class="kw">|</span> <span class="fu">tail</span> <span class="at">-n</span> +2 <span class="kw">|</span> <span class="fu">sort</span> <span class="at">-n</span> <span class="kw">|</span> <span class="fu">awk</span> <span class="st">'</span></span>
+<span id="cb24-443"><a href="#cb24-443"></a><span class="st">{</span></span>
+<span id="cb24-444"><a href="#cb24-444"></a><span class="st">    sum += $1</span></span>
+<span id="cb24-445"><a href="#cb24-445"></a><span class="st">    count++</span></span>
+<span id="cb24-446"><a href="#cb24-446"></a><span class="st">    values[count] = $1</span></span>
+<span id="cb24-447"><a href="#cb24-447"></a><span class="st">}</span></span>
+<span id="cb24-448"><a href="#cb24-448"></a><span class="st">END {</span></span>
+<span id="cb24-449"><a href="#cb24-449"></a><span class="st">    print "Count:", count</span></span>
+<span id="cb24-450"><a href="#cb24-450"></a><span class="st">    print "Average:", sum/count</span></span>
+<span id="cb24-451"><a href="#cb24-451"></a><span class="st">    print "Min:", values[1]</span></span>
+<span id="cb24-452"><a href="#cb24-452"></a><span class="st">    print "Max:", values[count]</span></span>
+<span id="cb24-453"><a href="#cb24-453"></a><span class="st">    print "Std Dev: (calculated separately)"</span></span>
+<span id="cb24-454"><a href="#cb24-454"></a><span class="st">}'</span> <span class="op">&gt;&gt;</span> <span class="va">$SUMMARY_FILE</span></span>
+<span id="cb24-455"><a href="#cb24-455"></a></span>
+<span id="cb24-456"><a href="#cb24-456"></a><span class="bu">echo</span> <span class="st">"Aggregation complete!"</span></span>
+<span id="cb24-457"><a href="#cb24-457"></a><span class="bu">echo</span> <span class="st">"Results file: </span><span class="va">$OUTPUT_FILE</span><span class="st">"</span></span>
+<span id="cb24-458"><a href="#cb24-458"></a><span class="bu">echo</span> <span class="st">"Summary: </span><span class="va">$SUMMARY_FILE</span><span class="st">"</span></span>
+<span id="cb24-459"><a href="#cb24-459"></a><span class="kw">```</span></span>
+<span id="cb24-460"><a href="#cb24-460"></a></span>
+<span id="cb24-461"><a href="#cb24-461"></a><span class="co">## Power Combinations: Pipes and Chains</span></span>
+<span id="cb24-462"><a href="#cb24-462"></a></span>
+<span id="cb24-463"><a href="#cb24-463"></a><span class="ex">The</span> real magic happens when you combine tools using pipes <span class="er">(</span><span class="kw">`|`)</span><span class="bu">:</span></span>
+<span id="cb24-464"><a href="#cb24-464"></a></span>
+<span id="cb24-465"><a href="#cb24-465"></a><span class="kw">```</span>bash</span>
+<span id="cb24-466"><a href="#cb24-466"></a><span class="co"># Find most common words in a file</span></span>
+<span id="cb24-467"><a href="#cb24-467"></a><span class="fu">cat</span> text_file.txt <span class="kw">|</span> <span class="fu">tr</span> <span class="st">' '</span> <span class="st">'\n'</span> <span class="kw">|</span> <span class="fu">sort</span> <span class="kw">|</span> <span class="fu">uniq</span> <span class="at">-c</span> <span class="kw">|</span> <span class="fu">sort</span> <span class="at">-nr</span> <span class="kw">|</span> <span class="fu">head</span> <span class="at">-10</span></span>
+<span id="cb24-468"><a href="#cb24-468"></a></span>
+<span id="cb24-469"><a href="#cb24-469"></a><span class="co"># Analyze web server logs</span></span>
+<span id="cb24-470"><a href="#cb24-470"></a><span class="fu">cat</span> access.log <span class="kw">|</span> <span class="fu">grep</span> <span class="st">"404"</span> <span class="kw">|</span> <span class="fu">cut</span> <span class="at">-d</span> <span class="st">' '</span> <span class="at">-f</span> 1 <span class="kw">|</span> <span class="fu">sort</span> <span class="kw">|</span> <span class="fu">uniq</span> <span class="at">-c</span> <span class="kw">|</span> <span class="fu">sort</span> <span class="at">-nr</span></span>
+<span id="cb24-471"><a href="#cb24-471"></a></span>
+<span id="cb24-472"><a href="#cb24-472"></a><span class="co"># Process CSV data</span></span>
+<span id="cb24-473"><a href="#cb24-473"></a><span class="fu">cat</span> data.csv <span class="kw">|</span> <span class="fu">cut</span> <span class="at">-d</span> <span class="st">','</span> <span class="at">-f</span> 2,4 <span class="kw">|</span> <span class="fu">grep</span> <span class="at">-v</span> <span class="st">"^$"</span> <span class="kw">|</span> <span class="fu">sort</span> <span class="kw">|</span> <span class="fu">uniq</span> <span class="at">-c</span></span>
+<span id="cb24-474"><a href="#cb24-474"></a></span>
+<span id="cb24-475"><a href="#cb24-475"></a><span class="co"># Monitor system processes</span></span>
+<span id="cb24-476"><a href="#cb24-476"></a><span class="fu">ps</span> aux <span class="kw">|</span> <span class="fu">grep</span> python <span class="kw">|</span> <span class="fu">awk</span> <span class="st">'{print $2, $11}'</span> <span class="kw">|</span> <span class="fu">sort</span></span>
+<span id="cb24-477"><a href="#cb24-477"></a></span>
+<span id="cb24-478"><a href="#cb24-478"></a><span class="co"># Analyze file sizes by extension</span></span>
+<span id="cb24-479"><a href="#cb24-479"></a><span class="fu">find</span> . <span class="at">-name</span> <span class="st">"*.*"</span> <span class="kw">|</span> <span class="fu">sed</span> <span class="st">'s/.*\.//'</span> <span class="kw">|</span> <span class="fu">sort</span> <span class="kw">|</span> <span class="fu">uniq</span> <span class="at">-c</span> <span class="kw">|</span> <span class="fu">sort</span> <span class="at">-nr</span></span>
+<span id="cb24-480"><a href="#cb24-480"></a><span class="kw">```</span></span>
+<span id="cb24-481"><a href="#cb24-481"></a></span>
+<span id="cb24-482"><a href="#cb24-482"></a><span class="ex">**Real-world</span> analogy<span class="pp">**</span>: Pipes are like assembly lines in a factory – each station performs one specific operation, and the product moves smoothly from one stage to the next until you get the final result.</span>
+<span id="cb24-483"><a href="#cb24-483"></a></span>
+<span id="cb24-484"><a href="#cb24-484"></a><span class="co">## Performance Tips for Large Files</span></span>
+<span id="cb24-485"><a href="#cb24-485"></a></span>
+<span id="cb24-486"><a href="#cb24-486"></a><span class="co">### Efficient Processing Strategies</span></span>
+<span id="cb24-487"><a href="#cb24-487"></a></span>
+<span id="cb24-488"><a href="#cb24-488"></a><span class="kw">```</span>bash</span>
+<span id="cb24-489"><a href="#cb24-489"></a><span class="co"># For very large files, use head/tail to sample first</span></span>
+<span id="cb24-490"><a href="#cb24-490"></a><span class="fu">head</span> <span class="at">-n</span> 1000 huge_file.txt <span class="kw">|</span> <span class="fu">grep</span> <span class="st">"pattern"</span></span>
+<span id="cb24-491"><a href="#cb24-491"></a></span>
+<span id="cb24-492"><a href="#cb24-492"></a><span class="co"># Use grep before other operations to reduce data size</span></span>
+<span id="cb24-493"><a href="#cb24-493"></a><span class="fu">grep</span> <span class="st">"relevant_pattern"</span> large_file.txt <span class="kw">|</span> <span class="fu">sort</span> <span class="kw">|</span> <span class="fu">uniq</span> <span class="at">-c</span></span>
+<span id="cb24-494"><a href="#cb24-494"></a></span>
+<span id="cb24-495"><a href="#cb24-495"></a><span class="co"># Process files in chunks</span></span>
+<span id="cb24-496"><a href="#cb24-496"></a><span class="fu">split</span> <span class="at">-l</span> 10000 huge_file.txt chunk_</span>
+<span id="cb24-497"><a href="#cb24-497"></a><span class="cf">for</span> chunk <span class="kw">in</span> chunk_<span class="pp">*</span><span class="kw">;</span> <span class="cf">do</span></span>
+<span id="cb24-498"><a href="#cb24-498"></a>    <span class="ex">process_chunk</span> <span class="st">"</span><span class="va">$chunk</span><span class="st">"</span></span>
+<span id="cb24-499"><a href="#cb24-499"></a><span class="cf">done</span></span>
+<span id="cb24-500"><a href="#cb24-500"></a></span>
+<span id="cb24-501"><a href="#cb24-501"></a><span class="co"># Use specific tools for specific tasks</span></span>
+<span id="cb24-502"><a href="#cb24-502"></a><span class="co"># grep is faster than awk for simple pattern matching</span></span>
+<span id="cb24-503"><a href="#cb24-503"></a><span class="co"># cut is faster than awk for simple column extraction</span></span>
+<span id="cb24-504"><a href="#cb24-504"></a><span class="kw">```</span></span>
+<span id="cb24-505"><a href="#cb24-505"></a></span>
+<span id="cb24-506"><a href="#cb24-506"></a><span class="co">## Quick Reference: Text Processing Cheat Sheet</span></span>
+<span id="cb24-507"><a href="#cb24-507"></a></span>
+<span id="cb24-508"><a href="#cb24-508"></a><span class="kw">|</span> <span class="ex">Task</span> <span class="kw">|</span> <span class="ex">Command</span> <span class="kw">|</span> <span class="ex">Example</span> <span class="kw">|</span></span>
+<span id="cb24-509"><a href="#cb24-509"></a><span class="kw">|</span><span class="ex">------</span><span class="kw">|</span><span class="ex">---------</span><span class="kw">|</span><span class="ex">---------</span><span class="kw">|</span></span>
+<span id="cb24-510"><a href="#cb24-510"></a><span class="kw">|</span> <span class="ex">View</span> file <span class="kw">|</span> <span class="kw">`</span>cat filename<span class="kw">`</span> <span class="kw">|</span> <span class="kw">`</span>cat data.txt<span class="kw">`</span> <span class="kw">|</span></span>
+<span id="cb24-511"><a href="#cb24-511"></a><span class="kw">|</span> <span class="ex">First/last</span> lines <span class="kw">|</span> <span class="kw">`</span>head <span class="at">-n</span> 10 file<span class="kw">`</span> <span class="kw">|</span> <span class="kw">`</span>head <span class="at">-n</span> 20 data.csv<span class="kw">`</span> <span class="kw">|</span></span>
+<span id="cb24-512"><a href="#cb24-512"></a><span class="kw">|</span> <span class="ex">Search</span> pattern <span class="kw">|</span> <span class="kw">`</span>grep <span class="st">"pattern"</span> file<span class="kw">`</span> <span class="kw">|</span> <span class="kw">`</span>grep <span class="st">"error"</span> log.txt<span class="kw">`</span> <span class="kw">|</span></span>
+<span id="cb24-513"><a href="#cb24-513"></a><span class="kw">|</span> <span class="ex">Sort</span> lines <span class="kw">|</span> <span class="kw">`</span>sort filename<span class="kw">`</span> <span class="kw">|</span> <span class="kw">`</span>sort <span class="at">-n</span> numbers.txt<span class="kw">`</span> <span class="kw">|</span></span>
+<span id="cb24-514"><a href="#cb24-514"></a><span class="kw">|</span> <span class="ex">Remove</span> duplicates <span class="kw">|</span> <span class="kw">`</span>sort file <span class="dt">\|</span> uniq<span class="kw">`</span> <span class="kw">|</span> <span class="kw">`</span>sort names.txt <span class="dt">\|</span> uniq<span class="kw">`</span> <span class="kw">|</span></span>
+<span id="cb24-515"><a href="#cb24-515"></a><span class="kw">|</span> <span class="ex">Extract</span> columns <span class="kw">|</span> <span class="kw">`</span>cut <span class="at">-d</span> <span class="st">','</span> <span class="at">-f</span> 1,3 file<span class="kw">`</span> <span class="kw">|</span> <span class="kw">`</span>cut <span class="at">-d</span> <span class="st">','</span> <span class="at">-f</span> 2 data.csv<span class="kw">`</span> <span class="kw">|</span></span>
+<span id="cb24-516"><a href="#cb24-516"></a><span class="kw">|</span> <span class="ex">Count</span> lines/words <span class="kw">|</span> <span class="kw">`</span>wc <span class="at">-l</span> filename<span class="kw">`</span> <span class="kw">|</span> <span class="kw">`</span>wc <span class="at">-l</span> <span class="pp">*</span>.txt<span class="kw">`</span> <span class="kw">|</span></span>
+<span id="cb24-517"><a href="#cb24-517"></a><span class="kw">|</span> <span class="ex">Replace</span> text <span class="kw">|</span> <span class="kw">`</span>sed <span class="st">'s/old/new/g'</span> file<span class="kw">`</span> <span class="kw">|</span> <span class="kw">`</span>sed <span class="st">'s/error/ERROR/g'</span> log.txt<span class="kw">`</span> <span class="kw">|</span></span>
+<span id="cb24-518"><a href="#cb24-518"></a><span class="kw">|</span> <span class="ex">Process</span> columns <span class="kw">|</span> <span class="kw">`</span>awk <span class="st">'{print $1, $3}'</span> file<span class="kw">`</span> <span class="kw">|</span> <span class="kw">`</span>awk <span class="st">'{sum+=$2} END {print sum}'</span> data.txt<span class="kw">`</span> <span class="kw">|</span></span>
+<span id="cb24-519"><a href="#cb24-519"></a></span>
+<span id="cb24-520"><a href="#cb24-520"></a><span class="co">## Practice Exercises</span></span>
+<span id="cb24-521"><a href="#cb24-521"></a></span>
+<span id="cb24-522"><a href="#cb24-522"></a><span class="ex">:::{.callout-important}</span></span>
+<span id="cb24-523"><a href="#cb24-523"></a><span class="co">## Your Text Processing Training</span></span>
+<span id="cb24-524"><a href="#cb24-524"></a></span>
+<span id="cb24-525"><a href="#cb24-525"></a><span class="ex">1.</span> <span class="pp">**</span>Log Analysis Challenge<span class="pp">**</span></span>
+<span id="cb24-526"><a href="#cb24-526"></a>   <span class="kw">```</span>bash</span>
+<span id="cb24-527"><a href="#cb24-527"></a>   <span class="co"># Create a sample log file and practice extracting:</span></span>
+<span id="cb24-528"><a href="#cb24-528"></a>   <span class="co"># - Count of different message types</span></span>
+<span id="cb24-529"><a href="#cb24-529"></a>   <span class="co"># - Most active time periods</span></span>
+<span id="cb24-530"><a href="#cb24-530"></a>   <span class="co"># - Top error sources</span></span>
+<span id="cb24-531"><a href="#cb24-531"></a>   <span class="kw">```</span></span>
+<span id="cb24-532"><a href="#cb24-532"></a></span>
+<span id="cb24-533"><a href="#cb24-533"></a><span class="ex">2.</span> <span class="pp">**</span>CSV Data Exploration<span class="pp">**</span></span>
+<span id="cb24-534"><a href="#cb24-534"></a>   <span class="kw">```</span>bash</span>
+<span id="cb24-535"><a href="#cb24-535"></a>   <span class="co"># Download or create a CSV file and practice:</span></span>
+<span id="cb24-536"><a href="#cb24-536"></a>   <span class="co"># - Extracting specific columns</span></span>
+<span id="cb24-537"><a href="#cb24-537"></a>   <span class="co"># - Finding unique values</span></span>
+<span id="cb24-538"><a href="#cb24-538"></a>   <span class="co"># - Calculating basic statistics</span></span>
+<span id="cb24-539"><a href="#cb24-539"></a>   <span class="kw">```</span></span>
+<span id="cb24-540"><a href="#cb24-540"></a></span>
+<span id="cb24-541"><a href="#cb24-541"></a><span class="ex">3.</span> <span class="pp">**</span>Text Transformation<span class="pp">**</span></span>
+<span id="cb24-542"><a href="#cb24-542"></a>   <span class="kw">```</span>bash</span>
+<span id="cb24-543"><a href="#cb24-543"></a>   <span class="co"># Practice cleaning messy data:</span></span>
+<span id="cb24-544"><a href="#cb24-544"></a>   <span class="co"># - Remove empty lines</span></span>
+<span id="cb24-545"><a href="#cb24-545"></a>   <span class="co"># - Standardize formatting</span></span>
+<span id="cb24-546"><a href="#cb24-546"></a>   <span class="co"># - Extract specific patterns</span></span>
+<span id="cb24-547"><a href="#cb24-547"></a>   <span class="kw">```</span></span>
+<span id="cb24-548"><a href="#cb24-548"></a></span>
+<span id="cb24-549"><a href="#cb24-549"></a><span class="ex">4.</span> <span class="pp">**</span>Pipeline Building<span class="pp">**</span></span>
+<span id="cb24-550"><a href="#cb24-550"></a>   <span class="kw">```</span>bash</span>
+<span id="cb24-551"><a href="#cb24-551"></a>   <span class="co"># Create complex pipelines that:</span></span>
+<span id="cb24-552"><a href="#cb24-552"></a>   <span class="co"># - Filter → Sort → Count → Report</span></span>
+<span id="cb24-553"><a href="#cb24-553"></a>   <span class="co"># - Process multiple files</span></span>
+<span id="cb24-554"><a href="#cb24-554"></a>   <span class="co"># - Generate summaries</span></span>
+<span id="cb24-555"><a href="#cb24-555"></a>   <span class="kw">```</span></span>
+<span id="cb24-556"><a href="#cb24-556"></a><span class="ex">:::</span></span>
+<span id="cb24-557"><a href="#cb24-557"></a></span>
+<span id="cb24-558"><a href="#cb24-558"></a><span class="co">## What's Next?</span></span>
+<span id="cb24-559"><a href="#cb24-559"></a></span>
+<span id="cb24-560"><a href="#cb24-560"></a><span class="ex">Now</span> that you<span class="st">'re a text processing wizard, you'</span>re ready to learn [Permission Wizardry]<span class="er">(</span><span class="ex">05-permission-wizardry.qmd</span><span class="kw">)</span><span class="bu">.</span> Understanding file permissions is crucial for HPC environments where security and access control are paramount.</span>
+<span id="cb24-561"><a href="#cb24-561"></a></span>
+<span id="cb24-562"><a href="#cb24-562"></a><span class="ex">Remember:</span> Text processing is the heart of data analysis. Whether you<span class="st">'re analyzing experimental results, processing log files, or cleaning datasets, these tools will be your constant companions. Master them, and you'</span>ll extract insights from data that others might miss entirely.</span>
+<span id="cb24-563"><a href="#cb24-563"></a></span>
+<span id="cb24-564"><a href="#cb24-564"></a><span class="ex">:::{.callout-tip}</span></span>
+<span id="cb24-565"><a href="#cb24-565"></a><span class="co">## Text Processing Challenge</span></span>
+<span id="cb24-566"><a href="#cb24-566"></a><span class="ex">Before</span> moving on, try this real-world scenario:</span>
+<span id="cb24-567"><a href="#cb24-567"></a><span class="ex">1.</span> Create or find a large text file <span class="er">(</span><span class="ex">log</span> file, CSV data, etc.<span class="kw">)</span></span>
+<span id="cb24-568"><a href="#cb24-568"></a><span class="ex">2.</span> Extract specific information using grep</span>
+<span id="cb24-569"><a href="#cb24-569"></a><span class="ex">3.</span> Sort and summarize the data</span>
+<span id="cb24-570"><a href="#cb24-570"></a><span class="ex">4.</span> Create a report with statistics</span>
+<span id="cb24-571"><a href="#cb24-571"></a><span class="ex">5.</span> Automate the process with a script</span>
+<span id="cb24-572"><a href="#cb24-572"></a></span>
+<span id="cb24-573"><a href="#cb24-573"></a><span class="ex">This</span> mirrors the daily work of data analysis in HPC environments!</span>
+<span id="cb24-574"><a href="#cb24-574"></a><span class="ex">:::</span></span>
+<span id="cb24-575"><a href="#cb24-575"></a></span>
+<span id="cb24-576"><a href="#cb24-576"></a><span class="ex">---</span></span>
+<span id="cb24-577"><a href="#cb24-577"></a></span>
+<span id="cb24-578"><a href="#cb24-578"></a><span class="ex">*You</span><span class="st">'ve unlocked the secrets of text processing – the ability to extract meaning from digital noise. Next, we'</span><span class="ex">ll</span> learn to control who can access and modify your precious data discoveries!<span class="pp">*</span> </span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div></div></div></div></div>
+</div> <!-- /content -->
+
+
+
+<script src="../../../site_libs/quarto-html/zenscroll-min.js"></script>
+</body></html>
