@@ -31,7 +31,7 @@ Imagine you're creating a mosaic with tiny colored tiles. Each tile is a single 
 Let's create the world's tiniest image—just 3×3 pixels:
 
 ```{python}
-#| eval: false
+#| eval: true
 import numpy as np
 import matplotlib.pyplot as plt
 
@@ -51,7 +51,7 @@ print(f"Image data type: {tiny_image.dtype}")
 Now let's see what this looks like as an actual image:
 
 ```{python}
-#| eval: false
+#| eval: true
 plt.figure(figsize=(8, 4))
 
 # Show the numbers
@@ -87,7 +87,7 @@ But wait—what about color images? Here's where it gets interesting. Color imag
 Think of it like making a sandwich with three transparent colored sheets!
 
 ```{python}
-#| eval: false
+#| eval: true
 # Create a simple 2x2 color image
 color_image = np.array([
     [[255, 0, 0], [0, 255, 0]],      # Red pixel, Green pixel
@@ -124,11 +124,11 @@ plt.show()
 Enough with toy examples! Let's load a real photograph and explore it:
 
 ```{python}
-#| eval: false
+#| eval: true
 import cv2
 
 # Load an image (you can upload your own to Colab!)
-img = cv2.imread('sample_image.jpg')
+img = cv2.imread('images/image.jpg')
 
 # OpenCV loads images in BGR format, let's convert to RGB
 img_rgb = cv2.cvtColor(img, cv2.COLOR_BGR2RGB)
@@ -158,9 +158,9 @@ Now that we understand images as numbers, we can do mathematical operations on t
 ### Making Images Brighter or Darker
 
 ```{python}
-#| eval: false
+#| eval: true
 # Load and prepare image
-img = cv2.imread('sample_image.jpg')
+img = cv2.imread('images/image.jpg')
 img_rgb = cv2.cvtColor(img, cv2.COLOR_BGR2RGB)
 
 # Make it brighter (add to all pixels)
@@ -194,7 +194,7 @@ plt.show()
 ### Playing with Individual Color Channels
 
 ```{python}
-#| eval: false
+#| eval: true
 # Create different color effects
 red_only = img_rgb.copy()
 red_only[:, :, 1] = 0  # Remove green
@@ -235,7 +235,7 @@ plt.show()
 Converting to grayscale is one of the most common operations in computer vision. But it's not just about averaging the RGB values—there's a secret formula!
 
 ```{python}
-#| eval: false
+#| eval: true
 # Method 1: Simple average (not the best)
 gray_simple = np.mean(img_rgb, axis=2).astype(np.uint8)
 
@@ -274,7 +274,7 @@ plt.show()
 Since images are just arrays, we can do all sorts of mathematical operations:
 
 ```{python}
-#| eval: false
+#| eval: true
 # Create a simple pattern
 rows, cols = img_rgb.shape[:2]
 x_gradient = np.linspace(0, 255, cols).astype(np.uint8)
@@ -312,7 +312,7 @@ plt.show()
 Let's create a simple blur effect by averaging neighboring pixels:
 
 ```{python}
-#| eval: false
+#| eval: true
 def simple_blur(image, kernel_size=5):
     """Apply a simple blur by averaging neighboring pixels"""
     blurred = np.zeros_like(image)
@@ -362,7 +362,7 @@ Before moving to the next post, try these fun experiments:
 
 ### 🎯 **Exercise 1: Create Your Own Pattern**
 ```{python}
-#| eval: false
+#| eval: true
 # Create a checkerboard pattern
 size = 200
 checkerboard = np.zeros((size, size))
@@ -381,7 +381,7 @@ plt.show()
 
 ### 🎯 **Exercise 2: Image Negative**
 ```{python}
-#| eval: false
+#| eval: true
 # Create a negative effect (like old film negatives)
 negative = 255 - img_rgb
 
@@ -427,8 +427,8 @@ Upload your own photos and see them transform into numbers!
 
 :::{.callout-note}
 ## Series Navigation
-- **Previous**: [Why Computer Vision?](../01-why-computer-vision/)
-- **Next**: [OpenCV Essentials: Your First Computer Vision Toolkit](../03-opencv-essentials/)  
+- **Previous**: [Why Computer Vision?](01-why-computer-vision.qmd)
+- **Next**: [OpenCV Essentials: Your First Computer Vision Toolkit](03-opencv-essentials.qmd)  
 - **Series Home**: [Computer Vision Foundations](../computer-vision-foundations.qmd)
 :::
 

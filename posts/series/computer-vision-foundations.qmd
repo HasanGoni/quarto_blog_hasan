@@ -31,15 +31,16 @@ Following Jeremy Howard's fastai approach:
 ### 🔧 **Phase 2: Classical Computer Vision**
 3. [**OpenCV Essentials**](cv-foundations/03-opencv-essentials.qmd) - Your first computer vision toolkit
 4. [**Finding Patterns**](cv-foundations/04-finding-patterns.qmd) - Edges, contours, and shapes
-5. [**Feature Magic**](cv-foundations/05-feature-magic.qmd) - What makes images unique
+5. [**Image Segmentation**](cv-foundations/05-image-segmentation.qmd) - Dividing images into meaningful parts
+6. [**Feature Magic**](cv-foundations/06-feature-magic.qmd) - What makes images unique
 
 ### 🧠 **Phase 3: Deep Learning Revolution**
-6. [**Why Deep Learning?**](cv-foundations/06-why-deep-learning.qmd) - When classical methods hit the wall
-7. [**Modern Vision Models**](cv-foundations/07-modern-vision-models.qmd) - CNNs, Vision Transformers, and DINOv2
+7. [**Why Deep Learning?**](cv-foundations/07-why-deep-learning.qmd) - When classical methods hit the wall
+8. [**Modern Vision Models**](cv-foundations/08-modern-vision-models.qmd) - CNNs, Vision Transformers, and DINOv2
 
 ### 🚀 **Phase 4: Building Your Future**
-8. [**Your First CV Project**](cv-foundations/08-first-cv-project.qmd) - Putting it all together
-9. [**Where to Go Next**](cv-foundations/09-where-to-go-next.qmd) - Your learning roadmap
+9. [**Your First CV Project**](cv-foundations/09-first-cv-project.qmd) - Putting it all together
+10. [**Where to Go Next**](cv-foundations/10-where-to-go-next.qmd) - Your learning roadmap
 
 ## What You'll Build
 

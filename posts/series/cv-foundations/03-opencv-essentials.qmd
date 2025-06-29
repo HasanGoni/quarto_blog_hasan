@@ -34,17 +34,17 @@ Back in 1999, Intel created OpenCV to accelerate computer vision research. Fast 
 Today, we're going to master the essential 20% that gives you 80% of the power!
 
 ## Your First OpenCV Adventure
-
+You can use any photo. Just make sure it's in the same folder as this notebook or provide the full path.
 Let's start with the basics—loading and displaying an image:
 
 ```{python}
-#| eval: false
+#| eval: true
 import cv2
 import matplotlib.pyplot as plt
 import numpy as np
 
 # Load an image (OpenCV reads in BGR format by default)
-img = cv2.imread('your_photo.jpg')
+img = cv2.imread('images/image.jpg')
 
 # Convert BGR to RGB (for matplotlib display)
 img_rgb = cv2.cvtColor(img, cv2.COLOR_BGR2RGB)
@@ -69,7 +69,7 @@ plt.show()
 Think of resizing like adjusting a picture frame—sometimes you need it bigger, sometimes smaller:
 
 ```{python}
-#| eval: false
+#| eval: true
 # Original image
 height, width = img_rgb.shape[:2]
 print(f"Original size: {width} x {height}")
@@ -130,7 +130,7 @@ plt.show()
 Cropping is like using scissors on a digital photo—you keep the interesting part and throw away the rest:
 
 ```{python}
-#| eval: false
+#| eval: true
 # Cropping is just array slicing!
 height, width = img_rgb.shape[:2]
 
@@ -193,7 +193,7 @@ plt.show()
 Sometimes your photo is sideways, or you want a creative angle. OpenCV makes rotation easy:
 
 ```{python}
-#| eval: false
+#| eval: true
 def rotate_image(image, angle):
     """Rotate image by angle (in degrees)"""
     height, width = image.shape[:2]
@@ -248,7 +248,7 @@ plt.show()
 Flipping is like looking in a mirror—super simple but very useful:
 
 ```{python}
-#| eval: false
+#| eval: true
 # Horizontal flip (left-right mirror)
 flipped_horizontal = cv2.flip(img_rgb, 1)
 
@@ -289,7 +289,7 @@ plt.show()
 Remember how we learned about RGB? OpenCV knows many other color spaces too! Each one is useful for different tasks:
 
 ```{python}
-#| eval: false
+#| eval: true
 # Convert to different color spaces
 gray = cv2.cvtColor(img_rgb, cv2.COLOR_RGB2GRAY)
 hsv = cv2.cvtColor(img_rgb, cv2.COLOR_RGB2HSV)
@@ -347,7 +347,7 @@ Now for the fun part—applying filters to make your photos look amazing!
 ### Blur Effects: Softening the World
 
 ```{python}
-#| eval: false
+#| eval: true
 # Convert to grayscale for cleaner examples
 gray_img = cv2.cvtColor(img_rgb, cv2.COLOR_RGB2GRAY)
 
@@ -385,7 +385,7 @@ plt.show()
 ### Sharpening: Making Everything Pop
 
 ```{python}
-#| eval: false
+#| eval: true
 # Create a sharpening kernel
 sharpening_kernel = np.array([
     [0, -1, 0],
@@ -426,7 +426,7 @@ plt.show()
 Let's combine everything we've learned into a simple photo editor:
 
 ```{python}
-#| eval: false
+#| eval: true
 def photo_editor(image, operation='original', **kwargs):
     """A simple photo editor with multiple operations"""
     
@@ -497,7 +497,7 @@ Now you might be wondering: "This is cool, but when would I actually use this?" 
 
 ### 1. **Photo Processing Pipeline**
 ```{python}
-#| eval: false
+#| eval: true
 def process_photo_batch(image_path):
     """Process a photo for social media"""
     # Load image
@@ -522,7 +522,7 @@ def process_photo_batch(image_path):
 
 ### 2. **Document Scanner**
 ```{python}
-#| eval: false
+#| eval: true
 def scan_document(image):
     """Simple document scanner"""
     # Convert to grayscale
@@ -555,7 +555,7 @@ plt.show()
 The real magic happens when you combine multiple operations:
 
 ```{python}
-#| eval: false
+#| eval: true
 def instagram_filter(image):
     """Create an Instagram-style vintage filter"""
     # Step 1: Slight blur for dreamy effect
@@ -594,7 +594,7 @@ Before we move to the next post, try these challenges:
 
 ### 🎯 **Challenge 1: Photo Collage Maker**
 ```{python}
-#| eval: false
+#| eval: true
 def create_collage(images, grid_size=(2, 2)):
     """Create a photo collage"""
     rows, cols = grid_size
@@ -635,7 +635,7 @@ if collage is not None:
 
 ### 🎯 **Challenge 2: Color Palette Extractor**
 ```{python}
-#| eval: false
+#| eval: true
 def extract_dominant_colors(image, k=5):
     """Extract dominant colors from an image"""
     # Reshape image to be a list of pixels
@@ -693,8 +693,8 @@ Upload your own photos and build your own filters!
 
 :::{.callout-note}
 ## Series Navigation
-- **Previous**: [Images as Data: How Computers See the World](../02-images-as-data/)
-- **Next**: [Finding Patterns: Edges, Contours, and Shapes](../04-finding-patterns/)
+- **Previous**: [Images as Data: How Computers See the World](02-images-as-data.qmd)
+- **Next**: [Finding Patterns: Edges, Contours, and Shapes](04-finding-patterns.qmd)
 - **Series Home**: [Computer Vision Foundations](../computer-vision-foundations.qmd)
 :::
 

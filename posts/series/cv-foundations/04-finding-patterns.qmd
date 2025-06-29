@@ -43,13 +43,13 @@ Before we dive into code, let's understand why edge detection changed everything
 The **Canny edge detector** is the gold standard—it's been the go-to algorithm for over 30 years! Here's how it works:
 
 ```{python}
-#| eval: false
+#| eval: true
 import cv2
 import numpy as np
 import matplotlib.pyplot as plt
 
 # Load and prepare image
-img = cv2.imread('your_image.jpg')
+img = cv2.imread('images/image.jpg')
 img_rgb = cv2.cvtColor(img, cv2.COLOR_BGR2RGB)
 gray = cv2.cvtColor(img_rgb, cv2.COLOR_RGB2GRAY)
 
@@ -87,7 +87,7 @@ print(f"Found edges in {np.sum(edges > 0)} pixels out of {edges.size} total pixe
 The Canny algorithm has two important parameters—think of them as sensitivity controls:
 
 ```{python}
-#| eval: false
+#| eval: true
 def explore_canny_thresholds(image, low_thresholds, high_thresholds):
     """Explore different Canny threshold combinations"""
     gray = cv2.cvtColor(image, cv2.COLOR_RGB2GRAY)
@@ -130,7 +130,7 @@ Here's what happens inside the Canny algorithm (don't worry, OpenCV does this fo
 Edges are great, but **contours** are even better! A contour is a curve that connects all the edge points around an object's boundary. Think of it as tracing around objects with your finger.
 
 ```{python}
-#| eval: false
+#| eval: true
 # Find edges first
 gray = cv2.cvtColor(img_rgb, cv2.COLOR_RGB2GRAY)
 edges = cv2.Canny(gray, 50, 150)
@@ -171,7 +171,7 @@ plt.show()
 Once we have contours, we can learn a lot about each shape:
 
 ```{python}
-#| eval: false
+#| eval: true
 def analyze_contours(contours, image):
     """Analyze properties of each contour"""
     img_analysis = image.copy()
@@ -227,7 +227,7 @@ plt.show()
 Now for the really cool part—detecting specific shapes! Let's build a shape classifier:
 
 ```{python}
-#| eval: false
+#| eval: true
 def classify_shape(contour):
     """Classify a contour as a specific shape"""
     # Approximate the contour to reduce number of points
@@ -321,7 +321,7 @@ for shape, count in shape_counts.items():
 Let's build something practical—a coin counting system:
 
 ```{python}
-#| eval: false
+#| eval: true
 def count_coins(image):
     """Count circular objects (coins) in an image"""
     # Convert to grayscale
@@ -373,7 +373,7 @@ plt.show()
 Sometimes you want to find a specific pattern or object. Template matching is perfect for this:
 
 ```{python}
-#| eval: false
+#| eval: true
 def find_template(image, template, threshold=0.8):
     """Find template in image using template matching"""
     # Convert both to grayscale
@@ -427,7 +427,7 @@ plt.show()
 Let's combine everything into a comprehensive object detection system:
 
 ```{python}
-#| eval: false
+#| eval: true
 class SimpleObjectDetector:
     def __init__(self):
         self.min_contour_area = 100
@@ -563,7 +563,7 @@ Now it's your turn! Try building one of these applications:
 
 ### 🎯 **Challenge 1: Document Page Counter**
 ```{python}
-#| eval: false
+#| eval: true
 def count_pages(image):
     """Count rectangular pages/documents in an image"""
     # Your code here!
@@ -573,7 +573,7 @@ def count_pages(image):
 
 ### 🎯 **Challenge 2: Parking Space Detector**
 ```{python}
-#| eval: false
+#| eval: true
 def detect_parking_spaces(image):
     """Detect empty parking spaces (rectangular regions)"""
     # Your code here!
@@ -583,7 +583,7 @@ def detect_parking_spaces(image):
 
 ### 🎯 **Challenge 3: Playing Card Detector**
 ```{python}
-#| eval: false
+#| eval: true
 def detect_playing_cards(image):
     """Detect playing cards in an image"""
     # Your code here!
@@ -620,8 +620,8 @@ Upload photos and watch your computer find shapes, count objects, and detect pat
 
 :::{.callout-note}
 ## Series Navigation
-- **Previous**: [OpenCV Essentials: Your First Computer Vision Toolkit](../03-opencv-essentials/)
-- **Next**: [Feature Magic: What Makes Images Unique](../05-feature-magic/)
+- **Previous**: [OpenCV Essentials: Your First Computer Vision Toolkit](03-opencv-essentials.qmd)
+- **Next**: [Image Segmentation: Dividing and Conquering](05-image-segmentation.qmd)
 - **Series Home**: [Computer Vision Foundations](../computer-vision-foundations.qmd)
 :::
 

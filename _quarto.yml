@@ -14,8 +14,8 @@ website:
         menu:
           - text: "Data Science Steps"
             file: posts/series/data-science-steps.qmd
-          - text: "Computer Vision"
-            file: posts/series/computer-vision-with-pytorch.qmd
+          - text: "Computer Vision Foundations"
+            file: posts/series/computer-vision-foundations.qmd
           - text: "VLM Series"
             file: posts/series/vlm.qmd
           - text: "Anomaly Detection"
@@ -46,11 +46,31 @@ website:
           - posts/data-science-steps-to-follow-part04/index.qmd
           - posts/data-science-steps-to-follow-part05/index.qmd
           - posts/data-science-steps-to-follow-part06/index.qmd
-      - section: "Computer Vision"
+      - section: "Computer Vision Foundations"
         collapse: true
         collapsed: true
         contents:
-          - posts/series/computer-vision-with-pytorch.qmd
+          - posts/series/computer-vision-foundations.qmd
+          - text: "1. Why Computer Vision?"
+            href: posts/series/cv-foundations/01-why-computer-vision.qmd
+          - text: "2. Images as Data"
+            href: posts/series/cv-foundations/02-images-as-data.qmd
+          - text: "3. OpenCV Essentials"
+            href: posts/series/cv-foundations/03-opencv-essentials.qmd
+          - text: "4. Finding Patterns"
+            href: posts/series/cv-foundations/04-finding-patterns.qmd
+          - text: "5. Image Segmentation"
+            href: posts/series/cv-foundations/05-image-segmentation.qmd
+          - text: "6. Feature Magic"
+            href: posts/series/cv-foundations/06-feature-magic.qmd
+          - text: "7. Why Deep Learning?"
+            href: posts/series/cv-foundations/07-why-deep-learning.qmd
+          - text: "8. Modern Vision Models"
+            href: posts/series/cv-foundations/08-modern-vision-models.qmd
+          - text: "9. First CV Project"
+            href: posts/series/cv-foundations/09-first-cv-project.qmd
+          - text: "10. Where to Go Next"
+            href: posts/series/cv-foundations/10-where-to-go-next.qmd
       - section: "Anomaly Detection"
         collapse: true
         collapsed: true
