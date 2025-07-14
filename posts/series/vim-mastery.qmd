@@ -1,0 +1,84 @@
+---
+title: "Vim Mastery Series"
+description: "From Text Editor Fear to Vim Ninja – Master the 20% of Vim that gives you 80% of the power. Transform your coding workflow with the world's most powerful text editor."
+author: "Hasan"
+date: last-modified
+categories: [series, vim, text-editor, productivity, programming]
+image: "https://images.unsplash.com/photo-1555066931-4365d14bab8c?ixlib=rb-4.0.3&auto=format&fit=crop&w=2000&q=80"
+toc: true
+---
+
+## The Story Behind This Series
+
+Imagine you're a medieval scribe, painstakingly copying manuscripts letter by letter. Then someone shows you a magical quill that can:
+- Jump to any word instantly
+- Delete entire sentences with a single gesture  
+- Copy and paste paragraphs with lightning speed
+- Transform text with mystical incantations
+
+That's Vim! It's not just a text editor – it's a language for talking to text. While others click and drag, you'll command text to bend to your will with elegant keystrokes.
+
+This series follows the **Pareto Principle**: we'll master the 20% of Vim commands that give you 80% of the power. By the end, you'll edit text faster than you ever thought possible, and your colleagues will wonder if you've discovered some secret programming magic.
+
+## Learning Philosophy
+
+Following Jeremy Howard's fastai approach:
+- **Start with stories**: Every command explained through relatable analogies
+- **Build muscle memory**: Practice with real-world examples you'll use daily
+- **No overwhelming theory**: Learn by doing, understand by practicing
+- **Progressive mastery**: From basic survival to advanced wizardry
+
+## The Journey Ahead
+
+### 🎯 **Phase 1: Survival Skills (Don't Panic!)**
+1. [**Vim Survival Guide**](vim-mastery/01-vim-survival.qmd) - How to enter, edit, and escape without losing your mind
+2. [**The Magic of Modes**](vim-mastery/02-vim-modes.qmd) - Understanding Vim's secret language
+
+### ⚔️ **Phase 2: Movement Mastery (Become a Text Ninja)**
+3. [**Navigate Like a Pro**](vim-mastery/03-movement-mastery.qmd) - Jump anywhere instantly
+4. [**Text Objects: The Secret Weapon**](vim-mastery/04-text-objects.qmd) - Select exactly what you want
+
+### 🔥 **Phase 3: Editing Superpowers (The Real Magic)**
+5. [**Delete, Change, Copy Like a Wizard**](vim-mastery/05-editing-commands.qmd) - The holy trinity of text manipulation
+6. [**Visual Mode: See What You're Doing**](vim-mastery/06-visual-mode.qmd) - Select and transform with precision
+
+### 🚀 **Phase 4: Productivity Boosters (Work Smarter, Not Harder)**
+7. [**Search and Replace Mastery**](vim-mastery/07-search-replace.qmd) - Find and transform anything instantly
+8. [**Registers and Macros**](vim-mastery/08-registers-macros.qmd) - Copy-paste on steroids and automation magic
+
+### 🏆 **Phase 5: Advanced Workflows (Become Unstoppable)**
+9. [**File Management and Buffers**](vim-mastery/09-file-management.qmd) - Handle multiple files like a pro
+10. [**The Other 80%: Advanced Vim**](vim-mastery/10-advanced-vim.qmd) - Plugins, customization, and expert techniques
+
+## What You'll Gain
+
+By the end of this series, you'll:
+- **Edit text 10x faster** than traditional editors
+- **Never touch the mouse** while coding
+- **Feel confident** in any Unix environment
+- **Impress colleagues** with your text manipulation skills
+- **Enjoy editing** instead of fighting with your tools
+
+## Prerequisites
+
+- Basic computer literacy (you know what files and folders are)
+- Willingness to practice (muscle memory is key!)
+- Patience with yourself (everyone struggles at first)
+
+## How to Use This Series
+
+1. **Read each post thoroughly** - understand the concepts
+2. **Practice immediately** - muscle memory beats theory
+3. **Use the examples** - they're designed for real-world scenarios
+4. **Don't rush** - master each level before moving on
+5. **Have fun** - Vim is powerful, but it should be enjoyable!
+
+## A Personal Note
+
+I remember my first encounter with Vim. I was SSH'd into a server, needed to edit a config file, and someone said "just use vi." I opened the file, tried to type, couldn't figure out how to save, and ended up killing the terminal session in frustration!
+
+If you've had a similar experience, this series is for you. We'll turn that frustration into fascination, and fear into fluency. Welcome to your Vim journey – it's going to be amazing!
+
+---
+
+*Ready to begin? Start with [Vim Survival Guide](vim-mastery/01-vim-survival.qmd) and take your first step toward text editing mastery!* 

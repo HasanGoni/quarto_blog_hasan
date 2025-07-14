@@ -1,0 +1,415 @@
+---
+title: "Delete, Change, Copy Like a Wizard: The Holy Trinity of Vim Editing"
+description: "Master the three most powerful editing operations in Vim. Learn to delete, change, and yank text with precision and speed that will make you feel like a coding wizard."
+author: "Hasan"
+date: last-modified
+categories: [vim, editing, delete, change, yank, operators]
+image: "https://images.unsplash.com/photo-1516389573391-5620a0263801?ixlib=rb-4.0.3&auto=format&fit=crop&w=2000&q=80"
+toc: true
+---
+
+## The Wizard's Toolkit
+
+Imagine you're a wizard with three magical spells that can transform any text:
+
+- **Delete Spell**: Makes unwanted text vanish instantly
+- **Change Spell**: Transforms text into something new
+- **Copy Spell**: Duplicates text wherever you need it
+
+These are Vim's three fundamental editing operations. Master these, and you'll edit text faster than you ever thought possible.
+
+## The Holy Trinity
+
+### 1. Delete (`d`) - The Vanishing Act 🗑️
+**What it does**: Removes text and stores it in a register
+**Think of it as**: A magic eraser that remembers what it erased
+
+### 2. Change (`c`) - The Transformer 🔄
+**What it does**: Deletes text and immediately enters Insert mode
+**Think of it as**: Delete + Insert in one smooth motion
+
+### 3. Yank (`y`) - The Duplicator 📋
+**What it does**: Copies text to a register without removing it
+**Think of it as**: A photocopy machine for text
+
+## The Grammar Pattern
+
+Remember the verb+noun pattern? These are your verbs:
+
+```
+[count] + operator + motion/text-object
+```
+
+**Examples**:
+- `d3w` = Delete 3 words
+- `c2l` = Change 2 characters
+- `yap` = Yank around paragraph
+
+## Delete Mastery: Making Text Disappear
+
+### Basic Delete Commands
+
+| Command | What It Deletes | Story |
+|---------|----------------|-------|
+| `x` | Character under cursor | "**x** marks the spot to delete" |
+| `X` | Character before cursor | "**X** deletes backward" |
+| `dd` | Entire line | "**d**elete **d**ouble = whole line" |
+| `dw` | Word from cursor | "**d**elete **w**ord" |
+| `db` | Word backward | "**d**elete **b**ack" |
+| `d$` | To end of line | "**d**elete to **$** (end)" |
+| `d0` | To beginning of line | "**d**elete to **0** (start)" |
+
+### Advanced Delete Patterns
+
+| Command | What It Deletes | Example |
+|---------|----------------|---------|
+| `daw` | A word (with space) | `hello ` from "hello world" |
+| `diw` | Inner word | `hello` from "hello world" |
+| `di"` | Inside quotes | `text` from `"text"` |
+| `da"` | Around quotes | `"text"` including quotes |
+| `dip` | Inner paragraph | Paragraph without empty lines |
+| `dap` | Around paragraph | Paragraph with empty lines |
+
+### Practical Delete Examples
+
+**Example 1: Cleaning up a function**
+```python
+def calculate_total(items, tax_rate, discount_rate):
+    # This is a long comment that needs to be removed
+    total = 0
+    for item in items:
+        total += item.price
+    return total
+```
+
+**Tasks**:
+1. Delete the comment: Move to comment line, `dd`
+2. Remove `discount_rate` parameter: Move to it, `daw`
+3. Delete inside function: Move to function body, `di{`
+
+## Change Mastery: The Ultimate Transformer
+
+### Basic Change Commands
+
+| Command | What It Changes | Story |
+|---------|----------------|-------|
+| `cc` | Entire line | "**c**hange **c**omplete line" |
+| `cw` | Word from cursor | "**c**hange **w**ord" |
+| `cb` | Word backward | "**c**hange **b**ack" |
+| `c$` | To end of line | "**c**hange to **$** (end)" |
+| `c0` | To beginning of line | "**c**hange to **0** (start)" |
+| `C` | From cursor to end of line | "**C**hange to end (shortcut)" |
+
+### Advanced Change Patterns
+
+| Command | What It Changes | Example |
+|---------|----------------|---------|
+| `ciw` | Inner word | Replace `hello` in "hello world" |
+| `caw` | A word (with space) | Replace `hello ` in "hello world" |
+| `ci"` | Inside quotes | Replace content in `"text"` |
+| `ca"` | Around quotes | Replace `"text"` entirely |
+| `cip` | Inner paragraph | Replace paragraph content |
+| `ci(` | Inside parentheses | Replace `x + y` in `(x + y)` |
+
+### Practical Change Examples
+
+**Example 1: Refactoring variable names**
+```python
+old_variable_name = calculate_something()
+result = process_data(old_variable_name)
+```
+
+**Tasks**:
+1. Change variable name: Move to `old_variable_name`, `ciw`, type `new_name`
+2. Change function name: Move to `calculate_something`, `ciw`, type `compute_value`
+3. Change string content: Move inside quotes, `ci"`, type new content
+
+**Example 2: Updating function parameters**
+```javascript
+function processOrder(orderId, customerId, priority) {
+    // function body
+}
+```
+
+**Task**: Change `priority` to `urgencyLevel`
+1. Move to `priority`
+2. `ciw` (change inner word)
+3. Type `urgencyLevel`
+
+## Yank Mastery: The Copy Champion
+
+### Basic Yank Commands
+
+| Command | What It Yanks | Story |
+|---------|--------------|-------|
+| `yy` | Entire line | "**y**ank **y**ank = whole line" |
+| `yw` | Word from cursor | "**y**ank **w**ord" |
+| `yb` | Word backward | "**y**ank **b**ack" |
+| `y$` | To end of line | "**y**ank to **$** (end)" |
+| `y0` | To beginning of line | "**y**ank to **0** (start)" |
+
+### Advanced Yank Patterns
+
+| Command | What It Yanks | Example |
+|---------|--------------|---------|
+| `yiw` | Inner word | Copy `hello` from "hello world" |
+| `yaw` | A word (with space) | Copy `hello ` from "hello world" |
+| `yi"` | Inside quotes | Copy content from `"text"` |
+| `ya"` | Around quotes | Copy `"text"` with quotes |
+| `yip` | Inner paragraph | Copy paragraph content |
+| `yi(` | Inside parentheses | Copy `x + y` from `(x + y)` |
+
+### Practical Yank Examples
+
+**Example 1: Duplicating code blocks**
+```python
+def calculate_tax(price, rate):
+    return price * rate
+
+def calculate_discount(price, rate):
+    return price * rate
+```
+
+**Task**: Copy the calculation logic
+1. Move to `price * rate`
+2. `yiw` to copy just `price`, or
+3. `y$` to copy `price * rate`, or
+4. `yy` to copy entire line
+
+## The Put Command: Completing the Circle
+
+After yanking or deleting, you need to put (paste) the text:
+
+| Command | What It Does | Story |
+|---------|-------------|-------|
+| `p` | Put after cursor | "**p**ut after" |
+| `P` | Put before cursor | "**P**ut before" |
+| `gp` | Put after and move cursor | "**g**o **p**ut" |
+| `gP` | Put before and move cursor | "**g**o **P**ut before" |
+
+### Put in Action
+
+**Example**: Moving a line down
+1. `dd` - Delete current line
+2. `j` - Move down one line
+3. `p` - Put the line after current position
+
+**Example**: Duplicating a word
+1. `yiw` - Yank inner word
+2. `w` - Move to next word
+3. `p` - Put the word after cursor
+
+## Combining Operations: The Power Combos
+
+### The Classic Workflows
+
+**1. Cut and Paste**
+```vim
+daw     " Delete a word (cut)
+/target " Search for target location
+p       " Put after cursor (paste)
+```
+
+**2. Copy and Paste**
+```vim
+yip     " Yank inner paragraph (copy)
+}       " Jump to next paragraph
+p       " Put after cursor (paste)
+```
+
+**3. Replace Pattern**
+```vim
+ciw     " Change inner word
+" Type replacement
+<Esc>   " Return to normal mode
+```
+
+### Advanced Combinations
+
+**1. Swap two words**
+```vim
+" Cursor on first word
+daw     " Delete first word
+w       " Move to second word
+daw     " Delete second word
+P       " Put second word before cursor
+w       " Move forward
+p       " Put first word after cursor
+```
+
+**2. Duplicate and modify**
+```vim
+yy      " Yank current line
+p       " Put below current line
+ciw     " Change first word in new line
+```
+
+## The Dot Command: Repeat Magic
+
+The `.` command repeats your last change:
+
+**Example**: Changing multiple variable names
+```python
+old_name = value1
+old_name = value2
+old_name = value3
+```
+
+**Workflow**:
+1. Move to first `old_name`
+2. `ciw` and type `new_name`
+3. Press `Esc`
+4. Move to next `old_name`
+5. Press `.` to repeat the change
+6. Repeat steps 4-5 for remaining occurrences
+
+## Registers: The Advanced Storage System
+
+Vim has multiple clipboards called registers:
+
+### Default Registers
+- `"` - Default register (last delete/yank)
+- `0` - Yank register (last yank only)
+- `1-9` - Delete registers (recent deletes)
+
+### Named Registers
+- `"a` to `"z` - Your personal storage
+
+**Examples**:
+```vim
+"ayy    " Yank line to register 'a'
+"ap     " Put from register 'a'
+"byiw   " Yank word to register 'b'
+"bp     " Put from register 'b'
+```
+
+### System Clipboard
+```vim
+"+y     " Yank to system clipboard
+"+p     " Put from system clipboard
+"*y     " Yank to selection clipboard (Linux)
+"*p     " Put from selection clipboard (Linux)
+```
+
+## Practice Exercise: The Editing Dojo
+
+Create a file with this content:
+```python
+def calculate_price(item_price, tax_rate, discount_rate):
+    """Calculate final price with tax and discount."""
+    # First apply discount
+    discounted_price = item_price * (1 - discount_rate)
+    
+    # Then apply tax
+    final_price = discounted_price * (1 + tax_rate)
+    
+    return final_price
+
+def process_order(order_data):
+    """Process customer order."""
+    total = 0
+    for item in order_data:
+        price = calculate_price(item.price, 0.08, 0.10)
+        total += price
+    return total
+```
+
+**Practice these operations**:
+
+1. **Delete operations**:
+   - Delete the docstring: `di"`
+   - Delete a comment: `dd`
+   - Delete function parameter: `daw`
+
+2. **Change operations**:
+   - Change function name: `ciw`
+   - Change variable name: `ciw`
+   - Change string content: `ci"`
+
+3. **Yank operations**:
+   - Copy entire function: `yip`
+   - Copy variable assignment: `yy`
+   - Copy parameter list: `yi(`
+
+4. **Advanced workflows**:
+   - Duplicate a line and modify it
+   - Move a line to different location
+   - Replace multiple occurrences with `.`
+
+## Common Editing Patterns
+
+### Pattern 1: Quick Word Replacement
+```vim
+ciw     " Change inner word
+" Type replacement
+<Esc>   " Back to normal mode
+```
+
+### Pattern 2: Line Duplication and Modification
+```vim
+yy      " Yank current line
+p       " Put below
+ciw     " Change first word
+```
+
+### Pattern 3: Block Movement
+```vim
+dip     " Delete inner paragraph
+}       " Jump to target location
+p       " Put paragraph
+```
+
+### Pattern 4: Selective Copy-Paste
+```vim
+"ayy    " Yank to register 'a'
+" Move to different location
+"ap     " Put from register 'a'
+```
+
+## Building Editing Muscle Memory
+
+### Week 1: Basic Operations
+- Practice `d`, `c`, `y` with simple motions
+- Use `x` and `s` for character editing
+- Master `dd`, `cc`, `yy` for line operations
+
+### Week 2: Text Objects Integration
+- Combine operators with text objects
+- Practice `diw`, `ciw`, `yiw` patterns
+- Use quote and bracket objects
+
+### Week 3: Advanced Workflows
+- Practice cut/copy/paste workflows
+- Use named registers for complex operations
+- Master the dot command for repetition
+
+### Week 4: Speed and Efficiency
+- Develop personal editing patterns
+- Combine with movement commands
+- Practice real-world editing scenarios
+
+## What's Next?
+
+You now master:
+- The three fundamental editing operations (delete, change, yank)
+- How to combine operators with motions and text objects
+- The put command for pasting text
+- Registers for advanced text storage
+- The dot command for repetition
+- Common editing patterns and workflows
+
+In the next post, we'll explore [Visual Mode: See What You're Doing](06-visual-mode.qmd) and learn how to select and transform text with visual feedback.
+
+## Key Takeaways
+
+1. **Master the trinity**: Delete, change, and yank are your core tools
+2. **Think verb+noun**: Operators + motions/text objects = power
+3. **Use text objects**: `ciw`, `di"`, `yip` are incredibly efficient
+4. **Leverage registers**: Named registers give you multiple clipboards
+5. **Practice the dot command**: Repetition is key to efficiency
+
+The holy trinity of Vim editing transforms you from a character-by-character editor to a text structure manipulator. Once these operations become muscle memory, you'll edit at the speed of thought.
+
+---
+
+*Ready to see your edits before you make them? Continue with [Visual Mode: See What You're Doing](06-visual-mode.qmd) to master visual selection and transformation.* 

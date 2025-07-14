@@ -1,0 +1,459 @@
+---
+title: "Visual Mode: See What You're Doing"
+description: "Master Vim's visual selection modes. Learn to select text with precision, see exactly what you're editing, and apply operations with confidence."
+author: "Hasan"
+date: last-modified
+categories: [vim, visual-mode, selection, precision]
+image: "https://images.unsplash.com/photo-1551288049-bebda4e38f71?ixlib=rb-4.0.3&auto=format&fit=crop&w=2000&q=80"
+toc: true
+---
+
+## The Highlighter's Dream
+
+Imagine you're editing a document with a magical highlighter that can:
+- Select exactly what you want to change
+- Show you precisely what will be affected
+- Let you see before you commit to any operation
+
+That's Visual Mode in Vim! It's like having a preview window for your edits - you see exactly what you're selecting before you transform it.
+
+## Why Visual Mode Matters
+
+Until now, you've been operating "blind" - typing `daw` and trusting that Vim will delete the right word. Visual Mode changes everything:
+
+**Before Visual Mode**: "I hope this deletes what I want"
+**After Visual Mode**: "I can see exactly what I'm about to change"
+
+## The Three Visual Modes
+
+### 1. Character Visual Mode (`v`) 📝
+**What it does**: Selects characters one by one
+**Best for**: Precise character-level selections
+**Think of it as**: A character-by-character highlighter
+
+### 2. Line Visual Mode (`V`) 📄
+**What it does**: Selects entire lines
+**Best for**: Line-based operations
+**Think of it as**: A line-by-line highlighter
+
+### 3. Block Visual Mode (`Ctrl-v`) 🔲
+**What it does**: Selects rectangular blocks
+**Best for**: Column editing and rectangular selections
+**Think of it as**: A rectangular selection tool
+
+## Character Visual Mode: Precision Selection
+
+### Entering Character Visual Mode
+```vim
+v           " Start character visual mode
+```
+
+### Basic Character Selection
+
+| Command | What It Selects | Example |
+|---------|----------------|---------|
+| `vw` | To next word | Select from cursor to next word |
+| `v$` | To end of line | Select from cursor to line end |
+| `v0` | To start of line | Select from cursor to line start |
+| `ve` | To end of word | Select from cursor to word end |
+| `vb` | To previous word | Select from cursor to previous word |
+
+### Advanced Character Selection
+
+| Command | What It Selects | Example |
+|---------|----------------|---------|
+| `viw` | Inner word | Select current word |
+| `vaw` | Around word | Select word with space |
+| `vi"` | Inside quotes | Select content in quotes |
+| `va"` | Around quotes | Select quotes and content |
+| `vi(` | Inside parentheses | Select content in parentheses |
+| `va(` | Around parentheses | Select parentheses and content |
+
+### Practical Character Visual Examples
+
+**Example 1: Selecting a function name**
+```python
+def calculate_total(items):
+```
+
+**Task**: Select `calculate_total`
+1. Move cursor to `c` in `calculate_total`
+2. `viw` - Visual select inner word
+3. You'll see `calculate_total` highlighted
+
+**Example 2: Selecting quoted text**
+```python
+message = "Hello, World!"
+```
+
+**Task**: Select the string content
+1. Move cursor anywhere inside the quotes
+2. `vi"` - Visual select inside quotes
+3. You'll see `Hello, World!` highlighted
+
+## Line Visual Mode: Line-by-Line Power
+
+### Entering Line Visual Mode
+```vim
+V           " Start line visual mode
+```
+
+### Basic Line Selection
+
+| Command | What It Selects | Example |
+|---------|----------------|---------|
+| `V` | Current line | Select entire current line |
+| `Vj` | Current and next line | Select two lines |
+| `Vk` | Current and previous line | Select two lines |
+| `V3j` | Current + 3 lines down | Select 4 lines total |
+| `VG` | From current to end of file | Select to end |
+| `Vgg` | From current to start of file | Select to start |
+
+### Advanced Line Selection
+
+| Command | What It Selects | Example |
+|---------|----------------|---------|
+| `Vip` | Inner paragraph | Select paragraph lines |
+| `Vap` | Around paragraph | Select paragraph with empty lines |
+| `V}` | To next paragraph | Select to next empty line |
+| `V{` | To previous paragraph | Select to previous empty line |
+
+### Practical Line Visual Examples
+
+**Example 1: Selecting a function**
+```python
+def calculate_total(items):
+    total = 0
+    for item in items:
+        total += item.price
+    return total
+```
+
+**Task**: Select the entire function
+1. Move cursor to function definition
+2. `Vip` - Visual select inner paragraph
+3. You'll see the entire function highlighted
+
+**Example 2: Selecting multiple lines for indentation**
+```python
+if condition:
+print("Hello")
+print("World")
+print("!")
+```
+
+**Task**: Select the print statements to indent them
+1. Move cursor to first `print`
+2. `V` - Start line visual mode
+3. `2j` - Extend selection down 2 lines
+4. `>` - Indent the selected lines
+
+## Block Visual Mode: Rectangular Magic
+
+### Entering Block Visual Mode
+```vim
+Ctrl-v      " Start block visual mode
+```
+
+### Basic Block Selection
+
+| Command | What It Selects | Example |
+|---------|----------------|---------|
+| `Ctrl-v` | Start block selection | Select rectangular area |
+| `Ctrl-v 3j` | 3 lines down | Select 4-line column |
+| `Ctrl-v 5l` | 5 characters right | Select 6-character width |
+| `Ctrl-v $` | To end of lines | Select to end of each line |
+
+### Practical Block Visual Examples
+
+**Example 1: Editing multiple lines at once**
+```python
+name = "John"
+age = 30
+city = "New York"
+```
+
+**Task**: Add `person_` prefix to all variable names
+1. Move cursor to `n` in `name`
+2. `Ctrl-v` - Start block visual mode
+3. `2j` - Extend selection down 2 lines
+4. `I` - Insert at beginning of selection
+5. Type `person_`
+6. `Esc` - Apply to all lines
+
+**Result**:
+```python
+person_name = "John"
+person_age = 30
+person_city = "New York"
+```
+
+**Example 2: Selecting a column of data**
+```
+Name     Age  City
+John     30   NYC
+Jane     25   LA
+Bob      35   Chicago
+```
+
+**Task**: Select the Age column
+1. Move cursor to `A` in `Age`
+2. `Ctrl-v` - Start block visual mode
+3. `3j` - Extend down 3 lines
+4. `2l` - Extend right 2 characters
+5. You'll see the Age column highlighted
+
+## Visual Mode Operations
+
+Once you've made a selection, you can apply operations:
+
+### Text Transformation
+
+| Command | What It Does | Example |
+|---------|-------------|---------|
+| `d` | Delete selection | Remove selected text |
+| `c` | Change selection | Replace selected text |
+| `y` | Yank selection | Copy selected text |
+| `u` | Lowercase selection | Convert to lowercase |
+| `U` | Uppercase selection | Convert to uppercase |
+| `~` | Toggle case | Switch case of selection |
+
+### Indentation and Formatting
+
+| Command | What It Does | Example |
+|---------|-------------|---------|
+| `>` | Indent selection | Add indentation |
+| `<` | Unindent selection | Remove indentation |
+| `=` | Auto-indent selection | Fix indentation |
+| `gq` | Format selection | Wrap text to textwidth |
+
+### Advanced Operations
+
+| Command | What It Does | Example |
+|---------|-------------|---------|
+| `:` | Command on selection | Run command on selected lines |
+| `!` | Filter through command | Process selection with external command |
+| `J` | Join lines | Combine selected lines |
+| `gJ` | Join without spaces | Combine lines without adding spaces |
+
+## Practical Visual Mode Workflows
+
+### Workflow 1: Refactoring Code Block
+```python
+# Old code
+result = calculate_something()
+if result > 0:
+    print("Positive")
+else:
+    print("Negative")
+```
+
+**Task**: Wrap in try-except block
+1. `Vip` - Select entire block
+2. `>` - Indent the block
+3. `O` - Open line above
+4. Type `try:`
+5. `G` - Go to end of block
+6. `o` - Open line below
+7. Type `except Exception as e:`
+8. `o` - Open another line
+9. Type `    print(f"Error: {e}")`
+
+### Workflow 2: Formatting Data
+```
+John,30,NYC
+Jane,25,LA
+Bob,35,Chicago
+```
+
+**Task**: Add quotes around names
+1. Move to `J` in `John`
+2. `Ctrl-v` - Start block visual mode
+3. `2j` - Extend down 2 lines
+4. `3l` - Extend right to cover names
+5. `c` - Change selection
+6. Type `"John"`
+7. `Esc` - Apply to all lines
+
+### Workflow 3: Comment Block
+```python
+def process_data():
+    clean_data()
+    transform_data()
+    save_data()
+```
+
+**Task**: Comment out the function calls
+1. Move to `clean_data()` line
+2. `V` - Start line visual mode
+3. `2j` - Select 3 lines
+4. `:` - Enter command mode
+5. Type `s/^/# /` - Add `# ` to beginning of each line
+6. Press `Enter`
+
+## Visual Mode with Search
+
+You can extend visual selections using search:
+
+### Search-Extended Selection
+```vim
+v           " Start visual mode
+/pattern    " Search for pattern
+n           " Extend to next match
+```
+
+**Example**: Select from current position to next function
+1. `v` - Start visual mode
+2. `/def ` - Search for next function definition
+3. Selection extends to the match
+
+## Advanced Visual Mode Techniques
+
+### Repeating Visual Operations
+```vim
+gv          " Reselect last visual selection
+.           " Repeat last operation on selection
+```
+
+### Visual Mode with Registers
+```vim
+"ay         " Yank selection to register 'a'
+"ap         " Put from register 'a'
+```
+
+### Visual Mode Marks
+```vim
+'<          " Jump to start of last visual selection
+'>          " Jump to end of last visual selection
+```
+
+## Common Visual Mode Patterns
+
+### Pattern 1: Select and Replace
+```vim
+viw         " Select inner word
+c           " Change selection
+" Type replacement
+<Esc>       " Finish
+```
+
+### Pattern 2: Select and Move
+```vim
+Vip         " Select paragraph
+d           " Delete (cut)
+}           " Jump to target location
+p           " Put (paste)
+```
+
+### Pattern 3: Select and Format
+```vim
+V           " Start line visual mode
+5j          " Select 6 lines
+=           " Auto-indent selection
+```
+
+### Pattern 4: Block Edit
+```vim
+Ctrl-v      " Start block visual mode
+3j          " Select 4 lines
+I           " Insert at beginning
+" Type text
+<Esc>       " Apply to all lines
+```
+
+## Practice Exercise: Visual Mode Mastery
+
+Create a file with this content:
+```python
+def calculate_tax(price, rate):
+    return price * rate
+
+def calculate_discount(price, rate):
+    return price * rate
+
+def process_order(items):
+    total = 0
+    for item in items:
+        tax = calculate_tax(item.price, 0.08)
+        discount = calculate_discount(item.price, 0.10)
+        final_price = item.price + tax - discount
+        total += final_price
+    return total
+
+# Test data
+items = [
+    {"name": "laptop", "price": 1000},
+    {"name": "mouse", "price": 25},
+    {"name": "keyboard", "price": 75}
+]
+```
+
+**Practice these visual operations**:
+
+1. **Character visual mode**:
+   - Select function name: `viw`
+   - Select parameter list: `vi(`
+   - Select string content: `vi"`
+
+2. **Line visual mode**:
+   - Select entire function: `Vip`
+   - Select multiple lines: `V3j`
+   - Select from cursor to end: `VG`
+
+3. **Block visual mode**:
+   - Select column of prices: `Ctrl-v`
+   - Add prefix to variable names
+   - Select rectangular area in comments
+
+4. **Visual operations**:
+   - Delete selection: `d`
+   - Change selection: `c`
+   - Indent selection: `>`
+   - Uppercase selection: `U`
+
+## Building Visual Mode Muscle Memory
+
+### Week 1: Basic Visual Selection
+- Practice `v`, `V`, `Ctrl-v` modes
+- Use with simple movements (`w`, `$`, `j`)
+- Apply basic operations (`d`, `c`, `y`)
+
+### Week 2: Text Object Integration
+- Combine visual mode with text objects
+- Practice `viw`, `vi"`, `vip` patterns
+- Use visual mode for precise selections
+
+### Week 3: Advanced Operations
+- Practice indentation and formatting
+- Use visual mode with search
+- Master block visual mode
+
+### Week 4: Workflow Integration
+- Combine visual mode with other operations
+- Develop personal visual editing patterns
+- Practice real-world editing scenarios
+
+## What's Next?
+
+You now master:
+- The three visual modes (character, line, block)
+- Visual selection with movements and text objects
+- Operations on visual selections
+- Advanced visual mode techniques
+- Common visual editing patterns
+
+In the next post, we'll explore [Search and Replace Mastery](07-search-replace.qmd) and learn to find and transform text across your entire file.
+
+## Key Takeaways
+
+1. **Visual mode shows you what you're selecting** - no more guessing
+2. **Three modes for different needs** - character, line, and block
+3. **Combine with text objects** - `viw`, `vi"`, `vip` are powerful
+4. **Block mode is magic** - edit multiple lines simultaneously
+5. **Practice makes perfect** - visual mode becomes intuitive with use
+
+Visual mode transforms Vim from a command-line editor to a visual editor while keeping all the power of modal editing. It's the perfect bridge between traditional and modern editing paradigms.
+
+---
+
+*Ready to find and replace like a pro? Continue with [Search and Replace Mastery](07-search-replace.qmd) to master text transformation across your entire file.* 

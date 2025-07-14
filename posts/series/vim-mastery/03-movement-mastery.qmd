@@ -1,0 +1,278 @@
+---
+title: "Navigate Like a Pro: Movement Mastery in Vim"
+description: "Master the art of moving through text at the speed of thought. Learn the 20% of movement commands that provide 80% of navigation power."
+author: "Hasan"
+date: last-modified
+categories: [vim, movement, navigation, efficiency]
+image: "https://images.unsplash.com/photo-1551288049-bebda4e38f71?ixlib=rb-4.0.3&auto=format&fit=crop&w=2000&q=80"
+toc: true
+---
+
+## The Speed of Thought
+
+Imagine you're reading a book, and every time you want to look at a different paragraph, you have to slowly drag your finger across each word. That's what using arrow keys feels like to a Vim master!
+
+Vim movement is like teleportation - you think about where you want to go, and you're there. Today, we'll learn to move through text at the speed of thought.
+
+## The Movement Mindset
+
+**Traditional editors**: Move character by character, line by line
+**Vim**: Move by meaning - words, sentences, paragraphs, functions
+
+**Traditional**: "I need to go 15 characters to the right"
+**Vim**: "I need to go to the next function"
+
+This mindset shift transforms how you think about text navigation.
+
+## The Essential Movement Commands
+
+### Basic Movements: Your Foundation 🏃‍♂️
+
+These replace your arrow keys:
+
+| Command | Movement | Think |
+|---------|----------|-------|
+| `h` | Left | "**h**and points left" |
+| `j` | Down | "**j**umps down" |
+| `k` | Up | "**k**icks up" |
+| `l` | Right | "**l**ooks right" |
+
+**Memory trick**: `j` looks like a down arrow, `k` is above `j` so it goes up!
+
+### Word Movements: Think in Words 📝
+
+| Command | Movement | Story |
+|---------|----------|-------|
+| `w` | Next word start | "**w**ord forward" |
+| `b` | Previous word start | "**b**ack a word" |
+| `e` | Next word end | "**e**nd of word" |
+| `ge` | Previous word end | "**g**o to **e**nd backward" |
+
+### Line Movements: Master Your Lines 📏
+
+| Command | Movement | Story |
+|---------|----------|-------|
+| `0` | Start of line | "**0** is the beginning" |
+| `^` | First non-blank character | "**^** points to first real character" |
+| `$` | End of line | "**$** is the end in regex" |
+| `g_` | Last non-blank character | "**g**o to last real character" |
+
+### Screen Movements: See the Big Picture 🖥️
+
+| Command | Movement | Story |
+|---------|----------|-------|
+| `H` | Top of screen | "**H**igh on screen" |
+| `M` | Middle of screen | "**M**iddle of screen" |
+| `L` | Bottom of screen | "**L**ow on screen" |
+| `gg` | Top of file | "**g**o to beginning" |
+| `G` | Bottom of file | "**G**o to end" |
+
+## Practical Examples: Movement in Action
+
+### Example 1: Fixing a Function Name
+
+**Scenario**: You need to change `calculateTotal` to `computeSum` in this line:
+```python
+def calculateTotal(items):
+```
+
+**Inefficient way**: Arrow keys to navigate
+**Vim way**:
+1. `^` - Jump to start of line
+2. `w` - Move to "calculateTotal"
+3. `cw` - Change word
+4. Type "computeSum"
+
+### Example 2: Jumping to a Specific Line
+
+**Scenario**: Error on line 47
+
+**Inefficient way**: Scroll and count
+**Vim way**:
+1. `:47` - Jump directly to line 47
+2. Or `47G` - Same result
+
+### Example 3: Moving Through a Function
+
+**Scenario**: Navigate through this function:
+```python
+def process_data(data):
+    # Clean the data
+    cleaned = clean_data(data)
+    
+    # Transform it
+    transformed = transform_data(cleaned)
+    
+    # Return result
+    return transformed
+```
+
+**Vim way**:
+- `}` - Jump to next paragraph (empty line)
+- `{` - Jump to previous paragraph
+- `w` - Move word by word through code
+- `$` - Jump to end of current line
+
+## Advanced Movement: The Power Moves 🚀
+
+### Search-Based Movement
+
+| Command | Movement | Story |
+|---------|----------|-------|
+| `/pattern` | Search forward | "**/** means search" |
+| `?pattern` | Search backward | "**?** questions search backward" |
+| `n` | Next match | "**n**ext result" |
+| `N` | Previous match | "**N**ext backward" |
+| `*` | Search word under cursor | "***** highlights current word" |
+| `#` | Search word backward | "**#** searches backward" |
+
+### Character-Based Movement
+
+| Command | Movement | Story |
+|---------|----------|-------|
+| `f{char}` | Find character forward | "**f**ind character" |
+| `F{char}` | Find character backward | "**F**ind backward" |
+| `t{char}` | Till character forward | "**t**ill character" |
+| `T{char}` | Till character backward | "**T**ill backward" |
+| `;` | Repeat last f/t | "**;** continues search" |
+| `,` | Repeat last f/t backward | "**,** goes back" |
+
+### Bracket and Brace Movement
+
+| Command | Movement | Story |
+|---------|----------|-------|
+| `%` | Match bracket/brace | "**%** matches pairs" |
+| `[{` | Previous opening brace | "**[** opens backward" |
+| `]}` | Next closing brace | "**]** closes forward" |
+
+## Movement Combinations: The Magic Multiplier ✨
+
+You can combine numbers with movements:
+
+| Command | Movement | Example |
+|---------|----------|---------|
+| `3w` | Move 3 words forward | Jump over 3 words |
+| `5j` | Move 5 lines down | Skip 5 lines |
+| `2f.` | Find 2nd period | Jump to second dot |
+| `4$` | Move to end of 4th line down | Jump to end of 4th line |
+
+## Practice Exercise: Movement Mastery
+
+Create a file with this content:
+```python
+def calculate_total(items):
+    """Calculate the total price of items."""
+    total = 0
+    for item in items:
+        if item.price > 0:
+            total += item.price
+        else:
+            print(f"Warning: {item.name} has invalid price")
+    return total
+
+def process_order(order):
+    """Process a customer order."""
+    items = order.items
+    total = calculate_total(items)
+    return {"total": total, "status": "processed"}
+```
+
+**Practice these movements**:
+1. `gg` - Go to top
+2. `f(` - Find first parenthesis
+3. `w` - Move to next word
+4. `$` - End of line
+5. `j` - Down one line
+6. `^` - Start of line
+7. `/total` - Search for "total"
+8. `n` - Next occurrence
+9. `G` - Go to bottom
+10. `%` - Match the closing brace
+
+## The Efficiency Mindset
+
+### Instead of This...
+- Arrow keys: ↓↓↓→→→→→→→→
+- Mouse: Click and drag
+- Page Up/Down: Scroll and search
+
+### Think Like This...
+- "I want the next function" → `}` 
+- "I want that word" → `w` or `/word`
+- "I want line 25" → `:25`
+- "I want the matching brace" → `%`
+
+## Common Movement Mistakes
+
+### Mistake 1: Using Arrow Keys
+**Problem**: Slow and inefficient
+**Solution**: Force yourself to use `hjkl` for a week
+
+### Mistake 2: Not Using Word Movements
+**Problem**: Moving character by character
+**Solution**: Think in words, use `w`, `b`, `e`
+
+### Mistake 3: Ignoring Search
+**Problem**: Scrolling to find text
+**Solution**: Use `/` to search, `n` to repeat
+
+### Mistake 4: Forgetting Line Jumps
+**Problem**: Scrolling to specific lines
+**Solution**: Use `:number` or `numberG`
+
+## Building Movement Muscle Memory
+
+### Week 1: Basic Movements
+- Replace arrow keys with `hjkl`
+- Use `w` and `b` for word movement
+- Practice `0` and `$` for line navigation
+
+### Week 2: Screen and File Navigation
+- Use `gg` and `G` for file navigation
+- Practice `H`, `M`, `L` for screen movement
+- Start using `{}` for paragraph jumping
+
+### Week 3: Advanced Navigation
+- Master `f` and `t` for character finding
+- Use `/` and `?` for searching
+- Practice `%` for bracket matching
+
+### Week 4: Combination Mastery
+- Combine numbers with movements (`3w`, `5j`)
+- Use search with navigation (`/function` then `n`)
+- Practice complex movements in real code
+
+## Speed Benchmarks
+
+Track your progress:
+
+**Beginner**: Moving to a word takes 5+ keystrokes
+**Intermediate**: Moving to a word takes 2-3 keystrokes
+**Advanced**: Moving to a word takes 1-2 keystrokes
+**Expert**: You think of a location and you're there
+
+## What's Next?
+
+You now know:
+- Basic movement commands (`hjkl`, `w`, `b`, `e`)
+- Line navigation (`0`, `^`, `$`)
+- File navigation (`gg`, `G`, `H`, `M`, `L`)
+- Search-based movement (`/`, `?`, `n`, `N`)
+- Character finding (`f`, `t`, `;`, `,`)
+- Movement combinations (numbers + movements)
+
+In the next post, we'll learn about [Text Objects: The Secret Weapon](04-text-objects.qmd) and discover how to select exactly what you want to edit.
+
+## Key Takeaways
+
+1. **Think in meaning, not characters** - move by words, not letters
+2. **Use search for distant targets** - `/` is faster than scrolling
+3. **Combine numbers with movements** - `3w` is better than `www`
+4. **Practice daily** - muscle memory is everything
+5. **Don't use arrow keys** - force yourself to use `hjkl`
+
+Movement is the foundation of Vim mastery. Once you can navigate at the speed of thought, everything else becomes natural.
+
+---
+
+*Ready to select like a pro? Continue with [Text Objects: The Secret Weapon](04-text-objects.qmd) to master precise text selection.* 

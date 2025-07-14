@@ -1,0 +1,487 @@
+---
+title: "Search and Replace Mastery: Find and Transform Anything Instantly"
+description: "Master Vim's powerful search and replace capabilities. Learn to find any pattern and transform text across your entire file with surgical precision."
+author: "Hasan"
+date: last-modified
+categories: [vim, search, replace, regex, patterns]
+image: "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?ixlib=rb-4.0.3&auto=format&fit=crop&w=2000&q=80"
+toc: true
+---
+
+## The Detective's Magnifying Glass
+
+Imagine you're a detective with a magical magnifying glass that can:
+- Find any clue instantly across thousands of pages
+- Transform evidence with a single command
+- Replace every occurrence of a pattern simultaneously
+- Show you exactly what will change before you commit
+
+That's Vim's search and replace system! It's like having a find-and-replace superpower that works at the speed of thought.
+
+## The Two-Phase Process
+
+Vim's search and replace follows a simple pattern:
+
+1. **Search Phase**: Find what you're looking for
+2. **Replace Phase**: Transform what you found
+
+**The Magic Formula**:
+```vim
+:s/old_pattern/new_pattern/flags
+```
+
+Think of it as: "**s**ubstitute old_pattern with new_pattern"
+
+## Basic Search: Finding Your Target
+
+### Simple Search Commands
+
+| Command | What It Does | Story |
+|---------|-------------|-------|
+| `/pattern` | Search forward | "**/** means search ahead" |
+| `?pattern` | Search backward | "**?** questions search behind" |
+| `n` | Next match | "**n**ext result" |
+| `N` | Previous match | "**N**ext backward" |
+| `*` | Search word under cursor | "***** highlights this word" |
+| `#` | Search word backward | "**#** searches this word backward" |
+
+### Practical Search Examples
+
+**Example 1: Finding a function**
+```python
+def calculate_total(items):
+    # lots of code
+def process_order(data):
+    # more code
+def calculate_tax(price):
+    # even more code
+```
+
+**Task**: Find the `calculate_tax` function
+1. `/calculate_tax` - Search for the function
+2. `Enter` - Execute search
+3. `n` - Jump to next occurrence (if any)
+
+**Example 2: Finding all occurrences of a variable**
+```python
+user_name = "John"
+print(f"Hello {user_name}")
+return {"name": user_name, "status": "active"}
+```
+
+**Task**: Find all uses of `user_name`
+1. Move cursor to `user_name`
+2. `*` - Search for this word
+3. `n` - Jump to next occurrence
+4. `n` - Jump to next occurrence again
+
+## Basic Replace: The Simple Transformation
+
+### The Substitute Command Structure
+```vim
+:[range]s/old/new/[flags]
+```
+
+### Basic Replace Examples
+
+**Example 1: Replace in current line**
+```vim
+:s/old/new          " Replace first occurrence in current line
+:s/old/new/g        " Replace all occurrences in current line
+```
+
+**Example 2: Replace in entire file**
+```vim
+:%s/old/new         " Replace first occurrence in each line
+:%s/old/new/g       " Replace all occurrences in entire file
+```
+
+**Example 3: Replace with confirmation**
+```vim
+:%s/old/new/gc      " Replace all with confirmation
+```
+
+### Practical Replace Examples
+
+**Example 1: Renaming a variable**
+```python
+old_name = "John"
+print(f"Hello {old_name}")
+result = process_data(old_name)
+```
+
+**Task**: Change `old_name` to `user_name`
+1. `:%s/old_name/user_name/g` - Replace all occurrences
+2. `Enter` - Execute the command
+
+**Result**:
+```python
+user_name = "John"
+print(f"Hello {user_name}")
+result = process_data(user_name)
+```
+
+**Example 2: Updating function calls**
+```python
+result1 = calculate_something(data)
+result2 = calculate_something(other_data)
+result3 = calculate_something(more_data)
+```
+
+**Task**: Change `calculate_something` to `compute_value`
+1. `:%s/calculate_something/compute_value/g`
+2. `Enter`
+
+## Advanced Search Patterns
+
+### Using Regular Expressions
+
+Enable "very magic" mode for easier regex:
+```vim
+/\v pattern         " Very magic search
+:%s/\v old/new/g    " Very magic replace
+```
+
+### Common Regex Patterns
+
+| Pattern | What It Matches | Example |
+|---------|----------------|---------|
+| `\w+` | One or more word characters | `hello`, `user123` |
+| `\d+` | One or more digits | `123`, `42` |
+| `\s+` | One or more whitespace | spaces, tabs, newlines |
+| `.*` | Any characters | anything |
+| `^` | Start of line | beginning |
+| `$` | End of line | end |
+| `\<` | Start of word | word boundary |
+| `\>` | End of word | word boundary |
+
+### Advanced Search Examples
+
+**Example 1: Finding function definitions**
+```vim
+/\v^def \w+\(       " Find function definitions
+```
+
+**Example 2: Finding numbers**
+```vim
+/\v\d+              " Find any number
+/\v\d+\.\d+         " Find decimal numbers
+```
+
+**Example 3: Finding email addresses**
+```vim
+/\v\w+@\w+\.\w+     " Find simple email patterns
+```
+
+## Advanced Replace Patterns
+
+### Capture Groups and Backreferences
+
+Use parentheses to capture parts of the match:
+```vim
+:%s/\v(\w+)\s+(\w+)/\2, \1/g
+```
+
+This swaps two words: `John Doe` becomes `Doe, John`
+
+### Advanced Replace Examples
+
+**Example 1: Swapping function parameters**
+```python
+def calculate_total(tax_rate, price):
+    return price * (1 + tax_rate)
+```
+
+**Task**: Swap parameters to `(price, tax_rate)`
+```vim
+:%s/\v(\w+)\((.*), (.*)\)/\1(\3, \2)/g
+```
+
+**Example 2: Adding quotes to values**
+```python
+name = John
+age = 30
+city = NYC
+```
+
+**Task**: Add quotes around the values
+```vim
+:%s/\v= (.+)$/= "\1"/g
+```
+
+**Result**:
+```python
+name = "John"
+age = "30"
+city = "NYC"
+```
+
+**Example 3: Converting camelCase to snake_case**
+```python
+userName = "John"
+firstName = "John"
+lastName = "Doe"
+```
+
+**Task**: Convert to snake_case
+```vim
+:%s/\v([a-z])([A-Z])/\1_\l\2/g
+```
+
+**Result**:
+```python
+user_name = "John"
+first_name = "John"
+last_name = "Doe"
+```
+
+## Range Specifications
+
+### Different Ways to Specify Range
+
+| Range | What It Means | Example |
+|-------|--------------|---------|
+| `%` | Entire file | `:%s/old/new/g` |
+| `.` | Current line | `:s/old/new/g` |
+| `1,5` | Lines 1 to 5 | `:1,5s/old/new/g` |
+| `.,+5` | Current line + 5 lines | `:.,+5s/old/new/g` |
+| `'a,'b` | From mark a to mark b | `:'a,'bs/old/new/g` |
+| `/start/,/end/` | From pattern to pattern | `:/start/,/end/s/old/new/g` |
+
+### Practical Range Examples
+
+**Example 1: Replace in a function**
+```python
+def calculate_total(items):  # Line 10
+    total = 0
+    for item in items:
+        total += item.price
+    return total             # Line 14
+
+def other_function():
+    # other code
+```
+
+**Task**: Replace `total` with `sum` only in the function
+```vim
+:10,14s/total/sum/g
+```
+
+**Example 2: Replace in visual selection**
+1. `V` - Start line visual mode
+2. Select the lines you want
+3. `:` - Enter command mode (you'll see `:'<,'>`)
+4. `s/old/new/g` - Replace in selection
+
+## Flags and Options
+
+### Common Flags
+
+| Flag | What It Does | Example |
+|------|-------------|---------|
+| `g` | Global (all in line) | `:s/old/new/g` |
+| `c` | Confirm each replacement | `:s/old/new/gc` |
+| `i` | Ignore case | `:s/old/new/gi` |
+| `I` | Don't ignore case | `:s/old/new/gI` |
+| `n` | Count matches only | `:s/old/new/gn` |
+
+### Confirmation Options
+
+When using the `c` flag, you'll see these options:
+- `y` - Yes, replace this match
+- `n` - No, skip this match
+- `a` - All, replace this and all remaining
+- `q` - Quit, stop replacing
+- `l` - Last, replace this match and quit
+
+## Practical Search and Replace Workflows
+
+### Workflow 1: Refactoring Variable Names
+
+**Scenario**: You have a variable called `data` that should be `user_data`
+
+```python
+data = get_user_info()
+if data:
+    process_data(data)
+    save_data(data)
+```
+
+**Steps**:
+1. `:%s/\<data\>/user_data/gc` - Replace with confirmation
+2. Review each replacement
+3. Accept or reject each change
+
+### Workflow 2: Updating API Endpoints
+
+**Scenario**: Change API version from v1 to v2
+
+```python
+api_url = "https://api.example.com/v1/users"
+endpoint = "/v1/data"
+version = "v1"
+```
+
+**Steps**:
+1. `:%s/v1/v2/g` - Replace all v1 with v2
+2. Check the results
+
+### Workflow 3: Format Consistency
+
+**Scenario**: Ensure consistent string quotes
+
+```python
+name = 'John'
+message = "Hello"
+error = 'Something went wrong'
+```
+
+**Steps**:
+1. `:%s/'/"/g` - Replace all single quotes with double quotes
+
+## Advanced Techniques
+
+### Using the Search History
+
+| Command | What It Does |
+|---------|-------------|
+| `/` then `↑` | Previous search |
+| `:` then `↑` | Previous command |
+| `q/` | Open search history window |
+| `q:` | Open command history window |
+
+### Search and Replace with External Commands
+
+```vim
+:%s/pattern/\=system('command')/g
+```
+
+This runs an external command for each match.
+
+### Multiple File Search and Replace
+
+```vim
+:args *.py                    " Load all Python files
+:argdo %s/old/new/ge | update " Replace in all files
+```
+
+## Common Patterns and Recipes
+
+### Pattern 1: Clean Up Whitespace
+```vim
+:%s/\s\+$//g                 " Remove trailing whitespace
+:%s/\v\n\n+/\r\r/g          " Multiple blank lines to single
+```
+
+### Pattern 2: Format Code
+```vim
+:%s/\v,(\S)/, \1/g          " Add space after commas
+:%s/\v\s*=\s*/ = /g         " Consistent spacing around =
+```
+
+### Pattern 3: Convert Data Formats
+```vim
+:%s/\v(\d+)-(\d+)-(\d+)/\3\/\2\/\1/g  " YYYY-MM-DD to DD/MM/YYYY
+```
+
+### Pattern 4: Add/Remove Comments
+```vim
+:%s/^/# /g                   " Add # comment to all lines
+:%s/^# //g                   " Remove # comment from all lines
+```
+
+## Practice Exercise: Search and Replace Mastery
+
+Create a file with this content:
+```python
+def calculateTotal(itemList):
+    total_sum = 0
+    for current_item in itemList:
+        if current_item.price > 0:
+            total_sum = total_sum + current_item.price
+        else:
+            print('Invalid price for item')
+    return total_sum
+
+def processOrder(orderData):
+    items = orderData.get('items')
+    total = calculateTotal(items)
+    return {'total': total, 'status': 'processed'}
+
+# Test data
+test_data = {
+    'items': [
+        {'name': 'laptop', 'price': 1000},
+        {'name': 'mouse', 'price': 25}
+    ]
+}
+```
+
+**Practice these operations**:
+
+1. **Basic replacements**:
+   - Change `calculateTotal` to `calculate_total`
+   - Change `itemList` to `items`
+   - Change `total_sum` to `total`
+
+2. **Pattern-based replacements**:
+   - Change all single quotes to double quotes
+   - Add spaces around `=` operators
+   - Convert camelCase to snake_case
+
+3. **Advanced patterns**:
+   - Swap function parameters
+   - Add type hints to functions
+   - Format dictionary consistently
+
+4. **Confirmation practice**:
+   - Use `c` flag to confirm each replacement
+   - Practice accepting/rejecting changes
+
+## Building Search and Replace Muscle Memory
+
+### Week 1: Basic Operations
+- Practice basic search (`/`, `?`, `n`, `N`)
+- Use simple replace (`:s/old/new/g`)
+- Master file-wide replace (`:%s/old/new/g`)
+
+### Week 2: Patterns and Ranges
+- Learn basic regex patterns
+- Practice range specifications
+- Use confirmation flag (`c`)
+
+### Week 3: Advanced Techniques
+- Master capture groups and backreferences
+- Practice complex pattern matching
+- Use external commands
+
+### Week 4: Real-world Applications
+- Apply to actual coding projects
+- Develop personal pattern library
+- Combine with other Vim operations
+
+## What's Next?
+
+You now master:
+- Basic search operations and navigation
+- Simple and advanced replace patterns
+- Regular expressions and capture groups
+- Range specifications and flags
+- Confirmation and review processes
+- Common patterns and workflows
+
+In the next post, we'll explore [Registers and Macros](08-registers-macros.qmd) and learn to automate repetitive tasks with incredible efficiency.
+
+## Key Takeaways
+
+1. **Search first, replace second** - always verify your pattern
+2. **Use confirmation** - the `c` flag prevents mistakes
+3. **Master regex patterns** - they unlock incredible power
+4. **Practice with real code** - build your pattern library
+5. **Combine with other operations** - search/replace integrates with everything
+
+Search and replace in Vim transforms you from a manual editor to an automation wizard. Once you master these patterns, you'll handle large-scale text transformations with confidence and precision.
+
+---
+
+*Ready to automate repetitive tasks? Continue with [Registers and Macros](08-registers-macros.qmd) to master copy-paste on steroids and task automation.* 
