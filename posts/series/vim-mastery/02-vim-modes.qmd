@@ -4,7 +4,7 @@ description: "Discover why Vim's modal editing is actually genius. Learn to thin
 author: "Hasan"
 date: last-modified
 categories: [vim, modes, philosophy, intermediate]
-image: "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?ixlib=rb-4.0.3&auto=format&fit=crop&w=2000&q=80"
+image: "images/vim.png"
 toc: true
 ---
 

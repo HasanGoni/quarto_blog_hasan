@@ -4,7 +4,7 @@ description: "Discover Vim's most powerful feature - text objects. Learn to sele
 author: "Hasan"
 date: last-modified
 categories: [vim, text-objects, selection, advanced]
-image: "https://images.unsplash.com/photo-1518709268805-4e9042af2176?ixlib=rb-4.0.3&auto=format&fit=crop&w=2000&q=80"
+image: "images/vim.png"
 toc: true
 ---
 

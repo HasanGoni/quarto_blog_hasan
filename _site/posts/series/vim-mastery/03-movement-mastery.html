@@ -1,0 +1,1641 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.3.450">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+<meta name="author" content="Hasan">
+<meta name="dcterms.date" content="2025-07-18">
+<meta name="description" content="Master the art of moving through text at the speed of thought. Learn the 20% of movement commands that provide 80% of navigation power.">
+
+<title>Hasan’s Data Science &amp; AI Blog - Navigate Like a Pro: Movement Mastery in Vim</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
+  vertical-align: middle;
+}
+/* CSS for syntax highlighting */
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+  }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+</style>
+
+
+<script src="../../../site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="../../../site_libs/quarto-nav/headroom.min.js"></script>
+<script src="../../../site_libs/clipboard/clipboard.min.js"></script>
+<script src="../../../site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="../../../site_libs/quarto-search/fuse.min.js"></script>
+<script src="../../../site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="../../../">
+<script src="../../../site_libs/quarto-html/quarto.js"></script>
+<script src="../../../site_libs/quarto-html/popper.min.js"></script>
+<script src="../../../site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="../../../site_libs/quarto-html/anchor.min.js"></script>
+<link href="../../../site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="../../../site_libs/quarto-html/quarto-syntax-highlighting.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="../../../site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="../../../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="../../../site_libs/bootstrap/bootstrap.min.css" rel="stylesheet" id="quarto-bootstrap" data-mode="light">
+<script id="quarto-search-options" type="application/json">{
+  "location": "navbar",
+  "copy-button": false,
+  "collapse-after": 3,
+  "panel-placement": "end",
+  "type": "overlay",
+  "limit": 20,
+  "language": {
+    "search-no-results-text": "No results",
+    "search-matching-documents-text": "matching documents",
+    "search-copy-link-title": "Copy link to search",
+    "search-hide-matches-text": "Hide additional matches",
+    "search-more-match-text": "more match in this document",
+    "search-more-matches-text": "more matches in this document",
+    "search-clear-button-title": "Clear",
+    "search-detached-cancel-button-title": "Cancel",
+    "search-submit-button-title": "Submit",
+    "search-label": "Search"
+  }
+}</script>
+<style>html{ scroll-behavior: smooth; }</style>
+<script async="" src="https://hypothes.is/embed.js"></script>
+
+
+<link rel="stylesheet" href="../../../styles.css">
+<meta property="og:title" content="Hasan’s Data Science &amp; AI Blog - Navigate Like a Pro: Movement Mastery in Vim">
+<meta property="og:description" content="Master the art of moving through text at the speed of thought. Learn the 20% of movement commands that provide 80% of navigation power.">
+<meta property="og:image" content="https://hasangoni.quarto.pub/hasan-blog-post/posts/series/vim-mastery/images/vim.png">
+<meta property="og:site-name" content="Hasan's Data Science &amp; AI Blog">
+<meta property="og:image:height" content="1413">
+<meta property="og:image:width" content="3368">
+<meta name="twitter:title" content="Hasan’s Data Science &amp; AI Blog - Navigate Like a Pro: Movement Mastery in Vim">
+<meta name="twitter:description" content="Master the art of moving through text at the speed of thought. Learn the 20% of movement commands that provide 80% of navigation power.">
+<meta name="twitter:image" content="https://hasangoni.quarto.pub/hasan-blog-post/posts/series/vim-mastery/images/vim.png">
+<meta name="twitter:image-height" content="1413">
+<meta name="twitter:image-width" content="3368">
+<meta name="twitter:card" content="summary_large_image">
+</head>
+
+<body class="nav-sidebar docked nav-fixed">
+
+<div id="quarto-search-results"></div>
+  <header id="quarto-header" class="headroom fixed-top">
+    <nav class="navbar navbar-expand-lg navbar-dark ">
+      <div class="navbar-container container-fluid">
+      <div class="navbar-brand-container">
+    <a class="navbar-brand" href="../../../index.html">
+    <span class="navbar-title">Hasan’s Data Science &amp; AI Blog</span>
+    </a>
+  </div>
+            <div id="quarto-search" class="" title="Search"></div>
+          <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCollapse" aria-controls="navbarCollapse" aria-expanded="false" aria-label="Toggle navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+  <span class="navbar-toggler-icon"></span>
+</button>
+          <div class="collapse navbar-collapse" id="navbarCollapse">
+            <ul class="navbar-nav navbar-nav-scroll me-auto">
+  <li class="nav-item">
+    <a class="nav-link" href="../../../index.html" rel="" target="">
+ <span class="menu-text">Home</span></a>
+  </li>  
+  <li class="nav-item dropdown ">
+    <a class="nav-link dropdown-toggle" href="#" id="nav-menu-series" role="button" data-bs-toggle="dropdown" aria-expanded="false" rel="" target="">
+ <span class="menu-text">Series</span>
+    </a>
+    <ul class="dropdown-menu" aria-labelledby="nav-menu-series">    
+        <li>
+    <a class="dropdown-item" href="../../../posts/series/command-line-mastery.html" rel="" target="">
+ <span class="dropdown-text">Command Line Mastery for HPC</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="../../../posts/series/data-science-steps.html" rel="" target="">
+ <span class="dropdown-text">Data Science Steps</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="../../../posts/series/computer-vision-foundations.html" rel="" target="">
+ <span class="dropdown-text">Computer Vision Foundations</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="../../../posts/series/vim-mastery.html" rel="" target="">
+ <span class="dropdown-text">Vim Mastery</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="../../../posts/series/vlm.html" rel="" target="">
+ <span class="dropdown-text">VLM Series</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="../../../posts/series/anomaly-detection/index.html" rel="" target="">
+ <span class="dropdown-text">Anomaly Detection</span></a>
+  </li>  
+    </ul>
+  </li>
+  <li class="nav-item">
+    <a class="nav-link" href="../../../categories.html" rel="" target="">
+ <span class="menu-text">Categories</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="../../../tags.html" rel="" target="">
+ <span class="menu-text">Tags</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="../../../about.html" rel="" target="">
+ <span class="menu-text">About</span></a>
+  </li>  
+</ul>
+            <ul class="navbar-nav navbar-nav-scroll ms-auto">
+  <li class="nav-item compact">
+    <a class="nav-link" href="https://github.com/HasanGoni" rel="" target=""><i class="bi bi-github" role="img">
+</i> 
+ <span class="menu-text"></span></a>
+  </li>  
+  <li class="nav-item compact">
+    <a class="nav-link" href="https://twitter.com/hasangoni" rel="" target=""><i class="bi bi-twitter" role="img">
+</i> 
+ <span class="menu-text"></span></a>
+  </li>  
+</ul>
+            <div class="quarto-navbar-tools">
+</div>
+          </div> <!-- /navcollapse -->
+      </div> <!-- /container-fluid -->
+    </nav>
+  <nav class="quarto-secondary-nav">
+    <div class="container-fluid d-flex">
+      <button type="button" class="quarto-btn-toggle btn" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar,#quarto-sidebar-glass" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+        <i class="bi bi-layout-text-sidebar-reverse"></i>
+      </button>
+      <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item">Navigate Like a Pro: Movement Mastery in Vim</li></ol></nav>
+      <a class="flex-grow-1" role="button" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar,#quarto-sidebar-glass" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
+      </a>
+    </div>
+  </nav>
+</header>
+<!-- content -->
+<header id="title-block-header" class="quarto-title-block default page-columns page-full">
+  <div class="quarto-title-banner page-columns page-full">
+    <div class="quarto-title column-body">
+      <div class="quarto-title-block"><div><h1 class="title">Navigate Like a Pro: Movement Mastery in Vim</h1><button type="button" class="btn code-tools-button" id="quarto-code-tools-source"><i class="bi"></i> Code</button></div></div>
+                  <div>
+        <div class="description">
+          Master the art of moving through text at the speed of thought. Learn the 20% of movement commands that provide 80% of navigation power.
+        </div>
+      </div>
+                          <div class="quarto-categories">
+                <div class="quarto-category">vim</div>
+                <div class="quarto-category">movement</div>
+                <div class="quarto-category">navigation</div>
+                <div class="quarto-category">efficiency</div>
+              </div>
+                  </div>
+  </div>
+    
+  
+  <div class="quarto-title-meta">
+
+      <div>
+      <div class="quarto-title-meta-heading">Author</div>
+      <div class="quarto-title-meta-contents">
+               <p>Hasan </p>
+            </div>
+    </div>
+      
+      <div>
+      <div class="quarto-title-meta-heading">Published</div>
+      <div class="quarto-title-meta-contents">
+        <p class="date">July 18, 2025</p>
+      </div>
+    </div>
+    
+      <div>
+      <div class="quarto-title-meta-heading">Modified</div>
+      <div class="quarto-title-meta-contents">
+        <p class="date-modified">July 18, 2025</p>
+      </div>
+    </div>
+      
+    </div>
+    
+  
+  </header><div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article page-navbar">
+<!-- sidebar -->
+  <nav id="quarto-sidebar" class="sidebar collapse collapse-horizontal sidebar-navigation docked overflow-auto">
+    <div class="sidebar-menu-container"> 
+    <ul class="list-unstyled mt-1">
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-1" aria-expanded="true">
+ <span class="menu-text">Command Line Mastery for HPC</span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-1" aria-expanded="true" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-1" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../../posts/series/command-line-mastery.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Command Line Mastery for HPC Series</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../../posts/series/command-line-mastery/01-digital-compass.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">1. Digital Compass</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../../posts/series/command-line-mastery/02-file-detective.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">2. File Detective</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../../posts/series/command-line-mastery/03-file-manipulation.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">3. File Manipulation Magic</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../../posts/series/command-line-mastery/04-text-processing.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">4. Text Processing Power</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../../posts/series/command-line-mastery/05-permission-wizardry.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">5. Permission Wizardry</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../../posts/series/command-line-mastery/06-ssh-remote-access.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">6. SSH and Remote Access</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../../posts/series/command-line-mastery/07-file-transfer.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">7. File Transfer Mastery</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../../posts/series/command-line-mastery/08-environment-mastery.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">8. Environment Mastery</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../../posts/series/command-line-mastery/09-hpc-job-scheduling.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">9. HPC Job Scheduling</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../../posts/series/command-line-mastery/10-parallel-processing.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">10. Parallel Processing Power</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../../posts/series/command-line-mastery/11-bash-scripting.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">11. Bash Scripting Essentials</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../../posts/series/command-line-mastery/12-automation-excellence.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">12. Automation Excellence</span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-2" aria-expanded="true">
+ <span class="menu-text">Data Science</span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-2" aria-expanded="true" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-2" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../../posts/series/data-science-steps.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Data Science Steps Series</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../../posts/data-science-steps-to-follow-part01/index.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Data Science Steps to Follow - 01</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../../posts/data-science-steps-to-follow-part02/index.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Data Science Steps to Follow - 02</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../../posts/data-science-steps-to-follow-part03/index.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Data Science Steps to Follow - 03</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../../posts/data-science-steps-to-follow-part04/index.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Data Science Steps to Follow - 04</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../../posts/data-science-steps-to-follow-part05/index.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Data Science Steps to Follow - 05</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../../posts/data-science-steps-to-follow-part06/index.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Data Science Steps to Follow - 06</span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-3" aria-expanded="true">
+ <span class="menu-text">Computer Vision Foundations</span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-3" aria-expanded="true" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-3" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../../posts/series/computer-vision-foundations.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Computer Vision Foundations Series</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../../posts/series/cv-foundations/01-why-computer-vision.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">1. Why Computer Vision?</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../../posts/series/cv-foundations/02-images-as-data.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">2. Images as Data</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../../posts/series/cv-foundations/03-opencv-essentials.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">3. OpenCV Essentials</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../../posts/series/cv-foundations/04-finding-patterns.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">4. Finding Patterns</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../../posts/series/cv-foundations/05-image-segmentation.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">5. Image Segmentation</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../../posts/series/cv-foundations/06-feature-magic.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">6. Feature Magic</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../../posts/series/cv-foundations/07-why-deep-learning.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">7. Why Deep Learning?</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../../posts/series/cv-foundations/08-modern-vision-models.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">8. Modern Vision Models</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../../posts/series/cv-foundations/09-first-cv-project.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">9. First CV Project</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../../posts/series/cv-foundations/10-where-to-go-next.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">10. Where to Go Next</span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-4" aria-expanded="true">
+ <span class="menu-text">Anomaly Detection</span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-4" aria-expanded="true" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-4" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../../posts/series/anomaly-detection/index.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Introduction</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../../posts/series/anomaly-detection/finding-the-oddballs.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Finding the Oddballs</span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-5" aria-expanded="true">
+ <span class="menu-text">VLM Series</span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-5" aria-expanded="true" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-5" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../../posts/series/vlm.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Introduction</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../../posts/series/vlm-qwen3-14b/index.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Qwen3-14B</span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+    </ul>
+    </div>
+</nav>
+<div id="quarto-sidebar-glass" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar,#quarto-sidebar-glass"></div>
+<!-- margin-sidebar -->
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+        <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">On this page</h2>
+   
+  <ul>
+  <li><a href="#the-speed-of-thought" id="toc-the-speed-of-thought" class="nav-link active" data-scroll-target="#the-speed-of-thought"><span class="header-section-number">0.1</span> The Speed of Thought</a></li>
+  <li><a href="#the-movement-mindset" id="toc-the-movement-mindset" class="nav-link" data-scroll-target="#the-movement-mindset"><span class="header-section-number">0.2</span> The Movement Mindset</a></li>
+  <li><a href="#the-essential-movement-commands" id="toc-the-essential-movement-commands" class="nav-link" data-scroll-target="#the-essential-movement-commands"><span class="header-section-number">0.3</span> The Essential Movement Commands</a>
+  <ul class="collapse">
+  <li><a href="#basic-movements-your-foundation" id="toc-basic-movements-your-foundation" class="nav-link" data-scroll-target="#basic-movements-your-foundation"><span class="header-section-number">0.3.1</span> Basic Movements: Your Foundation 🏃‍♂️</a></li>
+  <li><a href="#word-movements-think-in-words" id="toc-word-movements-think-in-words" class="nav-link" data-scroll-target="#word-movements-think-in-words"><span class="header-section-number">0.3.2</span> Word Movements: Think in Words 📝</a></li>
+  <li><a href="#line-movements-master-your-lines" id="toc-line-movements-master-your-lines" class="nav-link" data-scroll-target="#line-movements-master-your-lines"><span class="header-section-number">0.3.3</span> Line Movements: Master Your Lines 📏</a></li>
+  <li><a href="#screen-movements-see-the-big-picture" id="toc-screen-movements-see-the-big-picture" class="nav-link" data-scroll-target="#screen-movements-see-the-big-picture"><span class="header-section-number">0.3.4</span> Screen Movements: See the Big Picture 🖥️</a></li>
+  </ul></li>
+  <li><a href="#practical-examples-movement-in-action" id="toc-practical-examples-movement-in-action" class="nav-link" data-scroll-target="#practical-examples-movement-in-action"><span class="header-section-number">0.4</span> Practical Examples: Movement in Action</a>
+  <ul class="collapse">
+  <li><a href="#example-1-fixing-a-function-name" id="toc-example-1-fixing-a-function-name" class="nav-link" data-scroll-target="#example-1-fixing-a-function-name"><span class="header-section-number">0.4.1</span> Example 1: Fixing a Function Name</a></li>
+  <li><a href="#example-2-jumping-to-a-specific-line" id="toc-example-2-jumping-to-a-specific-line" class="nav-link" data-scroll-target="#example-2-jumping-to-a-specific-line"><span class="header-section-number">0.4.2</span> Example 2: Jumping to a Specific Line</a></li>
+  <li><a href="#example-3-moving-through-a-function" id="toc-example-3-moving-through-a-function" class="nav-link" data-scroll-target="#example-3-moving-through-a-function"><span class="header-section-number">0.4.3</span> Example 3: Moving Through a Function</a></li>
+  </ul></li>
+  <li><a href="#advanced-movement-the-power-moves" id="toc-advanced-movement-the-power-moves" class="nav-link" data-scroll-target="#advanced-movement-the-power-moves"><span class="header-section-number">0.5</span> Advanced Movement: The Power Moves 🚀</a>
+  <ul class="collapse">
+  <li><a href="#search-based-movement" id="toc-search-based-movement" class="nav-link" data-scroll-target="#search-based-movement"><span class="header-section-number">0.5.1</span> Search-Based Movement</a></li>
+  <li><a href="#character-based-movement" id="toc-character-based-movement" class="nav-link" data-scroll-target="#character-based-movement"><span class="header-section-number">0.5.2</span> Character-Based Movement</a></li>
+  <li><a href="#bracket-and-brace-movement" id="toc-bracket-and-brace-movement" class="nav-link" data-scroll-target="#bracket-and-brace-movement"><span class="header-section-number">0.5.3</span> Bracket and Brace Movement</a></li>
+  </ul></li>
+  <li><a href="#movement-combinations-the-magic-multiplier" id="toc-movement-combinations-the-magic-multiplier" class="nav-link" data-scroll-target="#movement-combinations-the-magic-multiplier"><span class="header-section-number">0.6</span> Movement Combinations: The Magic Multiplier ✨</a></li>
+  <li><a href="#practice-exercise-movement-mastery" id="toc-practice-exercise-movement-mastery" class="nav-link" data-scroll-target="#practice-exercise-movement-mastery"><span class="header-section-number">0.7</span> Practice Exercise: Movement Mastery</a></li>
+  <li><a href="#the-efficiency-mindset" id="toc-the-efficiency-mindset" class="nav-link" data-scroll-target="#the-efficiency-mindset"><span class="header-section-number">0.8</span> The Efficiency Mindset</a>
+  <ul class="collapse">
+  <li><a href="#instead-of-this" id="toc-instead-of-this" class="nav-link" data-scroll-target="#instead-of-this"><span class="header-section-number">0.8.1</span> Instead of This…</a></li>
+  <li><a href="#think-like-this" id="toc-think-like-this" class="nav-link" data-scroll-target="#think-like-this"><span class="header-section-number">0.8.2</span> Think Like This…</a></li>
+  </ul></li>
+  <li><a href="#common-movement-mistakes" id="toc-common-movement-mistakes" class="nav-link" data-scroll-target="#common-movement-mistakes"><span class="header-section-number">0.9</span> Common Movement Mistakes</a>
+  <ul class="collapse">
+  <li><a href="#mistake-1-using-arrow-keys" id="toc-mistake-1-using-arrow-keys" class="nav-link" data-scroll-target="#mistake-1-using-arrow-keys"><span class="header-section-number">0.9.1</span> Mistake 1: Using Arrow Keys</a></li>
+  <li><a href="#mistake-2-not-using-word-movements" id="toc-mistake-2-not-using-word-movements" class="nav-link" data-scroll-target="#mistake-2-not-using-word-movements"><span class="header-section-number">0.9.2</span> Mistake 2: Not Using Word Movements</a></li>
+  <li><a href="#mistake-3-ignoring-search" id="toc-mistake-3-ignoring-search" class="nav-link" data-scroll-target="#mistake-3-ignoring-search"><span class="header-section-number">0.9.3</span> Mistake 3: Ignoring Search</a></li>
+  <li><a href="#mistake-4-forgetting-line-jumps" id="toc-mistake-4-forgetting-line-jumps" class="nav-link" data-scroll-target="#mistake-4-forgetting-line-jumps"><span class="header-section-number">0.9.4</span> Mistake 4: Forgetting Line Jumps</a></li>
+  </ul></li>
+  <li><a href="#building-movement-muscle-memory" id="toc-building-movement-muscle-memory" class="nav-link" data-scroll-target="#building-movement-muscle-memory"><span class="header-section-number">0.10</span> Building Movement Muscle Memory</a>
+  <ul class="collapse">
+  <li><a href="#week-1-basic-movements" id="toc-week-1-basic-movements" class="nav-link" data-scroll-target="#week-1-basic-movements"><span class="header-section-number">0.10.1</span> Week 1: Basic Movements</a></li>
+  <li><a href="#week-2-screen-and-file-navigation" id="toc-week-2-screen-and-file-navigation" class="nav-link" data-scroll-target="#week-2-screen-and-file-navigation"><span class="header-section-number">0.10.2</span> Week 2: Screen and File Navigation</a></li>
+  <li><a href="#week-3-advanced-navigation" id="toc-week-3-advanced-navigation" class="nav-link" data-scroll-target="#week-3-advanced-navigation"><span class="header-section-number">0.10.3</span> Week 3: Advanced Navigation</a></li>
+  <li><a href="#week-4-combination-mastery" id="toc-week-4-combination-mastery" class="nav-link" data-scroll-target="#week-4-combination-mastery"><span class="header-section-number">0.10.4</span> Week 4: Combination Mastery</a></li>
+  </ul></li>
+  <li><a href="#speed-benchmarks" id="toc-speed-benchmarks" class="nav-link" data-scroll-target="#speed-benchmarks"><span class="header-section-number">0.11</span> Speed Benchmarks</a></li>
+  <li><a href="#whats-next" id="toc-whats-next" class="nav-link" data-scroll-target="#whats-next"><span class="header-section-number">0.12</span> What’s Next?</a></li>
+  <li><a href="#key-takeaways" id="toc-key-takeaways" class="nav-link" data-scroll-target="#key-takeaways"><span class="header-section-number">0.13</span> Key Takeaways</a></li>
+  </ul>
+</nav>
+    </div>
+<!-- main -->
+<main class="content quarto-banner-title-block" id="quarto-document-content">
+
+
+
+
+<section id="the-speed-of-thought" class="level2" data-number="0.1">
+<h2 data-number="0.1" class="anchored" data-anchor-id="the-speed-of-thought"><span class="header-section-number">0.1</span> The Speed of Thought</h2>
+<p>Imagine you’re reading a book, and every time you want to look at a different paragraph, you have to slowly drag your finger across each word. That’s what using arrow keys feels like to a Vim master!</p>
+<p>Vim movement is like teleportation - you think about where you want to go, and you’re there. Today, we’ll learn to move through text at the speed of thought.</p>
+</section>
+<section id="the-movement-mindset" class="level2" data-number="0.2">
+<h2 data-number="0.2" class="anchored" data-anchor-id="the-movement-mindset"><span class="header-section-number">0.2</span> The Movement Mindset</h2>
+<p><strong>Traditional editors</strong>: Move character by character, line by line <strong>Vim</strong>: Move by meaning - words, sentences, paragraphs, functions</p>
+<p><strong>Traditional</strong>: “I need to go 15 characters to the right” <strong>Vim</strong>: “I need to go to the next function”</p>
+<p>This mindset shift transforms how you think about text navigation.</p>
+</section>
+<section id="the-essential-movement-commands" class="level2" data-number="0.3">
+<h2 data-number="0.3" class="anchored" data-anchor-id="the-essential-movement-commands"><span class="header-section-number">0.3</span> The Essential Movement Commands</h2>
+<section id="basic-movements-your-foundation" class="level3" data-number="0.3.1">
+<h3 data-number="0.3.1" class="anchored" data-anchor-id="basic-movements-your-foundation"><span class="header-section-number">0.3.1</span> Basic Movements: Your Foundation 🏃‍♂️</h3>
+<p>These replace your arrow keys:</p>
+<table class="table">
+<thead>
+<tr class="header">
+<th>Command</th>
+<th>Movement</th>
+<th>Think</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><code>h</code></td>
+<td>Left</td>
+<td>“<strong>h</strong>and points left”</td>
+</tr>
+<tr class="even">
+<td><code>j</code></td>
+<td>Down</td>
+<td>“<strong>j</strong>umps down”</td>
+</tr>
+<tr class="odd">
+<td><code>k</code></td>
+<td>Up</td>
+<td>“<strong>k</strong>icks up”</td>
+</tr>
+<tr class="even">
+<td><code>l</code></td>
+<td>Right</td>
+<td>“<strong>l</strong>ooks right”</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Memory trick</strong>: <code>j</code> looks like a down arrow, <code>k</code> is above <code>j</code> so it goes up!</p>
+</section>
+<section id="word-movements-think-in-words" class="level3" data-number="0.3.2">
+<h3 data-number="0.3.2" class="anchored" data-anchor-id="word-movements-think-in-words"><span class="header-section-number">0.3.2</span> Word Movements: Think in Words 📝</h3>
+<table class="table">
+<thead>
+<tr class="header">
+<th>Command</th>
+<th>Movement</th>
+<th>Story</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><code>w</code></td>
+<td>Next word start</td>
+<td>“<strong>w</strong>ord forward”</td>
+</tr>
+<tr class="even">
+<td><code>b</code></td>
+<td>Previous word start</td>
+<td>“<strong>b</strong>ack a word”</td>
+</tr>
+<tr class="odd">
+<td><code>e</code></td>
+<td>Next word end</td>
+<td>“<strong>e</strong>nd of word”</td>
+</tr>
+<tr class="even">
+<td><code>ge</code></td>
+<td>Previous word end</td>
+<td>“<strong>g</strong>o to <strong>e</strong>nd backward”</td>
+</tr>
+</tbody>
+</table>
+</section>
+<section id="line-movements-master-your-lines" class="level3" data-number="0.3.3">
+<h3 data-number="0.3.3" class="anchored" data-anchor-id="line-movements-master-your-lines"><span class="header-section-number">0.3.3</span> Line Movements: Master Your Lines 📏</h3>
+<table class="table">
+<colgroup>
+<col style="width: 34%">
+<col style="width: 38%">
+<col style="width: 26%">
+</colgroup>
+<thead>
+<tr class="header">
+<th>Command</th>
+<th>Movement</th>
+<th>Story</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><code>0</code></td>
+<td>Start of line</td>
+<td>“<strong>0</strong> is the beginning”</td>
+</tr>
+<tr class="even">
+<td><code>^</code></td>
+<td>First non-blank character</td>
+<td>“<strong>^</strong> points to first real character”</td>
+</tr>
+<tr class="odd">
+<td><code>$</code></td>
+<td>End of line</td>
+<td>“<strong>$</strong> is the end in regex”</td>
+</tr>
+<tr class="even">
+<td><code>g_</code></td>
+<td>Last non-blank character</td>
+<td>“<strong>g</strong>o to last real character”</td>
+</tr>
+</tbody>
+</table>
+</section>
+<section id="screen-movements-see-the-big-picture" class="level3" data-number="0.3.4">
+<h3 data-number="0.3.4" class="anchored" data-anchor-id="screen-movements-see-the-big-picture"><span class="header-section-number">0.3.4</span> Screen Movements: See the Big Picture 🖥️</h3>
+<table class="table">
+<thead>
+<tr class="header">
+<th>Command</th>
+<th>Movement</th>
+<th>Story</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><code>H</code></td>
+<td>Top of screen</td>
+<td>“<strong>H</strong>igh on screen”</td>
+</tr>
+<tr class="even">
+<td><code>M</code></td>
+<td>Middle of screen</td>
+<td>“<strong>M</strong>iddle of screen”</td>
+</tr>
+<tr class="odd">
+<td><code>L</code></td>
+<td>Bottom of screen</td>
+<td>“<strong>L</strong>ow on screen”</td>
+</tr>
+<tr class="even">
+<td><code>gg</code></td>
+<td>Top of file</td>
+<td>“<strong>g</strong>o to beginning”</td>
+</tr>
+<tr class="odd">
+<td><code>G</code></td>
+<td>Bottom of file</td>
+<td>“<strong>G</strong>o to end”</td>
+</tr>
+</tbody>
+</table>
+</section>
+</section>
+<section id="practical-examples-movement-in-action" class="level2" data-number="0.4">
+<h2 data-number="0.4" class="anchored" data-anchor-id="practical-examples-movement-in-action"><span class="header-section-number">0.4</span> Practical Examples: Movement in Action</h2>
+<section id="example-1-fixing-a-function-name" class="level3" data-number="0.4.1">
+<h3 data-number="0.4.1" class="anchored" data-anchor-id="example-1-fixing-a-function-name"><span class="header-section-number">0.4.1</span> Example 1: Fixing a Function Name</h3>
+<p><strong>Scenario</strong>: You need to change <code>calculateTotal</code> to <code>computeSum</code> in this line:</p>
+<div class="sourceCode" id="cb1"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb1-1"><a href="#cb1-1"></a><span class="kw">def</span> calculateTotal(items):</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p><strong>Inefficient way</strong>: Arrow keys to navigate <strong>Vim way</strong>: 1. <code>^</code> - Jump to start of line 2. <code>w</code> - Move to “calculateTotal” 3. <code>cw</code> - Change word 4. Type “computeSum”</p>
+</section>
+<section id="example-2-jumping-to-a-specific-line" class="level3" data-number="0.4.2">
+<h3 data-number="0.4.2" class="anchored" data-anchor-id="example-2-jumping-to-a-specific-line"><span class="header-section-number">0.4.2</span> Example 2: Jumping to a Specific Line</h3>
+<p><strong>Scenario</strong>: Error on line 47</p>
+<p><strong>Inefficient way</strong>: Scroll and count <strong>Vim way</strong>: 1. <code>:47</code> - Jump directly to line 47 2. Or <code>47G</code> - Same result</p>
+</section>
+<section id="example-3-moving-through-a-function" class="level3" data-number="0.4.3">
+<h3 data-number="0.4.3" class="anchored" data-anchor-id="example-3-moving-through-a-function"><span class="header-section-number">0.4.3</span> Example 3: Moving Through a Function</h3>
+<p><strong>Scenario</strong>: Navigate through this function:</p>
+<div class="sourceCode" id="cb2"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb2-1"><a href="#cb2-1"></a><span class="kw">def</span> process_data(data):</span>
+<span id="cb2-2"><a href="#cb2-2"></a>    <span class="co"># Clean the data</span></span>
+<span id="cb2-3"><a href="#cb2-3"></a>    cleaned <span class="op">=</span> clean_data(data)</span>
+<span id="cb2-4"><a href="#cb2-4"></a>    </span>
+<span id="cb2-5"><a href="#cb2-5"></a>    <span class="co"># Transform it</span></span>
+<span id="cb2-6"><a href="#cb2-6"></a>    transformed <span class="op">=</span> transform_data(cleaned)</span>
+<span id="cb2-7"><a href="#cb2-7"></a>    </span>
+<span id="cb2-8"><a href="#cb2-8"></a>    <span class="co"># Return result</span></span>
+<span id="cb2-9"><a href="#cb2-9"></a>    <span class="cf">return</span> transformed</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p><strong>Vim way</strong>: - <code>}</code> - Jump to next paragraph (empty line) - <code>{</code> - Jump to previous paragraph - <code>w</code> - Move word by word through code - <code>$</code> - Jump to end of current line</p>
+</section>
+</section>
+<section id="advanced-movement-the-power-moves" class="level2" data-number="0.5">
+<h2 data-number="0.5" class="anchored" data-anchor-id="advanced-movement-the-power-moves"><span class="header-section-number">0.5</span> Advanced Movement: The Power Moves 🚀</h2>
+<section id="search-based-movement" class="level3" data-number="0.5.1">
+<h3 data-number="0.5.1" class="anchored" data-anchor-id="search-based-movement"><span class="header-section-number">0.5.1</span> Search-Based Movement</h3>
+<table class="table">
+<thead>
+<tr class="header">
+<th>Command</th>
+<th>Movement</th>
+<th>Story</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><code>/pattern</code></td>
+<td>Search forward</td>
+<td>“<strong>/</strong> means search”</td>
+</tr>
+<tr class="even">
+<td><code>?pattern</code></td>
+<td>Search backward</td>
+<td>“<strong>?</strong> questions search backward”</td>
+</tr>
+<tr class="odd">
+<td><code>n</code></td>
+<td>Next match</td>
+<td>“<strong>n</strong>ext result”</td>
+</tr>
+<tr class="even">
+<td><code>N</code></td>
+<td>Previous match</td>
+<td>“<strong>N</strong>ext backward”</td>
+</tr>
+<tr class="odd">
+<td><code>*</code></td>
+<td>Search word under cursor</td>
+<td>“***** highlights current word”</td>
+</tr>
+<tr class="even">
+<td><code>#</code></td>
+<td>Search word backward</td>
+<td>“<strong>#</strong> searches backward”</td>
+</tr>
+</tbody>
+</table>
+</section>
+<section id="character-based-movement" class="level3" data-number="0.5.2">
+<h3 data-number="0.5.2" class="anchored" data-anchor-id="character-based-movement"><span class="header-section-number">0.5.2</span> Character-Based Movement</h3>
+<table class="table">
+<thead>
+<tr class="header">
+<th>Command</th>
+<th>Movement</th>
+<th>Story</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><code>f{char}</code></td>
+<td>Find character forward</td>
+<td>“<strong>f</strong>ind character”</td>
+</tr>
+<tr class="even">
+<td><code>F{char}</code></td>
+<td>Find character backward</td>
+<td>“<strong>F</strong>ind backward”</td>
+</tr>
+<tr class="odd">
+<td><code>t{char}</code></td>
+<td>Till character forward</td>
+<td>“<strong>t</strong>ill character”</td>
+</tr>
+<tr class="even">
+<td><code>T{char}</code></td>
+<td>Till character backward</td>
+<td>“<strong>T</strong>ill backward”</td>
+</tr>
+<tr class="odd">
+<td><code>;</code></td>
+<td>Repeat last f/t</td>
+<td>“<strong>;</strong> continues search”</td>
+</tr>
+<tr class="even">
+<td><code>,</code></td>
+<td>Repeat last f/t backward</td>
+<td>“<strong>,</strong> goes back”</td>
+</tr>
+</tbody>
+</table>
+</section>
+<section id="bracket-and-brace-movement" class="level3" data-number="0.5.3">
+<h3 data-number="0.5.3" class="anchored" data-anchor-id="bracket-and-brace-movement"><span class="header-section-number">0.5.3</span> Bracket and Brace Movement</h3>
+<table class="table">
+<thead>
+<tr class="header">
+<th>Command</th>
+<th>Movement</th>
+<th>Story</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><code>%</code></td>
+<td>Match bracket/brace</td>
+<td>“<strong>%</strong> matches pairs”</td>
+</tr>
+<tr class="even">
+<td><code>[{</code></td>
+<td>Previous opening brace</td>
+<td>“<strong>[</strong> opens backward”</td>
+</tr>
+<tr class="odd">
+<td><code>]}</code></td>
+<td>Next closing brace</td>
+<td>“<strong>]</strong> closes forward”</td>
+</tr>
+</tbody>
+</table>
+</section>
+</section>
+<section id="movement-combinations-the-magic-multiplier" class="level2" data-number="0.6">
+<h2 data-number="0.6" class="anchored" data-anchor-id="movement-combinations-the-magic-multiplier"><span class="header-section-number">0.6</span> Movement Combinations: The Magic Multiplier ✨</h2>
+<p>You can combine numbers with movements:</p>
+<table class="table">
+<thead>
+<tr class="header">
+<th>Command</th>
+<th>Movement</th>
+<th>Example</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><code>3w</code></td>
+<td>Move 3 words forward</td>
+<td>Jump over 3 words</td>
+</tr>
+<tr class="even">
+<td><code>5j</code></td>
+<td>Move 5 lines down</td>
+<td>Skip 5 lines</td>
+</tr>
+<tr class="odd">
+<td><code>2f.</code></td>
+<td>Find 2nd period</td>
+<td>Jump to second dot</td>
+</tr>
+<tr class="even">
+<td><code>4$</code></td>
+<td>Move to end of 4th line down</td>
+<td>Jump to end of 4th line</td>
+</tr>
+</tbody>
+</table>
+</section>
+<section id="practice-exercise-movement-mastery" class="level2" data-number="0.7">
+<h2 data-number="0.7" class="anchored" data-anchor-id="practice-exercise-movement-mastery"><span class="header-section-number">0.7</span> Practice Exercise: Movement Mastery</h2>
+<p>Create a file with this content:</p>
+<div class="sourceCode" id="cb3"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb3-1"><a href="#cb3-1"></a><span class="kw">def</span> calculate_total(items):</span>
+<span id="cb3-2"><a href="#cb3-2"></a>    <span class="co">"""Calculate the total price of items."""</span></span>
+<span id="cb3-3"><a href="#cb3-3"></a>    total <span class="op">=</span> <span class="dv">0</span></span>
+<span id="cb3-4"><a href="#cb3-4"></a>    <span class="cf">for</span> item <span class="kw">in</span> items:</span>
+<span id="cb3-5"><a href="#cb3-5"></a>        <span class="cf">if</span> item.price <span class="op">&gt;</span> <span class="dv">0</span>:</span>
+<span id="cb3-6"><a href="#cb3-6"></a>            total <span class="op">+=</span> item.price</span>
+<span id="cb3-7"><a href="#cb3-7"></a>        <span class="cf">else</span>:</span>
+<span id="cb3-8"><a href="#cb3-8"></a>            <span class="bu">print</span>(<span class="ss">f"Warning: </span><span class="sc">{</span>item<span class="sc">.</span>name<span class="sc">}</span><span class="ss"> has invalid price"</span>)</span>
+<span id="cb3-9"><a href="#cb3-9"></a>    <span class="cf">return</span> total</span>
+<span id="cb3-10"><a href="#cb3-10"></a></span>
+<span id="cb3-11"><a href="#cb3-11"></a><span class="kw">def</span> process_order(order):</span>
+<span id="cb3-12"><a href="#cb3-12"></a>    <span class="co">"""Process a customer order."""</span></span>
+<span id="cb3-13"><a href="#cb3-13"></a>    items <span class="op">=</span> order.items</span>
+<span id="cb3-14"><a href="#cb3-14"></a>    total <span class="op">=</span> calculate_total(items)</span>
+<span id="cb3-15"><a href="#cb3-15"></a>    <span class="cf">return</span> {<span class="st">"total"</span>: total, <span class="st">"status"</span>: <span class="st">"processed"</span>}</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p><strong>Practice these movements</strong>: 1. <code>gg</code> - Go to top 2. <code>f(</code> - Find first parenthesis 3. <code>w</code> - Move to next word 4. <code>$</code> - End of line 5. <code>j</code> - Down one line 6. <code>^</code> - Start of line 7. <code>/total</code> - Search for “total” 8. <code>n</code> - Next occurrence 9. <code>G</code> - Go to bottom 10. <code>%</code> - Match the closing brace</p>
+</section>
+<section id="the-efficiency-mindset" class="level2" data-number="0.8">
+<h2 data-number="0.8" class="anchored" data-anchor-id="the-efficiency-mindset"><span class="header-section-number">0.8</span> The Efficiency Mindset</h2>
+<section id="instead-of-this" class="level3" data-number="0.8.1">
+<h3 data-number="0.8.1" class="anchored" data-anchor-id="instead-of-this"><span class="header-section-number">0.8.1</span> Instead of This…</h3>
+<ul>
+<li>Arrow keys: ↓↓↓→→→→→→→→</li>
+<li>Mouse: Click and drag</li>
+<li>Page Up/Down: Scroll and search</li>
+</ul>
+</section>
+<section id="think-like-this" class="level3" data-number="0.8.2">
+<h3 data-number="0.8.2" class="anchored" data-anchor-id="think-like-this"><span class="header-section-number">0.8.2</span> Think Like This…</h3>
+<ul>
+<li>“I want the next function” → <code>}</code></li>
+<li>“I want that word” → <code>w</code> or <code>/word</code></li>
+<li>“I want line 25” → <code>:25</code></li>
+<li>“I want the matching brace” → <code>%</code></li>
+</ul>
+</section>
+</section>
+<section id="common-movement-mistakes" class="level2" data-number="0.9">
+<h2 data-number="0.9" class="anchored" data-anchor-id="common-movement-mistakes"><span class="header-section-number">0.9</span> Common Movement Mistakes</h2>
+<section id="mistake-1-using-arrow-keys" class="level3" data-number="0.9.1">
+<h3 data-number="0.9.1" class="anchored" data-anchor-id="mistake-1-using-arrow-keys"><span class="header-section-number">0.9.1</span> Mistake 1: Using Arrow Keys</h3>
+<p><strong>Problem</strong>: Slow and inefficient <strong>Solution</strong>: Force yourself to use <code>hjkl</code> for a week</p>
+</section>
+<section id="mistake-2-not-using-word-movements" class="level3" data-number="0.9.2">
+<h3 data-number="0.9.2" class="anchored" data-anchor-id="mistake-2-not-using-word-movements"><span class="header-section-number">0.9.2</span> Mistake 2: Not Using Word Movements</h3>
+<p><strong>Problem</strong>: Moving character by character <strong>Solution</strong>: Think in words, use <code>w</code>, <code>b</code>, <code>e</code></p>
+</section>
+<section id="mistake-3-ignoring-search" class="level3" data-number="0.9.3">
+<h3 data-number="0.9.3" class="anchored" data-anchor-id="mistake-3-ignoring-search"><span class="header-section-number">0.9.3</span> Mistake 3: Ignoring Search</h3>
+<p><strong>Problem</strong>: Scrolling to find text <strong>Solution</strong>: Use <code>/</code> to search, <code>n</code> to repeat</p>
+</section>
+<section id="mistake-4-forgetting-line-jumps" class="level3" data-number="0.9.4">
+<h3 data-number="0.9.4" class="anchored" data-anchor-id="mistake-4-forgetting-line-jumps"><span class="header-section-number">0.9.4</span> Mistake 4: Forgetting Line Jumps</h3>
+<p><strong>Problem</strong>: Scrolling to specific lines <strong>Solution</strong>: Use <code>:number</code> or <code>numberG</code></p>
+</section>
+</section>
+<section id="building-movement-muscle-memory" class="level2" data-number="0.10">
+<h2 data-number="0.10" class="anchored" data-anchor-id="building-movement-muscle-memory"><span class="header-section-number">0.10</span> Building Movement Muscle Memory</h2>
+<section id="week-1-basic-movements" class="level3" data-number="0.10.1">
+<h3 data-number="0.10.1" class="anchored" data-anchor-id="week-1-basic-movements"><span class="header-section-number">0.10.1</span> Week 1: Basic Movements</h3>
+<ul>
+<li>Replace arrow keys with <code>hjkl</code></li>
+<li>Use <code>w</code> and <code>b</code> for word movement</li>
+<li>Practice <code>0</code> and <code>$</code> for line navigation</li>
+</ul>
+</section>
+<section id="week-2-screen-and-file-navigation" class="level3" data-number="0.10.2">
+<h3 data-number="0.10.2" class="anchored" data-anchor-id="week-2-screen-and-file-navigation"><span class="header-section-number">0.10.2</span> Week 2: Screen and File Navigation</h3>
+<ul>
+<li>Use <code>gg</code> and <code>G</code> for file navigation</li>
+<li>Practice <code>H</code>, <code>M</code>, <code>L</code> for screen movement</li>
+<li>Start using <code>{}</code> for paragraph jumping</li>
+</ul>
+</section>
+<section id="week-3-advanced-navigation" class="level3" data-number="0.10.3">
+<h3 data-number="0.10.3" class="anchored" data-anchor-id="week-3-advanced-navigation"><span class="header-section-number">0.10.3</span> Week 3: Advanced Navigation</h3>
+<ul>
+<li>Master <code>f</code> and <code>t</code> for character finding</li>
+<li>Use <code>/</code> and <code>?</code> for searching</li>
+<li>Practice <code>%</code> for bracket matching</li>
+</ul>
+</section>
+<section id="week-4-combination-mastery" class="level3" data-number="0.10.4">
+<h3 data-number="0.10.4" class="anchored" data-anchor-id="week-4-combination-mastery"><span class="header-section-number">0.10.4</span> Week 4: Combination Mastery</h3>
+<ul>
+<li>Combine numbers with movements (<code>3w</code>, <code>5j</code>)</li>
+<li>Use search with navigation (<code>/function</code> then <code>n</code>)</li>
+<li>Practice complex movements in real code</li>
+</ul>
+</section>
+</section>
+<section id="speed-benchmarks" class="level2" data-number="0.11">
+<h2 data-number="0.11" class="anchored" data-anchor-id="speed-benchmarks"><span class="header-section-number">0.11</span> Speed Benchmarks</h2>
+<p>Track your progress:</p>
+<p><strong>Beginner</strong>: Moving to a word takes 5+ keystrokes <strong>Intermediate</strong>: Moving to a word takes 2-3 keystrokes <strong>Advanced</strong>: Moving to a word takes 1-2 keystrokes <strong>Expert</strong>: You think of a location and you’re there</p>
+</section>
+<section id="whats-next" class="level2" data-number="0.12">
+<h2 data-number="0.12" class="anchored" data-anchor-id="whats-next"><span class="header-section-number">0.12</span> What’s Next?</h2>
+<p>You now know: - Basic movement commands (<code>hjkl</code>, <code>w</code>, <code>b</code>, <code>e</code>) - Line navigation (<code>0</code>, <code>^</code>, <code>$</code>) - File navigation (<code>gg</code>, <code>G</code>, <code>H</code>, <code>M</code>, <code>L</code>) - Search-based movement (<code>/</code>, <code>?</code>, <code>n</code>, <code>N</code>) - Character finding (<code>f</code>, <code>t</code>, <code>;</code>, <code>,</code>) - Movement combinations (numbers + movements)</p>
+<p>In the next post, we’ll learn about <a href="../../../posts/series/vim-mastery/04-text-objects.html">Text Objects: The Secret Weapon</a> and discover how to select exactly what you want to edit.</p>
+</section>
+<section id="key-takeaways" class="level2" data-number="0.13">
+<h2 data-number="0.13" class="anchored" data-anchor-id="key-takeaways"><span class="header-section-number">0.13</span> Key Takeaways</h2>
+<ol type="1">
+<li><strong>Think in meaning, not characters</strong> - move by words, not letters</li>
+<li><strong>Use search for distant targets</strong> - <code>/</code> is faster than scrolling</li>
+<li><strong>Combine numbers with movements</strong> - <code>3w</code> is better than <code>www</code></li>
+<li><strong>Practice daily</strong> - muscle memory is everything</li>
+<li><strong>Don’t use arrow keys</strong> - force yourself to use <code>hjkl</code></li>
+</ol>
+<p>Movement is the foundation of Vim mastery. Once you can navigate at the speed of thought, everything else becomes natural.</p>
+<hr>
+<p><em>Ready to select like a pro? Continue with <a href="../../../posts/series/vim-mastery/04-text-objects.html">Text Objects: The Secret Weapon</a> to master precise text selection.</em></p>
+
+
+<!-- -->
+
+</section>
+
+<div id="quarto-appendix" class="default"><section class="quarto-appendix-contents"><h2 class="anchored quarto-appendix-heading">Reuse</h2><div id="quarto-reuse" class="quarto-appendix-contents"><div>CC BY-NC-SA 4.0</div></div></section><section class="quarto-appendix-contents"><h2 class="anchored quarto-appendix-heading">Citation</h2><div><div class="quarto-appendix-secondary-label">BibTeX citation:</div><pre class="sourceCode code-with-copy quarto-appendix-bibtex"><code class="sourceCode bibtex">@online{2025,
+  author = {, Hasan},
+  title = {Navigate {Like} a {Pro:} {Movement} {Mastery} in {Vim}},
+  date = {2025-07-18},
+  url = {https://hasangoni.quarto.pub/hasan-blog-post/posts/series/vim-mastery/03-movement-mastery.html},
+  langid = {en}
+}
+</code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre><div class="quarto-appendix-secondary-label">For attribution, please cite this work as:</div><div id="ref-2025" class="csl-entry quarto-appendix-citeas" role="listitem">
+Hasan. 2025. <span>“Navigate Like a Pro: Movement Mastery in
+Vim.”</span> July 18, 2025. <a href="https://hasangoni.quarto.pub/hasan-blog-post/posts/series/vim-mastery/03-movement-mastery.html">https://hasangoni.quarto.pub/hasan-blog-post/posts/series/vim-mastery/03-movement-mastery.html</a>.
+</div></div></section></div></main> <!-- /main -->
+<script id="quarto-html-after-body" type="application/javascript">
+window.document.addEventListener("DOMContentLoaded", function (event) {
+  const toggleBodyColorMode = (bsSheetEl) => {
+    const mode = bsSheetEl.getAttribute("data-mode");
+    const bodyEl = window.document.querySelector("body");
+    if (mode === "dark") {
+      bodyEl.classList.add("quarto-dark");
+      bodyEl.classList.remove("quarto-light");
+    } else {
+      bodyEl.classList.add("quarto-light");
+      bodyEl.classList.remove("quarto-dark");
+    }
+  }
+  const toggleBodyColorPrimary = () => {
+    const bsSheetEl = window.document.querySelector("link#quarto-bootstrap");
+    if (bsSheetEl) {
+      toggleBodyColorMode(bsSheetEl);
+    }
+  }
+  toggleBodyColorPrimary();  
+  const icon = "";
+  const anchorJS = new window.AnchorJS();
+  anchorJS.options = {
+    placement: 'right',
+    icon: icon
+  };
+  anchorJS.add('.anchored');
+  const isCodeAnnotation = (el) => {
+    for (const clz of el.classList) {
+      if (clz.startsWith('code-annotation-')) {                     
+        return true;
+      }
+    }
+    return false;
+  }
+  const clipboard = new window.ClipboardJS('.code-copy-button', {
+    text: function(trigger) {
+      const codeEl = trigger.previousElementSibling.cloneNode(true);
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
+        }
+      }
+      return codeEl.innerText;
+    }
+  });
+  clipboard.on('success', function(e) {
+    // button target
+    const button = e.trigger;
+    // don't keep focus
+    button.blur();
+    // flash "checked"
+    button.classList.add('code-copy-button-checked');
+    var currentTitle = button.getAttribute("title");
+    button.setAttribute("title", "Copied!");
+    let tooltip;
+    if (window.bootstrap) {
+      button.setAttribute("data-bs-toggle", "tooltip");
+      button.setAttribute("data-bs-placement", "left");
+      button.setAttribute("data-bs-title", "Copied!");
+      tooltip = new bootstrap.Tooltip(button, 
+        { trigger: "manual", 
+          customClass: "code-copy-button-tooltip",
+          offset: [0, -8]});
+      tooltip.show();    
+    }
+    setTimeout(function() {
+      if (tooltip) {
+        tooltip.hide();
+        button.removeAttribute("data-bs-title");
+        button.removeAttribute("data-bs-toggle");
+        button.removeAttribute("data-bs-placement");
+      }
+      button.setAttribute("title", currentTitle);
+      button.classList.remove('code-copy-button-checked');
+    }, 1000);
+    // clear code selection
+    e.clearSelection();
+  });
+  const viewSource = window.document.getElementById('quarto-view-source') ||
+                     window.document.getElementById('quarto-code-tools-source');
+  if (viewSource) {
+    const sourceUrl = viewSource.getAttribute("data-quarto-source-url");
+    viewSource.addEventListener("click", function(e) {
+      if (sourceUrl) {
+        // rstudio viewer pane
+        if (/\bcapabilities=\b/.test(window.location)) {
+          window.open(sourceUrl);
+        } else {
+          window.location.href = sourceUrl;
+        }
+      } else {
+        const modal = new bootstrap.Modal(document.getElementById('quarto-embedded-source-code-modal'));
+        modal.show();
+      }
+      return false;
+    });
+  }
+  function toggleCodeHandler(show) {
+    return function(e) {
+      const detailsSrc = window.document.querySelectorAll(".cell > details > .sourceCode");
+      for (let i=0; i<detailsSrc.length; i++) {
+        const details = detailsSrc[i].parentElement;
+        if (show) {
+          details.open = true;
+        } else {
+          details.removeAttribute("open");
+        }
+      }
+      const cellCodeDivs = window.document.querySelectorAll(".cell > .sourceCode");
+      const fromCls = show ? "hidden" : "unhidden";
+      const toCls = show ? "unhidden" : "hidden";
+      for (let i=0; i<cellCodeDivs.length; i++) {
+        const codeDiv = cellCodeDivs[i];
+        if (codeDiv.classList.contains(fromCls)) {
+          codeDiv.classList.remove(fromCls);
+          codeDiv.classList.add(toCls);
+        } 
+      }
+      return false;
+    }
+  }
+  const hideAllCode = window.document.getElementById("quarto-hide-all-code");
+  if (hideAllCode) {
+    hideAllCode.addEventListener("click", toggleCodeHandler(false));
+  }
+  const showAllCode = window.document.getElementById("quarto-show-all-code");
+  if (showAllCode) {
+    showAllCode.addEventListener("click", toggleCodeHandler(true));
+  }
+  function tippyHover(el, contentFn) {
+    const config = {
+      allowHTML: true,
+      content: contentFn,
+      maxWidth: 500,
+      delay: 100,
+      arrow: false,
+      appendTo: function(el) {
+          return el.parentElement;
+      },
+      interactive: true,
+      interactiveBorder: 10,
+      theme: 'quarto',
+      placement: 'bottom-start'
+    };
+    window.tippy(el, config); 
+  }
+  const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+  for (var i=0; i<noterefs.length; i++) {
+    const ref = noterefs[i];
+    tippyHover(ref, function() {
+      // use id or data attribute instead here
+      let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+      try { href = new URL(href).hash; } catch {}
+      const id = href.replace(/^#\/?/, "");
+      const note = window.document.getElementById(id);
+      return note.innerHTML;
+    });
+  }
+      let selectedAnnoteEl;
+      const selectorForAnnotation = ( cell, annotation) => {
+        let cellAttr = 'data-code-cell="' + cell + '"';
+        let lineAttr = 'data-code-annotation="' +  annotation + '"';
+        const selector = 'span[' + cellAttr + '][' + lineAttr + ']';
+        return selector;
+      }
+      const selectCodeLines = (annoteEl) => {
+        const doc = window.document;
+        const targetCell = annoteEl.getAttribute("data-target-cell");
+        const targetAnnotation = annoteEl.getAttribute("data-target-annotation");
+        const annoteSpan = window.document.querySelector(selectorForAnnotation(targetCell, targetAnnotation));
+        const lines = annoteSpan.getAttribute("data-code-lines").split(",");
+        const lineIds = lines.map((line) => {
+          return targetCell + "-" + line;
+        })
+        let top = null;
+        let height = null;
+        let parent = null;
+        if (lineIds.length > 0) {
+            //compute the position of the single el (top and bottom and make a div)
+            const el = window.document.getElementById(lineIds[0]);
+            top = el.offsetTop;
+            height = el.offsetHeight;
+            parent = el.parentElement.parentElement;
+          if (lineIds.length > 1) {
+            const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
+            const bottom = lastEl.offsetTop + lastEl.offsetHeight;
+            height = bottom - top;
+          }
+          if (top !== null && height !== null && parent !== null) {
+            // cook up a div (if necessary) and position it 
+            let div = window.document.getElementById("code-annotation-line-highlight");
+            if (div === null) {
+              div = window.document.createElement("div");
+              div.setAttribute("id", "code-annotation-line-highlight");
+              div.style.position = 'absolute';
+              parent.appendChild(div);
+            }
+            div.style.top = top - 2 + "px";
+            div.style.height = height + 4 + "px";
+            let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
+            if (gutterDiv === null) {
+              gutterDiv = window.document.createElement("div");
+              gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
+              gutterDiv.style.position = 'absolute';
+              const codeCell = window.document.getElementById(targetCell);
+              const gutter = codeCell.querySelector('.code-annotation-gutter');
+              gutter.appendChild(gutterDiv);
+            }
+            gutterDiv.style.top = top - 2 + "px";
+            gutterDiv.style.height = height + 4 + "px";
+          }
+          selectedAnnoteEl = annoteEl;
+        }
+      };
+      const unselectCodeLines = () => {
+        const elementsIds = ["code-annotation-line-highlight", "code-annotation-line-highlight-gutter"];
+        elementsIds.forEach((elId) => {
+          const div = window.document.getElementById(elId);
+          if (div) {
+            div.remove();
+          }
+        });
+        selectedAnnoteEl = undefined;
+      };
+      // Attach click handler to the DT
+      const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
+      for (const annoteDlNode of annoteDls) {
+        annoteDlNode.addEventListener('click', (event) => {
+          const clickedEl = event.target;
+          if (clickedEl !== selectedAnnoteEl) {
+            unselectCodeLines();
+            const activeEl = window.document.querySelector('dt[data-target-cell].code-annotation-active');
+            if (activeEl) {
+              activeEl.classList.remove('code-annotation-active');
+            }
+            selectCodeLines(clickedEl);
+            clickedEl.classList.add('code-annotation-active');
+          } else {
+            // Unselect the line
+            unselectCodeLines();
+            clickedEl.classList.remove('code-annotation-active');
+          }
+        });
+      }
+  const findCites = (el) => {
+    const parentEl = el.parentElement;
+    if (parentEl) {
+      const cites = parentEl.dataset.cites;
+      if (cites) {
+        return {
+          el,
+          cites: cites.split(' ')
+        };
+      } else {
+        return findCites(el.parentElement)
+      }
+    } else {
+      return undefined;
+    }
+  };
+  var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+  for (var i=0; i<bibliorefs.length; i++) {
+    const ref = bibliorefs[i];
+    const citeInfo = findCites(ref);
+    if (citeInfo) {
+      tippyHover(citeInfo.el, function() {
+        var popup = window.document.createElement('div');
+        citeInfo.cites.forEach(function(cite) {
+          var citeDiv = window.document.createElement('div');
+          citeDiv.classList.add('hanging-indent');
+          citeDiv.classList.add('csl-entry');
+          var biblioDiv = window.document.getElementById('ref-' + cite);
+          if (biblioDiv) {
+            citeDiv.innerHTML = biblioDiv.innerHTML;
+          }
+          popup.appendChild(citeDiv);
+        });
+        return popup.innerHTML;
+      });
+    }
+  }
+});
+</script>
+<script src="https://utteranc.es/client.js" repo="yourusername/quarto_blog_hasan" issue-term="pathname" theme="github-light" crossorigin="anonymous" async="">
+</script>
+<script src="https://giscus.app/client.js" data-repo="HasanGoni/quarto_blog_hasan" data-repo-id="" data-category="General" data-category-id="" data-mapping="title" data-reactions-enabled="1" data-emit-metadata="0" data-input-position="top" data-theme="light" data-lang="en" crossorigin="anonymous" async="">
+</script><div class="modal fade" id="quarto-embedded-source-code-modal" tabindex="-1" aria-labelledby="quarto-embedded-source-code-modal-label" aria-hidden="true"><div class="modal-dialog modal-dialog-scrollable"><div class="modal-content"><div class="modal-header"><h5 class="modal-title" id="quarto-embedded-source-code-modal-label">Source Code</h5><button class="btn-close" data-bs-dismiss="modal"></button></div><div class="modal-body"><div class="">
+<div class="sourceCode" id="cb4" data-shortcodes="false"><pre class="sourceCode numberSource markdown number-lines code-with-copy"><code class="sourceCode markdown"><span id="cb4-1"><a href="#cb4-1"></a><span class="co">---</span></span>
+<span id="cb4-2"><a href="#cb4-2"></a><span class="an">title:</span><span class="co"> "Navigate Like a Pro: Movement Mastery in Vim"</span></span>
+<span id="cb4-3"><a href="#cb4-3"></a><span class="an">description:</span><span class="co"> "Master the art of moving through text at the speed of thought. Learn the 20% of movement commands that provide 80% of navigation power."</span></span>
+<span id="cb4-4"><a href="#cb4-4"></a><span class="an">author:</span><span class="co"> "Hasan"</span></span>
+<span id="cb4-5"><a href="#cb4-5"></a><span class="an">date:</span><span class="co"> last-modified</span></span>
+<span id="cb4-6"><a href="#cb4-6"></a><span class="an">categories:</span><span class="co"> [vim, movement, navigation, efficiency]</span></span>
+<span id="cb4-7"><a href="#cb4-7"></a><span class="an">image:</span><span class="co"> "images/vim.png"</span></span>
+<span id="cb4-8"><a href="#cb4-8"></a><span class="an">toc:</span><span class="co"> true</span></span>
+<span id="cb4-9"><a href="#cb4-9"></a><span class="co">---</span></span>
+<span id="cb4-10"><a href="#cb4-10"></a></span>
+<span id="cb4-11"><a href="#cb4-11"></a><span class="fu">## The Speed of Thought</span></span>
+<span id="cb4-12"><a href="#cb4-12"></a></span>
+<span id="cb4-13"><a href="#cb4-13"></a>Imagine you're reading a book, and every time you want to look at a different paragraph, you have to slowly drag your finger across each word. That's what using arrow keys feels like to a Vim master!</span>
+<span id="cb4-14"><a href="#cb4-14"></a></span>
+<span id="cb4-15"><a href="#cb4-15"></a>Vim movement is like teleportation - you think about where you want to go, and you're there. Today, we'll learn to move through text at the speed of thought.</span>
+<span id="cb4-16"><a href="#cb4-16"></a></span>
+<span id="cb4-17"><a href="#cb4-17"></a><span class="fu">## The Movement Mindset</span></span>
+<span id="cb4-18"><a href="#cb4-18"></a></span>
+<span id="cb4-19"><a href="#cb4-19"></a>**Traditional editors**: Move character by character, line by line</span>
+<span id="cb4-20"><a href="#cb4-20"></a>**Vim**: Move by meaning - words, sentences, paragraphs, functions</span>
+<span id="cb4-21"><a href="#cb4-21"></a></span>
+<span id="cb4-22"><a href="#cb4-22"></a>**Traditional**: "I need to go 15 characters to the right"</span>
+<span id="cb4-23"><a href="#cb4-23"></a>**Vim**: "I need to go to the next function"</span>
+<span id="cb4-24"><a href="#cb4-24"></a></span>
+<span id="cb4-25"><a href="#cb4-25"></a>This mindset shift transforms how you think about text navigation.</span>
+<span id="cb4-26"><a href="#cb4-26"></a></span>
+<span id="cb4-27"><a href="#cb4-27"></a><span class="fu">## The Essential Movement Commands</span></span>
+<span id="cb4-28"><a href="#cb4-28"></a></span>
+<span id="cb4-29"><a href="#cb4-29"></a><span class="fu">### Basic Movements: Your Foundation 🏃‍♂️</span></span>
+<span id="cb4-30"><a href="#cb4-30"></a></span>
+<span id="cb4-31"><a href="#cb4-31"></a>These replace your arrow keys:</span>
+<span id="cb4-32"><a href="#cb4-32"></a></span>
+<span id="cb4-33"><a href="#cb4-33"></a>| Command | Movement | Think |</span>
+<span id="cb4-34"><a href="#cb4-34"></a>|---------|----------|-------|</span>
+<span id="cb4-35"><a href="#cb4-35"></a>| <span class="in">`h`</span> | Left | "**h**and points left" |</span>
+<span id="cb4-36"><a href="#cb4-36"></a>| <span class="in">`j`</span> | Down | "**j**umps down" |</span>
+<span id="cb4-37"><a href="#cb4-37"></a>| <span class="in">`k`</span> | Up | "**k**icks up" |</span>
+<span id="cb4-38"><a href="#cb4-38"></a>| <span class="in">`l`</span> | Right | "**l**ooks right" |</span>
+<span id="cb4-39"><a href="#cb4-39"></a></span>
+<span id="cb4-40"><a href="#cb4-40"></a>**Memory trick**: <span class="in">`j`</span> looks like a down arrow, <span class="in">`k`</span> is above <span class="in">`j`</span> so it goes up!</span>
+<span id="cb4-41"><a href="#cb4-41"></a></span>
+<span id="cb4-42"><a href="#cb4-42"></a><span class="fu">### Word Movements: Think in Words 📝</span></span>
+<span id="cb4-43"><a href="#cb4-43"></a></span>
+<span id="cb4-44"><a href="#cb4-44"></a>| Command | Movement | Story |</span>
+<span id="cb4-45"><a href="#cb4-45"></a>|---------|----------|-------|</span>
+<span id="cb4-46"><a href="#cb4-46"></a>| <span class="in">`w`</span> | Next word start | "**w**ord forward" |</span>
+<span id="cb4-47"><a href="#cb4-47"></a>| <span class="in">`b`</span> | Previous word start | "**b**ack a word" |</span>
+<span id="cb4-48"><a href="#cb4-48"></a>| <span class="in">`e`</span> | Next word end | "**e**nd of word" |</span>
+<span id="cb4-49"><a href="#cb4-49"></a>| <span class="in">`ge`</span> | Previous word end | "**g**o to **e**nd backward" |</span>
+<span id="cb4-50"><a href="#cb4-50"></a></span>
+<span id="cb4-51"><a href="#cb4-51"></a><span class="fu">### Line Movements: Master Your Lines 📏</span></span>
+<span id="cb4-52"><a href="#cb4-52"></a></span>
+<span id="cb4-53"><a href="#cb4-53"></a>| Command | Movement | Story |</span>
+<span id="cb4-54"><a href="#cb4-54"></a>|---------|----------|-------|</span>
+<span id="cb4-55"><a href="#cb4-55"></a>| <span class="in">`0`</span> | Start of line | "**0** is the beginning" |</span>
+<span id="cb4-56"><a href="#cb4-56"></a>| <span class="in">`^`</span> | First non-blank character | "**^** points to first real character" |</span>
+<span id="cb4-57"><a href="#cb4-57"></a>| <span class="in">`$`</span> | End of line | "**$** is the end in regex" |</span>
+<span id="cb4-58"><a href="#cb4-58"></a>| <span class="in">`g_`</span> | Last non-blank character | "**g**o to last real character" |</span>
+<span id="cb4-59"><a href="#cb4-59"></a></span>
+<span id="cb4-60"><a href="#cb4-60"></a><span class="fu">### Screen Movements: See the Big Picture 🖥️</span></span>
+<span id="cb4-61"><a href="#cb4-61"></a></span>
+<span id="cb4-62"><a href="#cb4-62"></a>| Command | Movement | Story |</span>
+<span id="cb4-63"><a href="#cb4-63"></a>|---------|----------|-------|</span>
+<span id="cb4-64"><a href="#cb4-64"></a>| <span class="in">`H`</span> | Top of screen | "**H**igh on screen" |</span>
+<span id="cb4-65"><a href="#cb4-65"></a>| <span class="in">`M`</span> | Middle of screen | "**M**iddle of screen" |</span>
+<span id="cb4-66"><a href="#cb4-66"></a>| <span class="in">`L`</span> | Bottom of screen | "**L**ow on screen" |</span>
+<span id="cb4-67"><a href="#cb4-67"></a>| <span class="in">`gg`</span> | Top of file | "**g**o to beginning" |</span>
+<span id="cb4-68"><a href="#cb4-68"></a>| <span class="in">`G`</span> | Bottom of file | "**G**o to end" |</span>
+<span id="cb4-69"><a href="#cb4-69"></a></span>
+<span id="cb4-70"><a href="#cb4-70"></a><span class="fu">## Practical Examples: Movement in Action</span></span>
+<span id="cb4-71"><a href="#cb4-71"></a></span>
+<span id="cb4-72"><a href="#cb4-72"></a><span class="fu">### Example 1: Fixing a Function Name</span></span>
+<span id="cb4-73"><a href="#cb4-73"></a></span>
+<span id="cb4-74"><a href="#cb4-74"></a>**Scenario**: You need to change <span class="in">`calculateTotal`</span> to <span class="in">`computeSum`</span> in this line:</span>
+<span id="cb4-75"><a href="#cb4-75"></a><span class="in">```python</span></span>
+<span id="cb4-76"><a href="#cb4-76"></a><span class="kw">def</span> calculateTotal(items):</span>
+<span id="cb4-77"><a href="#cb4-77"></a><span class="in">```</span></span>
+<span id="cb4-78"><a href="#cb4-78"></a></span>
+<span id="cb4-79"><a href="#cb4-79"></a>**Inefficient way**: Arrow keys to navigate</span>
+<span id="cb4-80"><a href="#cb4-80"></a>**Vim way**:</span>
+<span id="cb4-81"><a href="#cb4-81"></a><span class="ss">1. </span><span class="in">`^`</span> - Jump to start of line</span>
+<span id="cb4-82"><a href="#cb4-82"></a><span class="ss">2. </span><span class="in">`w`</span> - Move to "calculateTotal"</span>
+<span id="cb4-83"><a href="#cb4-83"></a><span class="ss">3. </span><span class="in">`cw`</span> - Change word</span>
+<span id="cb4-84"><a href="#cb4-84"></a><span class="ss">4. </span>Type "computeSum"</span>
+<span id="cb4-85"><a href="#cb4-85"></a></span>
+<span id="cb4-86"><a href="#cb4-86"></a><span class="fu">### Example 2: Jumping to a Specific Line</span></span>
+<span id="cb4-87"><a href="#cb4-87"></a></span>
+<span id="cb4-88"><a href="#cb4-88"></a>**Scenario**: Error on line 47</span>
+<span id="cb4-89"><a href="#cb4-89"></a></span>
+<span id="cb4-90"><a href="#cb4-90"></a>**Inefficient way**: Scroll and count</span>
+<span id="cb4-91"><a href="#cb4-91"></a>**Vim way**:</span>
+<span id="cb4-92"><a href="#cb4-92"></a><span class="ss">1. </span><span class="in">`:47`</span> - Jump directly to line 47</span>
+<span id="cb4-93"><a href="#cb4-93"></a><span class="ss">2. </span>Or <span class="in">`47G`</span> - Same result</span>
+<span id="cb4-94"><a href="#cb4-94"></a></span>
+<span id="cb4-95"><a href="#cb4-95"></a><span class="fu">### Example 3: Moving Through a Function</span></span>
+<span id="cb4-96"><a href="#cb4-96"></a></span>
+<span id="cb4-97"><a href="#cb4-97"></a>**Scenario**: Navigate through this function:</span>
+<span id="cb4-98"><a href="#cb4-98"></a><span class="in">```python</span></span>
+<span id="cb4-99"><a href="#cb4-99"></a><span class="kw">def</span> process_data(data):</span>
+<span id="cb4-100"><a href="#cb4-100"></a>    <span class="co"># Clean the data</span></span>
+<span id="cb4-101"><a href="#cb4-101"></a>    cleaned <span class="op">=</span> clean_data(data)</span>
+<span id="cb4-102"><a href="#cb4-102"></a>    </span>
+<span id="cb4-103"><a href="#cb4-103"></a>    <span class="co"># Transform it</span></span>
+<span id="cb4-104"><a href="#cb4-104"></a>    transformed <span class="op">=</span> transform_data(cleaned)</span>
+<span id="cb4-105"><a href="#cb4-105"></a>    </span>
+<span id="cb4-106"><a href="#cb4-106"></a>    <span class="co"># Return result</span></span>
+<span id="cb4-107"><a href="#cb4-107"></a>    <span class="cf">return</span> transformed</span>
+<span id="cb4-108"><a href="#cb4-108"></a><span class="in">```</span></span>
+<span id="cb4-109"><a href="#cb4-109"></a></span>
+<span id="cb4-110"><a href="#cb4-110"></a>**Vim way**:</span>
+<span id="cb4-111"><a href="#cb4-111"></a><span class="ss">- </span><span class="in">`}`</span> - Jump to next paragraph (empty line)</span>
+<span id="cb4-112"><a href="#cb4-112"></a><span class="ss">- </span><span class="in">`{`</span> - Jump to previous paragraph</span>
+<span id="cb4-113"><a href="#cb4-113"></a><span class="ss">- </span><span class="in">`w`</span> - Move word by word through code</span>
+<span id="cb4-114"><a href="#cb4-114"></a><span class="ss">- </span><span class="in">`$`</span> - Jump to end of current line</span>
+<span id="cb4-115"><a href="#cb4-115"></a></span>
+<span id="cb4-116"><a href="#cb4-116"></a><span class="fu">## Advanced Movement: The Power Moves 🚀</span></span>
+<span id="cb4-117"><a href="#cb4-117"></a></span>
+<span id="cb4-118"><a href="#cb4-118"></a><span class="fu">### Search-Based Movement</span></span>
+<span id="cb4-119"><a href="#cb4-119"></a></span>
+<span id="cb4-120"><a href="#cb4-120"></a>| Command | Movement | Story |</span>
+<span id="cb4-121"><a href="#cb4-121"></a>|---------|----------|-------|</span>
+<span id="cb4-122"><a href="#cb4-122"></a>| <span class="in">`/pattern`</span> | Search forward | "**/** means search" |</span>
+<span id="cb4-123"><a href="#cb4-123"></a>| <span class="in">`?pattern`</span> | Search backward | "**?** questions search backward" |</span>
+<span id="cb4-124"><a href="#cb4-124"></a>| <span class="in">`n`</span> | Next match | "**n**ext result" |</span>
+<span id="cb4-125"><a href="#cb4-125"></a>| <span class="in">`N`</span> | Previous match | "**N**ext backward" |</span>
+<span id="cb4-126"><a href="#cb4-126"></a>| <span class="in">`*`</span> | Search word under cursor | "***** highlights current word" |</span>
+<span id="cb4-127"><a href="#cb4-127"></a>| <span class="in">`#`</span> | Search word backward | "**#** searches backward" |</span>
+<span id="cb4-128"><a href="#cb4-128"></a></span>
+<span id="cb4-129"><a href="#cb4-129"></a><span class="fu">### Character-Based Movement</span></span>
+<span id="cb4-130"><a href="#cb4-130"></a></span>
+<span id="cb4-131"><a href="#cb4-131"></a>| Command | Movement | Story |</span>
+<span id="cb4-132"><a href="#cb4-132"></a>|---------|----------|-------|</span>
+<span id="cb4-133"><a href="#cb4-133"></a>| <span class="in">`f{char}`</span> | Find character forward | "**f**ind character" |</span>
+<span id="cb4-134"><a href="#cb4-134"></a>| <span class="in">`F{char}`</span> | Find character backward | "**F**ind backward" |</span>
+<span id="cb4-135"><a href="#cb4-135"></a>| <span class="in">`t{char}`</span> | Till character forward | "**t**ill character" |</span>
+<span id="cb4-136"><a href="#cb4-136"></a>| <span class="in">`T{char}`</span> | Till character backward | "**T**ill backward" |</span>
+<span id="cb4-137"><a href="#cb4-137"></a>| <span class="in">`;`</span> | Repeat last f/t | "**;** continues search" |</span>
+<span id="cb4-138"><a href="#cb4-138"></a>| <span class="in">`,`</span> | Repeat last f/t backward | "**,** goes back" |</span>
+<span id="cb4-139"><a href="#cb4-139"></a></span>
+<span id="cb4-140"><a href="#cb4-140"></a><span class="fu">### Bracket and Brace Movement</span></span>
+<span id="cb4-141"><a href="#cb4-141"></a></span>
+<span id="cb4-142"><a href="#cb4-142"></a>| Command | Movement | Story |</span>
+<span id="cb4-143"><a href="#cb4-143"></a>|---------|----------|-------|</span>
+<span id="cb4-144"><a href="#cb4-144"></a>| <span class="in">`%`</span> | Match bracket/brace | "**%** matches pairs" |</span>
+<span id="cb4-145"><a href="#cb4-145"></a>| <span class="in">`[{`</span> | Previous opening brace | "**[** opens backward" |</span>
+<span id="cb4-146"><a href="#cb4-146"></a>| <span class="in">`]}`</span> | Next closing brace | "**]** closes forward" |</span>
+<span id="cb4-147"><a href="#cb4-147"></a></span>
+<span id="cb4-148"><a href="#cb4-148"></a><span class="fu">## Movement Combinations: The Magic Multiplier ✨</span></span>
+<span id="cb4-149"><a href="#cb4-149"></a></span>
+<span id="cb4-150"><a href="#cb4-150"></a>You can combine numbers with movements:</span>
+<span id="cb4-151"><a href="#cb4-151"></a></span>
+<span id="cb4-152"><a href="#cb4-152"></a>| Command | Movement | Example |</span>
+<span id="cb4-153"><a href="#cb4-153"></a>|---------|----------|---------|</span>
+<span id="cb4-154"><a href="#cb4-154"></a>| <span class="in">`3w`</span> | Move 3 words forward | Jump over 3 words |</span>
+<span id="cb4-155"><a href="#cb4-155"></a>| <span class="in">`5j`</span> | Move 5 lines down | Skip 5 lines |</span>
+<span id="cb4-156"><a href="#cb4-156"></a>| <span class="in">`2f.`</span> | Find 2nd period | Jump to second dot |</span>
+<span id="cb4-157"><a href="#cb4-157"></a>| <span class="in">`4$`</span> | Move to end of 4th line down | Jump to end of 4th line |</span>
+<span id="cb4-158"><a href="#cb4-158"></a></span>
+<span id="cb4-159"><a href="#cb4-159"></a><span class="fu">## Practice Exercise: Movement Mastery</span></span>
+<span id="cb4-160"><a href="#cb4-160"></a></span>
+<span id="cb4-161"><a href="#cb4-161"></a>Create a file with this content:</span>
+<span id="cb4-162"><a href="#cb4-162"></a><span class="in">```python</span></span>
+<span id="cb4-163"><a href="#cb4-163"></a><span class="kw">def</span> calculate_total(items):</span>
+<span id="cb4-164"><a href="#cb4-164"></a>    <span class="co">"""Calculate the total price of items."""</span></span>
+<span id="cb4-165"><a href="#cb4-165"></a>    total <span class="op">=</span> <span class="dv">0</span></span>
+<span id="cb4-166"><a href="#cb4-166"></a>    <span class="cf">for</span> item <span class="kw">in</span> items:</span>
+<span id="cb4-167"><a href="#cb4-167"></a>        <span class="cf">if</span> item.price <span class="op">&gt;</span> <span class="dv">0</span>:</span>
+<span id="cb4-168"><a href="#cb4-168"></a>            total <span class="op">+=</span> item.price</span>
+<span id="cb4-169"><a href="#cb4-169"></a>        <span class="cf">else</span>:</span>
+<span id="cb4-170"><a href="#cb4-170"></a>            <span class="bu">print</span>(<span class="ss">f"Warning: </span><span class="sc">{</span>item<span class="sc">.</span>name<span class="sc">}</span><span class="ss"> has invalid price"</span>)</span>
+<span id="cb4-171"><a href="#cb4-171"></a>    <span class="cf">return</span> total</span>
+<span id="cb4-172"><a href="#cb4-172"></a></span>
+<span id="cb4-173"><a href="#cb4-173"></a><span class="kw">def</span> process_order(order):</span>
+<span id="cb4-174"><a href="#cb4-174"></a>    <span class="co">"""Process a customer order."""</span></span>
+<span id="cb4-175"><a href="#cb4-175"></a>    items <span class="op">=</span> order.items</span>
+<span id="cb4-176"><a href="#cb4-176"></a>    total <span class="op">=</span> calculate_total(items)</span>
+<span id="cb4-177"><a href="#cb4-177"></a>    <span class="cf">return</span> {<span class="st">"total"</span>: total, <span class="st">"status"</span>: <span class="st">"processed"</span>}</span>
+<span id="cb4-178"><a href="#cb4-178"></a><span class="in">```</span></span>
+<span id="cb4-179"><a href="#cb4-179"></a></span>
+<span id="cb4-180"><a href="#cb4-180"></a>**Practice these movements**:</span>
+<span id="cb4-181"><a href="#cb4-181"></a><span class="ss">1. </span><span class="in">`gg`</span> - Go to top</span>
+<span id="cb4-182"><a href="#cb4-182"></a><span class="ss">2. </span><span class="in">`f(`</span> - Find first parenthesis</span>
+<span id="cb4-183"><a href="#cb4-183"></a><span class="ss">3. </span><span class="in">`w`</span> - Move to next word</span>
+<span id="cb4-184"><a href="#cb4-184"></a><span class="ss">4. </span><span class="in">`$`</span> - End of line</span>
+<span id="cb4-185"><a href="#cb4-185"></a><span class="ss">5. </span><span class="in">`j`</span> - Down one line</span>
+<span id="cb4-186"><a href="#cb4-186"></a><span class="ss">6. </span><span class="in">`^`</span> - Start of line</span>
+<span id="cb4-187"><a href="#cb4-187"></a><span class="ss">7. </span><span class="in">`/total`</span> - Search for "total"</span>
+<span id="cb4-188"><a href="#cb4-188"></a><span class="ss">8. </span><span class="in">`n`</span> - Next occurrence</span>
+<span id="cb4-189"><a href="#cb4-189"></a><span class="ss">9. </span><span class="in">`G`</span> - Go to bottom</span>
+<span id="cb4-190"><a href="#cb4-190"></a><span class="ss">10. </span><span class="in">`%`</span> - Match the closing brace</span>
+<span id="cb4-191"><a href="#cb4-191"></a></span>
+<span id="cb4-192"><a href="#cb4-192"></a><span class="fu">## The Efficiency Mindset</span></span>
+<span id="cb4-193"><a href="#cb4-193"></a></span>
+<span id="cb4-194"><a href="#cb4-194"></a><span class="fu">### Instead of This...</span></span>
+<span id="cb4-195"><a href="#cb4-195"></a><span class="ss">- </span>Arrow keys: ↓↓↓→→→→→→→→</span>
+<span id="cb4-196"><a href="#cb4-196"></a><span class="ss">- </span>Mouse: Click and drag</span>
+<span id="cb4-197"><a href="#cb4-197"></a><span class="ss">- </span>Page Up/Down: Scroll and search</span>
+<span id="cb4-198"><a href="#cb4-198"></a></span>
+<span id="cb4-199"><a href="#cb4-199"></a><span class="fu">### Think Like This...</span></span>
+<span id="cb4-200"><a href="#cb4-200"></a><span class="ss">- </span>"I want the next function" → <span class="in">`}`</span> </span>
+<span id="cb4-201"><a href="#cb4-201"></a><span class="ss">- </span>"I want that word" → <span class="in">`w`</span> or <span class="in">`/word`</span></span>
+<span id="cb4-202"><a href="#cb4-202"></a><span class="ss">- </span>"I want line 25" → <span class="in">`:25`</span></span>
+<span id="cb4-203"><a href="#cb4-203"></a><span class="ss">- </span>"I want the matching brace" → <span class="in">`%`</span></span>
+<span id="cb4-204"><a href="#cb4-204"></a></span>
+<span id="cb4-205"><a href="#cb4-205"></a><span class="fu">## Common Movement Mistakes</span></span>
+<span id="cb4-206"><a href="#cb4-206"></a></span>
+<span id="cb4-207"><a href="#cb4-207"></a><span class="fu">### Mistake 1: Using Arrow Keys</span></span>
+<span id="cb4-208"><a href="#cb4-208"></a>**Problem**: Slow and inefficient</span>
+<span id="cb4-209"><a href="#cb4-209"></a>**Solution**: Force yourself to use <span class="in">`hjkl`</span> for a week</span>
+<span id="cb4-210"><a href="#cb4-210"></a></span>
+<span id="cb4-211"><a href="#cb4-211"></a><span class="fu">### Mistake 2: Not Using Word Movements</span></span>
+<span id="cb4-212"><a href="#cb4-212"></a>**Problem**: Moving character by character</span>
+<span id="cb4-213"><a href="#cb4-213"></a>**Solution**: Think in words, use <span class="in">`w`</span>, <span class="in">`b`</span>, <span class="in">`e`</span></span>
+<span id="cb4-214"><a href="#cb4-214"></a></span>
+<span id="cb4-215"><a href="#cb4-215"></a><span class="fu">### Mistake 3: Ignoring Search</span></span>
+<span id="cb4-216"><a href="#cb4-216"></a>**Problem**: Scrolling to find text</span>
+<span id="cb4-217"><a href="#cb4-217"></a>**Solution**: Use <span class="in">`/`</span> to search, <span class="in">`n`</span> to repeat</span>
+<span id="cb4-218"><a href="#cb4-218"></a></span>
+<span id="cb4-219"><a href="#cb4-219"></a><span class="fu">### Mistake 4: Forgetting Line Jumps</span></span>
+<span id="cb4-220"><a href="#cb4-220"></a>**Problem**: Scrolling to specific lines</span>
+<span id="cb4-221"><a href="#cb4-221"></a>**Solution**: Use <span class="in">`:number`</span> or <span class="in">`numberG`</span></span>
+<span id="cb4-222"><a href="#cb4-222"></a></span>
+<span id="cb4-223"><a href="#cb4-223"></a><span class="fu">## Building Movement Muscle Memory</span></span>
+<span id="cb4-224"><a href="#cb4-224"></a></span>
+<span id="cb4-225"><a href="#cb4-225"></a><span class="fu">### Week 1: Basic Movements</span></span>
+<span id="cb4-226"><a href="#cb4-226"></a><span class="ss">- </span>Replace arrow keys with <span class="in">`hjkl`</span></span>
+<span id="cb4-227"><a href="#cb4-227"></a><span class="ss">- </span>Use <span class="in">`w`</span> and <span class="in">`b`</span> for word movement</span>
+<span id="cb4-228"><a href="#cb4-228"></a><span class="ss">- </span>Practice <span class="in">`0`</span> and <span class="in">`$`</span> for line navigation</span>
+<span id="cb4-229"><a href="#cb4-229"></a></span>
+<span id="cb4-230"><a href="#cb4-230"></a><span class="fu">### Week 2: Screen and File Navigation</span></span>
+<span id="cb4-231"><a href="#cb4-231"></a><span class="ss">- </span>Use <span class="in">`gg`</span> and <span class="in">`G`</span> for file navigation</span>
+<span id="cb4-232"><a href="#cb4-232"></a><span class="ss">- </span>Practice <span class="in">`H`</span>, <span class="in">`M`</span>, <span class="in">`L`</span> for screen movement</span>
+<span id="cb4-233"><a href="#cb4-233"></a><span class="ss">- </span>Start using <span class="in">`{}`</span> for paragraph jumping</span>
+<span id="cb4-234"><a href="#cb4-234"></a></span>
+<span id="cb4-235"><a href="#cb4-235"></a><span class="fu">### Week 3: Advanced Navigation</span></span>
+<span id="cb4-236"><a href="#cb4-236"></a><span class="ss">- </span>Master <span class="in">`f`</span> and <span class="in">`t`</span> for character finding</span>
+<span id="cb4-237"><a href="#cb4-237"></a><span class="ss">- </span>Use <span class="in">`/`</span> and <span class="in">`?`</span> for searching</span>
+<span id="cb4-238"><a href="#cb4-238"></a><span class="ss">- </span>Practice <span class="in">`%`</span> for bracket matching</span>
+<span id="cb4-239"><a href="#cb4-239"></a></span>
+<span id="cb4-240"><a href="#cb4-240"></a><span class="fu">### Week 4: Combination Mastery</span></span>
+<span id="cb4-241"><a href="#cb4-241"></a><span class="ss">- </span>Combine numbers with movements (<span class="in">`3w`</span>, <span class="in">`5j`</span>)</span>
+<span id="cb4-242"><a href="#cb4-242"></a><span class="ss">- </span>Use search with navigation (<span class="in">`/function`</span> then <span class="in">`n`</span>)</span>
+<span id="cb4-243"><a href="#cb4-243"></a><span class="ss">- </span>Practice complex movements in real code</span>
+<span id="cb4-244"><a href="#cb4-244"></a></span>
+<span id="cb4-245"><a href="#cb4-245"></a><span class="fu">## Speed Benchmarks</span></span>
+<span id="cb4-246"><a href="#cb4-246"></a></span>
+<span id="cb4-247"><a href="#cb4-247"></a>Track your progress:</span>
+<span id="cb4-248"><a href="#cb4-248"></a></span>
+<span id="cb4-249"><a href="#cb4-249"></a>**Beginner**: Moving to a word takes 5+ keystrokes</span>
+<span id="cb4-250"><a href="#cb4-250"></a>**Intermediate**: Moving to a word takes 2-3 keystrokes</span>
+<span id="cb4-251"><a href="#cb4-251"></a>**Advanced**: Moving to a word takes 1-2 keystrokes</span>
+<span id="cb4-252"><a href="#cb4-252"></a>**Expert**: You think of a location and you're there</span>
+<span id="cb4-253"><a href="#cb4-253"></a></span>
+<span id="cb4-254"><a href="#cb4-254"></a><span class="fu">## What's Next?</span></span>
+<span id="cb4-255"><a href="#cb4-255"></a></span>
+<span id="cb4-256"><a href="#cb4-256"></a>You now know:</span>
+<span id="cb4-257"><a href="#cb4-257"></a><span class="ss">- </span>Basic movement commands (<span class="in">`hjkl`</span>, <span class="in">`w`</span>, <span class="in">`b`</span>, <span class="in">`e`</span>)</span>
+<span id="cb4-258"><a href="#cb4-258"></a><span class="ss">- </span>Line navigation (<span class="in">`0`</span>, <span class="in">`^`</span>, <span class="in">`$`</span>)</span>
+<span id="cb4-259"><a href="#cb4-259"></a><span class="ss">- </span>File navigation (<span class="in">`gg`</span>, <span class="in">`G`</span>, <span class="in">`H`</span>, <span class="in">`M`</span>, <span class="in">`L`</span>)</span>
+<span id="cb4-260"><a href="#cb4-260"></a><span class="ss">- </span>Search-based movement (<span class="in">`/`</span>, <span class="in">`?`</span>, <span class="in">`n`</span>, <span class="in">`N`</span>)</span>
+<span id="cb4-261"><a href="#cb4-261"></a><span class="ss">- </span>Character finding (<span class="in">`f`</span>, <span class="in">`t`</span>, <span class="in">`;`</span>, <span class="in">`,`</span>)</span>
+<span id="cb4-262"><a href="#cb4-262"></a><span class="ss">- </span>Movement combinations (numbers + movements)</span>
+<span id="cb4-263"><a href="#cb4-263"></a></span>
+<span id="cb4-264"><a href="#cb4-264"></a>In the next post, we'll learn about <span class="co">[</span><span class="ot">Text Objects: The Secret Weapon</span><span class="co">](04-text-objects.qmd)</span> and discover how to select exactly what you want to edit.</span>
+<span id="cb4-265"><a href="#cb4-265"></a></span>
+<span id="cb4-266"><a href="#cb4-266"></a><span class="fu">## Key Takeaways</span></span>
+<span id="cb4-267"><a href="#cb4-267"></a></span>
+<span id="cb4-268"><a href="#cb4-268"></a><span class="ss">1. </span>**Think in meaning, not characters** - move by words, not letters</span>
+<span id="cb4-269"><a href="#cb4-269"></a><span class="ss">2. </span>**Use search for distant targets** - <span class="in">`/`</span> is faster than scrolling</span>
+<span id="cb4-270"><a href="#cb4-270"></a><span class="ss">3. </span>**Combine numbers with movements** - <span class="in">`3w`</span> is better than <span class="in">`www`</span></span>
+<span id="cb4-271"><a href="#cb4-271"></a><span class="ss">4. </span>**Practice daily** - muscle memory is everything</span>
+<span id="cb4-272"><a href="#cb4-272"></a><span class="ss">5. </span>**Don't use arrow keys** - force yourself to use <span class="in">`hjkl`</span></span>
+<span id="cb4-273"><a href="#cb4-273"></a></span>
+<span id="cb4-274"><a href="#cb4-274"></a>Movement is the foundation of Vim mastery. Once you can navigate at the speed of thought, everything else becomes natural.</span>
+<span id="cb4-275"><a href="#cb4-275"></a></span>
+<span id="cb4-276"><a href="#cb4-276"></a>---</span>
+<span id="cb4-277"><a href="#cb4-277"></a></span>
+<span id="cb4-278"><a href="#cb4-278"></a>*Ready to select like a pro? Continue with [Text Objects: The Secret Weapon](04-text-objects.qmd) to master precise text selection.* </span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div></div></div></div></div>
+</div> <!-- /content -->
+
+
+
+<script src="../../../site_libs/quarto-html/zenscroll-min.js"></script>
+</body></html>

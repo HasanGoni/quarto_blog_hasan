@@ -4,7 +4,7 @@ description: "Dive into the advanced features that make Vim truly powerful. Expl
 author: "Hasan"
 date: last-modified
 categories: [vim, advanced, plugins, customization, expert]
-image: "https://images.unsplash.com/photo-1555066931-4365d14bab8c?ixlib=rb-4.0.3&auto=format&fit=crop&w=2000&q=80"
+image: "images/vim.png"
 toc: true
 ---
 

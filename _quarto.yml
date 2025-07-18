@@ -18,6 +18,8 @@ website:
             file: posts/series/data-science-steps.qmd
           - text: "Computer Vision Foundations"
             file: posts/series/computer-vision-foundations.qmd
+          - text: "Vim Mastery"
+            file: posts/series/vim-mastery.qmd
           - text: "VLM Series"
             file: posts/series/vlm.qmd
           - text: "Anomaly Detection"

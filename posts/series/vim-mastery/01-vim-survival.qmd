@@ -4,7 +4,7 @@ description: "Your first steps into Vim without losing your mind. Learn the abso
 author: "Hasan"
 date: last-modified
 categories: [vim, beginner, survival, basics]
-image: "https://images.unsplash.com/photo-1551288049-bebda4e38f71?ixlib=rb-4.0.3&auto=format&fit=crop&w=2000&q=80"
+image: "images/vim.png"
 toc: true
 ---
 

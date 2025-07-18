@@ -4,7 +4,7 @@ description: "Master the three most powerful editing operations in Vim. Learn to
 author: "Hasan"
 date: last-modified
 categories: [vim, editing, delete, change, yank, operators]
-image: "https://images.unsplash.com/photo-1516389573391-5620a0263801?ixlib=rb-4.0.3&auto=format&fit=crop&w=2000&q=80"
+image: "images/vim.png"
 toc: true
 ---
 

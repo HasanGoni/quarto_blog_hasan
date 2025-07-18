@@ -4,7 +4,7 @@ description: "Master the art of moving through text at the speed of thought. Lea
 author: "Hasan"
 date: last-modified
 categories: [vim, movement, navigation, efficiency]
-image: "https://images.unsplash.com/photo-1551288049-bebda4e38f71?ixlib=rb-4.0.3&auto=format&fit=crop&w=2000&q=80"
+image: "images/vim.png"
 toc: true
 ---
 

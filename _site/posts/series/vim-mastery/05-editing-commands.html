@@ -1,0 +1,1910 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.3.450">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+<meta name="author" content="Hasan">
+<meta name="dcterms.date" content="2025-07-18">
+<meta name="description" content="Master the three most powerful editing operations in Vim. Learn to delete, change, and yank text with precision and speed that will make you feel like a coding wizard.">
+
+<title>Hasan’s Data Science &amp; AI Blog - Delete, Change, Copy Like a Wizard: The Holy Trinity of Vim Editing</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
+  vertical-align: middle;
+}
+/* CSS for syntax highlighting */
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+  }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+</style>
+
+
+<script src="../../../site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="../../../site_libs/quarto-nav/headroom.min.js"></script>
+<script src="../../../site_libs/clipboard/clipboard.min.js"></script>
+<script src="../../../site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="../../../site_libs/quarto-search/fuse.min.js"></script>
+<script src="../../../site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="../../../">
+<script src="../../../site_libs/quarto-html/quarto.js"></script>
+<script src="../../../site_libs/quarto-html/popper.min.js"></script>
+<script src="../../../site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="../../../site_libs/quarto-html/anchor.min.js"></script>
+<link href="../../../site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="../../../site_libs/quarto-html/quarto-syntax-highlighting.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="../../../site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="../../../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="../../../site_libs/bootstrap/bootstrap.min.css" rel="stylesheet" id="quarto-bootstrap" data-mode="light">
+<script id="quarto-search-options" type="application/json">{
+  "location": "navbar",
+  "copy-button": false,
+  "collapse-after": 3,
+  "panel-placement": "end",
+  "type": "overlay",
+  "limit": 20,
+  "language": {
+    "search-no-results-text": "No results",
+    "search-matching-documents-text": "matching documents",
+    "search-copy-link-title": "Copy link to search",
+    "search-hide-matches-text": "Hide additional matches",
+    "search-more-match-text": "more match in this document",
+    "search-more-matches-text": "more matches in this document",
+    "search-clear-button-title": "Clear",
+    "search-detached-cancel-button-title": "Cancel",
+    "search-submit-button-title": "Submit",
+    "search-label": "Search"
+  }
+}</script>
+<style>html{ scroll-behavior: smooth; }</style>
+<script async="" src="https://hypothes.is/embed.js"></script>
+
+
+<link rel="stylesheet" href="../../../styles.css">
+<meta property="og:title" content="Hasan’s Data Science &amp; AI Blog - Delete, Change, Copy Like a Wizard: The Holy Trinity of Vim Editing">
+<meta property="og:description" content="Master the three most powerful editing operations in Vim. Learn to delete, change, and yank text with precision and speed that will make you feel like a coding wizard.">
+<meta property="og:image" content="https://hasangoni.quarto.pub/hasan-blog-post/posts/series/vim-mastery/images/vim.png">
+<meta property="og:site-name" content="Hasan's Data Science &amp; AI Blog">
+<meta property="og:image:height" content="1413">
+<meta property="og:image:width" content="3368">
+<meta name="twitter:title" content="Hasan’s Data Science &amp; AI Blog - Delete, Change, Copy Like a Wizard: The Holy Trinity of Vim Editing">
+<meta name="twitter:description" content="Master the three most powerful editing operations in Vim. Learn to delete, change, and yank text with precision and speed that will make you feel like a coding wizard.">
+<meta name="twitter:image" content="https://hasangoni.quarto.pub/hasan-blog-post/posts/series/vim-mastery/images/vim.png">
+<meta name="twitter:image-height" content="1413">
+<meta name="twitter:image-width" content="3368">
+<meta name="twitter:card" content="summary_large_image">
+</head>
+
+<body class="nav-sidebar docked nav-fixed">
+
+<div id="quarto-search-results"></div>
+  <header id="quarto-header" class="headroom fixed-top">
+    <nav class="navbar navbar-expand-lg navbar-dark ">
+      <div class="navbar-container container-fluid">
+      <div class="navbar-brand-container">
+    <a class="navbar-brand" href="../../../index.html">
+    <span class="navbar-title">Hasan’s Data Science &amp; AI Blog</span>
+    </a>
+  </div>
+            <div id="quarto-search" class="" title="Search"></div>
+          <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCollapse" aria-controls="navbarCollapse" aria-expanded="false" aria-label="Toggle navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+  <span class="navbar-toggler-icon"></span>
+</button>
+          <div class="collapse navbar-collapse" id="navbarCollapse">
+            <ul class="navbar-nav navbar-nav-scroll me-auto">
+  <li class="nav-item">
+    <a class="nav-link" href="../../../index.html" rel="" target="">
+ <span class="menu-text">Home</span></a>
+  </li>  
+  <li class="nav-item dropdown ">
+    <a class="nav-link dropdown-toggle" href="#" id="nav-menu-series" role="button" data-bs-toggle="dropdown" aria-expanded="false" rel="" target="">
+ <span class="menu-text">Series</span>
+    </a>
+    <ul class="dropdown-menu" aria-labelledby="nav-menu-series">    
+        <li>
+    <a class="dropdown-item" href="../../../posts/series/command-line-mastery.html" rel="" target="">
+ <span class="dropdown-text">Command Line Mastery for HPC</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="../../../posts/series/data-science-steps.html" rel="" target="">
+ <span class="dropdown-text">Data Science Steps</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="../../../posts/series/computer-vision-foundations.html" rel="" target="">
+ <span class="dropdown-text">Computer Vision Foundations</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="../../../posts/series/vim-mastery.html" rel="" target="">
+ <span class="dropdown-text">Vim Mastery</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="../../../posts/series/vlm.html" rel="" target="">
+ <span class="dropdown-text">VLM Series</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="../../../posts/series/anomaly-detection/index.html" rel="" target="">
+ <span class="dropdown-text">Anomaly Detection</span></a>
+  </li>  
+    </ul>
+  </li>
+  <li class="nav-item">
+    <a class="nav-link" href="../../../categories.html" rel="" target="">
+ <span class="menu-text">Categories</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="../../../tags.html" rel="" target="">
+ <span class="menu-text">Tags</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="../../../about.html" rel="" target="">
+ <span class="menu-text">About</span></a>
+  </li>  
+</ul>
+            <ul class="navbar-nav navbar-nav-scroll ms-auto">
+  <li class="nav-item compact">
+    <a class="nav-link" href="https://github.com/HasanGoni" rel="" target=""><i class="bi bi-github" role="img">
+</i> 
+ <span class="menu-text"></span></a>
+  </li>  
+  <li class="nav-item compact">
+    <a class="nav-link" href="https://twitter.com/hasangoni" rel="" target=""><i class="bi bi-twitter" role="img">
+</i> 
+ <span class="menu-text"></span></a>
+  </li>  
+</ul>
+            <div class="quarto-navbar-tools">
+</div>
+          </div> <!-- /navcollapse -->
+      </div> <!-- /container-fluid -->
+    </nav>
+  <nav class="quarto-secondary-nav">
+    <div class="container-fluid d-flex">
+      <button type="button" class="quarto-btn-toggle btn" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar,#quarto-sidebar-glass" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+        <i class="bi bi-layout-text-sidebar-reverse"></i>
+      </button>
+      <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item">Delete, Change, Copy Like a Wizard: The Holy Trinity of Vim Editing</li></ol></nav>
+      <a class="flex-grow-1" role="button" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar,#quarto-sidebar-glass" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
+      </a>
+    </div>
+  </nav>
+</header>
+<!-- content -->
+<header id="title-block-header" class="quarto-title-block default page-columns page-full">
+  <div class="quarto-title-banner page-columns page-full">
+    <div class="quarto-title column-body">
+      <div class="quarto-title-block"><div><h1 class="title">Delete, Change, Copy Like a Wizard: The Holy Trinity of Vim Editing</h1><button type="button" class="btn code-tools-button" id="quarto-code-tools-source"><i class="bi"></i> Code</button></div></div>
+                  <div>
+        <div class="description">
+          Master the three most powerful editing operations in Vim. Learn to delete, change, and yank text with precision and speed that will make you feel like a coding wizard.
+        </div>
+      </div>
+                          <div class="quarto-categories">
+                <div class="quarto-category">vim</div>
+                <div class="quarto-category">editing</div>
+                <div class="quarto-category">delete</div>
+                <div class="quarto-category">change</div>
+                <div class="quarto-category">yank</div>
+                <div class="quarto-category">operators</div>
+              </div>
+                  </div>
+  </div>
+    
+  
+  <div class="quarto-title-meta">
+
+      <div>
+      <div class="quarto-title-meta-heading">Author</div>
+      <div class="quarto-title-meta-contents">
+               <p>Hasan </p>
+            </div>
+    </div>
+      
+      <div>
+      <div class="quarto-title-meta-heading">Published</div>
+      <div class="quarto-title-meta-contents">
+        <p class="date">July 18, 2025</p>
+      </div>
+    </div>
+    
+      <div>
+      <div class="quarto-title-meta-heading">Modified</div>
+      <div class="quarto-title-meta-contents">
+        <p class="date-modified">July 18, 2025</p>
+      </div>
+    </div>
+      
+    </div>
+    
+  
+  </header><div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article page-navbar">
+<!-- sidebar -->
+  <nav id="quarto-sidebar" class="sidebar collapse collapse-horizontal sidebar-navigation docked overflow-auto">
+    <div class="sidebar-menu-container"> 
+    <ul class="list-unstyled mt-1">
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-1" aria-expanded="true">
+ <span class="menu-text">Command Line Mastery for HPC</span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-1" aria-expanded="true" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-1" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../../posts/series/command-line-mastery.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Command Line Mastery for HPC Series</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../../posts/series/command-line-mastery/01-digital-compass.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">1. Digital Compass</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../../posts/series/command-line-mastery/02-file-detective.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">2. File Detective</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../../posts/series/command-line-mastery/03-file-manipulation.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">3. File Manipulation Magic</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../../posts/series/command-line-mastery/04-text-processing.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">4. Text Processing Power</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../../posts/series/command-line-mastery/05-permission-wizardry.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">5. Permission Wizardry</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../../posts/series/command-line-mastery/06-ssh-remote-access.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">6. SSH and Remote Access</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../../posts/series/command-line-mastery/07-file-transfer.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">7. File Transfer Mastery</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../../posts/series/command-line-mastery/08-environment-mastery.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">8. Environment Mastery</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../../posts/series/command-line-mastery/09-hpc-job-scheduling.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">9. HPC Job Scheduling</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../../posts/series/command-line-mastery/10-parallel-processing.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">10. Parallel Processing Power</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../../posts/series/command-line-mastery/11-bash-scripting.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">11. Bash Scripting Essentials</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../../posts/series/command-line-mastery/12-automation-excellence.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">12. Automation Excellence</span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-2" aria-expanded="true">
+ <span class="menu-text">Data Science</span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-2" aria-expanded="true" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-2" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../../posts/series/data-science-steps.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Data Science Steps Series</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../../posts/data-science-steps-to-follow-part01/index.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Data Science Steps to Follow - 01</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../../posts/data-science-steps-to-follow-part02/index.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Data Science Steps to Follow - 02</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../../posts/data-science-steps-to-follow-part03/index.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Data Science Steps to Follow - 03</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../../posts/data-science-steps-to-follow-part04/index.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Data Science Steps to Follow - 04</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../../posts/data-science-steps-to-follow-part05/index.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Data Science Steps to Follow - 05</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../../posts/data-science-steps-to-follow-part06/index.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Data Science Steps to Follow - 06</span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-3" aria-expanded="true">
+ <span class="menu-text">Computer Vision Foundations</span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-3" aria-expanded="true" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-3" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../../posts/series/computer-vision-foundations.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Computer Vision Foundations Series</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../../posts/series/cv-foundations/01-why-computer-vision.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">1. Why Computer Vision?</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../../posts/series/cv-foundations/02-images-as-data.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">2. Images as Data</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../../posts/series/cv-foundations/03-opencv-essentials.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">3. OpenCV Essentials</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../../posts/series/cv-foundations/04-finding-patterns.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">4. Finding Patterns</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../../posts/series/cv-foundations/05-image-segmentation.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">5. Image Segmentation</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../../posts/series/cv-foundations/06-feature-magic.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">6. Feature Magic</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../../posts/series/cv-foundations/07-why-deep-learning.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">7. Why Deep Learning?</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../../posts/series/cv-foundations/08-modern-vision-models.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">8. Modern Vision Models</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../../posts/series/cv-foundations/09-first-cv-project.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">9. First CV Project</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../../posts/series/cv-foundations/10-where-to-go-next.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">10. Where to Go Next</span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-4" aria-expanded="true">
+ <span class="menu-text">Anomaly Detection</span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-4" aria-expanded="true" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-4" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../../posts/series/anomaly-detection/index.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Introduction</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../../posts/series/anomaly-detection/finding-the-oddballs.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Finding the Oddballs</span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-5" aria-expanded="true">
+ <span class="menu-text">VLM Series</span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-5" aria-expanded="true" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-5" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../../posts/series/vlm.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Introduction</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../../posts/series/vlm-qwen3-14b/index.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Qwen3-14B</span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+    </ul>
+    </div>
+</nav>
+<div id="quarto-sidebar-glass" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar,#quarto-sidebar-glass"></div>
+<!-- margin-sidebar -->
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+        <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">On this page</h2>
+   
+  <ul>
+  <li><a href="#the-wizards-toolkit" id="toc-the-wizards-toolkit" class="nav-link active" data-scroll-target="#the-wizards-toolkit"><span class="header-section-number">0.1</span> The Wizard’s Toolkit</a></li>
+  <li><a href="#the-holy-trinity" id="toc-the-holy-trinity" class="nav-link" data-scroll-target="#the-holy-trinity"><span class="header-section-number">0.2</span> The Holy Trinity</a>
+  <ul class="collapse">
+  <li><a href="#delete-d---the-vanishing-act" id="toc-delete-d---the-vanishing-act" class="nav-link" data-scroll-target="#delete-d---the-vanishing-act"><span class="header-section-number">0.2.1</span> 1. Delete (<code>d</code>) - The Vanishing Act 🗑️</a></li>
+  <li><a href="#change-c---the-transformer" id="toc-change-c---the-transformer" class="nav-link" data-scroll-target="#change-c---the-transformer"><span class="header-section-number">0.2.2</span> 2. Change (<code>c</code>) - The Transformer 🔄</a></li>
+  <li><a href="#yank-y---the-duplicator" id="toc-yank-y---the-duplicator" class="nav-link" data-scroll-target="#yank-y---the-duplicator"><span class="header-section-number">0.2.3</span> 3. Yank (<code>y</code>) - The Duplicator 📋</a></li>
+  </ul></li>
+  <li><a href="#the-grammar-pattern" id="toc-the-grammar-pattern" class="nav-link" data-scroll-target="#the-grammar-pattern"><span class="header-section-number">0.3</span> The Grammar Pattern</a></li>
+  <li><a href="#delete-mastery-making-text-disappear" id="toc-delete-mastery-making-text-disappear" class="nav-link" data-scroll-target="#delete-mastery-making-text-disappear"><span class="header-section-number">0.4</span> Delete Mastery: Making Text Disappear</a>
+  <ul class="collapse">
+  <li><a href="#basic-delete-commands" id="toc-basic-delete-commands" class="nav-link" data-scroll-target="#basic-delete-commands"><span class="header-section-number">0.4.1</span> Basic Delete Commands</a></li>
+  <li><a href="#advanced-delete-patterns" id="toc-advanced-delete-patterns" class="nav-link" data-scroll-target="#advanced-delete-patterns"><span class="header-section-number">0.4.2</span> Advanced Delete Patterns</a></li>
+  <li><a href="#practical-delete-examples" id="toc-practical-delete-examples" class="nav-link" data-scroll-target="#practical-delete-examples"><span class="header-section-number">0.4.3</span> Practical Delete Examples</a></li>
+  </ul></li>
+  <li><a href="#change-mastery-the-ultimate-transformer" id="toc-change-mastery-the-ultimate-transformer" class="nav-link" data-scroll-target="#change-mastery-the-ultimate-transformer"><span class="header-section-number">0.5</span> Change Mastery: The Ultimate Transformer</a>
+  <ul class="collapse">
+  <li><a href="#basic-change-commands" id="toc-basic-change-commands" class="nav-link" data-scroll-target="#basic-change-commands"><span class="header-section-number">0.5.1</span> Basic Change Commands</a></li>
+  <li><a href="#advanced-change-patterns" id="toc-advanced-change-patterns" class="nav-link" data-scroll-target="#advanced-change-patterns"><span class="header-section-number">0.5.2</span> Advanced Change Patterns</a></li>
+  <li><a href="#practical-change-examples" id="toc-practical-change-examples" class="nav-link" data-scroll-target="#practical-change-examples"><span class="header-section-number">0.5.3</span> Practical Change Examples</a></li>
+  </ul></li>
+  <li><a href="#yank-mastery-the-copy-champion" id="toc-yank-mastery-the-copy-champion" class="nav-link" data-scroll-target="#yank-mastery-the-copy-champion"><span class="header-section-number">0.6</span> Yank Mastery: The Copy Champion</a>
+  <ul class="collapse">
+  <li><a href="#basic-yank-commands" id="toc-basic-yank-commands" class="nav-link" data-scroll-target="#basic-yank-commands"><span class="header-section-number">0.6.1</span> Basic Yank Commands</a></li>
+  <li><a href="#advanced-yank-patterns" id="toc-advanced-yank-patterns" class="nav-link" data-scroll-target="#advanced-yank-patterns"><span class="header-section-number">0.6.2</span> Advanced Yank Patterns</a></li>
+  <li><a href="#practical-yank-examples" id="toc-practical-yank-examples" class="nav-link" data-scroll-target="#practical-yank-examples"><span class="header-section-number">0.6.3</span> Practical Yank Examples</a></li>
+  </ul></li>
+  <li><a href="#the-put-command-completing-the-circle" id="toc-the-put-command-completing-the-circle" class="nav-link" data-scroll-target="#the-put-command-completing-the-circle"><span class="header-section-number">0.7</span> The Put Command: Completing the Circle</a>
+  <ul class="collapse">
+  <li><a href="#put-in-action" id="toc-put-in-action" class="nav-link" data-scroll-target="#put-in-action"><span class="header-section-number">0.7.1</span> Put in Action</a></li>
+  </ul></li>
+  <li><a href="#combining-operations-the-power-combos" id="toc-combining-operations-the-power-combos" class="nav-link" data-scroll-target="#combining-operations-the-power-combos"><span class="header-section-number">0.8</span> Combining Operations: The Power Combos</a>
+  <ul class="collapse">
+  <li><a href="#the-classic-workflows" id="toc-the-classic-workflows" class="nav-link" data-scroll-target="#the-classic-workflows"><span class="header-section-number">0.8.1</span> The Classic Workflows</a></li>
+  <li><a href="#advanced-combinations" id="toc-advanced-combinations" class="nav-link" data-scroll-target="#advanced-combinations"><span class="header-section-number">0.8.2</span> Advanced Combinations</a></li>
+  </ul></li>
+  <li><a href="#the-dot-command-repeat-magic" id="toc-the-dot-command-repeat-magic" class="nav-link" data-scroll-target="#the-dot-command-repeat-magic"><span class="header-section-number">0.9</span> The Dot Command: Repeat Magic</a></li>
+  <li><a href="#registers-the-advanced-storage-system" id="toc-registers-the-advanced-storage-system" class="nav-link" data-scroll-target="#registers-the-advanced-storage-system"><span class="header-section-number">0.10</span> Registers: The Advanced Storage System</a>
+  <ul class="collapse">
+  <li><a href="#default-registers" id="toc-default-registers" class="nav-link" data-scroll-target="#default-registers"><span class="header-section-number">0.10.1</span> Default Registers</a></li>
+  <li><a href="#named-registers" id="toc-named-registers" class="nav-link" data-scroll-target="#named-registers"><span class="header-section-number">0.10.2</span> Named Registers</a></li>
+  <li><a href="#system-clipboard" id="toc-system-clipboard" class="nav-link" data-scroll-target="#system-clipboard"><span class="header-section-number">0.10.3</span> System Clipboard</a></li>
+  </ul></li>
+  <li><a href="#practice-exercise-the-editing-dojo" id="toc-practice-exercise-the-editing-dojo" class="nav-link" data-scroll-target="#practice-exercise-the-editing-dojo"><span class="header-section-number">0.11</span> Practice Exercise: The Editing Dojo</a></li>
+  <li><a href="#common-editing-patterns" id="toc-common-editing-patterns" class="nav-link" data-scroll-target="#common-editing-patterns"><span class="header-section-number">0.12</span> Common Editing Patterns</a>
+  <ul class="collapse">
+  <li><a href="#pattern-1-quick-word-replacement" id="toc-pattern-1-quick-word-replacement" class="nav-link" data-scroll-target="#pattern-1-quick-word-replacement"><span class="header-section-number">0.12.1</span> Pattern 1: Quick Word Replacement</a></li>
+  <li><a href="#pattern-2-line-duplication-and-modification" id="toc-pattern-2-line-duplication-and-modification" class="nav-link" data-scroll-target="#pattern-2-line-duplication-and-modification"><span class="header-section-number">0.12.2</span> Pattern 2: Line Duplication and Modification</a></li>
+  <li><a href="#pattern-3-block-movement" id="toc-pattern-3-block-movement" class="nav-link" data-scroll-target="#pattern-3-block-movement"><span class="header-section-number">0.12.3</span> Pattern 3: Block Movement</a></li>
+  <li><a href="#pattern-4-selective-copy-paste" id="toc-pattern-4-selective-copy-paste" class="nav-link" data-scroll-target="#pattern-4-selective-copy-paste"><span class="header-section-number">0.12.4</span> Pattern 4: Selective Copy-Paste</a></li>
+  </ul></li>
+  <li><a href="#building-editing-muscle-memory" id="toc-building-editing-muscle-memory" class="nav-link" data-scroll-target="#building-editing-muscle-memory"><span class="header-section-number">0.13</span> Building Editing Muscle Memory</a>
+  <ul class="collapse">
+  <li><a href="#week-1-basic-operations" id="toc-week-1-basic-operations" class="nav-link" data-scroll-target="#week-1-basic-operations"><span class="header-section-number">0.13.1</span> Week 1: Basic Operations</a></li>
+  <li><a href="#week-2-text-objects-integration" id="toc-week-2-text-objects-integration" class="nav-link" data-scroll-target="#week-2-text-objects-integration"><span class="header-section-number">0.13.2</span> Week 2: Text Objects Integration</a></li>
+  <li><a href="#week-3-advanced-workflows" id="toc-week-3-advanced-workflows" class="nav-link" data-scroll-target="#week-3-advanced-workflows"><span class="header-section-number">0.13.3</span> Week 3: Advanced Workflows</a></li>
+  <li><a href="#week-4-speed-and-efficiency" id="toc-week-4-speed-and-efficiency" class="nav-link" data-scroll-target="#week-4-speed-and-efficiency"><span class="header-section-number">0.13.4</span> Week 4: Speed and Efficiency</a></li>
+  </ul></li>
+  <li><a href="#whats-next" id="toc-whats-next" class="nav-link" data-scroll-target="#whats-next"><span class="header-section-number">0.14</span> What’s Next?</a></li>
+  <li><a href="#key-takeaways" id="toc-key-takeaways" class="nav-link" data-scroll-target="#key-takeaways"><span class="header-section-number">0.15</span> Key Takeaways</a></li>
+  </ul>
+</nav>
+    </div>
+<!-- main -->
+<main class="content quarto-banner-title-block" id="quarto-document-content">
+
+
+
+
+<section id="the-wizards-toolkit" class="level2" data-number="0.1">
+<h2 data-number="0.1" class="anchored" data-anchor-id="the-wizards-toolkit"><span class="header-section-number">0.1</span> The Wizard’s Toolkit</h2>
+<p>Imagine you’re a wizard with three magical spells that can transform any text:</p>
+<ul>
+<li><strong>Delete Spell</strong>: Makes unwanted text vanish instantly</li>
+<li><strong>Change Spell</strong>: Transforms text into something new</li>
+<li><strong>Copy Spell</strong>: Duplicates text wherever you need it</li>
+</ul>
+<p>These are Vim’s three fundamental editing operations. Master these, and you’ll edit text faster than you ever thought possible.</p>
+</section>
+<section id="the-holy-trinity" class="level2" data-number="0.2">
+<h2 data-number="0.2" class="anchored" data-anchor-id="the-holy-trinity"><span class="header-section-number">0.2</span> The Holy Trinity</h2>
+<section id="delete-d---the-vanishing-act" class="level3" data-number="0.2.1">
+<h3 data-number="0.2.1" class="anchored" data-anchor-id="delete-d---the-vanishing-act"><span class="header-section-number">0.2.1</span> 1. Delete (<code>d</code>) - The Vanishing Act 🗑️</h3>
+<p><strong>What it does</strong>: Removes text and stores it in a register <strong>Think of it as</strong>: A magic eraser that remembers what it erased</p>
+</section>
+<section id="change-c---the-transformer" class="level3" data-number="0.2.2">
+<h3 data-number="0.2.2" class="anchored" data-anchor-id="change-c---the-transformer"><span class="header-section-number">0.2.2</span> 2. Change (<code>c</code>) - The Transformer 🔄</h3>
+<p><strong>What it does</strong>: Deletes text and immediately enters Insert mode <strong>Think of it as</strong>: Delete + Insert in one smooth motion</p>
+</section>
+<section id="yank-y---the-duplicator" class="level3" data-number="0.2.3">
+<h3 data-number="0.2.3" class="anchored" data-anchor-id="yank-y---the-duplicator"><span class="header-section-number">0.2.3</span> 3. Yank (<code>y</code>) - The Duplicator 📋</h3>
+<p><strong>What it does</strong>: Copies text to a register without removing it <strong>Think of it as</strong>: A photocopy machine for text</p>
+</section>
+</section>
+<section id="the-grammar-pattern" class="level2" data-number="0.3">
+<h2 data-number="0.3" class="anchored" data-anchor-id="the-grammar-pattern"><span class="header-section-number">0.3</span> The Grammar Pattern</h2>
+<p>Remember the verb+noun pattern? These are your verbs:</p>
+<pre><code>[count] + operator + motion/text-object</code></pre>
+<p><strong>Examples</strong>: - <code>d3w</code> = Delete 3 words - <code>c2l</code> = Change 2 characters - <code>yap</code> = Yank around paragraph</p>
+</section>
+<section id="delete-mastery-making-text-disappear" class="level2" data-number="0.4">
+<h2 data-number="0.4" class="anchored" data-anchor-id="delete-mastery-making-text-disappear"><span class="header-section-number">0.4</span> Delete Mastery: Making Text Disappear</h2>
+<section id="basic-delete-commands" class="level3" data-number="0.4.1">
+<h3 data-number="0.4.1" class="anchored" data-anchor-id="basic-delete-commands"><span class="header-section-number">0.4.1</span> Basic Delete Commands</h3>
+<table class="table">
+<thead>
+<tr class="header">
+<th>Command</th>
+<th>What It Deletes</th>
+<th>Story</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><code>x</code></td>
+<td>Character under cursor</td>
+<td>“<strong>x</strong> marks the spot to delete”</td>
+</tr>
+<tr class="even">
+<td><code>X</code></td>
+<td>Character before cursor</td>
+<td>“<strong>X</strong> deletes backward”</td>
+</tr>
+<tr class="odd">
+<td><code>dd</code></td>
+<td>Entire line</td>
+<td>“<strong>d</strong>elete <strong>d</strong>ouble = whole line”</td>
+</tr>
+<tr class="even">
+<td><code>dw</code></td>
+<td>Word from cursor</td>
+<td>“<strong>d</strong>elete <strong>w</strong>ord”</td>
+</tr>
+<tr class="odd">
+<td><code>db</code></td>
+<td>Word backward</td>
+<td>“<strong>d</strong>elete <strong>b</strong>ack”</td>
+</tr>
+<tr class="even">
+<td><code>d$</code></td>
+<td>To end of line</td>
+<td>“<strong>d</strong>elete to <strong>$</strong> (end)”</td>
+</tr>
+<tr class="odd">
+<td><code>d0</code></td>
+<td>To beginning of line</td>
+<td>“<strong>d</strong>elete to <strong>0</strong> (start)”</td>
+</tr>
+</tbody>
+</table>
+</section>
+<section id="advanced-delete-patterns" class="level3" data-number="0.4.2">
+<h3 data-number="0.4.2" class="anchored" data-anchor-id="advanced-delete-patterns"><span class="header-section-number">0.4.2</span> Advanced Delete Patterns</h3>
+<table class="table">
+<thead>
+<tr class="header">
+<th>Command</th>
+<th>What It Deletes</th>
+<th>Example</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><code>daw</code></td>
+<td>A word (with space)</td>
+<td><code>hello</code> from “hello world”</td>
+</tr>
+<tr class="even">
+<td><code>diw</code></td>
+<td>Inner word</td>
+<td><code>hello</code> from “hello world”</td>
+</tr>
+<tr class="odd">
+<td><code>di"</code></td>
+<td>Inside quotes</td>
+<td><code>text</code> from <code>"text"</code></td>
+</tr>
+<tr class="even">
+<td><code>da"</code></td>
+<td>Around quotes</td>
+<td><code>"text"</code> including quotes</td>
+</tr>
+<tr class="odd">
+<td><code>dip</code></td>
+<td>Inner paragraph</td>
+<td>Paragraph without empty lines</td>
+</tr>
+<tr class="even">
+<td><code>dap</code></td>
+<td>Around paragraph</td>
+<td>Paragraph with empty lines</td>
+</tr>
+</tbody>
+</table>
+</section>
+<section id="practical-delete-examples" class="level3" data-number="0.4.3">
+<h3 data-number="0.4.3" class="anchored" data-anchor-id="practical-delete-examples"><span class="header-section-number">0.4.3</span> Practical Delete Examples</h3>
+<p><strong>Example 1: Cleaning up a function</strong></p>
+<div class="sourceCode" id="cb2"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb2-1"><a href="#cb2-1"></a><span class="kw">def</span> calculate_total(items, tax_rate, discount_rate):</span>
+<span id="cb2-2"><a href="#cb2-2"></a>    <span class="co"># This is a long comment that needs to be removed</span></span>
+<span id="cb2-3"><a href="#cb2-3"></a>    total <span class="op">=</span> <span class="dv">0</span></span>
+<span id="cb2-4"><a href="#cb2-4"></a>    <span class="cf">for</span> item <span class="kw">in</span> items:</span>
+<span id="cb2-5"><a href="#cb2-5"></a>        total <span class="op">+=</span> item.price</span>
+<span id="cb2-6"><a href="#cb2-6"></a>    <span class="cf">return</span> total</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p><strong>Tasks</strong>: 1. Delete the comment: Move to comment line, <code>dd</code> 2. Remove <code>discount_rate</code> parameter: Move to it, <code>daw</code> 3. Delete inside function: Move to function body, <code>di{</code></p>
+</section>
+</section>
+<section id="change-mastery-the-ultimate-transformer" class="level2" data-number="0.5">
+<h2 data-number="0.5" class="anchored" data-anchor-id="change-mastery-the-ultimate-transformer"><span class="header-section-number">0.5</span> Change Mastery: The Ultimate Transformer</h2>
+<section id="basic-change-commands" class="level3" data-number="0.5.1">
+<h3 data-number="0.5.1" class="anchored" data-anchor-id="basic-change-commands"><span class="header-section-number">0.5.1</span> Basic Change Commands</h3>
+<table class="table">
+<thead>
+<tr class="header">
+<th>Command</th>
+<th>What It Changes</th>
+<th>Story</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><code>cc</code></td>
+<td>Entire line</td>
+<td>“<strong>c</strong>hange <strong>c</strong>omplete line”</td>
+</tr>
+<tr class="even">
+<td><code>cw</code></td>
+<td>Word from cursor</td>
+<td>“<strong>c</strong>hange <strong>w</strong>ord”</td>
+</tr>
+<tr class="odd">
+<td><code>cb</code></td>
+<td>Word backward</td>
+<td>“<strong>c</strong>hange <strong>b</strong>ack”</td>
+</tr>
+<tr class="even">
+<td><code>c$</code></td>
+<td>To end of line</td>
+<td>“<strong>c</strong>hange to <strong>$</strong> (end)”</td>
+</tr>
+<tr class="odd">
+<td><code>c0</code></td>
+<td>To beginning of line</td>
+<td>“<strong>c</strong>hange to <strong>0</strong> (start)”</td>
+</tr>
+<tr class="even">
+<td><code>C</code></td>
+<td>From cursor to end of line</td>
+<td>“<strong>C</strong>hange to end (shortcut)”</td>
+</tr>
+</tbody>
+</table>
+</section>
+<section id="advanced-change-patterns" class="level3" data-number="0.5.2">
+<h3 data-number="0.5.2" class="anchored" data-anchor-id="advanced-change-patterns"><span class="header-section-number">0.5.2</span> Advanced Change Patterns</h3>
+<table class="table">
+<thead>
+<tr class="header">
+<th>Command</th>
+<th>What It Changes</th>
+<th>Example</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><code>ciw</code></td>
+<td>Inner word</td>
+<td>Replace <code>hello</code> in “hello world”</td>
+</tr>
+<tr class="even">
+<td><code>caw</code></td>
+<td>A word (with space)</td>
+<td>Replace <code>hello</code> in “hello world”</td>
+</tr>
+<tr class="odd">
+<td><code>ci"</code></td>
+<td>Inside quotes</td>
+<td>Replace content in <code>"text"</code></td>
+</tr>
+<tr class="even">
+<td><code>ca"</code></td>
+<td>Around quotes</td>
+<td>Replace <code>"text"</code> entirely</td>
+</tr>
+<tr class="odd">
+<td><code>cip</code></td>
+<td>Inner paragraph</td>
+<td>Replace paragraph content</td>
+</tr>
+<tr class="even">
+<td><code>ci(</code></td>
+<td>Inside parentheses</td>
+<td>Replace <code>x + y</code> in <code>(x + y)</code></td>
+</tr>
+</tbody>
+</table>
+</section>
+<section id="practical-change-examples" class="level3" data-number="0.5.3">
+<h3 data-number="0.5.3" class="anchored" data-anchor-id="practical-change-examples"><span class="header-section-number">0.5.3</span> Practical Change Examples</h3>
+<p><strong>Example 1: Refactoring variable names</strong></p>
+<div class="sourceCode" id="cb3"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb3-1"><a href="#cb3-1"></a>old_variable_name <span class="op">=</span> calculate_something()</span>
+<span id="cb3-2"><a href="#cb3-2"></a>result <span class="op">=</span> process_data(old_variable_name)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p><strong>Tasks</strong>: 1. Change variable name: Move to <code>old_variable_name</code>, <code>ciw</code>, type <code>new_name</code> 2. Change function name: Move to <code>calculate_something</code>, <code>ciw</code>, type <code>compute_value</code> 3. Change string content: Move inside quotes, <code>ci"</code>, type new content</p>
+<p><strong>Example 2: Updating function parameters</strong></p>
+<div class="sourceCode" id="cb4"><pre class="sourceCode numberSource javascript number-lines code-with-copy"><code class="sourceCode javascript"><span id="cb4-1"><a href="#cb4-1"></a><span class="kw">function</span> <span class="fu">processOrder</span>(orderId<span class="op">,</span> customerId<span class="op">,</span> priority) {</span>
+<span id="cb4-2"><a href="#cb4-2"></a>    <span class="co">// function body</span></span>
+<span id="cb4-3"><a href="#cb4-3"></a>}</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p><strong>Task</strong>: Change <code>priority</code> to <code>urgencyLevel</code> 1. Move to <code>priority</code> 2. <code>ciw</code> (change inner word) 3. Type <code>urgencyLevel</code></p>
+</section>
+</section>
+<section id="yank-mastery-the-copy-champion" class="level2" data-number="0.6">
+<h2 data-number="0.6" class="anchored" data-anchor-id="yank-mastery-the-copy-champion"><span class="header-section-number">0.6</span> Yank Mastery: The Copy Champion</h2>
+<section id="basic-yank-commands" class="level3" data-number="0.6.1">
+<h3 data-number="0.6.1" class="anchored" data-anchor-id="basic-yank-commands"><span class="header-section-number">0.6.1</span> Basic Yank Commands</h3>
+<table class="table">
+<thead>
+<tr class="header">
+<th>Command</th>
+<th>What It Yanks</th>
+<th>Story</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><code>yy</code></td>
+<td>Entire line</td>
+<td>“<strong>y</strong>ank <strong>y</strong>ank = whole line”</td>
+</tr>
+<tr class="even">
+<td><code>yw</code></td>
+<td>Word from cursor</td>
+<td>“<strong>y</strong>ank <strong>w</strong>ord”</td>
+</tr>
+<tr class="odd">
+<td><code>yb</code></td>
+<td>Word backward</td>
+<td>“<strong>y</strong>ank <strong>b</strong>ack”</td>
+</tr>
+<tr class="even">
+<td><code>y$</code></td>
+<td>To end of line</td>
+<td>“<strong>y</strong>ank to <strong>$</strong> (end)”</td>
+</tr>
+<tr class="odd">
+<td><code>y0</code></td>
+<td>To beginning of line</td>
+<td>“<strong>y</strong>ank to <strong>0</strong> (start)”</td>
+</tr>
+</tbody>
+</table>
+</section>
+<section id="advanced-yank-patterns" class="level3" data-number="0.6.2">
+<h3 data-number="0.6.2" class="anchored" data-anchor-id="advanced-yank-patterns"><span class="header-section-number">0.6.2</span> Advanced Yank Patterns</h3>
+<table class="table">
+<thead>
+<tr class="header">
+<th>Command</th>
+<th>What It Yanks</th>
+<th>Example</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><code>yiw</code></td>
+<td>Inner word</td>
+<td>Copy <code>hello</code> from “hello world”</td>
+</tr>
+<tr class="even">
+<td><code>yaw</code></td>
+<td>A word (with space)</td>
+<td>Copy <code>hello</code> from “hello world”</td>
+</tr>
+<tr class="odd">
+<td><code>yi"</code></td>
+<td>Inside quotes</td>
+<td>Copy content from <code>"text"</code></td>
+</tr>
+<tr class="even">
+<td><code>ya"</code></td>
+<td>Around quotes</td>
+<td>Copy <code>"text"</code> with quotes</td>
+</tr>
+<tr class="odd">
+<td><code>yip</code></td>
+<td>Inner paragraph</td>
+<td>Copy paragraph content</td>
+</tr>
+<tr class="even">
+<td><code>yi(</code></td>
+<td>Inside parentheses</td>
+<td>Copy <code>x + y</code> from <code>(x + y)</code></td>
+</tr>
+</tbody>
+</table>
+</section>
+<section id="practical-yank-examples" class="level3" data-number="0.6.3">
+<h3 data-number="0.6.3" class="anchored" data-anchor-id="practical-yank-examples"><span class="header-section-number">0.6.3</span> Practical Yank Examples</h3>
+<p><strong>Example 1: Duplicating code blocks</strong></p>
+<div class="sourceCode" id="cb5"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb5-1"><a href="#cb5-1"></a><span class="kw">def</span> calculate_tax(price, rate):</span>
+<span id="cb5-2"><a href="#cb5-2"></a>    <span class="cf">return</span> price <span class="op">*</span> rate</span>
+<span id="cb5-3"><a href="#cb5-3"></a></span>
+<span id="cb5-4"><a href="#cb5-4"></a><span class="kw">def</span> calculate_discount(price, rate):</span>
+<span id="cb5-5"><a href="#cb5-5"></a>    <span class="cf">return</span> price <span class="op">*</span> rate</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p><strong>Task</strong>: Copy the calculation logic 1. Move to <code>price * rate</code> 2. <code>yiw</code> to copy just <code>price</code>, or 3. <code>y$</code> to copy <code>price * rate</code>, or 4. <code>yy</code> to copy entire line</p>
+</section>
+</section>
+<section id="the-put-command-completing-the-circle" class="level2" data-number="0.7">
+<h2 data-number="0.7" class="anchored" data-anchor-id="the-put-command-completing-the-circle"><span class="header-section-number">0.7</span> The Put Command: Completing the Circle</h2>
+<p>After yanking or deleting, you need to put (paste) the text:</p>
+<table class="table">
+<thead>
+<tr class="header">
+<th>Command</th>
+<th>What It Does</th>
+<th>Story</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><code>p</code></td>
+<td>Put after cursor</td>
+<td>“<strong>p</strong>ut after”</td>
+</tr>
+<tr class="even">
+<td><code>P</code></td>
+<td>Put before cursor</td>
+<td>“<strong>P</strong>ut before”</td>
+</tr>
+<tr class="odd">
+<td><code>gp</code></td>
+<td>Put after and move cursor</td>
+<td>“<strong>g</strong>o <strong>p</strong>ut”</td>
+</tr>
+<tr class="even">
+<td><code>gP</code></td>
+<td>Put before and move cursor</td>
+<td>“<strong>g</strong>o <strong>P</strong>ut before”</td>
+</tr>
+</tbody>
+</table>
+<section id="put-in-action" class="level3" data-number="0.7.1">
+<h3 data-number="0.7.1" class="anchored" data-anchor-id="put-in-action"><span class="header-section-number">0.7.1</span> Put in Action</h3>
+<p><strong>Example</strong>: Moving a line down 1. <code>dd</code> - Delete current line 2. <code>j</code> - Move down one line 3. <code>p</code> - Put the line after current position</p>
+<p><strong>Example</strong>: Duplicating a word 1. <code>yiw</code> - Yank inner word 2. <code>w</code> - Move to next word 3. <code>p</code> - Put the word after cursor</p>
+</section>
+</section>
+<section id="combining-operations-the-power-combos" class="level2" data-number="0.8">
+<h2 data-number="0.8" class="anchored" data-anchor-id="combining-operations-the-power-combos"><span class="header-section-number">0.8</span> Combining Operations: The Power Combos</h2>
+<section id="the-classic-workflows" class="level3" data-number="0.8.1">
+<h3 data-number="0.8.1" class="anchored" data-anchor-id="the-classic-workflows"><span class="header-section-number">0.8.1</span> The Classic Workflows</h3>
+<p><strong>1. Cut and Paste</strong></p>
+<div class="sourceCode" id="cb6"><pre class="sourceCode numberSource vim number-lines code-with-copy"><code class="sourceCode"><span id="cb6-1"><a href="#cb6-1"></a>daw     " Delete a word (cut)</span>
+<span id="cb6-2"><a href="#cb6-2"></a>/target " Search for target location</span>
+<span id="cb6-3"><a href="#cb6-3"></a>p       " Put after cursor (paste)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p><strong>2. Copy and Paste</strong></p>
+<div class="sourceCode" id="cb7"><pre class="sourceCode numberSource vim number-lines code-with-copy"><code class="sourceCode"><span id="cb7-1"><a href="#cb7-1"></a>yip     " Yank inner paragraph (copy)</span>
+<span id="cb7-2"><a href="#cb7-2"></a>}       " Jump to next paragraph</span>
+<span id="cb7-3"><a href="#cb7-3"></a>p       " Put after cursor (paste)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p><strong>3. Replace Pattern</strong></p>
+<div class="sourceCode" id="cb8"><pre class="sourceCode numberSource vim number-lines code-with-copy"><code class="sourceCode"><span id="cb8-1"><a href="#cb8-1"></a>ciw     " Change inner word</span>
+<span id="cb8-2"><a href="#cb8-2"></a>" Type replacement</span>
+<span id="cb8-3"><a href="#cb8-3"></a>&lt;Esc&gt;   " Return to normal mode</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</section>
+<section id="advanced-combinations" class="level3" data-number="0.8.2">
+<h3 data-number="0.8.2" class="anchored" data-anchor-id="advanced-combinations"><span class="header-section-number">0.8.2</span> Advanced Combinations</h3>
+<p><strong>1. Swap two words</strong></p>
+<div class="sourceCode" id="cb9"><pre class="sourceCode numberSource vim number-lines code-with-copy"><code class="sourceCode"><span id="cb9-1"><a href="#cb9-1"></a>" Cursor on first word</span>
+<span id="cb9-2"><a href="#cb9-2"></a>daw     " Delete first word</span>
+<span id="cb9-3"><a href="#cb9-3"></a>w       " Move to second word</span>
+<span id="cb9-4"><a href="#cb9-4"></a>daw     " Delete second word</span>
+<span id="cb9-5"><a href="#cb9-5"></a>P       " Put second word before cursor</span>
+<span id="cb9-6"><a href="#cb9-6"></a>w       " Move forward</span>
+<span id="cb9-7"><a href="#cb9-7"></a>p       " Put first word after cursor</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p><strong>2. Duplicate and modify</strong></p>
+<div class="sourceCode" id="cb10"><pre class="sourceCode numberSource vim number-lines code-with-copy"><code class="sourceCode"><span id="cb10-1"><a href="#cb10-1"></a>yy      " Yank current line</span>
+<span id="cb10-2"><a href="#cb10-2"></a>p       " Put below current line</span>
+<span id="cb10-3"><a href="#cb10-3"></a>ciw     " Change first word in new line</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</section>
+</section>
+<section id="the-dot-command-repeat-magic" class="level2" data-number="0.9">
+<h2 data-number="0.9" class="anchored" data-anchor-id="the-dot-command-repeat-magic"><span class="header-section-number">0.9</span> The Dot Command: Repeat Magic</h2>
+<p>The <code>.</code> command repeats your last change:</p>
+<p><strong>Example</strong>: Changing multiple variable names</p>
+<div class="sourceCode" id="cb11"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb11-1"><a href="#cb11-1"></a>old_name <span class="op">=</span> value1</span>
+<span id="cb11-2"><a href="#cb11-2"></a>old_name <span class="op">=</span> value2</span>
+<span id="cb11-3"><a href="#cb11-3"></a>old_name <span class="op">=</span> value3</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p><strong>Workflow</strong>: 1. Move to first <code>old_name</code> 2. <code>ciw</code> and type <code>new_name</code> 3. Press <code>Esc</code> 4. Move to next <code>old_name</code> 5. Press <code>.</code> to repeat the change 6. Repeat steps 4-5 for remaining occurrences</p>
+</section>
+<section id="registers-the-advanced-storage-system" class="level2" data-number="0.10">
+<h2 data-number="0.10" class="anchored" data-anchor-id="registers-the-advanced-storage-system"><span class="header-section-number">0.10</span> Registers: The Advanced Storage System</h2>
+<p>Vim has multiple clipboards called registers:</p>
+<section id="default-registers" class="level3" data-number="0.10.1">
+<h3 data-number="0.10.1" class="anchored" data-anchor-id="default-registers"><span class="header-section-number">0.10.1</span> Default Registers</h3>
+<ul>
+<li><code>"</code> - Default register (last delete/yank)</li>
+<li><code>0</code> - Yank register (last yank only)</li>
+<li><code>1-9</code> - Delete registers (recent deletes)</li>
+</ul>
+</section>
+<section id="named-registers" class="level3" data-number="0.10.2">
+<h3 data-number="0.10.2" class="anchored" data-anchor-id="named-registers"><span class="header-section-number">0.10.2</span> Named Registers</h3>
+<ul>
+<li><code>"a</code> to <code>"z</code> - Your personal storage</li>
+</ul>
+<p><strong>Examples</strong>:</p>
+<div class="sourceCode" id="cb12"><pre class="sourceCode numberSource vim number-lines code-with-copy"><code class="sourceCode"><span id="cb12-1"><a href="#cb12-1"></a>"ayy    " Yank line to register 'a'</span>
+<span id="cb12-2"><a href="#cb12-2"></a>"ap     " Put from register 'a'</span>
+<span id="cb12-3"><a href="#cb12-3"></a>"byiw   " Yank word to register 'b'</span>
+<span id="cb12-4"><a href="#cb12-4"></a>"bp     " Put from register 'b'</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</section>
+<section id="system-clipboard" class="level3" data-number="0.10.3">
+<h3 data-number="0.10.3" class="anchored" data-anchor-id="system-clipboard"><span class="header-section-number">0.10.3</span> System Clipboard</h3>
+<div class="sourceCode" id="cb13"><pre class="sourceCode numberSource vim number-lines code-with-copy"><code class="sourceCode"><span id="cb13-1"><a href="#cb13-1"></a>"+y     " Yank to system clipboard</span>
+<span id="cb13-2"><a href="#cb13-2"></a>"+p     " Put from system clipboard</span>
+<span id="cb13-3"><a href="#cb13-3"></a>"*y     " Yank to selection clipboard (Linux)</span>
+<span id="cb13-4"><a href="#cb13-4"></a>"*p     " Put from selection clipboard (Linux)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</section>
+</section>
+<section id="practice-exercise-the-editing-dojo" class="level2" data-number="0.11">
+<h2 data-number="0.11" class="anchored" data-anchor-id="practice-exercise-the-editing-dojo"><span class="header-section-number">0.11</span> Practice Exercise: The Editing Dojo</h2>
+<p>Create a file with this content:</p>
+<div class="sourceCode" id="cb14"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb14-1"><a href="#cb14-1"></a><span class="kw">def</span> calculate_price(item_price, tax_rate, discount_rate):</span>
+<span id="cb14-2"><a href="#cb14-2"></a>    <span class="co">"""Calculate final price with tax and discount."""</span></span>
+<span id="cb14-3"><a href="#cb14-3"></a>    <span class="co"># First apply discount</span></span>
+<span id="cb14-4"><a href="#cb14-4"></a>    discounted_price <span class="op">=</span> item_price <span class="op">*</span> (<span class="dv">1</span> <span class="op">-</span> discount_rate)</span>
+<span id="cb14-5"><a href="#cb14-5"></a>    </span>
+<span id="cb14-6"><a href="#cb14-6"></a>    <span class="co"># Then apply tax</span></span>
+<span id="cb14-7"><a href="#cb14-7"></a>    final_price <span class="op">=</span> discounted_price <span class="op">*</span> (<span class="dv">1</span> <span class="op">+</span> tax_rate)</span>
+<span id="cb14-8"><a href="#cb14-8"></a>    </span>
+<span id="cb14-9"><a href="#cb14-9"></a>    <span class="cf">return</span> final_price</span>
+<span id="cb14-10"><a href="#cb14-10"></a></span>
+<span id="cb14-11"><a href="#cb14-11"></a><span class="kw">def</span> process_order(order_data):</span>
+<span id="cb14-12"><a href="#cb14-12"></a>    <span class="co">"""Process customer order."""</span></span>
+<span id="cb14-13"><a href="#cb14-13"></a>    total <span class="op">=</span> <span class="dv">0</span></span>
+<span id="cb14-14"><a href="#cb14-14"></a>    <span class="cf">for</span> item <span class="kw">in</span> order_data:</span>
+<span id="cb14-15"><a href="#cb14-15"></a>        price <span class="op">=</span> calculate_price(item.price, <span class="fl">0.08</span>, <span class="fl">0.10</span>)</span>
+<span id="cb14-16"><a href="#cb14-16"></a>        total <span class="op">+=</span> price</span>
+<span id="cb14-17"><a href="#cb14-17"></a>    <span class="cf">return</span> total</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p><strong>Practice these operations</strong>:</p>
+<ol type="1">
+<li><strong>Delete operations</strong>:
+<ul>
+<li>Delete the docstring: <code>di"</code></li>
+<li>Delete a comment: <code>dd</code></li>
+<li>Delete function parameter: <code>daw</code></li>
+</ul></li>
+<li><strong>Change operations</strong>:
+<ul>
+<li>Change function name: <code>ciw</code></li>
+<li>Change variable name: <code>ciw</code></li>
+<li>Change string content: <code>ci"</code></li>
+</ul></li>
+<li><strong>Yank operations</strong>:
+<ul>
+<li>Copy entire function: <code>yip</code></li>
+<li>Copy variable assignment: <code>yy</code></li>
+<li>Copy parameter list: <code>yi(</code></li>
+</ul></li>
+<li><strong>Advanced workflows</strong>:
+<ul>
+<li>Duplicate a line and modify it</li>
+<li>Move a line to different location</li>
+<li>Replace multiple occurrences with <code>.</code></li>
+</ul></li>
+</ol>
+</section>
+<section id="common-editing-patterns" class="level2" data-number="0.12">
+<h2 data-number="0.12" class="anchored" data-anchor-id="common-editing-patterns"><span class="header-section-number">0.12</span> Common Editing Patterns</h2>
+<section id="pattern-1-quick-word-replacement" class="level3" data-number="0.12.1">
+<h3 data-number="0.12.1" class="anchored" data-anchor-id="pattern-1-quick-word-replacement"><span class="header-section-number">0.12.1</span> Pattern 1: Quick Word Replacement</h3>
+<div class="sourceCode" id="cb15"><pre class="sourceCode numberSource vim number-lines code-with-copy"><code class="sourceCode"><span id="cb15-1"><a href="#cb15-1"></a>ciw     " Change inner word</span>
+<span id="cb15-2"><a href="#cb15-2"></a>" Type replacement</span>
+<span id="cb15-3"><a href="#cb15-3"></a>&lt;Esc&gt;   " Back to normal mode</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</section>
+<section id="pattern-2-line-duplication-and-modification" class="level3" data-number="0.12.2">
+<h3 data-number="0.12.2" class="anchored" data-anchor-id="pattern-2-line-duplication-and-modification"><span class="header-section-number">0.12.2</span> Pattern 2: Line Duplication and Modification</h3>
+<div class="sourceCode" id="cb16"><pre class="sourceCode numberSource vim number-lines code-with-copy"><code class="sourceCode"><span id="cb16-1"><a href="#cb16-1"></a>yy      " Yank current line</span>
+<span id="cb16-2"><a href="#cb16-2"></a>p       " Put below</span>
+<span id="cb16-3"><a href="#cb16-3"></a>ciw     " Change first word</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</section>
+<section id="pattern-3-block-movement" class="level3" data-number="0.12.3">
+<h3 data-number="0.12.3" class="anchored" data-anchor-id="pattern-3-block-movement"><span class="header-section-number">0.12.3</span> Pattern 3: Block Movement</h3>
+<div class="sourceCode" id="cb17"><pre class="sourceCode numberSource vim number-lines code-with-copy"><code class="sourceCode"><span id="cb17-1"><a href="#cb17-1"></a>dip     " Delete inner paragraph</span>
+<span id="cb17-2"><a href="#cb17-2"></a>}       " Jump to target location</span>
+<span id="cb17-3"><a href="#cb17-3"></a>p       " Put paragraph</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</section>
+<section id="pattern-4-selective-copy-paste" class="level3" data-number="0.12.4">
+<h3 data-number="0.12.4" class="anchored" data-anchor-id="pattern-4-selective-copy-paste"><span class="header-section-number">0.12.4</span> Pattern 4: Selective Copy-Paste</h3>
+<div class="sourceCode" id="cb18"><pre class="sourceCode numberSource vim number-lines code-with-copy"><code class="sourceCode"><span id="cb18-1"><a href="#cb18-1"></a>"ayy    " Yank to register 'a'</span>
+<span id="cb18-2"><a href="#cb18-2"></a>" Move to different location</span>
+<span id="cb18-3"><a href="#cb18-3"></a>"ap     " Put from register 'a'</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</section>
+</section>
+<section id="building-editing-muscle-memory" class="level2" data-number="0.13">
+<h2 data-number="0.13" class="anchored" data-anchor-id="building-editing-muscle-memory"><span class="header-section-number">0.13</span> Building Editing Muscle Memory</h2>
+<section id="week-1-basic-operations" class="level3" data-number="0.13.1">
+<h3 data-number="0.13.1" class="anchored" data-anchor-id="week-1-basic-operations"><span class="header-section-number">0.13.1</span> Week 1: Basic Operations</h3>
+<ul>
+<li>Practice <code>d</code>, <code>c</code>, <code>y</code> with simple motions</li>
+<li>Use <code>x</code> and <code>s</code> for character editing</li>
+<li>Master <code>dd</code>, <code>cc</code>, <code>yy</code> for line operations</li>
+</ul>
+</section>
+<section id="week-2-text-objects-integration" class="level3" data-number="0.13.2">
+<h3 data-number="0.13.2" class="anchored" data-anchor-id="week-2-text-objects-integration"><span class="header-section-number">0.13.2</span> Week 2: Text Objects Integration</h3>
+<ul>
+<li>Combine operators with text objects</li>
+<li>Practice <code>diw</code>, <code>ciw</code>, <code>yiw</code> patterns</li>
+<li>Use quote and bracket objects</li>
+</ul>
+</section>
+<section id="week-3-advanced-workflows" class="level3" data-number="0.13.3">
+<h3 data-number="0.13.3" class="anchored" data-anchor-id="week-3-advanced-workflows"><span class="header-section-number">0.13.3</span> Week 3: Advanced Workflows</h3>
+<ul>
+<li>Practice cut/copy/paste workflows</li>
+<li>Use named registers for complex operations</li>
+<li>Master the dot command for repetition</li>
+</ul>
+</section>
+<section id="week-4-speed-and-efficiency" class="level3" data-number="0.13.4">
+<h3 data-number="0.13.4" class="anchored" data-anchor-id="week-4-speed-and-efficiency"><span class="header-section-number">0.13.4</span> Week 4: Speed and Efficiency</h3>
+<ul>
+<li>Develop personal editing patterns</li>
+<li>Combine with movement commands</li>
+<li>Practice real-world editing scenarios</li>
+</ul>
+</section>
+</section>
+<section id="whats-next" class="level2" data-number="0.14">
+<h2 data-number="0.14" class="anchored" data-anchor-id="whats-next"><span class="header-section-number">0.14</span> What’s Next?</h2>
+<p>You now master: - The three fundamental editing operations (delete, change, yank) - How to combine operators with motions and text objects - The put command for pasting text - Registers for advanced text storage - The dot command for repetition - Common editing patterns and workflows</p>
+<p>In the next post, we’ll explore <a href="../../../posts/series/vim-mastery/06-visual-mode.html">Visual Mode: See What You’re Doing</a> and learn how to select and transform text with visual feedback.</p>
+</section>
+<section id="key-takeaways" class="level2" data-number="0.15">
+<h2 data-number="0.15" class="anchored" data-anchor-id="key-takeaways"><span class="header-section-number">0.15</span> Key Takeaways</h2>
+<ol type="1">
+<li><strong>Master the trinity</strong>: Delete, change, and yank are your core tools</li>
+<li><strong>Think verb+noun</strong>: Operators + motions/text objects = power</li>
+<li><strong>Use text objects</strong>: <code>ciw</code>, <code>di"</code>, <code>yip</code> are incredibly efficient</li>
+<li><strong>Leverage registers</strong>: Named registers give you multiple clipboards</li>
+<li><strong>Practice the dot command</strong>: Repetition is key to efficiency</li>
+</ol>
+<p>The holy trinity of Vim editing transforms you from a character-by-character editor to a text structure manipulator. Once these operations become muscle memory, you’ll edit at the speed of thought.</p>
+<hr>
+<p><em>Ready to see your edits before you make them? Continue with <a href="../../../posts/series/vim-mastery/06-visual-mode.html">Visual Mode: See What You’re Doing</a> to master visual selection and transformation.</em></p>
+
+
+<!-- -->
+
+</section>
+
+<div id="quarto-appendix" class="default"><section class="quarto-appendix-contents"><h2 class="anchored quarto-appendix-heading">Reuse</h2><div id="quarto-reuse" class="quarto-appendix-contents"><div>CC BY-NC-SA 4.0</div></div></section><section class="quarto-appendix-contents"><h2 class="anchored quarto-appendix-heading">Citation</h2><div><div class="quarto-appendix-secondary-label">BibTeX citation:</div><pre class="sourceCode code-with-copy quarto-appendix-bibtex"><code class="sourceCode bibtex">@online{2025,
+  author = {, Hasan},
+  title = {Delete, {Change,} {Copy} {Like} a {Wizard:} {The} {Holy}
+    {Trinity} of {Vim} {Editing}},
+  date = {2025-07-18},
+  url = {https://hasangoni.quarto.pub/hasan-blog-post/posts/series/vim-mastery/05-editing-commands.html},
+  langid = {en}
+}
+</code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre><div class="quarto-appendix-secondary-label">For attribution, please cite this work as:</div><div id="ref-2025" class="csl-entry quarto-appendix-citeas" role="listitem">
+Hasan. 2025. <span>“Delete, Change, Copy Like a Wizard: The Holy Trinity
+of Vim Editing.”</span> July 18, 2025. <a href="https://hasangoni.quarto.pub/hasan-blog-post/posts/series/vim-mastery/05-editing-commands.html">https://hasangoni.quarto.pub/hasan-blog-post/posts/series/vim-mastery/05-editing-commands.html</a>.
+</div></div></section></div></main> <!-- /main -->
+<script id="quarto-html-after-body" type="application/javascript">
+window.document.addEventListener("DOMContentLoaded", function (event) {
+  const toggleBodyColorMode = (bsSheetEl) => {
+    const mode = bsSheetEl.getAttribute("data-mode");
+    const bodyEl = window.document.querySelector("body");
+    if (mode === "dark") {
+      bodyEl.classList.add("quarto-dark");
+      bodyEl.classList.remove("quarto-light");
+    } else {
+      bodyEl.classList.add("quarto-light");
+      bodyEl.classList.remove("quarto-dark");
+    }
+  }
+  const toggleBodyColorPrimary = () => {
+    const bsSheetEl = window.document.querySelector("link#quarto-bootstrap");
+    if (bsSheetEl) {
+      toggleBodyColorMode(bsSheetEl);
+    }
+  }
+  toggleBodyColorPrimary();  
+  const icon = "";
+  const anchorJS = new window.AnchorJS();
+  anchorJS.options = {
+    placement: 'right',
+    icon: icon
+  };
+  anchorJS.add('.anchored');
+  const isCodeAnnotation = (el) => {
+    for (const clz of el.classList) {
+      if (clz.startsWith('code-annotation-')) {                     
+        return true;
+      }
+    }
+    return false;
+  }
+  const clipboard = new window.ClipboardJS('.code-copy-button', {
+    text: function(trigger) {
+      const codeEl = trigger.previousElementSibling.cloneNode(true);
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
+        }
+      }
+      return codeEl.innerText;
+    }
+  });
+  clipboard.on('success', function(e) {
+    // button target
+    const button = e.trigger;
+    // don't keep focus
+    button.blur();
+    // flash "checked"
+    button.classList.add('code-copy-button-checked');
+    var currentTitle = button.getAttribute("title");
+    button.setAttribute("title", "Copied!");
+    let tooltip;
+    if (window.bootstrap) {
+      button.setAttribute("data-bs-toggle", "tooltip");
+      button.setAttribute("data-bs-placement", "left");
+      button.setAttribute("data-bs-title", "Copied!");
+      tooltip = new bootstrap.Tooltip(button, 
+        { trigger: "manual", 
+          customClass: "code-copy-button-tooltip",
+          offset: [0, -8]});
+      tooltip.show();    
+    }
+    setTimeout(function() {
+      if (tooltip) {
+        tooltip.hide();
+        button.removeAttribute("data-bs-title");
+        button.removeAttribute("data-bs-toggle");
+        button.removeAttribute("data-bs-placement");
+      }
+      button.setAttribute("title", currentTitle);
+      button.classList.remove('code-copy-button-checked');
+    }, 1000);
+    // clear code selection
+    e.clearSelection();
+  });
+  const viewSource = window.document.getElementById('quarto-view-source') ||
+                     window.document.getElementById('quarto-code-tools-source');
+  if (viewSource) {
+    const sourceUrl = viewSource.getAttribute("data-quarto-source-url");
+    viewSource.addEventListener("click", function(e) {
+      if (sourceUrl) {
+        // rstudio viewer pane
+        if (/\bcapabilities=\b/.test(window.location)) {
+          window.open(sourceUrl);
+        } else {
+          window.location.href = sourceUrl;
+        }
+      } else {
+        const modal = new bootstrap.Modal(document.getElementById('quarto-embedded-source-code-modal'));
+        modal.show();
+      }
+      return false;
+    });
+  }
+  function toggleCodeHandler(show) {
+    return function(e) {
+      const detailsSrc = window.document.querySelectorAll(".cell > details > .sourceCode");
+      for (let i=0; i<detailsSrc.length; i++) {
+        const details = detailsSrc[i].parentElement;
+        if (show) {
+          details.open = true;
+        } else {
+          details.removeAttribute("open");
+        }
+      }
+      const cellCodeDivs = window.document.querySelectorAll(".cell > .sourceCode");
+      const fromCls = show ? "hidden" : "unhidden";
+      const toCls = show ? "unhidden" : "hidden";
+      for (let i=0; i<cellCodeDivs.length; i++) {
+        const codeDiv = cellCodeDivs[i];
+        if (codeDiv.classList.contains(fromCls)) {
+          codeDiv.classList.remove(fromCls);
+          codeDiv.classList.add(toCls);
+        } 
+      }
+      return false;
+    }
+  }
+  const hideAllCode = window.document.getElementById("quarto-hide-all-code");
+  if (hideAllCode) {
+    hideAllCode.addEventListener("click", toggleCodeHandler(false));
+  }
+  const showAllCode = window.document.getElementById("quarto-show-all-code");
+  if (showAllCode) {
+    showAllCode.addEventListener("click", toggleCodeHandler(true));
+  }
+  function tippyHover(el, contentFn) {
+    const config = {
+      allowHTML: true,
+      content: contentFn,
+      maxWidth: 500,
+      delay: 100,
+      arrow: false,
+      appendTo: function(el) {
+          return el.parentElement;
+      },
+      interactive: true,
+      interactiveBorder: 10,
+      theme: 'quarto',
+      placement: 'bottom-start'
+    };
+    window.tippy(el, config); 
+  }
+  const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+  for (var i=0; i<noterefs.length; i++) {
+    const ref = noterefs[i];
+    tippyHover(ref, function() {
+      // use id or data attribute instead here
+      let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+      try { href = new URL(href).hash; } catch {}
+      const id = href.replace(/^#\/?/, "");
+      const note = window.document.getElementById(id);
+      return note.innerHTML;
+    });
+  }
+      let selectedAnnoteEl;
+      const selectorForAnnotation = ( cell, annotation) => {
+        let cellAttr = 'data-code-cell="' + cell + '"';
+        let lineAttr = 'data-code-annotation="' +  annotation + '"';
+        const selector = 'span[' + cellAttr + '][' + lineAttr + ']';
+        return selector;
+      }
+      const selectCodeLines = (annoteEl) => {
+        const doc = window.document;
+        const targetCell = annoteEl.getAttribute("data-target-cell");
+        const targetAnnotation = annoteEl.getAttribute("data-target-annotation");
+        const annoteSpan = window.document.querySelector(selectorForAnnotation(targetCell, targetAnnotation));
+        const lines = annoteSpan.getAttribute("data-code-lines").split(",");
+        const lineIds = lines.map((line) => {
+          return targetCell + "-" + line;
+        })
+        let top = null;
+        let height = null;
+        let parent = null;
+        if (lineIds.length > 0) {
+            //compute the position of the single el (top and bottom and make a div)
+            const el = window.document.getElementById(lineIds[0]);
+            top = el.offsetTop;
+            height = el.offsetHeight;
+            parent = el.parentElement.parentElement;
+          if (lineIds.length > 1) {
+            const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
+            const bottom = lastEl.offsetTop + lastEl.offsetHeight;
+            height = bottom - top;
+          }
+          if (top !== null && height !== null && parent !== null) {
+            // cook up a div (if necessary) and position it 
+            let div = window.document.getElementById("code-annotation-line-highlight");
+            if (div === null) {
+              div = window.document.createElement("div");
+              div.setAttribute("id", "code-annotation-line-highlight");
+              div.style.position = 'absolute';
+              parent.appendChild(div);
+            }
+            div.style.top = top - 2 + "px";
+            div.style.height = height + 4 + "px";
+            let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
+            if (gutterDiv === null) {
+              gutterDiv = window.document.createElement("div");
+              gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
+              gutterDiv.style.position = 'absolute';
+              const codeCell = window.document.getElementById(targetCell);
+              const gutter = codeCell.querySelector('.code-annotation-gutter');
+              gutter.appendChild(gutterDiv);
+            }
+            gutterDiv.style.top = top - 2 + "px";
+            gutterDiv.style.height = height + 4 + "px";
+          }
+          selectedAnnoteEl = annoteEl;
+        }
+      };
+      const unselectCodeLines = () => {
+        const elementsIds = ["code-annotation-line-highlight", "code-annotation-line-highlight-gutter"];
+        elementsIds.forEach((elId) => {
+          const div = window.document.getElementById(elId);
+          if (div) {
+            div.remove();
+          }
+        });
+        selectedAnnoteEl = undefined;
+      };
+      // Attach click handler to the DT
+      const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
+      for (const annoteDlNode of annoteDls) {
+        annoteDlNode.addEventListener('click', (event) => {
+          const clickedEl = event.target;
+          if (clickedEl !== selectedAnnoteEl) {
+            unselectCodeLines();
+            const activeEl = window.document.querySelector('dt[data-target-cell].code-annotation-active');
+            if (activeEl) {
+              activeEl.classList.remove('code-annotation-active');
+            }
+            selectCodeLines(clickedEl);
+            clickedEl.classList.add('code-annotation-active');
+          } else {
+            // Unselect the line
+            unselectCodeLines();
+            clickedEl.classList.remove('code-annotation-active');
+          }
+        });
+      }
+  const findCites = (el) => {
+    const parentEl = el.parentElement;
+    if (parentEl) {
+      const cites = parentEl.dataset.cites;
+      if (cites) {
+        return {
+          el,
+          cites: cites.split(' ')
+        };
+      } else {
+        return findCites(el.parentElement)
+      }
+    } else {
+      return undefined;
+    }
+  };
+  var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+  for (var i=0; i<bibliorefs.length; i++) {
+    const ref = bibliorefs[i];
+    const citeInfo = findCites(ref);
+    if (citeInfo) {
+      tippyHover(citeInfo.el, function() {
+        var popup = window.document.createElement('div');
+        citeInfo.cites.forEach(function(cite) {
+          var citeDiv = window.document.createElement('div');
+          citeDiv.classList.add('hanging-indent');
+          citeDiv.classList.add('csl-entry');
+          var biblioDiv = window.document.getElementById('ref-' + cite);
+          if (biblioDiv) {
+            citeDiv.innerHTML = biblioDiv.innerHTML;
+          }
+          popup.appendChild(citeDiv);
+        });
+        return popup.innerHTML;
+      });
+    }
+  }
+});
+</script>
+<script src="https://utteranc.es/client.js" repo="yourusername/quarto_blog_hasan" issue-term="pathname" theme="github-light" crossorigin="anonymous" async="">
+</script>
+<script src="https://giscus.app/client.js" data-repo="HasanGoni/quarto_blog_hasan" data-repo-id="" data-category="General" data-category-id="" data-mapping="title" data-reactions-enabled="1" data-emit-metadata="0" data-input-position="top" data-theme="light" data-lang="en" crossorigin="anonymous" async="">
+</script><div class="modal fade" id="quarto-embedded-source-code-modal" tabindex="-1" aria-labelledby="quarto-embedded-source-code-modal-label" aria-hidden="true"><div class="modal-dialog modal-dialog-scrollable"><div class="modal-content"><div class="modal-header"><h5 class="modal-title" id="quarto-embedded-source-code-modal-label">Source Code</h5><button class="btn-close" data-bs-dismiss="modal"></button></div><div class="modal-body"><div class="">
+<div class="sourceCode" id="cb19" data-shortcodes="false"><pre class="sourceCode numberSource markdown number-lines code-with-copy"><code class="sourceCode markdown"><span id="cb19-1"><a href="#cb19-1"></a><span class="co">---</span></span>
+<span id="cb19-2"><a href="#cb19-2"></a><span class="an">title:</span><span class="co"> "Delete, Change, Copy Like a Wizard: The Holy Trinity of Vim Editing"</span></span>
+<span id="cb19-3"><a href="#cb19-3"></a><span class="an">description:</span><span class="co"> "Master the three most powerful editing operations in Vim. Learn to delete, change, and yank text with precision and speed that will make you feel like a coding wizard."</span></span>
+<span id="cb19-4"><a href="#cb19-4"></a><span class="an">author:</span><span class="co"> "Hasan"</span></span>
+<span id="cb19-5"><a href="#cb19-5"></a><span class="an">date:</span><span class="co"> last-modified</span></span>
+<span id="cb19-6"><a href="#cb19-6"></a><span class="an">categories:</span><span class="co"> [vim, editing, delete, change, yank, operators]</span></span>
+<span id="cb19-7"><a href="#cb19-7"></a><span class="an">image:</span><span class="co"> "images/vim.png"</span></span>
+<span id="cb19-8"><a href="#cb19-8"></a><span class="an">toc:</span><span class="co"> true</span></span>
+<span id="cb19-9"><a href="#cb19-9"></a><span class="co">---</span></span>
+<span id="cb19-10"><a href="#cb19-10"></a></span>
+<span id="cb19-11"><a href="#cb19-11"></a><span class="fu">## The Wizard's Toolkit</span></span>
+<span id="cb19-12"><a href="#cb19-12"></a></span>
+<span id="cb19-13"><a href="#cb19-13"></a>Imagine you're a wizard with three magical spells that can transform any text:</span>
+<span id="cb19-14"><a href="#cb19-14"></a></span>
+<span id="cb19-15"><a href="#cb19-15"></a><span class="ss">- </span>**Delete Spell**: Makes unwanted text vanish instantly</span>
+<span id="cb19-16"><a href="#cb19-16"></a><span class="ss">- </span>**Change Spell**: Transforms text into something new</span>
+<span id="cb19-17"><a href="#cb19-17"></a><span class="ss">- </span>**Copy Spell**: Duplicates text wherever you need it</span>
+<span id="cb19-18"><a href="#cb19-18"></a></span>
+<span id="cb19-19"><a href="#cb19-19"></a>These are Vim's three fundamental editing operations. Master these, and you'll edit text faster than you ever thought possible.</span>
+<span id="cb19-20"><a href="#cb19-20"></a></span>
+<span id="cb19-21"><a href="#cb19-21"></a><span class="fu">## The Holy Trinity</span></span>
+<span id="cb19-22"><a href="#cb19-22"></a></span>
+<span id="cb19-23"><a href="#cb19-23"></a><span class="fu">### 1. Delete (`d`) - The Vanishing Act 🗑️</span></span>
+<span id="cb19-24"><a href="#cb19-24"></a>**What it does**: Removes text and stores it in a register</span>
+<span id="cb19-25"><a href="#cb19-25"></a>**Think of it as**: A magic eraser that remembers what it erased</span>
+<span id="cb19-26"><a href="#cb19-26"></a></span>
+<span id="cb19-27"><a href="#cb19-27"></a><span class="fu">### 2. Change (`c`) - The Transformer 🔄</span></span>
+<span id="cb19-28"><a href="#cb19-28"></a>**What it does**: Deletes text and immediately enters Insert mode</span>
+<span id="cb19-29"><a href="#cb19-29"></a>**Think of it as**: Delete + Insert in one smooth motion</span>
+<span id="cb19-30"><a href="#cb19-30"></a></span>
+<span id="cb19-31"><a href="#cb19-31"></a><span class="fu">### 3. Yank (`y`) - The Duplicator 📋</span></span>
+<span id="cb19-32"><a href="#cb19-32"></a>**What it does**: Copies text to a register without removing it</span>
+<span id="cb19-33"><a href="#cb19-33"></a>**Think of it as**: A photocopy machine for text</span>
+<span id="cb19-34"><a href="#cb19-34"></a></span>
+<span id="cb19-35"><a href="#cb19-35"></a><span class="fu">## The Grammar Pattern</span></span>
+<span id="cb19-36"><a href="#cb19-36"></a></span>
+<span id="cb19-37"><a href="#cb19-37"></a>Remember the verb+noun pattern? These are your verbs:</span>
+<span id="cb19-38"><a href="#cb19-38"></a></span>
+<span id="cb19-39"><a href="#cb19-39"></a><span class="in">```</span></span>
+<span id="cb19-40"><a href="#cb19-40"></a><span class="in">[count] + operator + motion/text-object</span></span>
+<span id="cb19-41"><a href="#cb19-41"></a><span class="in">```</span></span>
+<span id="cb19-42"><a href="#cb19-42"></a></span>
+<span id="cb19-43"><a href="#cb19-43"></a>**Examples**:</span>
+<span id="cb19-44"><a href="#cb19-44"></a><span class="ss">- </span><span class="in">`d3w`</span> = Delete 3 words</span>
+<span id="cb19-45"><a href="#cb19-45"></a><span class="ss">- </span><span class="in">`c2l`</span> = Change 2 characters</span>
+<span id="cb19-46"><a href="#cb19-46"></a><span class="ss">- </span><span class="in">`yap`</span> = Yank around paragraph</span>
+<span id="cb19-47"><a href="#cb19-47"></a></span>
+<span id="cb19-48"><a href="#cb19-48"></a><span class="fu">## Delete Mastery: Making Text Disappear</span></span>
+<span id="cb19-49"><a href="#cb19-49"></a></span>
+<span id="cb19-50"><a href="#cb19-50"></a><span class="fu">### Basic Delete Commands</span></span>
+<span id="cb19-51"><a href="#cb19-51"></a></span>
+<span id="cb19-52"><a href="#cb19-52"></a>| Command | What It Deletes | Story |</span>
+<span id="cb19-53"><a href="#cb19-53"></a>|---------|----------------|-------|</span>
+<span id="cb19-54"><a href="#cb19-54"></a>| <span class="in">`x`</span> | Character under cursor | "**x** marks the spot to delete" |</span>
+<span id="cb19-55"><a href="#cb19-55"></a>| <span class="in">`X`</span> | Character before cursor | "**X** deletes backward" |</span>
+<span id="cb19-56"><a href="#cb19-56"></a>| <span class="in">`dd`</span> | Entire line | "**d**elete **d**ouble = whole line" |</span>
+<span id="cb19-57"><a href="#cb19-57"></a>| <span class="in">`dw`</span> | Word from cursor | "**d**elete **w**ord" |</span>
+<span id="cb19-58"><a href="#cb19-58"></a>| <span class="in">`db`</span> | Word backward | "**d**elete **b**ack" |</span>
+<span id="cb19-59"><a href="#cb19-59"></a>| <span class="in">`d$`</span> | To end of line | "**d**elete to **$** (end)" |</span>
+<span id="cb19-60"><a href="#cb19-60"></a>| <span class="in">`d0`</span> | To beginning of line | "**d**elete to **0** (start)" |</span>
+<span id="cb19-61"><a href="#cb19-61"></a></span>
+<span id="cb19-62"><a href="#cb19-62"></a><span class="fu">### Advanced Delete Patterns</span></span>
+<span id="cb19-63"><a href="#cb19-63"></a></span>
+<span id="cb19-64"><a href="#cb19-64"></a>| Command | What It Deletes | Example |</span>
+<span id="cb19-65"><a href="#cb19-65"></a>|---------|----------------|---------|</span>
+<span id="cb19-66"><a href="#cb19-66"></a>| <span class="in">`daw`</span> | A word (with space) | <span class="in">`hello `</span> from "hello world" |</span>
+<span id="cb19-67"><a href="#cb19-67"></a>| <span class="in">`diw`</span> | Inner word | <span class="in">`hello`</span> from "hello world" |</span>
+<span id="cb19-68"><a href="#cb19-68"></a>| <span class="in">`di"`</span> | Inside quotes | <span class="in">`text`</span> from <span class="in">`"text"`</span> |</span>
+<span id="cb19-69"><a href="#cb19-69"></a>| <span class="in">`da"`</span> | Around quotes | <span class="in">`"text"`</span> including quotes |</span>
+<span id="cb19-70"><a href="#cb19-70"></a>| <span class="in">`dip`</span> | Inner paragraph | Paragraph without empty lines |</span>
+<span id="cb19-71"><a href="#cb19-71"></a>| <span class="in">`dap`</span> | Around paragraph | Paragraph with empty lines |</span>
+<span id="cb19-72"><a href="#cb19-72"></a></span>
+<span id="cb19-73"><a href="#cb19-73"></a><span class="fu">### Practical Delete Examples</span></span>
+<span id="cb19-74"><a href="#cb19-74"></a></span>
+<span id="cb19-75"><a href="#cb19-75"></a>**Example 1: Cleaning up a function**</span>
+<span id="cb19-76"><a href="#cb19-76"></a><span class="in">```python</span></span>
+<span id="cb19-77"><a href="#cb19-77"></a><span class="kw">def</span> calculate_total(items, tax_rate, discount_rate):</span>
+<span id="cb19-78"><a href="#cb19-78"></a>    <span class="co"># This is a long comment that needs to be removed</span></span>
+<span id="cb19-79"><a href="#cb19-79"></a>    total <span class="op">=</span> <span class="dv">0</span></span>
+<span id="cb19-80"><a href="#cb19-80"></a>    <span class="cf">for</span> item <span class="kw">in</span> items:</span>
+<span id="cb19-81"><a href="#cb19-81"></a>        total <span class="op">+=</span> item.price</span>
+<span id="cb19-82"><a href="#cb19-82"></a>    <span class="cf">return</span> total</span>
+<span id="cb19-83"><a href="#cb19-83"></a><span class="in">```</span></span>
+<span id="cb19-84"><a href="#cb19-84"></a></span>
+<span id="cb19-85"><a href="#cb19-85"></a>**Tasks**:</span>
+<span id="cb19-86"><a href="#cb19-86"></a><span class="ss">1. </span>Delete the comment: Move to comment line, <span class="in">`dd`</span></span>
+<span id="cb19-87"><a href="#cb19-87"></a><span class="ss">2. </span>Remove <span class="in">`discount_rate`</span> parameter: Move to it, <span class="in">`daw`</span></span>
+<span id="cb19-88"><a href="#cb19-88"></a><span class="ss">3. </span>Delete inside function: Move to function body, <span class="in">`di{`</span></span>
+<span id="cb19-89"><a href="#cb19-89"></a></span>
+<span id="cb19-90"><a href="#cb19-90"></a><span class="fu">## Change Mastery: The Ultimate Transformer</span></span>
+<span id="cb19-91"><a href="#cb19-91"></a></span>
+<span id="cb19-92"><a href="#cb19-92"></a><span class="fu">### Basic Change Commands</span></span>
+<span id="cb19-93"><a href="#cb19-93"></a></span>
+<span id="cb19-94"><a href="#cb19-94"></a>| Command | What It Changes | Story |</span>
+<span id="cb19-95"><a href="#cb19-95"></a>|---------|----------------|-------|</span>
+<span id="cb19-96"><a href="#cb19-96"></a>| <span class="in">`cc`</span> | Entire line | "**c**hange **c**omplete line" |</span>
+<span id="cb19-97"><a href="#cb19-97"></a>| <span class="in">`cw`</span> | Word from cursor | "**c**hange **w**ord" |</span>
+<span id="cb19-98"><a href="#cb19-98"></a>| <span class="in">`cb`</span> | Word backward | "**c**hange **b**ack" |</span>
+<span id="cb19-99"><a href="#cb19-99"></a>| <span class="in">`c$`</span> | To end of line | "**c**hange to **$** (end)" |</span>
+<span id="cb19-100"><a href="#cb19-100"></a>| <span class="in">`c0`</span> | To beginning of line | "**c**hange to **0** (start)" |</span>
+<span id="cb19-101"><a href="#cb19-101"></a>| <span class="in">`C`</span> | From cursor to end of line | "**C**hange to end (shortcut)" |</span>
+<span id="cb19-102"><a href="#cb19-102"></a></span>
+<span id="cb19-103"><a href="#cb19-103"></a><span class="fu">### Advanced Change Patterns</span></span>
+<span id="cb19-104"><a href="#cb19-104"></a></span>
+<span id="cb19-105"><a href="#cb19-105"></a>| Command | What It Changes | Example |</span>
+<span id="cb19-106"><a href="#cb19-106"></a>|---------|----------------|---------|</span>
+<span id="cb19-107"><a href="#cb19-107"></a>| <span class="in">`ciw`</span> | Inner word | Replace <span class="in">`hello`</span> in "hello world" |</span>
+<span id="cb19-108"><a href="#cb19-108"></a>| <span class="in">`caw`</span> | A word (with space) | Replace <span class="in">`hello `</span> in "hello world" |</span>
+<span id="cb19-109"><a href="#cb19-109"></a>| <span class="in">`ci"`</span> | Inside quotes | Replace content in <span class="in">`"text"`</span> |</span>
+<span id="cb19-110"><a href="#cb19-110"></a>| <span class="in">`ca"`</span> | Around quotes | Replace <span class="in">`"text"`</span> entirely |</span>
+<span id="cb19-111"><a href="#cb19-111"></a>| <span class="in">`cip`</span> | Inner paragraph | Replace paragraph content |</span>
+<span id="cb19-112"><a href="#cb19-112"></a>| <span class="in">`ci(`</span> | Inside parentheses | Replace <span class="in">`x + y`</span> in <span class="in">`(x + y)`</span> |</span>
+<span id="cb19-113"><a href="#cb19-113"></a></span>
+<span id="cb19-114"><a href="#cb19-114"></a><span class="fu">### Practical Change Examples</span></span>
+<span id="cb19-115"><a href="#cb19-115"></a></span>
+<span id="cb19-116"><a href="#cb19-116"></a>**Example 1: Refactoring variable names**</span>
+<span id="cb19-117"><a href="#cb19-117"></a><span class="in">```python</span></span>
+<span id="cb19-118"><a href="#cb19-118"></a>old_variable_name <span class="op">=</span> calculate_something()</span>
+<span id="cb19-119"><a href="#cb19-119"></a>result <span class="op">=</span> process_data(old_variable_name)</span>
+<span id="cb19-120"><a href="#cb19-120"></a><span class="in">```</span></span>
+<span id="cb19-121"><a href="#cb19-121"></a></span>
+<span id="cb19-122"><a href="#cb19-122"></a>**Tasks**:</span>
+<span id="cb19-123"><a href="#cb19-123"></a><span class="ss">1. </span>Change variable name: Move to <span class="in">`old_variable_name`</span>, <span class="in">`ciw`</span>, type <span class="in">`new_name`</span></span>
+<span id="cb19-124"><a href="#cb19-124"></a><span class="ss">2. </span>Change function name: Move to <span class="in">`calculate_something`</span>, <span class="in">`ciw`</span>, type <span class="in">`compute_value`</span></span>
+<span id="cb19-125"><a href="#cb19-125"></a><span class="ss">3. </span>Change string content: Move inside quotes, <span class="in">`ci"`</span>, type new content</span>
+<span id="cb19-126"><a href="#cb19-126"></a></span>
+<span id="cb19-127"><a href="#cb19-127"></a>**Example 2: Updating function parameters**</span>
+<span id="cb19-128"><a href="#cb19-128"></a><span class="in">```javascript</span></span>
+<span id="cb19-129"><a href="#cb19-129"></a>function <span class="fu">processOrder</span><span class="op">(</span>orderId<span class="op">,</span> customerId<span class="op">,</span> priority<span class="op">)</span> <span class="op">{</span></span>
+<span id="cb19-130"><a href="#cb19-130"></a>    <span class="co">// function body</span></span>
+<span id="cb19-131"><a href="#cb19-131"></a><span class="op">}</span></span>
+<span id="cb19-132"><a href="#cb19-132"></a><span class="in">```</span></span>
+<span id="cb19-133"><a href="#cb19-133"></a></span>
+<span id="cb19-134"><a href="#cb19-134"></a>**Task**: Change <span class="in">`priority`</span> to <span class="in">`urgencyLevel`</span></span>
+<span id="cb19-135"><a href="#cb19-135"></a><span class="ss">1. </span>Move to <span class="in">`priority`</span></span>
+<span id="cb19-136"><a href="#cb19-136"></a><span class="ss">2. </span><span class="in">`ciw`</span> (change inner word)</span>
+<span id="cb19-137"><a href="#cb19-137"></a><span class="ss">3. </span>Type <span class="in">`urgencyLevel`</span></span>
+<span id="cb19-138"><a href="#cb19-138"></a></span>
+<span id="cb19-139"><a href="#cb19-139"></a><span class="fu">## Yank Mastery: The Copy Champion</span></span>
+<span id="cb19-140"><a href="#cb19-140"></a></span>
+<span id="cb19-141"><a href="#cb19-141"></a><span class="fu">### Basic Yank Commands</span></span>
+<span id="cb19-142"><a href="#cb19-142"></a></span>
+<span id="cb19-143"><a href="#cb19-143"></a>| Command | What It Yanks | Story |</span>
+<span id="cb19-144"><a href="#cb19-144"></a>|---------|--------------|-------|</span>
+<span id="cb19-145"><a href="#cb19-145"></a>| <span class="in">`yy`</span> | Entire line | "**y**ank **y**ank = whole line" |</span>
+<span id="cb19-146"><a href="#cb19-146"></a>| <span class="in">`yw`</span> | Word from cursor | "**y**ank **w**ord" |</span>
+<span id="cb19-147"><a href="#cb19-147"></a>| <span class="in">`yb`</span> | Word backward | "**y**ank **b**ack" |</span>
+<span id="cb19-148"><a href="#cb19-148"></a>| <span class="in">`y$`</span> | To end of line | "**y**ank to **$** (end)" |</span>
+<span id="cb19-149"><a href="#cb19-149"></a>| <span class="in">`y0`</span> | To beginning of line | "**y**ank to **0** (start)" |</span>
+<span id="cb19-150"><a href="#cb19-150"></a></span>
+<span id="cb19-151"><a href="#cb19-151"></a><span class="fu">### Advanced Yank Patterns</span></span>
+<span id="cb19-152"><a href="#cb19-152"></a></span>
+<span id="cb19-153"><a href="#cb19-153"></a>| Command | What It Yanks | Example |</span>
+<span id="cb19-154"><a href="#cb19-154"></a>|---------|--------------|---------|</span>
+<span id="cb19-155"><a href="#cb19-155"></a>| <span class="in">`yiw`</span> | Inner word | Copy <span class="in">`hello`</span> from "hello world" |</span>
+<span id="cb19-156"><a href="#cb19-156"></a>| <span class="in">`yaw`</span> | A word (with space) | Copy <span class="in">`hello `</span> from "hello world" |</span>
+<span id="cb19-157"><a href="#cb19-157"></a>| <span class="in">`yi"`</span> | Inside quotes | Copy content from <span class="in">`"text"`</span> |</span>
+<span id="cb19-158"><a href="#cb19-158"></a>| <span class="in">`ya"`</span> | Around quotes | Copy <span class="in">`"text"`</span> with quotes |</span>
+<span id="cb19-159"><a href="#cb19-159"></a>| <span class="in">`yip`</span> | Inner paragraph | Copy paragraph content |</span>
+<span id="cb19-160"><a href="#cb19-160"></a>| <span class="in">`yi(`</span> | Inside parentheses | Copy <span class="in">`x + y`</span> from <span class="in">`(x + y)`</span> |</span>
+<span id="cb19-161"><a href="#cb19-161"></a></span>
+<span id="cb19-162"><a href="#cb19-162"></a><span class="fu">### Practical Yank Examples</span></span>
+<span id="cb19-163"><a href="#cb19-163"></a></span>
+<span id="cb19-164"><a href="#cb19-164"></a>**Example 1: Duplicating code blocks**</span>
+<span id="cb19-165"><a href="#cb19-165"></a><span class="in">```python</span></span>
+<span id="cb19-166"><a href="#cb19-166"></a><span class="kw">def</span> calculate_tax(price, rate):</span>
+<span id="cb19-167"><a href="#cb19-167"></a>    <span class="cf">return</span> price <span class="op">*</span> rate</span>
+<span id="cb19-168"><a href="#cb19-168"></a></span>
+<span id="cb19-169"><a href="#cb19-169"></a><span class="kw">def</span> calculate_discount(price, rate):</span>
+<span id="cb19-170"><a href="#cb19-170"></a>    <span class="cf">return</span> price <span class="op">*</span> rate</span>
+<span id="cb19-171"><a href="#cb19-171"></a><span class="in">```</span></span>
+<span id="cb19-172"><a href="#cb19-172"></a></span>
+<span id="cb19-173"><a href="#cb19-173"></a>**Task**: Copy the calculation logic</span>
+<span id="cb19-174"><a href="#cb19-174"></a><span class="ss">1. </span>Move to <span class="in">`price * rate`</span></span>
+<span id="cb19-175"><a href="#cb19-175"></a><span class="ss">2. </span><span class="in">`yiw`</span> to copy just <span class="in">`price`</span>, or</span>
+<span id="cb19-176"><a href="#cb19-176"></a><span class="ss">3. </span><span class="in">`y$`</span> to copy <span class="in">`price * rate`</span>, or</span>
+<span id="cb19-177"><a href="#cb19-177"></a><span class="ss">4. </span><span class="in">`yy`</span> to copy entire line</span>
+<span id="cb19-178"><a href="#cb19-178"></a></span>
+<span id="cb19-179"><a href="#cb19-179"></a><span class="fu">## The Put Command: Completing the Circle</span></span>
+<span id="cb19-180"><a href="#cb19-180"></a></span>
+<span id="cb19-181"><a href="#cb19-181"></a>After yanking or deleting, you need to put (paste) the text:</span>
+<span id="cb19-182"><a href="#cb19-182"></a></span>
+<span id="cb19-183"><a href="#cb19-183"></a>| Command | What It Does | Story |</span>
+<span id="cb19-184"><a href="#cb19-184"></a>|---------|-------------|-------|</span>
+<span id="cb19-185"><a href="#cb19-185"></a>| <span class="in">`p`</span> | Put after cursor | "**p**ut after" |</span>
+<span id="cb19-186"><a href="#cb19-186"></a>| <span class="in">`P`</span> | Put before cursor | "**P**ut before" |</span>
+<span id="cb19-187"><a href="#cb19-187"></a>| <span class="in">`gp`</span> | Put after and move cursor | "**g**o **p**ut" |</span>
+<span id="cb19-188"><a href="#cb19-188"></a>| <span class="in">`gP`</span> | Put before and move cursor | "**g**o **P**ut before" |</span>
+<span id="cb19-189"><a href="#cb19-189"></a></span>
+<span id="cb19-190"><a href="#cb19-190"></a><span class="fu">### Put in Action</span></span>
+<span id="cb19-191"><a href="#cb19-191"></a></span>
+<span id="cb19-192"><a href="#cb19-192"></a>**Example**: Moving a line down</span>
+<span id="cb19-193"><a href="#cb19-193"></a><span class="ss">1. </span><span class="in">`dd`</span> - Delete current line</span>
+<span id="cb19-194"><a href="#cb19-194"></a><span class="ss">2. </span><span class="in">`j`</span> - Move down one line</span>
+<span id="cb19-195"><a href="#cb19-195"></a><span class="ss">3. </span><span class="in">`p`</span> - Put the line after current position</span>
+<span id="cb19-196"><a href="#cb19-196"></a></span>
+<span id="cb19-197"><a href="#cb19-197"></a>**Example**: Duplicating a word</span>
+<span id="cb19-198"><a href="#cb19-198"></a><span class="ss">1. </span><span class="in">`yiw`</span> - Yank inner word</span>
+<span id="cb19-199"><a href="#cb19-199"></a><span class="ss">2. </span><span class="in">`w`</span> - Move to next word</span>
+<span id="cb19-200"><a href="#cb19-200"></a><span class="ss">3. </span><span class="in">`p`</span> - Put the word after cursor</span>
+<span id="cb19-201"><a href="#cb19-201"></a></span>
+<span id="cb19-202"><a href="#cb19-202"></a><span class="fu">## Combining Operations: The Power Combos</span></span>
+<span id="cb19-203"><a href="#cb19-203"></a></span>
+<span id="cb19-204"><a href="#cb19-204"></a><span class="fu">### The Classic Workflows</span></span>
+<span id="cb19-205"><a href="#cb19-205"></a></span>
+<span id="cb19-206"><a href="#cb19-206"></a>**1. Cut and Paste**</span>
+<span id="cb19-207"><a href="#cb19-207"></a><span class="in">```vim</span></span>
+<span id="cb19-208"><a href="#cb19-208"></a><span class="in">daw     " Delete a word (cut)</span></span>
+<span id="cb19-209"><a href="#cb19-209"></a><span class="in">/target " Search for target location</span></span>
+<span id="cb19-210"><a href="#cb19-210"></a><span class="in">p       " Put after cursor (paste)</span></span>
+<span id="cb19-211"><a href="#cb19-211"></a><span class="in">```</span></span>
+<span id="cb19-212"><a href="#cb19-212"></a></span>
+<span id="cb19-213"><a href="#cb19-213"></a>**2. Copy and Paste**</span>
+<span id="cb19-214"><a href="#cb19-214"></a><span class="in">```vim</span></span>
+<span id="cb19-215"><a href="#cb19-215"></a><span class="in">yip     " Yank inner paragraph (copy)</span></span>
+<span id="cb19-216"><a href="#cb19-216"></a><span class="in">}       " Jump to next paragraph</span></span>
+<span id="cb19-217"><a href="#cb19-217"></a><span class="in">p       " Put after cursor (paste)</span></span>
+<span id="cb19-218"><a href="#cb19-218"></a><span class="in">```</span></span>
+<span id="cb19-219"><a href="#cb19-219"></a></span>
+<span id="cb19-220"><a href="#cb19-220"></a>**3. Replace Pattern**</span>
+<span id="cb19-221"><a href="#cb19-221"></a><span class="in">```vim</span></span>
+<span id="cb19-222"><a href="#cb19-222"></a><span class="in">ciw     " Change inner word</span></span>
+<span id="cb19-223"><a href="#cb19-223"></a><span class="in">" Type replacement</span></span>
+<span id="cb19-224"><a href="#cb19-224"></a><span class="in">&lt;Esc&gt;   " Return to normal mode</span></span>
+<span id="cb19-225"><a href="#cb19-225"></a><span class="in">```</span></span>
+<span id="cb19-226"><a href="#cb19-226"></a></span>
+<span id="cb19-227"><a href="#cb19-227"></a><span class="fu">### Advanced Combinations</span></span>
+<span id="cb19-228"><a href="#cb19-228"></a></span>
+<span id="cb19-229"><a href="#cb19-229"></a>**1. Swap two words**</span>
+<span id="cb19-230"><a href="#cb19-230"></a><span class="in">```vim</span></span>
+<span id="cb19-231"><a href="#cb19-231"></a><span class="in">" Cursor on first word</span></span>
+<span id="cb19-232"><a href="#cb19-232"></a><span class="in">daw     " Delete first word</span></span>
+<span id="cb19-233"><a href="#cb19-233"></a><span class="in">w       " Move to second word</span></span>
+<span id="cb19-234"><a href="#cb19-234"></a><span class="in">daw     " Delete second word</span></span>
+<span id="cb19-235"><a href="#cb19-235"></a><span class="in">P       " Put second word before cursor</span></span>
+<span id="cb19-236"><a href="#cb19-236"></a><span class="in">w       " Move forward</span></span>
+<span id="cb19-237"><a href="#cb19-237"></a><span class="in">p       " Put first word after cursor</span></span>
+<span id="cb19-238"><a href="#cb19-238"></a><span class="in">```</span></span>
+<span id="cb19-239"><a href="#cb19-239"></a></span>
+<span id="cb19-240"><a href="#cb19-240"></a>**2. Duplicate and modify**</span>
+<span id="cb19-241"><a href="#cb19-241"></a><span class="in">```vim</span></span>
+<span id="cb19-242"><a href="#cb19-242"></a><span class="in">yy      " Yank current line</span></span>
+<span id="cb19-243"><a href="#cb19-243"></a><span class="in">p       " Put below current line</span></span>
+<span id="cb19-244"><a href="#cb19-244"></a><span class="in">ciw     " Change first word in new line</span></span>
+<span id="cb19-245"><a href="#cb19-245"></a><span class="in">```</span></span>
+<span id="cb19-246"><a href="#cb19-246"></a></span>
+<span id="cb19-247"><a href="#cb19-247"></a><span class="fu">## The Dot Command: Repeat Magic</span></span>
+<span id="cb19-248"><a href="#cb19-248"></a></span>
+<span id="cb19-249"><a href="#cb19-249"></a>The <span class="in">`.`</span> command repeats your last change:</span>
+<span id="cb19-250"><a href="#cb19-250"></a></span>
+<span id="cb19-251"><a href="#cb19-251"></a>**Example**: Changing multiple variable names</span>
+<span id="cb19-252"><a href="#cb19-252"></a><span class="in">```python</span></span>
+<span id="cb19-253"><a href="#cb19-253"></a>old_name <span class="op">=</span> value1</span>
+<span id="cb19-254"><a href="#cb19-254"></a>old_name <span class="op">=</span> value2</span>
+<span id="cb19-255"><a href="#cb19-255"></a>old_name <span class="op">=</span> value3</span>
+<span id="cb19-256"><a href="#cb19-256"></a><span class="in">```</span></span>
+<span id="cb19-257"><a href="#cb19-257"></a></span>
+<span id="cb19-258"><a href="#cb19-258"></a>**Workflow**:</span>
+<span id="cb19-259"><a href="#cb19-259"></a><span class="ss">1. </span>Move to first <span class="in">`old_name`</span></span>
+<span id="cb19-260"><a href="#cb19-260"></a><span class="ss">2. </span><span class="in">`ciw`</span> and type <span class="in">`new_name`</span></span>
+<span id="cb19-261"><a href="#cb19-261"></a><span class="ss">3. </span>Press <span class="in">`Esc`</span></span>
+<span id="cb19-262"><a href="#cb19-262"></a><span class="ss">4. </span>Move to next <span class="in">`old_name`</span></span>
+<span id="cb19-263"><a href="#cb19-263"></a><span class="ss">5. </span>Press <span class="in">`.`</span> to repeat the change</span>
+<span id="cb19-264"><a href="#cb19-264"></a><span class="ss">6. </span>Repeat steps 4-5 for remaining occurrences</span>
+<span id="cb19-265"><a href="#cb19-265"></a></span>
+<span id="cb19-266"><a href="#cb19-266"></a><span class="fu">## Registers: The Advanced Storage System</span></span>
+<span id="cb19-267"><a href="#cb19-267"></a></span>
+<span id="cb19-268"><a href="#cb19-268"></a>Vim has multiple clipboards called registers:</span>
+<span id="cb19-269"><a href="#cb19-269"></a></span>
+<span id="cb19-270"><a href="#cb19-270"></a><span class="fu">### Default Registers</span></span>
+<span id="cb19-271"><a href="#cb19-271"></a><span class="ss">- </span><span class="in">`"`</span> - Default register (last delete/yank)</span>
+<span id="cb19-272"><a href="#cb19-272"></a><span class="ss">- </span><span class="in">`0`</span> - Yank register (last yank only)</span>
+<span id="cb19-273"><a href="#cb19-273"></a><span class="ss">- </span><span class="in">`1-9`</span> - Delete registers (recent deletes)</span>
+<span id="cb19-274"><a href="#cb19-274"></a></span>
+<span id="cb19-275"><a href="#cb19-275"></a><span class="fu">### Named Registers</span></span>
+<span id="cb19-276"><a href="#cb19-276"></a><span class="ss">- </span><span class="in">`"a`</span> to <span class="in">`"z`</span> - Your personal storage</span>
+<span id="cb19-277"><a href="#cb19-277"></a></span>
+<span id="cb19-278"><a href="#cb19-278"></a>**Examples**:</span>
+<span id="cb19-279"><a href="#cb19-279"></a><span class="in">```vim</span></span>
+<span id="cb19-280"><a href="#cb19-280"></a><span class="in">"ayy    " Yank line to register 'a'</span></span>
+<span id="cb19-281"><a href="#cb19-281"></a><span class="in">"ap     " Put from register 'a'</span></span>
+<span id="cb19-282"><a href="#cb19-282"></a><span class="in">"byiw   " Yank word to register 'b'</span></span>
+<span id="cb19-283"><a href="#cb19-283"></a><span class="in">"bp     " Put from register 'b'</span></span>
+<span id="cb19-284"><a href="#cb19-284"></a><span class="in">```</span></span>
+<span id="cb19-285"><a href="#cb19-285"></a></span>
+<span id="cb19-286"><a href="#cb19-286"></a><span class="fu">### System Clipboard</span></span>
+<span id="cb19-287"><a href="#cb19-287"></a><span class="in">```vim</span></span>
+<span id="cb19-288"><a href="#cb19-288"></a><span class="in">"+y     " Yank to system clipboard</span></span>
+<span id="cb19-289"><a href="#cb19-289"></a><span class="in">"+p     " Put from system clipboard</span></span>
+<span id="cb19-290"><a href="#cb19-290"></a><span class="in">"*y     " Yank to selection clipboard (Linux)</span></span>
+<span id="cb19-291"><a href="#cb19-291"></a><span class="in">"*p     " Put from selection clipboard (Linux)</span></span>
+<span id="cb19-292"><a href="#cb19-292"></a><span class="in">```</span></span>
+<span id="cb19-293"><a href="#cb19-293"></a></span>
+<span id="cb19-294"><a href="#cb19-294"></a><span class="fu">## Practice Exercise: The Editing Dojo</span></span>
+<span id="cb19-295"><a href="#cb19-295"></a></span>
+<span id="cb19-296"><a href="#cb19-296"></a>Create a file with this content:</span>
+<span id="cb19-297"><a href="#cb19-297"></a><span class="in">```python</span></span>
+<span id="cb19-298"><a href="#cb19-298"></a><span class="kw">def</span> calculate_price(item_price, tax_rate, discount_rate):</span>
+<span id="cb19-299"><a href="#cb19-299"></a>    <span class="co">"""Calculate final price with tax and discount."""</span></span>
+<span id="cb19-300"><a href="#cb19-300"></a>    <span class="co"># First apply discount</span></span>
+<span id="cb19-301"><a href="#cb19-301"></a>    discounted_price <span class="op">=</span> item_price <span class="op">*</span> (<span class="dv">1</span> <span class="op">-</span> discount_rate)</span>
+<span id="cb19-302"><a href="#cb19-302"></a>    </span>
+<span id="cb19-303"><a href="#cb19-303"></a>    <span class="co"># Then apply tax</span></span>
+<span id="cb19-304"><a href="#cb19-304"></a>    final_price <span class="op">=</span> discounted_price <span class="op">*</span> (<span class="dv">1</span> <span class="op">+</span> tax_rate)</span>
+<span id="cb19-305"><a href="#cb19-305"></a>    </span>
+<span id="cb19-306"><a href="#cb19-306"></a>    <span class="cf">return</span> final_price</span>
+<span id="cb19-307"><a href="#cb19-307"></a></span>
+<span id="cb19-308"><a href="#cb19-308"></a><span class="kw">def</span> process_order(order_data):</span>
+<span id="cb19-309"><a href="#cb19-309"></a>    <span class="co">"""Process customer order."""</span></span>
+<span id="cb19-310"><a href="#cb19-310"></a>    total <span class="op">=</span> <span class="dv">0</span></span>
+<span id="cb19-311"><a href="#cb19-311"></a>    <span class="cf">for</span> item <span class="kw">in</span> order_data:</span>
+<span id="cb19-312"><a href="#cb19-312"></a>        price <span class="op">=</span> calculate_price(item.price, <span class="fl">0.08</span>, <span class="fl">0.10</span>)</span>
+<span id="cb19-313"><a href="#cb19-313"></a>        total <span class="op">+=</span> price</span>
+<span id="cb19-314"><a href="#cb19-314"></a>    <span class="cf">return</span> total</span>
+<span id="cb19-315"><a href="#cb19-315"></a><span class="in">```</span></span>
+<span id="cb19-316"><a href="#cb19-316"></a></span>
+<span id="cb19-317"><a href="#cb19-317"></a>**Practice these operations**:</span>
+<span id="cb19-318"><a href="#cb19-318"></a></span>
+<span id="cb19-319"><a href="#cb19-319"></a><span class="ss">1. </span>**Delete operations**:</span>
+<span id="cb19-320"><a href="#cb19-320"></a><span class="ss">   - </span>Delete the docstring: <span class="in">`di"`</span></span>
+<span id="cb19-321"><a href="#cb19-321"></a><span class="ss">   - </span>Delete a comment: <span class="in">`dd`</span></span>
+<span id="cb19-322"><a href="#cb19-322"></a><span class="ss">   - </span>Delete function parameter: <span class="in">`daw`</span></span>
+<span id="cb19-323"><a href="#cb19-323"></a></span>
+<span id="cb19-324"><a href="#cb19-324"></a><span class="ss">2. </span>**Change operations**:</span>
+<span id="cb19-325"><a href="#cb19-325"></a><span class="ss">   - </span>Change function name: <span class="in">`ciw`</span></span>
+<span id="cb19-326"><a href="#cb19-326"></a><span class="ss">   - </span>Change variable name: <span class="in">`ciw`</span></span>
+<span id="cb19-327"><a href="#cb19-327"></a><span class="ss">   - </span>Change string content: <span class="in">`ci"`</span></span>
+<span id="cb19-328"><a href="#cb19-328"></a></span>
+<span id="cb19-329"><a href="#cb19-329"></a><span class="ss">3. </span>**Yank operations**:</span>
+<span id="cb19-330"><a href="#cb19-330"></a><span class="ss">   - </span>Copy entire function: <span class="in">`yip`</span></span>
+<span id="cb19-331"><a href="#cb19-331"></a><span class="ss">   - </span>Copy variable assignment: <span class="in">`yy`</span></span>
+<span id="cb19-332"><a href="#cb19-332"></a><span class="ss">   - </span>Copy parameter list: <span class="in">`yi(`</span></span>
+<span id="cb19-333"><a href="#cb19-333"></a></span>
+<span id="cb19-334"><a href="#cb19-334"></a><span class="ss">4. </span>**Advanced workflows**:</span>
+<span id="cb19-335"><a href="#cb19-335"></a><span class="ss">   - </span>Duplicate a line and modify it</span>
+<span id="cb19-336"><a href="#cb19-336"></a><span class="ss">   - </span>Move a line to different location</span>
+<span id="cb19-337"><a href="#cb19-337"></a><span class="ss">   - </span>Replace multiple occurrences with <span class="in">`.`</span></span>
+<span id="cb19-338"><a href="#cb19-338"></a></span>
+<span id="cb19-339"><a href="#cb19-339"></a><span class="fu">## Common Editing Patterns</span></span>
+<span id="cb19-340"><a href="#cb19-340"></a></span>
+<span id="cb19-341"><a href="#cb19-341"></a><span class="fu">### Pattern 1: Quick Word Replacement</span></span>
+<span id="cb19-342"><a href="#cb19-342"></a><span class="in">```vim</span></span>
+<span id="cb19-343"><a href="#cb19-343"></a><span class="in">ciw     " Change inner word</span></span>
+<span id="cb19-344"><a href="#cb19-344"></a><span class="in">" Type replacement</span></span>
+<span id="cb19-345"><a href="#cb19-345"></a><span class="in">&lt;Esc&gt;   " Back to normal mode</span></span>
+<span id="cb19-346"><a href="#cb19-346"></a><span class="in">```</span></span>
+<span id="cb19-347"><a href="#cb19-347"></a></span>
+<span id="cb19-348"><a href="#cb19-348"></a><span class="fu">### Pattern 2: Line Duplication and Modification</span></span>
+<span id="cb19-349"><a href="#cb19-349"></a><span class="in">```vim</span></span>
+<span id="cb19-350"><a href="#cb19-350"></a><span class="in">yy      " Yank current line</span></span>
+<span id="cb19-351"><a href="#cb19-351"></a><span class="in">p       " Put below</span></span>
+<span id="cb19-352"><a href="#cb19-352"></a><span class="in">ciw     " Change first word</span></span>
+<span id="cb19-353"><a href="#cb19-353"></a><span class="in">```</span></span>
+<span id="cb19-354"><a href="#cb19-354"></a></span>
+<span id="cb19-355"><a href="#cb19-355"></a><span class="fu">### Pattern 3: Block Movement</span></span>
+<span id="cb19-356"><a href="#cb19-356"></a><span class="in">```vim</span></span>
+<span id="cb19-357"><a href="#cb19-357"></a><span class="in">dip     " Delete inner paragraph</span></span>
+<span id="cb19-358"><a href="#cb19-358"></a><span class="in">}       " Jump to target location</span></span>
+<span id="cb19-359"><a href="#cb19-359"></a><span class="in">p       " Put paragraph</span></span>
+<span id="cb19-360"><a href="#cb19-360"></a><span class="in">```</span></span>
+<span id="cb19-361"><a href="#cb19-361"></a></span>
+<span id="cb19-362"><a href="#cb19-362"></a><span class="fu">### Pattern 4: Selective Copy-Paste</span></span>
+<span id="cb19-363"><a href="#cb19-363"></a><span class="in">```vim</span></span>
+<span id="cb19-364"><a href="#cb19-364"></a><span class="in">"ayy    " Yank to register 'a'</span></span>
+<span id="cb19-365"><a href="#cb19-365"></a><span class="in">" Move to different location</span></span>
+<span id="cb19-366"><a href="#cb19-366"></a><span class="in">"ap     " Put from register 'a'</span></span>
+<span id="cb19-367"><a href="#cb19-367"></a><span class="in">```</span></span>
+<span id="cb19-368"><a href="#cb19-368"></a></span>
+<span id="cb19-369"><a href="#cb19-369"></a><span class="fu">## Building Editing Muscle Memory</span></span>
+<span id="cb19-370"><a href="#cb19-370"></a></span>
+<span id="cb19-371"><a href="#cb19-371"></a><span class="fu">### Week 1: Basic Operations</span></span>
+<span id="cb19-372"><a href="#cb19-372"></a><span class="ss">- </span>Practice <span class="in">`d`</span>, <span class="in">`c`</span>, <span class="in">`y`</span> with simple motions</span>
+<span id="cb19-373"><a href="#cb19-373"></a><span class="ss">- </span>Use <span class="in">`x`</span> and <span class="in">`s`</span> for character editing</span>
+<span id="cb19-374"><a href="#cb19-374"></a><span class="ss">- </span>Master <span class="in">`dd`</span>, <span class="in">`cc`</span>, <span class="in">`yy`</span> for line operations</span>
+<span id="cb19-375"><a href="#cb19-375"></a></span>
+<span id="cb19-376"><a href="#cb19-376"></a><span class="fu">### Week 2: Text Objects Integration</span></span>
+<span id="cb19-377"><a href="#cb19-377"></a><span class="ss">- </span>Combine operators with text objects</span>
+<span id="cb19-378"><a href="#cb19-378"></a><span class="ss">- </span>Practice <span class="in">`diw`</span>, <span class="in">`ciw`</span>, <span class="in">`yiw`</span> patterns</span>
+<span id="cb19-379"><a href="#cb19-379"></a><span class="ss">- </span>Use quote and bracket objects</span>
+<span id="cb19-380"><a href="#cb19-380"></a></span>
+<span id="cb19-381"><a href="#cb19-381"></a><span class="fu">### Week 3: Advanced Workflows</span></span>
+<span id="cb19-382"><a href="#cb19-382"></a><span class="ss">- </span>Practice cut/copy/paste workflows</span>
+<span id="cb19-383"><a href="#cb19-383"></a><span class="ss">- </span>Use named registers for complex operations</span>
+<span id="cb19-384"><a href="#cb19-384"></a><span class="ss">- </span>Master the dot command for repetition</span>
+<span id="cb19-385"><a href="#cb19-385"></a></span>
+<span id="cb19-386"><a href="#cb19-386"></a><span class="fu">### Week 4: Speed and Efficiency</span></span>
+<span id="cb19-387"><a href="#cb19-387"></a><span class="ss">- </span>Develop personal editing patterns</span>
+<span id="cb19-388"><a href="#cb19-388"></a><span class="ss">- </span>Combine with movement commands</span>
+<span id="cb19-389"><a href="#cb19-389"></a><span class="ss">- </span>Practice real-world editing scenarios</span>
+<span id="cb19-390"><a href="#cb19-390"></a></span>
+<span id="cb19-391"><a href="#cb19-391"></a><span class="fu">## What's Next?</span></span>
+<span id="cb19-392"><a href="#cb19-392"></a></span>
+<span id="cb19-393"><a href="#cb19-393"></a>You now master:</span>
+<span id="cb19-394"><a href="#cb19-394"></a><span class="ss">- </span>The three fundamental editing operations (delete, change, yank)</span>
+<span id="cb19-395"><a href="#cb19-395"></a><span class="ss">- </span>How to combine operators with motions and text objects</span>
+<span id="cb19-396"><a href="#cb19-396"></a><span class="ss">- </span>The put command for pasting text</span>
+<span id="cb19-397"><a href="#cb19-397"></a><span class="ss">- </span>Registers for advanced text storage</span>
+<span id="cb19-398"><a href="#cb19-398"></a><span class="ss">- </span>The dot command for repetition</span>
+<span id="cb19-399"><a href="#cb19-399"></a><span class="ss">- </span>Common editing patterns and workflows</span>
+<span id="cb19-400"><a href="#cb19-400"></a></span>
+<span id="cb19-401"><a href="#cb19-401"></a>In the next post, we'll explore <span class="co">[</span><span class="ot">Visual Mode: See What You're Doing</span><span class="co">](06-visual-mode.qmd)</span> and learn how to select and transform text with visual feedback.</span>
+<span id="cb19-402"><a href="#cb19-402"></a></span>
+<span id="cb19-403"><a href="#cb19-403"></a><span class="fu">## Key Takeaways</span></span>
+<span id="cb19-404"><a href="#cb19-404"></a></span>
+<span id="cb19-405"><a href="#cb19-405"></a><span class="ss">1. </span>**Master the trinity**: Delete, change, and yank are your core tools</span>
+<span id="cb19-406"><a href="#cb19-406"></a><span class="ss">2. </span>**Think verb+noun**: Operators + motions/text objects = power</span>
+<span id="cb19-407"><a href="#cb19-407"></a><span class="ss">3. </span>**Use text objects**: <span class="in">`ciw`</span>, <span class="in">`di"`</span>, <span class="in">`yip`</span> are incredibly efficient</span>
+<span id="cb19-408"><a href="#cb19-408"></a><span class="ss">4. </span>**Leverage registers**: Named registers give you multiple clipboards</span>
+<span id="cb19-409"><a href="#cb19-409"></a><span class="ss">5. </span>**Practice the dot command**: Repetition is key to efficiency</span>
+<span id="cb19-410"><a href="#cb19-410"></a></span>
+<span id="cb19-411"><a href="#cb19-411"></a>The holy trinity of Vim editing transforms you from a character-by-character editor to a text structure manipulator. Once these operations become muscle memory, you'll edit at the speed of thought.</span>
+<span id="cb19-412"><a href="#cb19-412"></a></span>
+<span id="cb19-413"><a href="#cb19-413"></a>---</span>
+<span id="cb19-414"><a href="#cb19-414"></a></span>
+<span id="cb19-415"><a href="#cb19-415"></a>*Ready to see your edits before you make them? Continue with [Visual Mode: See What You're Doing](06-visual-mode.qmd) to master visual selection and transformation.* </span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div></div></div></div></div>
+</div> <!-- /content -->
+
+
+
+<script src="../../../site_libs/quarto-html/zenscroll-min.js"></script>
+</body></html>

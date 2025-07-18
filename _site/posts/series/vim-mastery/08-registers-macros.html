@@ -1,0 +1,1674 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.3.450">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+<meta name="author" content="Hasan">
+<meta name="dcterms.date" content="2025-07-18">
+<meta name="description" content="Master Vim’s advanced clipboard system and powerful macro recording. Learn to manage multiple clipboards and automate repetitive tasks with incredible efficiency.">
+
+<title>Hasan’s Data Science &amp; AI Blog - Registers and Macros: Copy-Paste on Steroids and Automation Magic</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
+  vertical-align: middle;
+}
+/* CSS for syntax highlighting */
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+  }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+</style>
+
+
+<script src="../../../site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="../../../site_libs/quarto-nav/headroom.min.js"></script>
+<script src="../../../site_libs/clipboard/clipboard.min.js"></script>
+<script src="../../../site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="../../../site_libs/quarto-search/fuse.min.js"></script>
+<script src="../../../site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="../../../">
+<script src="../../../site_libs/quarto-html/quarto.js"></script>
+<script src="../../../site_libs/quarto-html/popper.min.js"></script>
+<script src="../../../site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="../../../site_libs/quarto-html/anchor.min.js"></script>
+<link href="../../../site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="../../../site_libs/quarto-html/quarto-syntax-highlighting.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="../../../site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="../../../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="../../../site_libs/bootstrap/bootstrap.min.css" rel="stylesheet" id="quarto-bootstrap" data-mode="light">
+<script id="quarto-search-options" type="application/json">{
+  "location": "navbar",
+  "copy-button": false,
+  "collapse-after": 3,
+  "panel-placement": "end",
+  "type": "overlay",
+  "limit": 20,
+  "language": {
+    "search-no-results-text": "No results",
+    "search-matching-documents-text": "matching documents",
+    "search-copy-link-title": "Copy link to search",
+    "search-hide-matches-text": "Hide additional matches",
+    "search-more-match-text": "more match in this document",
+    "search-more-matches-text": "more matches in this document",
+    "search-clear-button-title": "Clear",
+    "search-detached-cancel-button-title": "Cancel",
+    "search-submit-button-title": "Submit",
+    "search-label": "Search"
+  }
+}</script>
+<style>html{ scroll-behavior: smooth; }</style>
+<script async="" src="https://hypothes.is/embed.js"></script>
+
+
+<link rel="stylesheet" href="../../../styles.css">
+<meta property="og:title" content="Hasan’s Data Science &amp; AI Blog - Registers and Macros: Copy-Paste on Steroids and Automation Magic">
+<meta property="og:description" content="Master Vim’s advanced clipboard system and powerful macro recording. Learn to manage multiple clipboards and automate repetitive tasks with incredible efficiency.">
+<meta property="og:image" content="https://hasangoni.quarto.pub/hasan-blog-post/posts/series/vim-mastery/images/vim.png">
+<meta property="og:site-name" content="Hasan's Data Science &amp; AI Blog">
+<meta property="og:image:height" content="1413">
+<meta property="og:image:width" content="3368">
+<meta name="twitter:title" content="Hasan’s Data Science &amp; AI Blog - Registers and Macros: Copy-Paste on Steroids and Automation Magic">
+<meta name="twitter:description" content="Master Vim’s advanced clipboard system and powerful macro recording. Learn to manage multiple clipboards and automate repetitive tasks with incredible efficiency.">
+<meta name="twitter:image" content="https://hasangoni.quarto.pub/hasan-blog-post/posts/series/vim-mastery/images/vim.png">
+<meta name="twitter:image-height" content="1413">
+<meta name="twitter:image-width" content="3368">
+<meta name="twitter:card" content="summary_large_image">
+</head>
+
+<body class="nav-sidebar docked nav-fixed">
+
+<div id="quarto-search-results"></div>
+  <header id="quarto-header" class="headroom fixed-top">
+    <nav class="navbar navbar-expand-lg navbar-dark ">
+      <div class="navbar-container container-fluid">
+      <div class="navbar-brand-container">
+    <a class="navbar-brand" href="../../../index.html">
+    <span class="navbar-title">Hasan’s Data Science &amp; AI Blog</span>
+    </a>
+  </div>
+            <div id="quarto-search" class="" title="Search"></div>
+          <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCollapse" aria-controls="navbarCollapse" aria-expanded="false" aria-label="Toggle navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+  <span class="navbar-toggler-icon"></span>
+</button>
+          <div class="collapse navbar-collapse" id="navbarCollapse">
+            <ul class="navbar-nav navbar-nav-scroll me-auto">
+  <li class="nav-item">
+    <a class="nav-link" href="../../../index.html" rel="" target="">
+ <span class="menu-text">Home</span></a>
+  </li>  
+  <li class="nav-item dropdown ">
+    <a class="nav-link dropdown-toggle" href="#" id="nav-menu-series" role="button" data-bs-toggle="dropdown" aria-expanded="false" rel="" target="">
+ <span class="menu-text">Series</span>
+    </a>
+    <ul class="dropdown-menu" aria-labelledby="nav-menu-series">    
+        <li>
+    <a class="dropdown-item" href="../../../posts/series/command-line-mastery.html" rel="" target="">
+ <span class="dropdown-text">Command Line Mastery for HPC</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="../../../posts/series/data-science-steps.html" rel="" target="">
+ <span class="dropdown-text">Data Science Steps</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="../../../posts/series/computer-vision-foundations.html" rel="" target="">
+ <span class="dropdown-text">Computer Vision Foundations</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="../../../posts/series/vim-mastery.html" rel="" target="">
+ <span class="dropdown-text">Vim Mastery</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="../../../posts/series/vlm.html" rel="" target="">
+ <span class="dropdown-text">VLM Series</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="../../../posts/series/anomaly-detection/index.html" rel="" target="">
+ <span class="dropdown-text">Anomaly Detection</span></a>
+  </li>  
+    </ul>
+  </li>
+  <li class="nav-item">
+    <a class="nav-link" href="../../../categories.html" rel="" target="">
+ <span class="menu-text">Categories</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="../../../tags.html" rel="" target="">
+ <span class="menu-text">Tags</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="../../../about.html" rel="" target="">
+ <span class="menu-text">About</span></a>
+  </li>  
+</ul>
+            <ul class="navbar-nav navbar-nav-scroll ms-auto">
+  <li class="nav-item compact">
+    <a class="nav-link" href="https://github.com/HasanGoni" rel="" target=""><i class="bi bi-github" role="img">
+</i> 
+ <span class="menu-text"></span></a>
+  </li>  
+  <li class="nav-item compact">
+    <a class="nav-link" href="https://twitter.com/hasangoni" rel="" target=""><i class="bi bi-twitter" role="img">
+</i> 
+ <span class="menu-text"></span></a>
+  </li>  
+</ul>
+            <div class="quarto-navbar-tools">
+</div>
+          </div> <!-- /navcollapse -->
+      </div> <!-- /container-fluid -->
+    </nav>
+  <nav class="quarto-secondary-nav">
+    <div class="container-fluid d-flex">
+      <button type="button" class="quarto-btn-toggle btn" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar,#quarto-sidebar-glass" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+        <i class="bi bi-layout-text-sidebar-reverse"></i>
+      </button>
+      <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item">Registers and Macros: Copy-Paste on Steroids and Automation Magic</li></ol></nav>
+      <a class="flex-grow-1" role="button" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar,#quarto-sidebar-glass" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
+      </a>
+    </div>
+  </nav>
+</header>
+<!-- content -->
+<header id="title-block-header" class="quarto-title-block default page-columns page-full">
+  <div class="quarto-title-banner page-columns page-full">
+    <div class="quarto-title column-body">
+      <div class="quarto-title-block"><div><h1 class="title">Registers and Macros: Copy-Paste on Steroids and Automation Magic</h1><button type="button" class="btn code-tools-button" id="quarto-code-tools-source"><i class="bi"></i> Code</button></div></div>
+                  <div>
+        <div class="description">
+          Master Vim’s advanced clipboard system and powerful macro recording. Learn to manage multiple clipboards and automate repetitive tasks with incredible efficiency.
+        </div>
+      </div>
+                          <div class="quarto-categories">
+                <div class="quarto-category">vim</div>
+                <div class="quarto-category">registers</div>
+                <div class="quarto-category">macros</div>
+                <div class="quarto-category">automation</div>
+                <div class="quarto-category">clipboard</div>
+              </div>
+                  </div>
+  </div>
+    
+  
+  <div class="quarto-title-meta">
+
+      <div>
+      <div class="quarto-title-meta-heading">Author</div>
+      <div class="quarto-title-meta-contents">
+               <p>Hasan </p>
+            </div>
+    </div>
+      
+      <div>
+      <div class="quarto-title-meta-heading">Published</div>
+      <div class="quarto-title-meta-contents">
+        <p class="date">July 18, 2025</p>
+      </div>
+    </div>
+    
+      <div>
+      <div class="quarto-title-meta-heading">Modified</div>
+      <div class="quarto-title-meta-contents">
+        <p class="date-modified">July 18, 2025</p>
+      </div>
+    </div>
+      
+    </div>
+    
+  
+  </header><div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article page-navbar">
+<!-- sidebar -->
+  <nav id="quarto-sidebar" class="sidebar collapse collapse-horizontal sidebar-navigation docked overflow-auto">
+    <div class="sidebar-menu-container"> 
+    <ul class="list-unstyled mt-1">
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-1" aria-expanded="true">
+ <span class="menu-text">Command Line Mastery for HPC</span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-1" aria-expanded="true" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-1" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../../posts/series/command-line-mastery.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Command Line Mastery for HPC Series</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../../posts/series/command-line-mastery/01-digital-compass.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">1. Digital Compass</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../../posts/series/command-line-mastery/02-file-detective.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">2. File Detective</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../../posts/series/command-line-mastery/03-file-manipulation.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">3. File Manipulation Magic</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../../posts/series/command-line-mastery/04-text-processing.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">4. Text Processing Power</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../../posts/series/command-line-mastery/05-permission-wizardry.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">5. Permission Wizardry</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../../posts/series/command-line-mastery/06-ssh-remote-access.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">6. SSH and Remote Access</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../../posts/series/command-line-mastery/07-file-transfer.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">7. File Transfer Mastery</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../../posts/series/command-line-mastery/08-environment-mastery.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">8. Environment Mastery</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../../posts/series/command-line-mastery/09-hpc-job-scheduling.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">9. HPC Job Scheduling</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../../posts/series/command-line-mastery/10-parallel-processing.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">10. Parallel Processing Power</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../../posts/series/command-line-mastery/11-bash-scripting.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">11. Bash Scripting Essentials</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../../posts/series/command-line-mastery/12-automation-excellence.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">12. Automation Excellence</span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-2" aria-expanded="true">
+ <span class="menu-text">Data Science</span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-2" aria-expanded="true" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-2" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../../posts/series/data-science-steps.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Data Science Steps Series</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../../posts/data-science-steps-to-follow-part01/index.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Data Science Steps to Follow - 01</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../../posts/data-science-steps-to-follow-part02/index.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Data Science Steps to Follow - 02</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../../posts/data-science-steps-to-follow-part03/index.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Data Science Steps to Follow - 03</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../../posts/data-science-steps-to-follow-part04/index.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Data Science Steps to Follow - 04</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../../posts/data-science-steps-to-follow-part05/index.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Data Science Steps to Follow - 05</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../../posts/data-science-steps-to-follow-part06/index.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Data Science Steps to Follow - 06</span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-3" aria-expanded="true">
+ <span class="menu-text">Computer Vision Foundations</span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-3" aria-expanded="true" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-3" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../../posts/series/computer-vision-foundations.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Computer Vision Foundations Series</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../../posts/series/cv-foundations/01-why-computer-vision.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">1. Why Computer Vision?</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../../posts/series/cv-foundations/02-images-as-data.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">2. Images as Data</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../../posts/series/cv-foundations/03-opencv-essentials.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">3. OpenCV Essentials</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../../posts/series/cv-foundations/04-finding-patterns.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">4. Finding Patterns</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../../posts/series/cv-foundations/05-image-segmentation.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">5. Image Segmentation</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../../posts/series/cv-foundations/06-feature-magic.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">6. Feature Magic</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../../posts/series/cv-foundations/07-why-deep-learning.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">7. Why Deep Learning?</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../../posts/series/cv-foundations/08-modern-vision-models.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">8. Modern Vision Models</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../../posts/series/cv-foundations/09-first-cv-project.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">9. First CV Project</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../../posts/series/cv-foundations/10-where-to-go-next.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">10. Where to Go Next</span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-4" aria-expanded="true">
+ <span class="menu-text">Anomaly Detection</span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-4" aria-expanded="true" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-4" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../../posts/series/anomaly-detection/index.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Introduction</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../../posts/series/anomaly-detection/finding-the-oddballs.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Finding the Oddballs</span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-5" aria-expanded="true">
+ <span class="menu-text">VLM Series</span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-5" aria-expanded="true" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-5" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../../posts/series/vlm.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Introduction</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../../posts/series/vlm-qwen3-14b/index.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Qwen3-14B</span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+    </ul>
+    </div>
+</nav>
+<div id="quarto-sidebar-glass" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar,#quarto-sidebar-glass"></div>
+<!-- margin-sidebar -->
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+        <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">On this page</h2>
+   
+  <ul>
+  <li><a href="#the-magicians-arsenal" id="toc-the-magicians-arsenal" class="nav-link active" data-scroll-target="#the-magicians-arsenal"><span class="header-section-number">0.1</span> The Magician’s Arsenal</a></li>
+  <li><a href="#part-1-registers---the-multi-clipboard-system" id="toc-part-1-registers---the-multi-clipboard-system" class="nav-link" data-scroll-target="#part-1-registers---the-multi-clipboard-system"><span class="header-section-number">0.2</span> Part 1: Registers - The Multi-Clipboard System</a>
+  <ul class="collapse">
+  <li><a href="#what-are-registers" id="toc-what-are-registers" class="nav-link" data-scroll-target="#what-are-registers"><span class="header-section-number">0.2.1</span> What Are Registers?</a></li>
+  <li><a href="#the-register-family" id="toc-the-register-family" class="nav-link" data-scroll-target="#the-register-family"><span class="header-section-number">0.2.2</span> The Register Family</a></li>
+  <li><a href="#basic-register-operations" id="toc-basic-register-operations" class="nav-link" data-scroll-target="#basic-register-operations"><span class="header-section-number">0.2.3</span> Basic Register Operations</a></li>
+  <li><a href="#practical-register-examples" id="toc-practical-register-examples" class="nav-link" data-scroll-target="#practical-register-examples"><span class="header-section-number">0.2.4</span> Practical Register Examples</a></li>
+  <li><a href="#system-clipboard-integration" id="toc-system-clipboard-integration" class="nav-link" data-scroll-target="#system-clipboard-integration"><span class="header-section-number">0.2.5</span> System Clipboard Integration</a></li>
+  </ul></li>
+  <li><a href="#part-2-macros---the-automation-powerhouse" id="toc-part-2-macros---the-automation-powerhouse" class="nav-link" data-scroll-target="#part-2-macros---the-automation-powerhouse"><span class="header-section-number">0.3</span> Part 2: Macros - The Automation Powerhouse</a>
+  <ul class="collapse">
+  <li><a href="#what-are-macros" id="toc-what-are-macros" class="nav-link" data-scroll-target="#what-are-macros"><span class="header-section-number">0.3.1</span> What Are Macros?</a></li>
+  <li><a href="#basic-macro-operations" id="toc-basic-macro-operations" class="nav-link" data-scroll-target="#basic-macro-operations"><span class="header-section-number">0.3.2</span> Basic Macro Operations</a></li>
+  <li><a href="#simple-macro-example" id="toc-simple-macro-example" class="nav-link" data-scroll-target="#simple-macro-example"><span class="header-section-number">0.3.3</span> Simple Macro Example</a></li>
+  <li><a href="#advanced-macro-examples" id="toc-advanced-macro-examples" class="nav-link" data-scroll-target="#advanced-macro-examples"><span class="header-section-number">0.3.4</span> Advanced Macro Examples</a></li>
+  <li><a href="#macro-best-practices" id="toc-macro-best-practices" class="nav-link" data-scroll-target="#macro-best-practices"><span class="header-section-number">0.3.5</span> Macro Best Practices</a></li>
+  <li><a href="#complex-macro-workflows" id="toc-complex-macro-workflows" class="nav-link" data-scroll-target="#complex-macro-workflows"><span class="header-section-number">0.3.6</span> Complex Macro Workflows</a></li>
+  <li><a href="#macro-debugging" id="toc-macro-debugging" class="nav-link" data-scroll-target="#macro-debugging"><span class="header-section-number">0.3.7</span> Macro Debugging</a></li>
+  <li><a href="#combining-registers-and-macros" id="toc-combining-registers-and-macros" class="nav-link" data-scroll-target="#combining-registers-and-macros"><span class="header-section-number">0.3.8</span> Combining Registers and Macros</a></li>
+  </ul></li>
+  <li><a href="#practice-exercise-registers-and-macros-mastery" id="toc-practice-exercise-registers-and-macros-mastery" class="nav-link" data-scroll-target="#practice-exercise-registers-and-macros-mastery"><span class="header-section-number">0.4</span> Practice Exercise: Registers and Macros Mastery</a></li>
+  <li><a href="#building-register-and-macro-muscle-memory" id="toc-building-register-and-macro-muscle-memory" class="nav-link" data-scroll-target="#building-register-and-macro-muscle-memory"><span class="header-section-number">0.5</span> Building Register and Macro Muscle Memory</a>
+  <ul class="collapse">
+  <li><a href="#week-1-basic-registers" id="toc-week-1-basic-registers" class="nav-link" data-scroll-target="#week-1-basic-registers"><span class="header-section-number">0.5.1</span> Week 1: Basic Registers</a></li>
+  <li><a href="#week-2-simple-macros" id="toc-week-2-simple-macros" class="nav-link" data-scroll-target="#week-2-simple-macros"><span class="header-section-number">0.5.2</span> Week 2: Simple Macros</a></li>
+  <li><a href="#week-3-advanced-techniques" id="toc-week-3-advanced-techniques" class="nav-link" data-scroll-target="#week-3-advanced-techniques"><span class="header-section-number">0.5.3</span> Week 3: Advanced Techniques</a></li>
+  <li><a href="#week-4-real-world-applications" id="toc-week-4-real-world-applications" class="nav-link" data-scroll-target="#week-4-real-world-applications"><span class="header-section-number">0.5.4</span> Week 4: Real-world Applications</a></li>
+  </ul></li>
+  <li><a href="#whats-next" id="toc-whats-next" class="nav-link" data-scroll-target="#whats-next"><span class="header-section-number">0.6</span> What’s Next?</a></li>
+  <li><a href="#key-takeaways" id="toc-key-takeaways" class="nav-link" data-scroll-target="#key-takeaways"><span class="header-section-number">0.7</span> Key Takeaways</a></li>
+  </ul>
+</nav>
+    </div>
+<!-- main -->
+<main class="content quarto-banner-title-block" id="quarto-document-content">
+
+
+
+
+<section id="the-magicians-arsenal" class="level2" data-number="0.1">
+<h2 data-number="0.1" class="anchored" data-anchor-id="the-magicians-arsenal"><span class="header-section-number">0.1</span> The Magician’s Arsenal</h2>
+<p>Imagine you’re a magician with two incredible powers:</p>
+<ol type="1">
+<li><strong>Infinite Pockets</strong>: You can store unlimited items in labeled pockets and retrieve them instantly</li>
+<li><strong>Action Recording</strong>: You can record a sequence of actions and replay them perfectly, as many times as you want</li>
+</ol>
+<p>That’s what Vim’s registers and macros give you! Registers are like having 26+ clipboards, and macros are like having a personal assistant that can repeat complex tasks flawlessly.</p>
+</section>
+<section id="part-1-registers---the-multi-clipboard-system" class="level2" data-number="0.2">
+<h2 data-number="0.2" class="anchored" data-anchor-id="part-1-registers---the-multi-clipboard-system"><span class="header-section-number">0.2</span> Part 1: Registers - The Multi-Clipboard System</h2>
+<section id="what-are-registers" class="level3" data-number="0.2.1">
+<h3 data-number="0.2.1" class="anchored" data-anchor-id="what-are-registers"><span class="header-section-number">0.2.1</span> What Are Registers?</h3>
+<p>Registers are Vim’s storage containers for text. Think of them as labeled boxes where you can store different pieces of text and retrieve them later.</p>
+<p><strong>Traditional clipboard</strong>: One item at a time <strong>Vim registers</strong>: 26+ labeled storage containers</p>
+</section>
+<section id="the-register-family" class="level3" data-number="0.2.2">
+<h3 data-number="0.2.2" class="anchored" data-anchor-id="the-register-family"><span class="header-section-number">0.2.2</span> The Register Family</h3>
+<section id="named-registers-a-to-z" class="level4" data-number="0.2.2.1">
+<h4 data-number="0.2.2.1" class="anchored" data-anchor-id="named-registers-a-to-z"><span class="header-section-number">0.2.2.1</span> 1. Named Registers (<code>"a</code> to <code>"z</code>)</h4>
+<ul>
+<li><strong>Your personal storage</strong>: 26 containers you control</li>
+<li><strong>Persistent</strong>: Content stays until you replace it</li>
+<li><strong>Accessible</strong>: Use from anywhere in any file</li>
+</ul>
+</section>
+<section id="numbered-registers-0-to-9" class="level4" data-number="0.2.2.2">
+<h4 data-number="0.2.2.2" class="anchored" data-anchor-id="numbered-registers-0-to-9"><span class="header-section-number">0.2.2.2</span> 2. Numbered Registers (<code>"0</code> to <code>"9</code>)</h4>
+<ul>
+<li><strong>Automatic history</strong>: Vim manages these for you</li>
+<li><code>"0</code> = Last yank (copy)</li>
+<li><code>"1</code> to <code>"9</code> = Recent deletes (most recent first)</li>
+</ul>
+</section>
+<section id="special-registers" class="level4" data-number="0.2.2.3">
+<h4 data-number="0.2.2.3" class="anchored" data-anchor-id="special-registers"><span class="header-section-number">0.2.2.3</span> 3. Special Registers</h4>
+<ul>
+<li><code>""</code> = Default register (last delete/yank)</li>
+<li><code>"+</code> = System clipboard</li>
+<li><code>"*</code> = Selection clipboard (Linux/Mac)</li>
+<li><code>"%</code> = Current filename</li>
+<li><code>".</code> = Last inserted text</li>
+</ul>
+</section>
+</section>
+<section id="basic-register-operations" class="level3" data-number="0.2.3">
+<h3 data-number="0.2.3" class="anchored" data-anchor-id="basic-register-operations"><span class="header-section-number">0.2.3</span> Basic Register Operations</h3>
+<section id="storing-text-in-registers" class="level4" data-number="0.2.3.1">
+<h4 data-number="0.2.3.1" class="anchored" data-anchor-id="storing-text-in-registers"><span class="header-section-number">0.2.3.1</span> Storing Text in Registers</h4>
+<div class="sourceCode" id="cb1"><pre class="sourceCode numberSource vim number-lines code-with-copy"><code class="sourceCode"><span id="cb1-1"><a href="#cb1-1"></a>"ayy        " Yank current line to register 'a'</span>
+<span id="cb1-2"><a href="#cb1-2"></a>"byw        " Yank word to register 'b'</span>
+<span id="cb1-3"><a href="#cb1-3"></a>"cdd        " Delete line to register 'c'</span>
+<span id="cb1-4"><a href="#cb1-4"></a>"dvi"       " Delete inside quotes to register 'd'</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</section>
+<section id="retrieving-text-from-registers" class="level4" data-number="0.2.3.2">
+<h4 data-number="0.2.3.2" class="anchored" data-anchor-id="retrieving-text-from-registers"><span class="header-section-number">0.2.3.2</span> Retrieving Text from Registers</h4>
+<div class="sourceCode" id="cb2"><pre class="sourceCode numberSource vim number-lines code-with-copy"><code class="sourceCode"><span id="cb2-1"><a href="#cb2-1"></a>"ap         " Put from register 'a'</span>
+<span id="cb2-2"><a href="#cb2-2"></a>"bp         " Put from register 'b'</span>
+<span id="cb2-3"><a href="#cb2-3"></a>"cP         " Put from register 'c' before cursor</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</section>
+<section id="viewing-register-contents" class="level4" data-number="0.2.3.3">
+<h4 data-number="0.2.3.3" class="anchored" data-anchor-id="viewing-register-contents"><span class="header-section-number">0.2.3.3</span> Viewing Register Contents</h4>
+<div class="sourceCode" id="cb3"><pre class="sourceCode numberSource vim number-lines code-with-copy"><code class="sourceCode"><span id="cb3-1"><a href="#cb3-1"></a>:registers  " Show all registers</span>
+<span id="cb3-2"><a href="#cb3-2"></a>:reg a b c  " Show specific registers</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</section>
+</section>
+<section id="practical-register-examples" class="level3" data-number="0.2.4">
+<h3 data-number="0.2.4" class="anchored" data-anchor-id="practical-register-examples"><span class="header-section-number">0.2.4</span> Practical Register Examples</h3>
+<p><strong>Example 1: Managing Multiple Code Snippets</strong></p>
+<div class="sourceCode" id="cb4"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb4-1"><a href="#cb4-1"></a><span class="co"># You want to copy these three different pieces</span></span>
+<span id="cb4-2"><a href="#cb4-2"></a>function_header <span class="op">=</span> <span class="st">"def calculate_total(items):"</span></span>
+<span id="cb4-3"><a href="#cb4-3"></a>error_message <span class="op">=</span> <span class="st">"raise ValueError('Invalid input')"</span></span>
+<span id="cb4-4"><a href="#cb4-4"></a>return_statement <span class="op">=</span> <span class="st">"return total"</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p><strong>Workflow</strong>: 1. <code>"ayy</code> on function header - Store in register ‘a’ 2. <code>"byy</code> on error message - Store in register ‘b’<br>
+3. <code>"cyy</code> on return statement - Store in register ‘c’ 4. Navigate anywhere and use <code>"ap</code>, <code>"bp</code>, <code>"cp</code> to paste</p>
+<p><strong>Example 2: Swapping Code Blocks</strong></p>
+<div class="sourceCode" id="cb5"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb5-1"><a href="#cb5-1"></a><span class="co"># Block 1</span></span>
+<span id="cb5-2"><a href="#cb5-2"></a><span class="kw">def</span> old_function():</span>
+<span id="cb5-3"><a href="#cb5-3"></a>    <span class="cf">return</span> <span class="st">"old"</span></span>
+<span id="cb5-4"><a href="#cb5-4"></a></span>
+<span id="cb5-5"><a href="#cb5-5"></a><span class="co"># Block 2  </span></span>
+<span id="cb5-6"><a href="#cb5-6"></a><span class="kw">def</span> new_function():</span>
+<span id="cb5-7"><a href="#cb5-7"></a>    <span class="cf">return</span> <span class="st">"new"</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p><strong>Task</strong>: Swap the two functions 1. Select first function with <code>Vip</code> 2. <code>"ad</code> - Delete to register ‘a’ 3. Select second function with <code>Vip</code> 4. <code>"bd</code> - Delete to register ‘b’ 5. <code>"bp</code> - Put function from register ‘b’ 6. Move up and <code>"ap</code> - Put function from register ‘a’</p>
+</section>
+<section id="system-clipboard-integration" class="level3" data-number="0.2.5">
+<h3 data-number="0.2.5" class="anchored" data-anchor-id="system-clipboard-integration"><span class="header-section-number">0.2.5</span> System Clipboard Integration</h3>
+<section id="copying-to-system-clipboard" class="level4" data-number="0.2.5.1">
+<h4 data-number="0.2.5.1" class="anchored" data-anchor-id="copying-to-system-clipboard"><span class="header-section-number">0.2.5.1</span> Copying to System Clipboard</h4>
+<div class="sourceCode" id="cb6"><pre class="sourceCode numberSource vim number-lines code-with-copy"><code class="sourceCode"><span id="cb6-1"><a href="#cb6-1"></a>"+yy        " Yank line to system clipboard</span>
+<span id="cb6-2"><a href="#cb6-2"></a>"+yw        " Yank word to system clipboard</span>
+<span id="cb6-3"><a href="#cb6-3"></a>"+y         " Yank visual selection to system clipboard</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</section>
+<section id="pasting-from-system-clipboard" class="level4" data-number="0.2.5.2">
+<h4 data-number="0.2.5.2" class="anchored" data-anchor-id="pasting-from-system-clipboard"><span class="header-section-number">0.2.5.2</span> Pasting from System Clipboard</h4>
+<div class="sourceCode" id="cb7"><pre class="sourceCode numberSource vim number-lines code-with-copy"><code class="sourceCode"><span id="cb7-1"><a href="#cb7-1"></a>"+p         " Put from system clipboard</span>
+<span id="cb7-2"><a href="#cb7-2"></a>"+P         " Put from system clipboard before cursor</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</section>
+<section id="practical-system-clipboard-example" class="level4" data-number="0.2.5.3">
+<h4 data-number="0.2.5.3" class="anchored" data-anchor-id="practical-system-clipboard-example"><span class="header-section-number">0.2.5.3</span> Practical System Clipboard Example</h4>
+<div class="sourceCode" id="cb8"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb8-1"><a href="#cb8-1"></a><span class="co"># Copy this function to share with a colleague</span></span>
+<span id="cb8-2"><a href="#cb8-2"></a><span class="kw">def</span> calculate_tax(price, rate):</span>
+<span id="cb8-3"><a href="#cb8-3"></a>    <span class="cf">return</span> price <span class="op">*</span> rate</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p><strong>Workflow</strong>: 1. <code>Vip</code> - Select the function 2. <code>"+y</code> - Copy to system clipboard 3. Now you can paste it anywhere outside Vim</p>
+</section>
+</section>
+</section>
+<section id="part-2-macros---the-automation-powerhouse" class="level2" data-number="0.3">
+<h2 data-number="0.3" class="anchored" data-anchor-id="part-2-macros---the-automation-powerhouse"><span class="header-section-number">0.3</span> Part 2: Macros - The Automation Powerhouse</h2>
+<section id="what-are-macros" class="level3" data-number="0.3.1">
+<h3 data-number="0.3.1" class="anchored" data-anchor-id="what-are-macros"><span class="header-section-number">0.3.1</span> What Are Macros?</h3>
+<p>Macros are recorded sequences of keystrokes that you can replay. Think of them as recording your actions and playing them back perfectly.</p>
+<p><strong>Manual repetition</strong>: Do the same thing 50 times <strong>Macro power</strong>: Record once, replay 50 times instantly</p>
+</section>
+<section id="basic-macro-operations" class="level3" data-number="0.3.2">
+<h3 data-number="0.3.2" class="anchored" data-anchor-id="basic-macro-operations"><span class="header-section-number">0.3.2</span> Basic Macro Operations</h3>
+<section id="recording-a-macro" class="level4" data-number="0.3.2.1">
+<h4 data-number="0.3.2.1" class="anchored" data-anchor-id="recording-a-macro"><span class="header-section-number">0.3.2.1</span> Recording a Macro</h4>
+<div class="sourceCode" id="cb9"><pre class="sourceCode numberSource vim number-lines code-with-copy"><code class="sourceCode"><span id="cb9-1"><a href="#cb9-1"></a>qa          " Start recording macro in register 'a'</span>
+<span id="cb9-2"><a href="#cb9-2"></a>[perform actions]</span>
+<span id="cb9-3"><a href="#cb9-3"></a>q           " Stop recording</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</section>
+<section id="playing-a-macro" class="level4" data-number="0.3.2.2">
+<h4 data-number="0.3.2.2" class="anchored" data-anchor-id="playing-a-macro"><span class="header-section-number">0.3.2.2</span> Playing a Macro</h4>
+<div class="sourceCode" id="cb10"><pre class="sourceCode numberSource vim number-lines code-with-copy"><code class="sourceCode"><span id="cb10-1"><a href="#cb10-1"></a>@a          " Execute macro from register 'a'</span>
+<span id="cb10-2"><a href="#cb10-2"></a>@@          " Repeat last executed macro</span>
+<span id="cb10-3"><a href="#cb10-3"></a>5@a         " Execute macro 'a' 5 times</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</section>
+</section>
+<section id="simple-macro-example" class="level3" data-number="0.3.3">
+<h3 data-number="0.3.3" class="anchored" data-anchor-id="simple-macro-example"><span class="header-section-number">0.3.3</span> Simple Macro Example</h3>
+<p><strong>Scenario</strong>: Convert these lines to Python print statements</p>
+<pre><code>Hello World
+Goodbye World
+See you later</code></pre>
+<p><strong>Desired result</strong>:</p>
+<div class="sourceCode" id="cb12"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb12-1"><a href="#cb12-1"></a><span class="bu">print</span>(<span class="st">"Hello World"</span>)</span>
+<span id="cb12-2"><a href="#cb12-2"></a><span class="bu">print</span>(<span class="st">"Goodbye World"</span>)</span>
+<span id="cb12-3"><a href="#cb12-3"></a><span class="bu">print</span>(<span class="st">"See you later"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p><strong>Macro workflow</strong>: 1. <code>qa</code> - Start recording macro ‘a’ 2. <code>I</code> - Insert at beginning of line 3. Type <code>print("</code> 4. <code>A</code> - Append at end of line 5. Type <code>")</code> 6. <code>j</code> - Move to next line 7. <code>q</code> - Stop recording</p>
+<p><strong>Replay</strong>: 1. <code>2@a</code> - Execute macro ‘a’ on remaining 2 lines</p>
+</section>
+<section id="advanced-macro-examples" class="level3" data-number="0.3.4">
+<h3 data-number="0.3.4" class="anchored" data-anchor-id="advanced-macro-examples"><span class="header-section-number">0.3.4</span> Advanced Macro Examples</h3>
+<p><strong>Example 1: Creating a List from Data</strong></p>
+<pre><code>John,30,Engineer
+Jane,25,Designer
+Bob,35,Manager</code></pre>
+<p><strong>Goal</strong>: Convert to Python list of dictionaries</p>
+<div class="sourceCode" id="cb14"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb14-1"><a href="#cb14-1"></a>{<span class="st">"name"</span>: <span class="st">"John"</span>, <span class="st">"age"</span>: <span class="dv">30</span>, <span class="st">"job"</span>: <span class="st">"Engineer"</span>},</span>
+<span id="cb14-2"><a href="#cb14-2"></a>{<span class="st">"name"</span>: <span class="st">"Jane"</span>, <span class="st">"age"</span>: <span class="dv">25</span>, <span class="st">"job"</span>: <span class="st">"Designer"</span>},</span>
+<span id="cb14-3"><a href="#cb14-3"></a>{<span class="st">"name"</span>: <span class="st">"Bob"</span>, <span class="st">"age"</span>: <span class="dv">35</span>, <span class="st">"job"</span>: <span class="st">"Manager"</span>},</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p><strong>Macro workflow</strong>: 1. <code>qa</code> - Start recording 2. <code>I</code> - Insert at beginning 3. Type <code>{"name": "</code> 4. <code>f,</code> - Find first comma 5. <code>r"</code> - Replace comma with quote 6. <code>a, "age":</code> - Add age field 7. <code>f,</code> - Find next comma 8. <code>r,</code> - Replace with comma 9. <code>a "job": "</code> - Add job field 10. <code>A"},</code> - Add closing 11. <code>j</code> - Next line 12. <code>q</code> - Stop recording</p>
+<p><strong>Example 2: Adding Line Numbers</strong></p>
+<pre><code>First line
+Second line
+Third line</code></pre>
+<p><strong>Goal</strong>:</p>
+<pre><code>1. First line
+2. Second line  
+3. Third line</code></pre>
+<p><strong>Macro workflow</strong>: 1. <code>qa</code> - Start recording 2. <code>I</code> - Insert at beginning 3. <code>Ctrl-a</code> - Increment number (starts at 1) 4. <code>A.</code> - Add period and space 5. <code>j</code> - Next line 6. <code>q</code> - Stop recording</p>
+</section>
+<section id="macro-best-practices" class="level3" data-number="0.3.5">
+<h3 data-number="0.3.5" class="anchored" data-anchor-id="macro-best-practices"><span class="header-section-number">0.3.5</span> Macro Best Practices</h3>
+<section id="make-macros-repeatable" class="level4" data-number="0.3.5.1">
+<h4 data-number="0.3.5.1" class="anchored" data-anchor-id="make-macros-repeatable"><span class="header-section-number">0.3.5.1</span> 1. Make Macros Repeatable</h4>
+<ul>
+<li>End with movement to next target</li>
+<li>Use relative movements (<code>j</code>, <code>w</code>) not absolute (<code>5G</code>)</li>
+<li>Test on one item before applying to many</li>
+</ul>
+</section>
+<section id="handle-edge-cases" class="level4" data-number="0.3.5.2">
+<h4 data-number="0.3.5.2" class="anchored" data-anchor-id="handle-edge-cases"><span class="header-section-number">0.3.5.2</span> 2. Handle Edge Cases</h4>
+<ul>
+<li>What if there’s no next line?</li>
+<li>What if the pattern doesn’t match?</li>
+<li>Use <code>0</code> to start from beginning of line</li>
+</ul>
+</section>
+<section id="use-registers-wisely" class="level4" data-number="0.3.5.3">
+<h4 data-number="0.3.5.3" class="anchored" data-anchor-id="use-registers-wisely"><span class="header-section-number">0.3.5.3</span> 3. Use Registers Wisely</h4>
+<ul>
+<li>Store different macros in different registers</li>
+<li><code>qa</code> for quick temporary macros</li>
+<li><code>qz</code> for complex macros you might reuse</li>
+</ul>
+</section>
+</section>
+<section id="complex-macro-workflows" class="level3" data-number="0.3.6">
+<h3 data-number="0.3.6" class="anchored" data-anchor-id="complex-macro-workflows"><span class="header-section-number">0.3.6</span> Complex Macro Workflows</h3>
+<p><strong>Example 1: Reformatting Function Calls</strong></p>
+<div class="sourceCode" id="cb17"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb17-1"><a href="#cb17-1"></a>calculate_total(items, tax_rate, discount_rate)</span>
+<span id="cb17-2"><a href="#cb17-2"></a>process_order(order_data, customer_info)</span>
+<span id="cb17-3"><a href="#cb17-3"></a>validate_input(user_input, validation_rules)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p><strong>Goal</strong>: Add type hints and format</p>
+<div class="sourceCode" id="cb18"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb18-1"><a href="#cb18-1"></a>calculate_total(</span>
+<span id="cb18-2"><a href="#cb18-2"></a>    items: List[Item],</span>
+<span id="cb18-3"><a href="#cb18-3"></a>    tax_rate: <span class="bu">float</span>,</span>
+<span id="cb18-4"><a href="#cb18-4"></a>    discount_rate: <span class="bu">float</span></span>
+<span id="cb18-5"><a href="#cb18-5"></a>) <span class="op">-&gt;</span> <span class="bu">float</span>:</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p><strong>Macro approach</strong>: 1. Record macro to handle one function 2. Use text objects for precision 3. Replay on remaining functions</p>
+<p><strong>Example 2: Creating Test Cases</strong></p>
+<div class="sourceCode" id="cb19"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb19-1"><a href="#cb19-1"></a><span class="kw">def</span> add(a, b):</span>
+<span id="cb19-2"><a href="#cb19-2"></a>    <span class="cf">return</span> a <span class="op">+</span> b</span>
+<span id="cb19-3"><a href="#cb19-3"></a></span>
+<span id="cb19-4"><a href="#cb19-4"></a><span class="kw">def</span> multiply(a, b):</span>
+<span id="cb19-5"><a href="#cb19-5"></a>    <span class="cf">return</span> a <span class="op">*</span> b</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p><strong>Goal</strong>: Generate test functions</p>
+<div class="sourceCode" id="cb20"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb20-1"><a href="#cb20-1"></a><span class="kw">def</span> test_add():</span>
+<span id="cb20-2"><a href="#cb20-2"></a>    <span class="cf">assert</span> add(<span class="dv">2</span>, <span class="dv">3</span>) <span class="op">==</span> <span class="dv">5</span></span>
+<span id="cb20-3"><a href="#cb20-3"></a>    <span class="cf">assert</span> add(<span class="dv">0</span>, <span class="dv">0</span>) <span class="op">==</span> <span class="dv">0</span></span>
+<span id="cb20-4"><a href="#cb20-4"></a></span>
+<span id="cb20-5"><a href="#cb20-5"></a><span class="kw">def</span> test_multiply():</span>
+<span id="cb20-6"><a href="#cb20-6"></a>    <span class="cf">assert</span> multiply(<span class="dv">2</span>, <span class="dv">3</span>) <span class="op">==</span> <span class="dv">6</span></span>
+<span id="cb20-7"><a href="#cb20-7"></a>    <span class="cf">assert</span> multiply(<span class="dv">1</span>, <span class="dv">5</span>) <span class="op">==</span> <span class="dv">5</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</section>
+<section id="macro-debugging" class="level3" data-number="0.3.7">
+<h3 data-number="0.3.7" class="anchored" data-anchor-id="macro-debugging"><span class="header-section-number">0.3.7</span> Macro Debugging</h3>
+<section id="viewing-macro-contents" class="level4" data-number="0.3.7.1">
+<h4 data-number="0.3.7.1" class="anchored" data-anchor-id="viewing-macro-contents"><span class="header-section-number">0.3.7.1</span> Viewing Macro Contents</h4>
+<div class="sourceCode" id="cb21"><pre class="sourceCode numberSource vim number-lines code-with-copy"><code class="sourceCode"><span id="cb21-1"><a href="#cb21-1"></a>:registers a    " View macro stored in register 'a'</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</section>
+<section id="editing-macros" class="level4" data-number="0.3.7.2">
+<h4 data-number="0.3.7.2" class="anchored" data-anchor-id="editing-macros"><span class="header-section-number">0.3.7.2</span> Editing Macros</h4>
+<div class="sourceCode" id="cb22"><pre class="sourceCode numberSource vim number-lines code-with-copy"><code class="sourceCode"><span id="cb22-1"><a href="#cb22-1"></a>:let @a = 'new macro content'    " Directly edit macro</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</section>
+<section id="common-macro-problems" class="level4" data-number="0.3.7.3">
+<h4 data-number="0.3.7.3" class="anchored" data-anchor-id="common-macro-problems"><span class="header-section-number">0.3.7.3</span> Common Macro Problems</h4>
+<ol type="1">
+<li><strong>Macro stops early</strong>: Check for missing text or failed searches</li>
+<li><strong>Macro goes wrong direction</strong>: Use consistent navigation</li>
+<li><strong>Macro affects wrong text</strong>: Start with cursor positioning</li>
+</ol>
+</section>
+</section>
+<section id="combining-registers-and-macros" class="level3" data-number="0.3.8">
+<h3 data-number="0.3.8" class="anchored" data-anchor-id="combining-registers-and-macros"><span class="header-section-number">0.3.8</span> Combining Registers and Macros</h3>
+<section id="using-registers-in-macros" class="level4" data-number="0.3.8.1">
+<h4 data-number="0.3.8.1" class="anchored" data-anchor-id="using-registers-in-macros"><span class="header-section-number">0.3.8.1</span> Using Registers in Macros</h4>
+<div class="sourceCode" id="cb23"><pre class="sourceCode numberSource vim number-lines code-with-copy"><code class="sourceCode"><span id="cb23-1"><a href="#cb23-1"></a>qa              " Start recording macro 'a'</span>
+<span id="cb23-2"><a href="#cb23-2"></a>"byy            " Yank to register 'b'</span>
+<span id="cb23-3"><a href="#cb23-3"></a>/pattern        " Search for pattern</span>
+<span id="cb23-4"><a href="#cb23-4"></a>"bp             " Put from register 'b'</span>
+<span id="cb23-5"><a href="#cb23-5"></a>q               " Stop recording</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</section>
+<section id="macro-libraries" class="level4" data-number="0.3.8.2">
+<h4 data-number="0.3.8.2" class="anchored" data-anchor-id="macro-libraries"><span class="header-section-number">0.3.8.2</span> Macro Libraries</h4>
+<p>Store frequently used macros in your <code>.vimrc</code>:</p>
+<div class="sourceCode" id="cb24"><pre class="sourceCode numberSource vim number-lines code-with-copy"><code class="sourceCode"><span id="cb24-1"><a href="#cb24-1"></a>" Macro to add console.log</span>
+<span id="cb24-2"><a href="#cb24-2"></a>let @l = 'iconsole.log();hhi'</span>
+<span id="cb24-3"><a href="#cb24-3"></a></span>
+<span id="cb24-4"><a href="#cb24-4"></a>" Macro to wrap in quotes</span>
+<span id="cb24-5"><a href="#cb24-5"></a>let @q = 'ciw"pa"'</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</section>
+</section>
+</section>
+<section id="practice-exercise-registers-and-macros-mastery" class="level2" data-number="0.4">
+<h2 data-number="0.4" class="anchored" data-anchor-id="practice-exercise-registers-and-macros-mastery"><span class="header-section-number">0.4</span> Practice Exercise: Registers and Macros Mastery</h2>
+<p>Create a file with this content:</p>
+<div class="sourceCode" id="cb25"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb25-1"><a href="#cb25-1"></a>name <span class="op">=</span> John</span>
+<span id="cb25-2"><a href="#cb25-2"></a>age <span class="op">=</span> <span class="dv">30</span></span>
+<span id="cb25-3"><a href="#cb25-3"></a>city <span class="op">=</span> New York</span>
+<span id="cb25-4"><a href="#cb25-4"></a>email <span class="op">=</span> john<span class="op">@</span>example.com</span>
+<span id="cb25-5"><a href="#cb25-5"></a>phone <span class="op">=</span> <span class="dv">123</span><span class="op">-</span><span class="dv">456</span><span class="op">-</span><span class="dv">7890</span></span>
+<span id="cb25-6"><a href="#cb25-6"></a></span>
+<span id="cb25-7"><a href="#cb25-7"></a>name <span class="op">=</span> Jane</span>
+<span id="cb25-8"><a href="#cb25-8"></a>age <span class="op">=</span> <span class="dv">25</span></span>
+<span id="cb25-9"><a href="#cb25-9"></a>city <span class="op">=</span> Los Angeles</span>
+<span id="cb25-10"><a href="#cb25-10"></a>email <span class="op">=</span> jane<span class="op">@</span>example.com</span>
+<span id="cb25-11"><a href="#cb25-11"></a>phone <span class="op">=</span> <span class="dv">987</span><span class="op">-</span><span class="dv">654</span><span class="op">-</span><span class="dv">3210</span></span>
+<span id="cb25-12"><a href="#cb25-12"></a></span>
+<span id="cb25-13"><a href="#cb25-13"></a>name <span class="op">=</span> Bob</span>
+<span id="cb25-14"><a href="#cb25-14"></a>age <span class="op">=</span> <span class="dv">35</span></span>
+<span id="cb25-15"><a href="#cb25-15"></a>city <span class="op">=</span> Chicago</span>
+<span id="cb25-16"><a href="#cb25-16"></a>email <span class="op">=</span> bob<span class="op">@</span>example.com</span>
+<span id="cb25-17"><a href="#cb25-17"></a>phone <span class="op">=</span> <span class="dv">555</span><span class="op">-</span><span class="dv">123</span><span class="op">-</span><span class="dv">4567</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p><strong>Practice these operations</strong>:</p>
+<ol type="1">
+<li><strong>Register practice</strong>:
+<ul>
+<li>Store different names in registers a, b, c</li>
+<li>Copy email format to register e</li>
+<li>Use system clipboard to copy data</li>
+</ul></li>
+<li><strong>Macro practice</strong>:
+<ul>
+<li>Record macro to add quotes around values</li>
+<li>Create macro to format as dictionary</li>
+<li>Make macro to add type annotations</li>
+</ul></li>
+<li><strong>Combined practice</strong>:
+<ul>
+<li>Use registers within macros</li>
+<li>Store complex formatting in registers</li>
+<li>Create reusable transformation macros</li>
+</ul></li>
+<li><strong>Advanced challenges</strong>:
+<ul>
+<li>Convert to JSON format</li>
+<li>Add validation functions</li>
+<li>Create test data generators</li>
+</ul></li>
+</ol>
+</section>
+<section id="building-register-and-macro-muscle-memory" class="level2" data-number="0.5">
+<h2 data-number="0.5" class="anchored" data-anchor-id="building-register-and-macro-muscle-memory"><span class="header-section-number">0.5</span> Building Register and Macro Muscle Memory</h2>
+<section id="week-1-basic-registers" class="level3" data-number="0.5.1">
+<h3 data-number="0.5.1" class="anchored" data-anchor-id="week-1-basic-registers"><span class="header-section-number">0.5.1</span> Week 1: Basic Registers</h3>
+<ul>
+<li>Practice named registers (<code>"a</code>, <code>"b</code>, <code>"c</code>)</li>
+<li>Use system clipboard (<code>"+y</code>, <code>"+p</code>)</li>
+<li>Explore register contents (<code>:registers</code>)</li>
+</ul>
+</section>
+<section id="week-2-simple-macros" class="level3" data-number="0.5.2">
+<h3 data-number="0.5.2" class="anchored" data-anchor-id="week-2-simple-macros"><span class="header-section-number">0.5.2</span> Week 2: Simple Macros</h3>
+<ul>
+<li>Record basic macros (<code>qa</code>, <code>@a</code>)</li>
+<li>Practice with repetitive formatting</li>
+<li>Learn to debug failed macros</li>
+</ul>
+</section>
+<section id="week-3-advanced-techniques" class="level3" data-number="0.5.3">
+<h3 data-number="0.5.3" class="anchored" data-anchor-id="week-3-advanced-techniques"><span class="header-section-number">0.5.3</span> Week 3: Advanced Techniques</h3>
+<ul>
+<li>Combine registers and macros</li>
+<li>Create complex transformations</li>
+<li>Build personal macro library</li>
+</ul>
+</section>
+<section id="week-4-real-world-applications" class="level3" data-number="0.5.4">
+<h3 data-number="0.5.4" class="anchored" data-anchor-id="week-4-real-world-applications"><span class="header-section-number">0.5.4</span> Week 4: Real-world Applications</h3>
+<ul>
+<li>Apply to actual coding projects</li>
+<li>Develop workflow-specific macros</li>
+<li>Share macros with team</li>
+</ul>
+</section>
+</section>
+<section id="whats-next" class="level2" data-number="0.6">
+<h2 data-number="0.6" class="anchored" data-anchor-id="whats-next"><span class="header-section-number">0.6</span> What’s Next?</h2>
+<p>You now master: - Named registers for multiple clipboards - System clipboard integration - Basic and advanced macro recording - Macro debugging and editing - Combining registers and macros - Real-world automation workflows</p>
+<p>In the next post, we’ll explore <a href="../../../posts/series/vim-mastery/09-file-management.html">File Management and Buffers</a> and learn to work with multiple files like a pro.</p>
+</section>
+<section id="key-takeaways" class="level2" data-number="0.7">
+<h2 data-number="0.7" class="anchored" data-anchor-id="key-takeaways"><span class="header-section-number">0.7</span> Key Takeaways</h2>
+<ol type="1">
+<li><strong>Registers are multiple clipboards</strong> - use them to organize your copying</li>
+<li><strong>Macros automate repetition</strong> - record once, replay many times</li>
+<li><strong>System clipboard integration</strong> - seamlessly work with other applications</li>
+<li><strong>Practice makes perfect</strong> - start with simple macros, build complexity</li>
+<li><strong>Combine techniques</strong> - registers and macros work great together</li>
+</ol>
+<p>Registers and macros transform Vim from a text editor into a text manipulation powerhouse. Once you master these tools, you’ll handle repetitive tasks with incredible efficiency and wonder how you ever lived without them.</p>
+<hr>
+<p><em>Ready to manage multiple files like a pro? Continue with <a href="../../../posts/series/vim-mastery/09-file-management.html">File Management and Buffers</a> to master multi-file workflows.</em></p>
+
+
+<!-- -->
+
+</section>
+
+<div id="quarto-appendix" class="default"><section class="quarto-appendix-contents"><h2 class="anchored quarto-appendix-heading">Reuse</h2><div id="quarto-reuse" class="quarto-appendix-contents"><div>CC BY-NC-SA 4.0</div></div></section><section class="quarto-appendix-contents"><h2 class="anchored quarto-appendix-heading">Citation</h2><div><div class="quarto-appendix-secondary-label">BibTeX citation:</div><pre class="sourceCode code-with-copy quarto-appendix-bibtex"><code class="sourceCode bibtex">@online{2025,
+  author = {, Hasan},
+  title = {Registers and {Macros:} {Copy-Paste} on {Steroids} and
+    {Automation} {Magic}},
+  date = {2025-07-18},
+  url = {https://hasangoni.quarto.pub/hasan-blog-post/posts/series/vim-mastery/08-registers-macros.html},
+  langid = {en}
+}
+</code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre><div class="quarto-appendix-secondary-label">For attribution, please cite this work as:</div><div id="ref-2025" class="csl-entry quarto-appendix-citeas" role="listitem">
+Hasan. 2025. <span>“Registers and Macros: Copy-Paste on Steroids and
+Automation Magic.”</span> July 18, 2025. <a href="https://hasangoni.quarto.pub/hasan-blog-post/posts/series/vim-mastery/08-registers-macros.html">https://hasangoni.quarto.pub/hasan-blog-post/posts/series/vim-mastery/08-registers-macros.html</a>.
+</div></div></section></div></main> <!-- /main -->
+<script id="quarto-html-after-body" type="application/javascript">
+window.document.addEventListener("DOMContentLoaded", function (event) {
+  const toggleBodyColorMode = (bsSheetEl) => {
+    const mode = bsSheetEl.getAttribute("data-mode");
+    const bodyEl = window.document.querySelector("body");
+    if (mode === "dark") {
+      bodyEl.classList.add("quarto-dark");
+      bodyEl.classList.remove("quarto-light");
+    } else {
+      bodyEl.classList.add("quarto-light");
+      bodyEl.classList.remove("quarto-dark");
+    }
+  }
+  const toggleBodyColorPrimary = () => {
+    const bsSheetEl = window.document.querySelector("link#quarto-bootstrap");
+    if (bsSheetEl) {
+      toggleBodyColorMode(bsSheetEl);
+    }
+  }
+  toggleBodyColorPrimary();  
+  const icon = "";
+  const anchorJS = new window.AnchorJS();
+  anchorJS.options = {
+    placement: 'right',
+    icon: icon
+  };
+  anchorJS.add('.anchored');
+  const isCodeAnnotation = (el) => {
+    for (const clz of el.classList) {
+      if (clz.startsWith('code-annotation-')) {                     
+        return true;
+      }
+    }
+    return false;
+  }
+  const clipboard = new window.ClipboardJS('.code-copy-button', {
+    text: function(trigger) {
+      const codeEl = trigger.previousElementSibling.cloneNode(true);
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
+        }
+      }
+      return codeEl.innerText;
+    }
+  });
+  clipboard.on('success', function(e) {
+    // button target
+    const button = e.trigger;
+    // don't keep focus
+    button.blur();
+    // flash "checked"
+    button.classList.add('code-copy-button-checked');
+    var currentTitle = button.getAttribute("title");
+    button.setAttribute("title", "Copied!");
+    let tooltip;
+    if (window.bootstrap) {
+      button.setAttribute("data-bs-toggle", "tooltip");
+      button.setAttribute("data-bs-placement", "left");
+      button.setAttribute("data-bs-title", "Copied!");
+      tooltip = new bootstrap.Tooltip(button, 
+        { trigger: "manual", 
+          customClass: "code-copy-button-tooltip",
+          offset: [0, -8]});
+      tooltip.show();    
+    }
+    setTimeout(function() {
+      if (tooltip) {
+        tooltip.hide();
+        button.removeAttribute("data-bs-title");
+        button.removeAttribute("data-bs-toggle");
+        button.removeAttribute("data-bs-placement");
+      }
+      button.setAttribute("title", currentTitle);
+      button.classList.remove('code-copy-button-checked');
+    }, 1000);
+    // clear code selection
+    e.clearSelection();
+  });
+  const viewSource = window.document.getElementById('quarto-view-source') ||
+                     window.document.getElementById('quarto-code-tools-source');
+  if (viewSource) {
+    const sourceUrl = viewSource.getAttribute("data-quarto-source-url");
+    viewSource.addEventListener("click", function(e) {
+      if (sourceUrl) {
+        // rstudio viewer pane
+        if (/\bcapabilities=\b/.test(window.location)) {
+          window.open(sourceUrl);
+        } else {
+          window.location.href = sourceUrl;
+        }
+      } else {
+        const modal = new bootstrap.Modal(document.getElementById('quarto-embedded-source-code-modal'));
+        modal.show();
+      }
+      return false;
+    });
+  }
+  function toggleCodeHandler(show) {
+    return function(e) {
+      const detailsSrc = window.document.querySelectorAll(".cell > details > .sourceCode");
+      for (let i=0; i<detailsSrc.length; i++) {
+        const details = detailsSrc[i].parentElement;
+        if (show) {
+          details.open = true;
+        } else {
+          details.removeAttribute("open");
+        }
+      }
+      const cellCodeDivs = window.document.querySelectorAll(".cell > .sourceCode");
+      const fromCls = show ? "hidden" : "unhidden";
+      const toCls = show ? "unhidden" : "hidden";
+      for (let i=0; i<cellCodeDivs.length; i++) {
+        const codeDiv = cellCodeDivs[i];
+        if (codeDiv.classList.contains(fromCls)) {
+          codeDiv.classList.remove(fromCls);
+          codeDiv.classList.add(toCls);
+        } 
+      }
+      return false;
+    }
+  }
+  const hideAllCode = window.document.getElementById("quarto-hide-all-code");
+  if (hideAllCode) {
+    hideAllCode.addEventListener("click", toggleCodeHandler(false));
+  }
+  const showAllCode = window.document.getElementById("quarto-show-all-code");
+  if (showAllCode) {
+    showAllCode.addEventListener("click", toggleCodeHandler(true));
+  }
+  function tippyHover(el, contentFn) {
+    const config = {
+      allowHTML: true,
+      content: contentFn,
+      maxWidth: 500,
+      delay: 100,
+      arrow: false,
+      appendTo: function(el) {
+          return el.parentElement;
+      },
+      interactive: true,
+      interactiveBorder: 10,
+      theme: 'quarto',
+      placement: 'bottom-start'
+    };
+    window.tippy(el, config); 
+  }
+  const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+  for (var i=0; i<noterefs.length; i++) {
+    const ref = noterefs[i];
+    tippyHover(ref, function() {
+      // use id or data attribute instead here
+      let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+      try { href = new URL(href).hash; } catch {}
+      const id = href.replace(/^#\/?/, "");
+      const note = window.document.getElementById(id);
+      return note.innerHTML;
+    });
+  }
+      let selectedAnnoteEl;
+      const selectorForAnnotation = ( cell, annotation) => {
+        let cellAttr = 'data-code-cell="' + cell + '"';
+        let lineAttr = 'data-code-annotation="' +  annotation + '"';
+        const selector = 'span[' + cellAttr + '][' + lineAttr + ']';
+        return selector;
+      }
+      const selectCodeLines = (annoteEl) => {
+        const doc = window.document;
+        const targetCell = annoteEl.getAttribute("data-target-cell");
+        const targetAnnotation = annoteEl.getAttribute("data-target-annotation");
+        const annoteSpan = window.document.querySelector(selectorForAnnotation(targetCell, targetAnnotation));
+        const lines = annoteSpan.getAttribute("data-code-lines").split(",");
+        const lineIds = lines.map((line) => {
+          return targetCell + "-" + line;
+        })
+        let top = null;
+        let height = null;
+        let parent = null;
+        if (lineIds.length > 0) {
+            //compute the position of the single el (top and bottom and make a div)
+            const el = window.document.getElementById(lineIds[0]);
+            top = el.offsetTop;
+            height = el.offsetHeight;
+            parent = el.parentElement.parentElement;
+          if (lineIds.length > 1) {
+            const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
+            const bottom = lastEl.offsetTop + lastEl.offsetHeight;
+            height = bottom - top;
+          }
+          if (top !== null && height !== null && parent !== null) {
+            // cook up a div (if necessary) and position it 
+            let div = window.document.getElementById("code-annotation-line-highlight");
+            if (div === null) {
+              div = window.document.createElement("div");
+              div.setAttribute("id", "code-annotation-line-highlight");
+              div.style.position = 'absolute';
+              parent.appendChild(div);
+            }
+            div.style.top = top - 2 + "px";
+            div.style.height = height + 4 + "px";
+            let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
+            if (gutterDiv === null) {
+              gutterDiv = window.document.createElement("div");
+              gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
+              gutterDiv.style.position = 'absolute';
+              const codeCell = window.document.getElementById(targetCell);
+              const gutter = codeCell.querySelector('.code-annotation-gutter');
+              gutter.appendChild(gutterDiv);
+            }
+            gutterDiv.style.top = top - 2 + "px";
+            gutterDiv.style.height = height + 4 + "px";
+          }
+          selectedAnnoteEl = annoteEl;
+        }
+      };
+      const unselectCodeLines = () => {
+        const elementsIds = ["code-annotation-line-highlight", "code-annotation-line-highlight-gutter"];
+        elementsIds.forEach((elId) => {
+          const div = window.document.getElementById(elId);
+          if (div) {
+            div.remove();
+          }
+        });
+        selectedAnnoteEl = undefined;
+      };
+      // Attach click handler to the DT
+      const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
+      for (const annoteDlNode of annoteDls) {
+        annoteDlNode.addEventListener('click', (event) => {
+          const clickedEl = event.target;
+          if (clickedEl !== selectedAnnoteEl) {
+            unselectCodeLines();
+            const activeEl = window.document.querySelector('dt[data-target-cell].code-annotation-active');
+            if (activeEl) {
+              activeEl.classList.remove('code-annotation-active');
+            }
+            selectCodeLines(clickedEl);
+            clickedEl.classList.add('code-annotation-active');
+          } else {
+            // Unselect the line
+            unselectCodeLines();
+            clickedEl.classList.remove('code-annotation-active');
+          }
+        });
+      }
+  const findCites = (el) => {
+    const parentEl = el.parentElement;
+    if (parentEl) {
+      const cites = parentEl.dataset.cites;
+      if (cites) {
+        return {
+          el,
+          cites: cites.split(' ')
+        };
+      } else {
+        return findCites(el.parentElement)
+      }
+    } else {
+      return undefined;
+    }
+  };
+  var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+  for (var i=0; i<bibliorefs.length; i++) {
+    const ref = bibliorefs[i];
+    const citeInfo = findCites(ref);
+    if (citeInfo) {
+      tippyHover(citeInfo.el, function() {
+        var popup = window.document.createElement('div');
+        citeInfo.cites.forEach(function(cite) {
+          var citeDiv = window.document.createElement('div');
+          citeDiv.classList.add('hanging-indent');
+          citeDiv.classList.add('csl-entry');
+          var biblioDiv = window.document.getElementById('ref-' + cite);
+          if (biblioDiv) {
+            citeDiv.innerHTML = biblioDiv.innerHTML;
+          }
+          popup.appendChild(citeDiv);
+        });
+        return popup.innerHTML;
+      });
+    }
+  }
+});
+</script>
+<script src="https://utteranc.es/client.js" repo="yourusername/quarto_blog_hasan" issue-term="pathname" theme="github-light" crossorigin="anonymous" async="">
+</script>
+<script src="https://giscus.app/client.js" data-repo="HasanGoni/quarto_blog_hasan" data-repo-id="" data-category="General" data-category-id="" data-mapping="title" data-reactions-enabled="1" data-emit-metadata="0" data-input-position="top" data-theme="light" data-lang="en" crossorigin="anonymous" async="">
+</script><div class="modal fade" id="quarto-embedded-source-code-modal" tabindex="-1" aria-labelledby="quarto-embedded-source-code-modal-label" aria-hidden="true"><div class="modal-dialog modal-dialog-scrollable"><div class="modal-content"><div class="modal-header"><h5 class="modal-title" id="quarto-embedded-source-code-modal-label">Source Code</h5><button class="btn-close" data-bs-dismiss="modal"></button></div><div class="modal-body"><div class="">
+<div class="sourceCode" id="cb26" data-shortcodes="false"><pre class="sourceCode numberSource markdown number-lines code-with-copy"><code class="sourceCode markdown"><span id="cb26-1"><a href="#cb26-1"></a><span class="co">---</span></span>
+<span id="cb26-2"><a href="#cb26-2"></a><span class="an">title:</span><span class="co"> "Registers and Macros: Copy-Paste on Steroids and Automation Magic"</span></span>
+<span id="cb26-3"><a href="#cb26-3"></a><span class="an">description:</span><span class="co"> "Master Vim's advanced clipboard system and powerful macro recording. Learn to manage multiple clipboards and automate repetitive tasks with incredible efficiency."</span></span>
+<span id="cb26-4"><a href="#cb26-4"></a><span class="an">author:</span><span class="co"> "Hasan"</span></span>
+<span id="cb26-5"><a href="#cb26-5"></a><span class="an">date:</span><span class="co"> last-modified</span></span>
+<span id="cb26-6"><a href="#cb26-6"></a><span class="an">categories:</span><span class="co"> [vim, registers, macros, automation, clipboard]</span></span>
+<span id="cb26-7"><a href="#cb26-7"></a><span class="an">image:</span><span class="co"> "images/vim.png"</span></span>
+<span id="cb26-8"><a href="#cb26-8"></a><span class="an">toc:</span><span class="co"> true</span></span>
+<span id="cb26-9"><a href="#cb26-9"></a><span class="co">---</span></span>
+<span id="cb26-10"><a href="#cb26-10"></a></span>
+<span id="cb26-11"><a href="#cb26-11"></a><span class="fu">## The Magician's Arsenal</span></span>
+<span id="cb26-12"><a href="#cb26-12"></a></span>
+<span id="cb26-13"><a href="#cb26-13"></a>Imagine you're a magician with two incredible powers:</span>
+<span id="cb26-14"><a href="#cb26-14"></a></span>
+<span id="cb26-15"><a href="#cb26-15"></a><span class="ss">1. </span>**Infinite Pockets**: You can store unlimited items in labeled pockets and retrieve them instantly</span>
+<span id="cb26-16"><a href="#cb26-16"></a><span class="ss">2. </span>**Action Recording**: You can record a sequence of actions and replay them perfectly, as many times as you want</span>
+<span id="cb26-17"><a href="#cb26-17"></a></span>
+<span id="cb26-18"><a href="#cb26-18"></a>That's what Vim's registers and macros give you! Registers are like having 26+ clipboards, and macros are like having a personal assistant that can repeat complex tasks flawlessly.</span>
+<span id="cb26-19"><a href="#cb26-19"></a></span>
+<span id="cb26-20"><a href="#cb26-20"></a><span class="fu">## Part 1: Registers - The Multi-Clipboard System</span></span>
+<span id="cb26-21"><a href="#cb26-21"></a></span>
+<span id="cb26-22"><a href="#cb26-22"></a><span class="fu">### What Are Registers?</span></span>
+<span id="cb26-23"><a href="#cb26-23"></a></span>
+<span id="cb26-24"><a href="#cb26-24"></a>Registers are Vim's storage containers for text. Think of them as labeled boxes where you can store different pieces of text and retrieve them later.</span>
+<span id="cb26-25"><a href="#cb26-25"></a></span>
+<span id="cb26-26"><a href="#cb26-26"></a>**Traditional clipboard**: One item at a time</span>
+<span id="cb26-27"><a href="#cb26-27"></a>**Vim registers**: 26+ labeled storage containers</span>
+<span id="cb26-28"><a href="#cb26-28"></a></span>
+<span id="cb26-29"><a href="#cb26-29"></a><span class="fu">### The Register Family</span></span>
+<span id="cb26-30"><a href="#cb26-30"></a></span>
+<span id="cb26-31"><a href="#cb26-31"></a><span class="fu">#### 1. Named Registers (`"a` to `"z`)</span></span>
+<span id="cb26-32"><a href="#cb26-32"></a><span class="ss">- </span>**Your personal storage**: 26 containers you control</span>
+<span id="cb26-33"><a href="#cb26-33"></a><span class="ss">- </span>**Persistent**: Content stays until you replace it</span>
+<span id="cb26-34"><a href="#cb26-34"></a><span class="ss">- </span>**Accessible**: Use from anywhere in any file</span>
+<span id="cb26-35"><a href="#cb26-35"></a></span>
+<span id="cb26-36"><a href="#cb26-36"></a><span class="fu">#### 2. Numbered Registers (`"0` to `"9`)</span></span>
+<span id="cb26-37"><a href="#cb26-37"></a><span class="ss">- </span>**Automatic history**: Vim manages these for you</span>
+<span id="cb26-38"><a href="#cb26-38"></a><span class="ss">- </span><span class="in">`"0`</span> = Last yank (copy)</span>
+<span id="cb26-39"><a href="#cb26-39"></a><span class="ss">- </span><span class="in">`"1`</span> to <span class="in">`"9`</span> = Recent deletes (most recent first)</span>
+<span id="cb26-40"><a href="#cb26-40"></a></span>
+<span id="cb26-41"><a href="#cb26-41"></a><span class="fu">#### 3. Special Registers</span></span>
+<span id="cb26-42"><a href="#cb26-42"></a><span class="ss">- </span><span class="in">`""`</span> = Default register (last delete/yank)</span>
+<span id="cb26-43"><a href="#cb26-43"></a><span class="ss">- </span><span class="in">`"+`</span> = System clipboard</span>
+<span id="cb26-44"><a href="#cb26-44"></a><span class="ss">- </span><span class="in">`"*`</span> = Selection clipboard (Linux/Mac)</span>
+<span id="cb26-45"><a href="#cb26-45"></a><span class="ss">- </span><span class="in">`"%`</span> = Current filename</span>
+<span id="cb26-46"><a href="#cb26-46"></a><span class="ss">- </span><span class="in">`".`</span> = Last inserted text</span>
+<span id="cb26-47"><a href="#cb26-47"></a></span>
+<span id="cb26-48"><a href="#cb26-48"></a><span class="fu">### Basic Register Operations</span></span>
+<span id="cb26-49"><a href="#cb26-49"></a></span>
+<span id="cb26-50"><a href="#cb26-50"></a><span class="fu">#### Storing Text in Registers</span></span>
+<span id="cb26-51"><a href="#cb26-51"></a><span class="in">```vim</span></span>
+<span id="cb26-52"><a href="#cb26-52"></a><span class="in">"ayy        " Yank current line to register 'a'</span></span>
+<span id="cb26-53"><a href="#cb26-53"></a><span class="in">"byw        " Yank word to register 'b'</span></span>
+<span id="cb26-54"><a href="#cb26-54"></a><span class="in">"cdd        " Delete line to register 'c'</span></span>
+<span id="cb26-55"><a href="#cb26-55"></a><span class="in">"dvi"       " Delete inside quotes to register 'd'</span></span>
+<span id="cb26-56"><a href="#cb26-56"></a><span class="in">```</span></span>
+<span id="cb26-57"><a href="#cb26-57"></a></span>
+<span id="cb26-58"><a href="#cb26-58"></a><span class="fu">#### Retrieving Text from Registers</span></span>
+<span id="cb26-59"><a href="#cb26-59"></a><span class="in">```vim</span></span>
+<span id="cb26-60"><a href="#cb26-60"></a><span class="in">"ap         " Put from register 'a'</span></span>
+<span id="cb26-61"><a href="#cb26-61"></a><span class="in">"bp         " Put from register 'b'</span></span>
+<span id="cb26-62"><a href="#cb26-62"></a><span class="in">"cP         " Put from register 'c' before cursor</span></span>
+<span id="cb26-63"><a href="#cb26-63"></a><span class="in">```</span></span>
+<span id="cb26-64"><a href="#cb26-64"></a></span>
+<span id="cb26-65"><a href="#cb26-65"></a><span class="fu">#### Viewing Register Contents</span></span>
+<span id="cb26-66"><a href="#cb26-66"></a><span class="in">```vim</span></span>
+<span id="cb26-67"><a href="#cb26-67"></a><span class="in">:registers  " Show all registers</span></span>
+<span id="cb26-68"><a href="#cb26-68"></a><span class="in">:reg a b c  " Show specific registers</span></span>
+<span id="cb26-69"><a href="#cb26-69"></a><span class="in">```</span></span>
+<span id="cb26-70"><a href="#cb26-70"></a></span>
+<span id="cb26-71"><a href="#cb26-71"></a><span class="fu">### Practical Register Examples</span></span>
+<span id="cb26-72"><a href="#cb26-72"></a></span>
+<span id="cb26-73"><a href="#cb26-73"></a>**Example 1: Managing Multiple Code Snippets**</span>
+<span id="cb26-74"><a href="#cb26-74"></a><span class="in">```python</span></span>
+<span id="cb26-75"><a href="#cb26-75"></a><span class="co"># You want to copy these three different pieces</span></span>
+<span id="cb26-76"><a href="#cb26-76"></a>function_header <span class="op">=</span> <span class="st">"def calculate_total(items):"</span></span>
+<span id="cb26-77"><a href="#cb26-77"></a>error_message <span class="op">=</span> <span class="st">"raise ValueError('Invalid input')"</span></span>
+<span id="cb26-78"><a href="#cb26-78"></a>return_statement <span class="op">=</span> <span class="st">"return total"</span></span>
+<span id="cb26-79"><a href="#cb26-79"></a><span class="in">```</span></span>
+<span id="cb26-80"><a href="#cb26-80"></a></span>
+<span id="cb26-81"><a href="#cb26-81"></a>**Workflow**:</span>
+<span id="cb26-82"><a href="#cb26-82"></a><span class="ss">1. </span><span class="in">`"ayy`</span> on function header - Store in register 'a'</span>
+<span id="cb26-83"><a href="#cb26-83"></a><span class="ss">2. </span><span class="in">`"byy`</span> on error message - Store in register 'b'  </span>
+<span id="cb26-84"><a href="#cb26-84"></a><span class="ss">3. </span><span class="in">`"cyy`</span> on return statement - Store in register 'c'</span>
+<span id="cb26-85"><a href="#cb26-85"></a><span class="ss">4. </span>Navigate anywhere and use <span class="in">`"ap`</span>, <span class="in">`"bp`</span>, <span class="in">`"cp`</span> to paste</span>
+<span id="cb26-86"><a href="#cb26-86"></a></span>
+<span id="cb26-87"><a href="#cb26-87"></a>**Example 2: Swapping Code Blocks**</span>
+<span id="cb26-88"><a href="#cb26-88"></a><span class="in">```python</span></span>
+<span id="cb26-89"><a href="#cb26-89"></a><span class="co"># Block 1</span></span>
+<span id="cb26-90"><a href="#cb26-90"></a><span class="kw">def</span> old_function():</span>
+<span id="cb26-91"><a href="#cb26-91"></a>    <span class="cf">return</span> <span class="st">"old"</span></span>
+<span id="cb26-92"><a href="#cb26-92"></a></span>
+<span id="cb26-93"><a href="#cb26-93"></a><span class="co"># Block 2  </span></span>
+<span id="cb26-94"><a href="#cb26-94"></a><span class="kw">def</span> new_function():</span>
+<span id="cb26-95"><a href="#cb26-95"></a>    <span class="cf">return</span> <span class="st">"new"</span></span>
+<span id="cb26-96"><a href="#cb26-96"></a><span class="in">```</span></span>
+<span id="cb26-97"><a href="#cb26-97"></a></span>
+<span id="cb26-98"><a href="#cb26-98"></a>**Task**: Swap the two functions</span>
+<span id="cb26-99"><a href="#cb26-99"></a><span class="ss">1. </span>Select first function with <span class="in">`Vip`</span></span>
+<span id="cb26-100"><a href="#cb26-100"></a><span class="ss">2. </span><span class="in">`"ad`</span> - Delete to register 'a'</span>
+<span id="cb26-101"><a href="#cb26-101"></a><span class="ss">3. </span>Select second function with <span class="in">`Vip`</span></span>
+<span id="cb26-102"><a href="#cb26-102"></a><span class="ss">4. </span><span class="in">`"bd`</span> - Delete to register 'b'</span>
+<span id="cb26-103"><a href="#cb26-103"></a><span class="ss">5. </span><span class="in">`"bp`</span> - Put function from register 'b'</span>
+<span id="cb26-104"><a href="#cb26-104"></a><span class="ss">6. </span>Move up and <span class="in">`"ap`</span> - Put function from register 'a'</span>
+<span id="cb26-105"><a href="#cb26-105"></a></span>
+<span id="cb26-106"><a href="#cb26-106"></a><span class="fu">### System Clipboard Integration</span></span>
+<span id="cb26-107"><a href="#cb26-107"></a></span>
+<span id="cb26-108"><a href="#cb26-108"></a><span class="fu">#### Copying to System Clipboard</span></span>
+<span id="cb26-109"><a href="#cb26-109"></a><span class="in">```vim</span></span>
+<span id="cb26-110"><a href="#cb26-110"></a><span class="in">"+yy        " Yank line to system clipboard</span></span>
+<span id="cb26-111"><a href="#cb26-111"></a><span class="in">"+yw        " Yank word to system clipboard</span></span>
+<span id="cb26-112"><a href="#cb26-112"></a><span class="in">"+y         " Yank visual selection to system clipboard</span></span>
+<span id="cb26-113"><a href="#cb26-113"></a><span class="in">```</span></span>
+<span id="cb26-114"><a href="#cb26-114"></a></span>
+<span id="cb26-115"><a href="#cb26-115"></a><span class="fu">#### Pasting from System Clipboard</span></span>
+<span id="cb26-116"><a href="#cb26-116"></a><span class="in">```vim</span></span>
+<span id="cb26-117"><a href="#cb26-117"></a><span class="in">"+p         " Put from system clipboard</span></span>
+<span id="cb26-118"><a href="#cb26-118"></a><span class="in">"+P         " Put from system clipboard before cursor</span></span>
+<span id="cb26-119"><a href="#cb26-119"></a><span class="in">```</span></span>
+<span id="cb26-120"><a href="#cb26-120"></a></span>
+<span id="cb26-121"><a href="#cb26-121"></a><span class="fu">#### Practical System Clipboard Example</span></span>
+<span id="cb26-122"><a href="#cb26-122"></a><span class="in">```python</span></span>
+<span id="cb26-123"><a href="#cb26-123"></a><span class="co"># Copy this function to share with a colleague</span></span>
+<span id="cb26-124"><a href="#cb26-124"></a><span class="kw">def</span> calculate_tax(price, rate):</span>
+<span id="cb26-125"><a href="#cb26-125"></a>    <span class="cf">return</span> price <span class="op">*</span> rate</span>
+<span id="cb26-126"><a href="#cb26-126"></a><span class="in">```</span></span>
+<span id="cb26-127"><a href="#cb26-127"></a></span>
+<span id="cb26-128"><a href="#cb26-128"></a>**Workflow**:</span>
+<span id="cb26-129"><a href="#cb26-129"></a><span class="ss">1. </span><span class="in">`Vip`</span> - Select the function</span>
+<span id="cb26-130"><a href="#cb26-130"></a><span class="ss">2. </span><span class="in">`"+y`</span> - Copy to system clipboard</span>
+<span id="cb26-131"><a href="#cb26-131"></a><span class="ss">3. </span>Now you can paste it anywhere outside Vim</span>
+<span id="cb26-132"><a href="#cb26-132"></a></span>
+<span id="cb26-133"><a href="#cb26-133"></a><span class="fu">## Part 2: Macros - The Automation Powerhouse</span></span>
+<span id="cb26-134"><a href="#cb26-134"></a></span>
+<span id="cb26-135"><a href="#cb26-135"></a><span class="fu">### What Are Macros?</span></span>
+<span id="cb26-136"><a href="#cb26-136"></a></span>
+<span id="cb26-137"><a href="#cb26-137"></a>Macros are recorded sequences of keystrokes that you can replay. Think of them as recording your actions and playing them back perfectly.</span>
+<span id="cb26-138"><a href="#cb26-138"></a></span>
+<span id="cb26-139"><a href="#cb26-139"></a>**Manual repetition**: Do the same thing 50 times</span>
+<span id="cb26-140"><a href="#cb26-140"></a>**Macro power**: Record once, replay 50 times instantly</span>
+<span id="cb26-141"><a href="#cb26-141"></a></span>
+<span id="cb26-142"><a href="#cb26-142"></a><span class="fu">### Basic Macro Operations</span></span>
+<span id="cb26-143"><a href="#cb26-143"></a></span>
+<span id="cb26-144"><a href="#cb26-144"></a><span class="fu">#### Recording a Macro</span></span>
+<span id="cb26-145"><a href="#cb26-145"></a><span class="in">```vim</span></span>
+<span id="cb26-146"><a href="#cb26-146"></a><span class="in">qa          " Start recording macro in register 'a'</span></span>
+<span id="cb26-147"><a href="#cb26-147"></a><span class="in">[perform actions]</span></span>
+<span id="cb26-148"><a href="#cb26-148"></a><span class="in">q           " Stop recording</span></span>
+<span id="cb26-149"><a href="#cb26-149"></a><span class="in">```</span></span>
+<span id="cb26-150"><a href="#cb26-150"></a></span>
+<span id="cb26-151"><a href="#cb26-151"></a><span class="fu">#### Playing a Macro</span></span>
+<span id="cb26-152"><a href="#cb26-152"></a><span class="in">```vim</span></span>
+<span id="cb26-153"><a href="#cb26-153"></a><span class="in">@a          " Execute macro from register 'a'</span></span>
+<span id="cb26-154"><a href="#cb26-154"></a><span class="in">@@          " Repeat last executed macro</span></span>
+<span id="cb26-155"><a href="#cb26-155"></a><span class="in">5@a         " Execute macro 'a' 5 times</span></span>
+<span id="cb26-156"><a href="#cb26-156"></a><span class="in">```</span></span>
+<span id="cb26-157"><a href="#cb26-157"></a></span>
+<span id="cb26-158"><a href="#cb26-158"></a><span class="fu">### Simple Macro Example</span></span>
+<span id="cb26-159"><a href="#cb26-159"></a></span>
+<span id="cb26-160"><a href="#cb26-160"></a>**Scenario**: Convert these lines to Python print statements</span>
+<span id="cb26-161"><a href="#cb26-161"></a><span class="in">```</span></span>
+<span id="cb26-162"><a href="#cb26-162"></a><span class="in">Hello World</span></span>
+<span id="cb26-163"><a href="#cb26-163"></a><span class="in">Goodbye World</span></span>
+<span id="cb26-164"><a href="#cb26-164"></a><span class="in">See you later</span></span>
+<span id="cb26-165"><a href="#cb26-165"></a><span class="in">```</span></span>
+<span id="cb26-166"><a href="#cb26-166"></a></span>
+<span id="cb26-167"><a href="#cb26-167"></a>**Desired result**:</span>
+<span id="cb26-168"><a href="#cb26-168"></a><span class="in">```python</span></span>
+<span id="cb26-169"><a href="#cb26-169"></a><span class="bu">print</span>(<span class="st">"Hello World"</span>)</span>
+<span id="cb26-170"><a href="#cb26-170"></a><span class="bu">print</span>(<span class="st">"Goodbye World"</span>)</span>
+<span id="cb26-171"><a href="#cb26-171"></a><span class="bu">print</span>(<span class="st">"See you later"</span>)</span>
+<span id="cb26-172"><a href="#cb26-172"></a><span class="in">```</span></span>
+<span id="cb26-173"><a href="#cb26-173"></a></span>
+<span id="cb26-174"><a href="#cb26-174"></a>**Macro workflow**:</span>
+<span id="cb26-175"><a href="#cb26-175"></a><span class="ss">1. </span><span class="in">`qa`</span> - Start recording macro 'a'</span>
+<span id="cb26-176"><a href="#cb26-176"></a><span class="ss">2. </span><span class="in">`I`</span> - Insert at beginning of line</span>
+<span id="cb26-177"><a href="#cb26-177"></a><span class="ss">3. </span>Type <span class="in">`print("`</span></span>
+<span id="cb26-178"><a href="#cb26-178"></a><span class="ss">4. </span><span class="in">`A`</span> - Append at end of line</span>
+<span id="cb26-179"><a href="#cb26-179"></a><span class="ss">5. </span>Type <span class="in">`")`</span></span>
+<span id="cb26-180"><a href="#cb26-180"></a><span class="ss">6. </span><span class="in">`j`</span> - Move to next line</span>
+<span id="cb26-181"><a href="#cb26-181"></a><span class="ss">7. </span><span class="in">`q`</span> - Stop recording</span>
+<span id="cb26-182"><a href="#cb26-182"></a></span>
+<span id="cb26-183"><a href="#cb26-183"></a>**Replay**:</span>
+<span id="cb26-184"><a href="#cb26-184"></a><span class="ss">1. </span><span class="in">`2@a`</span> - Execute macro 'a' on remaining 2 lines</span>
+<span id="cb26-185"><a href="#cb26-185"></a></span>
+<span id="cb26-186"><a href="#cb26-186"></a><span class="fu">### Advanced Macro Examples</span></span>
+<span id="cb26-187"><a href="#cb26-187"></a></span>
+<span id="cb26-188"><a href="#cb26-188"></a>**Example 1: Creating a List from Data**</span>
+<span id="cb26-189"><a href="#cb26-189"></a><span class="in">```</span></span>
+<span id="cb26-190"><a href="#cb26-190"></a><span class="in">John,30,Engineer</span></span>
+<span id="cb26-191"><a href="#cb26-191"></a><span class="in">Jane,25,Designer</span></span>
+<span id="cb26-192"><a href="#cb26-192"></a><span class="in">Bob,35,Manager</span></span>
+<span id="cb26-193"><a href="#cb26-193"></a><span class="in">```</span></span>
+<span id="cb26-194"><a href="#cb26-194"></a></span>
+<span id="cb26-195"><a href="#cb26-195"></a>**Goal**: Convert to Python list of dictionaries</span>
+<span id="cb26-196"><a href="#cb26-196"></a><span class="in">```python</span></span>
+<span id="cb26-197"><a href="#cb26-197"></a>{<span class="st">"name"</span>: <span class="st">"John"</span>, <span class="st">"age"</span>: <span class="dv">30</span>, <span class="st">"job"</span>: <span class="st">"Engineer"</span>},</span>
+<span id="cb26-198"><a href="#cb26-198"></a>{<span class="st">"name"</span>: <span class="st">"Jane"</span>, <span class="st">"age"</span>: <span class="dv">25</span>, <span class="st">"job"</span>: <span class="st">"Designer"</span>},</span>
+<span id="cb26-199"><a href="#cb26-199"></a>{<span class="st">"name"</span>: <span class="st">"Bob"</span>, <span class="st">"age"</span>: <span class="dv">35</span>, <span class="st">"job"</span>: <span class="st">"Manager"</span>},</span>
+<span id="cb26-200"><a href="#cb26-200"></a><span class="in">```</span></span>
+<span id="cb26-201"><a href="#cb26-201"></a></span>
+<span id="cb26-202"><a href="#cb26-202"></a>**Macro workflow**:</span>
+<span id="cb26-203"><a href="#cb26-203"></a><span class="ss">1. </span><span class="in">`qa`</span> - Start recording</span>
+<span id="cb26-204"><a href="#cb26-204"></a><span class="ss">2. </span><span class="in">`I`</span> - Insert at beginning</span>
+<span id="cb26-205"><a href="#cb26-205"></a><span class="ss">3. </span>Type <span class="in">`{"name": "`</span></span>
+<span id="cb26-206"><a href="#cb26-206"></a><span class="ss">4. </span><span class="in">`f,`</span> - Find first comma</span>
+<span id="cb26-207"><a href="#cb26-207"></a><span class="ss">5. </span><span class="in">`r"`</span> - Replace comma with quote</span>
+<span id="cb26-208"><a href="#cb26-208"></a><span class="ss">6. </span><span class="in">`a, "age": `</span> - Add age field</span>
+<span id="cb26-209"><a href="#cb26-209"></a><span class="ss">7. </span><span class="in">`f,`</span> - Find next comma</span>
+<span id="cb26-210"><a href="#cb26-210"></a><span class="ss">8. </span><span class="in">`r,`</span> - Replace with comma</span>
+<span id="cb26-211"><a href="#cb26-211"></a><span class="ss">9. </span><span class="in">`a "job": "`</span> - Add job field</span>
+<span id="cb26-212"><a href="#cb26-212"></a><span class="ss">10. </span><span class="in">`A"},`</span> - Add closing</span>
+<span id="cb26-213"><a href="#cb26-213"></a><span class="ss">11. </span><span class="in">`j`</span> - Next line</span>
+<span id="cb26-214"><a href="#cb26-214"></a><span class="ss">12. </span><span class="in">`q`</span> - Stop recording</span>
+<span id="cb26-215"><a href="#cb26-215"></a></span>
+<span id="cb26-216"><a href="#cb26-216"></a>**Example 2: Adding Line Numbers**</span>
+<span id="cb26-217"><a href="#cb26-217"></a><span class="in">```</span></span>
+<span id="cb26-218"><a href="#cb26-218"></a><span class="in">First line</span></span>
+<span id="cb26-219"><a href="#cb26-219"></a><span class="in">Second line</span></span>
+<span id="cb26-220"><a href="#cb26-220"></a><span class="in">Third line</span></span>
+<span id="cb26-221"><a href="#cb26-221"></a><span class="in">```</span></span>
+<span id="cb26-222"><a href="#cb26-222"></a></span>
+<span id="cb26-223"><a href="#cb26-223"></a>**Goal**:</span>
+<span id="cb26-224"><a href="#cb26-224"></a><span class="in">```</span></span>
+<span id="cb26-225"><a href="#cb26-225"></a><span class="in">1. First line</span></span>
+<span id="cb26-226"><a href="#cb26-226"></a><span class="in">2. Second line  </span></span>
+<span id="cb26-227"><a href="#cb26-227"></a><span class="in">3. Third line</span></span>
+<span id="cb26-228"><a href="#cb26-228"></a><span class="in">```</span></span>
+<span id="cb26-229"><a href="#cb26-229"></a></span>
+<span id="cb26-230"><a href="#cb26-230"></a>**Macro workflow**:</span>
+<span id="cb26-231"><a href="#cb26-231"></a><span class="ss">1. </span><span class="in">`qa`</span> - Start recording</span>
+<span id="cb26-232"><a href="#cb26-232"></a><span class="ss">2. </span><span class="in">`I`</span> - Insert at beginning</span>
+<span id="cb26-233"><a href="#cb26-233"></a><span class="ss">3. </span><span class="in">`Ctrl-a`</span> - Increment number (starts at 1)</span>
+<span id="cb26-234"><a href="#cb26-234"></a><span class="ss">4. </span><span class="in">`A. `</span> - Add period and space</span>
+<span id="cb26-235"><a href="#cb26-235"></a><span class="ss">5. </span><span class="in">`j`</span> - Next line</span>
+<span id="cb26-236"><a href="#cb26-236"></a><span class="ss">6. </span><span class="in">`q`</span> - Stop recording</span>
+<span id="cb26-237"><a href="#cb26-237"></a></span>
+<span id="cb26-238"><a href="#cb26-238"></a><span class="fu">### Macro Best Practices</span></span>
+<span id="cb26-239"><a href="#cb26-239"></a></span>
+<span id="cb26-240"><a href="#cb26-240"></a><span class="fu">#### 1. Make Macros Repeatable</span></span>
+<span id="cb26-241"><a href="#cb26-241"></a><span class="ss">- </span>End with movement to next target</span>
+<span id="cb26-242"><a href="#cb26-242"></a><span class="ss">- </span>Use relative movements (<span class="in">`j`</span>, <span class="in">`w`</span>) not absolute (<span class="in">`5G`</span>)</span>
+<span id="cb26-243"><a href="#cb26-243"></a><span class="ss">- </span>Test on one item before applying to many</span>
+<span id="cb26-244"><a href="#cb26-244"></a></span>
+<span id="cb26-245"><a href="#cb26-245"></a><span class="fu">#### 2. Handle Edge Cases</span></span>
+<span id="cb26-246"><a href="#cb26-246"></a><span class="ss">- </span>What if there's no next line?</span>
+<span id="cb26-247"><a href="#cb26-247"></a><span class="ss">- </span>What if the pattern doesn't match?</span>
+<span id="cb26-248"><a href="#cb26-248"></a><span class="ss">- </span>Use <span class="in">`0`</span> to start from beginning of line</span>
+<span id="cb26-249"><a href="#cb26-249"></a></span>
+<span id="cb26-250"><a href="#cb26-250"></a><span class="fu">#### 3. Use Registers Wisely</span></span>
+<span id="cb26-251"><a href="#cb26-251"></a><span class="ss">- </span>Store different macros in different registers</span>
+<span id="cb26-252"><a href="#cb26-252"></a><span class="ss">- </span><span class="in">`qa`</span> for quick temporary macros</span>
+<span id="cb26-253"><a href="#cb26-253"></a><span class="ss">- </span><span class="in">`qz`</span> for complex macros you might reuse</span>
+<span id="cb26-254"><a href="#cb26-254"></a></span>
+<span id="cb26-255"><a href="#cb26-255"></a><span class="fu">### Complex Macro Workflows</span></span>
+<span id="cb26-256"><a href="#cb26-256"></a></span>
+<span id="cb26-257"><a href="#cb26-257"></a>**Example 1: Reformatting Function Calls**</span>
+<span id="cb26-258"><a href="#cb26-258"></a><span class="in">```python</span></span>
+<span id="cb26-259"><a href="#cb26-259"></a>calculate_total(items, tax_rate, discount_rate)</span>
+<span id="cb26-260"><a href="#cb26-260"></a>process_order(order_data, customer_info)</span>
+<span id="cb26-261"><a href="#cb26-261"></a>validate_input(user_input, validation_rules)</span>
+<span id="cb26-262"><a href="#cb26-262"></a><span class="in">```</span></span>
+<span id="cb26-263"><a href="#cb26-263"></a></span>
+<span id="cb26-264"><a href="#cb26-264"></a>**Goal**: Add type hints and format</span>
+<span id="cb26-265"><a href="#cb26-265"></a><span class="in">```python</span></span>
+<span id="cb26-266"><a href="#cb26-266"></a>calculate_total(</span>
+<span id="cb26-267"><a href="#cb26-267"></a>    items: List[Item],</span>
+<span id="cb26-268"><a href="#cb26-268"></a>    tax_rate: <span class="bu">float</span>,</span>
+<span id="cb26-269"><a href="#cb26-269"></a>    discount_rate: <span class="bu">float</span></span>
+<span id="cb26-270"><a href="#cb26-270"></a>) <span class="op">-&gt;</span> <span class="bu">float</span>:</span>
+<span id="cb26-271"><a href="#cb26-271"></a><span class="in">```</span></span>
+<span id="cb26-272"><a href="#cb26-272"></a></span>
+<span id="cb26-273"><a href="#cb26-273"></a>**Macro approach**:</span>
+<span id="cb26-274"><a href="#cb26-274"></a><span class="ss">1. </span>Record macro to handle one function</span>
+<span id="cb26-275"><a href="#cb26-275"></a><span class="ss">2. </span>Use text objects for precision</span>
+<span id="cb26-276"><a href="#cb26-276"></a><span class="ss">3. </span>Replay on remaining functions</span>
+<span id="cb26-277"><a href="#cb26-277"></a></span>
+<span id="cb26-278"><a href="#cb26-278"></a>**Example 2: Creating Test Cases**</span>
+<span id="cb26-279"><a href="#cb26-279"></a><span class="in">```python</span></span>
+<span id="cb26-280"><a href="#cb26-280"></a><span class="kw">def</span> add(a, b):</span>
+<span id="cb26-281"><a href="#cb26-281"></a>    <span class="cf">return</span> a <span class="op">+</span> b</span>
+<span id="cb26-282"><a href="#cb26-282"></a></span>
+<span id="cb26-283"><a href="#cb26-283"></a><span class="kw">def</span> multiply(a, b):</span>
+<span id="cb26-284"><a href="#cb26-284"></a>    <span class="cf">return</span> a <span class="op">*</span> b</span>
+<span id="cb26-285"><a href="#cb26-285"></a><span class="in">```</span></span>
+<span id="cb26-286"><a href="#cb26-286"></a></span>
+<span id="cb26-287"><a href="#cb26-287"></a>**Goal**: Generate test functions</span>
+<span id="cb26-288"><a href="#cb26-288"></a><span class="in">```python</span></span>
+<span id="cb26-289"><a href="#cb26-289"></a><span class="kw">def</span> test_add():</span>
+<span id="cb26-290"><a href="#cb26-290"></a>    <span class="cf">assert</span> add(<span class="dv">2</span>, <span class="dv">3</span>) <span class="op">==</span> <span class="dv">5</span></span>
+<span id="cb26-291"><a href="#cb26-291"></a>    <span class="cf">assert</span> add(<span class="dv">0</span>, <span class="dv">0</span>) <span class="op">==</span> <span class="dv">0</span></span>
+<span id="cb26-292"><a href="#cb26-292"></a></span>
+<span id="cb26-293"><a href="#cb26-293"></a><span class="kw">def</span> test_multiply():</span>
+<span id="cb26-294"><a href="#cb26-294"></a>    <span class="cf">assert</span> multiply(<span class="dv">2</span>, <span class="dv">3</span>) <span class="op">==</span> <span class="dv">6</span></span>
+<span id="cb26-295"><a href="#cb26-295"></a>    <span class="cf">assert</span> multiply(<span class="dv">1</span>, <span class="dv">5</span>) <span class="op">==</span> <span class="dv">5</span></span>
+<span id="cb26-296"><a href="#cb26-296"></a><span class="in">```</span></span>
+<span id="cb26-297"><a href="#cb26-297"></a></span>
+<span id="cb26-298"><a href="#cb26-298"></a><span class="fu">### Macro Debugging</span></span>
+<span id="cb26-299"><a href="#cb26-299"></a></span>
+<span id="cb26-300"><a href="#cb26-300"></a><span class="fu">#### Viewing Macro Contents</span></span>
+<span id="cb26-301"><a href="#cb26-301"></a><span class="in">```vim</span></span>
+<span id="cb26-302"><a href="#cb26-302"></a><span class="in">:registers a    " View macro stored in register 'a'</span></span>
+<span id="cb26-303"><a href="#cb26-303"></a><span class="in">```</span></span>
+<span id="cb26-304"><a href="#cb26-304"></a></span>
+<span id="cb26-305"><a href="#cb26-305"></a><span class="fu">#### Editing Macros</span></span>
+<span id="cb26-306"><a href="#cb26-306"></a><span class="in">```vim</span></span>
+<span id="cb26-307"><a href="#cb26-307"></a><span class="in">:let @a = 'new macro content'    " Directly edit macro</span></span>
+<span id="cb26-308"><a href="#cb26-308"></a><span class="in">```</span></span>
+<span id="cb26-309"><a href="#cb26-309"></a></span>
+<span id="cb26-310"><a href="#cb26-310"></a><span class="fu">#### Common Macro Problems</span></span>
+<span id="cb26-311"><a href="#cb26-311"></a><span class="ss">1. </span>**Macro stops early**: Check for missing text or failed searches</span>
+<span id="cb26-312"><a href="#cb26-312"></a><span class="ss">2. </span>**Macro goes wrong direction**: Use consistent navigation</span>
+<span id="cb26-313"><a href="#cb26-313"></a><span class="ss">3. </span>**Macro affects wrong text**: Start with cursor positioning</span>
+<span id="cb26-314"><a href="#cb26-314"></a></span>
+<span id="cb26-315"><a href="#cb26-315"></a><span class="fu">### Combining Registers and Macros</span></span>
+<span id="cb26-316"><a href="#cb26-316"></a></span>
+<span id="cb26-317"><a href="#cb26-317"></a><span class="fu">#### Using Registers in Macros</span></span>
+<span id="cb26-318"><a href="#cb26-318"></a><span class="in">```vim</span></span>
+<span id="cb26-319"><a href="#cb26-319"></a><span class="in">qa              " Start recording macro 'a'</span></span>
+<span id="cb26-320"><a href="#cb26-320"></a><span class="in">"byy            " Yank to register 'b'</span></span>
+<span id="cb26-321"><a href="#cb26-321"></a><span class="in">/pattern        " Search for pattern</span></span>
+<span id="cb26-322"><a href="#cb26-322"></a><span class="in">"bp             " Put from register 'b'</span></span>
+<span id="cb26-323"><a href="#cb26-323"></a><span class="in">q               " Stop recording</span></span>
+<span id="cb26-324"><a href="#cb26-324"></a><span class="in">```</span></span>
+<span id="cb26-325"><a href="#cb26-325"></a></span>
+<span id="cb26-326"><a href="#cb26-326"></a><span class="fu">#### Macro Libraries</span></span>
+<span id="cb26-327"><a href="#cb26-327"></a>Store frequently used macros in your <span class="in">`.vimrc`</span>:</span>
+<span id="cb26-328"><a href="#cb26-328"></a><span class="in">```vim</span></span>
+<span id="cb26-329"><a href="#cb26-329"></a><span class="in">" Macro to add console.log</span></span>
+<span id="cb26-330"><a href="#cb26-330"></a><span class="in">let @l = 'iconsole.log();hhi'</span></span>
+<span id="cb26-331"><a href="#cb26-331"></a></span>
+<span id="cb26-332"><a href="#cb26-332"></a><span class="in">" Macro to wrap in quotes</span></span>
+<span id="cb26-333"><a href="#cb26-333"></a><span class="in">let @q = 'ciw"pa"'</span></span>
+<span id="cb26-334"><a href="#cb26-334"></a><span class="in">```</span></span>
+<span id="cb26-335"><a href="#cb26-335"></a></span>
+<span id="cb26-336"><a href="#cb26-336"></a><span class="fu">## Practice Exercise: Registers and Macros Mastery</span></span>
+<span id="cb26-337"><a href="#cb26-337"></a></span>
+<span id="cb26-338"><a href="#cb26-338"></a>Create a file with this content:</span>
+<span id="cb26-339"><a href="#cb26-339"></a><span class="in">```python</span></span>
+<span id="cb26-340"><a href="#cb26-340"></a>name <span class="op">=</span> John</span>
+<span id="cb26-341"><a href="#cb26-341"></a>age <span class="op">=</span> <span class="dv">30</span></span>
+<span id="cb26-342"><a href="#cb26-342"></a>city <span class="op">=</span> New York</span>
+<span id="cb26-343"><a href="#cb26-343"></a>email <span class="op">=</span> john<span class="op">@</span>example.com</span>
+<span id="cb26-344"><a href="#cb26-344"></a>phone <span class="op">=</span> <span class="dv">123</span><span class="op">-</span><span class="dv">456</span><span class="op">-</span><span class="dv">7890</span></span>
+<span id="cb26-345"><a href="#cb26-345"></a></span>
+<span id="cb26-346"><a href="#cb26-346"></a>name <span class="op">=</span> Jane</span>
+<span id="cb26-347"><a href="#cb26-347"></a>age <span class="op">=</span> <span class="dv">25</span></span>
+<span id="cb26-348"><a href="#cb26-348"></a>city <span class="op">=</span> Los Angeles</span>
+<span id="cb26-349"><a href="#cb26-349"></a>email <span class="op">=</span> jane<span class="op">@</span>example.com</span>
+<span id="cb26-350"><a href="#cb26-350"></a>phone <span class="op">=</span> <span class="dv">987</span><span class="op">-</span><span class="dv">654</span><span class="op">-</span><span class="dv">3210</span></span>
+<span id="cb26-351"><a href="#cb26-351"></a></span>
+<span id="cb26-352"><a href="#cb26-352"></a>name <span class="op">=</span> Bob</span>
+<span id="cb26-353"><a href="#cb26-353"></a>age <span class="op">=</span> <span class="dv">35</span></span>
+<span id="cb26-354"><a href="#cb26-354"></a>city <span class="op">=</span> Chicago</span>
+<span id="cb26-355"><a href="#cb26-355"></a>email <span class="op">=</span> bob<span class="op">@</span>example.com</span>
+<span id="cb26-356"><a href="#cb26-356"></a>phone <span class="op">=</span> <span class="dv">555</span><span class="op">-</span><span class="dv">123</span><span class="op">-</span><span class="dv">4567</span></span>
+<span id="cb26-357"><a href="#cb26-357"></a><span class="in">```</span></span>
+<span id="cb26-358"><a href="#cb26-358"></a></span>
+<span id="cb26-359"><a href="#cb26-359"></a>**Practice these operations**:</span>
+<span id="cb26-360"><a href="#cb26-360"></a></span>
+<span id="cb26-361"><a href="#cb26-361"></a><span class="ss">1. </span>**Register practice**:</span>
+<span id="cb26-362"><a href="#cb26-362"></a><span class="ss">   - </span>Store different names in registers a, b, c</span>
+<span id="cb26-363"><a href="#cb26-363"></a><span class="ss">   - </span>Copy email format to register e</span>
+<span id="cb26-364"><a href="#cb26-364"></a><span class="ss">   - </span>Use system clipboard to copy data</span>
+<span id="cb26-365"><a href="#cb26-365"></a></span>
+<span id="cb26-366"><a href="#cb26-366"></a><span class="ss">2. </span>**Macro practice**:</span>
+<span id="cb26-367"><a href="#cb26-367"></a><span class="ss">   - </span>Record macro to add quotes around values</span>
+<span id="cb26-368"><a href="#cb26-368"></a><span class="ss">   - </span>Create macro to format as dictionary</span>
+<span id="cb26-369"><a href="#cb26-369"></a><span class="ss">   - </span>Make macro to add type annotations</span>
+<span id="cb26-370"><a href="#cb26-370"></a></span>
+<span id="cb26-371"><a href="#cb26-371"></a><span class="ss">3. </span>**Combined practice**:</span>
+<span id="cb26-372"><a href="#cb26-372"></a><span class="ss">   - </span>Use registers within macros</span>
+<span id="cb26-373"><a href="#cb26-373"></a><span class="ss">   - </span>Store complex formatting in registers</span>
+<span id="cb26-374"><a href="#cb26-374"></a><span class="ss">   - </span>Create reusable transformation macros</span>
+<span id="cb26-375"><a href="#cb26-375"></a></span>
+<span id="cb26-376"><a href="#cb26-376"></a><span class="ss">4. </span>**Advanced challenges**:</span>
+<span id="cb26-377"><a href="#cb26-377"></a><span class="ss">   - </span>Convert to JSON format</span>
+<span id="cb26-378"><a href="#cb26-378"></a><span class="ss">   - </span>Add validation functions</span>
+<span id="cb26-379"><a href="#cb26-379"></a><span class="ss">   - </span>Create test data generators</span>
+<span id="cb26-380"><a href="#cb26-380"></a></span>
+<span id="cb26-381"><a href="#cb26-381"></a><span class="fu">## Building Register and Macro Muscle Memory</span></span>
+<span id="cb26-382"><a href="#cb26-382"></a></span>
+<span id="cb26-383"><a href="#cb26-383"></a><span class="fu">### Week 1: Basic Registers</span></span>
+<span id="cb26-384"><a href="#cb26-384"></a><span class="ss">- </span>Practice named registers (<span class="in">`"a`</span>, <span class="in">`"b`</span>, <span class="in">`"c`</span>)</span>
+<span id="cb26-385"><a href="#cb26-385"></a><span class="ss">- </span>Use system clipboard (<span class="in">`"+y`</span>, <span class="in">`"+p`</span>)</span>
+<span id="cb26-386"><a href="#cb26-386"></a><span class="ss">- </span>Explore register contents (<span class="in">`:registers`</span>)</span>
+<span id="cb26-387"><a href="#cb26-387"></a></span>
+<span id="cb26-388"><a href="#cb26-388"></a><span class="fu">### Week 2: Simple Macros</span></span>
+<span id="cb26-389"><a href="#cb26-389"></a><span class="ss">- </span>Record basic macros (<span class="in">`qa`</span>, <span class="in">`@a`</span>)</span>
+<span id="cb26-390"><a href="#cb26-390"></a><span class="ss">- </span>Practice with repetitive formatting</span>
+<span id="cb26-391"><a href="#cb26-391"></a><span class="ss">- </span>Learn to debug failed macros</span>
+<span id="cb26-392"><a href="#cb26-392"></a></span>
+<span id="cb26-393"><a href="#cb26-393"></a><span class="fu">### Week 3: Advanced Techniques</span></span>
+<span id="cb26-394"><a href="#cb26-394"></a><span class="ss">- </span>Combine registers and macros</span>
+<span id="cb26-395"><a href="#cb26-395"></a><span class="ss">- </span>Create complex transformations</span>
+<span id="cb26-396"><a href="#cb26-396"></a><span class="ss">- </span>Build personal macro library</span>
+<span id="cb26-397"><a href="#cb26-397"></a></span>
+<span id="cb26-398"><a href="#cb26-398"></a><span class="fu">### Week 4: Real-world Applications</span></span>
+<span id="cb26-399"><a href="#cb26-399"></a><span class="ss">- </span>Apply to actual coding projects</span>
+<span id="cb26-400"><a href="#cb26-400"></a><span class="ss">- </span>Develop workflow-specific macros</span>
+<span id="cb26-401"><a href="#cb26-401"></a><span class="ss">- </span>Share macros with team</span>
+<span id="cb26-402"><a href="#cb26-402"></a></span>
+<span id="cb26-403"><a href="#cb26-403"></a><span class="fu">## What's Next?</span></span>
+<span id="cb26-404"><a href="#cb26-404"></a></span>
+<span id="cb26-405"><a href="#cb26-405"></a>You now master:</span>
+<span id="cb26-406"><a href="#cb26-406"></a><span class="ss">- </span>Named registers for multiple clipboards</span>
+<span id="cb26-407"><a href="#cb26-407"></a><span class="ss">- </span>System clipboard integration</span>
+<span id="cb26-408"><a href="#cb26-408"></a><span class="ss">- </span>Basic and advanced macro recording</span>
+<span id="cb26-409"><a href="#cb26-409"></a><span class="ss">- </span>Macro debugging and editing</span>
+<span id="cb26-410"><a href="#cb26-410"></a><span class="ss">- </span>Combining registers and macros</span>
+<span id="cb26-411"><a href="#cb26-411"></a><span class="ss">- </span>Real-world automation workflows</span>
+<span id="cb26-412"><a href="#cb26-412"></a></span>
+<span id="cb26-413"><a href="#cb26-413"></a>In the next post, we'll explore <span class="co">[</span><span class="ot">File Management and Buffers</span><span class="co">](09-file-management.qmd)</span> and learn to work with multiple files like a pro.</span>
+<span id="cb26-414"><a href="#cb26-414"></a></span>
+<span id="cb26-415"><a href="#cb26-415"></a><span class="fu">## Key Takeaways</span></span>
+<span id="cb26-416"><a href="#cb26-416"></a></span>
+<span id="cb26-417"><a href="#cb26-417"></a><span class="ss">1. </span>**Registers are multiple clipboards** - use them to organize your copying</span>
+<span id="cb26-418"><a href="#cb26-418"></a><span class="ss">2. </span>**Macros automate repetition** - record once, replay many times</span>
+<span id="cb26-419"><a href="#cb26-419"></a><span class="ss">3. </span>**System clipboard integration** - seamlessly work with other applications</span>
+<span id="cb26-420"><a href="#cb26-420"></a><span class="ss">4. </span>**Practice makes perfect** - start with simple macros, build complexity</span>
+<span id="cb26-421"><a href="#cb26-421"></a><span class="ss">5. </span>**Combine techniques** - registers and macros work great together</span>
+<span id="cb26-422"><a href="#cb26-422"></a></span>
+<span id="cb26-423"><a href="#cb26-423"></a>Registers and macros transform Vim from a text editor into a text manipulation powerhouse. Once you master these tools, you'll handle repetitive tasks with incredible efficiency and wonder how you ever lived without them.</span>
+<span id="cb26-424"><a href="#cb26-424"></a></span>
+<span id="cb26-425"><a href="#cb26-425"></a>---</span>
+<span id="cb26-426"><a href="#cb26-426"></a></span>
+<span id="cb26-427"><a href="#cb26-427"></a>*Ready to manage multiple files like a pro? Continue with [File Management and Buffers](09-file-management.qmd) to master multi-file workflows.* </span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div></div></div></div></div>
+</div> <!-- /content -->
+
+
+
+<script src="../../../site_libs/quarto-html/zenscroll-min.js"></script>
+</body></html>

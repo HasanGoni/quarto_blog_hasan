@@ -1,0 +1,1704 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.3.450">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+<meta name="author" content="Hasan">
+<meta name="dcterms.date" content="2025-07-18">
+<meta name="description" content="Dive into the advanced features that make Vim truly powerful. Explore plugins, customization, and expert techniques for the dedicated Vim enthusiast.">
+
+<title>Hasan’s Data Science &amp; AI Blog - The Other 80%: Advanced Vim Mastery</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
+  vertical-align: middle;
+}
+/* CSS for syntax highlighting */
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+  }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+</style>
+
+
+<script src="../../../site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="../../../site_libs/quarto-nav/headroom.min.js"></script>
+<script src="../../../site_libs/clipboard/clipboard.min.js"></script>
+<script src="../../../site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="../../../site_libs/quarto-search/fuse.min.js"></script>
+<script src="../../../site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="../../../">
+<script src="../../../site_libs/quarto-html/quarto.js"></script>
+<script src="../../../site_libs/quarto-html/popper.min.js"></script>
+<script src="../../../site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="../../../site_libs/quarto-html/anchor.min.js"></script>
+<link href="../../../site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="../../../site_libs/quarto-html/quarto-syntax-highlighting.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="../../../site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="../../../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="../../../site_libs/bootstrap/bootstrap.min.css" rel="stylesheet" id="quarto-bootstrap" data-mode="light">
+<script id="quarto-search-options" type="application/json">{
+  "location": "navbar",
+  "copy-button": false,
+  "collapse-after": 3,
+  "panel-placement": "end",
+  "type": "overlay",
+  "limit": 20,
+  "language": {
+    "search-no-results-text": "No results",
+    "search-matching-documents-text": "matching documents",
+    "search-copy-link-title": "Copy link to search",
+    "search-hide-matches-text": "Hide additional matches",
+    "search-more-match-text": "more match in this document",
+    "search-more-matches-text": "more matches in this document",
+    "search-clear-button-title": "Clear",
+    "search-detached-cancel-button-title": "Cancel",
+    "search-submit-button-title": "Submit",
+    "search-label": "Search"
+  }
+}</script>
+<style>html{ scroll-behavior: smooth; }</style>
+<script async="" src="https://hypothes.is/embed.js"></script>
+
+
+<link rel="stylesheet" href="../../../styles.css">
+<meta property="og:title" content="Hasan’s Data Science &amp; AI Blog - The Other 80%: Advanced Vim Mastery">
+<meta property="og:description" content="Dive into the advanced features that make Vim truly powerful. Explore plugins, customization, and expert techniques for the dedicated Vim enthusiast.">
+<meta property="og:image" content="https://hasangoni.quarto.pub/hasan-blog-post/posts/series/vim-mastery/images/vim.png">
+<meta property="og:site-name" content="Hasan's Data Science &amp; AI Blog">
+<meta property="og:image:height" content="1413">
+<meta property="og:image:width" content="3368">
+<meta name="twitter:title" content="Hasan’s Data Science &amp; AI Blog - The Other 80%: Advanced Vim Mastery">
+<meta name="twitter:description" content="Dive into the advanced features that make Vim truly powerful. Explore plugins, customization, and expert techniques for the dedicated Vim enthusiast.">
+<meta name="twitter:image" content="https://hasangoni.quarto.pub/hasan-blog-post/posts/series/vim-mastery/images/vim.png">
+<meta name="twitter:image-height" content="1413">
+<meta name="twitter:image-width" content="3368">
+<meta name="twitter:card" content="summary_large_image">
+</head>
+
+<body class="nav-sidebar docked nav-fixed">
+
+<div id="quarto-search-results"></div>
+  <header id="quarto-header" class="headroom fixed-top">
+    <nav class="navbar navbar-expand-lg navbar-dark ">
+      <div class="navbar-container container-fluid">
+      <div class="navbar-brand-container">
+    <a class="navbar-brand" href="../../../index.html">
+    <span class="navbar-title">Hasan’s Data Science &amp; AI Blog</span>
+    </a>
+  </div>
+            <div id="quarto-search" class="" title="Search"></div>
+          <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCollapse" aria-controls="navbarCollapse" aria-expanded="false" aria-label="Toggle navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+  <span class="navbar-toggler-icon"></span>
+</button>
+          <div class="collapse navbar-collapse" id="navbarCollapse">
+            <ul class="navbar-nav navbar-nav-scroll me-auto">
+  <li class="nav-item">
+    <a class="nav-link" href="../../../index.html" rel="" target="">
+ <span class="menu-text">Home</span></a>
+  </li>  
+  <li class="nav-item dropdown ">
+    <a class="nav-link dropdown-toggle" href="#" id="nav-menu-series" role="button" data-bs-toggle="dropdown" aria-expanded="false" rel="" target="">
+ <span class="menu-text">Series</span>
+    </a>
+    <ul class="dropdown-menu" aria-labelledby="nav-menu-series">    
+        <li>
+    <a class="dropdown-item" href="../../../posts/series/command-line-mastery.html" rel="" target="">
+ <span class="dropdown-text">Command Line Mastery for HPC</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="../../../posts/series/data-science-steps.html" rel="" target="">
+ <span class="dropdown-text">Data Science Steps</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="../../../posts/series/computer-vision-foundations.html" rel="" target="">
+ <span class="dropdown-text">Computer Vision Foundations</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="../../../posts/series/vim-mastery.html" rel="" target="">
+ <span class="dropdown-text">Vim Mastery</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="../../../posts/series/vlm.html" rel="" target="">
+ <span class="dropdown-text">VLM Series</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="../../../posts/series/anomaly-detection/index.html" rel="" target="">
+ <span class="dropdown-text">Anomaly Detection</span></a>
+  </li>  
+    </ul>
+  </li>
+  <li class="nav-item">
+    <a class="nav-link" href="../../../categories.html" rel="" target="">
+ <span class="menu-text">Categories</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="../../../tags.html" rel="" target="">
+ <span class="menu-text">Tags</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="../../../about.html" rel="" target="">
+ <span class="menu-text">About</span></a>
+  </li>  
+</ul>
+            <ul class="navbar-nav navbar-nav-scroll ms-auto">
+  <li class="nav-item compact">
+    <a class="nav-link" href="https://github.com/HasanGoni" rel="" target=""><i class="bi bi-github" role="img">
+</i> 
+ <span class="menu-text"></span></a>
+  </li>  
+  <li class="nav-item compact">
+    <a class="nav-link" href="https://twitter.com/hasangoni" rel="" target=""><i class="bi bi-twitter" role="img">
+</i> 
+ <span class="menu-text"></span></a>
+  </li>  
+</ul>
+            <div class="quarto-navbar-tools">
+</div>
+          </div> <!-- /navcollapse -->
+      </div> <!-- /container-fluid -->
+    </nav>
+  <nav class="quarto-secondary-nav">
+    <div class="container-fluid d-flex">
+      <button type="button" class="quarto-btn-toggle btn" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar,#quarto-sidebar-glass" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+        <i class="bi bi-layout-text-sidebar-reverse"></i>
+      </button>
+      <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item">The Other 80%: Advanced Vim Mastery</li></ol></nav>
+      <a class="flex-grow-1" role="button" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar,#quarto-sidebar-glass" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
+      </a>
+    </div>
+  </nav>
+</header>
+<!-- content -->
+<header id="title-block-header" class="quarto-title-block default page-columns page-full">
+  <div class="quarto-title-banner page-columns page-full">
+    <div class="quarto-title column-body">
+      <div class="quarto-title-block"><div><h1 class="title">The Other 80%: Advanced Vim Mastery</h1><button type="button" class="btn code-tools-button" id="quarto-code-tools-source"><i class="bi"></i> Code</button></div></div>
+                  <div>
+        <div class="description">
+          Dive into the advanced features that make Vim truly powerful. Explore plugins, customization, and expert techniques for the dedicated Vim enthusiast.
+        </div>
+      </div>
+                          <div class="quarto-categories">
+                <div class="quarto-category">vim</div>
+                <div class="quarto-category">advanced</div>
+                <div class="quarto-category">plugins</div>
+                <div class="quarto-category">customization</div>
+                <div class="quarto-category">expert</div>
+              </div>
+                  </div>
+  </div>
+    
+  
+  <div class="quarto-title-meta">
+
+      <div>
+      <div class="quarto-title-meta-heading">Author</div>
+      <div class="quarto-title-meta-contents">
+               <p>Hasan </p>
+            </div>
+    </div>
+      
+      <div>
+      <div class="quarto-title-meta-heading">Published</div>
+      <div class="quarto-title-meta-contents">
+        <p class="date">July 18, 2025</p>
+      </div>
+    </div>
+    
+      <div>
+      <div class="quarto-title-meta-heading">Modified</div>
+      <div class="quarto-title-meta-contents">
+        <p class="date-modified">July 18, 2025</p>
+      </div>
+    </div>
+      
+    </div>
+    
+  
+  </header><div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article page-navbar">
+<!-- sidebar -->
+  <nav id="quarto-sidebar" class="sidebar collapse collapse-horizontal sidebar-navigation docked overflow-auto">
+    <div class="sidebar-menu-container"> 
+    <ul class="list-unstyled mt-1">
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-1" aria-expanded="true">
+ <span class="menu-text">Command Line Mastery for HPC</span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-1" aria-expanded="true" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-1" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../../posts/series/command-line-mastery.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Command Line Mastery for HPC Series</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../../posts/series/command-line-mastery/01-digital-compass.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">1. Digital Compass</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../../posts/series/command-line-mastery/02-file-detective.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">2. File Detective</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../../posts/series/command-line-mastery/03-file-manipulation.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">3. File Manipulation Magic</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../../posts/series/command-line-mastery/04-text-processing.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">4. Text Processing Power</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../../posts/series/command-line-mastery/05-permission-wizardry.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">5. Permission Wizardry</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../../posts/series/command-line-mastery/06-ssh-remote-access.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">6. SSH and Remote Access</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../../posts/series/command-line-mastery/07-file-transfer.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">7. File Transfer Mastery</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../../posts/series/command-line-mastery/08-environment-mastery.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">8. Environment Mastery</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../../posts/series/command-line-mastery/09-hpc-job-scheduling.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">9. HPC Job Scheduling</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../../posts/series/command-line-mastery/10-parallel-processing.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">10. Parallel Processing Power</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../../posts/series/command-line-mastery/11-bash-scripting.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">11. Bash Scripting Essentials</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../../posts/series/command-line-mastery/12-automation-excellence.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">12. Automation Excellence</span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-2" aria-expanded="true">
+ <span class="menu-text">Data Science</span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-2" aria-expanded="true" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-2" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../../posts/series/data-science-steps.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Data Science Steps Series</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../../posts/data-science-steps-to-follow-part01/index.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Data Science Steps to Follow - 01</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../../posts/data-science-steps-to-follow-part02/index.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Data Science Steps to Follow - 02</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../../posts/data-science-steps-to-follow-part03/index.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Data Science Steps to Follow - 03</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../../posts/data-science-steps-to-follow-part04/index.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Data Science Steps to Follow - 04</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../../posts/data-science-steps-to-follow-part05/index.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Data Science Steps to Follow - 05</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../../posts/data-science-steps-to-follow-part06/index.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Data Science Steps to Follow - 06</span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-3" aria-expanded="true">
+ <span class="menu-text">Computer Vision Foundations</span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-3" aria-expanded="true" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-3" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../../posts/series/computer-vision-foundations.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Computer Vision Foundations Series</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../../posts/series/cv-foundations/01-why-computer-vision.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">1. Why Computer Vision?</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../../posts/series/cv-foundations/02-images-as-data.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">2. Images as Data</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../../posts/series/cv-foundations/03-opencv-essentials.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">3. OpenCV Essentials</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../../posts/series/cv-foundations/04-finding-patterns.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">4. Finding Patterns</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../../posts/series/cv-foundations/05-image-segmentation.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">5. Image Segmentation</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../../posts/series/cv-foundations/06-feature-magic.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">6. Feature Magic</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../../posts/series/cv-foundations/07-why-deep-learning.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">7. Why Deep Learning?</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../../posts/series/cv-foundations/08-modern-vision-models.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">8. Modern Vision Models</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../../posts/series/cv-foundations/09-first-cv-project.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">9. First CV Project</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../../posts/series/cv-foundations/10-where-to-go-next.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">10. Where to Go Next</span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-4" aria-expanded="true">
+ <span class="menu-text">Anomaly Detection</span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-4" aria-expanded="true" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-4" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../../posts/series/anomaly-detection/index.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Introduction</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../../posts/series/anomaly-detection/finding-the-oddballs.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Finding the Oddballs</span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-5" aria-expanded="true">
+ <span class="menu-text">VLM Series</span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-5" aria-expanded="true" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-5" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../../posts/series/vlm.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Introduction</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../../posts/series/vlm-qwen3-14b/index.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Qwen3-14B</span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+    </ul>
+    </div>
+</nav>
+<div id="quarto-sidebar-glass" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar,#quarto-sidebar-glass"></div>
+<!-- margin-sidebar -->
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+        <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">On this page</h2>
+   
+  <ul>
+  <li><a href="#welcome-to-the-advanced-realm" id="toc-welcome-to-the-advanced-realm" class="nav-link active" data-scroll-target="#welcome-to-the-advanced-realm"><span class="header-section-number">0.1</span> Welcome to the Advanced Realm</a></li>
+  <li><a href="#the-advanced-vim-landscape" id="toc-the-advanced-vim-landscape" class="nav-link" data-scroll-target="#the-advanced-vim-landscape"><span class="header-section-number">0.2</span> The Advanced Vim Landscape</a>
+  <ul class="collapse">
+  <li><a href="#what-youve-mastered-the-essential-20" id="toc-what-youve-mastered-the-essential-20" class="nav-link" data-scroll-target="#what-youve-mastered-the-essential-20"><span class="header-section-number">0.2.1</span> What You’ve Mastered (The Essential 20%)</a></li>
+  <li><a href="#what-awaits-the-powerful-80" id="toc-what-awaits-the-powerful-80" class="nav-link" data-scroll-target="#what-awaits-the-powerful-80"><span class="header-section-number">0.2.2</span> What Awaits (The Powerful 80%)</a></li>
+  </ul></li>
+  <li><a href="#advanced-movement-mastery" id="toc-advanced-movement-mastery" class="nav-link" data-scroll-target="#advanced-movement-mastery"><span class="header-section-number">0.3</span> Advanced Movement Mastery</a>
+  <ul class="collapse">
+  <li><a href="#marks-and-jumps" id="toc-marks-and-jumps" class="nav-link" data-scroll-target="#marks-and-jumps"><span class="header-section-number">0.3.1</span> Marks and Jumps</a></li>
+  <li><a href="#advanced-search-patterns" id="toc-advanced-search-patterns" class="nav-link" data-scroll-target="#advanced-search-patterns"><span class="header-section-number">0.3.2</span> Advanced Search Patterns</a></li>
+  <li><a href="#window-and-tab-management" id="toc-window-and-tab-management" class="nav-link" data-scroll-target="#window-and-tab-management"><span class="header-section-number">0.3.3</span> Window and Tab Management</a></li>
+  </ul></li>
+  <li><a href="#the-plugin-ecosystem" id="toc-the-plugin-ecosystem" class="nav-link" data-scroll-target="#the-plugin-ecosystem"><span class="header-section-number">0.4</span> The Plugin Ecosystem</a>
+  <ul class="collapse">
+  <li><a href="#essential-plugin-categories" id="toc-essential-plugin-categories" class="nav-link" data-scroll-target="#essential-plugin-categories"><span class="header-section-number">0.4.1</span> Essential Plugin Categories</a></li>
+  <li><a href="#plugin-manager-setup" id="toc-plugin-manager-setup" class="nav-link" data-scroll-target="#plugin-manager-setup"><span class="header-section-number">0.4.2</span> Plugin Manager Setup</a></li>
+  </ul></li>
+  <li><a href="#advanced-text-manipulation" id="toc-advanced-text-manipulation" class="nav-link" data-scroll-target="#advanced-text-manipulation"><span class="header-section-number">0.5</span> Advanced Text Manipulation</a>
+  <ul class="collapse">
+  <li><a href="#macros-automation-magic" id="toc-macros-automation-magic" class="nav-link" data-scroll-target="#macros-automation-magic"><span class="header-section-number">0.5.1</span> Macros: Automation Magic</a></li>
+  <li><a href="#advanced-registers" id="toc-advanced-registers" class="nav-link" data-scroll-target="#advanced-registers"><span class="header-section-number">0.5.2</span> Advanced Registers</a></li>
+  <li><a href="#complex-text-transformations" id="toc-complex-text-transformations" class="nav-link" data-scroll-target="#complex-text-transformations"><span class="header-section-number">0.5.3</span> Complex Text Transformations</a></li>
+  </ul></li>
+  <li><a href="#vim-scripting-and-customization" id="toc-vim-scripting-and-customization" class="nav-link" data-scroll-target="#vim-scripting-and-customization"><span class="header-section-number">0.6</span> Vim Scripting and Customization</a>
+  <ul class="collapse">
+  <li><a href="#custom-key-mappings" id="toc-custom-key-mappings" class="nav-link" data-scroll-target="#custom-key-mappings"><span class="header-section-number">0.6.1</span> Custom Key Mappings</a></li>
+  <li><a href="#custom-functions" id="toc-custom-functions" class="nav-link" data-scroll-target="#custom-functions"><span class="header-section-number">0.6.2</span> Custom Functions</a></li>
+  <li><a href="#advanced-settings" id="toc-advanced-settings" class="nav-link" data-scroll-target="#advanced-settings"><span class="header-section-number">0.6.3</span> Advanced Settings</a></li>
+  </ul></li>
+  <li><a href="#project-level-workflows" id="toc-project-level-workflows" class="nav-link" data-scroll-target="#project-level-workflows"><span class="header-section-number">0.7</span> Project-Level Workflows</a>
+  <ul class="collapse">
+  <li><a href="#session-management" id="toc-session-management" class="nav-link" data-scroll-target="#session-management"><span class="header-section-number">0.7.1</span> Session Management</a></li>
+  <li><a href="#buffer-management" id="toc-buffer-management" class="nav-link" data-scroll-target="#buffer-management"><span class="header-section-number">0.7.2</span> Buffer Management</a></li>
+  <li><a href="#quickfix-and-location-lists" id="toc-quickfix-and-location-lists" class="nav-link" data-scroll-target="#quickfix-and-location-lists"><span class="header-section-number">0.7.3</span> Quickfix and Location Lists</a></li>
+  </ul></li>
+  <li><a href="#advanced-search-and-replace" id="toc-advanced-search-and-replace" class="nav-link" data-scroll-target="#advanced-search-and-replace"><span class="header-section-number">0.8</span> Advanced Search and Replace</a>
+  <ul class="collapse">
+  <li><a href="#regex-mastery" id="toc-regex-mastery" class="nav-link" data-scroll-target="#regex-mastery"><span class="header-section-number">0.8.1</span> Regex Mastery</a></li>
+  <li><a href="#multi-file-operations" id="toc-multi-file-operations" class="nav-link" data-scroll-target="#multi-file-operations"><span class="header-section-number">0.8.2</span> Multi-file Operations</a></li>
+  </ul></li>
+  <li><a href="#integration-with-external-tools" id="toc-integration-with-external-tools" class="nav-link" data-scroll-target="#integration-with-external-tools"><span class="header-section-number">0.9</span> Integration with External Tools</a>
+  <ul class="collapse">
+  <li><a href="#compiler-integration" id="toc-compiler-integration" class="nav-link" data-scroll-target="#compiler-integration"><span class="header-section-number">0.9.1</span> Compiler Integration</a></li>
+  <li><a href="#terminal-integration" id="toc-terminal-integration" class="nav-link" data-scroll-target="#terminal-integration"><span class="header-section-number">0.9.2</span> Terminal Integration</a></li>
+  </ul></li>
+  <li><a href="#performance-optimization" id="toc-performance-optimization" class="nav-link" data-scroll-target="#performance-optimization"><span class="header-section-number">0.10</span> Performance Optimization</a>
+  <ul class="collapse">
+  <li><a href="#profiling-vim" id="toc-profiling-vim" class="nav-link" data-scroll-target="#profiling-vim"><span class="header-section-number">0.10.1</span> Profiling Vim</a></li>
+  <li><a href="#optimization-techniques" id="toc-optimization-techniques" class="nav-link" data-scroll-target="#optimization-techniques"><span class="header-section-number">0.10.2</span> Optimization Techniques</a></li>
+  </ul></li>
+  <li><a href="#advanced-debugging" id="toc-advanced-debugging" class="nav-link" data-scroll-target="#advanced-debugging"><span class="header-section-number">0.11</span> Advanced Debugging</a>
+  <ul class="collapse">
+  <li><a href="#debugging-vim-configuration" id="toc-debugging-vim-configuration" class="nav-link" data-scroll-target="#debugging-vim-configuration"><span class="header-section-number">0.11.1</span> Debugging Vim Configuration</a></li>
+  <li><a href="#plugin-debugging" id="toc-plugin-debugging" class="nav-link" data-scroll-target="#plugin-debugging"><span class="header-section-number">0.11.2</span> Plugin Debugging</a></li>
+  </ul></li>
+  <li><a href="#the-path-to-mastery" id="toc-the-path-to-mastery" class="nav-link" data-scroll-target="#the-path-to-mastery"><span class="header-section-number">0.12</span> The Path to Mastery</a>
+  <ul class="collapse">
+  <li><a href="#continuous-learning" id="toc-continuous-learning" class="nav-link" data-scroll-target="#continuous-learning"><span class="header-section-number">0.12.1</span> Continuous Learning</a></li>
+  <li><a href="#building-your-vim-environment" id="toc-building-your-vim-environment" class="nav-link" data-scroll-target="#building-your-vim-environment"><span class="header-section-number">0.12.2</span> Building Your Vim Environment</a></li>
+  <li><a href="#advanced-practice-projects" id="toc-advanced-practice-projects" class="nav-link" data-scroll-target="#advanced-practice-projects"><span class="header-section-number">0.12.3</span> Advanced Practice Projects</a></li>
+  </ul></li>
+  <li><a href="#the-vim-philosophy" id="toc-the-vim-philosophy" class="nav-link" data-scroll-target="#the-vim-philosophy"><span class="header-section-number">0.13</span> The Vim Philosophy</a>
+  <ul class="collapse">
+  <li><a href="#why-the-80-matters" id="toc-why-the-80-matters" class="nav-link" data-scroll-target="#why-the-80-matters"><span class="header-section-number">0.13.1</span> Why the 80% Matters</a></li>
+  <li><a href="#the-continuous-journey" id="toc-the-continuous-journey" class="nav-link" data-scroll-target="#the-continuous-journey"><span class="header-section-number">0.13.2</span> The Continuous Journey</a></li>
+  </ul></li>
+  <li><a href="#your-next-steps" id="toc-your-next-steps" class="nav-link" data-scroll-target="#your-next-steps"><span class="header-section-number">0.14</span> Your Next Steps</a></li>
+  <li><a href="#final-thoughts" id="toc-final-thoughts" class="nav-link" data-scroll-target="#final-thoughts"><span class="header-section-number">0.15</span> Final Thoughts</a></li>
+  </ul>
+</nav>
+    </div>
+<!-- main -->
+<main class="content quarto-banner-title-block" id="quarto-document-content">
+
+
+
+
+<section id="welcome-to-the-advanced-realm" class="level2" data-number="0.1">
+<h2 data-number="0.1" class="anchored" data-anchor-id="welcome-to-the-advanced-realm"><span class="header-section-number">0.1</span> Welcome to the Advanced Realm</h2>
+<p>Congratulations! If you’ve made it this far, you’ve mastered the essential 20% of Vim that provides 80% of the power. You can navigate like a ninja, edit with precision, and work faster than most developers ever will.</p>
+<p>But there’s a whole other world of Vim mastery waiting for you. This is where good Vim users become great, and great users become legendary.</p>
+</section>
+<section id="the-advanced-vim-landscape" class="level2" data-number="0.2">
+<h2 data-number="0.2" class="anchored" data-anchor-id="the-advanced-vim-landscape"><span class="header-section-number">0.2</span> The Advanced Vim Landscape</h2>
+<section id="what-youve-mastered-the-essential-20" class="level3" data-number="0.2.1">
+<h3 data-number="0.2.1" class="anchored" data-anchor-id="what-youve-mastered-the-essential-20"><span class="header-section-number">0.2.1</span> What You’ve Mastered (The Essential 20%)</h3>
+<ul>
+<li>Modal editing and mode transitions</li>
+<li>Basic movement and navigation</li>
+<li>Text objects and precise selection</li>
+<li>Core editing commands (delete, change, yank)</li>
+<li>Visual mode and basic visual operations</li>
+<li>Search and replace fundamentals</li>
+<li>File operations and basic buffer management</li>
+</ul>
+</section>
+<section id="what-awaits-the-powerful-80" class="level3" data-number="0.2.2">
+<h3 data-number="0.2.2" class="anchored" data-anchor-id="what-awaits-the-powerful-80"><span class="header-section-number">0.2.2</span> What Awaits (The Powerful 80%)</h3>
+<ul>
+<li>Advanced movement patterns and custom motions</li>
+<li>Complex text transformations and macros</li>
+<li>Plugin ecosystem and customization</li>
+<li>Advanced search and replace with regex</li>
+<li>Multiple file workflows and project management</li>
+<li>Vim scripting and automation</li>
+<li>Integration with external tools</li>
+<li>Advanced registers and clipboard management</li>
+</ul>
+</section>
+</section>
+<section id="advanced-movement-mastery" class="level2" data-number="0.3">
+<h2 data-number="0.3" class="anchored" data-anchor-id="advanced-movement-mastery"><span class="header-section-number">0.3</span> Advanced Movement Mastery</h2>
+<section id="marks-and-jumps" class="level3" data-number="0.3.1">
+<h3 data-number="0.3.1" class="anchored" data-anchor-id="marks-and-jumps"><span class="header-section-number">0.3.1</span> Marks and Jumps</h3>
+<div class="sourceCode" id="cb1"><pre class="sourceCode numberSource vim number-lines code-with-copy"><code class="sourceCode"><span id="cb1-1"><a href="#cb1-1"></a>" Set marks</span>
+<span id="cb1-2"><a href="#cb1-2"></a>ma          " Set mark 'a' at current position</span>
+<span id="cb1-3"><a href="#cb1-3"></a>'a          " Jump to mark 'a'</span>
+<span id="cb1-4"><a href="#cb1-4"></a>``          " Jump back to previous position</span>
+<span id="cb1-5"><a href="#cb1-5"></a>'.          " Jump to last change</span>
+<span id="cb1-6"><a href="#cb1-6"></a>'^          " Jump to last insertion</span>
+<span id="cb1-7"><a href="#cb1-7"></a></span>
+<span id="cb1-8"><a href="#cb1-8"></a>" Jump list navigation</span>
+<span id="cb1-9"><a href="#cb1-9"></a>Ctrl-o      " Jump to older position</span>
+<span id="cb1-10"><a href="#cb1-10"></a>Ctrl-i      " Jump to newer position</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</section>
+<section id="advanced-search-patterns" class="level3" data-number="0.3.2">
+<h3 data-number="0.3.2" class="anchored" data-anchor-id="advanced-search-patterns"><span class="header-section-number">0.3.2</span> Advanced Search Patterns</h3>
+<div class="sourceCode" id="cb2"><pre class="sourceCode numberSource vim number-lines code-with-copy"><code class="sourceCode"><span id="cb2-1"><a href="#cb2-1"></a>" Search with regex</span>
+<span id="cb2-2"><a href="#cb2-2"></a>/\v(function|def)\s+\w+    " Find function definitions</span>
+<span id="cb2-3"><a href="#cb2-3"></a>/\v&lt;word&gt;                  " Exact word match</span>
+<span id="cb2-4"><a href="#cb2-4"></a>/\v^$                      " Empty lines</span>
+<span id="cb2-5"><a href="#cb2-5"></a></span>
+<span id="cb2-6"><a href="#cb2-6"></a>" Search and replace with confirmation</span>
+<span id="cb2-7"><a href="#cb2-7"></a>:%s/old/new/gc            " Replace all with confirmation</span>
+<span id="cb2-8"><a href="#cb2-8"></a>:5,10s/old/new/g          " Replace in lines 5-10</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</section>
+<section id="window-and-tab-management" class="level3" data-number="0.3.3">
+<h3 data-number="0.3.3" class="anchored" data-anchor-id="window-and-tab-management"><span class="header-section-number">0.3.3</span> Window and Tab Management</h3>
+<div class="sourceCode" id="cb3"><pre class="sourceCode numberSource vim number-lines code-with-copy"><code class="sourceCode"><span id="cb3-1"><a href="#cb3-1"></a>" Window operations</span>
+<span id="cb3-2"><a href="#cb3-2"></a>:split filename           " Horizontal split</span>
+<span id="cb3-3"><a href="#cb3-3"></a>:vsplit filename         " Vertical split</span>
+<span id="cb3-4"><a href="#cb3-4"></a>Ctrl-w h/j/k/l          " Navigate windows</span>
+<span id="cb3-5"><a href="#cb3-5"></a>Ctrl-w =                " Equal window sizes</span>
+<span id="cb3-6"><a href="#cb3-6"></a>Ctrl-w q                " Close window</span>
+<span id="cb3-7"><a href="#cb3-7"></a></span>
+<span id="cb3-8"><a href="#cb3-8"></a>" Tab operations</span>
+<span id="cb3-9"><a href="#cb3-9"></a>:tabnew filename        " New tab</span>
+<span id="cb3-10"><a href="#cb3-10"></a>:tabnext / :tabprev     " Navigate tabs</span>
+<span id="cb3-11"><a href="#cb3-11"></a>:tabclose               " Close tab</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</section>
+</section>
+<section id="the-plugin-ecosystem" class="level2" data-number="0.4">
+<h2 data-number="0.4" class="anchored" data-anchor-id="the-plugin-ecosystem"><span class="header-section-number">0.4</span> The Plugin Ecosystem</h2>
+<section id="essential-plugin-categories" class="level3" data-number="0.4.1">
+<h3 data-number="0.4.1" class="anchored" data-anchor-id="essential-plugin-categories"><span class="header-section-number">0.4.1</span> Essential Plugin Categories</h3>
+<section id="file-management" class="level4" data-number="0.4.1.1">
+<h4 data-number="0.4.1.1" class="anchored" data-anchor-id="file-management"><span class="header-section-number">0.4.1.1</span> 1. File Management</h4>
+<ul>
+<li><strong>NERDTree</strong>: File explorer sidebar</li>
+<li><strong>fzf.vim</strong>: Fuzzy file finder</li>
+<li><strong>ranger.vim</strong>: Terminal file manager integration</li>
+</ul>
+</section>
+<section id="code-intelligence" class="level4" data-number="0.4.1.2">
+<h4 data-number="0.4.1.2" class="anchored" data-anchor-id="code-intelligence"><span class="header-section-number">0.4.1.2</span> 2. Code Intelligence</h4>
+<ul>
+<li><strong>coc.nvim</strong>: Language server protocol support</li>
+<li><strong>YouCompleteMe</strong>: Code completion</li>
+<li><strong>ALE</strong>: Asynchronous linting</li>
+</ul>
+</section>
+<section id="git-integration" class="level4" data-number="0.4.1.3">
+<h4 data-number="0.4.1.3" class="anchored" data-anchor-id="git-integration"><span class="header-section-number">0.4.1.3</span> 3. Git Integration</h4>
+<ul>
+<li><strong>fugitive.vim</strong>: Git wrapper</li>
+<li><strong>gitgutter</strong>: Git diff in gutter</li>
+<li><strong>gv.vim</strong>: Git commit browser</li>
+</ul>
+</section>
+<section id="text-manipulation" class="level4" data-number="0.4.1.4">
+<h4 data-number="0.4.1.4" class="anchored" data-anchor-id="text-manipulation"><span class="header-section-number">0.4.1.4</span> 4. Text Manipulation</h4>
+<ul>
+<li><strong>surround.vim</strong>: Manipulate surroundings</li>
+<li><strong>commentary.vim</strong>: Comment/uncomment code</li>
+<li><strong>multiple-cursors</strong>: Multiple cursor editing</li>
+</ul>
+</section>
+<section id="appearance-and-themes" class="level4" data-number="0.4.1.5">
+<h4 data-number="0.4.1.5" class="anchored" data-anchor-id="appearance-and-themes"><span class="header-section-number">0.4.1.5</span> 5. Appearance and Themes</h4>
+<ul>
+<li><strong>gruvbox</strong>: Popular color scheme</li>
+<li><strong>vim-airline</strong>: Status line enhancement</li>
+<li><strong>indentLine</strong>: Indentation guides</li>
+</ul>
+</section>
+</section>
+<section id="plugin-manager-setup" class="level3" data-number="0.4.2">
+<h3 data-number="0.4.2" class="anchored" data-anchor-id="plugin-manager-setup"><span class="header-section-number">0.4.2</span> Plugin Manager Setup</h3>
+<div class="sourceCode" id="cb4"><pre class="sourceCode numberSource vim number-lines code-with-copy"><code class="sourceCode"><span id="cb4-1"><a href="#cb4-1"></a>" Using vim-plug</span>
+<span id="cb4-2"><a href="#cb4-2"></a>call plug#begin('~/.vim/plugged')</span>
+<span id="cb4-3"><a href="#cb4-3"></a></span>
+<span id="cb4-4"><a href="#cb4-4"></a>" Essential plugins</span>
+<span id="cb4-5"><a href="#cb4-5"></a>Plug 'preservim/nerdtree'</span>
+<span id="cb4-6"><a href="#cb4-6"></a>Plug 'junegunn/fzf.vim'</span>
+<span id="cb4-7"><a href="#cb4-7"></a>Plug 'tpope/vim-fugitive'</span>
+<span id="cb4-8"><a href="#cb4-8"></a>Plug 'tpope/vim-surround'</span>
+<span id="cb4-9"><a href="#cb4-9"></a>Plug 'tpope/vim-commentary'</span>
+<span id="cb4-10"><a href="#cb4-10"></a></span>
+<span id="cb4-11"><a href="#cb4-11"></a>call plug#end()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</section>
+</section>
+<section id="advanced-text-manipulation" class="level2" data-number="0.5">
+<h2 data-number="0.5" class="anchored" data-anchor-id="advanced-text-manipulation"><span class="header-section-number">0.5</span> Advanced Text Manipulation</h2>
+<section id="macros-automation-magic" class="level3" data-number="0.5.1">
+<h3 data-number="0.5.1" class="anchored" data-anchor-id="macros-automation-magic"><span class="header-section-number">0.5.1</span> Macros: Automation Magic</h3>
+<div class="sourceCode" id="cb5"><pre class="sourceCode numberSource vim number-lines code-with-copy"><code class="sourceCode"><span id="cb5-1"><a href="#cb5-1"></a>" Record macro</span>
+<span id="cb5-2"><a href="#cb5-2"></a>qa              " Start recording macro 'a'</span>
+<span id="cb5-3"><a href="#cb5-3"></a>[commands]      " Perform actions</span>
+<span id="cb5-4"><a href="#cb5-4"></a>q               " Stop recording</span>
+<span id="cb5-5"><a href="#cb5-5"></a></span>
+<span id="cb5-6"><a href="#cb5-6"></a>" Play macro</span>
+<span id="cb5-7"><a href="#cb5-7"></a>@a              " Execute macro 'a'</span>
+<span id="cb5-8"><a href="#cb5-8"></a>@@              " Repeat last macro</span>
+<span id="cb5-9"><a href="#cb5-9"></a>5@a             " Execute macro 'a' 5 times</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</section>
+<section id="advanced-registers" class="level3" data-number="0.5.2">
+<h3 data-number="0.5.2" class="anchored" data-anchor-id="advanced-registers"><span class="header-section-number">0.5.2</span> Advanced Registers</h3>
+<div class="sourceCode" id="cb6"><pre class="sourceCode numberSource vim number-lines code-with-copy"><code class="sourceCode"><span id="cb6-1"><a href="#cb6-1"></a>" Named registers</span>
+<span id="cb6-2"><a href="#cb6-2"></a>"ayy            " Yank line to register 'a'</span>
+<span id="cb6-3"><a href="#cb6-3"></a>"ap             " Paste from register 'a'</span>
+<span id="cb6-4"><a href="#cb6-4"></a>:registers      " View all registers</span>
+<span id="cb6-5"><a href="#cb6-5"></a></span>
+<span id="cb6-6"><a href="#cb6-6"></a>" System clipboard</span>
+<span id="cb6-7"><a href="#cb6-7"></a>"+y             " Yank to system clipboard</span>
+<span id="cb6-8"><a href="#cb6-8"></a>"+p             " Paste from system clipboard</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</section>
+<section id="complex-text-transformations" class="level3" data-number="0.5.3">
+<h3 data-number="0.5.3" class="anchored" data-anchor-id="complex-text-transformations"><span class="header-section-number">0.5.3</span> Complex Text Transformations</h3>
+<div class="sourceCode" id="cb7"><pre class="sourceCode numberSource vim number-lines code-with-copy"><code class="sourceCode"><span id="cb7-1"><a href="#cb7-1"></a>" Sort lines</span>
+<span id="cb7-2"><a href="#cb7-2"></a>:sort           " Sort selected lines</span>
+<span id="cb7-3"><a href="#cb7-3"></a>:sort u         " Sort and remove duplicates</span>
+<span id="cb7-4"><a href="#cb7-4"></a>:sort n         " Numeric sort</span>
+<span id="cb7-5"><a href="#cb7-5"></a></span>
+<span id="cb7-6"><a href="#cb7-6"></a>" Number sequences</span>
+<span id="cb7-7"><a href="#cb7-7"></a>Ctrl-a          " Increment number</span>
+<span id="cb7-8"><a href="#cb7-8"></a>Ctrl-x          " Decrement number</span>
+<span id="cb7-9"><a href="#cb7-9"></a>g Ctrl-a        " Increment sequence in visual block</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</section>
+</section>
+<section id="vim-scripting-and-customization" class="level2" data-number="0.6">
+<h2 data-number="0.6" class="anchored" data-anchor-id="vim-scripting-and-customization"><span class="header-section-number">0.6</span> Vim Scripting and Customization</h2>
+<section id="custom-key-mappings" class="level3" data-number="0.6.1">
+<h3 data-number="0.6.1" class="anchored" data-anchor-id="custom-key-mappings"><span class="header-section-number">0.6.1</span> Custom Key Mappings</h3>
+<div class="sourceCode" id="cb8"><pre class="sourceCode numberSource vim number-lines code-with-copy"><code class="sourceCode"><span id="cb8-1"><a href="#cb8-1"></a>" Custom mappings in .vimrc</span>
+<span id="cb8-2"><a href="#cb8-2"></a>nnoremap &lt;leader&gt;w :w&lt;CR&gt;</span>
+<span id="cb8-3"><a href="#cb8-3"></a>nnoremap &lt;leader&gt;q :q&lt;CR&gt;</span>
+<span id="cb8-4"><a href="#cb8-4"></a>nnoremap &lt;leader&gt;f :FZF&lt;CR&gt;</span>
+<span id="cb8-5"><a href="#cb8-5"></a>nnoremap &lt;leader&gt;t :NERDTreeToggle&lt;CR&gt;</span>
+<span id="cb8-6"><a href="#cb8-6"></a></span>
+<span id="cb8-7"><a href="#cb8-7"></a>" Function keys</span>
+<span id="cb8-8"><a href="#cb8-8"></a>nnoremap &lt;F2&gt; :set number!&lt;CR&gt;</span>
+<span id="cb8-9"><a href="#cb8-9"></a>nnoremap &lt;F3&gt; :set paste!&lt;CR&gt;</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</section>
+<section id="custom-functions" class="level3" data-number="0.6.2">
+<h3 data-number="0.6.2" class="anchored" data-anchor-id="custom-functions"><span class="header-section-number">0.6.2</span> Custom Functions</h3>
+<div class="sourceCode" id="cb9"><pre class="sourceCode numberSource vim number-lines code-with-copy"><code class="sourceCode"><span id="cb9-1"><a href="#cb9-1"></a>" Custom function in .vimrc</span>
+<span id="cb9-2"><a href="#cb9-2"></a>function! ToggleBackground()</span>
+<span id="cb9-3"><a href="#cb9-3"></a>    if &amp;background == 'dark'</span>
+<span id="cb9-4"><a href="#cb9-4"></a>        set background=light</span>
+<span id="cb9-5"><a href="#cb9-5"></a>    else</span>
+<span id="cb9-6"><a href="#cb9-6"></a>        set background=dark</span>
+<span id="cb9-7"><a href="#cb9-7"></a>    endif</span>
+<span id="cb9-8"><a href="#cb9-8"></a>endfunction</span>
+<span id="cb9-9"><a href="#cb9-9"></a></span>
+<span id="cb9-10"><a href="#cb9-10"></a>nnoremap &lt;leader&gt;bg :call ToggleBackground()&lt;CR&gt;</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</section>
+<section id="advanced-settings" class="level3" data-number="0.6.3">
+<h3 data-number="0.6.3" class="anchored" data-anchor-id="advanced-settings"><span class="header-section-number">0.6.3</span> Advanced Settings</h3>
+<div class="sourceCode" id="cb10"><pre class="sourceCode numberSource vim number-lines code-with-copy"><code class="sourceCode"><span id="cb10-1"><a href="#cb10-1"></a>" Performance optimizations</span>
+<span id="cb10-2"><a href="#cb10-2"></a>set lazyredraw          " Don't redraw during macros</span>
+<span id="cb10-3"><a href="#cb10-3"></a>set ttyfast             " Fast terminal connection</span>
+<span id="cb10-4"><a href="#cb10-4"></a>set synmaxcol=200       " Limit syntax highlighting</span>
+<span id="cb10-5"><a href="#cb10-5"></a></span>
+<span id="cb10-6"><a href="#cb10-6"></a>" Advanced editing</span>
+<span id="cb10-7"><a href="#cb10-7"></a>set undofile            " Persistent undo</span>
+<span id="cb10-8"><a href="#cb10-8"></a>set undodir=~/.vim/undo " Undo directory</span>
+<span id="cb10-9"><a href="#cb10-9"></a>set backupdir=~/.vim/backup " Backup directory</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</section>
+</section>
+<section id="project-level-workflows" class="level2" data-number="0.7">
+<h2 data-number="0.7" class="anchored" data-anchor-id="project-level-workflows"><span class="header-section-number">0.7</span> Project-Level Workflows</h2>
+<section id="session-management" class="level3" data-number="0.7.1">
+<h3 data-number="0.7.1" class="anchored" data-anchor-id="session-management"><span class="header-section-number">0.7.1</span> Session Management</h3>
+<div class="sourceCode" id="cb11"><pre class="sourceCode numberSource vim number-lines code-with-copy"><code class="sourceCode"><span id="cb11-1"><a href="#cb11-1"></a>" Save session</span>
+<span id="cb11-2"><a href="#cb11-2"></a>:mksession! project.vim</span>
+<span id="cb11-3"><a href="#cb11-3"></a></span>
+<span id="cb11-4"><a href="#cb11-4"></a>" Load session</span>
+<span id="cb11-5"><a href="#cb11-5"></a>:source project.vim</span>
+<span id="cb11-6"><a href="#cb11-6"></a>vim -S project.vim</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</section>
+<section id="buffer-management" class="level3" data-number="0.7.2">
+<h3 data-number="0.7.2" class="anchored" data-anchor-id="buffer-management"><span class="header-section-number">0.7.2</span> Buffer Management</h3>
+<div class="sourceCode" id="cb12"><pre class="sourceCode numberSource vim number-lines code-with-copy"><code class="sourceCode"><span id="cb12-1"><a href="#cb12-1"></a>" Buffer operations</span>
+<span id="cb12-2"><a href="#cb12-2"></a>:ls             " List buffers</span>
+<span id="cb12-3"><a href="#cb12-3"></a>:b filename     " Switch to buffer</span>
+<span id="cb12-4"><a href="#cb12-4"></a>:bd             " Delete buffer</span>
+<span id="cb12-5"><a href="#cb12-5"></a>:bn / :bp       " Next/previous buffer</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</section>
+<section id="quickfix-and-location-lists" class="level3" data-number="0.7.3">
+<h3 data-number="0.7.3" class="anchored" data-anchor-id="quickfix-and-location-lists"><span class="header-section-number">0.7.3</span> Quickfix and Location Lists</h3>
+<div class="sourceCode" id="cb13"><pre class="sourceCode numberSource vim number-lines code-with-copy"><code class="sourceCode"><span id="cb13-1"><a href="#cb13-1"></a>" Quickfix operations</span>
+<span id="cb13-2"><a href="#cb13-2"></a>:copen          " Open quickfix window</span>
+<span id="cb13-3"><a href="#cb13-3"></a>:cnext / :cprev " Navigate quickfix items</span>
+<span id="cb13-4"><a href="#cb13-4"></a>:cclose         " Close quickfix window</span>
+<span id="cb13-5"><a href="#cb13-5"></a></span>
+<span id="cb13-6"><a href="#cb13-6"></a>" Location list</span>
+<span id="cb13-7"><a href="#cb13-7"></a>:lopen          " Open location list</span>
+<span id="cb13-8"><a href="#cb13-8"></a>:lnext / :lprev " Navigate location items</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</section>
+</section>
+<section id="advanced-search-and-replace" class="level2" data-number="0.8">
+<h2 data-number="0.8" class="anchored" data-anchor-id="advanced-search-and-replace"><span class="header-section-number">0.8</span> Advanced Search and Replace</h2>
+<section id="regex-mastery" class="level3" data-number="0.8.1">
+<h3 data-number="0.8.1" class="anchored" data-anchor-id="regex-mastery"><span class="header-section-number">0.8.1</span> Regex Mastery</h3>
+<div class="sourceCode" id="cb14"><pre class="sourceCode numberSource vim number-lines code-with-copy"><code class="sourceCode"><span id="cb14-1"><a href="#cb14-1"></a>" Advanced patterns</span>
+<span id="cb14-2"><a href="#cb14-2"></a>:%s/\v(\w+)\s+(\w+)/\2, \1/g    " Swap words</span>
+<span id="cb14-3"><a href="#cb14-3"></a>:%s/\v&lt;(\w+)&gt;/\U\1/g            " Uppercase words</span>
+<span id="cb14-4"><a href="#cb14-4"></a>:%s/\v^(.{80}).*/\1/g           " Truncate lines to 80 chars</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</section>
+<section id="multi-file-operations" class="level3" data-number="0.8.2">
+<h3 data-number="0.8.2" class="anchored" data-anchor-id="multi-file-operations"><span class="header-section-number">0.8.2</span> Multi-file Operations</h3>
+<div class="sourceCode" id="cb15"><pre class="sourceCode numberSource vim number-lines code-with-copy"><code class="sourceCode"><span id="cb15-1"><a href="#cb15-1"></a>" Search across files</span>
+<span id="cb15-2"><a href="#cb15-2"></a>:vimgrep /pattern/ **/*.py      " Search in Python files</span>
+<span id="cb15-3"><a href="#cb15-3"></a>:copen                          " Open results in quickfix</span>
+<span id="cb15-4"><a href="#cb15-4"></a></span>
+<span id="cb15-5"><a href="#cb15-5"></a>" Replace across files</span>
+<span id="cb15-6"><a href="#cb15-6"></a>:argdo %s/old/new/ge | update   " Replace in all args</span>
+<span id="cb15-7"><a href="#cb15-7"></a>:bufdo %s/old/new/ge | update   " Replace in all buffers</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</section>
+</section>
+<section id="integration-with-external-tools" class="level2" data-number="0.9">
+<h2 data-number="0.9" class="anchored" data-anchor-id="integration-with-external-tools"><span class="header-section-number">0.9</span> Integration with External Tools</h2>
+<section id="compiler-integration" class="level3" data-number="0.9.1">
+<h3 data-number="0.9.1" class="anchored" data-anchor-id="compiler-integration"><span class="header-section-number">0.9.1</span> Compiler Integration</h3>
+<div class="sourceCode" id="cb16"><pre class="sourceCode numberSource vim number-lines code-with-copy"><code class="sourceCode"><span id="cb16-1"><a href="#cb16-1"></a>" Set compiler</span>
+<span id="cb16-2"><a href="#cb16-2"></a>:compiler gcc</span>
+<span id="cb16-3"><a href="#cb16-3"></a>:make           " Run make</span>
+<span id="cb16-4"><a href="#cb16-4"></a>:copen          " View errors</span>
+<span id="cb16-5"><a href="#cb16-5"></a></span>
+<span id="cb16-6"><a href="#cb16-6"></a>" Custom compiler</span>
+<span id="cb16-7"><a href="#cb16-7"></a>autocmd FileType python setlocal makeprg=python\ %</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</section>
+<section id="terminal-integration" class="level3" data-number="0.9.2">
+<h3 data-number="0.9.2" class="anchored" data-anchor-id="terminal-integration"><span class="header-section-number">0.9.2</span> Terminal Integration</h3>
+<div class="sourceCode" id="cb17"><pre class="sourceCode numberSource vim number-lines code-with-copy"><code class="sourceCode"><span id="cb17-1"><a href="#cb17-1"></a>" Terminal (Vim 8+/Neovim)</span>
+<span id="cb17-2"><a href="#cb17-2"></a>:terminal       " Open terminal</span>
+<span id="cb17-3"><a href="#cb17-3"></a>:!command       " Run external command</span>
+<span id="cb17-4"><a href="#cb17-4"></a>:r !command     " Read command output</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</section>
+</section>
+<section id="performance-optimization" class="level2" data-number="0.10">
+<h2 data-number="0.10" class="anchored" data-anchor-id="performance-optimization"><span class="header-section-number">0.10</span> Performance Optimization</h2>
+<section id="profiling-vim" class="level3" data-number="0.10.1">
+<h3 data-number="0.10.1" class="anchored" data-anchor-id="profiling-vim"><span class="header-section-number">0.10.1</span> Profiling Vim</h3>
+<div class="sourceCode" id="cb18"><pre class="sourceCode numberSource vim number-lines code-with-copy"><code class="sourceCode"><span id="cb18-1"><a href="#cb18-1"></a>" Profile startup</span>
+<span id="cb18-2"><a href="#cb18-2"></a>vim --startuptime startup.log</span>
+<span id="cb18-3"><a href="#cb18-3"></a></span>
+<span id="cb18-4"><a href="#cb18-4"></a>" Profile runtime</span>
+<span id="cb18-5"><a href="#cb18-5"></a>:profile start profile.log</span>
+<span id="cb18-6"><a href="#cb18-6"></a>:profile func *</span>
+<span id="cb18-7"><a href="#cb18-7"></a>:profile file *</span>
+<span id="cb18-8"><a href="#cb18-8"></a>" [do operations]</span>
+<span id="cb18-9"><a href="#cb18-9"></a>:profile pause</span>
+<span id="cb18-10"><a href="#cb18-10"></a>:noautocmd qall!</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</section>
+<section id="optimization-techniques" class="level3" data-number="0.10.2">
+<h3 data-number="0.10.2" class="anchored" data-anchor-id="optimization-techniques"><span class="header-section-number">0.10.2</span> Optimization Techniques</h3>
+<div class="sourceCode" id="cb19"><pre class="sourceCode numberSource vim number-lines code-with-copy"><code class="sourceCode"><span id="cb19-1"><a href="#cb19-1"></a>" Lazy loading plugins</span>
+<span id="cb19-2"><a href="#cb19-2"></a>Plug 'plugin/name', { 'on': 'Command' }</span>
+<span id="cb19-3"><a href="#cb19-3"></a>Plug 'plugin/name', { 'for': 'filetype' }</span>
+<span id="cb19-4"><a href="#cb19-4"></a></span>
+<span id="cb19-5"><a href="#cb19-5"></a>" Disable unused features</span>
+<span id="cb19-6"><a href="#cb19-6"></a>let g:loaded_netrw = 1      " Disable netrw</span>
+<span id="cb19-7"><a href="#cb19-7"></a>let g:loaded_matchparen = 1 " Disable match paren</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</section>
+</section>
+<section id="advanced-debugging" class="level2" data-number="0.11">
+<h2 data-number="0.11" class="anchored" data-anchor-id="advanced-debugging"><span class="header-section-number">0.11</span> Advanced Debugging</h2>
+<section id="debugging-vim-configuration" class="level3" data-number="0.11.1">
+<h3 data-number="0.11.1" class="anchored" data-anchor-id="debugging-vim-configuration"><span class="header-section-number">0.11.1</span> Debugging Vim Configuration</h3>
+<div class="sourceCode" id="cb20"><pre class="sourceCode numberSource vim number-lines code-with-copy"><code class="sourceCode"><span id="cb20-1"><a href="#cb20-1"></a>" Check option values</span>
+<span id="cb20-2"><a href="#cb20-2"></a>:set option?            " Check option value</span>
+<span id="cb20-3"><a href="#cb20-3"></a>:verbose set option?    " Check where option was set</span>
+<span id="cb20-4"><a href="#cb20-4"></a>:scriptnames           " List loaded scripts</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</section>
+<section id="plugin-debugging" class="level3" data-number="0.11.2">
+<h3 data-number="0.11.2" class="anchored" data-anchor-id="plugin-debugging"><span class="header-section-number">0.11.2</span> Plugin Debugging</h3>
+<div class="sourceCode" id="cb21"><pre class="sourceCode numberSource vim number-lines code-with-copy"><code class="sourceCode"><span id="cb21-1"><a href="#cb21-1"></a>" Disable plugins temporarily</span>
+<span id="cb21-2"><a href="#cb21-2"></a>vim --noplugin</span>
+<span id="cb21-3"><a href="#cb21-3"></a>vim -u NONE            " No configuration</span>
+<span id="cb21-4"><a href="#cb21-4"></a>vim -u minimal.vimrc   " Minimal configuration</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</section>
+</section>
+<section id="the-path-to-mastery" class="level2" data-number="0.12">
+<h2 data-number="0.12" class="anchored" data-anchor-id="the-path-to-mastery"><span class="header-section-number">0.12</span> The Path to Mastery</h2>
+<section id="continuous-learning" class="level3" data-number="0.12.1">
+<h3 data-number="0.12.1" class="anchored" data-anchor-id="continuous-learning"><span class="header-section-number">0.12.1</span> Continuous Learning</h3>
+<ol type="1">
+<li><strong>Read the manual</strong>: <code>:help</code> is your friend</li>
+<li><strong>Follow Vim communities</strong>: Reddit, Stack Overflow, blogs</li>
+<li><strong>Watch experts</strong>: Screencasts and conference talks</li>
+<li><strong>Practice regularly</strong>: Use Vim for everything</li>
+<li><strong>Contribute</strong>: Share your knowledge and plugins</li>
+</ol>
+</section>
+<section id="building-your-vim-environment" class="level3" data-number="0.12.2">
+<h3 data-number="0.12.2" class="anchored" data-anchor-id="building-your-vim-environment"><span class="header-section-number">0.12.2</span> Building Your Vim Environment</h3>
+<ol type="1">
+<li><strong>Start simple</strong>: Don’t over-configure initially</li>
+<li><strong>Add incrementally</strong>: One plugin at a time</li>
+<li><strong>Understand everything</strong>: Don’t cargo-cult configurations</li>
+<li><strong>Backup regularly</strong>: Version control your dotfiles</li>
+<li><strong>Document your choices</strong>: Comment your vimrc</li>
+</ol>
+</section>
+<section id="advanced-practice-projects" class="level3" data-number="0.12.3">
+<h3 data-number="0.12.3" class="anchored" data-anchor-id="advanced-practice-projects"><span class="header-section-number">0.12.3</span> Advanced Practice Projects</h3>
+<ol type="1">
+<li><strong>Create a plugin</strong>: Solve a problem you have</li>
+<li><strong>Contribute to existing plugins</strong>: Fix bugs, add features</li>
+<li><strong>Write Vim scripts</strong>: Automate repetitive tasks</li>
+<li><strong>Customize for your workflow</strong>: Language-specific setups</li>
+<li><strong>Share your knowledge</strong>: Blog, teach, mentor</li>
+</ol>
+</section>
+</section>
+<section id="the-vim-philosophy" class="level2" data-number="0.13">
+<h2 data-number="0.13" class="anchored" data-anchor-id="the-vim-philosophy"><span class="header-section-number">0.13</span> The Vim Philosophy</h2>
+<section id="why-the-80-matters" class="level3" data-number="0.13.1">
+<h3 data-number="0.13.1" class="anchored" data-anchor-id="why-the-80-matters"><span class="header-section-number">0.13.1</span> Why the 80% Matters</h3>
+<p>While the 20% gets you productive, the 80% makes you: - <strong>Truly efficient</strong>: Every keystroke has purpose - <strong>Language agnostic</strong>: Vim works with any language - <strong>Environment independent</strong>: SSH, containers, servers - <strong>Endlessly customizable</strong>: Adapt to any workflow - <strong>Future-proof</strong>: Skills that last decades</p>
+</section>
+<section id="the-continuous-journey" class="level3" data-number="0.13.2">
+<h3 data-number="0.13.2" class="anchored" data-anchor-id="the-continuous-journey"><span class="header-section-number">0.13.2</span> The Continuous Journey</h3>
+<p>Vim mastery is not a destination but a journey. Every day you’ll discover new techniques, better workflows, and more elegant solutions. The 80% is vast and deep, offering endless opportunities for growth.</p>
+</section>
+</section>
+<section id="your-next-steps" class="level2" data-number="0.14">
+<h2 data-number="0.14" class="anchored" data-anchor-id="your-next-steps"><span class="header-section-number">0.14</span> Your Next Steps</h2>
+<ol type="1">
+<li><strong>Choose your first advanced topic</strong>: Pick one area that interests you most</li>
+<li><strong>Set up a practice environment</strong>: Dedicated Vim configuration for learning</li>
+<li><strong>Join the community</strong>: Find others on the same journey</li>
+<li><strong>Start teaching</strong>: Share what you learn with others</li>
+<li><strong>Never stop exploring</strong>: The Vim ecosystem is always evolving</li>
+</ol>
+</section>
+<section id="final-thoughts" class="level2" data-number="0.15">
+<h2 data-number="0.15" class="anchored" data-anchor-id="final-thoughts"><span class="header-section-number">0.15</span> Final Thoughts</h2>
+<p>You’ve completed the essential journey from Vim novice to competent user. The advanced realm awaits with its infinite possibilities. Remember:</p>
+<ul>
+<li><strong>Master the basics first</strong>: The 20% is your foundation</li>
+<li><strong>Learn incrementally</strong>: Don’t try to absorb everything at once</li>
+<li><strong>Practice consistently</strong>: Regular use builds muscle memory</li>
+<li><strong>Stay curious</strong>: There’s always more to discover</li>
+<li><strong>Help others</strong>: Teaching reinforces your own learning</li>
+</ul>
+<p>Welcome to the advanced Vim community. You now have the tools to shape Vim into whatever you need it to be. The only limit is your imagination.</p>
+<hr>
+<p><em>Congratulations on completing the Vim Mastery series! You now possess the knowledge to edit text at the speed of thought and the foundation to explore Vim’s infinite possibilities.</em></p>
+
+
+<!-- -->
+
+</section>
+
+<div id="quarto-appendix" class="default"><section class="quarto-appendix-contents"><h2 class="anchored quarto-appendix-heading">Reuse</h2><div id="quarto-reuse" class="quarto-appendix-contents"><div>CC BY-NC-SA 4.0</div></div></section><section class="quarto-appendix-contents"><h2 class="anchored quarto-appendix-heading">Citation</h2><div><div class="quarto-appendix-secondary-label">BibTeX citation:</div><pre class="sourceCode code-with-copy quarto-appendix-bibtex"><code class="sourceCode bibtex">@online{2025,
+  author = {, Hasan},
+  title = {The {Other} 80\%: {Advanced} {Vim} {Mastery}},
+  date = {2025-07-18},
+  url = {https://hasangoni.quarto.pub/hasan-blog-post/posts/series/vim-mastery/10-advanced-vim.html},
+  langid = {en}
+}
+</code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre><div class="quarto-appendix-secondary-label">For attribution, please cite this work as:</div><div id="ref-2025" class="csl-entry quarto-appendix-citeas" role="listitem">
+Hasan. 2025. <span>“The Other 80%: Advanced Vim Mastery.”</span> July
+18, 2025. <a href="https://hasangoni.quarto.pub/hasan-blog-post/posts/series/vim-mastery/10-advanced-vim.html">https://hasangoni.quarto.pub/hasan-blog-post/posts/series/vim-mastery/10-advanced-vim.html</a>.
+</div></div></section></div></main> <!-- /main -->
+<script id="quarto-html-after-body" type="application/javascript">
+window.document.addEventListener("DOMContentLoaded", function (event) {
+  const toggleBodyColorMode = (bsSheetEl) => {
+    const mode = bsSheetEl.getAttribute("data-mode");
+    const bodyEl = window.document.querySelector("body");
+    if (mode === "dark") {
+      bodyEl.classList.add("quarto-dark");
+      bodyEl.classList.remove("quarto-light");
+    } else {
+      bodyEl.classList.add("quarto-light");
+      bodyEl.classList.remove("quarto-dark");
+    }
+  }
+  const toggleBodyColorPrimary = () => {
+    const bsSheetEl = window.document.querySelector("link#quarto-bootstrap");
+    if (bsSheetEl) {
+      toggleBodyColorMode(bsSheetEl);
+    }
+  }
+  toggleBodyColorPrimary();  
+  const icon = "";
+  const anchorJS = new window.AnchorJS();
+  anchorJS.options = {
+    placement: 'right',
+    icon: icon
+  };
+  anchorJS.add('.anchored');
+  const isCodeAnnotation = (el) => {
+    for (const clz of el.classList) {
+      if (clz.startsWith('code-annotation-')) {                     
+        return true;
+      }
+    }
+    return false;
+  }
+  const clipboard = new window.ClipboardJS('.code-copy-button', {
+    text: function(trigger) {
+      const codeEl = trigger.previousElementSibling.cloneNode(true);
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
+        }
+      }
+      return codeEl.innerText;
+    }
+  });
+  clipboard.on('success', function(e) {
+    // button target
+    const button = e.trigger;
+    // don't keep focus
+    button.blur();
+    // flash "checked"
+    button.classList.add('code-copy-button-checked');
+    var currentTitle = button.getAttribute("title");
+    button.setAttribute("title", "Copied!");
+    let tooltip;
+    if (window.bootstrap) {
+      button.setAttribute("data-bs-toggle", "tooltip");
+      button.setAttribute("data-bs-placement", "left");
+      button.setAttribute("data-bs-title", "Copied!");
+      tooltip = new bootstrap.Tooltip(button, 
+        { trigger: "manual", 
+          customClass: "code-copy-button-tooltip",
+          offset: [0, -8]});
+      tooltip.show();    
+    }
+    setTimeout(function() {
+      if (tooltip) {
+        tooltip.hide();
+        button.removeAttribute("data-bs-title");
+        button.removeAttribute("data-bs-toggle");
+        button.removeAttribute("data-bs-placement");
+      }
+      button.setAttribute("title", currentTitle);
+      button.classList.remove('code-copy-button-checked');
+    }, 1000);
+    // clear code selection
+    e.clearSelection();
+  });
+  const viewSource = window.document.getElementById('quarto-view-source') ||
+                     window.document.getElementById('quarto-code-tools-source');
+  if (viewSource) {
+    const sourceUrl = viewSource.getAttribute("data-quarto-source-url");
+    viewSource.addEventListener("click", function(e) {
+      if (sourceUrl) {
+        // rstudio viewer pane
+        if (/\bcapabilities=\b/.test(window.location)) {
+          window.open(sourceUrl);
+        } else {
+          window.location.href = sourceUrl;
+        }
+      } else {
+        const modal = new bootstrap.Modal(document.getElementById('quarto-embedded-source-code-modal'));
+        modal.show();
+      }
+      return false;
+    });
+  }
+  function toggleCodeHandler(show) {
+    return function(e) {
+      const detailsSrc = window.document.querySelectorAll(".cell > details > .sourceCode");
+      for (let i=0; i<detailsSrc.length; i++) {
+        const details = detailsSrc[i].parentElement;
+        if (show) {
+          details.open = true;
+        } else {
+          details.removeAttribute("open");
+        }
+      }
+      const cellCodeDivs = window.document.querySelectorAll(".cell > .sourceCode");
+      const fromCls = show ? "hidden" : "unhidden";
+      const toCls = show ? "unhidden" : "hidden";
+      for (let i=0; i<cellCodeDivs.length; i++) {
+        const codeDiv = cellCodeDivs[i];
+        if (codeDiv.classList.contains(fromCls)) {
+          codeDiv.classList.remove(fromCls);
+          codeDiv.classList.add(toCls);
+        } 
+      }
+      return false;
+    }
+  }
+  const hideAllCode = window.document.getElementById("quarto-hide-all-code");
+  if (hideAllCode) {
+    hideAllCode.addEventListener("click", toggleCodeHandler(false));
+  }
+  const showAllCode = window.document.getElementById("quarto-show-all-code");
+  if (showAllCode) {
+    showAllCode.addEventListener("click", toggleCodeHandler(true));
+  }
+  function tippyHover(el, contentFn) {
+    const config = {
+      allowHTML: true,
+      content: contentFn,
+      maxWidth: 500,
+      delay: 100,
+      arrow: false,
+      appendTo: function(el) {
+          return el.parentElement;
+      },
+      interactive: true,
+      interactiveBorder: 10,
+      theme: 'quarto',
+      placement: 'bottom-start'
+    };
+    window.tippy(el, config); 
+  }
+  const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+  for (var i=0; i<noterefs.length; i++) {
+    const ref = noterefs[i];
+    tippyHover(ref, function() {
+      // use id or data attribute instead here
+      let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+      try { href = new URL(href).hash; } catch {}
+      const id = href.replace(/^#\/?/, "");
+      const note = window.document.getElementById(id);
+      return note.innerHTML;
+    });
+  }
+      let selectedAnnoteEl;
+      const selectorForAnnotation = ( cell, annotation) => {
+        let cellAttr = 'data-code-cell="' + cell + '"';
+        let lineAttr = 'data-code-annotation="' +  annotation + '"';
+        const selector = 'span[' + cellAttr + '][' + lineAttr + ']';
+        return selector;
+      }
+      const selectCodeLines = (annoteEl) => {
+        const doc = window.document;
+        const targetCell = annoteEl.getAttribute("data-target-cell");
+        const targetAnnotation = annoteEl.getAttribute("data-target-annotation");
+        const annoteSpan = window.document.querySelector(selectorForAnnotation(targetCell, targetAnnotation));
+        const lines = annoteSpan.getAttribute("data-code-lines").split(",");
+        const lineIds = lines.map((line) => {
+          return targetCell + "-" + line;
+        })
+        let top = null;
+        let height = null;
+        let parent = null;
+        if (lineIds.length > 0) {
+            //compute the position of the single el (top and bottom and make a div)
+            const el = window.document.getElementById(lineIds[0]);
+            top = el.offsetTop;
+            height = el.offsetHeight;
+            parent = el.parentElement.parentElement;
+          if (lineIds.length > 1) {
+            const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
+            const bottom = lastEl.offsetTop + lastEl.offsetHeight;
+            height = bottom - top;
+          }
+          if (top !== null && height !== null && parent !== null) {
+            // cook up a div (if necessary) and position it 
+            let div = window.document.getElementById("code-annotation-line-highlight");
+            if (div === null) {
+              div = window.document.createElement("div");
+              div.setAttribute("id", "code-annotation-line-highlight");
+              div.style.position = 'absolute';
+              parent.appendChild(div);
+            }
+            div.style.top = top - 2 + "px";
+            div.style.height = height + 4 + "px";
+            let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
+            if (gutterDiv === null) {
+              gutterDiv = window.document.createElement("div");
+              gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
+              gutterDiv.style.position = 'absolute';
+              const codeCell = window.document.getElementById(targetCell);
+              const gutter = codeCell.querySelector('.code-annotation-gutter');
+              gutter.appendChild(gutterDiv);
+            }
+            gutterDiv.style.top = top - 2 + "px";
+            gutterDiv.style.height = height + 4 + "px";
+          }
+          selectedAnnoteEl = annoteEl;
+        }
+      };
+      const unselectCodeLines = () => {
+        const elementsIds = ["code-annotation-line-highlight", "code-annotation-line-highlight-gutter"];
+        elementsIds.forEach((elId) => {
+          const div = window.document.getElementById(elId);
+          if (div) {
+            div.remove();
+          }
+        });
+        selectedAnnoteEl = undefined;
+      };
+      // Attach click handler to the DT
+      const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
+      for (const annoteDlNode of annoteDls) {
+        annoteDlNode.addEventListener('click', (event) => {
+          const clickedEl = event.target;
+          if (clickedEl !== selectedAnnoteEl) {
+            unselectCodeLines();
+            const activeEl = window.document.querySelector('dt[data-target-cell].code-annotation-active');
+            if (activeEl) {
+              activeEl.classList.remove('code-annotation-active');
+            }
+            selectCodeLines(clickedEl);
+            clickedEl.classList.add('code-annotation-active');
+          } else {
+            // Unselect the line
+            unselectCodeLines();
+            clickedEl.classList.remove('code-annotation-active');
+          }
+        });
+      }
+  const findCites = (el) => {
+    const parentEl = el.parentElement;
+    if (parentEl) {
+      const cites = parentEl.dataset.cites;
+      if (cites) {
+        return {
+          el,
+          cites: cites.split(' ')
+        };
+      } else {
+        return findCites(el.parentElement)
+      }
+    } else {
+      return undefined;
+    }
+  };
+  var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+  for (var i=0; i<bibliorefs.length; i++) {
+    const ref = bibliorefs[i];
+    const citeInfo = findCites(ref);
+    if (citeInfo) {
+      tippyHover(citeInfo.el, function() {
+        var popup = window.document.createElement('div');
+        citeInfo.cites.forEach(function(cite) {
+          var citeDiv = window.document.createElement('div');
+          citeDiv.classList.add('hanging-indent');
+          citeDiv.classList.add('csl-entry');
+          var biblioDiv = window.document.getElementById('ref-' + cite);
+          if (biblioDiv) {
+            citeDiv.innerHTML = biblioDiv.innerHTML;
+          }
+          popup.appendChild(citeDiv);
+        });
+        return popup.innerHTML;
+      });
+    }
+  }
+});
+</script>
+<script src="https://utteranc.es/client.js" repo="yourusername/quarto_blog_hasan" issue-term="pathname" theme="github-light" crossorigin="anonymous" async="">
+</script>
+<script src="https://giscus.app/client.js" data-repo="HasanGoni/quarto_blog_hasan" data-repo-id="" data-category="General" data-category-id="" data-mapping="title" data-reactions-enabled="1" data-emit-metadata="0" data-input-position="top" data-theme="light" data-lang="en" crossorigin="anonymous" async="">
+</script><div class="modal fade" id="quarto-embedded-source-code-modal" tabindex="-1" aria-labelledby="quarto-embedded-source-code-modal-label" aria-hidden="true"><div class="modal-dialog modal-dialog-scrollable"><div class="modal-content"><div class="modal-header"><h5 class="modal-title" id="quarto-embedded-source-code-modal-label">Source Code</h5><button class="btn-close" data-bs-dismiss="modal"></button></div><div class="modal-body"><div class="">
+<div class="sourceCode" id="cb22" data-shortcodes="false"><pre class="sourceCode numberSource markdown number-lines code-with-copy"><code class="sourceCode markdown"><span id="cb22-1"><a href="#cb22-1"></a><span class="co">---</span></span>
+<span id="cb22-2"><a href="#cb22-2"></a><span class="an">title:</span><span class="co"> "The Other 80%: Advanced Vim Mastery"</span></span>
+<span id="cb22-3"><a href="#cb22-3"></a><span class="an">description:</span><span class="co"> "Dive into the advanced features that make Vim truly powerful. Explore plugins, customization, and expert techniques for the dedicated Vim enthusiast."</span></span>
+<span id="cb22-4"><a href="#cb22-4"></a><span class="an">author:</span><span class="co"> "Hasan"</span></span>
+<span id="cb22-5"><a href="#cb22-5"></a><span class="an">date:</span><span class="co"> last-modified</span></span>
+<span id="cb22-6"><a href="#cb22-6"></a><span class="an">categories:</span><span class="co"> [vim, advanced, plugins, customization, expert]</span></span>
+<span id="cb22-7"><a href="#cb22-7"></a><span class="an">image:</span><span class="co"> "images/vim.png"</span></span>
+<span id="cb22-8"><a href="#cb22-8"></a><span class="an">toc:</span><span class="co"> true</span></span>
+<span id="cb22-9"><a href="#cb22-9"></a><span class="co">---</span></span>
+<span id="cb22-10"><a href="#cb22-10"></a></span>
+<span id="cb22-11"><a href="#cb22-11"></a><span class="fu">## Welcome to the Advanced Realm</span></span>
+<span id="cb22-12"><a href="#cb22-12"></a></span>
+<span id="cb22-13"><a href="#cb22-13"></a>Congratulations! If you've made it this far, you've mastered the essential 20% of Vim that provides 80% of the power. You can navigate like a ninja, edit with precision, and work faster than most developers ever will.</span>
+<span id="cb22-14"><a href="#cb22-14"></a></span>
+<span id="cb22-15"><a href="#cb22-15"></a>But there's a whole other world of Vim mastery waiting for you. This is where good Vim users become great, and great users become legendary.</span>
+<span id="cb22-16"><a href="#cb22-16"></a></span>
+<span id="cb22-17"><a href="#cb22-17"></a><span class="fu">## The Advanced Vim Landscape</span></span>
+<span id="cb22-18"><a href="#cb22-18"></a></span>
+<span id="cb22-19"><a href="#cb22-19"></a><span class="fu">### What You've Mastered (The Essential 20%)</span></span>
+<span id="cb22-20"><a href="#cb22-20"></a><span class="ss">- </span>Modal editing and mode transitions</span>
+<span id="cb22-21"><a href="#cb22-21"></a><span class="ss">- </span>Basic movement and navigation</span>
+<span id="cb22-22"><a href="#cb22-22"></a><span class="ss">- </span>Text objects and precise selection</span>
+<span id="cb22-23"><a href="#cb22-23"></a><span class="ss">- </span>Core editing commands (delete, change, yank)</span>
+<span id="cb22-24"><a href="#cb22-24"></a><span class="ss">- </span>Visual mode and basic visual operations</span>
+<span id="cb22-25"><a href="#cb22-25"></a><span class="ss">- </span>Search and replace fundamentals</span>
+<span id="cb22-26"><a href="#cb22-26"></a><span class="ss">- </span>File operations and basic buffer management</span>
+<span id="cb22-27"><a href="#cb22-27"></a></span>
+<span id="cb22-28"><a href="#cb22-28"></a><span class="fu">### What Awaits (The Powerful 80%)</span></span>
+<span id="cb22-29"><a href="#cb22-29"></a><span class="ss">- </span>Advanced movement patterns and custom motions</span>
+<span id="cb22-30"><a href="#cb22-30"></a><span class="ss">- </span>Complex text transformations and macros</span>
+<span id="cb22-31"><a href="#cb22-31"></a><span class="ss">- </span>Plugin ecosystem and customization</span>
+<span id="cb22-32"><a href="#cb22-32"></a><span class="ss">- </span>Advanced search and replace with regex</span>
+<span id="cb22-33"><a href="#cb22-33"></a><span class="ss">- </span>Multiple file workflows and project management</span>
+<span id="cb22-34"><a href="#cb22-34"></a><span class="ss">- </span>Vim scripting and automation</span>
+<span id="cb22-35"><a href="#cb22-35"></a><span class="ss">- </span>Integration with external tools</span>
+<span id="cb22-36"><a href="#cb22-36"></a><span class="ss">- </span>Advanced registers and clipboard management</span>
+<span id="cb22-37"><a href="#cb22-37"></a></span>
+<span id="cb22-38"><a href="#cb22-38"></a><span class="fu">## Advanced Movement Mastery</span></span>
+<span id="cb22-39"><a href="#cb22-39"></a></span>
+<span id="cb22-40"><a href="#cb22-40"></a><span class="fu">### Marks and Jumps</span></span>
+<span id="cb22-41"><a href="#cb22-41"></a><span class="in">```vim</span></span>
+<span id="cb22-42"><a href="#cb22-42"></a><span class="in">" Set marks</span></span>
+<span id="cb22-43"><a href="#cb22-43"></a><span class="in">ma          " Set mark 'a' at current position</span></span>
+<span id="cb22-44"><a href="#cb22-44"></a><span class="in">'a          " Jump to mark 'a'</span></span>
+<span id="cb22-45"><a href="#cb22-45"></a><span class="in">``          " Jump back to previous position</span></span>
+<span id="cb22-46"><a href="#cb22-46"></a><span class="in">'.          " Jump to last change</span></span>
+<span id="cb22-47"><a href="#cb22-47"></a><span class="in">'^          " Jump to last insertion</span></span>
+<span id="cb22-48"><a href="#cb22-48"></a></span>
+<span id="cb22-49"><a href="#cb22-49"></a><span class="in">" Jump list navigation</span></span>
+<span id="cb22-50"><a href="#cb22-50"></a><span class="in">Ctrl-o      " Jump to older position</span></span>
+<span id="cb22-51"><a href="#cb22-51"></a><span class="in">Ctrl-i      " Jump to newer position</span></span>
+<span id="cb22-52"><a href="#cb22-52"></a><span class="in">```</span></span>
+<span id="cb22-53"><a href="#cb22-53"></a></span>
+<span id="cb22-54"><a href="#cb22-54"></a><span class="fu">### Advanced Search Patterns</span></span>
+<span id="cb22-55"><a href="#cb22-55"></a><span class="in">```vim</span></span>
+<span id="cb22-56"><a href="#cb22-56"></a><span class="in">" Search with regex</span></span>
+<span id="cb22-57"><a href="#cb22-57"></a><span class="in">/\v(function|def)\s+\w+    " Find function definitions</span></span>
+<span id="cb22-58"><a href="#cb22-58"></a><span class="in">/\v&lt;word&gt;                  " Exact word match</span></span>
+<span id="cb22-59"><a href="#cb22-59"></a><span class="in">/\v^$                      " Empty lines</span></span>
+<span id="cb22-60"><a href="#cb22-60"></a></span>
+<span id="cb22-61"><a href="#cb22-61"></a><span class="in">" Search and replace with confirmation</span></span>
+<span id="cb22-62"><a href="#cb22-62"></a><span class="in">:%s/old/new/gc            " Replace all with confirmation</span></span>
+<span id="cb22-63"><a href="#cb22-63"></a><span class="in">:5,10s/old/new/g          " Replace in lines 5-10</span></span>
+<span id="cb22-64"><a href="#cb22-64"></a><span class="in">```</span></span>
+<span id="cb22-65"><a href="#cb22-65"></a></span>
+<span id="cb22-66"><a href="#cb22-66"></a><span class="fu">### Window and Tab Management</span></span>
+<span id="cb22-67"><a href="#cb22-67"></a><span class="in">```vim</span></span>
+<span id="cb22-68"><a href="#cb22-68"></a><span class="in">" Window operations</span></span>
+<span id="cb22-69"><a href="#cb22-69"></a><span class="in">:split filename           " Horizontal split</span></span>
+<span id="cb22-70"><a href="#cb22-70"></a><span class="in">:vsplit filename         " Vertical split</span></span>
+<span id="cb22-71"><a href="#cb22-71"></a><span class="in">Ctrl-w h/j/k/l          " Navigate windows</span></span>
+<span id="cb22-72"><a href="#cb22-72"></a><span class="in">Ctrl-w =                " Equal window sizes</span></span>
+<span id="cb22-73"><a href="#cb22-73"></a><span class="in">Ctrl-w q                " Close window</span></span>
+<span id="cb22-74"><a href="#cb22-74"></a></span>
+<span id="cb22-75"><a href="#cb22-75"></a><span class="in">" Tab operations</span></span>
+<span id="cb22-76"><a href="#cb22-76"></a><span class="in">:tabnew filename        " New tab</span></span>
+<span id="cb22-77"><a href="#cb22-77"></a><span class="in">:tabnext / :tabprev     " Navigate tabs</span></span>
+<span id="cb22-78"><a href="#cb22-78"></a><span class="in">:tabclose               " Close tab</span></span>
+<span id="cb22-79"><a href="#cb22-79"></a><span class="in">```</span></span>
+<span id="cb22-80"><a href="#cb22-80"></a></span>
+<span id="cb22-81"><a href="#cb22-81"></a><span class="fu">## The Plugin Ecosystem</span></span>
+<span id="cb22-82"><a href="#cb22-82"></a></span>
+<span id="cb22-83"><a href="#cb22-83"></a><span class="fu">### Essential Plugin Categories</span></span>
+<span id="cb22-84"><a href="#cb22-84"></a></span>
+<span id="cb22-85"><a href="#cb22-85"></a><span class="fu">#### 1. File Management</span></span>
+<span id="cb22-86"><a href="#cb22-86"></a><span class="ss">- </span>**NERDTree**: File explorer sidebar</span>
+<span id="cb22-87"><a href="#cb22-87"></a><span class="ss">- </span>**fzf.vim**: Fuzzy file finder</span>
+<span id="cb22-88"><a href="#cb22-88"></a><span class="ss">- </span>**ranger.vim**: Terminal file manager integration</span>
+<span id="cb22-89"><a href="#cb22-89"></a></span>
+<span id="cb22-90"><a href="#cb22-90"></a><span class="fu">#### 2. Code Intelligence</span></span>
+<span id="cb22-91"><a href="#cb22-91"></a><span class="ss">- </span>**coc.nvim**: Language server protocol support</span>
+<span id="cb22-92"><a href="#cb22-92"></a><span class="ss">- </span>**YouCompleteMe**: Code completion</span>
+<span id="cb22-93"><a href="#cb22-93"></a><span class="ss">- </span>**ALE**: Asynchronous linting</span>
+<span id="cb22-94"><a href="#cb22-94"></a></span>
+<span id="cb22-95"><a href="#cb22-95"></a><span class="fu">#### 3. Git Integration</span></span>
+<span id="cb22-96"><a href="#cb22-96"></a><span class="ss">- </span>**fugitive.vim**: Git wrapper</span>
+<span id="cb22-97"><a href="#cb22-97"></a><span class="ss">- </span>**gitgutter**: Git diff in gutter</span>
+<span id="cb22-98"><a href="#cb22-98"></a><span class="ss">- </span>**gv.vim**: Git commit browser</span>
+<span id="cb22-99"><a href="#cb22-99"></a></span>
+<span id="cb22-100"><a href="#cb22-100"></a><span class="fu">#### 4. Text Manipulation</span></span>
+<span id="cb22-101"><a href="#cb22-101"></a><span class="ss">- </span>**surround.vim**: Manipulate surroundings</span>
+<span id="cb22-102"><a href="#cb22-102"></a><span class="ss">- </span>**commentary.vim**: Comment/uncomment code</span>
+<span id="cb22-103"><a href="#cb22-103"></a><span class="ss">- </span>**multiple-cursors**: Multiple cursor editing</span>
+<span id="cb22-104"><a href="#cb22-104"></a></span>
+<span id="cb22-105"><a href="#cb22-105"></a><span class="fu">#### 5. Appearance and Themes</span></span>
+<span id="cb22-106"><a href="#cb22-106"></a><span class="ss">- </span>**gruvbox**: Popular color scheme</span>
+<span id="cb22-107"><a href="#cb22-107"></a><span class="ss">- </span>**vim-airline**: Status line enhancement</span>
+<span id="cb22-108"><a href="#cb22-108"></a><span class="ss">- </span>**indentLine**: Indentation guides</span>
+<span id="cb22-109"><a href="#cb22-109"></a></span>
+<span id="cb22-110"><a href="#cb22-110"></a><span class="fu">### Plugin Manager Setup</span></span>
+<span id="cb22-111"><a href="#cb22-111"></a><span class="in">```vim</span></span>
+<span id="cb22-112"><a href="#cb22-112"></a><span class="in">" Using vim-plug</span></span>
+<span id="cb22-113"><a href="#cb22-113"></a><span class="in">call plug#begin('~/.vim/plugged')</span></span>
+<span id="cb22-114"><a href="#cb22-114"></a></span>
+<span id="cb22-115"><a href="#cb22-115"></a><span class="in">" Essential plugins</span></span>
+<span id="cb22-116"><a href="#cb22-116"></a><span class="in">Plug 'preservim/nerdtree'</span></span>
+<span id="cb22-117"><a href="#cb22-117"></a><span class="in">Plug 'junegunn/fzf.vim'</span></span>
+<span id="cb22-118"><a href="#cb22-118"></a><span class="in">Plug 'tpope/vim-fugitive'</span></span>
+<span id="cb22-119"><a href="#cb22-119"></a><span class="in">Plug 'tpope/vim-surround'</span></span>
+<span id="cb22-120"><a href="#cb22-120"></a><span class="in">Plug 'tpope/vim-commentary'</span></span>
+<span id="cb22-121"><a href="#cb22-121"></a></span>
+<span id="cb22-122"><a href="#cb22-122"></a><span class="in">call plug#end()</span></span>
+<span id="cb22-123"><a href="#cb22-123"></a><span class="in">```</span></span>
+<span id="cb22-124"><a href="#cb22-124"></a></span>
+<span id="cb22-125"><a href="#cb22-125"></a><span class="fu">## Advanced Text Manipulation</span></span>
+<span id="cb22-126"><a href="#cb22-126"></a></span>
+<span id="cb22-127"><a href="#cb22-127"></a><span class="fu">### Macros: Automation Magic</span></span>
+<span id="cb22-128"><a href="#cb22-128"></a><span class="in">```vim</span></span>
+<span id="cb22-129"><a href="#cb22-129"></a><span class="in">" Record macro</span></span>
+<span id="cb22-130"><a href="#cb22-130"></a><span class="in">qa              " Start recording macro 'a'</span></span>
+<span id="cb22-131"><a href="#cb22-131"></a><span class="in">[commands]      " Perform actions</span></span>
+<span id="cb22-132"><a href="#cb22-132"></a><span class="in">q               " Stop recording</span></span>
+<span id="cb22-133"><a href="#cb22-133"></a></span>
+<span id="cb22-134"><a href="#cb22-134"></a><span class="in">" Play macro</span></span>
+<span id="cb22-135"><a href="#cb22-135"></a><span class="in">@a              " Execute macro 'a'</span></span>
+<span id="cb22-136"><a href="#cb22-136"></a><span class="in">@@              " Repeat last macro</span></span>
+<span id="cb22-137"><a href="#cb22-137"></a><span class="in">5@a             " Execute macro 'a' 5 times</span></span>
+<span id="cb22-138"><a href="#cb22-138"></a><span class="in">```</span></span>
+<span id="cb22-139"><a href="#cb22-139"></a></span>
+<span id="cb22-140"><a href="#cb22-140"></a><span class="fu">### Advanced Registers</span></span>
+<span id="cb22-141"><a href="#cb22-141"></a><span class="in">```vim</span></span>
+<span id="cb22-142"><a href="#cb22-142"></a><span class="in">" Named registers</span></span>
+<span id="cb22-143"><a href="#cb22-143"></a><span class="in">"ayy            " Yank line to register 'a'</span></span>
+<span id="cb22-144"><a href="#cb22-144"></a><span class="in">"ap             " Paste from register 'a'</span></span>
+<span id="cb22-145"><a href="#cb22-145"></a><span class="in">:registers      " View all registers</span></span>
+<span id="cb22-146"><a href="#cb22-146"></a></span>
+<span id="cb22-147"><a href="#cb22-147"></a><span class="in">" System clipboard</span></span>
+<span id="cb22-148"><a href="#cb22-148"></a><span class="in">"+y             " Yank to system clipboard</span></span>
+<span id="cb22-149"><a href="#cb22-149"></a><span class="in">"+p             " Paste from system clipboard</span></span>
+<span id="cb22-150"><a href="#cb22-150"></a><span class="in">```</span></span>
+<span id="cb22-151"><a href="#cb22-151"></a></span>
+<span id="cb22-152"><a href="#cb22-152"></a><span class="fu">### Complex Text Transformations</span></span>
+<span id="cb22-153"><a href="#cb22-153"></a><span class="in">```vim</span></span>
+<span id="cb22-154"><a href="#cb22-154"></a><span class="in">" Sort lines</span></span>
+<span id="cb22-155"><a href="#cb22-155"></a><span class="in">:sort           " Sort selected lines</span></span>
+<span id="cb22-156"><a href="#cb22-156"></a><span class="in">:sort u         " Sort and remove duplicates</span></span>
+<span id="cb22-157"><a href="#cb22-157"></a><span class="in">:sort n         " Numeric sort</span></span>
+<span id="cb22-158"><a href="#cb22-158"></a></span>
+<span id="cb22-159"><a href="#cb22-159"></a><span class="in">" Number sequences</span></span>
+<span id="cb22-160"><a href="#cb22-160"></a><span class="in">Ctrl-a          " Increment number</span></span>
+<span id="cb22-161"><a href="#cb22-161"></a><span class="in">Ctrl-x          " Decrement number</span></span>
+<span id="cb22-162"><a href="#cb22-162"></a><span class="in">g Ctrl-a        " Increment sequence in visual block</span></span>
+<span id="cb22-163"><a href="#cb22-163"></a><span class="in">```</span></span>
+<span id="cb22-164"><a href="#cb22-164"></a></span>
+<span id="cb22-165"><a href="#cb22-165"></a><span class="fu">## Vim Scripting and Customization</span></span>
+<span id="cb22-166"><a href="#cb22-166"></a></span>
+<span id="cb22-167"><a href="#cb22-167"></a><span class="fu">### Custom Key Mappings</span></span>
+<span id="cb22-168"><a href="#cb22-168"></a><span class="in">```vim</span></span>
+<span id="cb22-169"><a href="#cb22-169"></a><span class="in">" Custom mappings in .vimrc</span></span>
+<span id="cb22-170"><a href="#cb22-170"></a><span class="in">nnoremap &lt;leader&gt;w :w&lt;CR&gt;</span></span>
+<span id="cb22-171"><a href="#cb22-171"></a><span class="in">nnoremap &lt;leader&gt;q :q&lt;CR&gt;</span></span>
+<span id="cb22-172"><a href="#cb22-172"></a><span class="in">nnoremap &lt;leader&gt;f :FZF&lt;CR&gt;</span></span>
+<span id="cb22-173"><a href="#cb22-173"></a><span class="in">nnoremap &lt;leader&gt;t :NERDTreeToggle&lt;CR&gt;</span></span>
+<span id="cb22-174"><a href="#cb22-174"></a></span>
+<span id="cb22-175"><a href="#cb22-175"></a><span class="in">" Function keys</span></span>
+<span id="cb22-176"><a href="#cb22-176"></a><span class="in">nnoremap &lt;F2&gt; :set number!&lt;CR&gt;</span></span>
+<span id="cb22-177"><a href="#cb22-177"></a><span class="in">nnoremap &lt;F3&gt; :set paste!&lt;CR&gt;</span></span>
+<span id="cb22-178"><a href="#cb22-178"></a><span class="in">```</span></span>
+<span id="cb22-179"><a href="#cb22-179"></a></span>
+<span id="cb22-180"><a href="#cb22-180"></a><span class="fu">### Custom Functions</span></span>
+<span id="cb22-181"><a href="#cb22-181"></a><span class="in">```vim</span></span>
+<span id="cb22-182"><a href="#cb22-182"></a><span class="in">" Custom function in .vimrc</span></span>
+<span id="cb22-183"><a href="#cb22-183"></a><span class="in">function! ToggleBackground()</span></span>
+<span id="cb22-184"><a href="#cb22-184"></a><span class="in">    if &amp;background == 'dark'</span></span>
+<span id="cb22-185"><a href="#cb22-185"></a><span class="in">        set background=light</span></span>
+<span id="cb22-186"><a href="#cb22-186"></a><span class="in">    else</span></span>
+<span id="cb22-187"><a href="#cb22-187"></a><span class="in">        set background=dark</span></span>
+<span id="cb22-188"><a href="#cb22-188"></a><span class="in">    endif</span></span>
+<span id="cb22-189"><a href="#cb22-189"></a><span class="in">endfunction</span></span>
+<span id="cb22-190"><a href="#cb22-190"></a></span>
+<span id="cb22-191"><a href="#cb22-191"></a><span class="in">nnoremap &lt;leader&gt;bg :call ToggleBackground()&lt;CR&gt;</span></span>
+<span id="cb22-192"><a href="#cb22-192"></a><span class="in">```</span></span>
+<span id="cb22-193"><a href="#cb22-193"></a></span>
+<span id="cb22-194"><a href="#cb22-194"></a><span class="fu">### Advanced Settings</span></span>
+<span id="cb22-195"><a href="#cb22-195"></a><span class="in">```vim</span></span>
+<span id="cb22-196"><a href="#cb22-196"></a><span class="in">" Performance optimizations</span></span>
+<span id="cb22-197"><a href="#cb22-197"></a><span class="in">set lazyredraw          " Don't redraw during macros</span></span>
+<span id="cb22-198"><a href="#cb22-198"></a><span class="in">set ttyfast             " Fast terminal connection</span></span>
+<span id="cb22-199"><a href="#cb22-199"></a><span class="in">set synmaxcol=200       " Limit syntax highlighting</span></span>
+<span id="cb22-200"><a href="#cb22-200"></a></span>
+<span id="cb22-201"><a href="#cb22-201"></a><span class="in">" Advanced editing</span></span>
+<span id="cb22-202"><a href="#cb22-202"></a><span class="in">set undofile            " Persistent undo</span></span>
+<span id="cb22-203"><a href="#cb22-203"></a><span class="in">set undodir=~/.vim/undo " Undo directory</span></span>
+<span id="cb22-204"><a href="#cb22-204"></a><span class="in">set backupdir=~/.vim/backup " Backup directory</span></span>
+<span id="cb22-205"><a href="#cb22-205"></a><span class="in">```</span></span>
+<span id="cb22-206"><a href="#cb22-206"></a></span>
+<span id="cb22-207"><a href="#cb22-207"></a><span class="fu">## Project-Level Workflows</span></span>
+<span id="cb22-208"><a href="#cb22-208"></a></span>
+<span id="cb22-209"><a href="#cb22-209"></a><span class="fu">### Session Management</span></span>
+<span id="cb22-210"><a href="#cb22-210"></a><span class="in">```vim</span></span>
+<span id="cb22-211"><a href="#cb22-211"></a><span class="in">" Save session</span></span>
+<span id="cb22-212"><a href="#cb22-212"></a><span class="in">:mksession! project.vim</span></span>
+<span id="cb22-213"><a href="#cb22-213"></a></span>
+<span id="cb22-214"><a href="#cb22-214"></a><span class="in">" Load session</span></span>
+<span id="cb22-215"><a href="#cb22-215"></a><span class="in">:source project.vim</span></span>
+<span id="cb22-216"><a href="#cb22-216"></a><span class="in">vim -S project.vim</span></span>
+<span id="cb22-217"><a href="#cb22-217"></a><span class="in">```</span></span>
+<span id="cb22-218"><a href="#cb22-218"></a></span>
+<span id="cb22-219"><a href="#cb22-219"></a><span class="fu">### Buffer Management</span></span>
+<span id="cb22-220"><a href="#cb22-220"></a><span class="in">```vim</span></span>
+<span id="cb22-221"><a href="#cb22-221"></a><span class="in">" Buffer operations</span></span>
+<span id="cb22-222"><a href="#cb22-222"></a><span class="in">:ls             " List buffers</span></span>
+<span id="cb22-223"><a href="#cb22-223"></a><span class="in">:b filename     " Switch to buffer</span></span>
+<span id="cb22-224"><a href="#cb22-224"></a><span class="in">:bd             " Delete buffer</span></span>
+<span id="cb22-225"><a href="#cb22-225"></a><span class="in">:bn / :bp       " Next/previous buffer</span></span>
+<span id="cb22-226"><a href="#cb22-226"></a><span class="in">```</span></span>
+<span id="cb22-227"><a href="#cb22-227"></a></span>
+<span id="cb22-228"><a href="#cb22-228"></a><span class="fu">### Quickfix and Location Lists</span></span>
+<span id="cb22-229"><a href="#cb22-229"></a><span class="in">```vim</span></span>
+<span id="cb22-230"><a href="#cb22-230"></a><span class="in">" Quickfix operations</span></span>
+<span id="cb22-231"><a href="#cb22-231"></a><span class="in">:copen          " Open quickfix window</span></span>
+<span id="cb22-232"><a href="#cb22-232"></a><span class="in">:cnext / :cprev " Navigate quickfix items</span></span>
+<span id="cb22-233"><a href="#cb22-233"></a><span class="in">:cclose         " Close quickfix window</span></span>
+<span id="cb22-234"><a href="#cb22-234"></a></span>
+<span id="cb22-235"><a href="#cb22-235"></a><span class="in">" Location list</span></span>
+<span id="cb22-236"><a href="#cb22-236"></a><span class="in">:lopen          " Open location list</span></span>
+<span id="cb22-237"><a href="#cb22-237"></a><span class="in">:lnext / :lprev " Navigate location items</span></span>
+<span id="cb22-238"><a href="#cb22-238"></a><span class="in">```</span></span>
+<span id="cb22-239"><a href="#cb22-239"></a></span>
+<span id="cb22-240"><a href="#cb22-240"></a><span class="fu">## Advanced Search and Replace</span></span>
+<span id="cb22-241"><a href="#cb22-241"></a></span>
+<span id="cb22-242"><a href="#cb22-242"></a><span class="fu">### Regex Mastery</span></span>
+<span id="cb22-243"><a href="#cb22-243"></a><span class="in">```vim</span></span>
+<span id="cb22-244"><a href="#cb22-244"></a><span class="in">" Advanced patterns</span></span>
+<span id="cb22-245"><a href="#cb22-245"></a><span class="in">:%s/\v(\w+)\s+(\w+)/\2, \1/g    " Swap words</span></span>
+<span id="cb22-246"><a href="#cb22-246"></a><span class="in">:%s/\v&lt;(\w+)&gt;/\U\1/g            " Uppercase words</span></span>
+<span id="cb22-247"><a href="#cb22-247"></a><span class="in">:%s/\v^(.{80}).*/\1/g           " Truncate lines to 80 chars</span></span>
+<span id="cb22-248"><a href="#cb22-248"></a><span class="in">```</span></span>
+<span id="cb22-249"><a href="#cb22-249"></a></span>
+<span id="cb22-250"><a href="#cb22-250"></a><span class="fu">### Multi-file Operations</span></span>
+<span id="cb22-251"><a href="#cb22-251"></a><span class="in">```vim</span></span>
+<span id="cb22-252"><a href="#cb22-252"></a><span class="in">" Search across files</span></span>
+<span id="cb22-253"><a href="#cb22-253"></a><span class="in">:vimgrep /pattern/ **/*.py      " Search in Python files</span></span>
+<span id="cb22-254"><a href="#cb22-254"></a><span class="in">:copen                          " Open results in quickfix</span></span>
+<span id="cb22-255"><a href="#cb22-255"></a></span>
+<span id="cb22-256"><a href="#cb22-256"></a><span class="in">" Replace across files</span></span>
+<span id="cb22-257"><a href="#cb22-257"></a><span class="in">:argdo %s/old/new/ge | update   " Replace in all args</span></span>
+<span id="cb22-258"><a href="#cb22-258"></a><span class="in">:bufdo %s/old/new/ge | update   " Replace in all buffers</span></span>
+<span id="cb22-259"><a href="#cb22-259"></a><span class="in">```</span></span>
+<span id="cb22-260"><a href="#cb22-260"></a></span>
+<span id="cb22-261"><a href="#cb22-261"></a><span class="fu">## Integration with External Tools</span></span>
+<span id="cb22-262"><a href="#cb22-262"></a></span>
+<span id="cb22-263"><a href="#cb22-263"></a><span class="fu">### Compiler Integration</span></span>
+<span id="cb22-264"><a href="#cb22-264"></a><span class="in">```vim</span></span>
+<span id="cb22-265"><a href="#cb22-265"></a><span class="in">" Set compiler</span></span>
+<span id="cb22-266"><a href="#cb22-266"></a><span class="in">:compiler gcc</span></span>
+<span id="cb22-267"><a href="#cb22-267"></a><span class="in">:make           " Run make</span></span>
+<span id="cb22-268"><a href="#cb22-268"></a><span class="in">:copen          " View errors</span></span>
+<span id="cb22-269"><a href="#cb22-269"></a></span>
+<span id="cb22-270"><a href="#cb22-270"></a><span class="in">" Custom compiler</span></span>
+<span id="cb22-271"><a href="#cb22-271"></a><span class="in">autocmd FileType python setlocal makeprg=python\ %</span></span>
+<span id="cb22-272"><a href="#cb22-272"></a><span class="in">```</span></span>
+<span id="cb22-273"><a href="#cb22-273"></a></span>
+<span id="cb22-274"><a href="#cb22-274"></a><span class="fu">### Terminal Integration</span></span>
+<span id="cb22-275"><a href="#cb22-275"></a><span class="in">```vim</span></span>
+<span id="cb22-276"><a href="#cb22-276"></a><span class="in">" Terminal (Vim 8+/Neovim)</span></span>
+<span id="cb22-277"><a href="#cb22-277"></a><span class="in">:terminal       " Open terminal</span></span>
+<span id="cb22-278"><a href="#cb22-278"></a><span class="in">:!command       " Run external command</span></span>
+<span id="cb22-279"><a href="#cb22-279"></a><span class="in">:r !command     " Read command output</span></span>
+<span id="cb22-280"><a href="#cb22-280"></a><span class="in">```</span></span>
+<span id="cb22-281"><a href="#cb22-281"></a></span>
+<span id="cb22-282"><a href="#cb22-282"></a><span class="fu">## Performance Optimization</span></span>
+<span id="cb22-283"><a href="#cb22-283"></a></span>
+<span id="cb22-284"><a href="#cb22-284"></a><span class="fu">### Profiling Vim</span></span>
+<span id="cb22-285"><a href="#cb22-285"></a><span class="in">```vim</span></span>
+<span id="cb22-286"><a href="#cb22-286"></a><span class="in">" Profile startup</span></span>
+<span id="cb22-287"><a href="#cb22-287"></a><span class="in">vim --startuptime startup.log</span></span>
+<span id="cb22-288"><a href="#cb22-288"></a></span>
+<span id="cb22-289"><a href="#cb22-289"></a><span class="in">" Profile runtime</span></span>
+<span id="cb22-290"><a href="#cb22-290"></a><span class="in">:profile start profile.log</span></span>
+<span id="cb22-291"><a href="#cb22-291"></a><span class="in">:profile func *</span></span>
+<span id="cb22-292"><a href="#cb22-292"></a><span class="in">:profile file *</span></span>
+<span id="cb22-293"><a href="#cb22-293"></a><span class="in">" [do operations]</span></span>
+<span id="cb22-294"><a href="#cb22-294"></a><span class="in">:profile pause</span></span>
+<span id="cb22-295"><a href="#cb22-295"></a><span class="in">:noautocmd qall!</span></span>
+<span id="cb22-296"><a href="#cb22-296"></a><span class="in">```</span></span>
+<span id="cb22-297"><a href="#cb22-297"></a></span>
+<span id="cb22-298"><a href="#cb22-298"></a><span class="fu">### Optimization Techniques</span></span>
+<span id="cb22-299"><a href="#cb22-299"></a><span class="in">```vim</span></span>
+<span id="cb22-300"><a href="#cb22-300"></a><span class="in">" Lazy loading plugins</span></span>
+<span id="cb22-301"><a href="#cb22-301"></a><span class="in">Plug 'plugin/name', { 'on': 'Command' }</span></span>
+<span id="cb22-302"><a href="#cb22-302"></a><span class="in">Plug 'plugin/name', { 'for': 'filetype' }</span></span>
+<span id="cb22-303"><a href="#cb22-303"></a></span>
+<span id="cb22-304"><a href="#cb22-304"></a><span class="in">" Disable unused features</span></span>
+<span id="cb22-305"><a href="#cb22-305"></a><span class="in">let g:loaded_netrw = 1      " Disable netrw</span></span>
+<span id="cb22-306"><a href="#cb22-306"></a><span class="in">let g:loaded_matchparen = 1 " Disable match paren</span></span>
+<span id="cb22-307"><a href="#cb22-307"></a><span class="in">```</span></span>
+<span id="cb22-308"><a href="#cb22-308"></a></span>
+<span id="cb22-309"><a href="#cb22-309"></a><span class="fu">## Advanced Debugging</span></span>
+<span id="cb22-310"><a href="#cb22-310"></a></span>
+<span id="cb22-311"><a href="#cb22-311"></a><span class="fu">### Debugging Vim Configuration</span></span>
+<span id="cb22-312"><a href="#cb22-312"></a><span class="in">```vim</span></span>
+<span id="cb22-313"><a href="#cb22-313"></a><span class="in">" Check option values</span></span>
+<span id="cb22-314"><a href="#cb22-314"></a><span class="in">:set option?            " Check option value</span></span>
+<span id="cb22-315"><a href="#cb22-315"></a><span class="in">:verbose set option?    " Check where option was set</span></span>
+<span id="cb22-316"><a href="#cb22-316"></a><span class="in">:scriptnames           " List loaded scripts</span></span>
+<span id="cb22-317"><a href="#cb22-317"></a><span class="in">```</span></span>
+<span id="cb22-318"><a href="#cb22-318"></a></span>
+<span id="cb22-319"><a href="#cb22-319"></a><span class="fu">### Plugin Debugging</span></span>
+<span id="cb22-320"><a href="#cb22-320"></a><span class="in">```vim</span></span>
+<span id="cb22-321"><a href="#cb22-321"></a><span class="in">" Disable plugins temporarily</span></span>
+<span id="cb22-322"><a href="#cb22-322"></a><span class="in">vim --noplugin</span></span>
+<span id="cb22-323"><a href="#cb22-323"></a><span class="in">vim -u NONE            " No configuration</span></span>
+<span id="cb22-324"><a href="#cb22-324"></a><span class="in">vim -u minimal.vimrc   " Minimal configuration</span></span>
+<span id="cb22-325"><a href="#cb22-325"></a><span class="in">```</span></span>
+<span id="cb22-326"><a href="#cb22-326"></a></span>
+<span id="cb22-327"><a href="#cb22-327"></a><span class="fu">## The Path to Mastery</span></span>
+<span id="cb22-328"><a href="#cb22-328"></a></span>
+<span id="cb22-329"><a href="#cb22-329"></a><span class="fu">### Continuous Learning</span></span>
+<span id="cb22-330"><a href="#cb22-330"></a><span class="ss">1. </span>**Read the manual**: <span class="in">`:help`</span> is your friend</span>
+<span id="cb22-331"><a href="#cb22-331"></a><span class="ss">2. </span>**Follow Vim communities**: Reddit, Stack Overflow, blogs</span>
+<span id="cb22-332"><a href="#cb22-332"></a><span class="ss">3. </span>**Watch experts**: Screencasts and conference talks</span>
+<span id="cb22-333"><a href="#cb22-333"></a><span class="ss">4. </span>**Practice regularly**: Use Vim for everything</span>
+<span id="cb22-334"><a href="#cb22-334"></a><span class="ss">5. </span>**Contribute**: Share your knowledge and plugins</span>
+<span id="cb22-335"><a href="#cb22-335"></a></span>
+<span id="cb22-336"><a href="#cb22-336"></a><span class="fu">### Building Your Vim Environment</span></span>
+<span id="cb22-337"><a href="#cb22-337"></a><span class="ss">1. </span>**Start simple**: Don't over-configure initially</span>
+<span id="cb22-338"><a href="#cb22-338"></a><span class="ss">2. </span>**Add incrementally**: One plugin at a time</span>
+<span id="cb22-339"><a href="#cb22-339"></a><span class="ss">3. </span>**Understand everything**: Don't cargo-cult configurations</span>
+<span id="cb22-340"><a href="#cb22-340"></a><span class="ss">4. </span>**Backup regularly**: Version control your dotfiles</span>
+<span id="cb22-341"><a href="#cb22-341"></a><span class="ss">5. </span>**Document your choices**: Comment your vimrc</span>
+<span id="cb22-342"><a href="#cb22-342"></a></span>
+<span id="cb22-343"><a href="#cb22-343"></a><span class="fu">### Advanced Practice Projects</span></span>
+<span id="cb22-344"><a href="#cb22-344"></a><span class="ss">1. </span>**Create a plugin**: Solve a problem you have</span>
+<span id="cb22-345"><a href="#cb22-345"></a><span class="ss">2. </span>**Contribute to existing plugins**: Fix bugs, add features</span>
+<span id="cb22-346"><a href="#cb22-346"></a><span class="ss">3. </span>**Write Vim scripts**: Automate repetitive tasks</span>
+<span id="cb22-347"><a href="#cb22-347"></a><span class="ss">4. </span>**Customize for your workflow**: Language-specific setups</span>
+<span id="cb22-348"><a href="#cb22-348"></a><span class="ss">5. </span>**Share your knowledge**: Blog, teach, mentor</span>
+<span id="cb22-349"><a href="#cb22-349"></a></span>
+<span id="cb22-350"><a href="#cb22-350"></a><span class="fu">## The Vim Philosophy</span></span>
+<span id="cb22-351"><a href="#cb22-351"></a></span>
+<span id="cb22-352"><a href="#cb22-352"></a><span class="fu">### Why the 80% Matters</span></span>
+<span id="cb22-353"><a href="#cb22-353"></a>While the 20% gets you productive, the 80% makes you:</span>
+<span id="cb22-354"><a href="#cb22-354"></a><span class="ss">- </span>**Truly efficient**: Every keystroke has purpose</span>
+<span id="cb22-355"><a href="#cb22-355"></a><span class="ss">- </span>**Language agnostic**: Vim works with any language</span>
+<span id="cb22-356"><a href="#cb22-356"></a><span class="ss">- </span>**Environment independent**: SSH, containers, servers</span>
+<span id="cb22-357"><a href="#cb22-357"></a><span class="ss">- </span>**Endlessly customizable**: Adapt to any workflow</span>
+<span id="cb22-358"><a href="#cb22-358"></a><span class="ss">- </span>**Future-proof**: Skills that last decades</span>
+<span id="cb22-359"><a href="#cb22-359"></a></span>
+<span id="cb22-360"><a href="#cb22-360"></a><span class="fu">### The Continuous Journey</span></span>
+<span id="cb22-361"><a href="#cb22-361"></a>Vim mastery is not a destination but a journey. Every day you'll discover new techniques, better workflows, and more elegant solutions. The 80% is vast and deep, offering endless opportunities for growth.</span>
+<span id="cb22-362"><a href="#cb22-362"></a></span>
+<span id="cb22-363"><a href="#cb22-363"></a><span class="fu">## Your Next Steps</span></span>
+<span id="cb22-364"><a href="#cb22-364"></a></span>
+<span id="cb22-365"><a href="#cb22-365"></a><span class="ss">1. </span>**Choose your first advanced topic**: Pick one area that interests you most</span>
+<span id="cb22-366"><a href="#cb22-366"></a><span class="ss">2. </span>**Set up a practice environment**: Dedicated Vim configuration for learning</span>
+<span id="cb22-367"><a href="#cb22-367"></a><span class="ss">3. </span>**Join the community**: Find others on the same journey</span>
+<span id="cb22-368"><a href="#cb22-368"></a><span class="ss">4. </span>**Start teaching**: Share what you learn with others</span>
+<span id="cb22-369"><a href="#cb22-369"></a><span class="ss">5. </span>**Never stop exploring**: The Vim ecosystem is always evolving</span>
+<span id="cb22-370"><a href="#cb22-370"></a></span>
+<span id="cb22-371"><a href="#cb22-371"></a><span class="fu">## Final Thoughts</span></span>
+<span id="cb22-372"><a href="#cb22-372"></a></span>
+<span id="cb22-373"><a href="#cb22-373"></a>You've completed the essential journey from Vim novice to competent user. The advanced realm awaits with its infinite possibilities. Remember:</span>
+<span id="cb22-374"><a href="#cb22-374"></a></span>
+<span id="cb22-375"><a href="#cb22-375"></a><span class="ss">- </span>**Master the basics first**: The 20% is your foundation</span>
+<span id="cb22-376"><a href="#cb22-376"></a><span class="ss">- </span>**Learn incrementally**: Don't try to absorb everything at once</span>
+<span id="cb22-377"><a href="#cb22-377"></a><span class="ss">- </span>**Practice consistently**: Regular use builds muscle memory</span>
+<span id="cb22-378"><a href="#cb22-378"></a><span class="ss">- </span>**Stay curious**: There's always more to discover</span>
+<span id="cb22-379"><a href="#cb22-379"></a><span class="ss">- </span>**Help others**: Teaching reinforces your own learning</span>
+<span id="cb22-380"><a href="#cb22-380"></a></span>
+<span id="cb22-381"><a href="#cb22-381"></a>Welcome to the advanced Vim community. You now have the tools to shape Vim into whatever you need it to be. The only limit is your imagination.</span>
+<span id="cb22-382"><a href="#cb22-382"></a></span>
+<span id="cb22-383"><a href="#cb22-383"></a>---</span>
+<span id="cb22-384"><a href="#cb22-384"></a></span>
+<span id="cb22-385"><a href="#cb22-385"></a>*Congratulations on completing the Vim Mastery series! You now possess the knowledge to edit text at the speed of thought and the foundation to explore Vim's infinite possibilities.* </span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div></div></div></div></div>
+</div> <!-- /content -->
+
+
+
+<script src="../../../site_libs/quarto-html/zenscroll-min.js"></script>
+</body></html>

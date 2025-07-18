@@ -4,7 +4,7 @@ description: "Learn to work with multiple files, tabs, splits, and buffers in Vi
 author: "Hasan"
 date: last-modified
 categories: [vim, buffers, files, tabs, splits, workflow]
-image: "https://images.unsplash.com/photo-1464983953574-0892a716854b?ixlib=rb-4.0.3&auto=format&fit=crop&w=2000&q=80"
+image: "images/vim.png"
 toc: true
 ---
 
