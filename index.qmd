@@ -1,5 +1,6 @@
 ---
-title: "DS notes"
+title: "Hasan Goni"
+subtitle: "Notes on computer vision, machine learning, and the tools behind them"
 listing:
   contents: posts
   sort: "date desc"
@@ -11,4 +12,6 @@ page-layout: full
 title-block-banner: true
 ---
 
-
+Computer vision, applied ML, and practical tooling — written up as I use it, mostly in series
+rather than one-off posts. Start with a [series](posts/series/computer-vision-foundations.qmd)
+or browse everything below.

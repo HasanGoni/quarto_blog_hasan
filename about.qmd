@@ -16,4 +16,13 @@ about:
 
 ---
 
-This is more about my notes. I am inthusiast about machine learning
+I'm Hasan Goni, a machine learning engineer working on computer vision for industrial and
+manufacturing applications — defect detection, segmentation, and anomaly detection on real
+production data.
+
+This blog is where I write up the concepts, tools, and techniques I use day to day, usually as
+multi-part series rather than one-off posts: computer vision foundations, anomaly detection,
+vision-language models, and the command-line/HPC workflows that make the rest of it practical.
+
+I'm sharing this partly to keep my own notes straight, and partly because writing things down
+clearly is the best test of whether I actually understand them.
