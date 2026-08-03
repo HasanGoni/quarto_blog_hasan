@@ -40,13 +40,13 @@ Following Jeremy Howard's fastai approach:
 7. [**File Transfer Mastery**](command-line-mastery/07-file-transfer.qmd) - Moving millions of files efficiently (rsync, scp, and more)
 
 ### ⚡ **Phase 4: Parallel Processing Power**
-8. [**Background Jobs and Process Control**](command-line-mastery/08-process-control.qmd) - Managing multiple tasks simultaneously
+8. [**Environment Mastery**](command-line-mastery/08-environment-mastery.qmd) - Customizing your shell environment and variables
 9. [**HPC Job Scheduling with bsub**](command-line-mastery/09-hpc-job-scheduling.qmd) - Mastering cluster job submission
-10. [**Parallel Processing Patterns**](command-line-mastery/10-parallel-patterns.qmd) - GNU parallel and advanced techniques
+10. [**Parallel Processing Power**](command-line-mastery/10-parallel-processing.qmd) - GNU parallel and advanced techniques
 
 ### 🛠️ **Phase 5: Automation and Scripting**
 11. [**Bash Scripting Essentials**](command-line-mastery/11-bash-scripting.qmd) - Automating repetitive tasks
-12. [**Advanced Scripting Patterns**](command-line-mastery/12-advanced-scripting.qmd) - Error handling, logging, and robust scripts
+12. [**Automation Excellence**](command-line-mastery/12-automation-excellence.qmd) - Error handling, logging, and robust scripts
 
 ## What You'll Master
 

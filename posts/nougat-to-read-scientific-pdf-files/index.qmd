@@ -5,13 +5,6 @@ date: "2023-10-21"
 categories: [Nlp, Research paper, Text]
 author: "Hasan Goni"
 
-listing:
-  sort: "date desc"
-  contents: "posts"
-  sort-ui: false
-  filter-ui: false
-  categories: true
-   
 page-layout: full
 image: "image.png"
 ---

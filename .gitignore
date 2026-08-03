@@ -3,3 +3,6 @@
 /_freeze/
 .jupyter_cache/
 __pycache__/
+/.venv-quarto/
+
+**/*.quarto_ipynb

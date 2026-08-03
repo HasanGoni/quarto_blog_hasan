@@ -5,13 +5,6 @@ date: "2022-11-21"
 categories: [code, tabular, analysis]
 author: "Hasan Goni"
 
-listing:
-  sort: "date desc"
-  contents: "posts"
-  sort-ui: false
-  filter-ui: false
-  categories: true
-   
 page-layout: full
 image: "anonymized_data.png"
 ---

@@ -1,7 +1,7 @@
 ---
 title: "Tools Series"
 description: "A series exploring modern Python development tools for productivity, reproducibility, and speed."
-author: "Your Name"
+author: "Hasan Goni"
 date: 2024-05-10
 categories: [series, tools, python, development]
 series:
@@ -17,6 +17,6 @@ This series highlights the best modern tools for Python developers, with a focus
 
 ## Posts in this Series
 
-- [UV: A Bolt of Lightning for Python Packaging](uv.qmd)
+- [UV: Python Packaging, Reimagined (and Lightning Fast)](uv2.qmd)
 
 <!-- Add more tools posts here as the series grows --> 
