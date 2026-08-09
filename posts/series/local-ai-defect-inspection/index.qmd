@@ -1,0 +1,43 @@
+---
+title: "Local-AI Defect Inspection Series"
+description: "Testing small, local vision-language models against real industrial defect imagery — semiconductor, casting, wafer — and being honest about where they break."
+author: "Hasan Goni"
+date: last-modified
+categories: [series, computer-vision, VLM, semiconductor, edge-ai]
+image: images/gdxray-box-sanity-check.png
+toc: true
+---
+
+## Series Overview
+
+I run local-AI experiments on real industrial defect-inspection imagery — semiconductor,
+casting X-ray, wafer maps — and post them in public, LinkedIn-first, with the full technical
+detail (code, numbers, failure cases) landing here. The goal isn't a highlight reel: every post
+ends with an honest limitation, not just a win.
+
+The recurring question behind the series: **how far does a model that's never seen this kind of
+imagery actually get, and what does it take to close the gap for real use?**
+
+### Posts in this series
+
+1. **Part 1** — MODUS (EPFL's any-to-any multimodal model) on real casting crack/void images.
+   [LinkedIn post](#) — general multimodal models read a defect X-ray as a generic
+   "bearing/mechanical component"; no domain fine-tuning.
+2. **Part 2** — Zero-shot benchmark: Opus, Sonnet, and three small local VLMs (LFM2-VL-450M,
+   Qwen2.5-VL-3B, Cosmos-Reason2-2B) classifying WM-811K wafer maps blind. [LinkedIn post](#) —
+   frontier models scored 7-8/9; local VLMs scored 1-2/9, mostly by riding one default answer
+   regardless of the image.
+3. **Part 3** — [Fine-Tuning LFM2-VL-450M for X-ray Defect Detection and Localization](03-finetuning-lfm2-vl-xray-defects.qmd)
+   — this post. LoRA fine-tuning on real GDXray casting X-ray images, targeting both *is there a
+   defect* and *where is it*, with Outlines-constrained structured generation. Detection improved;
+   localization never did — and I show exactly why.
+
+## Tools used throughout
+
+- Local inference on a DGX Spark (GB10, unified memory) — no cloud GPU rental
+- HuggingFace `transformers` + `peft` for models and LoRA
+- [Outlines](https://github.com/dottxt-ai/outlines) for schema-constrained generation
+- Real, licensed datasets with ground truth (GDXray, WM-811K) — no synthetic labels, no invented
+  ground truth
+
+Code for every post is public. Links inline.

@@ -24,6 +24,8 @@ website:
             file: posts/series/vlm.qmd
           - text: "Anomaly Detection"
             file: posts/series/anomaly-detection/index.qmd
+          - text: "Local-AI Defect Inspection"
+            file: posts/series/local-ai-defect-inspection/index.qmd
       - text: "Categories"
         file: categories.qmd
       - text: "Tags"
@@ -120,6 +122,14 @@ website:
             href: posts/series/vlm.qmd
           - text: "Qwen3-14B"
             href: posts/series/vlm-qwen3-14b/index.qmd
+      - section: "Local-AI Defect Inspection"
+        collapse: true
+        collapsed: true
+        contents:
+          - text: "Introduction"
+            href: posts/series/local-ai-defect-inspection/index.qmd
+          - text: "3. Fine-Tuning LFM2-VL for X-ray Defects"
+            href: posts/series/local-ai-defect-inspection/03-finetuning-lfm2-vl-xray-defects.qmd
 
 format:
   html:
