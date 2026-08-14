@@ -28,9 +28,13 @@ imagery actually get, and what does it take to close the gap for real use?**
    frontier models scored 7-8/9; local VLMs scored 1-2/9, mostly by riding one default answer
    regardless of the image.
 3. **Part 3** — [Fine-Tuning LFM2-VL-450M for X-ray Defect Detection and Localization](03-finetuning-lfm2-vl-xray-defects.qmd)
-   — this post. LoRA fine-tuning on real GDXray casting X-ray images, targeting both *is there a
+   LoRA fine-tuning on real GDXray casting X-ray images, targeting both *is there a
    defect* and *where is it*, with Outlines-constrained structured generation. Detection improved;
    localization never did — and I show exactly why.
+4. **Part 4** — [Fine-Tuning LFM2.5-VL-3B — Does the Grounding Upgrade Actually Help?](04-finetuning-lfm25-vl-xray-defects.qmd)
+   — this post. Same task, dataset, and eval split as Part 3, testing Liquid AI's newer,
+   grounding-improved 3B model. Detection improved again; localization still didn't work, but
+   failed in a more specific way — plausible box *size*, near-random box *position*.
 
 ## Tools used throughout
 
