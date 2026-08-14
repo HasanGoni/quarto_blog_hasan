@@ -4,5 +4,7 @@
 .jupyter_cache/
 __pycache__/
 /.venv-quarto/
+/.venv-boogu/
+/.model_cache/
 
 **/*.quarto_ipynb
