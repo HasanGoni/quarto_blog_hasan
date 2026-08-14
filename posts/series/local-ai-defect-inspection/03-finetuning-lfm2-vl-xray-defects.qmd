@@ -22,16 +22,20 @@ This post is part of the [Local-AI Defect Inspection Series](index.qmd). Full co
 ## Where this picks up
 
 [Part 2](index.qmd) ended with local VLMs failing hard at zero-shot wafer-defect classification —
-1-2/9, mostly by picking one default answer and riding it regardless of what was on screen. The
-obvious next question: does fine-tuning actually close that gap, or does a 450M model just learn
-a *different* shortcut?
+1-2/9, mostly by picking one default answer and riding it regardless of what was on screen. That
+result bugged me more than I expected it to. The obvious next question: does fine-tuning actually
+close that gap, or does a 450M model just learn a *different*, more sophisticated-looking
+shortcut?
 
-I decided to push further than plain classification. Instead of just "defect or not," I wanted
-LFM2-VL-450M to say **where** — a bounding box, grounded against real annotation data, evaluated
-with real IoU, not a vibe check.
+I decided to push further than plain classification, partly because "defect or not" felt like too
+easy a target to declare victory on. Instead I wanted LFM2-VL-450M to say **where** — a bounding
+box, grounded against real annotation data, evaluated with real IoU, not a vibe check where I
+squint at a prediction and decide it looks close enough.
 
 Short version: **detection got measurably better. Localization never worked, in any of the four
-configurations I tried — and I can show you exactly what it did instead.**
+configurations I tried — and I can show you exactly what it did instead.** I went in expecting a
+messier, more ambiguous result than this. What I got was cleaner and, honestly, a little more
+humbling.
 
 ## The task
 
@@ -61,12 +65,15 @@ class Detection(BaseModel):
 ```
 
 Outlines constrains decoding token-by-token so the model *cannot* emit malformed JSON — no
-retry loops, no regex parsing of free text.
+retry loops, no regex parsing of free text. This is the kind of infrastructure choice that feels
+like overkill until the first time a model hands you `{"defect": true, "boxes": [[12, 34,`  and
+you realize you'd otherwise be writing a janky recovery parser at 11pm.
 
 One deliberate scope decision: **no defect-type label** (crack vs. porosity vs. shrinkage).
-GDXray doesn't provide one — only bounding boxes. Making up type labels to make the task look
-richer would have broken the one thing that makes this series credible: every ground-truth label
-is real.
+GDXray doesn't provide one — only bounding boxes. I was tempted, briefly, to invent plausible
+type labels just to make the task look richer for this post. I didn't, because that would have
+broken the one thing that actually makes this series credible to me: every ground-truth label is
+real.
 
 ## Dataset: GDXray Castings
 
@@ -77,8 +84,8 @@ bounding-box annotations in a per-series `BoundingBox.mat`. Free for research/ed
 ### Obstacle #1: the official download is scripted-download-blocked
 
 GDXray's Dropbox links return a JS-gated interstitial to any non-browser client — curl with a
-spoofed user-agent, cookies, referer headers, none of it got past a `Dropbox - Error` page. I
-found a Kaggle mirror instead
+spoofed user-agent, cookies, referer headers, none of it got past a `Dropbox - Error` page. This
+ate more of my afternoon than I'd like to admit. I found a Kaggle mirror instead
 ([`samarthgoel2604/gdxray-without-synthetic-for-defectd`](https://www.kaggle.com/datasets/samarthgoel2604/gdxray-without-synthetic-for-defectd))
 that preserves the original per-series folder structure, pulled via `kagglehub`:
 
@@ -90,21 +97,24 @@ path = kagglehub.dataset_download("samarthgoel2604/gdxray-without-synthetic-for-
 ### Obstacle #2: the bounding-box column order is not what you'd guess
 
 `BoundingBox.mat` has one row per defect region: 5 numbers. I assumed
-`[image_index, x1, y1, x2, y2]` — the "obvious" convention. Wrong. Cross-checking against a
-reference implementation ([maxkferg/metal-defect-detection](https://github.com/maxkferg/metal-defect-detection)),
-the actual column order is `[image_index, x1, x2, y1, y2]` — **x-range then y-range**, not
+`[image_index, x1, y1, x2, y2]` — the "obvious" convention, because it's the one I've seen
+everywhere else. Wrong. Cross-checking against a reference implementation
+([maxkferg/metal-defect-detection](https://github.com/maxkferg/metal-defect-detection)), the
+actual column order is `[image_index, x1, x2, y1, y2]` — **x-range then y-range**, not
 interleaved. My first guess would have silently produced a degenerate box (`x2 < x1`) for at
-least one real annotation I checked by hand — a useful tell that something was wrong before I'd
-trained a single step on bad labels.
+least one real annotation I checked by hand — the kind of bug that doesn't crash, doesn't warn
+you, and just quietly trains the model on garbage. Small thing, but it's exactly the sort of
+mistake that would have invalidated everything downstream without ever throwing an error.
 
-I didn't just trust the reference code either — I rendered the corrected box on a real image:
+I didn't just trust the reference code either — I rendered the corrected box on a real image,
+because at this point I trust my own eyes more than either source:
 
 ![A GDXray box, rendered with the corrected `[x1,x2,y1,y2]` column order — it lands exactly on a small localized anomaly near the rim of the casting.](images/gdxray-box-sanity-check.png)
 
 ![Cropped and zoomed — the box sits precisely on the defect, not off in the background.](images/gdxray-box-sanity-crop.png){width=50%}
 
-Lesson: when a dataset format is undocumented and a reference implementation disagrees with the
-"obvious" reading, render a box on a real image before trusting either.
+Lesson I keep re-learning: when a dataset format is undocumented and a reference implementation
+disagrees with the "obvious" reading, render a box on a real image before trusting either.
 
 ### Manifest and split
 
@@ -124,8 +134,9 @@ than one defect region.
 
 Split train/eval **by series, not by image** — images within one series are highly correlated
 (same casting, adjacent rotation angles), so a naive image-level split would leak information
-between train and eval. Result: 3,313 train images (70 series) / 668 eval images (17 series),
-same seed reused across every experiment below so comparisons stay fair.
+between train and eval and quietly flatter every number in this post. I was paranoid enough about
+this to check it twice before running anything. Result: 3,313 train images (70 series) / 668 eval
+images (17 series), same seed reused across every experiment below so comparisons stay fair.
 
 ## Zero-shot baseline
 
@@ -136,15 +147,17 @@ images.
 |---|---|---|---|---|
 | Zero-shot | 26.3% | 21.0% | 100% | 0.00 |
 
-100% recall sounds great until you see the confusion matrix: the model predicted `defect: true`
-for 623 of 668 images (93.3%) — it wasn't detecting defects, it was just saying yes to nearly
-everything. And on the 131 true positives, mean IoU against ground truth was exactly **0.00** —
-zero real localization signal, zero-shot.
+100% recall sounds great for about as long as it takes to open the confusion matrix: the model
+predicted `defect: true` for 623 of 668 images (93.3%) — it wasn't detecting defects, it was just
+saying yes to nearly everything, which is a strategy but not a useful one. And on the 131 true
+positives, mean IoU against ground truth was exactly **0.00** — zero real localization signal,
+zero-shot. Not a great start, but at least an honest one.
 
-(Side note: a differently-worded plain-text prompt asking only for `defect`/`no_defect` — no
-JSON, no boxes — produced the *opposite* degenerate behavior: `no_defect` on all 668 images,
-0% recall. Prompt framing alone flipped which majority-class shortcut the model defaulted to.
-Neither framing engaged with the actual image content zero-shot.)
+(Side note, and this one genuinely amused me: a differently-worded plain-text prompt asking only
+for `defect`/`no_defect` — no JSON, no boxes — produced the *opposite* degenerate behavior:
+`no_defect` on all 668 images, 0% recall. Prompt framing alone flipped which majority-class
+shortcut the model defaulted to. Neither framing engaged with the actual image content zero-shot —
+the model just picked whichever lazy answer the prompt nudged it toward.)
 
 ## LoRA fine-tune
 
@@ -153,8 +166,9 @@ Neither framing engaged with the actual image content zero-shot.)
 Following [Liquid AI's own fine-tuning guidance](https://docs.liquid.ai/lfm/fine-tuning/trl):
 rank 16, `lora_alpha=32` (2×r). Their docs list generic target-module names for their model
 family (`q_proj, v_proj, fc1, fc2, linear, gate_proj, up_proj, down_proj`) — but half of those
-don't exist as literal module names in LFM2-VL-450M's actual architecture. I checked with
-`named_modules()` before trusting the doc:
+don't exist as literal module names in LFM2-VL-450M's actual architecture, which I only found out
+because I checked instead of copy-pasting. I checked with `named_modules()` before trusting the
+doc:
 
 ```python
 LORA_TARGET_MODULES = ["q_proj", "k_proj", "v_proj", "out_proj", "fc1", "fc2"]
@@ -170,14 +184,18 @@ def target_json(row: dict) -> str:
 ```
 
 Training the model to emit exactly what Outlines will later constrain it to, rather than
-free-text, so there's no train/eval mismatch in output format.
+free-text, so there's no train/eval mismatch in output format. Felt obvious once I'd written it,
+less obvious before — my first draft of this pipeline trained on loosely-formatted text and I had
+to backtrack.
 
 ### Label masking via prompt-prefix trick
 
 Loss should only apply to the response tokens, not the image+prompt context. Rather than parsing
-the chat template's special-token structure by hand, I exploited that the tokenized prompt is an
-exact prefix of the tokenized full conversation (image processing is deterministic regardless of
-what text follows it) — verified this holds before relying on it:
+the chat template's special-token structure by hand — which I really did not want to do — I
+exploited that the tokenized prompt is an exact prefix of the tokenized full conversation (image
+processing is deterministic regardless of what text follows it). I verified this holds before
+relying on it, because "should be true" and "is true in this specific tokenizer" are not the same
+claim:
 
 ```python
 prompt_inputs = processor(images=[img], text=prompt_text, return_tensors="pt")
@@ -190,7 +208,8 @@ labels[:, :prompt_len] = -100  # ignored by cross-entropy
 ### Class-weighted sampling
 
 Train split is 17.6% defect. Left alone, a fine-tune on this data will happily relearn "always
-say no_defect" — it's an easy 82% accuracy. Inverse-frequency weighted sampling forces roughly
+say no_defect" — it's an easy 82% accuracy, and I've watched a model take that shortcut before, so
+I wasn't going to let it happen twice. Inverse-frequency weighted sampling forces roughly
 balanced defect/no_defect exposure per epoch:
 
 ```python
@@ -203,8 +222,9 @@ sampler = WeightedRandomSampler(sample_weights, num_samples=len(train_rows), rep
 ### Obstacle #3: training instability
 
 First run (flat lr=1e-4, no schedule, 800 steps, checkpoint every 200): loss trended down
-(1.23 → 0.56) but quick-eval on a held-back 80-image subset **oscillated between collapsing to
-"always no_defect" and a more balanced state**, checkpoint to checkpoint:
+(1.23 → 0.56), which looked promising, right up until quick-eval on a held-back 80-image subset
+**oscillated between collapsing to "always no_defect" and a more balanced state**, checkpoint to
+checkpoint:
 
 | step | accuracy | recall | precision |
 |---|---|---|---|
@@ -214,13 +234,16 @@ First run (flat lr=1e-4, no schedule, 800 steps, checkpoint every 200): loss tre
 | 600 | 50.0% | 0% | — collapsed again |
 | 800 (final) | 48.75% | 12.5% | 45.5% |
 
-I added a warmup + cosine LR decay schedule (peak `lr=5e-5`, 10% warmup) and reran, checking
-every 100 steps instead of 200. **It didn't fix the oscillation** — recall still bounced
-0%→100%→12.5%→0%→32.5%→30% across the run. That ruled out "missing LR schedule" as the root
-cause and points instead at the small effective batch size (gradient-accumulated batch of 4, on
-a dataset with only ~583 real defect training examples after oversampling) producing a
-high-variance gradient estimate. Something I'd want to fix with a larger effective batch before
-trusting this recipe further.
+Watching recall bounce from 52.5% to 0% to 52.5% to 0% again across a single training run is not
+a fun way to spend an evening. I added a warmup + cosine LR decay schedule (peak `lr=5e-5`, 10%
+warmup) and reran, checking every 100 steps instead of 200, half-expecting that to fix it. **It
+didn't fix the oscillation** — recall still bounced 0%→100%→12.5%→0%→32.5%→30% across the run.
+That ruled out "missing LR schedule" as the root cause and points instead at the small effective
+batch size (gradient-accumulated batch of 4, on a dataset with only ~583 real defect training
+examples after oversampling) producing a high-variance gradient estimate. Something I'd want to
+fix with a larger effective batch before trusting this recipe further — I'm noting it here rather
+than quietly smoothing it over, because I'd want to know this if I were reading someone else's
+post.
 
 ### Results — full 668-image eval, four configurations
 
@@ -231,18 +254,20 @@ trusting this recipe further.
 | LoRA, flat lr, step 800 (final) | 75.6% | 26.5% | 13.7% | 0.00 |
 | LoRA, warmup+cosine, step 800 (final) | 66.0% | 23.9% | 33.6% | 0.00 |
 
-**Detection genuinely improved.** Zero-shot's degenerate "flag everything" (100% recall / 21%
-precision) became a real, much more balanced decision at step 400 — 58% recall at similar
-precision. Unstable across configurations, not a clean monotonic win, but real signal that the
+**Detection genuinely improved, and this is the part I'm actually pleased with.** Zero-shot's
+degenerate "flag everything" (100% recall / 21% precision) became a real, much more balanced
+decision at step 400 — 58% recall at similar precision. Unstable across configurations, not a
+clean monotonic win — I'd be lying if I called this recipe "solved" — but real signal that the
 model learned something about defect *presence*.
 
 **Localization never moved. At all. In any configuration.** Mean IoU is exactly 0.00 across
-zero-shot and all three fine-tuned checkpoints.
+zero-shot and all three fine-tuned checkpoints. Four separate runs, same dead number every time.
 
 ### I didn't just report 0.00 — I checked why
 
 A number that's *exactly* 0.00 in four separate runs is either a very clean finding or a bug in
-my eval code. Before writing this up, I pulled the raw predictions:
+my eval code, and I've been burned by the second option enough times to not just trust the first.
+Before writing this up, I pulled the raw predictions:
 
 ```
 true: [[456.0, 502.0, 489.0, 545.0]]  pred: [[0,0,0,0], [0,0,0,0], [0,0,0,0], [0,0,0,0]]
@@ -252,27 +277,31 @@ true: [[466.0, 447.0, 499.0, 483.0]]  pred: [[0,0,0,0], [0,0,0,0], [0,0,0,0], [0
 ```
 
 Every single predicted box, on every image, is `[0,0,0,0]` — regardless of where the real defect
-actually is. The fine-tuned model learned to say `"defect": true` more accurately. It never
-engaged with the harder task hiding inside the same JSON object: predicting the actual numbers.
-`[0,0,0,0]` is a cheap, constant way to reduce the coordinate-token loss without ever learning to
-regress a real value through next-token prediction — and apparently a local optimum the training
-found and kept.
+actually is. That's a genuinely funny (in a bleak way) thing to discover after a training run:
+the fine-tuned model learned to say `"defect": true` more accurately, then just... gave up on the
+harder task hiding inside the same JSON object, and found the laziest possible way to make the
+coordinate loss go down. `[0,0,0,0]` is a cheap, constant way to reduce the coordinate-token loss
+without ever learning to regress a real value through next-token prediction — and apparently a
+local optimum the training found and settled into, every time.
 
-That's a much stronger, more specific finding than "IoU was low." Detecting *that* something's
-wrong turned out to be learnable in an 800-step LoRA budget on a 450M model. Detecting *where* —
-asking a generalist small VLM to learn numeric grounding purely through text-token generation,
-from a few hundred examples — did not work once, in four attempts.
+That's a much stronger, more specific finding than "IoU was low," and honestly a more satisfying
+one to have dug up than to have just reported the number and moved on. Detecting *that*
+something's wrong turned out to be learnable in an 800-step LoRA budget on a 450M model.
+Detecting *where* — asking a generalist small VLM to learn numeric grounding purely through
+text-token generation, from a few hundred examples — did not work once, in four attempts.
 
 ## What's next
 
 I don't think a 450M generalist VLM, fine-tuned this way, is the right tool for pixel-level
-localization from scratch. The natural next experiment: split the job. Use a dedicated
-segmentation/prompted-detection model (SAM3, or similar) to find candidate defect regions, and
-hand *that* result to the VLM for reasoning — instead of asking one small model to learn both
-"what" and "where" end-to-end through the same text-generation objective.
+localization from scratch, and I say that having genuinely wanted it to work. The natural next
+experiment: split the job. Use a dedicated segmentation/prompted-detection model (SAM3, or
+similar) to find candidate defect regions, and hand *that* result to the VLM for reasoning —
+instead of asking one small model to learn both "what" and "where" end-to-end through the same
+text-generation objective.
 
 If you've combined a segmentation model with a small VLM this way for a narrow visual task, I'd
-like to hear about it — curious whether the extra moving part is worth it in practice.
+genuinely like to hear about it — curious whether the extra moving part is worth it in practice,
+or just trades one set of headaches for another.
 
 ---
 
