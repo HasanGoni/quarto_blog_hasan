@@ -1,0 +1,191 @@
+---
+title: "Can a Small Local VLM Catch Its Own Auto-Labeling Mistakes? Testing LFM2.5-VL-3B as a Judge"
+description: "Instead of generating labels, I asked LFM2.5-VL-3B to grade them — zero-shot vs. few-shot, on synthetically corrupted GDXray labels. Few-shot nearly doubled recall overall, and completely failed on the one error type that matters most. I show exactly why."
+author: "Hasan Goni"
+date: 2026-08-14
+categories: [computer-vision, VLM, LoRA, semiconductor, X-ray, edge-ai, few-shot]
+tags: [LFM2.5-VL, LiquidAI, Outlines, GDXray, structured-generation, LLM-as-judge]
+image: images/judge-fewshot-flip-fn-miss.png
+toc: true
+series:
+  name: "Local-AI Defect Inspection Series"
+  number: 5
+format:
+  html: default
+---
+
+:::{.callout-tip}
+This post is part of the [Local-AI Defect Inspection Series](index.qmd). Full code:
+[github.com/HasanGoni/lfm2.5-vl-label-judge](https://github.com/HasanGoni/lfm2.5-vl-label-judge).
+:::
+
+## A different question this time
+
+Posts 3 and 4 both asked the same kind of question: can a small local VLM *generate* a correct
+label — defect or not, and where — from scratch? Answer, twice now: detection improves with
+fine-tuning, localization doesn't, in two different specific ways depending on the model.
+
+This post asks something more practical, and honestly closer to a problem I actually run into: I
+have automated labeling pipelines that get it right most of the time — call it 95% — and wrong the
+rest. Instead of asking a small model to produce the label, what if I ask it to **grade** a label
+someone (or something) else already produced? That's a strictly easier task in principle —
+verification instead of generation — and it maps directly onto a real use case: a cheap second
+pass that flags the suspicious 5% for a human, instead of a human reviewing everything.
+
+Short version: **few-shot examples nearly doubled the judge's recall overall, at higher precision,
+not lower — genuinely the cleanest win this series has produced. And it did that by getting much
+better at one error type while going to a flat 0% on another, more dangerous one. I dug into why,
+and the answer is more mundane and more useful than I expected.**
+
+## The setup
+
+Show the model one image plus a *proposed* label — `defect: true/false`, with the proposed box
+drawn directly on the image in yellow when it claims a defect — and ask for a verdict:
+
+```
+{"verdict": "correct"} or {"verdict": "incorrect"}
+```
+
+Outlines-constrained generation, same pattern as posts 3/4, so there's no parsing free text out of
+a maybe-malformed response.
+
+GDXray's real labels are all correct, obviously — there's no natural pool of real auto-labeler
+mistakes sitting in a research dataset. So I built synthetic ones, and I want to be upfront about
+that rather than bury it: errors here are injected, not real auto-labeling failures. Three kinds:
+
+- **classification_flip_fp** — a real `no_defect` image relabeled `defect`, with a box borrowed
+  from a real defect elsewhere in the dataset and rescaled to fit, so it looks like a plausible
+  mistake instead of an obviously empty one.
+- **classification_flip_fn** — a real `defect` image relabeled `no_defect`, box dropped.
+- **localization_shift** — label stays `defect: true`, but the box gets replaced with one moved to
+  IoU<0.1 against the real box. Same size, wrong place.
+
+Eval set: post 3/4's exact 668-image eval split (byte-identical manifest, same series-level
+train/eval boundary), corrupted at roughly 50/50 so precision and recall stay meaningful instead
+of getting swamped by class imbalance the way plain accuracy did in every earlier post in this
+series. Actual composition landed at 49.0% correct / 51.0% corrupted — close enough to call
+balanced. One honest caveat up front: because only 131 of the 668 eval images are real defects,
+the two corruption types that need a defect image to start from — flip_fn and localization_shift —
+only have 37 and 32 examples respectively. Those two breakdowns carry noticeably more noise than
+the headline number.
+
+## Few-shot demos
+
+Four fixed examples, pulled from the *train* split only (no eval leakage): 1 correct-defect
+example, 1 correct-no_defect example, 1 incorrect classification_flip_fp example, 1 incorrect
+localization_shift example. I picked these up front, before running anything, on the assumption
+that covering "a wrong yes" and "a wrong box" would give the model enough of a sense of what
+"incorrect" looks like. That assumption turned out to matter a lot more than I expected — more on
+that below.
+
+## Results
+
+| | accuracy | precision | recall |
+|---|---|---|---|
+| Zero-shot | 59.7% | 82.1% | 27.0% |
+| Few-shot | 72.8% | 93.0% | **50.4%** |
+
+I'll be honest, this is a better result than I expected going in. Four in-context examples nearly
+doubled recall (27.0% → 50.4%) *and* improved precision (82.1% → 93.0%) — not a
+precision-for-recall trade like every fine-tuning result in posts 3 and 4, an improvement on both
+axes at once. If this were the whole story, it'd be the most unambiguously positive result in the
+series so far.
+
+It's not the whole story.
+
+### Recall by corruption type
+
+| corruption type | n | zero-shot recall | few-shot recall |
+|---|---|---|---|
+| classification_flip_fp (false "defect" claim) | 272 | 25.7% | **58.1%** |
+| classification_flip_fn (missed real defect) | 37 | 5.4% | **0.0%** |
+| localization_shift (wrong box) | 32 | **62.5%** | 43.8% |
+
+Break the aggregate number apart and it's a completely different picture. Few-shot helped
+enormously on catching false "defect" claims — more than doubled that recall. But on
+classification_flip_fn — a real defect mislabeled as clean, the single most dangerous error type
+in an actual QA setting, the one you'd most want a safety-net judge to catch — few-shot recall
+went to **exactly 0 out of 37**. Not "worse." Zero. And it wasn't great zero-shot either (5.4%),
+but zero-shot at least caught 2.
+
+I noticed the aggregate number first, felt genuinely good about it for about a minute, then broke
+it down by corruption type and felt a lot less good. This is exactly the kind of result this
+series exists to report honestly rather than round off.
+
+### I checked why — and this one has a clean, specific answer
+
+A flat 0/37 is either a real ceiling or an artifact of how I built the eval, and by now I've
+learned not to trust a suspiciously clean number without checking. I went back to the four
+few-shot demos:
+
+| demo | proposed `defect` | verdict |
+|---|---|---|
+| 1 | `true` | correct |
+| 2 | `false` | correct |
+| 3 | `true` | incorrect |
+| 4 | `true` | incorrect |
+
+Every single "incorrect" demonstration I picked has `proposed_defect: true` — a wrong "yes" or a
+wrong box. Not one demo shows the model that a `defect: false` claim, with no box on screen, can
+also be wrong. In few-shot mode, the model apparently picked up "no box shown → probably fine" as
+a shortcut reinforced by exactly the examples I gave it, and applied it to every single one of the
+37 real defects that got relabeled clean.
+
+![A real defect (this image is genuinely `defect: true` in GDXray), relabeled `no_defect` — no box shown. The few-shot judge said `correct`. Every one of the 37 images in this exact situation got the same wrong answer.](images/judge-fewshot-flip-fn-miss.png)
+
+That's a real, fixable gap in how I built the demo set, not necessarily a hard ceiling on the
+task. I didn't retest with a 5th demo covering this exact case before writing this up — I'd rather
+report the honest result of the demo set I actually committed to up front than go back and
+cherry-pick a fix after seeing where it failed. But I'd bet on it mattering: adding one
+demonstration of "no box shown, still wrong" is the obvious next experiment, and I'd be surprised
+if it didn't move that 0% by a meaningful amount.
+
+The localization_shift regression (62.5% → 43.8%) I'm less confident reading anything into — n=32
+means that's a 20-vs-14 split, well within the range I'd expect from noise alone on a set this
+small. Flagging it rather than either explaining it away or building a story on top of it.
+
+### And a genuine win, to be fair to the result
+
+Not every corrupted label is subtle. Here's one the few-shot judge caught cleanly — a real
+`no_defect` casting, relabeled `defect` with a borrowed box that doesn't correspond to anything
+actually wrong with the part:
+
+![A real `no_defect` image, relabeled `defect` with a box borrowed from elsewhere in the dataset. The few-shot judge correctly said `incorrect`.](images/judge-fewshot-flip-fp-catch.png)
+
+272 of the 668 eval rows are this exact corruption type, and few-shot recall on it — 58.1% — is
+the best number in this entire post. If your auto-labeling pipeline's failure mode looks more like
+"occasionally invents a defect that isn't there" than "occasionally misses a real one," this
+result is genuinely encouraging.
+
+## So — does it make sense as a real QA step?
+
+My honest read: **partially, and the part that works isn't the part I'd have guessed mattered
+most going in.** A few-shot judge built this way is decent — not great, but decent — at catching
+false alarms. It is currently unsafe to rely on for catching missed defects, which is the failure
+mode that actually matters if you're trying to keep bad parts from shipping. I don't think that's
+a fundamental property of the task, given how directly it traces back to a gap in four
+hand-picked examples rather than to the model running into a wall — but I also don't want to
+claim it's fixed until I've actually rerun it with a better demo set and can show a number.
+
+If I were deploying something like this for real, today, based only on what's in this post: I'd
+use it as a first-pass filter for "does this look like a false positive," not as a substitute for
+human review on "did we miss something real." Those are very different reliability bars, and this
+experiment shows they're not the same task even though they look like the same task on paper.
+
+## What's next
+
+The obvious immediate follow-up: add a 5th few-shot demo — a real defect relabeled `no_defect`,
+verdict `incorrect` — and see whether that flat 0% actually moves, or whether something deeper is
+going on. If it does move, that's a strong, useful finding about how sensitive few-shot judging is
+to demo *coverage*, not just demo *count*. If it doesn't, that's an even more interesting finding.
+
+Beyond that: this post deliberately stayed at prompting only, no fine-tuning, because that's the
+question that was actually asked. Whether a LoRA-tuned judge closes the classification_flip_fn gap
+faster or more reliably than a 5th demo would is the natural next comparison — and ties back
+directly to posts 3/4's finding that detection-shaped tasks are the ones that respond to
+fine-tuning in this series so far.
+
+---
+
+**Full code, eval set construction, and raw per-image results**:
+[github.com/HasanGoni/lfm2.5-vl-label-judge](https://github.com/HasanGoni/lfm2.5-vl-label-judge)

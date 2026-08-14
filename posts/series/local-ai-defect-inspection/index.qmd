@@ -32,16 +32,22 @@ imagery actually get, and what does it take to close the gap for real use?**
    defect* and *where is it*, with Outlines-constrained structured generation. Detection improved;
    localization never did — and I show exactly why.
 4. **Part 4** — [Fine-Tuning LFM2.5-VL-3B — Does the Grounding Upgrade Actually Help?](04-finetuning-lfm25-vl-xray-defects.qmd)
-   — this post. Same task, dataset, and eval split as Part 3, testing Liquid AI's newer,
+   Same task, dataset, and eval split as Part 3, testing Liquid AI's newer,
    grounding-improved 3B model. Detection improved again; localization still didn't work, but
    failed in a more specific way — plausible box *size*, near-random box *position*.
+5. **Part 5** — [Can a Small Local VLM Catch Its Own Auto-Labeling Mistakes?](05-lfm25-vl-label-qa-judge.qmd)
+   — this post. Same model and eval split, different question: verification instead of
+   generation. Few-shot examples nearly doubled the judge's recall on synthetically corrupted
+   labels — while going to a flat 0% on the one error type (a real defect mislabeled clean) that
+   matters most, traced back to a gap in the demo set itself.
 
 ## Tools used throughout
 
 - Local inference on a DGX Spark (GB10, unified memory) — no cloud GPU rental
 - HuggingFace `transformers` + `peft` for models and LoRA
 - [Outlines](https://github.com/dottxt-ai/outlines) for schema-constrained generation
-- Real, licensed datasets with ground truth (GDXray, WM-811K) — no synthetic labels, no invented
-  ground truth
+- Real, licensed datasets with ground truth (GDXray, WM-811K) — underlying ground truth is always
+  real; Part 5's label-QA task deliberately corrupts *proposed* labels to simulate auto-labeling
+  errors, clearly marked as synthetic where it's used
 
 Code for every post is public. Links inline.
