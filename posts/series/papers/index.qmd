@@ -1,0 +1,16 @@
+---
+title: "Paper of the Week"
+author: "Hasan Goni"
+date: last-modified
+categories: [series, papers, computer-vision, VLM]
+description: "One paper a week, picked and explained for my own semiconductor CV/VLM defect-inspection work — ELI5 first, then the full technical breakdown."
+toc: true
+---
+
+## Series Overview
+
+Every week I pick the single most relevant paper from arXiv and the HF Daily Papers list — filtered against my own work (semiconductor X-ray/casting defect detection, VLM fine-tuning, auto-label verification) — and write it up twice: once so a 5-year-old could follow it, once with the full methodology, a code sketch, and an honest note on whether it's actually useful for what I'm building.
+
+## Posts in this Series
+
+- **2026-08-15** — [AI4AI at Test-Time: Strong-to-Weak Capability Transfer via Harnesses](2026-08-15-ai4ai-at-test-time-strong-to-weak-capability.qmd)

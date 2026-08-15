@@ -1,0 +1,83 @@
+---
+title: "AI4AI at Test-Time: Strong-to-Weak Capability Transfer via Harnesses"
+author: "Hasan Goni"
+date: 2026-08-15
+categories: [papers, weekly-pick, computer-vision, VLM]
+image: "https://cdn-thumbnails.huggingface.co/social-thumbnails/papers/2608.12307.png"
+toc: true
+series:
+  name: "Paper of the Week"
+  number: 1
+format:
+  html: default
+---
+
+:::{.callout-tip}
+This post is part of the [Paper of the Week](index.qmd) series — one paper a week, picked and explained for my own semiconductor CV/VLM work.
+:::
+
+## The One-Sentence Version
+
+A large "builder" model writes custom inference-time scaffolding (prompts, checklists, verification steps) for a smaller "target" model, allowing the small model to solve complex reasoning tasks without any parameter updates.
+
+## Explain It Like I'm 5
+
+Imagine you have a tiny robot that is bad at tying shoelaces. Instead of teaching the tiny robot new moves, you ask a very smart, big robot to write a step-by-step cheat sheet. The big robot keeps checking if the cheat sheet works and fixes it until the tiny robot can tie the laces perfectly. The tiny robot didn’t change at all; it just got a really good instruction manual.
+
+## Explain It Like I'm a Data Scientist
+
+### What problem does it solve?
+
+Standard distillation methods (teacher forcing, on-policy distillation) require updating the student model’s parameters. This is computationally expensive and often requires access to the student’s training loop, which isn’t always feasible for proprietary or frozen local models. Furthermore, parameter updates can lead to catastrophic forgetting or overfitting to the teacher’s specific distribution quirks. The gap here is the lack of a mechanism to transfer *reasoning capability* from a strong model to a weak one purely through inference-time logic, without touching the weights.
+
+### How does it solve it?
+
+The authors propose "strong-to-weak scaffolding." A strong builder model iteratively generates and refines a "harness"—a structured prompt or chain-of-thought template—using a small validation set (5% of the data). The builder evaluates the weak target model’s performance on this harness and adjusts the instructions until the target model performs well. The final, optimized harness is then applied to the full test set. Essentially, the builder model acts as a compiler, translating its internal reasoning capabilities into explicit, executable instructions that the weaker model can follow.
+
+### Minimal code sketch
+
+```python
+def optimize_harness(builder_model, target_model, val_data, num_rounds=5):
+    current_harness = "Think step-by-step."
+    
+    for _ in range(num_rounds):
+        # 1. Evaluate target model with current harness
+        scores = []
+        for sample in val_data:
+            prompt = f"{current_harness}\n\nQuestion: {sample['q']}"
+            pred = target_model.generate(prompt)
+            scores.append(sample['label'] == pred)
+        
+        acc = sum(scores) / len(scores)
+        print(f"Round accuracy: {acc:.2f}")
+        
+        # 2. Builder model critiques and refines harness
+        # Builder sees the failures and proposes a better instruction set
+        failure_examples = [s for s, ok in zip(val_data, scores) if not ok]
+        critique_prompt = f"""
+        Current Harness: {current_harness}
+        Failed Examples: {failure_examples[:3]}
+        
+        Propose a new, more specific harness that helps the weak model 
+        avoid these errors. Focus on explicit verification steps.
+        """
+        new_harness = builder_model.generate(critique_prompt)
+        
+        # 3. Accept if better (or always accept in this simple loop)
+        if new_harness:
+            current_harness = new_harness
+            
+    return current_harness
+
+# Usage:
+# final_harness = optimize_harness(builder, small_vlm, val_set)
+# test_acc = evaluate(small_vlm, test_set, harness=final_harness)
+```
+
+## Why This Matters For My Work
+
+This is directly relevant to my work on fine-tuning small local VLMs (like Qwen3-VL) for semiconductor defect detection. Instead of relying solely on parameter updates to teach the model to distinguish between a casting defect and a sensor artifact, I can use a larger, more capable VLM to generate a "defect verification harness"—a specific checklist of visual features and logical checks—that the smaller model can follow during inference. This could significantly improve auto-label judging accuracy for edge-deployed models where retraining is costly or impossible, effectively letting the small model "borrow" the larger model's nuance in defect localization.
+
+## Paper
+
+- **AI4AI at Test-Time: Strong-to-Weak Capability Transfer via Harnesses** — [https://huggingface.co/papers/2608.12307](https://huggingface.co/papers/2608.12307)
