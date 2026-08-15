@@ -7,7 +7,7 @@ image: "https://cdn-thumbnails.huggingface.co/social-thumbnails/papers/2608.1230
 toc: true
 series:
   name: "Paper of the Week"
-  number: 1
+  number: 3
 format:
   html: default
 ---
@@ -18,65 +18,67 @@ This post is part of the [Paper of the Week](index.qmd) series — one paper a w
 
 ## The One-Sentence Version
 
-A large "builder" model writes custom inference-time scaffolding (prompts, checklists, verification steps) for a smaller "target" model, allowing the small model to solve complex reasoning tasks without any parameter updates.
+This paper demonstrates that a large "builder" model can write custom inference-time scaffolding (harnesses) for a smaller "target" model, significantly boosting the smaller model's performance on Theory-of-Mind tasks without a single parameter update.
 
 ## Explain It Like I'm 5
 
-Imagine you have a tiny robot that is bad at tying shoelaces. Instead of teaching the tiny robot new moves, you ask a very smart, big robot to write a step-by-step cheat sheet. The big robot keeps checking if the cheat sheet works and fixes it until the tiny robot can tie the laces perfectly. The tiny robot didn’t change at all; it just got a really good instruction manual.
+Imagine you have a very smart older brother and a younger sibling who is still learning to ride a bike. Instead of teaching the younger sibling how to pedal by holding the seat (which takes a long time), the older brother builds a special training wheel system and a map of the park. The younger sibling doesn't change how their legs work, but because they have the map and the wheels, they can ride much further and safer. The older brother didn't make the younger sibling stronger; they just built better tools for the ride.
 
 ## Explain It Like I'm a Data Scientist
 
 ### What problem does it solve?
 
-Standard distillation methods (teacher forcing, on-policy distillation) require updating the student model’s parameters. This is computationally expensive and often requires access to the student’s training loop, which isn’t always feasible for proprietary or frozen local models. Furthermore, parameter updates can lead to catastrophic forgetting or overfitting to the teacher’s specific distribution quirks. The gap here is the lack of a mechanism to transfer *reasoning capability* from a strong model to a weak one purely through inference-time logic, without touching the weights.
+Standard distillation relies on updating the student model's weights via teacher forcing or on-policy distillation. This is computationally expensive and often requires access to the teacher's logits or gradients. Furthermore, it locks in the knowledge at training time, making the student model brittle to distribution shifts or new task formulations. The gap here is the lack of a mechanism to transfer complex reasoning capabilities to a weaker model *at inference time*, where the cost is paid by the builder model rather than the target model's training pipeline.
 
 ### How does it solve it?
 
-The authors propose "strong-to-weak scaffolding." A strong builder model iteratively generates and refines a "harness"—a structured prompt or chain-of-thought template—using a small validation set (5% of the data). The builder evaluates the weak target model’s performance on this harness and adjusts the instructions until the target model performs well. The final, optimized harness is then applied to the full test set. Essentially, the builder model acts as a compiler, translating its internal reasoning capabilities into explicit, executable instructions that the weaker model can follow.
+The authors propose "strong-to-weak scaffolding." A stronger builder model is given a small validation set (5% of the data) and is tasked with iteratively refining a "harness"—a set of prompts, few-shot examples, or logical constraints. This harness is designed specifically to guide a weaker target model. The builder model evaluates the target model's performance on the validation set using the current harness, identifies failure modes, and refines the harness in subsequent rounds. Once the harness is finalized, it is applied to the full test set. The key insight is that the "intelligence" is externalized into the prompt structure and context, rather than internalized into the weights.
 
 ### Minimal code sketch
 
 ```python
-def optimize_harness(builder_model, target_model, val_data, num_rounds=5):
-    current_harness = "Think step-by-step."
-    
-    for _ in range(num_rounds):
-        # 1. Evaluate target model with current harness
+def build_harness(builder_model, target_model, val_data, test_data, max_rounds=5):
+    current_harness = "Base prompt: {question}"
+    best_harness = current_harness
+    best_score = 0.0
+
+    for _ in range(max_rounds):
+        # 1. Evaluate target model with current harness on validation set
         scores = []
         for sample in val_data:
-            prompt = f"{current_harness}\n\nQuestion: {sample['q']}"
+            prompt = current_harness.format(question=sample['question'])
             pred = target_model.generate(prompt)
-            scores.append(sample['label'] == pred)
+            scores.append(accuracy(pred, sample['answer']))
         
-        acc = sum(scores) / len(scores)
-        print(f"Round accuracy: {acc:.2f}")
+        avg_score = np.mean(scores)
         
-        # 2. Builder model critiques and refines harness
-        # Builder sees the failures and proposes a better instruction set
-        failure_examples = [s for s, ok in zip(val_data, scores) if not ok]
-        critique_prompt = f"""
-        Current Harness: {current_harness}
-        Failed Examples: {failure_examples[:3]}
-        
-        Propose a new, more specific harness that helps the weak model 
-        avoid these errors. Focus on explicit verification steps.
-        """
-        new_harness = builder_model.generate(critique_prompt)
-        
-        # 3. Accept if better (or always accept in this simple loop)
-        if new_harness:
-            current_harness = new_harness
-            
-    return current_harness
+        # 2. If improved, keep it
+        if avg_score > best_score:
+            best_score = avg_score
+            best_harness = current_harness
 
-# Usage:
-# final_harness = optimize_harness(builder, small_vlm, val_set)
-# test_acc = evaluate(small_vlm, test_set, harness=final_harness)
+        # 3. Builder model analyzes failures and refines harness
+        # (Pseudo-code: builder sees samples where target failed)
+        failed_samples = get_failed_samples(val_data, target_model, current_harness)
+        current_harness = builder_model.refine_harness(
+            current_harness=current_harness,
+            failures=failed_samples,
+            instruction="Modify the prompt structure or add few-shot examples to fix these errors."
+        )
+
+    # 4. Final evaluation on test set
+    final_scores = []
+    for sample in test_data:
+        prompt = best_harness.format(question=sample['question'])
+        pred = target_model.generate(prompt)
+        final_scores.append(accuracy(pred, sample['answer']))
+        
+    return np.mean(final_scores), best_harness
 ```
 
 ## Why This Matters For My Work
 
-This is directly relevant to my work on fine-tuning small local VLMs (like Qwen3-VL) for semiconductor defect detection. Instead of relying solely on parameter updates to teach the model to distinguish between a casting defect and a sensor artifact, I can use a larger, more capable VLM to generate a "defect verification harness"—a specific checklist of visual features and logical checks—that the smaller model can follow during inference. This could significantly improve auto-label judging accuracy for edge-deployed models where retraining is costly or impossible, effectively letting the small model "borrow" the larger model's nuance in defect localization.
+This is directly relevant to my work with small local VLMs like LFM2-VL and Qwen3-VL for industrial defect detection. Instead of spending GPU hours fine-tuning these smaller models on every new defect class, I can use a larger, more capable model (like a hosted Qwen2.5-VL or Llama-3.2-11B) to generate specific prompting strategies or few-shot exemplars for the smaller model. This is particularly useful for auto-label verification, where the "harness" could be a set of logical constraints the small model must follow to judge a SAM3 segmentation mask, allowing me to improve precision without retraining the vision encoder.
 
 ## Paper
 

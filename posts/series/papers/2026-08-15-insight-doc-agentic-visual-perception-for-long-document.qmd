@@ -1,0 +1,78 @@
+---
+title: "InSight-doc: Agentic Visual Perception for Long-Document Understanding"
+author: "Hasan Goni"
+date: 2026-08-15
+categories: [papers, weekly-pick, computer-vision, VLM]
+image: "https://cdn-thumbnails.huggingface.co/social-thumbnails/papers/2608.10628.png"
+toc: true
+series:
+  name: "Paper of the Week"
+  number: 2
+format:
+  html: default
+---
+
+:::{.callout-tip}
+This post is part of the [Paper of the Week](index.qmd) series — one paper a week, picked and explained for my own semiconductor CV/VLM work.
+:::
+
+## The One-Sentence Version
+
+InSight-doc turns visual resolution into an adaptive reasoning resource, allowing a small VLM to start with a cheap, low-res overview and selectively "zoom in" on high-res regions only when it needs finer evidence.
+
+## Explain It Like I'm 5
+
+Imagine you are looking at a very long, blurry picture of a room. First, you squint and look at the whole room to see where the interesting stuff is. Then, you only move your eyes closer to look at the specific spot where you think the toy is hiding. You don’t look at every single inch of the floor because that takes too long and makes your eyes tired. You just look closely at the parts that matter.
+
+## Explain It Like I'm a Data Scientist
+
+### What problem does it solve?
+
+Current Vision-Language Models (VLMs) face a trade-off between context window limits and visual fidelity. To understand a long document, you either feed in many low-resolution tiles (losing fine text details) or a few high-resolution tiles (blowing up the token count and inference cost). This leads to "context rot," where the model loses track of global structure, or hallucination, where it invents details it can't actually see because the resolution was too low.
+
+### How does it solve it?
+
+InSight-doc treats resolution as a dynamic resource rather than a fixed input parameter. The model is trained to act as an agent: it first processes a low-resolution global view to identify regions of interest. It then generates "zoom-in" trajectories to fetch high-resolution crops of those specific regions. The training recipe uses a two-stage approach: Supervised Fine-Tuning (SFT) on 17.9K examples with explicit region-level zoom trajectories, followed by Reinforcement Learning (RL) on 19.2K hard examples to refine the decision-making process for when and where to zoom.
+
+### Minimal code sketch
+
+```python
+class InSightDocAgent:
+    def __init__(self, model, low_res_processor, high_res_processor):
+        self.model = model
+        self.low_res_processor = low_res_processor
+        self.high_res_processor = high_res_processor
+
+    def reason(self, document_image, question):
+        # 1. Global low-res pass
+        low_res_tokens = self.low_res_processor(document_image)
+        initial_context = [low_res_tokens, question]
+        
+        # 2. Agent decides if zoom is needed
+        # In practice, this is a learned policy, not a simple if-statement
+        zoom_decision = self.model.predict_zoom_action(initial_context)
+        
+        if zoom_decision.should_zoom:
+            # 3. Identify region of interest (ROI)
+            roi_bbox = zoom_decision.bbox
+            
+            # 4. Crop and process at high resolution
+            high_res_crop = document_image.crop(roi_bbox)
+            high_res_tokens = self.high_res_processor(high_res_crop)
+            
+            # 5. Append high-res evidence to context
+            final_context = initial_context + [high_res_tokens]
+        else:
+            final_context = initial_context
+            
+        # 6. Final answer generation
+        return self.model.generate(final_context)
+```
+
+## Why This Matters For My Work
+
+This approach is directly relevant to my work on fine-tuning small local VLMs (like LFM2-VL and Qwen3-VL) for industrial defect detection, where high-resolution detail is critical for localization but full-image high-res inference is prohibitively expensive. The "zoom-in" trajectory concept could be adapted to my pipeline: instead of document pages, the agent could scan a low-res X-ray or casting image, identify potential defect regions, and then zoom in for high-precision SAM3 segmentation or defect classification. While the paper focuses on text-heavy documents, the underlying mechanism of adaptive resolution allocation is a strong candidate for reducing hallucination in my auto-label verification tasks, where the model must be certain before flagging a defect.
+
+## Paper
+
+- **InSight-doc: Agentic Visual Perception for Long-Document Understanding** — [https://huggingface.co/papers/2608.10628](https://huggingface.co/papers/2608.10628)

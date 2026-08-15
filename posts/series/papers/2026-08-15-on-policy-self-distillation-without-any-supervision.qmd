@@ -1,0 +1,99 @@
+---
+title: "On-Policy Self-Distillation without Any Supervision"
+author: "Hasan Goni"
+date: 2026-08-15
+categories: [papers, weekly-pick, computer-vision, VLM]
+image: "https://cdn-thumbnails.huggingface.co/social-thumbnails/papers/2608.06296.png"
+toc: true
+series:
+  name: "Paper of the Week"
+  number: 4
+format:
+  html: default
+---
+
+:::{.callout-tip}
+This post is part of the [Paper of the Week](index.qmd) series — one paper a week, picked and explained for my own semiconductor CV/VLM work.
+:::
+
+## The One-Sentence Version
+
+U-OPSD improves LLM reasoning by having the model generate multiple answers, voting on the most consistent one, and then using that self-generated "truth" to correct its own probability distribution on the wrong answers.
+
+## Explain It Like I'm 5
+
+Imagine you are trying to solve a puzzle, but you don't have the answer key. You try to solve it five times. Four times, you put the blue piece in the corner. One time, you put it in the middle. You look at your five tries and think, "Four times I chose the corner, so the corner must be right." Now, you look at that one weird try where you put it in the middle and you learn, "Oh, I shouldn't do that." You just taught yourself the right answer by looking at your own mistakes, without asking a teacher.
+
+## Explain It Like I'm a Data Scientist
+
+### What problem does it solve?
+
+On-policy distillation (OPD) is a strong post-training technique, but standard implementations are not truly "self-contained." They typically require external supervision: ground-truth labels, environmental feedback (like code execution results), or a larger teacher model to provide the target distribution. This dependency limits scalability and introduces bias from the external source. The gap here is the lack of a method that allows a model to refine its own reasoning capabilities using only its internal consistency, without any external signal.
+
+### How does it solve it?
+
+The method, U-OPSD, operates in two phases. First, it samples multiple rollouts (completions) for a given prompt. It then applies a self-consistency check: if a majority of the rollouts agree on a specific solution (or a key part of the reasoning chain), that consensus is treated as a "pseudo-solution." Second, the model conditions its probability distribution on this pseudo-solution. It then performs distillation specifically on the "disagreeing" completions—those that deviated from the consensus. By minimizing the divergence between the model's distribution conditioned on the correct pseudo-solution and its actual distribution on the incorrect paths, the model learns to suppress low-confidence, inconsistent reasoning patterns.
+
+### Minimal code sketch
+
+```python
+import torch
+import torch.nn.functional as F
+
+def u_opsd_step(model, prompt, num_rollouts=5, threshold=0.6):
+    # 1. Sample multiple rollouts
+    rollouts = []
+    for _ in range(num_rollouts):
+        # Standard sampling from model
+        rollout = model.generate(prompt, do_sample=True)
+        rollouts.append(rollout)
+    
+    # 2. Construct pseudo-solution via majority vote
+    # Simplified: assume we extract a final answer or key token sequence
+    # In practice, this might involve clustering or exact match voting
+    votes = {}
+    for r in rollouts:
+        ans = extract_answer(r) 
+        votes[ans] = votes.get(ans, 0) + 1
+    
+    if not votes:
+        return 0.0
+        
+    pseudo_solution, count = max(votes.items(), key=lambda x: x[1])
+    
+    # Check self-consistency threshold
+    if count / num_rollouts < threshold:
+        return 0.0 # Not confident enough, skip distillation
+    
+    # 3. Distill on disagreeing completions
+    total_loss = 0.0
+    for r in rollouts:
+        if extract_answer(r) != pseudo_solution:
+            # Compute logits for the incorrect rollout
+            logits = model(prompt + r).logits
+            
+            # Condition the model on the pseudo-solution
+            # This creates a "teacher" distribution that knows the answer
+            # but is still the same model architecture
+            teacher_logits = model(prompt + pseudo_solution).logits
+            
+            # Calculate KL divergence or cross-entropy
+            # We want the model to move away from the incorrect path
+            # towards the distribution implied by the correct path
+            loss = F.kl_div(
+                F.log_softmax(logits, dim=-1),
+                F.softmax(teacher_logits, dim=-1),
+                reduction='batchmean'
+            )
+            total_loss += loss
+            
+    return total_loss / num_rollouts
+```
+
+## Why This Matters For My Work
+
+This is directly relevant to my auto-label verification pipeline for semiconductor defect detection. Currently, I rely on ground-truth annotations to fine-tune small VLMs like LFM2-VL and Qwen3-VL, which is expensive and slow. U-OPSD suggests I can use the model's own consistency to identify and correct ambiguous defect classifications (e.g., distinguishing a scratch from a casting bubble) without needing a human-in-the-loop for every edge case. It’s a speculative fit for vision-language models since the paper focuses on text, but the core mechanism of using internal consistency to refine probability distributions on "hard" or "disagreeing" samples could significantly reduce my annotation burden for localization tasks.
+
+## Paper
+
+- **On-Policy Self-Distillation without Any Supervision** — [https://huggingface.co/papers/2608.06296](https://huggingface.co/papers/2608.06296)
