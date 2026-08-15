@@ -15,7 +15,4 @@ Every week I pick a handful of the most relevant papers from arXiv and the HF Da
 
 ## Posts in this Series
 
-- **2026-08-15** — [AI4AI at Test-Time: Strong-to-Weak Capability Transfer via Harnesses](2026-08-15-ai4ai-at-test-time-strong-to-weak-capability.qmd)
-- **2026-08-15** — [InSight-doc: Agentic Visual Perception for Long-Document Understanding](2026-08-15-insight-doc-agentic-visual-perception-for-long-document.qmd)
-- **2026-08-15** — [On-Policy Self-Distillation without Any Supervision](2026-08-15-on-policy-self-distillation-without-any-supervision.qmd)
-- **2026-08-15** — [BDH-CQ: In-Context Learning with Recurrent Latent Reasoning](2026-08-15-bdh-cq-in-context-learning-with-recurrent-latent.qmd)
+- **2026-08-15** — [4 Papers Worth Reading — Week of August 15, 2026](2026-08-15.qmd) (4 papers)
