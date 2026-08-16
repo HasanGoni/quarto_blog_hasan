@@ -1,0 +1,173 @@
+---
+title: "Agentic AI for Semiconductor Imaging, Part 7: Agent-to-Agent Interoperability with A2A"
+subtitle: "When agents built by different teams and frameworks need to talk to each other"
+author: "Hasan Goni"
+date: 2026-08-16
+categories: [agentic-ai, computer-vision, semiconductor, python, a2a]
+toc: true
+series:
+  name: "Agentic Development"
+  number: 7
+format:
+  html:
+    code-fold: false
+---
+
+:::{.callout-tip}
+This post is part of the [Agentic Development Series](index.qmd). It follows on
+from [Part 6 — advanced agentic AI development](06-advanced-agentic-development.qmd).
+:::
+
+[Part three](03-tool-use-mcp.qmd) solved "how does an agent call a tool," with
+MCP. This post solves a different problem I actually expect to run into soon:
+how do two independent agents, built by different teams, in different
+frameworks, running on different machines, talk to each other as peers, not as
+a tool call. Google's Agent2Agent protocol, A2A, is the answer.
+
+Concretely, in my own setup: my error-analysis agent is raw Python plus
+aisuite, but a colleague's synthetic-data agent might end up in LangGraph, and
+some future scheduling agent might live inside Google ADK, especially given
+where Infineon seems to be looking. Without a shared protocol, wiring those
+three together means a custom integration for every single pair. A2A gives all
+of them a common language instead.
+
+## Jargon, explained simply
+
+**A2A.** Agent2Agent protocol, an open standard letting independent agents
+discover each other's capabilities and delegate tasks, regardless of what
+framework built either side.
+
+**Agent Card.** A small JSON document an agent publishes describing what it can
+do and how to reach it, the agent equivalent of an API spec.
+
+**Task, in A2A terms.** A unit of work one agent delegates to another, sent as
+structured JSON, with the receiving agent able to report progress and return a
+result.
+
+**Signed Agent Card.** A cryptographically signed version of the card, so a
+receiving agent can verify it actually came from the domain it claims to.
+
+**Skill, in A2A terms.** One specific capability an agent exposes, listed
+inside its Agent Card, with defined input and output formats.
+
+## MCP versus A2A, in one sentence
+
+MCP is agent to tool. A2A is agent to agent. They solve different layers of
+the same overall problem, and I use both, not one instead of the other.
+
+## Publishing my error-analysis agent as an A2A agent
+
+Here's a real Agent Card for the error-analysis agent from [part
+five](05-planning-multiagent.qmd), so any other A2A-compatible agent can
+discover and call it.
+
+Install the reference SDK with `pip install a2a-sdk`.
+
+Save this as `agent_card.json`:
+
+```json
+{
+  "name": "semiconductor-error-analysis-agent",
+  "description": "Reviews segmentation pipeline verdicts and decides whether a case needs human review.",
+  "url": "https://internal.example.com/a2a/error-analysis",
+  "capabilities": {
+    "streaming": true
+  },
+  "skills": [
+    {
+      "id": "review-void-verdict",
+      "description": "Given a void-ratio verdict and image metadata, decide if human review is required.",
+      "inputModes": ["text/plain", "application/json"],
+      "outputModes": ["application/json"]
+    }
+  ]
+}
+```
+
+## A minimal A2A server wrapping my existing agent
+
+Here's the server side, exposing the same `error_analysis_agent` function from
+part five, using the reference Python SDK.
+
+Save this as `a2a_server.py`:
+
+```python
+from a2a.server import A2AServer
+from a2a.types import Task, TaskResult
+import aisuite as ai
+
+client = ai.Client()
+
+def error_analysis_agent(verdict_text: str) -> str:
+    response = client.chat.completions.create(
+        model="openai:gpt-4o-mini",
+        messages=[
+            {"role": "system", "content": "You are an error-analysis agent for a "
+             "semiconductor imaging pipeline."},
+            {"role": "user", "content": "Given this verdict, decide if it needs "
+             "human review and why: " + verdict_text}
+        ]
+    )
+    return response.choices[0].message.content
+
+
+def handle_task(task: Task) -> TaskResult:
+    verdict_text = task.input.get("verdict_text", "")
+    decision = error_analysis_agent(verdict_text)
+    return TaskResult(output={"decision": decision})
+
+
+server = A2AServer(agent_card_path="agent_card.json", task_handler=handle_task)
+
+if __name__ == "__main__":
+    server.run(host="0.0.0.0", port=9000)
+```
+
+Any A2A-compatible client, regardless of what framework built it, LangGraph,
+CrewAI, ADK, or raw Python like mine, can fetch `agent_card.json`, see that I
+expose a `review-void-verdict` skill, and send a task without either side
+needing to know anything about the other's internals.
+
+## Calling another team's A2A agent from my own pipeline
+
+Here's the client side: my linear pipeline from part five, delegating the
+final review step to a remote A2A agent instead of a local Python function.
+
+```python
+from a2a.client import A2AClient
+
+a2a_client = A2AClient()
+
+def remote_error_analysis(verdict_text: str) -> str:
+    card = a2a_client.fetch_agent_card("https://internal.example.com/a2a/error-analysis")
+    task = a2a_client.create_task(
+        agent_card=card,
+        skill_id="review-void-verdict",
+        input={"verdict_text": verdict_text},
+    )
+    result = a2a_client.wait_for_result(task)
+    return result.output["decision"]
+```
+
+This function is a drop-in replacement for the local `error_analysis_agent`
+call in my part-five pipeline, the rest of the pipeline code doesn't change at
+all, only where that one step actually executes.
+
+## When I'd actually reach for this, versus when I wouldn't
+
+If every agent in a system lives in my own codebase, MCP for tools plus plain
+Python function calls between my own agents is genuinely enough, I would not
+add A2A just because it exists. I'd reach for it specifically when agents cross
+an organizational or framework boundary, a vendor's inspection-equipment agent
+needing to talk to mine, or a separate team's agent, built in a framework I
+don't control, needing to hand off work into my pipeline. That boundary-
+crossing case is exactly what A2A was built for, and it's also exactly the
+situation I expect to hit once more teams here start building their own
+agents.
+
+## What's next
+
+[Part eight](08-finetuning-distillation.qmd) covers fine-tuning and distilling
+my own agent's behavior, taking what a large model does well inside the agent
+loop and compressing it into a smaller model I can run cheaply and repeatedly,
+directly connected to the distillation work I'm already doing.

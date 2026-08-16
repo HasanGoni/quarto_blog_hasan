@@ -1,0 +1,140 @@
+---
+title: "Agentic AI for Semiconductor Imaging, Part 1: What Agentic AI Actually Is"
+subtitle: "Applications, the four design patterns, and setting up aisuite"
+author: "Hasan Goni"
+date: 2026-08-16
+categories: [agentic-ai, computer-vision, semiconductor, python]
+toc: true
+series:
+  name: "Agentic Development"
+  number: 1
+format:
+  html:
+    code-fold: false
+---
+
+:::{.callout-tip}
+This post is part of the [Agentic Development Series](index.qmd).
+:::
+
+I went through Andrew Ng's *Agentic AI* course on DeepLearning.AI mainly because
+I kept hearing "agentic" thrown around at work without a shared definition, and
+I wanted a rigorous one before building anything else on top of Hermes Agent.
+The course is good, but every example is generic, customer support bots,
+research assistants. None of it touches what I actually do all day: segmenting
+voids and lifted chips out of X-ray scans. So I rebuilt every example from
+scratch, in my own domain, following the course's own five-module order. This
+series is that rebuild, plus four more posts covering things the course does
+not touch at all but that I think you need if you actually want to run this in
+production.
+
+If you read all nine posts and work through the code, you should be able to go
+from zero to building, hardening, and shipping your own agent. That is the bar
+I am holding myself to.
+
+## What "agentic" actually means, cutting through the hype
+
+A plain LLM call is one-shot: you send a prompt, you get text back, done. An
+agentic system does three things a plain call does not. It acts, calling real
+functions rather than just describing what it would do. It iterates, looking at
+its own output and trying again if that is not good enough. It decides,
+choosing what happens next, instead of you hard-coding every step.
+
+Here is the distinction in my own terms. A plain LLM call can describe, in
+prose, how you'd normalize a sixteen-bit X-ray TIFF. An agentic system actually
+calls my `normalize_xray` function, looks at what came back, and decides
+whether that result is good enough to hand to the next stage, or whether
+something needs to be redone.
+
+## The four design patterns
+
+The course organizes everything around four patterns, and once you see them,
+you start noticing them everywhere.
+
+Reflection is an agent checking its own work and improving it, the automated
+version of a code review. I use this to catch implausible segmentation masks
+before a human ever sees them, more on that in [part two](02-reflection.qmd).
+
+Tool Use is an agent calling real functions, code execution, database lookups,
+APIs. This is the pattern I care most about, because it turns "a chatbot that
+knows about segmentation" into "a system that actually runs my pipeline."
+[Part three](03-tool-use-mcp.qmd) covers this in depth, including MCP, which is
+how I now expose these same tools to Copilot and Cursor.
+
+Planning is an agent breaking a task into sub-steps on its own, instead of me
+writing that logic by hand every time.
+
+Multi-Agent Collaboration is several specialized agents working together, a
+preprocessing agent, a modeling agent, an error-analysis agent, instead of one
+generalist agent trying to do everything badly.
+
+## Jargon, explained simply
+
+**LLM.** Large language model, the underlying engine, like GPT or Qwen, that
+reads text and generates text back.
+
+**Agent.** An LLM wrapped with the ability to call real functions and make
+decisions about what to do next, rather than only producing text.
+
+**Prompt.** The instructions and context you send to the model before it
+responds.
+
+**Design pattern.** A reusable way of structuring a solution to a common
+problem, borrowed from regular software engineering, applied here to agent
+behavior.
+
+**Inference.** The act of running a trained model to get an output, as opposed
+to training it.
+
+## Setting up aisuite
+
+The course builds everything on aisuite, a thin wrapper that gives you one
+interface across multiple LLM providers. I like this choice for a practical
+reason: model strings are written as provider, colon, model name, so switching
+from a cloud model to my own local Qwen3 running on the GX10 is a one-line
+change, not a rewrite. That matters a lot once you get into Reflection and Tool
+Use, where the same agent code should work whether it's talking to GPT or to a
+model sitting on your own GPU.
+
+Install it with pip install aisuite, plus whatever provider extra you need.
+
+Here's the minimal shape every example in this series builds from:
+
+```python
+import aisuite as ai
+
+client = ai.Client()
+
+response = client.chat.completions.create(
+    model="openai:gpt-4o-mini",
+    messages=[
+        {"role": "system", "content": "You are a semiconductor imaging QA assistant."},
+        {"role": "user", "content": "What does a bright blob in an X-ray void scan usually mean?"}
+    ]
+)
+
+print(response.choices[0].message.content)
+```
+
+If you want to run this against a local model instead, you point the client at
+an OpenAI-compatible endpoint, my own vLLM containers on port eight thousand
+and eight thousand one work exactly this way, and nothing else in the code
+changes.
+
+## The domain, and why it's not a toy example
+
+Every code example from here on touches a real problem I actually work on:
+X-ray void detection in solder joints, AOI, or USM imaging. A few domain rules
+I hold to throughout, because getting these wrong quietly wrecks your results.
+Sixteen-bit TIFFs always get percentile-based normalization, never naive
+min-max, since a handful of hot pixels will otherwise blow out your contrast.
+Void regions appear bright, not dark, because lower material density means
+higher X-ray transmission, the opposite of what most people expect walking in
+from natural-image computer vision. And I never use elastic deformation as an
+augmentation, because it distorts the exact void area I'm trying to measure.
+
+## What's next
+
+[Part two](02-reflection.qmd) is Reflection: teaching an agent to look at its
+own segmentation output and catch its own mistakes before they reach a human
+reviewer.

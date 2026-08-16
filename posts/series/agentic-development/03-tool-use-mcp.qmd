@@ -1,0 +1,250 @@
+---
+title: "Agentic AI for Semiconductor Imaging, Part 3: Tool Use and MCP"
+subtitle: "From function calling to a real MCP server Copilot and Cursor can use"
+author: "Hasan Goni"
+date: 2026-08-16
+categories: [agentic-ai, computer-vision, semiconductor, python, mcp]
+toc: true
+series:
+  name: "Agentic Development"
+  number: 3
+format:
+  html:
+    code-fold: false
+---
+
+:::{.callout-tip}
+This post is part of the [Agentic Development Series](index.qmd). It follows on
+from [Part 2 — the reflection agent](02-reflection.qmd).
+:::
+
+This is the post I care most about in the whole series, because tool use is
+where an agent stops talking and starts doing. Everything before this point was
+the model producing text about my pipeline. Tool use is the model actually
+running my pipeline. And once you add MCP on top, which the course barely
+mentions, the same tools become usable directly inside Copilot or Cursor,
+without me writing a single line of orchestration code. That last part is
+genuinely how I work day to day now, so I'm going into more depth here than the
+course itself does.
+
+## Jargon, explained simply
+
+**Tool, or function calling.** Giving a model access to real Python functions
+it can choose to call, instead of only generating text.
+
+**Schema.** A structured description of what a function expects as input and
+returns as output, so the model knows how to call it correctly.
+
+**Docstring.** The comment block inside a Python function explaining what it
+does, aisuite uses this to build the schema automatically.
+
+**Max turns.** A limit on how many times the model is allowed to call tools and
+respond back and forth in a single request, preventing infinite loops.
+
+**MCP.** Model Context Protocol, an open standard for exposing tools to any
+compatible AI assistant, so the same tool works in Copilot, Cursor, or Claude
+Code without custom glue code for each one.
+
+**MCP server.** A small background process that hosts your tools and speaks
+MCP, so a client like Cursor can discover and call them.
+
+## Step one: writing tools as plain Python functions
+
+aisuite's real convenience is that you hand it ordinary Python functions and it
+infers the tool schema from the function signature and docstring. No hand-
+written JSON schema for the common case.
+
+```python
+def normalize_xray(image_path: str, low_percentile: float = 2.0,
+                    high_percentile: float = 98.0) -> str:
+    """Normalize a 16-bit X-ray TIFF to 8-bit using percentile clipping.
+
+    Args:
+        image_path: path to the input 16-bit TIFF file
+        low_percentile: lower percentile clip point
+        high_percentile: upper percentile clip point
+
+    Returns:
+        path to the saved 8-bit normalized PNG
+    """
+    import numpy as np
+    from PIL import Image
+
+    img = np.array(Image.open(image_path))
+    lo, hi = np.percentile(img, [low_percentile, high_percentile])
+    clipped = np.clip(img, lo, hi)
+    normalized = ((clipped - lo) / (hi - lo) * 255).astype("uint8")
+
+    out_path = image_path.replace(".tif", "_normalized.png")
+    Image.fromarray(normalized).save(out_path)
+    return out_path
+
+
+def check_void_ratio(mask_path: str, threshold: float = 0.3) -> str:
+    """Compute the void-to-chip area ratio from a segmentation mask and flag
+    if it exceeds a threshold.
+
+    Args:
+        mask_path: path to a mask PNG with chip=1 and void=2 encoded per pixel
+        threshold: maximum acceptable void ratio before flagging
+
+    Returns:
+        a short text verdict with the computed ratio
+    """
+    import numpy as np
+    from PIL import Image
+
+    mask = np.array(Image.open(mask_path))
+    chip_area = (mask >= 1).sum()
+    void_area = (mask == 2).sum()
+    ratio = void_area / max(chip_area, 1)
+    verdict = "FLAGGED" if ratio > threshold else "OK"
+    return f"void_ratio={ratio:.3f} status={verdict}"
+```
+
+These are the exact two functions I'll carry through the rest of this post.
+
+## Step two: automatic tool-calling with aisuite
+
+Pass the functions straight into tools, and set max turns so the client keeps
+looping, calling tools and feeding results back to the model, until the model
+decides it's done.
+
+```python
+import aisuite as ai
+
+client = ai.Client()
+
+response = client.chat.completions.create(
+    model="openai:gpt-4o-mini",
+    messages=[
+        {"role": "system", "content": "You are a semiconductor imaging pipeline assistant."},
+        {"role": "user", "content": "Normalize scan_0451.tif, then check the void "
+         "ratio in scan_0451_mask.png, and tell me if it needs a human review."}
+    ],
+    tools=[normalize_xray, check_void_ratio],
+    max_turns=5,
+)
+
+print(response.choices[0].message.content)
+```
+
+I did not write a loop, aisuite reads each function's docstring, builds the
+schema, sends it to the model, executes whichever function the model calls,
+and feeds the result back, up to five turns.
+
+## Step three: the manual loop, when I need control
+
+Sometimes I want to log every intermediate tool call myself, the same
+transparency the course's own M3 lab goes for. Here's the manual version of the
+same task:
+
+```python
+from aisuite.utils.tools import Tools
+
+toolkit = Tools([normalize_xray, check_void_ratio])
+
+messages = [
+    {"role": "system", "content": "You are a semiconductor imaging pipeline assistant."},
+    {"role": "user", "content": "Normalize scan_0451.tif, then check the void "
+     "ratio in scan_0451_mask.png."}
+]
+
+while True:
+    response = client.chat.completions.create(
+        model="openai:gpt-4o-mini",
+        messages=messages,
+        tools=toolkit.tools(),
+    )
+    msg = response.choices[0].message
+    messages.append(msg)
+
+    if not getattr(msg, "tool_calls", None):
+        print(msg.content)
+        break
+
+    results = toolkit.handle_tool_call(msg)
+    messages.extend(results)
+```
+
+More code, yes, but this is the version I'd actually use once I'm logging
+traces for error analysis in [part four](04-evaluation-error-analysis.qmd),
+since I control exactly what gets recorded at each step.
+
+## Step four: MCP, taking these tools outside my own script
+
+Here's where I go beyond what the course covers. The course mentions MCP in
+about one sentence, "the emerging standard for tool distribution." In practice
+it is one of the most useful things I've adopted this year, because the exact
+same Python functions above become tools Copilot, Cursor, or Claude Code can
+call directly in a chat window, zero custom orchestration.
+
+The core idea: MCP is a protocol, not a library trick. You run a small server
+process exposing your functions with schemas, and any MCP-compatible client
+connects and calls those functions like any other tool.
+
+```python
+from mcp.server.fastmcp import FastMCP
+
+mcp = FastMCP("semiconductor-imaging-tools")
+
+@mcp.tool()
+def normalize_xray_tool(image_path: str, low_percentile: float = 2.0,
+                         high_percentile: float = 98.0) -> str:
+    """Normalize a 16-bit X-ray TIFF to 8-bit using percentile clipping."""
+    return normalize_xray(image_path, low_percentile, high_percentile)
+
+@mcp.tool()
+def check_void_ratio_tool(mask_path: str, threshold: float = 0.3) -> str:
+    """Compute the void-to-chip area ratio and flag if it exceeds a threshold."""
+    return check_void_ratio(mask_path, threshold)
+
+if __name__ == "__main__":
+    mcp.run()
+```
+
+Install the SDK with pip install "mcp[cli]", save this as mcp_server.py, and
+run it with python mcp_server.py. That's the entire server.
+
+### Connecting it to Cursor or Claude Code
+
+Both read a small JSON config telling them which MCP servers to launch:
+
+```json
+{
+  "mcpServers": {
+    "semiconductor-imaging-tools": {
+      "command": "python",
+      "args": ["mcp_server.py"]
+    }
+  }
+}
+```
+
+Once that's registered, I open a chat and just say, in plain English,
+"normalize scan_0451.tif and check its void ratio." The assistant sees my two
+tools and calls them exactly like any other tool. No max turns, no manual loop,
+the protocol handles discovery and invocation for me.
+
+### Why this matters beyond convenience
+
+This is the exact pattern I use in my own agent architecture: cron jobs and
+headless scripts call my `tools.py` functions directly, while an MCP server
+wraps those same functions for interactive use inside a coding assistant. One
+set of functions, two consumption paths, no duplicated logic.
+
+## Laptop versus cloud, briefly
+
+Everything above runs identically on a laptop or a cloud VM, only where the
+process lives changes. Locally, I run the MCP server as a background process,
+sometimes pointed at a local model endpoint. In production, the same server
+script runs on a cloud instance or in a container, often behind a scheduler, so
+cron-triggered ingestion or nightly QC jobs call the same functions without a
+chat interface at all. The functions never change, only who's calling them.
+
+## What's next
+
+[Part four](04-evaluation-error-analysis.qmd) covers Evaluations and Error
+Analysis, the module Andrew Ng himself calls the most practically valuable part
+of the course, including the spreadsheet-style component-tagging method I
+actually use to find out which part of a pipeline is causing my failures.

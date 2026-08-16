@@ -1,0 +1,173 @@
+---
+title: "Agentic AI for Semiconductor Imaging, Part 4: Evaluations and Error Analysis"
+subtitle: "The component-tagging method for finding out what is actually broken"
+author: "Hasan Goni"
+date: 2026-08-16
+categories: [agentic-ai, computer-vision, semiconductor, python]
+toc: true
+series:
+  name: "Agentic Development"
+  number: 4
+format:
+  html:
+    code-fold: false
+---
+
+:::{.callout-tip}
+This post is part of the [Agentic Development Series](index.qmd). It follows on
+from [Part 3 — tool use and MCP](03-tool-use-mcp.qmd).
+:::
+
+Andrew Ng calls this the module people find most valuable, and I agree with
+him, but for a specific reason tied to my own work. Reflection and tool use make
+an agent capable. This module makes it improvable. Without a disciplined way to
+measure and diagnose failures, you are guessing at what to fix next, and
+guessing does not scale once your pipeline has five or six chained components,
+which mine does.
+
+## Jargon, explained simply
+
+**Evaluation, or eval.** A repeatable, measurable check of whether an agent's
+output is correct or good enough.
+
+**End-to-end eval.** Judging only the final output of the whole pipeline, not
+any individual step inside it.
+
+**Component-level eval.** Judging one specific stage of the pipeline in
+isolation, so you know exactly where a failure originated.
+
+**Root-cause tagging.** Labeling each failed example with which pipeline
+component actually caused the failure, rather than just recording that it
+failed.
+
+**IoU.** Intersection over union, a standard segmentation metric measuring how
+much a predicted mask overlaps with the true mask, from zero, no overlap, to
+one, perfect overlap.
+
+**LLM-as-judge.** Using a language model to score subjective quality that a
+hard numeric threshold cannot capture cleanly.
+
+## Two levels of evaluation
+
+End-to-end evaluation looks only at the final output: did the pipeline
+correctly flag this X-ray image as containing a void, yes or no. Simple, but it
+tells you nothing about why a case failed.
+
+Component-level evaluation scores each stage separately: did normalization
+produce a sane image, did the segmentation model produce a plausible mask, did
+postprocessing apply containment correctly. This is where the actual
+diagnostic value lives, and it's the level I spend most of my own time at.
+
+## Objective versus subjective evals
+
+Some checks are objective and code-based: does the void ratio exceed a
+threshold, does the mask pass a containment rule, does the output JSON parse.
+Others are subjective and need an LLM-as-judge, or a human: does this mask look
+like a real void to an experienced inspector. I use both, and I've learned the
+hard way that skipping the subjective side just because it's harder to automate
+leaves real failure modes invisible.
+
+## The component-tagging method
+
+This is the specific technique worth calling out on its own, and it's the one
+I actually run against my own error logs. When I have a batch of failed
+examples, I do not just tally "it failed." I tag which pipeline component
+caused each failure, one row per failed example, one column per component. That
+turns a vague sense of "the model isn't great" into a concrete, ranked list of
+what to fix next.
+
+```python
+import pandas as pd
+
+error_log = pd.DataFrame([
+    {"image_id": "scan_0451", "failure_mode": "void_ratio_too_high",
+     "root_cause_component": "postprocessing", "notes": "containment logic skipped"},
+    {"image_id": "scan_0487", "failure_mode": "void_missed_entirely",
+     "root_cause_component": "segmentation_model", "notes": "low contrast region"},
+    {"image_id": "scan_0512", "failure_mode": "chip_boundary_wrong",
+     "root_cause_component": "normalization", "notes": "percentile clip too aggressive"},
+    {"image_id": "scan_0530", "failure_mode": "void_missed_entirely",
+     "root_cause_component": "segmentation_model", "notes": "unusual solder geometry"},
+    {"image_id": "scan_0561", "failure_mode": "false_positive_void",
+     "root_cause_component": "confidence_estimation", "notes": "high-entropy case not flagged"},
+])
+
+component_counts = error_log["root_cause_component"].value_counts()
+print(component_counts)
+```
+
+Running this on even a modest batch of failures gives me a ranked answer to
+where the team should spend next sprint. If segmentation_model shows up in
+forty percent of failures and normalization shows up in five percent, that's
+the priority order, not a guess based on whoever complained loudest.
+
+## Turning the tally into a component eval
+
+Once I know segmentation_model is the biggest bucket, I build a focused,
+repeatable eval just for that component, so I can measure whether a fix
+actually helped, instead of eyeballing a handful of images and hoping.
+
+```python
+def component_eval_segmentation(predicted_mask, ground_truth_mask):
+    """Objective, code-based component eval for the segmentation stage only,
+    independent of normalization or postprocessing quality."""
+    import numpy as np
+
+    intersection = np.logical_and(predicted_mask, ground_truth_mask).sum()
+    union = np.logical_or(predicted_mask, ground_truth_mask).sum()
+    iou = intersection / max(union, 1)
+    return {"iou": iou, "pass": iou > 0.7}
+```
+
+I run this before and after any change to the segmentation model specifically,
+so the signal stays clean, not muddied by an upstream normalization issue or a
+downstream postprocessing bug.
+
+## LLM-as-judge for the subjective side
+
+For failure modes that are genuinely hard to define with a hard threshold, for
+example whether a mask looks anatomically plausible to an experienced
+inspector, an LLM-as-judge call, ideally my own local vision-language model,
+does a first pass at scale, with a human only reviewing the cases it flags as
+uncertain.
+
+```python
+def llm_judge_plausibility(client, image_b64, mask_description):
+    prompt_text = (
+        "You are an experienced semiconductor X-ray inspector. Given this "
+        "image and a text description of a predicted void mask, rate "
+        "plausibility as plausible, borderline, or implausible, with one "
+        "sentence of reasoning.\\n\\nMask description: " + mask_description
+    )
+    response = client.chat.completions.create(
+        model="openai:gpt-4o-mini",
+        messages=[{"role": "user", "content": [
+            {"type": "text", "text": prompt_text},
+            {"type": "image_url", "image_url": {"url": "data:image/png;base64," + image_b64}}
+        ]}]
+    )
+    return response.choices[0].message.content
+```
+
+## The build-analyze loop
+
+The course frames this as a repeating loop, not a one-time audit, and that
+matches how I actually work: build, run a batch, tag failures by component, fix
+the highest-count component, re-run, repeat. Each cycle should shrink the error
+log and shift which component tops the list. That shift is itself useful
+information, it tells you the previous fix actually worked.
+
+## Cost and latency, briefly
+
+The course also flags benchmarking cost and latency per component as part of a
+full evaluation practice, and I take that seriously too, since a component
+that's accurate but ten times slower than everything else becomes my real
+bottleneck once I'm running thousands of images a day. I go into this properly
+in the [advanced capstone post](06-advanced-agentic-development.qmd).
+
+## What's next
+
+[Part five](05-planning-multiagent.qmd) covers Planning and Multi-Agent
+Systems, the most powerful and least predictable patterns in the course,
+including both the linear pipeline pattern and the all-to-all pattern, built
+around a team of segmentation agents.

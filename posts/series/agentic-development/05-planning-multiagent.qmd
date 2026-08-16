@@ -1,0 +1,227 @@
+---
+title: "Agentic AI for Semiconductor Imaging, Part 5: Planning and Multi-Agent Systems"
+subtitle: "From a single agent to a team, in two very different communication styles"
+author: "Hasan Goni"
+date: 2026-08-16
+categories: [agentic-ai, computer-vision, semiconductor, python]
+toc: true
+series:
+  name: "Agentic Development"
+  number: 5
+format:
+  html:
+    code-fold: false
+---
+
+:::{.callout-tip}
+This post is part of the [Agentic Development Series](index.qmd). It follows on
+from [Part 4 — evaluations and error analysis](04-evaluation-error-analysis.qmd).
+:::
+
+Everything up to this post has been me writing the pipeline logic myself: call
+this tool, then that one. Planning flips that around, an LLM looks at a task
+and produces the plan itself, which I then execute. And once a task needs
+genuinely different kinds of expertise, I stop trying to make one agent do
+everything and split it into a team instead, the same instinct that led me to
+split my own error-analysis and ingestion agents apart rather than bolt
+everything onto one.
+
+## Jargon, explained simply
+
+**Planning.** An LLM deciding the sequence of steps needed to complete a task,
+instead of a developer hard-coding that sequence.
+
+**JSON plan.** A plan expressed as a structured list of steps, which your code
+then reads and executes one by one.
+
+**Code-as-plan.** A plan expressed as actual runnable code the model writes,
+more flexible, riskier to run unsupervised.
+
+**Linear pattern.** A fixed sequence of agents, each one's output feeding
+directly into the next, with no agent deciding what happens next.
+
+**All-to-all pattern.** Every agent can message any other agent freely, and the
+group is done once one agent declares the task complete.
+
+**Orchestrator.** Whatever decides the order agents run in, either your own
+code, in the linear pattern, or the agents themselves, in the all-to-all
+pattern.
+
+## Planning: letting the model decide the steps
+
+A JSON plan is a structured list of steps the model outputs, which your code
+then walks through and executes. A code-as-plan approach has the model write
+actual Python that does the work, which you then run directly.
+
+```python
+import aisuite as ai
+import json
+
+client = ai.Client()
+
+response = client.chat.completions.create(
+    model="openai:gpt-4o-mini",
+    messages=[
+        {"role": "system", "content": "You are a segmentation pipeline planner. "
+         "Respond only with a JSON list of steps, each with a tool name and arguments."},
+        {"role": "user", "content": "New X-ray scan just came in as scan_0602.tif. "
+         "Plan how to process it end to end, from raw file to a void-ratio verdict."}
+    ]
+)
+
+plan = json.loads(response.choices[0].message.content)
+for step in plan:
+    print(step["tool"], step["arguments"])
+```
+
+The tradeoff is real, and I feel it every time I consider using this in
+production: a fixed pipeline I write by hand is predictable and easy to debug.
+A model-generated plan can adapt to unusual cases, an unusually noisy scan
+might get an extra denoising step the model decides to add on its own, but it's
+harder to guarantee what it will do on any given run. I lean toward fixed
+pipelines for anything that ends up in a report, and reserve model-generated
+plans for exploratory work.
+
+## Multi-agent systems: specialists instead of one generalist
+
+Once a task needs genuinely different expertise, preprocessing logic, model
+inference, postprocessing rules, error triage, it works better as a team of
+small, focused agents than one agent trying to do everything. The course walks
+through communication patterns in increasing order of complexity and
+decreasing order of predictability. I'll build the two ends of that spectrum:
+linear and all-to-all.
+
+## Pattern one: the linear pipeline
+
+The simplest and most predictable pattern, a fixed sequence, each agent's
+output feeding directly into the next, no agent deciding what happens next, my
+Python function is the orchestrator. This mirrors the course's own four-agent
+marketing lab, just rebuilt for segmentation.
+
+```python
+import aisuite as ai
+
+client = ai.Client()
+
+def preprocessing_agent(raw_path):
+    return normalize_xray(raw_path)
+
+def modeling_agent(normalized_path):
+    return {"mask_path": normalized_path.replace(".png", "_mask.png")}
+
+def postprocessing_agent(mask_path):
+    return check_void_ratio(mask_path)
+
+def error_analysis_agent(verdict_text):
+    response = client.chat.completions.create(
+        model="openai:gpt-4o-mini",
+        messages=[
+            {"role": "system", "content": "You are an error-analysis agent for a "
+             "semiconductor imaging pipeline."},
+            {"role": "user", "content": "Given this verdict, decide if it needs "
+             "human review and why: " + verdict_text}
+        ]
+    )
+    return response.choices[0].message.content
+
+def run_segmentation_pipeline(raw_path):
+    normalized = preprocessing_agent(raw_path)
+    model_output = modeling_agent(normalized)
+    verdict = postprocessing_agent(model_output["mask_path"])
+    review_decision = error_analysis_agent(verdict)
+    return review_decision
+
+print(run_segmentation_pipeline("scan_0602.tif"))
+```
+
+Four specialists, one fixed order, easy to trace, easy to debug. This is
+basically the shape my own ingestion and error-analysis agent split already
+takes, just with two more stages spelled out explicitly here.
+
+## Pattern two: all-to-all
+
+At the other extreme, every agent can message every other agent whenever it
+wants, each is prompted with knowledge that the others exist, and the group
+converges when one agent self-declares the work complete. The course is
+explicit that this suits applications where some unpredictability is
+tolerable, not production systems, you simply re-run it if the output is not
+good enough.
+
+```python
+class Agent:
+    def __init__(self, name, role_prompt, client):
+        self.name = name
+        self.role_prompt = role_prompt
+        self.client = client
+        self.inbox = []
+
+    def receive(self, sender, message):
+        self.inbox.append({"from": sender, "message": message})
+
+    def act(self, other_agent_names):
+        context = "\\n".join(f"{m['from']}: {m['message']}" for m in self.inbox)
+        prompt = (
+            self.role_prompt + "\\n\\nOther agents in this team: " +
+            ", ".join(other_agent_names) +
+            "\\n\\nConversation so far:\\n" + context +
+            "\\n\\nRespond with either a message to a specific agent in the "
+            "format TO:<agent_name> <message>, or DONE: <final summary> if the "
+            "team's task is complete."
+        )
+        response = self.client.chat.completions.create(
+            model="openai:gpt-4o-mini",
+            messages=[{"role": "user", "content": prompt}]
+        )
+        return response.choices[0].message.content
+
+
+def run_all_to_all(agents, max_rounds=6):
+    for round_num in range(max_rounds):
+        for agent in agents.values():
+            other_names = [n for n in agents if n != agent.name]
+            reply = agent.act(other_names)
+
+            if reply.startswith("DONE:"):
+                return reply
+
+            if reply.startswith("TO:"):
+                target_name, _, message = reply.partition(" ")
+                target_name = target_name.replace("TO:", "").strip()
+                if target_name in agents:
+                    agents[target_name].receive(agent.name, message)
+    return "No agent declared completion within max_rounds."
+
+
+agents = {
+    "preprocessing": Agent("preprocessing",
+        "You handle normalization of raw X-ray TIFFs.", client),
+    "modeling": Agent("modeling",
+        "You run the segmentation model and report mask statistics.", client),
+    "error_analysis": Agent("error_analysis",
+        "You review results from other agents and flag anything implausible, "
+        "declaring DONE once you are satisfied the case is resolved.", client),
+}
+
+print(run_all_to_all(agents))
+```
+
+I have noticeably less control here than in the linear version. No agent is
+guaranteed to talk to any other in a given order, and the whole thing could, in
+principle, loop past max_rounds without resolving, which is exactly why the
+course frames this as chaos-tolerant, and why I cap it with max_rounds at all.
+
+## Which pattern for which job
+
+For anything going into a production KPI report, a regulated defect log, or
+anything I need to explain to an auditor, I use the linear pattern, or the
+hierarchical manager pattern one step up, single point of control, easy to
+reason about. I reach for all-to-all only for exploratory, low-stakes work,
+brainstorming a new synthetic-data augmentation strategy, for example, where
+some unpredictability is genuinely fine.
+
+## What's next
+
+That closes out the five modules, in the course's own order. [Part
+six](06-advanced-agentic-development.qmd) covers production hardening,
+testing, and deployment, the things the course itself does not touch but that
+decide whether an agent actually survives contact with a real production line.

@@ -1,0 +1,459 @@
+---
+title: "Agentic AI for Semiconductor Imaging, Part 6: Advanced Agentic AI Development"
+subtitle: "Production hardening, memory, security, testing, deployment, observability, and safe iteration"
+author: "Hasan Goni"
+date: 2026-08-16
+categories: [agentic-ai, computer-vision, semiconductor, python]
+toc: true
+series:
+  name: "Agentic Development"
+  number: 6
+format:
+  html:
+    code-fold: false
+---
+
+:::{.callout-tip}
+This post is part of the [Agentic Development Series](index.qmd). It follows on
+from [Part 5 — planning and multi-agent systems](05-planning-multiagent.qmd),
+and closes out the course's own five modules before the series goes further
+than the course does.
+:::
+
+The five posts before this one followed Andrew Ng's course closely, and that
+course, by design, stops at fundamentals built from raw Python. Nobody tells
+you what happens six months later, when a network call fails at three in the
+morning, or a prompt edit silently degrades a decision nobody notices for a
+week. This post is everything I've had to figure out on my own to get an agent
+from "works in a notebook" to "I trust it running against real production
+imaging data every day." It's the longest post in the series for a reason.
+
+## Jargon, explained simply
+
+**Retry with backoff.** Automatically retrying a failed call, waiting a bit
+longer between each attempt, instead of failing immediately.
+
+**Timeout.** A hard limit on how long you'll wait for something to respond
+before giving up on it.
+
+**Memory, or state.** Information an agent keeps around, either within one
+conversation, or persisted across restarts and future runs.
+
+**Prompt injection.** Malicious instructions hidden inside data an agent reads,
+trying to hijack what the agent does next.
+
+**Span, in tracing.** One recorded unit of work, an agent call or a tool call,
+with a start time, end time, and metadata, used to reconstruct what happened
+during a run.
+
+**HITL.** Human-in-the-loop, a point in the pipeline where a person reviews and
+decides something before the pipeline continues.
+
+**LoRA.** A parameter-efficient fine-tuning method, adjusting a small number of
+extra weights rather than the whole model, which is why it's realistic on a
+single GPU.
+
+## Production hardening: retries, timeouts, and cost tracking
+
+Every real deployment eventually hits a flaky API call, a slow model response,
+or a session that turns out far more expensive than expected. None of the code
+in the earlier posts protects against any of that on its own, and I learned
+that the hard way early on.
+
+Retries with backoff, so a transient failure doesn't kill the whole run:
+
+```python
+import time
+
+def call_with_retry(func, max_attempts=3, base_delay=1.0, *args, **kwargs):
+    last_error = None
+    for attempt in range(max_attempts):
+        try:
+            return func(*args, **kwargs)
+        except Exception as error:
+            last_error = error
+            wait_time = base_delay * (2 ** attempt)
+            time.sleep(wait_time)
+    raise last_error
+```
+
+Timeouts matter just as much, an agent calling a tool that hangs forever brings
+the whole pipeline down with it, so I always bound tool execution time
+explicitly, especially for anything touching a network filesystem.
+
+Cost and latency tracking stops being optional once you're running an agent
+against thousands of X-ray images a day, token usage becomes a real budget
+line, so I log both on every call.
+
+```python
+def logged_call(client, model, messages, **kwargs):
+    start = time.time()
+    response = client.chat.completions.create(model=model, messages=messages, **kwargs)
+    elapsed = time.time() - start
+    usage = getattr(response, "usage", None)
+    print(f"model={model} elapsed={elapsed:.2f}s usage={usage}")
+    return response
+```
+
+Aggregate these per component, and I get the same kind of visibility the
+error-analysis post gave for correctness, now for cost and speed.
+
+## Memory and state: agents that remember
+
+Nothing in the earlier posts persists anything across runs. A real agent
+supporting a production line needs at least two kinds of memory: short-term,
+within-session, just the growing messages list I already use in the tool-use
+loop, and long-term, cross-session, facts the agent should remember tomorrow.
+
+For me, a genuinely useful long-term example is remembering which defect
+signatures have already been triaged, so a recurring lifted-chip pattern on a
+specific machine doesn't get re-flagged as novel every single day.
+
+```python
+import json
+import os
+
+MEMORY_PATH = "agent_memory.json"
+
+def load_memory():
+    if os.path.exists(MEMORY_PATH):
+        with open(MEMORY_PATH) as f:
+            return json.load(f)
+    return {"known_defect_signatures": []}
+
+def save_memory(memory):
+    with open(MEMORY_PATH, "w") as f:
+        json.dump(memory, f, indent=2)
+
+def is_known_signature(memory, signature):
+    return signature in memory["known_defect_signatures"]
+
+def remember_signature(memory, signature):
+    memory["known_defect_signatures"].append(signature)
+    save_memory(memory)
+```
+
+Intentionally simple, a JSON file. In production I'd swap this for a proper
+vector store, but the idea doesn't change: persist state outside the process so
+it survives a restart.
+
+## Security: prompt injection and input validation
+
+This matters more once you've exposed tools through MCP, as I did in [part
+three](03-tool-use-mcp.qmd), because anything that can produce text your agent
+reads, a filename, a value pulled off a shared network drive, becomes a
+potential attack surface.
+
+Treat any text your agent reads from an external source as data, never as
+instructions, and be explicit about that boundary in your system prompt.
+Always validate tool inputs too, even when the model generated them itself.
+
+```python
+def normalize_xray_safe(image_path: str, low_percentile: float = 2.0,
+                         high_percentile: float = 98.0) -> str:
+    if not image_path.endswith((".tif", ".tiff")):
+        raise ValueError("Only TIFF files are accepted.")
+    if not (0 <= low_percentile < high_percentile <= 100):
+        raise ValueError("Percentile bounds are invalid.")
+    if not os.path.exists(image_path):
+        raise FileNotFoundError(f"No such file: {image_path}")
+    return normalize_xray(image_path, low_percentile, high_percentile)
+```
+
+A model calling a tool is still just code executing with whatever arguments it
+was handed, it deserves the exact same input validation as any function
+reachable from an untrusted caller.
+
+## The framework landscape: when to stop hand-rolling
+
+Everything in this series is raw Python plus aisuite, deliberately, because
+that's how I actually learned what these frameworks do underneath. Once you
+understand that, reaching for a framework becomes a real efficiency choice, not
+a black box you're trusting blindly.
+
+LangGraph models an agent as an explicit graph of nodes and edges, particularly
+good once your pipeline has branches and loops that get unwieldy as plain
+Python control flow.
+
+CrewAI is built specifically around the multi-agent, role-based pattern from
+[part five](05-planning-multiagent.qmd), defining agents by role and goal
+declaratively, with orchestration handled by the framework.
+
+Google's Agent Development Kit is worth knowing given where the industry, and
+frankly Infineon's own tooling direction, seems to be heading. It's open
+source, code-first, built specifically for multi-agent systems, and it can
+expose an ADK agent as an MCP server directly, connecting natively to
+everything from part three. I'm planning a separate, deeper series just on ADK
+and LangGraph once I've spent more real hours in each, this post is not the
+place to go shallow on both.
+
+I stay with raw Python and aisuite while still learning, or while the pipeline
+stays small enough to reason about directly. I move to a framework once there's
+real branching logic, more than a handful of cooperating agents, or an
+organizational reason to prefer a shared framework over a custom one.
+
+## Testing agents automatically
+
+Everything so far has been "run it and read the output." That stops scaling
+the moment more than one person touches the pipeline, you need tests that catch
+regressions automatically, same as any other software.
+
+Agent testing has two layers. First, test the plain functions underneath the
+agent exactly like any Python code, no LLM involved. Second, test the agent's
+tool-selection behavior itself, where it gets more interesting, since the
+model's exact wording varies between runs, so you assert on behavior, not on
+exact text.
+
+```python
+import pytest
+from tools import normalize_xray_safe, check_void_ratio
+
+def test_normalize_rejects_non_tiff():
+    with pytest.raises(ValueError):
+        normalize_xray_safe("scan.png")
+
+def test_normalize_rejects_bad_percentiles():
+    with pytest.raises(ValueError):
+        normalize_xray_safe("scan.tif", low_percentile=99, high_percentile=1)
+
+def test_void_ratio_flags_above_threshold(tmp_path):
+    import numpy as np
+    from PIL import Image
+
+    mask = np.zeros((10, 10), dtype="uint8")
+    mask[0:10, 0:5] = 1
+    mask[0:10, 0:4] = 2
+    mask_path = tmp_path / "mask.png"
+    Image.fromarray(mask).save(mask_path)
+
+    result = check_void_ratio(str(mask_path), threshold=0.3)
+    assert "FLAGGED" in result
+```
+
+```python
+import aisuite as ai
+from tools import normalize_xray, check_void_ratio
+
+client = ai.Client()
+
+def test_agent_calls_normalize_when_asked():
+    response = client.chat.completions.create(
+        model="openai:gpt-4o-mini",
+        messages=[
+            {"role": "user", "content": "Please normalize scan_0451.tif"}
+        ],
+        tools=[normalize_xray, check_void_ratio],
+        max_turns=3,
+    )
+    tool_names_called = [
+        call.function.name
+        for msg in response.choices
+        for call in getattr(msg.message, "tool_calls", None) or []
+    ]
+    assert "normalize_xray" in tool_names_called or "normalize" in (
+        response.choices[0].message.content or ""
+    ).lower()
+```
+
+Run these with pytest, and wire that same command into whatever CI you already
+use, so a broken tool or a regressed agent decision fails a pull request
+automatically instead of quietly showing up in production.
+
+## Deploying the MCP server for real
+
+The MCP server from part three ran with a single command on my own machine.
+For anything shared or production, I want it running unattended and restarting
+itself if it crashes.
+
+Docker option, save this as `Dockerfile`:
+
+```dockerfile
+FROM python:3.12-slim
+
+WORKDIR /app
+COPY mcp_server.py tools.py requirements.txt ./
+RUN pip install --no-cache-dir -r requirements.txt
+
+CMD ["python", "mcp_server.py"]
+```
+
+Build and run it with these two commands: `docker build -t semiconductor-mcp-server .`
+then `docker run -d --name semiconductor-mcp --restart unless-stopped semiconductor-mcp-server`.
+The restart flag means Docker brings the server back up on its own if it
+crashes or the host reboots.
+
+systemd option, for a bare-metal or VM deployment without Docker, save this as
+`/etc/systemd/system/semiconductor-mcp.service`:
+
+```ini
+[Unit]
+Description=Semiconductor Imaging MCP Server
+After=network.target
+
+[Service]
+ExecStart=/usr/bin/python3 /opt/semiconductor-mcp/mcp_server.py
+Restart=on-failure
+User=youruser
+WorkingDirectory=/opt/semiconductor-mcp
+
+[Install]
+WantedBy=multi-user.target
+```
+
+Enable and start it with `sudo systemctl enable semiconductor-mcp` then
+`sudo systemctl start semiconductor-mcp`. Check its health any time with
+`sudo systemctl status semiconductor-mcp`.
+
+Docker is my default if more than one person needs to reproduce the exact same
+environment. systemd is simpler and perfectly fine on a single dedicated
+machine you fully control, like a lab PC sitting next to the inspection line
+itself.
+
+## Observability: tracing a multi-agent run properly
+
+Print statements stop being enough once several agents call several tools
+across several turns, you lose the shape of what actually happened.
+OpenTelemetry is the vendor-neutral standard for this, and it plugs into
+dashboards like Jaeger, or agent-specific tools like LangSmith or Arize
+Phoenix.
+
+```python
+from opentelemetry import trace
+from opentelemetry.sdk.trace import TracerProvider
+from opentelemetry.sdk.trace.export import BatchSpanProcessor, ConsoleSpanExporter
+
+provider = TracerProvider()
+provider.add_span_processor(BatchSpanProcessor(ConsoleSpanExporter()))
+trace.set_tracer_provider(provider)
+
+tracer = trace.get_tracer("semiconductor-imaging-agents")
+
+
+def traced_tool_call(tool_fn, *args, **kwargs):
+    with tracer.start_as_current_span(f"tool:{tool_fn.__name__}") as span:
+        span.set_attribute("tool.args", str(args))
+        result = tool_fn(*args, **kwargs)
+        span.set_attribute("tool.result", str(result)[:200])
+        return result
+
+
+def traced_agent_call(client, agent_name, model, messages, **kwargs):
+    with tracer.start_as_current_span(f"agent:{agent_name}") as span:
+        span.set_attribute("agent.model", model)
+        response = client.chat.completions.create(model=model, messages=messages, **kwargs)
+        span.set_attribute("agent.output", str(response.choices[0].message.content)[:200])
+        return response
+```
+
+Swap direct calls throughout the linear pipeline from part five for these
+traced versions, and running it prints a full nested span tree: which agent
+ran, which tool it called, how long each step took, what it returned. Point the
+exporter at a real backend instead of the console, and you get the same
+information as a visual timeline in a browser.
+
+## Human-in-the-loop escalation, as a real queue
+
+I've said "flag for human review" a few times across this series without ever
+building the actual mechanism. A proper HITL pattern needs the pipeline to
+pause, persist its state, and let a separate process resume it once a human has
+answered, rather than blocking a live process waiting on a person.
+
+```python
+import json
+import uuid
+import os
+
+QUEUE_PATH = "hitl_queue.json"
+
+
+def load_queue():
+    if os.path.exists(QUEUE_PATH):
+        with open(QUEUE_PATH) as f:
+            return json.load(f)
+    return {}
+
+
+def save_queue(queue):
+    with open(QUEUE_PATH, "w") as f:
+        json.dump(queue, f, indent=2)
+
+
+def escalate_to_human(context: dict) -> str:
+    """Pause the pipeline here by writing pending state to the queue.
+    Returns a ticket id the caller can use to check for a resolution later."""
+    queue = load_queue()
+    ticket_id = str(uuid.uuid4())
+    queue[ticket_id] = {"status": "pending", "context": context, "resolution": None}
+    save_queue(queue)
+    return ticket_id
+
+
+def resolve_ticket(ticket_id: str, human_decision: str):
+    """Run this from a separate script, or a small internal review UI,
+    once a human has actually looked at the flagged case."""
+    queue = load_queue()
+    if ticket_id in queue:
+        queue[ticket_id]["status"] = "resolved"
+        queue[ticket_id]["resolution"] = human_decision
+        save_queue(queue)
+
+
+def check_ticket(ticket_id: str):
+    queue = load_queue()
+    return queue.get(ticket_id, {}).get("status", "unknown")
+```
+
+The pipeline calls escalate_to_human when the error-analysis agent decides a
+case is too uncertain, gets a ticket id back, and can exit and be re-triggered
+later, or poll check_ticket in a loop. A human, or a small internal review
+tool, calls resolve_ticket separately, decoupling human response time
+completely from the pipeline process. Swap the JSON file for a real database
+table once you have more than a handful of concurrent tickets.
+
+## Versioning and rollback for prompts and configs
+
+System prompts and tool schemas change over time, and a bad prompt edit can
+silently degrade behavior the same way a bad model checkpoint can. I treat them
+as versioned artifacts, not strings hardcoded inline.
+
+```python
+import os
+
+PROMPT_DIR = "prompts"
+
+
+def load_prompt(name: str, version: str) -> str:
+    path = os.path.join(PROMPT_DIR, f"{version}_{name}.txt")
+    with open(path) as f:
+        return f.read()
+
+
+ACTIVE_PROMPT_VERSION = "v2"
+
+error_analysis_prompt = load_prompt("error_analysis", ACTIVE_PROMPT_VERSION)
+```
+
+Because these live in my project folder, plain git history gives full version
+control, `git log` for change history, `git checkout` on a specific commit if
+v2 turns out to perform worse than v1 once I actually measure it with the
+component evals from [part four](04-evaluation-error-analysis.qmd). Never edit
+a prompt in place and redeploy, bump the version, keep the old file, only flip
+`ACTIVE_PROMPT_VERSION` once you've re-run your evals.
+
+## Where this leaves you
+
+Across this series you went from a single LLM call, to a self-critiquing agent,
+to a tool-calling agent exposed as a real MCP server, to a disciplined
+error-analysis practice, to a working multi-agent team in two communication
+styles, and now to production hardening, testing, deployment, observability,
+human escalation, and safe iteration. That's the difference between a working
+demo and a system I would actually trust running against real semiconductor
+imaging data every day.
+
+## What's next
+
+The next three posts go further than the course ever attempts: [cross-framework
+agent interoperability with A2A](07-a2a-interoperability.qmd), [fine-tuning and
+distilling your own agent's behavior](08-finetuning-distillation.qmd), and
+[retrieval, grounding an agent in real historical cases and documented
+knowledge](09-retrieval-rag.qmd).

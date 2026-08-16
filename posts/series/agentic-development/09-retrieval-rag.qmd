@@ -1,0 +1,318 @@
+---
+title: "Agentic AI for Semiconductor Imaging, Part 9: Retrieval, Grounding Your Agent in Real Knowledge"
+subtitle: "Two different retrieval problems: similar past images, and relevant text knowledge, plus a defect-level refinement"
+author: "Hasan Goni"
+date: 2026-08-16
+categories: [agentic-ai, computer-vision, semiconductor, python, rag]
+toc: true
+series:
+  name: "Agentic Development"
+  number: 9
+format:
+  html:
+    code-fold: false
+---
+
+:::{.callout-tip}
+This post is part of the [Agentic Development Series](index.qmd). It follows on
+from [Part 8 — fine-tuning and distilling your own agent](08-finetuning-distillation.qmd),
+and closes out the series.
+:::
+
+Every agent in this series so far reasons from whatever is in the prompt, or
+from what a tool computes on the spot. Retrieval adds a third source: a
+knowledge base the agent actually searches before answering. This is usually
+called RAG, retrieval-augmented generation, but in my domain it genuinely
+splits into two different problems, and I think treating them as one leads to
+a worse, more confused implementation than treating them separately.
+
+The first problem is visual similarity retrieval: given a new X-ray scan, find
+the most similar past scans, so an agent can say "this looks like case such-
+and-such from last month, which turned out to be a real lifted-chip defect."
+That's nearest-neighbor search over image embeddings, and it's exactly what my
+existing DINOv3 plus LanceDB setup already does.
+
+The second problem is textual knowledge retrieval: given a question like "what
+does LT07 mean, and what's the acceptance threshold," find the relevant
+paragraph from a defect catalog or process spec. That's classic RAG over text
+chunks, a completely different embedding space and mechanism.
+
+I'll build both, separately, then show an agent combining them.
+
+## Jargon, explained simply
+
+**RAG.** Retrieval-augmented generation, an agent searching a knowledge base
+for relevant information before generating its answer, instead of relying only
+on what's already in the prompt.
+
+**Embedding.** A numeric vector representing an image or a piece of text, such
+that similar things end up with similar vectors, which is what makes nearest-
+neighbor search possible.
+
+**Vector database.** A database built specifically for storing embeddings and
+finding the nearest ones to a query, LanceDB in my case.
+
+**Chunk.** A small piece of a longer document, split up so each piece can be
+embedded and searched individually.
+
+**Crop, or region crop.** A small rectangular piece cut out of a larger image,
+in my case around a specific defect region, using the segmentation mask to
+know where to cut.
+
+## Part one: visual case retrieval with DINOv3 and LanceDB
+
+I already have the right embedding model for this: `facebook/dinov3-vitl16-pretrain-lvd1689m`
+on HPC, or the smaller `vitb16` variant locally, feeding a LanceDB table of CLS
+embeddings for FiftyOne-style similarity search. Here's that exact pattern,
+wired up as a tool an agent can call.
+
+```python
+import lancedb
+import numpy as np
+import torch
+from transformers import AutoImageProcessor, AutoModel
+
+processor = AutoImageProcessor.from_pretrained("facebook/dinov3-vitb16-pretrain-lvd1689m")
+embedding_model = AutoModel.from_pretrained("facebook/dinov3-vitb16-pretrain-lvd1689m")
+
+db = lancedb.connect("./xray_case_db")
+table = db.open_table("historical_scans")
+
+
+def embed_image(image_path: str) -> np.ndarray:
+    from PIL import Image
+    image = Image.open(image_path).convert("RGB")
+    inputs = processor(images=image, return_tensors="pt")
+    with torch.no_grad():
+        outputs = embedding_model(**inputs)
+    cls_embedding = outputs.last_hidden_state[:, 0, :].squeeze().numpy()
+    return cls_embedding
+
+
+def retrieve_similar_cases(image_path: str, top_k: int = 5) -> list:
+    """Find the most visually similar historical X-ray scans, with their
+    recorded defect labels, for a new scan."""
+    query_embedding = embed_image(image_path)
+    results = table.search(query_embedding).limit(top_k).to_list()
+    return [
+        {"case_id": r["case_id"], "defect_label": r["defect_label"], "distance": r["_distance"]}
+        for r in results
+    ]
+```
+
+This is a real tool, in the exact aisuite-compatible shape from part three. An
+agent can call `retrieve_similar_cases` mid-conversation the same way it calls
+`normalize_xray` or `check_void_ratio`, the only difference is what comes back
+is historical precedent, not a computed number.
+
+## Part two: textual RAG over the defect catalog and specs
+
+For text knowledge, chunk the documents, embed the chunks with a text
+embedding model, and store those in a separate vector index. This is a
+completely different embedding space from DINOv3, I don't try to reuse the
+image embeddings for this.
+
+```python
+import lancedb
+from sentence_transformers import SentenceTransformer
+
+text_embedder = SentenceTransformer("all-MiniLM-L6-v2")
+text_db = lancedb.connect("./spec_knowledge_db")
+spec_table = text_db.open_table("defect_catalog_chunks")
+
+
+def retrieve_spec_knowledge(query: str, top_k: int = 3) -> list:
+    """Retrieve the most relevant defect-catalog or process-spec passages
+    for a natural language question."""
+    query_embedding = text_embedder.encode(query)
+    results = spec_table.search(query_embedding).limit(top_k).to_list()
+    return [{"text": r["text"], "source_doc": r["source_doc"]} for r in results]
+```
+
+Building the index itself, once, is a simple chunk-and-embed job:
+
+```python
+def build_spec_index(documents: list, chunk_size: int = 300):
+    records = []
+    for doc in documents:
+        text = doc["text"]
+        chunks = [text[i:i + chunk_size] for i in range(0, len(text), chunk_size)]
+        for chunk in chunks:
+            records.append({
+                "text": chunk,
+                "source_doc": doc["source_doc"],
+                "vector": text_embedder.encode(chunk),
+            })
+    spec_table.add(records)
+```
+
+Run `build_spec_index` once against the defect catalog, LT07, LT14, LT03,
+LT52, LT57, and any process spec documents, and `retrieve_spec_knowledge`
+gives any agent instant lookup over that material from then on.
+
+## A refinement I think matters: separating whole-image similarity from defect similarity
+
+Everything above treats "similar case" as one thing, similarity of the whole
+scan. That conflates two genuinely different questions. Whole-image similarity
+is driven mostly by chip layout, imaging conditions, and overall geometry, two
+scans of the same chip family look similar to each other almost regardless of
+whether either one has a defect. Defect-level similarity is a different
+question entirely: does this specific void region resemble other void
+regions, in shape, size, and texture, independent of which chip it happened to
+appear on. A single whole-image embedding can't answer that second question
+well, since the defect is a small part of a much larger, mostly irrelevant,
+context.
+
+The fix is to embed defect crops separately, using the segmentation masks I
+already produce, and store them in their own table, tagged by defect type, so
+retrieval can search specifically within, say, all historical void regions,
+regardless of what chip or scan they came from.
+
+### Cropping defect regions using the existing segmentation masks
+
+This reuses the multi-head UNet output directly, chip, void, and lifted-chip
+masks, to extract a tight crop around each defect region before embedding it.
+
+```python
+import numpy as np
+from PIL import Image
+
+
+def crop_defect_region(image_path: str, mask: np.ndarray, defect_class_value: int,
+                        padding: int = 16) -> Image.Image:
+    """Crop a tight bounding box around a specific defect class in the mask,
+    with a small padding margin, from the original image."""
+    ys, xs = np.where(mask == defect_class_value)
+    if len(ys) == 0:
+        return None
+
+    y_min, y_max = max(ys.min() - padding, 0), ys.max() + padding
+    x_min, x_max = max(xs.min() - padding, 0), xs.max() + padding
+
+    image = Image.open(image_path)
+    return image.crop((x_min, y_min, x_max, y_max))
+```
+
+### A second embedding table, specifically for defect crops
+
+```python
+defect_table = db.open_table("defect_crops") if "defect_crops" in db.table_names() \
+    else db.create_table("defect_crops", schema=None)
+
+
+def embed_defect_crop(cropped_image: Image.Image) -> np.ndarray:
+    inputs = processor(images=cropped_image.convert("RGB"), return_tensors="pt")
+    with torch.no_grad():
+        outputs = embedding_model(**inputs)
+    return outputs.last_hidden_state[:, 0, :].squeeze().numpy()
+
+
+def index_defect_crop(image_path: str, mask: np.ndarray, defect_class_value: int,
+                       defect_label: str, case_id: str):
+    crop = crop_defect_region(image_path, mask, defect_class_value)
+    if crop is None:
+        return
+    embedding = embed_defect_crop(crop)
+    defect_table.add([{
+        "case_id": case_id,
+        "defect_label": defect_label,
+        "vector": embedding,
+    }])
+```
+
+Run `index_defect_crop` once per historical defect instance, void, lifted-
+chip, solder void, and so on, and I now have a retrieval space that only
+contains defect regions, not whole scans, so nearest neighbors are genuinely
+about defect shape and texture, not chip layout.
+
+### Two-stage retrieval: context, then defect-specific precedent
+
+```python
+def retrieve_two_stage(image_path: str, mask: np.ndarray, defect_class_value: int,
+                        defect_label: str, top_k: int = 5) -> dict:
+    """Stage one: whole-image context, what kind of scan is this overall.
+    Stage two: defect-specific precedent, what similar defects have we seen,
+    regardless of which chip they came from."""
+    whole_image_matches = retrieve_similar_cases(image_path, top_k=top_k)
+
+    crop = crop_defect_region(image_path, mask, defect_class_value)
+    defect_matches = []
+    if crop is not None:
+        crop_embedding = embed_defect_crop(crop)
+        results = defect_table.search(crop_embedding).limit(top_k).to_list()
+        defect_matches = [
+            {"case_id": r["case_id"], "defect_label": r["defect_label"], "distance": r["_distance"]}
+            for r in results
+        ]
+
+    return {"whole_image_context": whole_image_matches, "defect_precedent": defect_matches}
+```
+
+### Feeding both levels, plus spec text, into one grounded agent decision
+
+```python
+import aisuite as ai
+
+client = ai.Client()
+
+
+def grounded_error_analysis(image_path: str, mask: np.ndarray, defect_class_value: int,
+                             defect_label: str, verdict_text: str, defect_code_guess: str) -> str:
+    retrieval = retrieve_two_stage(image_path, mask, defect_class_value, defect_label)
+    spec_passages = retrieve_spec_knowledge(
+        f"acceptance threshold and definition for {defect_code_guess}", top_k=2
+    )
+
+    context_text = (
+        "Whole-image context, similar overall scans:\n" +
+        "\n".join(f"- case {c['case_id']}: {c['defect_label']}" for c in retrieval["whole_image_context"]) +
+        "\n\nDefect-specific precedent, similar " + defect_label + " regions regardless of chip:\n" +
+        "\n".join(f"- case {c['case_id']}: {c['defect_label']}" for c in retrieval["defect_precedent"]) +
+        "\n\nRelevant specification text:\n" +
+        "\n".join(f"- {p['text']} (source: {p['source_doc']})" for p in spec_passages)
+    )
+
+    prompt = (
+        "You are a semiconductor imaging error-analysis agent. You have two "
+        "distinct kinds of retrieved evidence: whole-image context, and "
+        "defect-specific precedent. Weigh the defect-specific precedent more "
+        "heavily when judging whether this defect itself is plausible, and use "
+        "the whole-image context only for general scan-quality sanity checking.\n\n"
+        + context_text +
+        "\n\nNew case verdict: " + verdict_text
+    )
+
+    response = client.chat.completions.create(
+        model="openai:gpt-4o-mini",
+        messages=[{"role": "user", "content": prompt}]
+    )
+    return response.choices[0].message.content
+```
+
+## Why this distinction actually matters
+
+Without the split, a defect that's genuinely unusual but sits on a very common
+chip type gets diluted whole-image similarity scores that hide the defect's
+actual novelty. With the split, defect-crop retrieval alone correctly surfaces
+that this void shape has never really been seen before, regardless of how
+familiar the surrounding chip looks, which is exactly the signal an error-
+analysis agent, or a human reviewer reading its justification, actually needs.
+
+## Why retrieval belongs late in the series, not early
+
+Retrieval only pays off once you already have a body of prior cases and
+documents worth retrieving from, and once your agent already has the tool-use
+and error-analysis discipline from earlier posts to make good use of what
+comes back. Bolting retrieval onto an agent with no other structure just adds
+noise to the prompt, it earns its place here, as a grounding layer on top of
+everything already built.
+
+## Where the series stands now
+
+Nine posts: the original five in the course's own order, then production
+hardening with testing and deployment, cross-framework interoperability with
+A2A, fine-tuning and distillation of my own agent's behavior, and now
+retrieval, both visual case similarity, at the whole-image and defect-crop
+level, and textual specification knowledge, grounding every decision the agent
+makes in real historical and documented evidence rather than reasoning alone.
+That's the complete arc.

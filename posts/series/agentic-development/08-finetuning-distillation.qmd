@@ -1,0 +1,246 @@
+---
+title: "Agentic AI for Semiconductor Imaging, Part 8: Fine-Tuning and Distilling Your Own Agent"
+subtitle: "Turning a large model's agent behavior into a small model you can run cheaply, forever"
+author: "Hasan Goni"
+date: 2026-08-16
+categories: [agentic-ai, computer-vision, semiconductor, python, distillation]
+toc: true
+series:
+  name: "Agentic Development"
+  number: 8
+format:
+  html:
+    code-fold: false
+---
+
+:::{.callout-tip}
+This post is part of the [Agentic Development Series](index.qmd). It follows on
+from [Part 7 — agent-to-agent interoperability with A2A](07-a2a-interoperability.qmd).
+:::
+
+Every agent in this series so far is a frozen large model plus a prompt. That's
+the right way to start, but it has a real cost once you're running an agent
+thousands of times a day: every call pays full inference cost and full latency
+on a large model, even for decisions that turn out to be fairly routine, like
+"is this void ratio within the normal range." I already treat distillation as a
+compounding strategic asset in my own work, more valuable the longer a system
+runs, and this post is that same logic applied to an agent's decisions instead
+of a vision model's weights.
+
+The core idea: run the large, expensive model on real traffic for a while, log
+every input and every good output, then fine-tune a much smaller model on
+those logged pairs, so the small model learns to reproduce the large model's
+specific decisions for your specific task, without the large model's general-
+purpose overhead.
+
+## Jargon, explained simply
+
+**Distillation.** Training a smaller model to imitate a larger model's
+outputs, rather than training it from scratch on the original task.
+
+**Teacher model.** The larger model whose outputs you're using as training
+data.
+
+**Student model.** The smaller model being trained to imitate the teacher.
+
+**LoRA.** Low-rank adaptation, a way to fine-tune a model by training a small
+number of extra weights, instead of updating every weight in the model, which
+is why it fits on a single GPU.
+
+**Held-out set.** Data kept aside during training, never seen by the model, so
+you can evaluate honestly instead of grading on data it already memorized.
+
+**Staged rollout.** Gradually increasing what fraction of real traffic a new
+model handles, instead of switching everything over at once.
+
+## Step one: instrument my agent to log training pairs
+
+I already have most of this from the observability section in [part
+six](06-advanced-agentic-development.qmd). I extend it slightly so every agent
+call also writes a clean input, output pair to a dataset file, not just a
+trace span.
+
+```python
+import json
+import os
+
+DISTILLATION_LOG = "distillation_pairs.jsonl"
+
+
+def log_distillation_pair(agent_name: str, input_messages: list, output_text: str):
+    record = {
+        "agent": agent_name,
+        "messages": input_messages,
+        "output": output_text,
+    }
+    with open(DISTILLATION_LOG, "a") as f:
+        f.write(json.dumps(record) + "\n")
+
+
+def traced_agent_call_with_logging(client, agent_name, model, messages, **kwargs):
+    response = client.chat.completions.create(model=model, messages=messages, **kwargs)
+    output_text = response.choices[0].message.content
+    log_distillation_pair(agent_name, messages, output_text)
+    return response
+```
+
+Run my error-analysis agent this way for a few weeks against real production
+traffic, and `distillation_pairs.jsonl` fills up with exactly the input and
+output pairs I need, no separate data-collection effort, since it's piggy-
+backing on traffic I was already generating anyway.
+
+## Step two: filter for quality before training on anything
+
+Not every logged pair is a good training example, some were wrong, some were
+later overridden by a human through the HITL queue from part six. Filter these
+out before training, this one step matters more than almost anything else in
+the whole process.
+
+```python
+def filter_high_quality_pairs(raw_pairs_path, hitl_queue_path):
+    with open(hitl_queue_path) as f:
+        hitl_queue = json.load(f)
+
+    overridden_outputs = {
+        ticket["context"].get("original_output")
+        for ticket in hitl_queue.values()
+        if ticket["status"] == "resolved" and ticket["resolution"] != "approved"
+    }
+
+    clean_pairs = []
+    with open(raw_pairs_path) as f:
+        for line in f:
+            record = json.loads(line)
+            if record["output"] not in overridden_outputs:
+                clean_pairs.append(record)
+    return clean_pairs
+```
+
+Any case a human later corrected should never be used as a positive training
+example, that would just teach the small model to repeat the same mistake with
+more confidence.
+
+## Step three: fine-tune a small model on the filtered data
+
+Given my own hardware, a local Qwen3 model is a natural distillation target, I
+already have the serving infrastructure via vLLM. The general recipe, using
+LoRA so this is realistic on a single GPU:
+
+```python
+from datasets import Dataset
+from transformers import AutoModelForCausalLM, AutoTokenizer, TrainingArguments, Trainer
+from peft import LoraConfig, get_peft_model
+
+model_name = "Qwen/Qwen3-4B-Instruct"
+tokenizer = AutoTokenizer.from_pretrained(model_name)
+model = AutoModelForCausalLM.from_pretrained(model_name)
+
+lora_config = LoraConfig(
+    r=16, lora_alpha=32, lora_dropout=0.05,
+    target_modules=["q_proj", "v_proj"],
+)
+model = get_peft_model(model, lora_config)
+
+
+def format_example(record):
+    prompt = tokenizer.apply_chat_template(record["messages"], tokenize=False)
+    full_text = prompt + record["output"]
+    return {"text": full_text}
+
+
+clean_pairs = filter_high_quality_pairs("distillation_pairs.jsonl", "hitl_queue.json")
+dataset = Dataset.from_list(clean_pairs).map(format_example)
+
+
+def tokenize(example):
+    return tokenizer(example["text"], truncation=True, max_length=2048)
+
+
+tokenized_dataset = dataset.map(tokenize)
+
+training_args = TrainingArguments(
+    output_dir="./error-analysis-distilled",
+    per_device_train_batch_size=4,
+    num_train_epochs=3,
+    learning_rate=2e-4,
+    logging_steps=10,
+    save_strategy="epoch",
+)
+
+trainer = Trainer(model=model, args=training_args, train_dataset=tokenized_dataset)
+trainer.train()
+```
+
+I'm training a four billion parameter model here to imitate a much larger
+model's specific decisions on my specific error-analysis task, not to be
+generally smart. That narrowness is exactly what makes distillation work.
+
+## Step four: evaluate the distilled model against the teacher
+
+Before this replaces the large model in production, I run it through the same
+component eval from [part four](04-evaluation-error-analysis.qmd), comparing
+the small model's decisions against the large model's on a held-out set it
+never trained on.
+
+```python
+def compare_teacher_student(teacher_client, student_client, held_out_pairs):
+    agreements = 0
+    for record in held_out_pairs:
+        teacher_output = record["output"]
+        student_response = student_client.chat.completions.create(
+            model="local:error-analysis-distilled",
+            messages=record["messages"],
+        )
+        student_output = student_response.choices[0].message.content
+
+        if student_output.strip().lower()[:20] == teacher_output.strip().lower()[:20]:
+            agreements += 1
+
+    agreement_rate = agreements / len(held_out_pairs)
+    return {"agreement_rate": agreement_rate, "n": len(held_out_pairs)}
+```
+
+A crude prefix match is a starting point, in practice I'd use a proper
+LLM-as-judge comparison here, similar to the plausibility judge from part four,
+scoring whether the two decisions actually mean the same thing, not just
+whether the text matches.
+
+## Step five: roll it out gradually, not all at once
+
+I would not flip one hundred percent of traffic to the distilled model on day
+one. Route a small percentage of real traffic to the small model, log both the
+small model's decision and what the large model would have said side by side,
+and only increase the percentage once the held-out agreement rate has held
+steady across real production traffic, not just the original test set.
+
+```python
+import random
+
+DISTILLED_TRAFFIC_PERCENT = 10
+
+def route_error_analysis_call(client, messages):
+    if random.randint(1, 100) <= DISTILLED_TRAFFIC_PERCENT:
+        model = "local:error-analysis-distilled"
+    else:
+        model = "openai:gpt-4o-mini"
+    return client.chat.completions.create(model=model, messages=messages)
+```
+
+Increase `DISTILLED_TRAFFIC_PERCENT` gradually, the same staged-rollout
+discipline I'd use for any model change touching a production line, not just
+an agentic one.
+
+## Why this is a compounding asset, not a one-off project
+
+Every week the agent runs against real traffic, `distillation_pairs.jsonl`
+grows, which means the next distilled model trains on more, and better-
+filtered, data than the last one. This is exactly the reasoning behind treating
+distillation as a compounding strategic asset rather than a single fine-tuning
+exercise, the value keeps growing the longer the system runs, which is very
+different economics than simply paying for a bigger model every time a better
+one ships.
+
+## What's next
+
+[Part nine](09-retrieval-rag.qmd) covers retrieval, grounding an agent in real
+historical cases and documented knowledge, closing out the series.

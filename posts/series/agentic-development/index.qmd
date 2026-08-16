@@ -1,0 +1,82 @@
+---
+title: "Agentic Development Series"
+description: "Rebuilding DeepLearning.AI's Agentic AI course (Andrew Ng) around real semiconductor X-ray/AOI imaging work, then going four posts further into production hardening, A2A interoperability, distillation, and retrieval — none of which the course covers."
+author: "Hasan Goni"
+date: last-modified
+categories: [series, agentic-ai, computer-vision, semiconductor]
+toc: true
+---
+
+## Series Overview
+
+I went through Andrew Ng's *Agentic AI* course on DeepLearning.AI mainly because
+I kept hearing "agentic" thrown around at work without a shared definition, and
+wanted a rigorous one before building anything else on top of Hermes Agent. The
+course is good, but every example is generic — customer support bots, research
+assistants. None of it touches what I actually do all day: segmenting voids and
+lifted chips out of X-ray scans. So I rebuilt every example from scratch, in my
+own domain, following the course's own five-module order — then kept going for
+four more posts covering things the course doesn't touch at all but that I
+think you need if you actually want to run this in production.
+
+If you read all nine posts and work through the code, you should be able to go
+from zero to building, hardening, and shipping your own agent.
+
+### Posts in this series
+
+**The course's own five modules, rebuilt around segmentation:**
+
+1. [What Agentic AI Actually Is](01-applications.qmd) — the four design
+   patterns (reflection, tool use, planning, multi-agent), the domain rules
+   that make this a real problem instead of a toy one, and setting up aisuite.
+2. [Reflection](02-reflection.qmd) — teaching an agent to catch a physically
+   impossible segmentation mask (a void bigger than the chip it's in) before
+   it reaches a KPI report, both self-critique and multimodal external critique.
+3. [Tool Use and MCP](03-tool-use-mcp.qmd) — the biggest post in the series:
+   aisuite's automatic tool-calling, the manual tool-calling loop, and a full
+   MCP server so Copilot, Cursor, and Claude Code can call the same tools
+   directly.
+4. [Evaluations and Error Analysis](04-evaluation-error-analysis.qmd) — the
+   module Andrew Ng himself calls the most valuable: the component-tagging
+   method for turning a vague "the model isn't great" into a ranked, concrete
+   list of what to fix next.
+5. [Planning and Multi-Agent Systems](05-planning-multiagent.qmd) — JSON plans
+   vs. code-as-plan, and the two ends of the multi-agent spectrum: a
+   predictable linear pipeline and a chaos-tolerant all-to-all team.
+
+**Four posts past the course, covering what it takes to actually ship this:**
+
+6. [Advanced Agentic AI Development](06-advanced-agentic-development.qmd) —
+   retries, timeouts, cost tracking, memory, prompt-injection defenses,
+   automated testing, Docker/systemd deployment, OpenTelemetry tracing, a real
+   HITL queue, and prompt/config versioning. The longest post in the series.
+7. [Agent-to-Agent Interoperability with A2A](07-a2a-interoperability.qmd) —
+   Google's A2A protocol for when independent agents, built by different teams
+   in different frameworks, need to talk to each other as peers, not as a tool
+   call.
+8. [Fine-Tuning and Distilling Your Own Agent](08-finetuning-distillation.qmd)
+   — logging real production traffic, filtering out human-corrected examples,
+   and LoRA fine-tuning a small local model to reproduce a large model's agent
+   decisions cheaply, with a staged rollout.
+9. [Retrieval, Grounding Your Agent in Real Knowledge](09-retrieval-rag.qmd) —
+   two different retrieval problems (visual case similarity vs. textual spec
+   knowledge), plus why whole-image similarity and defect-crop similarity need
+   separate embedding spaces to be useful.
+
+## Tools used throughout
+
+- [aisuite](https://github.com/andrewyng/aisuite) as the model-provider layer
+  — one interface, so the same agent code runs against a cloud model or a
+  local Qwen3 endpoint on my own GX10 with a one-line change
+- MCP (Model Context Protocol) and A2A (Agent2Agent) for, respectively,
+  agent-to-tool and agent-to-agent interoperability
+- DINOv3 + LanceDB for visual case retrieval, `sentence-transformers` for
+  textual spec retrieval
+- Real semiconductor-imaging domain rules throughout: p2/p98 percentile X-ray
+  normalization, chip-containment checks, IoU-based evals
+
+:::{.callout-note}
+This series pairs well with the [Local-AI Defect Inspection Series](../local-ai-defect-inspection/index.qmd),
+which covers fine-tuning and evaluating small local VLMs on the same class of
+imagery.
+:::

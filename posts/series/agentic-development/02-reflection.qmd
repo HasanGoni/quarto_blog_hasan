@@ -1,0 +1,164 @@
+---
+title: "Agentic AI for Semiconductor Imaging, Part 2: Reflection"
+subtitle: "Teaching an agent to critique its own segmentation output"
+author: "Hasan Goni"
+date: 2026-08-16
+categories: [agentic-ai, computer-vision, semiconductor, python]
+toc: true
+series:
+  name: "Agentic Development"
+  number: 2
+format:
+  html:
+    code-fold: false
+---
+
+:::{.callout-tip}
+This post is part of the [Agentic Development Series](index.qmd). It follows on
+from [Part 1 — what agentic AI actually is](01-applications.qmd).
+:::
+
+The first time I actually needed reflection, not as a course exercise but for
+real, was after watching a postprocessing bug slip a physically impossible mask
+through to a KPI report, a predicted void bigger than the chip it supposedly
+sat inside. Nobody caught it until someone downstream asked why our defect rate
+had a weird spike. A five-minute reflection check would have caught that
+instantly. That's the whole pitch for this pattern: it is the cheapest
+performance boost available, no retraining, no new data, just a second pass
+that asks "does this actually make sense."
+
+## Self-critique versus external critique
+
+There are two flavors. Self-critique is the same model checking its own answer
+in a follow-up call. External critique is a separate model, often stronger or
+just differently specialized, doing the checking, and that can include a human
+in the loop, which the course is explicit is genuinely valuable, not a
+fallback.
+
+In my domain, external critique earns its keep: a fast segmentation model
+proposes a mask, and a vision-language model does a second-opinion pass on the
+image and the mask together, flagging anything implausible before it goes
+anywhere near a report.
+
+## Jargon, explained simply
+
+**Reflection.** An agent reviewing its own or another agent's output and
+deciding whether it's correct, then suggesting a fix if it isn't.
+
+**Self-critique.** The same model checking its own work.
+
+**External critique.** A different model, or a human, checking the work
+instead.
+
+**Multimodal.** A model that can take both images and text as input in the
+same call, not just text.
+
+**Containment logic.** In my segmentation pipeline specifically, the rule that
+a void region must sit inside the chip region, enforced by a logical AND
+between the two masks, since a void by definition cannot exist outside the
+solder it's found in.
+
+## A worked example: checking a void-mask plausibility
+
+Say a U-Net just produced three masks for an X-ray solder joint: chip outline,
+void region, lifted-chip region. Before any of this reaches a KPI report, I
+want a reflection step to catch the obvious physical impossibilities, like a
+void region larger than the chip itself.
+
+```python
+import aisuite as ai
+
+client = ai.Client()
+
+def build_reflection_prompt(void_area_px, chip_area_px, num_void_components):
+    template = (
+        "You are reviewing an automated X-ray segmentation result for a "
+        "solder joint. Domain rules: void regions must always be smaller than "
+        "the chip area, since a void is a gap inside the solder, not outside "
+        "it. Voids appear as bright regions in the X-ray due to lower material "
+        "density.\\n\\n"
+        "Measurements:\\n"
+        "- Chip area: {chip} pixels\\n"
+        "- Predicted void area: {void} pixels\\n"
+        "- Number of separate void components: {n}\\n\\n"
+        "Question: is this result physically plausible? If not, say exactly "
+        "what is wrong and suggest which postprocessing step likely caused it "
+        "(thresholding, containment logic, or connected-component filtering)."
+    )
+    return template.format(chip=chip_area_px, void=void_area_px, n=num_void_components)
+
+response = client.chat.completions.create(
+    model="openai:gpt-4o-mini",
+    messages=[
+        {"role": "system", "content": "You are a semiconductor imaging QA reviewer."},
+        {"role": "user", "content": build_reflection_prompt(
+            void_area_px=48000, chip_area_px=32000, num_void_components=1
+        )}
+    ]
+)
+
+print(response.choices[0].message.content)
+```
+
+In this example the void area is bigger than the chip area, which should never
+happen. The model should immediately flag that the containment logic, void
+inside equals void prediction AND chip prediction, probably wasn't applied, and
+point at that specific fix, exactly the bug I described at the top of this
+post.
+
+## Multimodal reflection: showing the model the actual image
+
+Numbers only get you so far. The stronger version of this sends the image and
+the predicted mask overlay directly to a vision-language model, and this is
+where running my own model locally actually pays off, since I can run this
+check on every single inference without worrying about per-call cost.
+
+```python
+import base64
+
+def encode_image(path):
+    with open(path, "rb") as f:
+        return base64.b64encode(f.read()).decode("utf-8")
+
+def build_multimodal_reflection(image_path):
+    image_b64 = encode_image(image_path)
+    prompt_text = (
+        "Here is an X-ray image with a predicted void mask overlaid in red. "
+        "Does the red region look like a plausible void given the visible chip "
+        "boundary? Answer plausible or not plausible, with one sentence of "
+        "reasoning."
+    )
+    return [
+        {"role": "system", "content": "You are a semiconductor imaging QA reviewer."},
+        {"role": "user", "content": [
+            {"type": "text", "text": prompt_text},
+            {"type": "image_url", "image_url": {
+                "url": "data:image/png;base64," + image_b64}}
+        ]}
+    ]
+
+response = client.chat.completions.create(
+    model="openai:gpt-4o-mini",
+    messages=build_multimodal_reflection("void_overlay_example.png")
+)
+print(response.choices[0].message.content)
+```
+
+Point this at my local Qwen3-VL-32B-FP8 endpoint instead of a cloud model, and
+I get a free, unlimited second-opinion check running on every image that comes
+off the line, no API bill creeping up as volume grows.
+
+## The tradeoff I actually think about
+
+Reflection costs real latency and real tokens on every pass. On a line running
+thousands of images a day, I do not reflect on every single one, I reflect on
+the ones my confidence signal, MC Dropout entropy in my case, already flags as
+uncertain. Reflection is a targeted tool you aim at your weak points, not a
+blanket policy you apply everywhere.
+
+## What's next
+
+[Part three](03-tool-use-mcp.qmd) is the biggest post in this series: Tool Use,
+covering both aisuite's automatic tool-calling and manual tool-calling loops,
+and then a full deep dive into exposing those same tools through MCP so
+Copilot, Cursor, and Claude Code can call them directly.
