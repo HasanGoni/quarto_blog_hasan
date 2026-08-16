@@ -1,0 +1,183 @@
+---
+title: "Building a Training-Planner Agent (Part 2 of 5)"
+subtitle: "The planning design pattern, applied to a segmentation training run"
+author: "Hasan Goni"
+date: last-modified
+categories: [agentic-ai, image-segmentation, planning, semiconductor-imaging]
+toc: true
+series:
+  name: "Agentic AI for Segmentation"
+  number: 2
+format:
+  html:
+    code-fold: false
+---
+
+:::{.callout-tip}
+This post is part of the [Agentic AI for Segmentation Series](index.qmd). It follows on
+from [Part 1 — the preprocessing tool-use agent](01-preprocessing-agent.qmd).
+:::
+
+::: {.callout-note}
+This is Part 2 of a 5-part series rebuilding DeepLearning.AI's *Agentic AI* course
+(Andrew Ng) around image segmentation. Part 1 covered tool use for preprocessing; if
+you haven't read it, the tool-calling loop introduced there is reused as-is here.
+:::
+
+## The core idea: what is "planning"?
+
+In Part 1, the LLM picked *one* tool per turn from a small fixed menu. **Planning**
+goes a level up: instead of the developer hard-coding "first do X, then Y, then Z", you
+ask the LLM to *generate the sequence itself* — a step-by-step plan — before any tool
+gets called. This matters once your workflow has more steps than fit comfortably in a
+single decision, or when the right order of steps genuinely depends on the input.
+
+The course covers three ways to express a plan, ranked (per the course's own citation
+of empirical results) from **least** to **most** reliable for downstream execution:
+
+1. Plain text ("first do this, then that") — easy for a human to read, hard to parse
+   reliably in code.
+2. Structured JSON or XML — a fixed schema your code can parse deterministically.
+3. **Code as the plan** — the LLM writes actual Python (e.g. using `pandas`), and you
+   execute it. This scored best in the course's cited comparison, and it sidesteps the
+   problem of your tool inventory growing forever: instead of writing a new tool for
+   every possible action, the model composes existing primitives in code.
+
+## Why a training run is a good planning example
+
+Kicking off a segmentation training run genuinely is a multi-step decision, and the
+right sequence depends on the request: *"train a void-detector on the new SAKI lot"*
+implies different steps than *"resume training from last week's checkpoint with a
+higher void-class weight."* That's exactly the situation planning is for — a fixed
+tool-call script would need an if/else branch for every phrasing; a plan lets the model
+work out the right steps itself.
+
+## Building it: JSON plan, then code-as-plan
+
+### Step 1 — JSON plan (safer, easier to review before executing)
+
+```python
+import json
+from openai import OpenAI
+
+client = OpenAI(base_url="http://localhost:8000/v1", api_key="local")
+MODEL = "Qwen3-Coder-30B-A3B"
+
+PLAN_SYSTEM_PROMPT = """You are a training-run planner for an image segmentation
+pipeline. Given a request, output ONLY a JSON list of steps. Each step has:
+"action" (one of: load_dataset, split_train_val, configure_loss, set_hyperparams,
+launch_training, log_run) and "args" (an object of parameters for that action).
+Do not include any text outside the JSON list."""
+
+def plan_training_run(request: str) -> list[dict]:
+    resp = client.chat.completions.create(
+        model=MODEL,
+        messages=[
+            {"role": "system", "content": PLAN_SYSTEM_PROMPT},
+            {"role": "user", "content": request},
+        ],
+    )
+    return json.loads(resp.choices[0].message.content)
+
+plan = plan_training_run(
+    "Train a multi-head UNet on the LT14 void dataset. Use Focal Tversky loss for "
+    "the void head since it's a rare, small-object class, and log the run so I can "
+    "compare it against last month's baseline."
+)
+for step in plan:
+    print(step)
+```
+
+Typical output — this is the part worth pausing on: the model has correctly inferred
+that "rare, small-object class" implies recall-weighted Focal Tversky, without being
+told that mapping explicitly:
+
+```json
+[
+  {"action": "load_dataset", "args": {"name": "LT14_void"}},
+  {"action": "split_train_val", "args": {"val_fraction": 0.15, "stratify_by": "defect_class"}},
+  {"action": "configure_loss", "args": {"head": "void", "loss": "focal_tversky", "alpha": 0.3, "beta": 0.7}},
+  {"action": "set_hyperparams", "args": {"lr": 3e-4, "epochs": 50, "batch_size": 16}},
+  {"action": "launch_training", "args": {"run_name": "lt14_void_focal_tversky_v1"}},
+  {"action": "log_run", "args": {"compare_to": "baseline_2026_07"}}
+]
+```
+
+Because the plan is a fixed, parseable schema, you can — and should — **review it
+before executing a single step**, or even show it to a teammate. This is the main
+reason to prefer JSON over free-form code for anything that costs GPU-hours to get
+wrong.
+
+### Step 2 — code as the plan (more expressive, needs a sandbox)
+
+For a more open-ended request, letting the model write the orchestration as Python
+directly avoids the "I need a new JSON action for every possible thing" problem:
+
+```python
+CODE_PLAN_SYSTEM_PROMPT = """You are a training-run planner. Given a request, write a
+short Python script using ONLY these pre-defined functions: load_dataset(name),
+split_train_val(ds, val_fraction, stratify_by=None), configure_loss(head, loss, **kw),
+set_hyperparams(**kw), launch_training(run_name, **kw), log_run(compare_to=None).
+Output ONLY the Python code, no explanation."""
+
+resp = client.chat.completions.create(
+    model=MODEL,
+    messages=[
+        {"role": "system", "content": CODE_PLAN_SYSTEM_PROMPT},
+        {"role": "user", "content": "Train two variants back to back: one with "
+         "Focal Tversky on the void head, one with plain Dice, so I can compare."},
+    ],
+)
+generated_code = resp.choices[0].message.content
+print(generated_code)
+
+# CRITICAL: never call exec() on raw LLM output in your real environment.
+# Run it in a sandbox — a container, or a restricted namespace like the
+# customer-service-agent lab in the course used (SAFE_GLOBALS / SAFE_LOCALS with only
+# your approved functions exposed, no builtins, no filesystem/network access).
+SAFE_GLOBALS = {
+    "load_dataset": load_dataset, "split_train_val": split_train_val,
+    "configure_loss": configure_loss, "set_hyperparams": set_hyperparams,
+    "launch_training": launch_training, "log_run": log_run,
+    "__builtins__": {},
+}
+exec(generated_code, SAFE_GLOBALS, {})
+```
+
+Here, the "for loop training two variants" is something you'd otherwise need a
+bespoke `train_two_variants` tool for. Code-as-plan lets the model compose that from
+primitives instead — at the cost of needing real sandboxing, since arbitrary generated
+code is a real security surface (the course flags a real anecdote of an agentic coder
+deleting `.py` files it wasn't supposed to touch — take that seriously).
+
+## Copilot / MCP angle
+
+The same primitives (`load_dataset`, `configure_loss`, etc.) can be wrapped as MCP
+tools exactly like Part 1, and then you can literally type in Copilot chat: *"plan and
+kick off a training run comparing Focal Tversky vs. Dice on the void head"* — Copilot's
+agent mode does its own internal planning over your exposed tools, so you often don't
+need to write the planning prompt yourself at all. The trade-off: less visibility into
+*why* it chose a given order of steps, versus the explicit JSON plan you can print and
+review in pattern A.
+
+## Which model to use
+
+Planning is a harder task than single tool-call routing — the model has to hold more
+structure in mind and get an entire sequence right, not just one call. If you're
+testing with a free model, DeepSeek's reasoning-oriented free tier or Qwen3's larger
+variants tend to hold up better here than smaller distills; watch for plans that look
+right but silently drop a step (e.g. skipping the val split) — this is exactly the kind
+of failure Part 4 (error analysis) will teach you to catch systematically instead of by
+eyeballing.
+
+## Try it yourself
+
+1. Feed the JSON planner three requests that differ only in one implied detail (dataset
+   size, class rarity, whether to resume vs. start fresh) and check whether the plan
+   actually changes correctly.
+2. Force a plan to go wrong on purpose (ask for something outside your allowed
+   `action` list) and see whether the model invents a new action name — that's your
+   cue for where you need better prompt constraints or output validation.
+
+**Next up:** [Part 3 — a reflection agent that critiques its own postprocessing
+output](03-postprocessing-agent.qmd).

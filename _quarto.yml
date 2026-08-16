@@ -22,6 +22,8 @@ website:
             file: posts/series/vim-mastery.qmd
           - text: "VLM Series"
             file: posts/series/vlm.qmd
+          - text: "Agentic AI for Segmentation"
+            file: posts/series/agentic-ai-segmentation/index.qmd
           - text: "Anomaly Detection"
             file: posts/series/anomaly-detection/index.qmd
           - text: "Local-AI Defect Inspection"
@@ -124,6 +126,22 @@ website:
             href: posts/series/vlm.qmd
           - text: "Qwen3-14B"
             href: posts/series/vlm-qwen3-14b/index.qmd
+      - section: "Agentic AI for Segmentation"
+        collapse: true
+        collapsed: true
+        contents:
+          - text: "Introduction"
+            href: posts/series/agentic-ai-segmentation/index.qmd
+          - text: "1. Preprocessing Agent"
+            href: posts/series/agentic-ai-segmentation/01-preprocessing-agent.qmd
+          - text: "2. Training-Planner Agent"
+            href: posts/series/agentic-ai-segmentation/02-training-agent.qmd
+          - text: "3. Postprocessing-Reflection Agent"
+            href: posts/series/agentic-ai-segmentation/03-postprocessing-agent.qmd
+          - text: "4. Error-Analysis Agent"
+            href: posts/series/agentic-ai-segmentation/04-error-analysis-agent.qmd
+          - text: "5. Multi-Agent Pipeline"
+            href: posts/series/agentic-ai-segmentation/05-multiagent-system.qmd
       - section: "Local-AI Defect Inspection"
         collapse: true
         collapsed: true
