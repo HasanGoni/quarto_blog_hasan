@@ -6,6 +6,7 @@ date: last-modified
 categories: [vim, buffers, files, tabs, splits, workflow]
 image: "images/vim.png"
 toc: true
+search: false
 ---
 
 ## The Juggler's Secret

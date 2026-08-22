@@ -6,6 +6,7 @@ date: last-modified
 categories: [command-line, find, search, hpc]
 image: "https://images.unsplash.com/photo-1575505586569-646b2ca898fc?ixlib=rb-4.0.3&auto=format&fit=crop&w=2000&q=80"
 toc: true
+search: false
 ---
 
 ## The Story: The Million File Challenge

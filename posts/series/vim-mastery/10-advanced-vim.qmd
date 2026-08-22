@@ -6,6 +6,7 @@ date: last-modified
 categories: [vim, advanced, plugins, customization, expert]
 image: "images/vim.png"
 toc: true
+search: false
 ---
 
 ## Welcome to the Advanced Realm

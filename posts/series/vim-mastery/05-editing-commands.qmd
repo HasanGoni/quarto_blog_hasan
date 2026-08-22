@@ -6,6 +6,7 @@ date: last-modified
 categories: [vim, editing, delete, change, yank, operators]
 image: "images/vim.png"
 toc: true
+search: false
 ---
 
 ## The Wizard's Toolkit

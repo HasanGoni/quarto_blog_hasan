@@ -12,6 +12,7 @@ series:
 format:
   html: default
 jupyter: python3
+search: false
 ---
 
 ![Feature detection visualization - geometric shapes with clear keypoints for detection](../../images/cv-foundations/feature-magic-header.jpg)

@@ -6,6 +6,7 @@ date: last-modified
 categories: [vim, registers, macros, automation, clipboard]
 image: "images/vim.png"
 toc: true
+search: false
 ---
 
 ## The Magician's Arsenal

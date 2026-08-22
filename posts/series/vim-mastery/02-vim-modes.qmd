@@ -6,6 +6,7 @@ date: last-modified
 categories: [vim, modes, philosophy, intermediate]
 image: "images/vim.png"
 toc: true
+search: false
 ---
 
 ## The "Aha!" Moment

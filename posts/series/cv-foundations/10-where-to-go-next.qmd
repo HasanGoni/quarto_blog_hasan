@@ -12,6 +12,7 @@ series:
 format:
   html: default
 jupyter: python3
+search: false
 ---
 
 ## The Journey So Far: What You've Accomplished

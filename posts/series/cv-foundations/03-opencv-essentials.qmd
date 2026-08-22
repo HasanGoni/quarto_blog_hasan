@@ -12,6 +12,7 @@ series:
 format:
   html: default
 jupyter: python3
+search: false
 ---
 
 ## Meet Your New Best Friend: OpenCV

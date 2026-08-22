@@ -6,6 +6,7 @@ date: last-modified
 categories: [vim, text-objects, selection, advanced]
 image: "images/vim.png"
 toc: true
+search: false
 ---
 
 ## The Surgeon's Precision

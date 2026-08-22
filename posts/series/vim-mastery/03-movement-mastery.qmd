@@ -6,6 +6,7 @@ date: last-modified
 categories: [vim, movement, navigation, efficiency]
 image: "images/vim.png"
 toc: true
+search: false
 ---
 
 ## The Speed of Thought

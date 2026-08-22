@@ -6,6 +6,7 @@ date: last-modified
 categories: [command-line, navigation, basics, unix]
 image: "https://images.unsplash.com/photo-1586281380349-632531db7ed4?ixlib=rb-4.0.3&auto=format&fit=crop&w=2000&q=80"
 toc: true
+search: false
 ---
 
 ## The Story: Lost in Digital Space
