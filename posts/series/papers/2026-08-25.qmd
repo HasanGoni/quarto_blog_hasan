@@ -1,0 +1,111 @@
+---
+title: "1 Paper Worth Reading — FlowEvo, Week of August 25, 2026"
+author: "Hasan Goni"
+date: 2026-08-25
+categories: ["papers", "weekly-pick", "agents", "Reasoning & Agents"]
+image: "https://cdn-thumbnails.huggingface.co/social-thumbnails/papers/2607.21596.png"
+toc: true
+series:
+  name: "Paper of the Week"
+  number: 3
+paper-urls:
+  - https://huggingface.co/papers/2607.21596
+paper-topics:
+  - "Reasoning & Agents"
+format:
+  html: default
+---
+
+:::{.callout-tip}
+This post is part of the [Paper of the Week](index.qmd) series — a handful of papers a week, picked and explained for my own semiconductor CV/VLM work.
+:::
+
+This one skipped the usual weekly scan. I'd just wired up two small LLM agents for my void-detection pipeline — one that labels lifted-chip defects by talking to SAM3, one that does visual QA on chip-detection overlays — and was asking whether either one deserved to be an "agent" at all versus a plain script. That question led straight to FlowEvo, which turned out to answer a follow-up I hadn't asked yet: once you *do* have a real agent, how does it get better at its own job without retraining anything?
+
+## 1. FlowEvo: Self-Evolving Agents through the Co-Evolution of Workflows and Executable Skills
+
+[https://huggingface.co/papers/2607.21596](https://huggingface.co/papers/2607.21596) · _A training-free way for an LLM agent to remember and reuse what actually worked last time, instead of re-deriving the same solution from scratch on every single run._ · **Reasoning & Agents**
+
+### The One-Sentence Version
+
+FlowEvo has an LLM agent compile every workflow that actually succeeds into a small, executable, reusable "skill," keeps a persistent bank of them, and automatically stops trusting any skill that turns out to make things worse.
+
+### Explain It Like I'm 5
+
+Imagine you're doing your homework every night, and every single night you re-figure-out from zero how to carry the 1 in addition — nobody ever let you write it down. That's a normal LLM agent: brilliant in the moment, goldfish memory across episodes. FlowEvo is what happens when you're finally allowed a cheat sheet — but a picky one. Every time a trick actually works, it goes on the cheat sheet. Every time a trick on the cheat sheet stops working, it gets crossed out. You still have to think for genuinely new problems, but you stop reinventing the same wheel every night.
+
+### Jargon Buster
+
+* **Workflow** — the actual sequence of steps (tool calls, reasoning, code) an agent builds to solve one task. Normally thrown away once the task ends.
+* **Skill (in this paper)** — a *compiled*, callable artifact extracted from a workflow that succeeded: real executable code/interface, plus metadata about when it's safe to reuse — not just a text note about what happened.
+* **Direct execution vs. skill-conditioned generation** — the two ways a retrieved skill gets reused: either called as a subroutine outright (when it's clearly compatible), or handed to the planner as *context* to help it write a fresh workflow (when reuse is informative but not safe to run blind).
+* **Admission gate** — the checks a newly compiled skill has to pass before it's trusted for direct execution: does it respect its declared interface, does it actually do what it claims, does it avoid banned operations.
+* **Contrastive-utility curation** — periodically comparing how episodes went *with* a skill applied versus matched episodes *without* it; if a skill's applied-episodes are consistently worse, it gets suppressed — not deleted, just benched.
+
+### Explain It Like I'm a Data Scientist
+
+**What problem does it solve?**
+
+Inference-time agents (ReAct-style, tool-using, whatever) are great at building a workflow on the fly for a task they've never seen — but everything useful discovered while doing so evaporates the moment the episode ends. Prior fixes split into two camps: text-based memory (store the plan/trace as text, let the model re-read it later) is flexible but can't be invoked or verified — the model still has to re-derive the procedure from a description every time. Tool/skill libraries (pre-built, hand-curated, callable) are verifiable and cheap to reuse, but they're built *offline*, disconnected from the agent's own problem-solving, and they don't grow from what the agent itself just did. Nobody had closed the loop: agent solves task → the useful part becomes a real, callable, growing capability → that capability changes how the *next* task gets solved.
+
+**How does it solve it?**
+
+FlowEvo runs a workflow → skill → workflow loop, four pieces working together: (1) a planner that, for each new task, retrieves candidate skills and decides whether to build a workflow from scratch, execute a retrieved skill directly, or build a new workflow *conditioned* on a retrieved skill as context; (2) an executor that runs the resulting workflow and verifies whether it actually succeeded; (3) a compiler that, only on verified success, extracts a reusable executable artifact (entry point, interface, replay tests, metadata) from the trace — not a text summary; (4) a skill registry that admits new candidates through interface/functional/safety checks, then keeps tracking each admitted skill's *downstream* utility for as long as it stays in the bank, via that contrastive guided-vs-withheld comparison, auto-suppressing anything that's quietly become harmful. None of this touches model weights — the entire capability layer lives in what gets retrieved and replayed at inference time.
+
+**Minimal code sketch**
+
+The paper's actual system has ~180 tuned constants and a full LLM-driven compiler. The part worth stealing for a small project is much smaller — just: remember which named thing worked, rank by that next time, bench the ones that don't:
+
+```python
+from dataclasses import dataclass, field
+
+@dataclass
+class SkillRecord:
+    name: str
+    uses: int = 0
+    successes: int = 0
+    status: str = "active"
+
+    @property
+    def utility(self) -> float:
+        return self.successes / self.uses if self.uses else 0.0
+
+class SkillBank:
+    def __init__(self, min_samples=5, suppress_below=0.2):
+        self.records: dict[str, SkillRecord] = {}
+        self.min_samples = min_samples
+        self.suppress_below = suppress_below
+
+    def record(self, name: str, success: bool) -> None:
+        rec = self.records.setdefault(name, SkillRecord(name))
+        rec.uses += 1
+        rec.successes += success
+        if rec.uses >= self.min_samples and rec.utility < self.suppress_below:
+            rec.status = "suppressed"
+
+    def ranked(self, candidates: list[str]) -> list[str]:
+        # tried-and-active, best utility first -> never-tried, original order -> suppressed, last
+        tried = sorted(
+            (c for c in candidates if c in self.records and self.records[c].status == "active"),
+            key=lambda c: self.records[c].utility, reverse=True,
+        )
+        untried = [c for c in candidates if c not in self.records]
+        suppressed = [c for c in candidates if c in self.records and self.records[c].status == "suppressed"]
+        return tried + untried + suppressed
+```
+
+That's the entire mechanism minus the LLM compiler and the statistics — a bank that reorders retrieval by what's actually worked, and quietly benches what hasn't.
+
+### Why This Matters For My Work
+
+I already had a smaller, uncomfortable version of exactly the problem this paper names. Two agents in my void-detection repo re-explore from scratch on every run: one tries the same three prompt phrasings in the same fixed order on every lifted-chip image, whether or not one of them has been winning consistently; the other always uses the one retry strategy it's handed on a rejected overlay, with no memory of whether that strategy actually rescues anything. Neither remembers a single thing between runs.
+
+I shipped the code sketch above, close to verbatim, as a shared `SkillBank` used by both — no LLM compiler, no admission gates, no contrastive significance testing, just persistent success/fail counts that reorder which prompt or retry strategy gets tried first, and quietly deprioritize (never delete) one that's clearly not pulling its weight. It's a few dozen lines because the "skill" in both cases is just a name a human already wrote — a prompt string, a strategy label — so there's nothing to *compile*; the only missing piece was memory.
+
+The part I *didn't* build, and where FlowEvo is a genuinely useful north star rather than just a source of a data structure, is a closer-to-the-paper version for Cursor's own skill system. Cursor already has the retrieval half for free — `.cursor/skills/*/SKILL.md` gets discovered and matched by description automatically, which is exactly FlowEvo's retrieval step, just done by the platform instead of a custom router. What Cursor doesn't have is the other three legs of the loop, and building them properly would look a lot more like the actual paper than my `SkillBank`:
+
+- **A real compiler, not a human writing SKILL.md by hand.** After a task finishes, an LLM call reads the trace (the commands run, files touched, outcome) and *writes* the skill file itself — extracting the reusable procedure, its preconditions, and a usage guideline — the same job FlowEvo's compilation prompt does for ALFWorld traces (Appendix D.2 of the paper is literally the prompt template for this).
+- **An admission gate before a generated skill is trusted.** FlowEvo checks interface compliance, functional correctness against replay tests, and a banned-operations list before a skill is eligible for direct execution. A Cursor equivalent would mean: don't let an LLM-authored skill run `rm -rf` or push to a remote just because it looked plausible in one successful trace — hold it in a "skill-conditioned context only" tier until it's proven itself across more than one real invocation.
+- **Real contrastive curation**, not my threshold-and-min-samples stand-in. FlowEvo compares matched *guided* (skill used) versus *withheld* (skill deliberately not offered) episodes and suppresses on a persistently negative delta. For Cursor that would mean logging enough real session outcomes — with and without a given skill actually being retrieved — to compute that comparison for real, rather than eyeballing a success rate.
+
+That's a real engineering lift, not a weekend addition — an LLM-in-the-loop compiler and admission gate is a different order of complexity than a JSON file with counters in it. But it's the honest answer to "how would you actually do this closer to the paper," and worth coming back to once the two agents currently running the lightweight version have generated enough real traces to make an LLM-written compiler worth training against.

@@ -11,11 +11,12 @@ toc: true
 
 Every week I pick a handful of the most relevant papers from arXiv and the HF Daily Papers list — filtered against my own work (semiconductor X-ray/casting defect detection, VLM fine-tuning, auto-label verification) — and write each one up twice: once so a 5-year-old could follow it, once with the full methodology, a code sketch, and an honest note on whether it's actually useful for what I'm building.
 
-**Papers covered so far:** 9
+**Papers covered so far:** 10
 
-**By topic:** Vision-Language Models (3), Reasoning & Agents (2), Benchmarks & Evaluation (1), Model Efficiency (1), Reinforcement Learning (1), Self-Supervised Learning (1)
+**By topic:** Vision-Language Models (3), Reasoning & Agents (3), Benchmarks & Evaluation (1), Model Efficiency (1), Reinforcement Learning (1), Self-Supervised Learning (1)
 
 ## Posts in this Series
 
 - **2026-08-15** — [4 Papers Worth Reading — Week of August 15, 2026](2026-08-15.qmd) (4 papers)
 - **2026-08-21** — [5 Papers Worth Reading — Week of August 21, 2026](2026-08-21.qmd) (5 papers)
+- **2026-08-25** — [1 Paper Worth Reading — FlowEvo, Week of August 25, 2026](2026-08-25.qmd) (1 paper)
