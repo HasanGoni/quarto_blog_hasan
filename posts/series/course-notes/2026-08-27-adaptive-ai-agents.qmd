@@ -1,0 +1,325 @@
+---
+title: "Building Adaptive AI Agents — Course Notes"
+subtitle: "Consolidated lesson summaries, notebook details, and glossary"
+author: "Hasan Goni"
+date: 2026-08-27
+categories: [agentic-ai, course-notes]
+toc: true
+series:
+  name: "Online Course Notes"
+  number: 1
+format:
+  html:
+    code-fold: false
+---
+
+:::{.callout-tip}
+This post is part of the [Online Course Notes](index.qmd) series — consolidated notes from online courses I work through.
+:::
+
+## Course overview
+
+DeepLearning.AI course on building AI agents that improve from experience across three layers, cheapest/safest first:
+
+1. **Token Space Adaptation — Behavior** (Lesson 2): Skill Induction
+2. **Token Space Adaptation — Knowledge** (Lessons 3–4): Code Knowledge Graph
+3. **Weight Space Adaptation** (Lesson 5): LoRA/QLoRA fine-tuning
+
+Governing rule: can better context/instructions fix the problem? Stay in token space. Only move to weight space once token-space options are exhausted, and even then scope it narrowly (refusal or style/format — not new factual knowledge).
+
+---
+
+## Lesson 1 — Foundations: The Agent Loop and Memory
+
+**Problem statement:** an agent without memory repeats the same mistakes. Example: Monday's agent hits a test failure, investigates, finds the fix. Tuesday's fresh-context agent hits the same error and re-derives the same fix from scratch — wasted time and tokens. Wednesday should start from the proven fix instead.
+
+**What is an agent:** a system that takes in information from its environment, reasons about what to do next using an LLM, and uses tools to act on that environment. With memory, it also retains useful experience across sessions.
+
+**The agent loop:**
+1. User request triggers the model to decide on an action
+2. Model requests a tool via the harness
+3. Harness executes the tool, returns the result
+4. Result becomes part of context for the next iteration
+5. Repeat until task succeeds or agent stops
+
+**Harness vs. model:** the LLM is the raw reasoning power. The harness is the software scaffolding — assembles context, gives tool access, records results to memory, re-invokes the model.
+
+**Four memory types:**
+
+| Type | Definition |
+|---|---|
+| Working memory | Messages/tool results in use during the current run only |
+| Episodic memory | Record of what happened in previous runs, persists across sessions |
+| Semantic memory | Project-specific facts and knowledge (what is true) |
+| Procedural memory | Learned workflow steps — what skills are built from (how to do something) |
+
+**Traces:** a complete record of everything in an agent's run — files inspected, actions taken, outcomes, corrections. Traces are the raw material for building long-term memory.
+
+**Where to intervene, decision order:**
+
+- Can better context/instructions help? → **Token space**: (a) skill enhancement loop, (b) adaptive memory via knowledge graph
+- If token-space methods are exhausted → **Weight space**: fine-tune the model itself
+
+---
+
+## Lesson 2 — Behavior Adaptation: Skill Induction
+
+**Skill induction pipeline:**
+
+1. Raw traces (what was tried, where it failed, what worked) fed to an **Induction Engine** (LLM)
+2. Engine drafts a procedure as a `skill.md` file
+3. Human approves → skill enters the **Skill Box** (managed, versioned collection of active skills)
+
+**Continuous improvement loop:**
+
+- Agent uses approved skills → generates new traces
+- Induction Engine (outside the main agent path) reviews new traces → proposes an enhanced skill version with supporting evidence
+- Human reviewer **approves** (promotes to active, replaces old version) or **rejects with a reason** (feeds back into the next proposal)
+
+**Why human-in-the-loop matters:**
+
+- Approval turns a proposal into standing behavior — the agent retrieves it on every matching future task
+- A bad skill that slips through repeats the mistake and compounds damage
+- **Poisoned traces**: incorrect or deliberately planted instructions could get proposed as a skill; human review is the gate
+- Every skill has an owner; every rejection teaches the engine what to fix next
+
+**Notebook demo (`L2.ipynb`):**
+
+- Stack: Oracle Agent Memory (`mem`, trace storage) + LangGraph + Oracle DB (induction loop, `conn`)
+- 5 starter skills: `brainstorming`, `requesting-code-review`, `run-the-tests`, `systematic-debugging`, `writing-plans`
+- Flow: `show_recurring_failure()` (demonstrates v1 failure) → `trace_seed_summary()` (seeds traces + skills into DB) → `search_skill_box()` (shows current retrieval, `before_hit`) → induction engine system contract (`_SYSTEM`) shown, then `induce_all(run_test_episodes, complete=night)` filtered to `topic == "run_test_suite"` → produces `proposals[0]` (candidate v2) → `run_dream()` checkpoints it as pending review → `build_review_app()` renders v1-vs-v2 diff with approve/reject → after approval, v2 becomes active → re-running the same query shows `after_hit` retrieving v2, and the test passes.
+- Key implementation detail: induction is scoped **by topic** — only episodes matching the specific skill's topic get distilled, not the whole trace store at once.
+
+---
+
+## Lesson 3 — Knowledge Adaptation: Code Knowledge Graph (theory)
+
+**Core claim:** in large codebases, code *generation* isn't the bottleneck — **retrieval** is. Finding the right files to modify is the hardest, most time-consuming part of a coding agent's task.
+
+**Why keyword/regex search fails:** matches literal terms but loses relationships between files. Example: fixing a cache issue — keyword search finds some relevant files but misses related ones connected only structurally.
+
+**The fix — Code Knowledge Graph:** a property graph with three edge types:
+
+1. **Import edges** (file→file) — the "skeleton." If file A imports from B and C, changes in B/C may ripple into A.
+2. **Call edges** (function→function) — e.g. function X calls Y and Z; changes to Y/Z should prompt review of X.
+3. **Co-edit edges** (file↔file) — derived from git commit history; files historically modified together, even absent any code dependency.
+
+**Graph prep before retrieval:** audit and deduplicate near-identical nodes.
+
+**Retrieval mechanism — two steps:**
+
+1. **Anchor** — the query is matched via semantic similarity to find the closest starting node
+2. **PageRank** — scores/ranks nodes outward from the anchor along edges
+
+**Why PageRank beats plain traversal:** fixed-radius traversal weights every same-hop-distance neighbor equally. PageRank produces a custom score per node combining distance and semantic similarity.
+
+**Benchmark (Claude Code + Haiku, 4 conditions: vanilla / +knowledge graph / +anchor hits / +random-file placebo, Django repo, 10 tasks):**
+
+- 18% improvement in time spent
+- 17% improvement in steps to first correct edit
+- 16% reduction in tokens spent
+- Faster on 7/10 tasks, median 11% time reduction
+
+**Closing the loop:** new commit → reprocess graph (extract new edges) → merge into DB → append/re-rank. Update frequency is tunable per use case.
+
+---
+
+## Lesson 4 — Knowledge Adaptation: Building the Code Knowledge Graph (hands-on)
+
+**Toy graph (`L4.ipynb`):**
+
+```python
+starter_nodes = [(id, kind, label), ...]   # kind: "file" | "symbol"
+starter_edges = [(src, dst, kind), ...]    # kind: "contains" | "import" | "call" | "co_edit"
+```
+
+8 nodes (5 files + 3 functions), 12 edges. Example relationships: `retriever.py` **contains** `seed_ppr()`, `walk_edges()`, `verify_token()`; `retriever.py` **imports** `graph_store.py`; `api.py` **imports** `auth.py`/`retriever.py`; `seed_ppr()` **calls** `walk_edges()`; co-edit clusters `{retriever.py, graph_store.py, test_retriever.py}` and `{api.py, auth.py}`.
+
+**Oracle property graph (real DDL):**
+
+```sql
+CREATE TABLE STARTER_GRAPH_NODES (id PK, kind, label)
+CREATE TABLE STARTER_GRAPH_EDGES (eid PK, src FK, dst FK, kind)
+CREATE PROPERTY GRAPH starter_code_graph
+  VERTEX TABLES (STARTER_GRAPH_NODES KEY(id) PROPERTIES(id,kind,label))
+  EDGE TABLES (STARTER_GRAPH_EDGES KEY(eid) SOURCE KEY(src) DESTINATION KEY(dst) PROPERTIES(kind))
+```
+
+**Querying (SQL/PGQ):**
+
+```sql
+-- all typed edges
+SELECT a, kind, b FROM GRAPH_TABLE (starter_code_graph
+  MATCH (v)-[e]->(w) COLUMNS (v.label AS a, e.kind AS kind, w.label AS b))
+
+-- undirected co-edit neighbors
+MATCH (v)-[e]-(w) WHERE v.id=:f AND e.kind='co_edit' COLUMNS (w.label AS other)
+```
+
+**Visualization:** files = squares, functions = triangles; co-edit = green dotted line.
+
+**Traversal example:** query "where do we verify a token?" → anchor = `verify_token` (semantic similarity) → traversal surfaces connected nodes even when those neighbors share **no** lexical/semantic similarity with the query — the structural connection carries the relevance signal.
+
+**Incremental updates:** appending a new node/edge costs ~zero — no full graph rebuild.
+
+**Real codebase scale-up** (presenter's `agent-harness` OSS repo): 208 files, ~1,200 symbols, 5,000+ edges. Dedup audit found ~4% duplicate nodes (>96% identical) — removed as clusters.
+
+**Graph structure observations:** most functions are atomic (no outgoing calls); a smaller hub of interconnected functions links into files; a subset of files has the highest import-degree — most-referenced, highest blast-radius, needs extra care on changes.
+
+**Two-type evaluation:**
+
+- **Lexical/similarity questions** — query wording overlaps the answer; keyword search and graph anchor both succeed (no graph advantage here)
+- **Multi-hop questions** — answer is >1 hop from anchor, e.g. *"When `get_chat_archive` runs, which internal function does it call?"* — keyword search fails, graph traversal succeeds
+
+**Production-style test** (PageRank-ranked hints injected into Claude's system prompt, Sonnet + Haiku):
+
+- **HTTPie** (small repo): ~11% combined improvement — 3% fewer tokens, 22% fewer tool calls, 36% faster to first correct edit, 10% less total time
+- **Django** (larger repo): 11% less total time, 7% fewer steps to first correct edit, 5% fewer tokens, 6% cost improvement
+- Pooled across 10 tasks: positive win rate throughout; **~10–12% overall task-efficiency improvement**
+
+**Notebook pipeline functions:** `load_code_graph()` / `load_real_graph()` (parse real repo data + eval tasks) → `audit_scorecard()` (baseline noise score, `before_sc`) → `restructure()` (dedup + folds in retrieval traces from `mem.list_traces("retrieval")`) → `build_node_embeddings()` + `run_retrieval_eval()` (anchor+PageRank vs. keyword eval) → `gv_lab` module renders pre-computed HTTPie/Django benchmark results.
+
+*Implementation note: co-edit edges require git-history mining — not shown in the notebook itself; treated as pre-extracted input data.*
+
+---
+
+## Lesson 5 — Weight Space Adaptation: Fine-Tuning
+
+**Why weight-space is the expensive, last-resort layer:** foundation models are trained on the whole internet — injecting new *knowledge* via weight edits is usually a bad idea. Weight modification is justified mainly for two objectives:
+
+1. **Refusal** — e.g. refuse to discuss a topic/person
+2. **Formatting/behavior** — e.g. tone, brand voice, style
+
+**LoRA (Low-Rank Adaptation):**
+
+- Freeze original weights **W**
+- Train two small matrices **A**, **B**: output = `W + (scale) × B·A`
+- Target ~**1%** of total weights
+- Too few weights trained → behavior doesn't stick
+- Too many weights trained → **catastrophic forgetting** (overwrites original capabilities)
+
+**Mechanistic intuition:** reading "happy" text activates certain neurons; the adapter observes this into a residual stream; the two matrices learn (A) how strongly to fire a behavior given context, (B) writing the behavior back in low-dimensional form.
+
+**Quantization (QLoRA):** 32-bit float weights → 4-bit (16 possible values, 0–15). Reconstruction back to 32-bit introduces small error but drastically cuts memory. A 600M-param model fits in ~1GB RAM this way.
+
+**Case study — "Super Polite Qwen":**
+
+- Base: Qwen 600M params, 4–5GB
+- Trained on ~14,000 synthetic polite Q&A pairs (varying intensity: courteous, warm, effusive)
+- Adapter size: ~150MB
+- Training time: ~1 hour, ~5% of weights updated
+- Scale context: 600M params ≈ 0.01–0.1% the size of a frontier model — frontier fine-tuning takes hundreds/thousands of GPU-hours, usually outsourced to cloud providers
+
+**Production pattern — the router:** a lightweight regex/pattern layer inspects each incoming query *before* it hits any model, deciding base model (factual/technical) vs. polite adapter (needs warmth). Generalizes to: refusing sensitive topics, adapting tone/format per request type.
+
+**Notebook (`L5.ipynb`, via `L5_lab` module):**
+
+```python
+cfg = L5_lab.load_l5_config("weight")
+adapters = L5_lab.resolve_weight_adapters()
+L5_lab.show_politeness_proof()          # base vs adapter side-by-side
+L5_lab.show_polite_training_samples()   # sample Q&A pairs
+L5_lab.show_qlora_quantization()        # 32-bit → 4-bit visualization
+L5_lab.show_training_stats(); L5_lab.plot_loss_curve()
+L5_lab.live_compare_polite(query)       # live test
+L5_lab.show_adapter_router_demo()       # regex router demo
+```
+
+Lighter/more black-box than L2/L4 — LoRA training internals are abstracted into helper functions rather than shown as raw PyTorch/PEFT code.
+
+---
+
+## Course wrap-up (closing message)
+
+> "In this course, you've learned how adaptive AI agents can improve from experience by changing their behavior, organizing their knowledge, and when needed, adapting their model weights. You now have practical techniques to build agents that become more capable when doing the same work from one day to the next."
+
+**Full lesson map:**
+
+| # | Layer | Mechanism | Cost | Key result |
+|---|---|---|---|---|
+| 1 | Foundations | Agent loop + 4 memory types; traces as raw material | — | Framing |
+| 2 | Token space — behavior | Skill induction: traces → skill.md → human approval → Skill Box | Low | Agent stopped repeating a test-suite failure after v2 skill promoted |
+| 3–4 | Token space — knowledge | Code Knowledge Graph: import/call/co-edit + anchor+PageRank | Low–medium | ~10–12% pooled efficiency gain (HTTPie + Django, Sonnet & Haiku) |
+| 5 | Weight space | LoRA/QLoRA fine-tuning | High | "Super polite" Qwen: 150MB adapter, ~1hr train, 5% of weights on a 600M model |
+
+---
+
+## Glossary
+
+### Foundations
+
+**Agent** — A system that takes in information from its environment, reasons about what to do next using an LLM, and uses tools to act on that environment. An agent that also has memory can retain useful experience from past interactions instead of starting fresh each time.
+
+**Harness** — The software scaffolding that surrounds an LLM to turn it into a working agent. It assembles the context the model sees, gives the model the ability to call tools, records results to memory, and re-invokes the model within the agent loop. The LLM supplies the reasoning; the harness supplies the structure around it.
+
+**Agent Loop** — The repeating cycle by which an agent completes a task: a user request triggers the model to decide on an action, the harness executes a tool and returns the result, and that result is added to the context for the next iteration. The loop continues until the task succeeds or the agent stops.
+
+**Trace** — A complete record of everything that happened during an agent's run on a task — its conversations, tool calls, decisions, errors, and fixes. Traces are the raw material used to derive skills and other forms of long-term memory.
+
+**Working Memory** — The messages and tool results currently in use within a single agent run. It exists only for the duration of that run and does not persist afterward.
+
+**Episodic Memory** — The record of what happened in previous agent runs. Unlike working memory, episodic memory persists across sessions, allowing an agent to recall specific past interactions rather than just the current one.
+
+**Semantic Memory** — Project-specific facts and knowledge an agent holds about its environment (for example, the structure or conventions of a codebase); distinct from episodic memory's record of events, semantic memory stores facts.
+
+**Procedural Memory** — The workflow steps or reusable methods an agent has learned for accomplishing a task. Where semantic memory captures what is true, procedural memory captures how to do something; this is the form of memory that skills are built from.
+
+**Token Space Adaptation** — Improving an agent's performance by changing the context and instructions it receives, without altering the underlying model's weights. Covers two methods: behavior adaptation (skill induction) and knowledge adaptation (code knowledge graphs). Contrast with Weight Space Adaptation, which modifies the model itself and is generally used only once token space methods are exhausted.
+
+**Weight Space Adaptation** — Improving an agent's behavior by directly modifying the weights of the underlying model, typically through fine-tuning. More costly than token space adaptation; used to patch specific behaviors (such as tone or refusals) that context alone cannot reliably produce.
+
+### Behavior Adaptation: Skill Induction
+
+**Skill Induction** — The process of turning an agent's repeated experiences, captured in its traces, into reusable procedures called skills, so future runs can retrieve a proven approach instead of rediscovering it from scratch.
+
+**Skill Induction Engine** — The component (built on an LLM) that reviews an agent's traces, identifies repeated failures and fixes, and drafts or proposes an enhanced version of a skill along with supporting evidence for the change.
+
+**Skill** — A short, reusable procedure, typically written as a markdown file, that describes steps, tools, common errors, and fixes for accomplishing a recurring task. Produced by the Skill Induction Engine and, once approved, retrieved by the agent whenever it faces a matching task.
+
+**Skill Box** — The managed, versioned collection of approved skills available for an agent to retrieve and use. A skill only enters the Skill Box after human review; each version promoted into it is considered active until replaced.
+
+**Human-in-the-Loop Review** — The approval step where a person reviews a proposed skill enhancement and either approves it (promoting it to active status) or rejects it with a reason. This gate exists because approval turns a proposal into behavior the agent will repeat on every matching task going forward; approving a flawed or maliciously planted procedure would let a "poisoned" trace become standing agent behavior; and every approval or rejection creates an accountable owner for that skill.
+
+### Knowledge Adaptation: Code Knowledge Graph
+
+**Retrieval Bottleneck** — The observation that in large, unstructured code bases, the hardest and most time-consuming part of a coding agent's task is usually not writing or generating code, but finding the correct files to read or modify in the first place.
+
+**Keyword/Regex Search** — A traditional code-search method based on matching literal keywords or regular expression patterns in file contents. Fast but structurally blind: can find files containing a matching term while missing related files that don't share that exact wording — the gap the Code Knowledge Graph is designed to close.
+
+**Code Knowledge Graph** — A property graph representation of a code base that stores relationships between its files and functions — import, call, and co-edit relationships — so an agent can retrieve related code by traversing structure rather than by keyword matching alone.
+
+**Import Relationship (Import Edge)** — A file-to-file connection indicating that one file imports from another. The most basic relationship type; outlines which files may be affected when a dependency changes.
+
+**Call Relationship (Call Edge)** — A function-to-function connection indicating that one function calls another, often across files. Flags which functions may need review when a called function's behavior changes.
+
+**Co-edit Relationship (Co-edit Edge)** — A file-to-file connection derived from a repository's Git history, linking files that have tended to be modified together in the same commits, even when they share no direct import or call relationship.
+
+**Property Graph** — The underlying graph database structure used to store the Code Knowledge Graph: vertices (files and functions, each with a type and label) and directed edges (import, call, co-edit relationships) connecting them.
+
+**Deduplication (Graph Auditing)** — The step of identifying and removing near-duplicate or highly similar nodes from the graph before retrieval, so redundant files don't inflate results or create misleading duplicate edges.
+
+**Anchor** — The first node found to be semantically similar to an incoming query. Serves as the starting point from which PageRank expands outward.
+
+**PageRank Retrieval** — A ranking algorithm applied to the graph that scores nodes by their importance relative to an anchor node, expanding outward along edges. Unlike plain traversal (equal weight per hop-distance), PageRank produces a custom score per node combining distance and relationship structure — surfacing relevant files even several hops from the anchor.
+
+**Multi-hop Question** — A query whose correct answer lies in a node more than one relationship away from the anchor — the case where keyword search is most likely to miss the answer and graph-based retrieval shows the clearest advantage.
+
+### Weight Space Adaptation: Fine-Tuning
+
+**Fine-Tuning** — Further training a pre-trained model's weights to patch a specific behavior (tone, formatting, refusing certain topics) after the model has already been trained on general data. Because foundation models are already trained on broad data, fine-tuning is generally used to adjust *how* a model behaves rather than to add new factual knowledge.
+
+**Adapter** — A small, separately trained add-on placed on top of a frozen base model's weights to produce a targeted behavior change without altering the original model. A router can select among multiple trained adapters, or the base model itself, depending on the incoming query.
+
+**LoRA (Low-Rank Adaptation)** — A parameter-efficient fine-tuning technique that freezes a model's original weights and adds two small trainable matrices per targeted layer whose product approximates the desired weight change. Only these matrices are trained and added to the frozen weights at inference time, keeping training cheap; typically targets around 1% of a model's total weights.
+
+**Quantization** — Reducing the numerical precision used to represent a model's weights (e.g. 32-bit float → 4-bit) to shrink memory and storage requirements. Converting back to higher precision introduces some reconstruction error, trading a small precision loss for a large size reduction.
+
+**Catastrophic Forgetting** — A failure mode where training too many of a model's weights overwrites what the original network had already learned, degrading its broader capabilities. The risk on the opposite end from training too few weights (which fails to produce enough behavior change); fine-tuning aims for the smallest weight change that reliably produces the target behavior.
+
+**Router (Model Router)** — A component that inspects an incoming query (e.g. via pattern/regex matching) and decides which model should answer it: the base model, or one of several fine-tuned adapters. Lets a system serve a factual response to one query and a stylistically adapted response to another, without a human choosing the model manually.
+
+### Applied Examples
+
+**Skeleton Import Graph** — The set of import relationships within a Code Knowledge Graph, described as "the skeleton" because it determines the base paths an agent walks to find everything a given file depends on, before call and co-edit relationships add further connections.
+
+**Win Rate (Task Efficiency Comparison)** — The proportion of coding tasks, out of a benchmark set, on which an agent performs better (faster, fewer steps, or fewer tokens) using one method, such as Code Knowledge Graph retrieval, compared to a baseline such as keyword search or no additional context.

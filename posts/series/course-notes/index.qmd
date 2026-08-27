@@ -1,0 +1,16 @@
+---
+title: "Online Course Notes"
+author: "Hasan Goni"
+date: last-modified
+categories: [series, course-notes]
+description: "Consolidated notes from online courses I work through — lesson summaries, notebook details, and glossaries, kept as a reference rather than scattered across scratch files."
+toc: true
+---
+
+## Series Overview
+
+I take a lot of short DeepLearning.AI-style courses, and the notes from each one used to live in whatever scratch file I had open at the time. This series is where I consolidate them properly instead: one post per course, with the lesson-by-lesson summary, the notebook/code details worth remembering, and a glossary of the terms introduced — written so I (or anyone else) can come back months later and actually use it as a reference.
+
+## Posts in this Series
+
+- **2026-08-27** — [Building Adaptive AI Agents — Course Notes](2026-08-27-adaptive-ai-agents.qmd) — a course on agents that improve from experience across three layers: token-space behavior adaptation (skill induction), token-space knowledge adaptation (code knowledge graphs), and weight-space adaptation (LoRA/QLoRA fine-tuning).

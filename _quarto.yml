@@ -30,6 +30,8 @@ website:
             file: posts/series/local-ai-defect-inspection/index.qmd
           - text: "Paper of the Week"
             file: posts/series/papers/index.qmd
+          - text: "Online Course Notes"
+            file: posts/series/course-notes/index.qmd
       - text: "Categories"
         file: categories.qmd
       - text: "Tags"
@@ -164,6 +166,14 @@ website:
         contents:
           - text: "Introduction"
             href: posts/series/papers/index.qmd
+      - section: "Online Course Notes"
+        collapse: true
+        collapsed: true
+        contents:
+          - text: "Introduction"
+            href: posts/series/course-notes/index.qmd
+          - text: "Building Adaptive AI Agents"
+            href: posts/series/course-notes/2026-08-27-adaptive-ai-agents.qmd
 
 format:
   html:
