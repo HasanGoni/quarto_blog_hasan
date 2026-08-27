@@ -9,5 +9,8 @@ __pycache__/
 notebooks/course-notes-adaptive-agents/.venv/
 notebooks/course-notes-adaptive-agents/lora_out/
 notebooks/course-notes-adaptive-agents/traces.db
+notebooks/paper-hpma-sam3/.venv/
+notebooks/paper-hpma-sam3/train_out/
+notebooks/paper-hpma-sam3/prototypes.pt
 
 **/*.quarto_ipynb

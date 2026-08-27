@@ -75,6 +75,7 @@ its own purpose-named venv at the location that subproject's tooling expects, ke
 | `.venv-quarto` | Rendering the CV-foundations notebooks / general Quarto Python execution | pip + `requirements.txt` |
 | `.venv-boogu` | The boogu semiconductor-defect image-editing notebook (`notebooks/_drafts/`) | pip |
 | `notebooks/course-notes-adaptive-agents/.venv` | Hands-on demo scripts for the "Online Course Notes" series (code knowledge graph, skill induction, LoRA fine-tuning) | **`uv`**, deps declared in that folder's `pyproject.toml` (`[tool.uv] package = false`) |
+| `notebooks/paper-hpma-sam3/.venv` | Real reimplementation of a "Paper of the Week" post (HPMA adapters wired into the real `facebook/sam3` model, trained on real EndoVis2017 data) | **`uv`**, same `pyproject.toml` pattern |
 
 When adding a new Python-dependent subproject, follow the newest pattern: a scoped `pyproject.toml`
 next to the code, `uv sync` to create its venv, and add the venv path to `.gitignore`. Don't add
@@ -96,3 +97,8 @@ Python-native alternatives (e.g. `transformers` running a small local model) ove
   inside the `posts/` tree.
 - **Paper of the Week** (`posts/series/papers/`) — weekly digest, one dated post per week
   (`YYYY-MM-DD.qmd`), consolidating multiple papers into a single post rather than one post per paper.
+  A single-paper deep dive with a full, real reimplementation (not pseudocode) is also a valid post
+  in this series when a paper warrants it — demo code goes in its own `notebooks/paper-<slug>/`
+  `uv` project (same pattern as `course-notes-adaptive-agents`), generated images/GIFs referenced
+  from `posts/series/papers/images/`. The sidebar for this series only links to `index.qmd`, not
+  every individual post (unlike other series) — that's the existing convention, not an oversight.
