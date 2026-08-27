@@ -14,7 +14,7 @@ format:
 ---
 
 :::{.callout-tip}
-This post is part of the [Online Course Notes](index.qmd) series — consolidated notes from online courses I work through.
+This post is part of the [Online Course Notes](index.qmd) series — consolidated notes from online courses I work through. Want to actually build this instead of just reading about it? See the hands-on companion: [Building Adaptive AI Agents — Hands-On, Open-Source Edition](2026-08-27-adaptive-ai-agents-hands-on.qmd).
 :::
 
 ## Course overview

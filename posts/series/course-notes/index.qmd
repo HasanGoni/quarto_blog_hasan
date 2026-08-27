@@ -14,3 +14,4 @@ I take a lot of short DeepLearning.AI-style courses, and the notes from each one
 ## Posts in this Series
 
 - **2026-08-27** — [Building Adaptive AI Agents — Course Notes](2026-08-27-adaptive-ai-agents.qmd) — a course on agents that improve from experience across three layers: token-space behavior adaptation (skill induction), token-space knowledge adaptation (code knowledge graphs), and weight-space adaptation (LoRA/QLoRA fine-tuning).
+- **2026-08-27** — [Building Adaptive AI Agents — Hands-On, Open-Source Edition](2026-08-27-adaptive-ai-agents-hands-on.qmd) — the same three lessons, rebuilt with an all-open-source stack (SQLite, `networkx`, a local LLM, `transformers`/`peft`) and actually run on a real repo, with real output, an interactive graph, and a real LoRA training curve.

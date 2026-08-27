@@ -6,5 +6,8 @@ __pycache__/
 /.venv-quarto/
 /.venv-boogu/
 /.model_cache/
+notebooks/course-notes-adaptive-agents/.venv/
+notebooks/course-notes-adaptive-agents/lora_out/
+notebooks/course-notes-adaptive-agents/traces.db
 
 **/*.quarto_ipynb
