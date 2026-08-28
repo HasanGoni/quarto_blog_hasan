@@ -12,5 +12,9 @@ notebooks/course-notes-adaptive-agents/traces.db
 notebooks/paper-hpma-sam3/.venv/
 notebooks/paper-hpma-sam3/train_out/
 notebooks/paper-hpma-sam3/prototypes.pt
+notebooks/paper-rau-sam2/.venv/
+notebooks/paper-rau-sam2/camus_cache/
+notebooks/paper-rau-sam2/train_out/
+notebooks/paper-rau-sam2/reference_bank.pt
 
 **/*.quarto_ipynb

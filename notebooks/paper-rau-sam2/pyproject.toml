@@ -1,0 +1,20 @@
+[project]
+name = "paper-rau-sam2"
+version = "0.1.0"
+description = "Real, runnable reimplementation of RAU (Reference-based Anatomical Understanding with Vision Language Models, arXiv:2509.22404) — Qwen2.5-VL emitting a <SEG> query fused into SAM2's mask decoder via its target_embedding interface, trained on real CAMUS echocardiography data."
+requires-python = ">=3.11"
+dependencies = [
+    "torch>=2.4",
+    "torchvision>=0.19",
+    "transformers>=4.49",
+    "accelerate>=0.34",
+    "pillow>=10.4",
+    "matplotlib>=3.9",
+    "huggingface_hub>=0.25",
+    "numpy",
+    "qwen-vl-utils>=0.0.8",
+    "nibabel>=5.4",
+]
+
+[tool.uv]
+package = false

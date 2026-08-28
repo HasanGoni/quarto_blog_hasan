@@ -76,6 +76,7 @@ its own purpose-named venv at the location that subproject's tooling expects, ke
 | `.venv-boogu` | The boogu semiconductor-defect image-editing notebook (`notebooks/_drafts/`) | pip |
 | `notebooks/course-notes-adaptive-agents/.venv` | Hands-on demo scripts for the "Online Course Notes" series (code knowledge graph, skill induction, LoRA fine-tuning) | **`uv`**, deps declared in that folder's `pyproject.toml` (`[tool.uv] package = false`) |
 | `notebooks/paper-hpma-sam3/.venv` | Real reimplementation of a "Paper of the Week" post (HPMA adapters wired into the real `facebook/sam3` model, trained on real EndoVis2017 data) | **`uv`**, same `pyproject.toml` pattern |
+| `notebooks/paper-rau-sam2/.venv` | Real reimplementation of a "Paper of the Week" post (Qwen2.5-VL + SAM2 fusion via SAM2's `target_embedding`, trained on real CAMUS data) | **`uv`**, same `pyproject.toml` pattern |
 
 When adding a new Python-dependent subproject, follow the newest pattern: a scoped `pyproject.toml`
 next to the code, `uv sync` to create its venv, and add the venv path to `.gitignore`. Don't add
@@ -102,3 +103,10 @@ Python-native alternatives (e.g. `transformers` running a small local model) ove
   `uv` project (same pattern as `course-notes-adaptive-agents`), generated images/GIFs referenced
   from `posts/series/papers/images/`. The sidebar for this series only links to `index.qmd`, not
   every individual post (unlike other series) — that's the existing convention, not an oversight.
+  A deep-dive paper post's structure (established with the RAU post): paper summary, "explain
+  like I'm five" + "explain like I'm a data scientist" (two reading levels), a jargon-buster
+  glossary table, a Mermaid architecture diagram traced from the actual library source, an
+  optional hand-drawn/xkcd-style sketch diagram for the ELI5 section, full real code, real
+  captured output, and a real before/after result (static images + a size-optimized GIF, since
+  quarto.pub rejects uploads much above ~1MB — check GIF size and shrink with
+  `Image.quantize`/frame-subsampling before publishing, don't assume it'll fit).

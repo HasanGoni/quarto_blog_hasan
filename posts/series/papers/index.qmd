@@ -11,9 +11,9 @@ toc: true
 
 Every week I pick a handful of the most relevant papers from arXiv and the HF Daily Papers list — filtered against my own work (semiconductor X-ray/casting defect detection, VLM fine-tuning, auto-label verification) — and write each one up twice: once so a 5-year-old could follow it, once with the full methodology, a code sketch, and an honest note on whether it's actually useful for what I'm building.
 
-**Papers covered so far:** 11
+**Papers covered so far:** 12
 
-**By topic:** Vision-Language Models (3), Reasoning & Agents (3), Segmentation (1), Benchmarks & Evaluation (1), Model Efficiency (1), Reinforcement Learning (1), Self-Supervised Learning (1)
+**By topic:** Vision-Language Models (4), Reasoning & Agents (3), Segmentation (2), Benchmarks & Evaluation (1), Model Efficiency (1), Reinforcement Learning (1), Self-Supervised Learning (1)
 
 ## Posts in this Series
 
@@ -21,3 +21,4 @@ Every week I pick a handful of the most relevant papers from arXiv and the HF Da
 - **2026-08-21** — [5 Papers Worth Reading — Week of August 21, 2026](2026-08-21.qmd) (5 papers)
 - **2026-08-25** — [1 Paper Worth Reading — FlowEvo, Week of August 25, 2026](2026-08-25.qmd) (1 paper)
 - **2026-08-27** — [Reimplementing HPMA — Frozen Prototype Memory for SAM3, With Real Code](2026-08-27-hpma-sam3.qmd) — a full, real reimplementation (not pseudocode): the actual `facebook/sam3` model, real EndoVis2017 data, real K-Means prototypes, real coupling adapters, a real training run with a real loss curve and before/after result.
+- **2026-08-28** — [Reimplementing RAU — VLMs Pointing SAM2 at the Right Region, With Real Code](2026-08-28-rau-vlm-sam2.qmd) — real Qwen2.5-VL-3B + real SAM2 fused via SAM2's own `target_embedding` interface, trained on real CAMUS cardiac ultrasound. ELI5 section, data-scientist breakdown, jargon glossary, and a real training-progress GIF.
