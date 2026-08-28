@@ -16,7 +16,6 @@ import pathlib
 import zipfile
 
 import gdown
-import requests  # noqa: F401 -- kept so tests can monkeypatch synth_xray.data.requests.get
 
 GDXRAY_URLS = {
     "Welds": "https://drive.google.com/uc?id=1hKDBI-76cjwP-aUSFXuaTu2unpoyc-lg",

@@ -27,7 +27,7 @@ def test_download_and_extract_skips_existing(tmp_path, monkeypatch):
     def fail_if_called(*args, **kwargs):
         raise AssertionError("should not attempt download when group dir already exists")
 
-    monkeypatch.setattr("synth_xray.data.requests.get", fail_if_called)
+    monkeypatch.setattr("synth_xray.data.gdown.download", fail_if_called)
     result = download_and_extract("Welds", dest)
     assert result == group_dir
 
