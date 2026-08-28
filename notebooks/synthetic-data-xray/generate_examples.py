@@ -82,7 +82,17 @@ def main() -> None:
 
     clean_image = load_gray(images[1]) if len(images) > 1 else defect_image.copy()
     rng = np.random.default_rng(0)
-    synthetic_mask = generate_crack_mask(clean_image.shape, start=box[:2], length=40, thickness=2, rng=rng)
+    # `box` is in defect_image's (images[0]) coordinate frame, but the crack is drawn
+    # on clean_image (images[1]) -- a different real GDXray image with its own
+    # resolution and aspect ratio (e.g. here 366x3512 vs 835x4919). Copying box[:2]
+    # as a raw pixel coordinate would be meaningless on clean_image (it'd only be
+    # in-bounds by luck, and wouldn't correspond to anything). Scale it
+    # proportionally into clean_image's shape instead, so the start point still
+    # lands "near where a real defect was" in relative terms.
+    scale_row = clean_image.shape[0] / defect_image.shape[0]
+    scale_col = clean_image.shape[1] / defect_image.shape[1]
+    start = (int(box[0] * scale_row), int(box[1] * scale_col))
+    synthetic_mask = generate_crack_mask(clean_image.shape, start=start, length=40, thickness=2, rng=rng)
     synthetic_image, _ = synthesize_defect_image(
         clean_image, I0=I0, defect_mask=synthetic_mask, delta=delta,
         noise_gain=max(a, 0.1), blur_sigma=blur_sigma, rng=rng,

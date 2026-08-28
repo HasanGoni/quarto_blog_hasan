@@ -9,13 +9,14 @@ def parse_gdxray_bboxes(txt_path: pathlib.Path) -> list[tuple[int, int, int, int
     """Parse a GDXray ground-truth file into 0-indexed (row_min, col_min, row_max, col_max) boxes.
 
     Real GDXray ground-truth lines are `image_id col_min col_max row_min row_max`
-    (verified against the real Welds group, series W0001-W0010: checking each
-    line's two coordinate pairs against that image's actual (width, height) --
-    read from the corresponding real PNG -- shows the first pair's max value
-    tracks image width and the second pair's max value tracks image height,
-    for every one of the 10 images in the real W0001 series. The other two
-    candidate orderings (treating the columns as row-first, or as unpaired)
-    both put coordinate values far outside the image bounds.
+    (verified against the real Welds group, series W0001: grouping ground_truth.txt's
+    641 lines by their leading image_id column into the 10 images of that series,
+    then checking each image's coordinate pairs against that image's actual
+    (width, height) -- read from the corresponding real PNG -- shows the first
+    pair's max value tracks image width and the second pair's max value tracks
+    image height, for every one of those 10 images. The other two candidate
+    orderings (treating the columns as row-first, or as unpaired) both put
+    coordinate values far outside the image bounds.
     """
     boxes = []
     for line in pathlib.Path(txt_path).read_text().splitlines():
