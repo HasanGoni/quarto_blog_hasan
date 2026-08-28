@@ -1,6 +1,9 @@
 project:
   type: website
   output-dir: _site
+  render:
+    - "*"
+    - "!docs/**"
 
 website:
   title: "Hasan's Data Science & AI Blog"
