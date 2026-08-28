@@ -41,6 +41,13 @@ imagery actually get, and what does it take to close the gap for real use?**
    labels — while going to a flat 0% on the one error type (a real defect mislabeled clean) that
    matters most, traced back to a gap in the demo set itself.
 
+## Related series
+
+The flip side of this series is the [Synthetic Data Series](../synthetic-data/index.qmd): this one
+evaluates and fine-tunes models on the real defect data that exists; that one asks whether it's
+possible to *generate more of it* — physics-based simulation, generative fine-tuning, GANs, and the
+classic cut-paste baseline, measured against each other on the same GDXray imagery used here.
+
 ## Tools used throughout
 
 - Local inference on a DGX Spark (GB10, unified memory) — no cloud GPU rental

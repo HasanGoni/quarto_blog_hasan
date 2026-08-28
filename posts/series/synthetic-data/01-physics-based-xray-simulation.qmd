@@ -61,8 +61,10 @@ right where you want the cut to be (step 4, editing inside a mask). Then you shi
 light through your edited thickness map all over again and see what shadow it casts now (step 5 --
 re-render, add the blur and graininess a real detector would add). You end up with a brand-new
 shadow that has a scar in exactly the shape you drew, and because you know exactly which pixels
-you carved, you get a perfect answer key (a segmentation mask) completely for free (step 6).
-No new hand needed -- just a shadow, some math, and an eraser.
+you carved, you get a perfect answer key (a segmentation mask) completely for free (step 6) --
+for the scar *you* drew, at least; if the original hand already had a scratch on it, that one is
+still there and still not on your answer key. No new hand needed -- just a shadow, some math, and
+an eraser.
 
 ## Explain it like I'm a data scientist
 
@@ -117,31 +119,31 @@ flowchart TB
         DL["download_and_extract('Welds', ...)\n(gdown, Google Drive mirror --\nGDXray's original Dropbox links are dead)"]
         DL --> SD["find_series_dirs\n-> series_dir (W0001)"]
         SD --> GT["find_groundtruth_file\n-> ground_truth.txt"]
-        SD --> IMGS["find_images_in_series\n-> images[0] (defect), images[1] (clean)"]
+        SD --> IMGS["find_images_in_series\n-> images[0] = defect image,\nimages[1] = base image"]
     end
 
     subgraph GROUNDTRUTH["synth_xray.groundtruth"]
-        GT --> PB["parse_gdxray_bboxes\n(col_min col_max row_min row_max)"]
-        PB --> BM["bbox_to_mask -> roi_mask"]
+        GT --> PB["parse_gdxray_bboxes\n(col_min col_max row_min row_max)\n-> dict keyed by image_id"]
+        PB --> BM["bbox_to_mask\n(boxes for images[0]'s image_id)\n-> roi_mask"]
         IMGS --> RO["refine_mask_otsu\n(defect_image, roi_mask) -> defect_mask"]
         BM --> RO
     end
 
     subgraph CALIBRATION["synth_xray.calibration (fit from real pixels)"]
-        IMGS --> I0["estimate_I0\n(99th percentile) -> I0"]
-        RO --> DELTA["fit_defect_attenuation_depth\n(defect_mask, background_mask, I0) -> delta"]
-        IMGS --> NOISE["fit_noise_model\n(dense 20x20 flat patches) -> a, b"]
-        IMGS --> BLUR["fit_blur_sigma\n(edge profile) -> raw sigma"]
+        IMGS --> I0["estimate_I0\n(99th percentile of defect image) -> I0\n(cancels out of the round trip)"]
+        RO --> DELTA["fit_defect_attenuation_depth\n(defect image; background = 25 px ring\naround roi_mask, not whole image)\n-> delta"]
+        IMGS --> NOISE["fit_noise_model\n(base image, dense 20x20 patches)\n-> a, b"]
+        IMGS --> BLUR["fit_blur_sigma\n(base image edge profile)\n-> raw sigma"]
     end
 
-    BLUR -->|"raw sigma"| CLAMP["generate_examples.py (script, not library):\nclamp to (0, 5] px,\nfallback 1.5 px if out of range"]
+    BLUR -->|"raw sigma"| CLAMP["generate_examples.py (script, not library):\naccept [0.5, 5] px,\nfallback 1.5 px if out of range"]
 
     subgraph EDIT["synth_xray.defect_edit"]
         CRACK["generate_crack_mask\n(random-walk crack shape)\n-> synthetic_mask"]
     end
 
     subgraph PIPELINE["synth_xray.pipeline.synthesize_defect_image"]
-        INV["physics.invert_to_attenuation_depth\n(clean_image, I0) -> depth"]
+        INV["physics.invert_to_attenuation_depth\n(clean_image arg = base image, I0) -> depth"]
         EDITD["defect_edit.edit_attenuation_depth\n(depth, synthetic_mask, delta) -> edited_depth"]
         REND["physics.render_xray\n(edited_depth, I0) -> rendered"]
         BLURF["physics.apply_gaussian_blur\n(rendered, blur_sigma) -> blurred"]
@@ -149,7 +151,7 @@ flowchart TB
         INV --> EDITD --> REND --> BLURF --> NOISEF
     end
 
-    IMGS -->|clean_image| INV
+    IMGS -->|"images[1] (base image)"| INV
     I0 --> INV
     I0 --> REND
     DELTA --> EDITD
@@ -171,15 +173,38 @@ results section below.
 
 Every number the pipeline needs is fit from real pixel statistics on a real GDXray image, not
 assumed or hand-picked. The series used is **W0001** from GDXray's Welds group -- the first weld
-radiograph series that ships a `ground_truth.txt` file. Running `generate_examples.py` against it
-prints the actual calibration report:
+radiograph series that ships a `ground_truth.txt` file.
+
+Two of that series' ten radiographs get used, and *which parameter comes from which image* turns
+out to matter more than it looks:
+
+- `W0001_0001.png` is the **defect image**. It has annotated ground-truth defect boxes, so it's
+  what the defect physics -- the attenuation-depth signature `delta` -- is fit from. You need a
+  real, annotated defect to measure what a defect actually does to attenuation depth, and that's
+  the one thing this image is for.
+- `W0001_0002.png` is the **base image**: the radiograph the synthetic crack gets injected into.
+  So it's what the *sensor and acquisition* characteristics -- the noise model and the blur width
+  -- are fit from. Those are properties of one specific capture (exposure, dose, detector
+  settings), not of defect physics.
+
+Getting that split wrong is easy and quietly expensive. An earlier version of this pipeline fit
+*everything*, noise and blur included, on the defect image and then applied it to the base image.
+The output was measurably 3.7x grainier than its own source (median local standard deviation over
+20x20 tiles: 5.90 versus the base image's 1.58) -- a synthetic image that looks like a *different*
+X-ray machine took it. Fitting noise and blur where they'll actually be applied brings that to
+1.56x (2.47 versus 1.58), which is about as close as you get while still adding a fresh, honest
+noise realization on top.
+
+Running `generate_examples.py` prints the actual calibration report:
 
 ```
 series: W0001
+defect image (delta fit from): W0001_0001.png
+base image (noise/blur fit from, synthesized onto): W0001_0002.png
 fitted I0: 245.00
-fitted attenuation-depth delta: -0.4925
-fitted noise model: variance = 0.288 * mean + 28.249
-fitted blur sigma: 1.500 px
+fitted attenuation-depth delta: -0.3494
+fitted noise model: variance = 0.036 * mean + 0.441
+fitted blur sigma: 2.121 px
 ```
 
 A few things worth calling out, because they're the kind of thing that looks wrong until you
@@ -187,8 +212,12 @@ check it against the real image:
 
 - **$I_0 = 245$**, close to the top of the 0-255 range. That's consistent with the 99th-percentile
   brightest pixels in this image being the bright weld-bead band, close to saturation -- a
-  physically sane place for the "unattenuated beam" estimate to land.
-- **delta is negative** (-0.4925). The docstring intuition for a void/crack is "material missing
+  physically sane place for the "unattenuated beam" estimate to land. It's also the one parameter
+  whose exact value doesn't change the output: `render_xray` and `invert_to_attenuation_depth` are
+  exact algebraic inverses ($I_0 e^{-(-\ln(I/I_0))} = I$), so $I_0$ cancels straight out of the
+  round trip, and `delta` is a *difference* of two log-depths, so it cancels there too. $I_0$ only
+  sets the scale of the intermediate depth map.
+- **delta is negative** (-0.3494). The docstring intuition for a void/crack is "material missing
   → less attenuation → brighter pixel," which would be a *positive* delta. This particular weld
   image's defects are small pores that render *darker* than their surroundings, not brighter --
   confirmed by eye (a string of small dark dots along the bright band in the real image) as well
@@ -196,23 +225,40 @@ check it against the real image:
   attenuation depth under the mask, darkening those pixels), so this isn't a bug to fix -- it's
   the real, dataset-specific polarity, and a good reminder that "defects are brighter" is a
   convenient default, not a law of physics.
+- **What counts as "background" for that delta fit is a real choice, not a detail.** `delta` is
+  the median attenuation depth of the background minus that of the defect, and the obvious
+  "background" -- every pixel outside the defect box -- is wrong here for the same reason the
+  noise quadrants below are wrong: these panoramas have a strong large-scale brightness gradient,
+  so a whole-image median averages the dark plate and the bright weld bead together and has
+  nothing to do with the material immediately around *this* defect. Measured on the real image, a
+  whole-image background gives `delta = -0.4925`; a local ring dilated 25 px around the defect box
+  gives `-0.3494`. Same polarity, roughly 1.4x less magnitude. The value does keep drifting as you
+  tighten the ring (-0.2412 at 10 px, -0.1974 at 5 px), which is worth saying out loud: there is no
+  single "true" delta here, only a background reference you pick and then state. A 25 px ring is
+  the compromise used -- local enough to share the defect's gradient context, wide enough (2,720
+  px) for a stable median.
 - **The noise model needed a fix to the naive approach.** The obvious way to sample "flat"
-  patches for a photon-transfer-curve fit is a 2x2 grid of quadrants. This image has a strong,
+  patches for a photon-transfer-curve fit is a 2x2 grid of quadrants. These images have a strong,
   slow brightness gradient (the bright weld-bead band sweeping across an otherwise dark plate),
   so each quadrant patch spans most of that gradient -- its variance reflects the gradient, not
   pixel-level photon noise. Fitting on quadrants predicted a standard deviation of 15-20 gray
-  levels in a region that actually measures ~4 by eye; applying that everywhere made the
+  levels in regions whose real local standard deviation is 2-4; applying that everywhere made the
   synthetic image visibly over-grainy. Switching to a dense grid of small 20x20 patches (each one
   small enough to sit inside a single locally-flat region) gives the reported
-  `variance = 0.288*mean + 28.249`, which predicts a standard deviation of roughly 6-8 gray
-  levels across the image's brightness range -- much closer to the real local noise.
-- **Blur sigma needed a sanity clamp.** Every edge profile tried (through the defect box, through
-  the weld-bead band's edge elsewhere in the image) fit a sigma of 10-40 pixels, because none of
-  them contain an actual local step edge -- they're all riding the same slow gradient the noise
-  patches ran into. A blur that large would smear the synthetic crack (about 11x11 pixels) down
-  to invisibility. Real detector/geometric unsharpness at this resolution is a few pixels at
-  most, so the fit is clamped to `(0, 5]` px and falls back to a constant 1.5 px outside that
-  range -- which is what actually got used here.
+  `variance = 0.036*mean + 0.441`, which predicts a standard deviation of about 2.1 gray levels at
+  the base image's typical brightness -- close to its measured 1.58, with the small remaining gap
+  being real large-scale structure that even 20x20 patches can't entirely dodge.
+- **Blur sigma needed a sanity clamp, in both directions.** There is no genuinely sharp step edge
+  in these images to measure, and the step-edge fit fails in two opposite ways depending on where
+  you put the profile: on a profile riding the large-scale gradient it returns 10-40 px (a blur
+  that large would smear the synthetic crack, about 11x11 px, down to invisibility), and on a
+  locally flat profile it degenerates to a near-zero sigma that `scipy` can't even estimate a
+  covariance for (i.e. no detector unsharpness at all). Neither is a measurement. Real
+  detector/geometric unsharpness at this resolution is a sub-pixel-to-few-pixel affair, so
+  anything outside `[0.5, 5]` px is treated as a failed fit and falls back to a constant 1.5 px.
+  The profile actually used -- taken through the site on the base image where the crack is about
+  to be injected, which is where the blur has to be right -- lands at **2.121 px**, inside the
+  plausible band, so it's a real fit rather than the fallback.
 
 Two more real-world details worth flagging rather than hiding, since they're the kind of thing
 that trips up anyone reproducing this: GDXray's original Dropbox download links are entirely
@@ -221,9 +267,15 @@ replacement, downloaded with `gdown`. And GDXray's ground-truth text files order
 `image_id col_min col_max row_min row_max` -- initially assumed to be
 `image_id row_min col_min row_max col_max`, which silently produced nonsense boxes until it was
 caught by checking parsed box extents against each image's real pixel dimensions and
-cross-checking against a third-party open-source GDXray parser. Both are the unglamorous parts of
-working with a real, imperfectly-maintained public dataset, and both are now handled in
-`synth_xray/data.py` and `synth_xray/groundtruth.py` respectively.
+cross-checking against a third-party open-source GDXray parser. A third, subtler one: a series
+ships a *single* `ground_truth.txt` for all its images, with the image each box belongs to given
+only by a leading `image_id` column. Returning a flat list of boxes from that file works right up
+until the file isn't sorted the way you assumed, so `parse_gdxray_bboxes` returns a dict keyed by
+`image_id` and callers ask for the boxes of the image they actually loaded (file `W0001_000N.png`
+is `image_id` N -- verified by checking every one of the 10 ids' coordinate extents against its
+same-numbered PNG's real dimensions). All three are the unglamorous parts of working with a real,
+imperfectly-maintained public dataset, and they're handled in `synth_xray/data.py` and
+`synth_xray/groundtruth.py`.
 
 ## Real code
 
@@ -394,38 +446,54 @@ def synthesize_defect_image(
 ```
 
 Every function above is real, tested code from `notebooks/synthetic-data-xray/src/synth_xray/`
-(24/24 tests passing), run for real against the downloaded GDXray Welds data by
+(25/25 tests passing), run for real against the downloaded GDXray Welds data by
 `notebooks/synthetic-data-xray/generate_examples.py` to produce the images below.
 
 ## Results
 
 ::: {layout-ncol=3}
-![Real clean image](images/synth-xray-clean.png)
+![Real base image (W0001_0002) -- not defect-free; see below](images/synth-xray-clean.png)
 
-![Real defect image](images/synth-xray-defect-real.png)
+![Real defect image (W0001_0001)](images/synth-xray-defect-real.png)
 
 ![Synthetic defect image](images/synth-xray-defect-synthetic.png)
 :::
 
 The synthetic image holds up at a glance: the overall gradient structure (dark plate, bright
-weld-bead band) matches the clean source, the naturally-occurring real pore dots that were
-already in the clean image pass straight through the invert-edit-render round trip, and the grain
-level looks like a real X-ray image rather than the over-grainy first attempt described above.
-Zooming into the injected crack's location shows a clearly visible dark blob distinct from the
-surrounding noise texture -- confirmed with a direct pixel-difference check against the clean
-source (roughly 34-39 gray levels of contrast before blur and noise, still legible after both).
-The crack itself is small (an 11x11 pixel random walk) relative to the full ~4900-pixel-wide
-panorama, so it reads as a small, easy-to-miss local flaw rather than a dramatic feature -- which
-is actually consistent with how this dataset's own real pore defects look.
+weld-bead band) matches the base image, the naturally-occurring real pore dots that were already
+in the base image pass straight through the invert-edit-render round trip, and the grain now sits
+at 2.47 median local standard deviation against the base image's 1.58 -- a 1.56x ratio, versus the
+3.74x of the earlier version that fit noise on the wrong image. Zooming into the injected crack's
+location shows a visible dark blob distinct from the surrounding noise texture: in the rendered
+image before blur and noise it carries about 26 gray levels of contrast, and in the final saved PNG
+the mask pixels average 70.5 against a surrounding-window mean of 87.8 with a local standard
+deviation of 2.8 -- roughly a 6-sigma separation, so it survives the noise it's buried in. The
+crack itself is small (an 11x11 pixel random walk) relative to the full ~4900-pixel-wide panorama,
+so it reads as a small, easy-to-miss local flaw rather than a dramatic feature -- which is actually
+consistent with how this dataset's own real pore defects look.
 
-One honest caveat that's important not to gloss over: this is **not** a surgical, local edit.
+**The "real base image" is not actually a clean image, and that limits the free-ground-truth
+claim.** It's worth being blunt about this, because the pitch for physics-based synthesis is "you
+get a perfect segmentation mask for free" and that sentence has a footnote. There is no
+defect-free radiograph in GDXray's W0001 series: all ten images carry annotated defects, 641 boxes
+between them, and `W0001_0002.png` -- the base image the crack is injected into, and the one
+`synthesize_defect_image` politely calls `clean_image` -- has 37 real annotated defects of its own.
+So the mask this pipeline hands back is ground truth for *the one synthetic crack it just drew*,
+and nothing else. The 37 pre-existing real defects in the same frame are still there, still
+unlabeled by this mask, and a detector trained on that mask alone would be told they are
+background. In practice you'd merge the synthetic mask with the base image's own shipped ground
+truth, or start from a base image you've actually verified is clean. Neither is free, and the
+honest version of the claim is narrower than the headline: the mask is free *for the defect you
+injected*.
+
+A second honest caveat that's important not to gloss over: this is **not** a surgical, local edit.
 `synthesize_defect_image` inverts, re-renders, re-blurs, and re-samples fresh Poisson noise for
 the *entire* image, not just the pixels under the defect mask. The signal (attenuation depth)
 outside the mask is unchanged, but the noise realization outside the mask is a fresh random draw,
-not a copy of the clean image's own noise -- so the clean/synthetic pair differs everywhere at
+not a copy of the base image's own noise -- so the base/synthetic pair differs everywhere at
 low magnitude, not only where the defect was injected. In practice that difference is small
 enough not to be visually obvious next to the actual defect, but it means a naive pixel-diff
-between clean and synthetic images is not itself a ground-truth defect mask -- the real mask
+between base and synthetic images is not itself a ground-truth defect mask -- the real mask
 returned by `synthesize_defect_image` is what to use, not a diff.
 
 Where the physics-only approach visibly falls short: the injected crack is geometrically correct
@@ -438,7 +506,7 @@ textures do better than physics alone at the *shape and texture* of the defect, 
 respecting the same underlying image statistics this post calibrated by hand?
 
 Known follow-up, not blocking for this post: the three PNGs above are large, wide-aspect real
-GDXray panoramas (up to ~2.6MB for the synthetic one) -- fine for `quarto render`, but worth a
+GDXray panoramas (up to ~1.9MB for the synthetic one) -- fine for `quarto render`, but worth a
 size check and possible downscaling before `quarto publish`, given quarto.pub's upload-size
 sensitivity.
 

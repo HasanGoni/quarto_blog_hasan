@@ -27,8 +27,8 @@ generating more of it.
 1. **Part 1** -- [Physics-Based X-ray Simulation](01-physics-based-xray-simulation.qmd). No
    imaging-equipment access, so every physical parameter is fit directly from real GDXray pixel
    statistics: an attenuation-depth calibration, a photon-noise model, a blur kernel -- then a
-   real clean image is inverted, edited inside a mask, and re-rendered into a synthetic defect
-   image with its ground-truth mask for free.
+   real base radiograph is inverted, edited inside a mask, and re-rendered into a synthetic defect
+   image with a ground-truth mask for the injected defect, free.
 2. **Part 2** -- Mask-conditioned diffusion fine-tuning. Coming soon.
 3. **Part 3** -- GAN-based synthesis. Coming soon.
 4. **Part 4** -- Cut-paste + Poisson blending baseline. Coming soon.
