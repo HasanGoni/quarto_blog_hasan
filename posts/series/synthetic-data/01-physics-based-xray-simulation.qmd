@@ -478,6 +478,17 @@ pixel random walk) relative to the full ~4900-pixel-wide panorama, so it reads a
 easy-to-miss local flaw rather than a dramatic feature -- which is actually consistent with how
 this dataset's own real pore defects look.
 
+That's a lot of prose promising a "visible dark blob" that isn't actually visible in the crop
+above -- at 500x300 pixels, an 11x11 pixel feature is a handful of screen pixels, easy to miss
+scrolling past. Here it is at 200x120, native resolution (no interpolation, so the noise texture
+itself is unchanged from the full crop above -- just fewer surrounding pixels to get lost in):
+
+::: {layout-ncol=2}
+![Clean, before](images/synth-xray-clean-zoom.png)
+
+![Synthetic, after -- the injected crack, upper-left](images/synth-xray-defect-synthetic-zoom.png)
+:::
+
 **The "real base image" is not actually a clean image, and that limits the free-ground-truth
 claim.** It's worth being blunt about this, because the pitch for physics-based synthesis is "you
 get a perfect segmentation mask for free" and that sentence has a footnote. There is no

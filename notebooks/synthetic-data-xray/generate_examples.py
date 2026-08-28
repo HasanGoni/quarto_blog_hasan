@@ -186,6 +186,17 @@ def main() -> None:
     save_gray(real_crop, OUT_DIR / "synth-xray-defect-real.png")
     save_gray(synthetic_crop, OUT_DIR / "synth-xray-defect-synthetic.png")
 
+    # The wide crop above is honest but not legible: an 11x11 px injected crack is
+    # a handful of screen pixels at 500x300 display width, easy to miss. A second,
+    # tighter native-resolution crop (still no interpolation) centered on the same
+    # `start` location makes it actually visible without changing a single pixel
+    # value.
+    zoom_row0, zoom_col0 = 220, 0
+    zoom_crop_base = base_image[zoom_row0:zoom_row0 + 120, zoom_col0:zoom_col0 + 200]
+    zoom_crop_synth = synthetic_image[zoom_row0:zoom_row0 + 120, zoom_col0:zoom_col0 + 200]
+    save_gray(zoom_crop_base, OUT_DIR / "synth-xray-clean-zoom.png")
+    save_gray(zoom_crop_synth, OUT_DIR / "synth-xray-defect-synthetic-zoom.png")
+
     print(f"series: {series_dir.name}")
     print(f"defect image (delta fit from): {defect_path.name}")
     print(f"base image (noise/blur fit from, synthesized onto): {base_path.name}")
