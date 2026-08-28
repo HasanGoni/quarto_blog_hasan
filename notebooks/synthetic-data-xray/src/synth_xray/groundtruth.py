@@ -6,13 +6,23 @@ from skimage.filters import threshold_otsu
 
 
 def parse_gdxray_bboxes(txt_path: pathlib.Path) -> list[tuple[int, int, int, int]]:
-    """Parse a GDXray ground-truth file into 0-indexed (row_min, col_min, row_max, col_max) boxes."""
+    """Parse a GDXray ground-truth file into 0-indexed (row_min, col_min, row_max, col_max) boxes.
+
+    Real GDXray ground-truth lines are `image_id col_min col_max row_min row_max`
+    (verified against the real Welds group, series W0001-W0010: checking each
+    line's two coordinate pairs against that image's actual (width, height) --
+    read from the corresponding real PNG -- shows the first pair's max value
+    tracks image width and the second pair's max value tracks image height,
+    for every one of the 10 images in the real W0001 series. The other two
+    candidate orderings (treating the columns as row-first, or as unpaired)
+    both put coordinate values far outside the image bounds.
+    """
     boxes = []
     for line in pathlib.Path(txt_path).read_text().splitlines():
         line = line.strip()
         if not line:
             continue
-        _, row_min, col_min, row_max, col_max = (int(float(v)) for v in line.split())
+        _, col_min, col_max, row_min, row_max = (int(float(v)) for v in line.split())
         boxes.append((row_min - 1, col_min - 1, row_max - 1, col_max - 1))
     return boxes
 

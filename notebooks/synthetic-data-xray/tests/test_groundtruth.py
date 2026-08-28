@@ -4,10 +4,13 @@ from synth_xray.groundtruth import parse_gdxray_bboxes, bbox_to_mask, refine_mas
 
 
 def test_parse_gdxray_bboxes(tmp_path):
+    # Real GDXray lines are `image_id col_min col_max row_min row_max` -- these
+    # rows use distinct row/col spans (100x40 vs 8x40) so a column-order mixup
+    # would produce a mismatched shape, not just a coincidentally-equal box.
     gt_file = tmp_path / "ground_truth_C0001.txt"
-    gt_file.write_text("1 10 10 20 20\n1 30 5 45 15\n2 1 1 5 5\n")
+    gt_file.write_text("1 10 110 20 60\n1 5 13 30 70\n2 1 5 1 5\n")
     boxes = parse_gdxray_bboxes(gt_file)
-    assert boxes == [(9, 9, 19, 19), (29, 4, 44, 14), (0, 0, 4, 4)]
+    assert boxes == [(19, 9, 59, 109), (29, 4, 69, 12), (0, 0, 4, 4)]
 
 
 def test_bbox_to_mask_shape_and_bounds():
