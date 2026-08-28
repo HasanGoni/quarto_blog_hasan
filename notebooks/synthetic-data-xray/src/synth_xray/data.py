@@ -17,9 +17,13 @@ import zipfile
 
 import gdown
 
+# NOTE: only the `Welds` URL has been download-verified (it is the one this
+# project actually fetches and extracts). `Castings` was updated to the same
+# Google Drive mirror in the same pass but has never been downloaded or tested --
+# treat it as unverified until someone actually pulls it.
 GDXRAY_URLS = {
     "Welds": "https://drive.google.com/uc?id=1hKDBI-76cjwP-aUSFXuaTu2unpoyc-lg",
-    "Castings": "https://drive.google.com/uc?id=1AcXT_E2-z_gBm3eSx_2VqsCHfdyIelrc",
+    "Castings": "https://drive.google.com/uc?id=1AcXT_E2-z_gBm3eSx_2VqsCHfdyIelrc",  # unverified
 }
 
 

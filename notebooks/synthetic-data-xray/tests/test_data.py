@@ -1,5 +1,4 @@
 import zipfile
-import pytest
 from synth_xray.data import (
     GDXRAY_URLS,
     download_and_extract,
@@ -10,11 +9,18 @@ from synth_xray.data import (
 
 
 def _make_fake_group_zip(zip_path):
+    # W0001 uses the per-series ground-truth filename originally assumed;
+    # W0003 uses the plain `ground_truth.txt` the real GDXray data actually
+    # ships. Both spellings are covered so a regression to a stricter
+    # `ground_truth_*.txt` glob (which works on the fixture but breaks on real
+    # data) fails a test instead of passing silently. W0002 has no ground truth.
     with zipfile.ZipFile(zip_path, "w") as zf:
         zf.writestr("Welds/W0001/W0001_0001.png", b"fake-png-bytes")
         zf.writestr("Welds/W0001/W0001_0002.png", b"fake-png-bytes")
         zf.writestr("Welds/W0001/ground_truth_W0001.txt", "1 10 10 20 20\n")
         zf.writestr("Welds/W0002/W0002_0001.png", b"fake-png-bytes")
+        zf.writestr("Welds/W0003/W0003_0001.png", b"fake-png-bytes")
+        zf.writestr("Welds/W0003/ground_truth.txt", "1 10 10 20 20\n")
 
 
 def test_download_and_extract_skips_existing(tmp_path, monkeypatch):
@@ -42,16 +48,22 @@ def test_find_series_and_images_and_groundtruth(tmp_path):
     group_dir = extract_dir / "Welds"
 
     series_dirs = find_series_dirs(group_dir)
-    assert {d.name for d in series_dirs} == {"W0001", "W0002"}
+    assert {d.name for d in series_dirs} == {"W0001", "W0002", "W0003"}
 
     w0001 = group_dir / "W0001"
     images = find_images_in_series(w0001)
     assert len(images) == 2
     assert all(p.suffix == ".png" for p in images)
 
+    # Per-series spelling (`ground_truth_<series>.txt`).
     gt = find_groundtruth_file(w0001)
     assert gt is not None
     assert gt.name == "ground_truth_W0001.txt"
+
+    # Plain `ground_truth.txt` -- what the real GDXray Welds data actually ships.
+    gt_plain = find_groundtruth_file(group_dir / "W0003")
+    assert gt_plain is not None
+    assert gt_plain.name == "ground_truth.txt"
 
     w0002 = group_dir / "W0002"
     assert find_groundtruth_file(w0002) is None

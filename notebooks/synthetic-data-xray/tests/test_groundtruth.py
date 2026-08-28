@@ -1,5 +1,4 @@
 import numpy as np
-import pytest
 from synth_xray.groundtruth import parse_gdxray_bboxes, bbox_to_mask, refine_mask_otsu
 
 
@@ -7,10 +6,25 @@ def test_parse_gdxray_bboxes(tmp_path):
     # Real GDXray lines are `image_id col_min col_max row_min row_max` -- these
     # rows use distinct row/col spans (100x40 vs 8x40) so a column-order mixup
     # would produce a mismatched shape, not just a coincidentally-equal box.
+    # Boxes come back grouped by image_id so callers never have to rely on the
+    # ground-truth file's line order lining up with a series' image list.
     gt_file = tmp_path / "ground_truth_C0001.txt"
     gt_file.write_text("1 10 110 20 60\n1 5 13 30 70\n2 1 5 1 5\n")
     boxes = parse_gdxray_bboxes(gt_file)
-    assert boxes == [(19, 9, 59, 109), (29, 4, 69, 12), (0, 0, 4, 4)]
+    assert boxes == {
+        1: [(19, 9, 59, 109), (29, 4, 69, 12)],
+        2: [(0, 0, 4, 4)],
+    }
+
+
+def test_parse_gdxray_bboxes_groups_out_of_order_image_ids(tmp_path):
+    # A flat list would silently mis-assign these; keyed-by-image_id cannot.
+    gt_file = tmp_path / "ground_truth.txt"
+    gt_file.write_text("2 1 5 1 5\n1 10 110 20 60\n2 3 9 7 11\n")
+    boxes = parse_gdxray_bboxes(gt_file)
+    assert set(boxes) == {1, 2}
+    assert boxes[1] == [(19, 9, 59, 109)]
+    assert boxes[2] == [(0, 0, 4, 4), (6, 2, 10, 8)]
 
 
 def test_bbox_to_mask_shape_and_bounds():

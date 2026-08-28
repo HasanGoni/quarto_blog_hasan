@@ -16,7 +16,6 @@ def test_estimate_i0_uses_bright_percentile():
 
 
 def test_fit_defect_attenuation_depth_recovers_known_void_depth():
-    background = np.zeros((30, 30))
     background_mask = np.zeros((30, 30), dtype=bool)
     background_mask[:10, :] = True
     defect_mask = np.zeros((30, 30), dtype=bool)
