@@ -131,8 +131,10 @@ flowchart TB
         IMGS --> I0["estimate_I0\n(99th percentile) -> I0"]
         RO --> DELTA["fit_defect_attenuation_depth\n(defect_mask, background_mask, I0) -> delta"]
         IMGS --> NOISE["fit_noise_model\n(dense 20x20 flat patches) -> a, b"]
-        IMGS --> BLUR["fit_blur_sigma\n(edge profile) -> sigma\n(clamped to a physically-plausible range)"]
+        IMGS --> BLUR["fit_blur_sigma\n(edge profile) -> raw sigma"]
     end
+
+    BLUR -->|"raw sigma"| CLAMP["generate_examples.py (script, not library):\nclamp to (0, 5] px,\nfallback 1.5 px if out of range"]
 
     subgraph EDIT["synth_xray.defect_edit"]
         CRACK["generate_crack_mask\n(random-walk crack shape)\n-> synthetic_mask"]
@@ -153,10 +155,11 @@ flowchart TB
     DELTA --> EDITD
     CRACK --> EDITD
     NOISE --> NOISEF
-    BLUR --> BLURF
+    CLAMP -->|blur_sigma| BLURF
     NOISEF --> OUT["synthetic_image, synthetic_mask\n(free ground truth)"]
 
     style PIPELINE fill:#2c5,color:#000
+    style CLAMP fill:#eb4,color:#000
 ```
 
 `synthesize_defect_image` itself is a five-line function -- `invert_to_attenuation_depth` on the
