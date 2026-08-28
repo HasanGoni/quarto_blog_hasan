@@ -51,8 +51,9 @@ def dense_patch_masks(shape: tuple[int, int], patch: int = 20) -> list[np.ndarra
     otherwise dark plate), so the obvious choice of a 2x2 grid of quadrant "flat"
     patches has each patch spanning most of that gradient -- its variance is then
     dominated by the gradient itself rather than by pixel-level photon noise.
-    Measured, that gave a noise model predicting std ~15-20 in regions whose real
-    local std is ~2-4, i.e. a visibly over-grainy synthetic image. Small patches
+    Measured, that gave a noise model predicting a standard deviation roughly an
+    order of magnitude above the image's real local std, i.e. a visibly
+    over-grainy synthetic image. Small patches
     keep each one inside a locally-flat region, so the fitted model matches the
     image's actual local noise level.
     """

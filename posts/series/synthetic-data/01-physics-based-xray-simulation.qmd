@@ -241,8 +241,8 @@ check it against the real image:
   patches for a photon-transfer-curve fit is a 2x2 grid of quadrants. These images have a strong,
   slow brightness gradient (the bright weld-bead band sweeping across an otherwise dark plate),
   so each quadrant patch spans most of that gradient -- its variance reflects the gradient, not
-  pixel-level photon noise. Fitting on quadrants predicted a standard deviation of 15-20 gray
-  levels in regions whose real local standard deviation is 2-4; applying that everywhere made the
+  pixel-level photon noise. Fitting on quadrants predicted a standard deviation roughly an order
+  of magnitude above the image's real local standard deviation; applying that everywhere made the
   synthetic image visibly over-grainy. Switching to a dense grid of small 20x20 patches (each one
   small enough to sit inside a single locally-flat region) gives the reported
   `variance = 0.036*mean + 0.441`, which predicts a standard deviation of about 2.1 gray levels at
@@ -260,7 +260,7 @@ check it against the real image:
   to be injected, which is where the blur has to be right -- lands at **2.121 px**, inside the
   plausible band, so it's a real fit rather than the fallback.
 
-Two more real-world details worth flagging rather than hiding, since they're the kind of thing
+Three more real-world details worth flagging rather than hiding, since they're the kind of thing
 that trips up anyone reproducing this: GDXray's original Dropbox download links are entirely
 dead (verified across all five groups); the working source is a maintainer-posted Google Drive
 replacement, downloaded with `gdown`. And GDXray's ground-truth text files order their columns as
