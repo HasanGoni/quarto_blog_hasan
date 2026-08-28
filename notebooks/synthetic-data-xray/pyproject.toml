@@ -1,0 +1,22 @@
+[project]
+name = "synth-xray"
+version = "0.1.0"
+description = "Physics-based and generative synthetic X-ray defect image generation (Synthetic Data blog series)"
+requires-python = ">=3.12"
+dependencies = [
+    "numpy>=2.0",
+    "scipy>=1.13",
+    "scikit-image>=0.24",
+    "matplotlib>=3.9",
+    "pillow>=10.0",
+    "requests>=2.32",
+]
+
+[dependency-groups]
+dev = ["pytest>=8.0"]
+
+[tool.uv]
+package = false
+
+[tool.pytest.ini_options]
+pythonpath = ["src"]
