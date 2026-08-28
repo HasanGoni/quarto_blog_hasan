@@ -452,25 +452,31 @@ Every function above is real, tested code from `notebooks/synthetic-data-xray/sr
 ## Results
 
 ::: {layout-ncol=3}
-![Real base image (W0001_0002) -- not defect-free; see below](images/synth-xray-clean.png)
+![Real base image (W0001_0002), cropped -- not defect-free; see below](images/synth-xray-clean.png)
 
-![Real defect image (W0001_0001)](images/synth-xray-defect-real.png)
+![Real defect image (W0001_0001), cropped near its annotated pore cluster](images/synth-xray-defect-real.png)
 
-![Synthetic defect image](images/synth-xray-defect-synthetic.png)
+![Synthetic defect image, same crop as the base image](images/synth-xray-defect-synthetic.png)
 :::
+
+Each of these is a 500x300 crop out of the full ~4900-pixel-wide panorama -- a crop, not a resize:
+same pixel values, same noise realization, just a smaller window, chosen so the file is small
+enough for `quarto publish` without touching a single pixel value (resizing, tried first, quietly
+shifted the very noise statistics this post is about -- see the caveat below).
 
 The synthetic image holds up at a glance: the overall gradient structure (dark plate, bright
 weld-bead band) matches the base image, the naturally-occurring real pore dots that were already
-in the base image pass straight through the invert-edit-render round trip, and the grain now sits
-at 2.47 median local standard deviation against the base image's 1.58 -- a 1.56x ratio, versus the
-3.74x of the earlier version that fit noise on the wrong image. Zooming into the injected crack's
-location shows a visible dark blob distinct from the surrounding noise texture: in the rendered
-image before blur and noise it carries about 26 gray levels of contrast, and in the final saved PNG
-the mask pixels average 70.5 against a surrounding-window mean of 87.8 with a local standard
-deviation of 2.8 -- roughly a 6-sigma separation, so it survives the noise it's buried in. The
-crack itself is small (an 11x11 pixel random walk) relative to the full ~4900-pixel-wide panorama,
-so it reads as a small, easy-to-miss local flaw rather than a dramatic feature -- which is actually
-consistent with how this dataset's own real pore defects look.
+in the base image pass straight through the invert-edit-render round trip, and the grain in this
+crop sits at 2.30 median local standard deviation against the base crop's 1.62 -- a 1.42x ratio,
+in the same range as the 1.56x measured on the full images (versus the 3.74x of the earlier
+version that fit noise on the wrong image). Zooming into the injected crack's location shows a
+visible dark blob distinct from the surrounding noise texture: in the rendered image before blur
+and noise it carries about 26 gray levels of contrast, and in this crop the mask pixels average
+78.3 against a surrounding-window mean of 89.6 with a local standard deviation of 2.1 -- roughly a
+5.5-sigma separation, so it survives the noise it's buried in. The crack itself is small (an 11x11
+pixel random walk) relative to the full ~4900-pixel-wide panorama, so it reads as a small,
+easy-to-miss local flaw rather than a dramatic feature -- which is actually consistent with how
+this dataset's own real pore defects look.
 
 **The "real base image" is not actually a clean image, and that limits the free-ground-truth
 claim.** It's worth being blunt about this, because the pitch for physics-based synthesis is "you
@@ -505,10 +511,13 @@ the bar Part 2's diffusion fine-tune needs to clear: can a model that's actually
 textures do better than physics alone at the *shape and texture* of the defect, while still
 respecting the same underlying image statistics this post calibrated by hand?
 
-Known follow-up, not blocking for this post: the three PNGs above are large, wide-aspect real
-GDXray panoramas (up to ~1.9MB for the synthetic one) -- fine for `quarto render`, but worth a
-size check and possible downscaling before `quarto publish`, given quarto.pub's upload-size
-sensitivity.
+One more real-world detail: the three full-resolution panoramas (up to ~1.9MB for the synthetic
+one) were too large for `quarto publish`'s upload limit. Downscaling them was the first fix tried
+and it was wrong -- resampling blends neighboring pixels together, and since the noise this post
+spends several paragraphs getting right lives entirely in how much adjacent pixels differ, a
+resize quietly changed the very numbers quoted above. Cropping instead -- keeping the original
+pixels, just fewer of them -- gets the file size down without touching a single value, which is
+why the images above are 500x300 windows rather than the full panorama.
 
 ## What's next
 

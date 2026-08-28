@@ -169,9 +169,22 @@ def main() -> None:
         noise_gain=noise_gain, blur_sigma=blur_sigma, rng=rng,
     )
 
-    save_gray(base_image, OUT_DIR / "synth-xray-clean.png")
-    save_gray(defect_image, OUT_DIR / "synth-xray-defect-real.png")
-    save_gray(synthetic_image, OUT_DIR / "synth-xray-defect-synthetic.png")
+    # Crop before saving -- not resize. The full panoramas are too large for
+    # quarto.pub's upload limit, but resizing was tried first and was wrong: it
+    # blends neighboring pixels together, and this pipeline's entire calibration
+    # story lives in how much adjacent pixels differ. A resize quietly shifted
+    # the measured noise statistics the blog post reports. Cropping keeps every
+    # remaining pixel value untouched -- fewer pixels, same real numbers.
+    # Windows below are centered on this run's known defect locations (base/synth
+    # around `start`, real around `box`); re-running against a different series
+    # or image would need new windows.
+    base_crop = base_image[150:450, 0:500]
+    synthetic_crop = synthetic_image[150:450, 0:500]
+    real_crop = defect_image[0:300, 0:500]
+
+    save_gray(base_crop, OUT_DIR / "synth-xray-clean.png")
+    save_gray(real_crop, OUT_DIR / "synth-xray-defect-real.png")
+    save_gray(synthetic_crop, OUT_DIR / "synth-xray-defect-synthetic.png")
 
     print(f"series: {series_dir.name}")
     print(f"defect image (delta fit from): {defect_path.name}")
