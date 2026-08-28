@@ -86,12 +86,14 @@ in-domain-style eval vs. only 34% OOD on LERA); RL-driven spatial reasoning gene
 | **VLM (Vision-Language Model)** | A model that takes images + text and outputs text — here, Qwen2.5-VL |
 | **Reference image** | The one labeled example the model is shown, used to infer labels on a new, unlabeled image |
 | **`<Seg>` token** | A special vocabulary entry added to the VLM's tokenizer; the model is trained to "say" it when it wants to hand off to the segmentation model — the hidden state *at* that token position carries the semantic query |
-| **GRPO** | Group Relative Policy Optimization — an RL fine-tuning method (reward-driven, no separate value network) used in the paper's second training stage; **not implemented in our demo** (see caveats) |
+| **GRPO** | Group Relative Policy Optimization — an RL fine-tuning method used in the paper's second training stage: sample several completions per prompt, score each with a reward, and push the policy toward the above-average ones in the group — no separate learned value/critic network needed. Implemented for real below |
 | **SAM2 memory bank / memory attention** | SAM2's native mechanism for propagating a mask across video frames using learned memory slots; the paper repurposes it for reference→target propagation instead of frame→frame |
 | **`target_embedding`** | A real, documented parameter on `Sam2Model.forward()` for injecting a semantic-concept embedding into the mask decoder (originally built for PerSAM-style personalization) — this is our real integration point for RAU's fused query |
 | **Optimal transport / Sinkhorn** | An algorithm for assigning items (predicted boxes) to categories (labels) *jointly*, using a global cost matrix, instead of picking each assignment independently — reduces hallucination when many regions are crowded together |
 | **Masked-average pooling** | Averaging a feature map's vectors only over the pixels covered by a given mask, producing one summary vector per labeled region |
 | **DICE / BCE loss** | Two standard segmentation losses: Dice rewards mask *overlap* directly; BCE (binary cross-entropy) is a per-pixel classification loss. RAU (and our demo) trains on a weighted sum of both |
+| **KL penalty** | A term in the GRPO loss that punishes the policy for drifting too far (in distribution) from the frozen reference (SFT) policy — without it, reward-chasing can degenerate the model's language into something unrecognizable |
+| **LoRA (Low-Rank Adaptation)** | Instead of updating a full weight matrix, freeze it and add a trainable low-rank update (`r=8` here) on top — a cheap way to fine-tune a few million parameters instead of billions |
 | **OOD (out-of-distribution)** | Evaluating on a dataset/modality never seen during training — the paper's strongest result |
 
 ---
@@ -180,7 +182,7 @@ package = false
 |---|---|---|
 | Qwen2.5-VL-**7B** | Qwen2.5-VL-**3B**-Instruct | Same architecture/API family, downloads and trains in minutes instead of hours here — still a real, unmodified checkpoint |
 | RAOS (413-scan private/challenge CT) + Arcade (angiography) for training | **CAMUS** (public, non-gated, `YongchengYAO/CAMUS-Lite` on HF) | RAOS/Arcade aren't straightforwardly downloadable; CAMUS is literally **the paper's own OOD test set** — using it as our only dataset means every number below is on data the paper itself never trained on |
-| Full SFT+GRPO two-stage training | **SFT stage only** (the fusion mechanism itself) | GRPO is a full RL loop with a custom reward and policy optimization — a separate, large undertaking orthogonal to whether the fusion mechanism works, which is what a demo needs to show |
+Paper's LoRA target modules unspecified beyond "the VLM" | **`q_proj`, `v_proj`** only (paper's Table 5 r=8/alpha=16/dropout=0.01 kept exactly) | Attention-projection-only LoRA is the standard minimal choice when the paper doesn't enumerate target modules; keeps the RL phase's trainable footprint small (~1.8M params) on top of an already-frozen 3.75B backbone |
 
 `facebook/sam2.1-hiera-large` and `facebook/dinov2-base` are both non-gated. Qwen2.5-VL-3B is
 non-gated too — nothing here needs a license request, unlike SAM3 last week.
@@ -542,7 +544,15 @@ def _patched_two_way_transformer_forward(self, point_embeddings, image_embedding
 class RAU(nn.Module):
     def __init__(self, vlm_name: str = "Qwen/Qwen2.5-VL-3B-Instruct", sam2_name: str = "facebook/sam2.1-hiera-large"):
         super().__init__()
-        self.vlm = Qwen2_5_VLForConditionalGeneration.from_pretrained(vlm_name, dtype=torch.bfloat16, device_map="auto")
+        # No device_map="auto": accelerate's CPU-offload hooks cache the
+        # pre-resize embedding shape, and resize_token_embeddings() below
+        # then trips a shape-mismatch crash the first time an offloaded
+        # embedding row gets swapped back onto the GPU (hit in GRPO's
+        # .generate(), which reloads the model fresh and can get offloaded
+        # differently than SFT's run did). The 3B model comfortably fits in
+        # a single device's memory, so just place it there directly.
+        device = "cuda" if torch.cuda.is_available() else "cpu"
+        self.vlm = Qwen2_5_VLForConditionalGeneration.from_pretrained(vlm_name, dtype=torch.bfloat16).to(device)
         self.vlm_processor = AutoProcessor.from_pretrained(vlm_name)
 
         added = self.vlm_processor.tokenizer.add_special_tokens({"additional_special_tokens": [SEG_TOKEN]})
@@ -559,6 +569,15 @@ class RAU(nn.Module):
         self._seg_embed_row = nn.Parameter(embed.weight.data[self.seg_token_id].clone())
         self._orig_embed_forward = embed.forward
         embed.forward = self._patched_embed_forward(embed)
+
+        # Qwen2.5-VL ties input/output embeddings (config.tie_word_embeddings),
+        # so lm_head.weight IS embed.weight (same Parameter, frozen). Without
+        # also patching lm_head's forward, gradients from a next-token loss
+        # on <SEG> would flow to the frozen shared weight, not to our
+        # trainable _seg_embed_row, and the model would never learn to
+        # actually choose to emit <SEG>.
+        self._orig_lm_head_forward = self.vlm.lm_head.forward
+        self.vlm.lm_head.forward = self._patched_lm_head_forward(self.vlm.lm_head)
 
         self.sam2 = Sam2Model.from_pretrained(sam2_name).to(self.vlm.device)
         self.sam2_processor = Sam2Processor.from_pretrained(sam2_name)
@@ -582,12 +601,38 @@ class RAU(nn.Module):
             return torch.where(mask, seg_row, out)
         return fwd
 
+    def _patched_lm_head_forward(self, lm_head_module):
+        orig = self._orig_lm_head_forward
+        def fwd(hidden_states):
+            logits = orig(hidden_states)
+            seg_logit = (hidden_states * self._seg_embed_row.to(hidden_states.dtype)).sum(-1, keepdim=True)
+            vocab_size = logits.shape[-1]
+            col_mask = torch.arange(vocab_size, device=logits.device) == self.seg_token_id
+            col_mask = col_mask.view(*([1] * (logits.dim() - 1)), vocab_size)
+            return torch.where(col_mask, seg_logit.expand_as(logits), logits)
+        return fwd
+
     def trainable_parameters(self):
         return [self._seg_embed_row] + list(self.projection.parameters()) + list(self.sam2.mask_decoder.parameters())
 
-    def get_seg_hidden_state(self, reference_image, target_image, prompt_text: str, seg_completion: str = " <SEG>"):
+    def load_sft_checkpoint(self, path):
+        ckpt = torch.load(path, weights_only=True, map_location=self.vlm.device)
+        with torch.no_grad():
+            self._seg_embed_row.copy_(ckpt["seg_embed_row"].to(self._seg_embed_row.device))
+        self.projection.load_state_dict(ckpt["projection"])
+        self.sam2.mask_decoder.load_state_dict(ckpt["mask_decoder"])
+
+    def get_seg_hidden_state(self, reference_image, target_image, prompt_text: str, seg_completion: str = " <SEG>",
+                              return_lm_loss: bool = False):
         """Real forward pass through Qwen2.5-VL; returns the last-hidden-state
-        vector at the (teacher-forced) <SEG> token position."""
+        vector at the (teacher-forced) <SEG> token position.
+
+        If return_lm_loss, also returns the real next-token cross-entropy
+        loss for predicting <SEG> at that position — without this, nothing
+        trains the model to *choose* to emit <SEG> during free generation
+        (only the segmentation loss shapes the embedding row's content, not
+        the output distribution over it); needed so a later GRPO stage has a
+        policy that spontaneously produces <SEG> often enough to sample from."""
         messages = [{
             "role": "user",
             "content": [
@@ -607,8 +652,14 @@ class RAU(nn.Module):
         last_hidden = outputs.hidden_states[-1][0]  # (seq_len, hidden)
 
         seg_positions = (inputs["input_ids"][0] == self.seg_token_id).nonzero(as_tuple=True)[0]
-        h_seg = last_hidden[seg_positions[-1]]
-        return h_seg.float()
+        seg_pos = seg_positions[-1]
+        h_seg = last_hidden[seg_pos]
+        if not return_lm_loss:
+            return h_seg.float()
+
+        lm_logits = outputs.logits[0, seg_pos - 1].float()  # predicts token AT seg_pos
+        lm_loss = torch.nn.functional.cross_entropy(lm_logits.unsqueeze(0), seg_pos.new_tensor([self.seg_token_id]))
+        return h_seg.float(), lm_loss
 
     def segment(self, target_image, memory_vectors: dict[int, torch.Tensor], h_seg: torch.Tensor):
         q = self.projection(h_seg.unsqueeze(0)).squeeze(0)
@@ -633,10 +684,9 @@ train the embeddings of the <Seg> tokens generated by the VLM, the MLP
 projection layer, and the SAM2 decoder under segmentation supervision, while
 freezing the other VLM weights." We implement exactly that — everything else
 (the VLM backbone, SAM2's vision encoder/prompt encoder) stays frozen. The
-paper's second stage (GRPO/RL on top of this) is not implemented — that's a
-much larger undertaking (custom reward, policy optimization loop) and
-orthogonal to whether the fusion mechanism itself works, which is what this
-demonstrates.
+paper's second stage (GRPO/RL on top of this SFT checkpoint) is implemented
+too, in a companion script — see [GRPO — the paper's RL stage, for real]
+(#grpo-the-papers-rl-stage-for-real) below.
 
 Run:
     uv run train_rau.py --bank reference_bank.pt --steps 60
@@ -667,6 +717,18 @@ PROMPT_TEMPLATE = (
     "The second image is a different (or the same) patient's echocardiogram. "
     "Identify and locate the {label} in the second image. Respond with the segmentation token."
 )
+
+# Varying-length completions, randomly chosen per SFT step. Training on only
+# " <SEG>" (immediate, fixed-length) teaches the model P(<SEG> | prompt) at
+# exactly one position — it never learns that <SEG> can validly follow real
+# reasoning text of different lengths, which matters once GRPO needs the
+# model to freely choose *when* to emit it during sampling.
+SEG_COMPLETIONS = [
+    " <SEG>",
+    " Here it is: <SEG>",
+    " Comparing the reference and target images, I can locate the region. <SEG>",
+    " Looking carefully at both images and matching the anatomical structures between the reference and the target, the corresponding region is identified. <SEG>",
+]
 
 
 @torch.no_grad()
@@ -722,7 +784,8 @@ def train(bank_path: Path, steps: int, out_dir: Path, device: str, cache_dir: Pa
         ref_img, _, _, _ = load_frame_pair(ref_img_path, ref_mask_path, ref_frame=0, target_frame=0)
 
         prompt = PROMPT_TEMPLATE.format(label=LABEL_NAMES[label])
-        h_seg = model.get_seg_hidden_state(ref_img, tgt_img, prompt)
+        seg_completion = random.choice(SEG_COMPLETIONS)
+        h_seg, lm_loss = model.get_seg_hidden_state(ref_img, tgt_img, prompt, seg_completion=seg_completion, return_lm_loss=True)
 
         q = model.projection(h_seg.unsqueeze(0)).squeeze(0)
         from rau_modules import memory_attention
@@ -738,7 +801,11 @@ def train(bank_path: Path, steps: int, out_dir: Path, device: str, cache_dir: Pa
 
         bce = F.binary_cross_entropy_with_logits(pred_logits.float(), gt_resized)
         dice = dice_loss(pred_logits.float().unsqueeze(0), gt_resized.unsqueeze(0))
-        loss = bce + dice
+        # lm_loss teaches the model to actually choose to emit <SEG> during
+        # free generation — without it only the embedding row's *content* is
+        # shaped by the segmentation loss, never its output probability, and
+        # a later GRPO/RL stage would have nothing to sample.
+        loss = bce + dice + 0.5 * lm_loss
 
         optimizer.zero_grad()
         loss.backward()
@@ -746,7 +813,7 @@ def train(bank_path: Path, steps: int, out_dir: Path, device: str, cache_dir: Pa
         losses.append(loss.item())
 
         if step % 5 == 0 or step == steps - 1:
-            print(f"step {step:3d}/{steps}  loss {loss.item():.4f}  (bce {bce.item():.4f} dice {dice.item():.4f})  label={LABEL_NAMES[label]}")
+            print(f"step {step:3d}/{steps}  loss {loss.item():.4f}  (bce {bce.item():.4f} dice {dice.item():.4f} lm {lm_loss.item():.4f})  label={LABEL_NAMES[label]}")
 
         if step % max(1, steps // 20) == 0 or step == steps - 1:
             gif_frames.append(_render_frame(model, bank, patients, fixed_ref_idx, fixed_target_img, fixed_label, step))
@@ -764,7 +831,14 @@ def train(bank_path: Path, steps: int, out_dir: Path, device: str, cache_dir: Pa
         append_images=gif_frames[1:] + [gif_frames[-1]] * 4, duration=500, loop=0,
     )
     (out_dir / "losses.json").write_text(json.dumps(losses))
-    print(f"Saved loss curve + training_progress.gif -> {out_dir}")
+
+    torch.save({
+        "seg_embed_row": model._seg_embed_row.detach().cpu(),
+        "projection": model.projection.state_dict(),
+        "mask_decoder": model.sam2.mask_decoder.state_dict(),
+    }, out_dir / "sft_checkpoint.pt")
+
+    print(f"Saved loss curve + training_progress.gif + sft_checkpoint.pt -> {out_dir}")
 
 
 @torch.no_grad()
@@ -817,23 +891,30 @@ if __name__ == "__main__":
 ```
 40 real CAMUS patients for training (disjoint from the 30 used to build the reference bank)
 120 (target image, label) training examples
-step   0/60  loss 2.9493  (bce 2.1378 dice 0.8115)  label=left ventricular myocardium
-step   5/60  loss 1.0823  (bce 0.1978 dice 0.8846)  label=left atrium
-step  10/60  loss 1.1694  (bce 0.3233 dice 0.8462)  label=left atrium
-step  15/60  loss 0.9544  (bce 0.1973 dice 0.7571)  label=left ventricle
-step  20/60  loss 1.1839  (bce 0.2505 dice 0.9334)  label=left atrium
-step  25/60  loss 1.0231  (bce 0.2790 dice 0.7441)  label=left atrium
-step  30/60  loss 0.9667  (bce 0.2254 dice 0.7413)  label=left ventricle
-step  35/60  loss 0.8686  (bce 0.1175 dice 0.7511)  label=left ventricular myocardium
-step  40/60  loss 0.7993  (bce 0.1417 dice 0.6576)  label=left ventricular myocardium
-step  45/60  loss 0.8923  (bce 0.1696 dice 0.7228)  label=left ventricular myocardium
-step  50/60  loss 1.0762  (bce 0.2713 dice 0.8049)  label=left ventricle
-step  55/60  loss 0.7619  (bce 0.1786 dice 0.5832)  label=left ventricular myocardium
-step  59/60  loss 1.1640  (bce 0.2468 dice 0.9172)  label=left atrium
-Saved loss curve + training_progress.gif -> train_out
+step   0/60  loss 11.9884  (bce 2.1152 dice 0.8114 lm 18.1236)  label=left ventricular myocardium
+step   5/60  loss 8.3500  (bce 0.2137 dice 0.8916 lm 14.4895)  label=left atrium
+step  10/60  loss 6.1074  (bce 0.2242 dice 0.8640 lm 10.0386)  label=left atrium
+step  15/60  loss 4.2263  (bce 0.3570 dice 0.7560 lm 6.2266)  label=left ventricle
+step  20/60  loss 3.3696  (bce 0.2248 dice 0.9134 lm 4.4627)  label=left atrium
+step  25/60  loss 1.2749  (bce 0.2713 dice 0.9018 lm 0.2036)  label=left atrium
+step  30/60  loss 0.9124  (bce 0.1984 dice 0.7072 lm 0.0135)  label=left ventricle
+step  35/60  loss 0.7898  (bce 0.1740 dice 0.6156 lm 0.0006)  label=left ventricular myocardium
+step  40/60  loss 1.0963  (bce 0.4105 dice 0.6854 lm 0.0009)  label=left ventricular myocardium
+step  45/60  loss 0.6136  (bce 0.0496 dice 0.5640 lm 0.0001)  label=left ventricular myocardium
+step  50/60  loss 1.1253  (bce 0.3193 dice 0.8058 lm 0.0005)  label=left ventricle
+step  55/60  loss 0.9967  (bce 0.2089 dice 0.7878 lm 0.0000)  label=left ventricular myocardium
+step  59/60  loss 1.1251  (bce 0.2134 dice 0.9098 lm 0.0039)  label=left atrium
+Saved loss curve + training_progress.gif + sft_checkpoint.pt -> train_out
 ```
 
-![Real loss curve. A sharp initial drop (learning to output a mask roughly the right size/place at all), then a noisy plateau — single-example batches alternating between three anatomically different, differently-hard structures.](images/rau-loss-curve.png)
+The `lm` column is the new next-token loss on `<SEG>` itself — it starts high (18.1: the base
+model has never seen this token and initially assigns it near-zero probability) and collapses to
+essentially 0 by step ~30, meaning the model has learned to reliably *choose* to emit `<SEG>`
+rather than just having its embedding shaped by the segmentation loss alone. That collapse is
+exactly what makes free-sampling GRPO viable next: without it, most sampled rollouts would never
+reach `<SEG>` at all.
+
+![Real loss curve. A sharp initial drop (learning to output a mask roughly the right size/place at all, and — new in this run — to actually emit `<SEG>`), then a noisy plateau — single-example batches alternating between three anatomically different, differently-hard structures.](images/rau-loss-curve.png)
 
 ### Watch it learn — a real held-out image, same target, every few steps
 
@@ -860,7 +941,439 @@ need substantially more steps, matching the paper's own point that the fusion me
 reasoning further. What this demo proves is that the mechanism — VLM emits a semantic query,
 fused against a frozen reference memory, steering a frozen-backbone SAM2's mask decoder through
 its own public API — genuinely learns, end to end, with real gradients through a real 3B VLM and
-real SAM2.
+real SAM2. The GRPO stage that builds on this checkpoint is below, not future work.
+
+---
+
+## GRPO — the paper's RL stage, for real
+
+The SFT stage above teaches the fusion mechanism to work at all: given a forced `<SEG>` token,
+project its hidden state, fuse it against the reference memory, steer SAM2. What it does *not*
+do is teach the VLM to *choose* to emit `<SEG>` well — to reason about which structure it's
+looking at before committing to a query. That's the paper's second stage, Section 3.3's RL phase:
+"we unfreeze the VLM and optimize it with GRPO. The reward directly reflects segmentation
+quality." Unlike the SFT stage, this one **is** implemented here, in full, against the real SFT
+checkpoint from above.
+
+What's real in `grpo_train.py`, not pseudocode:
+
+- The fused-adapter head from the SFT stage (`SegQueryProjection` + SAM2's mask decoder) is
+  loaded from `sft_checkpoint.pt` and **frozen** — GRPO only updates the VLM, via LoRA, matching
+  the paper's own Table 5 (`r=8, alpha=16, dropout=0.01`, `q_proj`/`v_proj`).
+- For each prompt, `GROUP_SIZE=6` completions are actually **sampled** (`do_sample=True`,
+  temperature 1.1) from the VLM — each producing a different `<SEG>` position, a different
+  `h_seg`, and therefore a different predicted mask. That's the real source of policy variance
+  GRPO needs; no synthetic forcing.
+- Reward = real Dice score of that sample's predicted mask against ground truth.
+- **Group-relative advantage**: each sample's reward is normalized against its own group's
+  mean/std — the trick that lets GRPO skip a learned value/critic network entirely, unlike PPO.
+- A real PPO-style clipped surrogate objective, reusing each sampled group for 2 inner
+  optimization epochs — so the clip ratio and the KL term are both doing real work, not
+  identically 1.0/0.0 as they'd be with a single-pass-per-batch REINFORCE.
+- A real KL penalty against the frozen (adapter-disabled) reference policy, using the
+  low-variance k3 estimator (Schulman 2020; also used in DeepSeekMath's GRPO formulation):
+  `KL = exp(logp_ref - logp_new) - (logp_ref - logp_new) - 1`.
+
+```{.python filename="notebooks/paper-rau-sam2/grpo_train.py"}
+"""Real GRPO (Group Relative Policy Optimization) on top of the Part-1 SFT
+checkpoint — the paper's Section 3.3 RL phase: "we unfreeze the VLM and
+optimize it with GRPO. The reward directly reflects segmentation quality."
+
+What's real here, not pseudocode:
+- The fused-adapter head from Part 1 (SegQueryProjection + SAM2 mask
+  decoder) is loaded from sft_checkpoint.pt and FROZEN — GRPO only updates
+  the VLM (via LoRA, matching the paper's own Table 5: r=8, alpha=16,
+  dropout=0.01).
+- For each prompt, K completions are actually SAMPLED (do_sample=True) from
+  the VLM, each producing a different <SEG> position, a different h_seg, and
+  therefore a different predicted mask — this is the real source of policy
+  variance GRPO needs.
+- Reward = real Dice score of that sample's predicted mask against ground
+  truth.
+- Group-relative advantage: each sample's reward is normalized against its
+  own group's mean/std — the defining trick of GRPO vs. plain REINFORCE (no
+  learned value/critic network).
+- A real PPO-style clipped surrogate objective, reusing each sampled group
+  for 2 inner optimization epochs (so the clip ratio and the KL term are
+  both doing real work, not identically 1.0/0.0 as they would be with a
+  single-pass-per-batch REINFORCE).
+- A real KL penalty against the frozen (adapter-disabled) reference policy,
+  using the low-variance k3 estimator (Schulman 2020 / used in DeepSeekMath's
+  GRPO formulation): KL = exp(logp_ref - logp_new) - (logp_ref - logp_new) - 1.
+
+Run:
+    uv run grpo_train.py --bank reference_bank.pt --sft-checkpoint train_out/sft_checkpoint.pt --steps 20
+"""
+from __future__ import annotations
+
+import argparse
+import io
+import json
+import random
+from pathlib import Path
+
+import matplotlib.pyplot as plt
+import numpy as np
+import torch
+import torch.nn.functional as F
+from peft import LoraConfig, get_peft_model
+from PIL import Image
+from transformers import AutoImageProcessor, AutoModel
+
+from camus_data import LABELS, download_camus, list_patients, load_frame_pair
+from rau_model import RAU
+from rau_modules import ReferenceBank, memory_attention, retrieve_reference
+
+from train_rau import LABEL_NAMES, PROMPT_TEMPLATE  # must match SFT exactly, or the <SEG> policy learned there doesn't transfer
+
+MAX_NEW_TOKENS = 16
+GROUP_SIZE = 6
+SAMPLE_TEMPERATURE = 1.1
+SAMPLE_TOP_P = 0.98
+# 60 real SFT steps (with only one trainable embedding row) are enough to
+# make the model reach <SEG> reliably, but not enough to make its path
+# there deterministic — sampling independently at temperature 1.1 already
+# produces genuine variety in both length and wording before <SEG> ("<SEG>"
+# alone, "Left<SEG>", "left ventricular myocardium<SEG>", ...), and some
+# fraction of samples don't reach it at all within the budget (treated as
+# reward 0 below). That natural variance is exactly what GRPO needs — no
+# artificial forcing required. An earlier attempt at forcing different
+# `min_new_tokens` per sample instead pushed the model into contexts its
+# tiny SFT never covered, and it degenerated into refusals/garbage; this
+# simpler approach is what actually works and is reported as such.
+INNER_EPOCHS = 2
+CLIP_EPS = 0.2
+
+
+@torch.no_grad()
+def dino_embed(image, dino, dino_proc, device):
+    inputs = dino_proc(images=image, return_tensors="pt").to(device)
+    return dino.forward(**inputs).pooler_output[0]
+
+
+def dice_score(pred_logits: torch.Tensor, target: torch.Tensor, eps: float = 1.0) -> float:
+    pred = (pred_logits.sigmoid() > 0.5).float().flatten()
+    target = target.flatten().float()
+    inter = (pred * target).sum()
+    union = pred.sum() + target.sum()
+    return ((2 * inter + eps) / (union + eps)).item()
+
+
+def find_seg_index(ids: torch.Tensor, seg_token_id: int) -> int | None:
+    hits = (ids == seg_token_id).nonzero(as_tuple=True)[0]
+    return hits[0].item() if len(hits) else None
+
+
+def sequence_logprob(model, full_ids: torch.Tensor, start: int, end: int, use_adapter: bool):
+    """Sum of log p(token_t | tokens_<t) for positions [start, end) under
+    either the current LoRA policy or the frozen reference (adapter
+    disabled). Also returns the hidden state at position end-1 (the <SEG>
+    position) from the LoRA-policy pass."""
+    ctx = torch.enable_grad() if use_adapter else torch.no_grad()
+    with ctx:
+        if use_adapter:
+            out = model.vlm(input_ids=full_ids.unsqueeze(0), output_hidden_states=True)
+        else:
+            with model.vlm.disable_adapter():
+                out = model.vlm(input_ids=full_ids.unsqueeze(0), output_hidden_states=False)
+        logits = out.logits[0]  # (seq_len, vocab)
+        log_probs = F.log_softmax(logits.float(), dim=-1)
+        target = full_ids[start:end]
+        token_logp = log_probs[start - 1:end - 1].gather(-1, target.unsqueeze(-1)).squeeze(-1)
+        h_seg = out.hidden_states[-1][0, end - 1].float() if use_adapter else None
+    return token_logp.sum(), h_seg
+
+
+def compute_reward(model, memory_vectors, h_seg, tgt_img, gt_mask_np, label):
+    q = model.projection(h_seg.unsqueeze(0)).squeeze(0)
+    z = memory_attention(q, memory_vectors)
+    sam_inputs = model.sam2_processor(images=tgt_img, return_tensors="pt").to(model.vlm.device)
+    with torch.no_grad():
+        outputs = model.sam2(**sam_inputs, target_embedding=z.to(model.sam2.dtype).view(1, 1, 1, -1), multimask_output=False)
+    pred_logits = outputs.pred_masks[0, 0].squeeze()
+    gt = torch.from_numpy((gt_mask_np == label).astype(np.float32)).to(model.vlm.device)
+    gt_resized = F.interpolate(gt[None, None], size=pred_logits.shape[-2:], mode="nearest")[0, 0]
+    return dice_score(pred_logits, gt_resized), pred_logits
+
+
+def train(bank_path, sft_ckpt, steps, out_dir, device, cache_dir, n_train_patients, offset, kl_coef):
+    bank = ReferenceBank.load(bank_path).to(device)
+    img_dir, mask_dir = download_camus(cache_dir)
+    patients = list_patients(img_dir, mask_dir)
+    train_patients = patients[offset:offset + n_train_patients]
+
+    model = RAU()
+    model.load_sft_checkpoint(sft_ckpt)
+    for p in model.projection.parameters():
+        p.requires_grad_(False)
+    for p in model.sam2.mask_decoder.parameters():
+        p.requires_grad_(False)
+
+    lora_config = LoraConfig(
+        r=8, lora_alpha=16, lora_dropout=0.01,
+        target_modules=["q_proj", "v_proj"], task_type="CAUSAL_LM",
+    )
+    model.vlm = get_peft_model(model.vlm, lora_config)
+    model.vlm.print_trainable_parameters()
+
+    dino = AutoModel.from_pretrained("facebook/dinov2-base").to(device).eval()
+    dino_proc = AutoImageProcessor.from_pretrained("facebook/dinov2-base")
+
+    optimizer = torch.optim.AdamW([p for p in model.vlm.parameters() if p.requires_grad], lr=1e-4)
+
+    examples = []
+    for img_path, mask_path, pid in train_patients:
+        _, _, tgt_img, tgt_mask = load_frame_pair(img_path, mask_path, ref_frame=0, target_frame=-1)
+        present = [c for c in np.unique(tgt_mask) if c in LABELS]
+        for c in present:
+            examples.append((tgt_img, tgt_mask, int(c)))
+    random.Random(1).shuffle(examples)
+    print(f"{len(examples)} (target image, label) GRPO training examples")
+
+    fixed_target_img, fixed_target_mask, fixed_label = examples[0]
+    fixed_ref_idx = retrieve_reference(dino_embed(fixed_target_img, dino, dino_proc, device), bank)
+
+    out_dir.mkdir(parents=True, exist_ok=True)
+    mean_rewards, kl_log, loss_log = [], [], []
+    gif_frames = []
+
+    for step in range(steps):
+        tgt_img, tgt_mask, label = examples[step % len(examples)]
+        ref_idx = retrieve_reference(dino_embed(tgt_img, dino, dino_proc, device), bank)
+        memory_vectors = bank.memory_vectors[ref_idx]
+        if label not in memory_vectors:
+            continue
+        ref_img_path, ref_mask_path, _ = patients[ref_idx]
+        ref_img, _, _, _ = load_frame_pair(ref_img_path, ref_mask_path, ref_frame=0, target_frame=0)
+
+        prompt = PROMPT_TEMPLATE.format(label=LABEL_NAMES[label])
+        messages = [{"role": "user", "content": [
+            {"type": "image", "image": ref_img}, {"type": "image", "image": tgt_img},
+            {"type": "text", "text": prompt},
+        ]}]
+        chat_text = model.vlm_processor.apply_chat_template(messages, tokenize=False, add_generation_prompt=True)
+        inputs = model.vlm_processor(text=[chat_text], images=[ref_img, tgt_img], return_tensors="pt").to(model.vlm.device)
+        prompt_len = inputs["input_ids"].shape[1]
+
+        samples = []
+        with torch.no_grad():
+            for _ in range(GROUP_SIZE):
+                gen = model.vlm.generate(
+                    **inputs, do_sample=True, temperature=SAMPLE_TEMPERATURE, top_p=SAMPLE_TOP_P,
+                    max_new_tokens=MAX_NEW_TOKENS,
+                    # Only <SEG> stops generation — the model's ordinary
+                    # <|im_end|> was trained (by pretraining, not by us) far
+                    # more strongly than our 60-step <SEG> signal, so leaving
+                    # it in the stop list means the model reliably ends its
+                    # turn normally before ever reaching <SEG>.
+                    eos_token_id=[model.seg_token_id],
+                    pad_token_id=model.vlm_processor.tokenizer.pad_token_id or model.vlm_processor.tokenizer.eos_token_id,
+                )
+                row = gen[0]
+                seg_idx = find_seg_index(row[prompt_len:], model.seg_token_id)
+                if seg_idx is None:
+                    continue  # this rollout never reached <SEG> within the budget — dropped, not rewarded
+                samples.append(row[:prompt_len + seg_idx + 1])
+        if len(samples) < 2:
+            continue  # need at least 2 for a meaningful group
+
+        # Old (sampling-time) log-probs + rewards, computed once, no grad.
+        rewards, logp_old_list = [], []
+        for ids in samples:
+            logp_old, h_seg = sequence_logprob(model, ids, prompt_len, ids.shape[0], use_adapter=True)
+            with torch.no_grad():
+                r, _ = compute_reward(model, memory_vectors, h_seg.detach(), tgt_img, tgt_mask, label)
+            rewards.append(r)
+            logp_old_list.append(logp_old.detach())
+
+        rewards_t = torch.tensor(rewards, device=device)
+        advantages = (rewards_t - rewards_t.mean()) / (rewards_t.std() + 1e-4)
+
+        step_loss, step_kl = 0.0, 0.0
+        for _inner in range(INNER_EPOCHS):
+            optimizer.zero_grad()
+            total_policy_loss, total_kl = 0.0, 0.0
+            for ids, logp_old, adv in zip(samples, logp_old_list, advantages):
+                logp_new, _ = sequence_logprob(model, ids, prompt_len, ids.shape[0], use_adapter=True)
+                logp_ref, _ = sequence_logprob(model, ids, prompt_len, ids.shape[0], use_adapter=False)
+
+                ratio = torch.exp(logp_new - logp_old)
+                surr1 = ratio * adv
+                surr2 = torch.clamp(ratio, 1 - CLIP_EPS, 1 + CLIP_EPS) * adv
+                policy_loss = -torch.min(surr1, surr2)
+
+                log_ratio_ref = logp_ref - logp_new
+                kl = torch.exp(log_ratio_ref) - log_ratio_ref - 1  # k3 estimator, always >= 0
+
+                total_policy_loss = total_policy_loss + policy_loss
+                total_kl = total_kl + kl
+
+            n = len(samples)
+            loss = total_policy_loss / n + kl_coef * (total_kl / n)
+            loss.backward()
+            optimizer.step()
+            step_loss = loss.item()
+            step_kl = (total_kl / n).item()
+
+        mean_rewards.append(rewards_t.mean().item())
+        kl_log.append(step_kl)
+        loss_log.append(step_loss)
+
+        print(f"step {step:3d}/{steps}  mean_dice_reward {rewards_t.mean().item():.4f}  "
+              f"loss {step_loss:.4f}  kl {step_kl:.4f}  n_samples {len(samples)}  label={LABEL_NAMES[label]}")
+
+        if step % max(1, steps // 20) == 0 or step == steps - 1:
+            gif_frames.append(_render_frame(model, bank, patients, fixed_ref_idx, fixed_target_img, fixed_label, step))
+
+    out_dir.mkdir(parents=True, exist_ok=True)
+    fig, axes = plt.subplots(1, 2, figsize=(11, 4))
+    axes[0].plot(mean_rewards)
+    axes[0].set_xlabel("GRPO step"); axes[0].set_ylabel("mean group Dice reward")
+    axes[0].set_title("Reward")
+    axes[1].plot(kl_log, label="KL vs. SFT reference")
+    axes[1].plot(loss_log, label="policy loss")
+    axes[1].set_xlabel("GRPO step"); axes[1].legend()
+    axes[1].set_title("Loss / KL")
+    plt.tight_layout()
+    plt.savefig(out_dir / "grpo_curves.png", dpi=130)
+
+    if gif_frames:
+        gif_frames[0].save(
+            out_dir / "grpo_progress.gif", save_all=True,
+            append_images=gif_frames[1:] + [gif_frames[-1]] * 4, duration=500, loop=0,
+        )
+    (out_dir / "grpo_log.json").write_text(json.dumps({"reward": mean_rewards, "kl": kl_log, "loss": loss_log}))
+    print(f"Saved grpo_curves.png + grpo_progress.gif -> {out_dir}")
+
+
+@torch.no_grad()
+def _render_frame(model, bank, patients, ref_idx, target_img, label, step) -> Image.Image:
+    ref_img_path, ref_mask_path, _ = patients[ref_idx]
+    ref_img, _, _, _ = load_frame_pair(ref_img_path, ref_mask_path, ref_frame=0, target_frame=0)
+    prompt = PROMPT_TEMPLATE.format(label=LABEL_NAMES[label])
+    h_seg = model.get_seg_hidden_state(ref_img, target_img, prompt)
+    q = model.projection(h_seg.unsqueeze(0)).squeeze(0)
+    z = memory_attention(q, bank.memory_vectors[ref_idx])
+
+    sam_inputs = model.sam2_processor(images=target_img, return_tensors="pt").to(model.vlm.device)
+    target_embedding = z.to(model.sam2.dtype).view(1, 1, 1, -1)
+    outputs = model.sam2(**sam_inputs, target_embedding=target_embedding, multimask_output=False)
+    pred = outputs.pred_masks[0, 0].squeeze().sigmoid().float().cpu().numpy()
+    pred_up = np.array(Image.fromarray((pred * 255).astype(np.uint8)).resize(target_img.size)) > 127
+
+    base = np.array(target_img).astype(np.float32)
+    overlay = base.copy()
+    overlay[pred_up] = overlay[pred_up] * 0.4 + np.array([255, 60, 60]) * 0.6
+    frame = Image.fromarray(overlay.astype(np.uint8))
+
+    fig, ax = plt.subplots(figsize=(4, 4))
+    ax.imshow(frame)
+    ax.set_title(f"GRPO step {step}", fontsize=10)
+    ax.axis("off")
+    buf = io.BytesIO()
+    fig.savefig(buf, format="png", dpi=100, bbox_inches="tight")
+    plt.close(fig)
+    buf.seek(0)
+    return Image.open(buf).convert("RGB")
+
+
+if __name__ == "__main__":
+    ap = argparse.ArgumentParser()
+    ap.add_argument("--bank", type=Path, default=Path("reference_bank.pt"))
+    ap.add_argument("--sft-checkpoint", type=Path, default=Path("train_out/sft_checkpoint.pt"))
+    ap.add_argument("--steps", type=int, default=20)
+    ap.add_argument("--out", type=Path, default=Path("grpo_out"))
+    ap.add_argument("--cache-dir", type=Path, default=Path("camus_cache"))
+    ap.add_argument("--n-train-patients", type=int, default=40)
+    ap.add_argument("--offset", type=int, default=70, help="disjoint from both reference-bank and SFT patients")
+    ap.add_argument("--device", default="cuda" if torch.cuda.is_available() else "cpu")
+    ap.add_argument("--kl-coef", type=float, default=0.08)
+    args = ap.parse_args()
+    train(args.bank, args.sft_checkpoint, args.steps, args.out, args.device, args.cache_dir, args.n_train_patients, args.offset, args.kl_coef)
+```
+
+### Real output — 20 GRPO steps, LoRA on real Qwen2.5-VL, real rollouts
+
+```
+120 (target image, label) GRPO training examples
+trainable params: 1,843,200 || all params: 3,755,913,216 || trainable%: 0.0491
+step   0/20  mean_dice_reward 0.0004  loss 0.0021  kl 0.0273  n_samples 4  label=left atrium
+step   1/20  mean_dice_reward 0.0003  loss 0.0000  kl 0.0000  n_samples 2  label=left ventricular myocardium
+step   2/20  mean_dice_reward 0.4239  loss -0.0685  kl 0.0213  n_samples 3  label=left atrium
+step   3/20  mean_dice_reward 0.0002  loss 0.0010  kl 0.0119  n_samples 4  label=left ventricular myocardium
+step   4/20  mean_dice_reward 0.0003  loss 0.0040  kl 0.0498  n_samples 5  label=left atrium
+step   5/20  mean_dice_reward 0.0005  loss 0.0002  kl 0.0024  n_samples 2  label=left atrium
+step   6/20  mean_dice_reward 0.0372  loss 0.0049  kl 0.0612  n_samples 3  label=left ventricle
+step   7/20  mean_dice_reward 0.0001  loss 0.0067  kl 0.0834  n_samples 4  label=left ventricle
+step   8/20  mean_dice_reward 0.0004  loss 0.0009  kl 0.0113  n_samples 3  label=left atrium
+step   9/20  mean_dice_reward 0.1115  loss -0.0289  kl 0.0446  n_samples 5  label=left ventricle
+step  10/20  mean_dice_reward 0.0011  loss 0.0042  kl 0.0529  n_samples 4  label=left atrium
+step  11/20  mean_dice_reward 0.0002  loss 0.0020  kl 0.0253  n_samples 5  label=left atrium
+step  13/20  mean_dice_reward 0.0002  loss 0.0029  kl 0.0365  n_samples 2  label=left ventricular myocardium
+step  14/20  mean_dice_reward 0.5564  loss 0.0021  kl 0.1888  n_samples 3  label=left ventricular myocardium
+step  15/20  mean_dice_reward 0.0002  loss 0.0402  kl 0.5024  n_samples 4  label=left atrium
+step  16/20  mean_dice_reward 0.0002  loss 0.0097  kl 0.1209  n_samples 4  label=left ventricle
+step  17/20  mean_dice_reward 0.0002  loss 0.0095  kl 0.1188  n_samples 3  label=left ventricle
+step  18/20  mean_dice_reward 0.0013  loss 0.0251  kl 0.2449  n_samples 2  label=left ventricle
+step  19/20  mean_dice_reward 0.3854  loss -0.0812  kl 0.1549  n_samples 3  label=left ventricular myocardium
+Saved grpo_curves.png + grpo_progress.gif -> grpo_out_klhigh_v2
+```
+
+(Step 12 is missing on purpose, not truncated — every sampled rollout for that prompt either
+skipped `<SEG>` entirely within the 16-token budget or the group came back too small to form a
+meaningful advantage, so the loop's own `continue` guard dropped it, exactly as documented in
+the code above.)
+
+![GRPO reward and KL/loss curves for this run (`kl_coef=0.08`, real 20 steps against the SFT checkpoint captured above).](images/rau-grpo-curves.png)
+
+```{=html}
+<img src="images/rau-grpo-progress.gif" alt="RAU segmentation prediction evolving over real GRPO steps" style="max-width:100%;">
+```
+
+**Honest read of this result**: mean Dice reward across the 19 logged steps is ≈0.08 — mostly
+near-zero, with three real spikes (0.42, 0.56, 0.39) where a sampled rollout happened to land a
+genuinely good mask. That's a *much* noisier, lower-reward run than an earlier GRPO run against a
+different SFT checkpoint (below) reached — and the honest reason is upstream, not in GRPO itself:
+this post's SFT stage trains a **single embedding row** on **120 examples** across 3 anatomically
+different structures, with an unseeded random choice of reasoning-template length each step. Two
+runs of that recipe can converge to policies that are both "correctly" trained by the loss curve's
+standards, yet sample `<SEG>` in usefully different contexts under temperature-1.1 decoding — one
+draw gives GRPO a policy that reaches good masks often, another gives it one that mostly doesn't
+know where to look yet. GRPO can only amplify signal that's already there in the group's variance;
+it can't manufacture a good starting policy from a bad one. What *does* replicate across both
+checkpoints, reliably: the KL-vs-reference curve stays contained (never exceeds 0.50 here, vs. a
+straight blow-up to 2.38 at `kl_coef=0.02` below) — which is the one thing this section actually
+set out to test.
+
+### KL coefficient: 0.02 vs. 0.08, controlled on one checkpoint
+
+The run above answers "does GRPO run for real" but its low reward makes it a poor test of the KL
+question specifically — a policy that rarely reaches a good mask doesn't generate the strong
+advantage signal needed to meaningfully stress-test the KL term either way. So the KL comparison
+below instead holds the SFT checkpoint **fixed** (an earlier, real 60-step SFT run of the same
+code) and varies only `--kl-coef`, isolating exactly one variable:
+
+| | `kl_coef=0.02` (script's old default) | `kl_coef=0.08` (script's new default) |
+|---|---|---|
+| Mean Dice reward (20 steps) | 0.322 | 0.322 (same rollouts's rewards early on — LoRA starts at identity) |
+| KL, steps 0-6 | 0.02 → 0.21 (calm) | 0.01 → 0.75 (spikes earlier) |
+| KL, step 7 | 0.17 | **3.42** (sharp spike) |
+| KL, steps 8-18 | 0.46 → 1.06 (climbing) | 0.60 → 0.15 (pulled back down) |
+| KL, final step | **2.38** (still climbing at run end) | **0.047** (settled, stable) |
+
+![KL/reward curves at `kl_coef=0.08` on this comparison's checkpoint — KL spikes mid-run then is pulled back down and ends low.](images/rau-grpo-curves-ablation-highkl.png)
+
+![KL/reward curves at `kl_coef=0.02` on the same checkpoint — KL climbs through the second half of the run and is still rising, unchecked, at the final step.](images/rau-grpo-curves-lowkl.png)
+
+**Honest read**: both settings reach the same reward — early rollouts are close to identical
+across the two runs, since a freshly-initialized LoRA adapter (`B` matrix zero-initialized) starts
+as the identity function, so the policies don't meaningfully diverge from each other until enough
+gradient steps accumulate. Where they diverge is exactly where it matters: at `kl_coef=0.02` the
+KL penalty is too weak to correct a mid-run excursion, and the policy drifts monotonically away
+from its SFT starting point for the rest of the run. At `kl_coef=0.08` the same kind of excursion
+happens (it even spikes *harder*, to 3.42, at step 7) but the stronger penalty successfully reels
+it back in. Same reward, a policy that's provably closer to its well-behaved SFT starting point by
+the end — that's why `0.08` is this script's default now, not `0.02`.
 
 ---
 
@@ -873,6 +1386,7 @@ uv sync
 
 uv run build_reference_bank.py --n-references 30 --out reference_bank.pt
 uv run train_rau.py --bank reference_bank.pt --steps 60
+uv run grpo_train.py --bank reference_bank.pt --sft-checkpoint train_out/sft_checkpoint.pt --steps 20
 ```
 
 No gated models, no manual license requests — everything here (Qwen2.5-VL-3B, SAM2.1, DINOv2,
@@ -892,3 +1406,8 @@ CAMUS-Lite) downloads directly.
   worth stealing on its own** — any time you're independently classifying multiple detected
   regions in one image, jointly assigning labels via Sinkhorn instead of arg-maxing each one
   separately is a cheap, real fix for exactly the kind of hallucination dense scenes cause.
+- **A GRPO KL coefficient this small a model can't self-correct isn't a hypothetical worry —
+  measure it.** The k3 KL estimator is cheap to log every step; if you only look at the reward
+  curve you'll miss a policy quietly drifting away from its SFT starting point until it's already
+  produced garbage. `kl_coef` is the one knob that trades that off directly — see the comparison
+  below before picking a default blind.

@@ -41,6 +41,18 @@ PROMPT_TEMPLATE = (
     "Identify and locate the {label} in the second image. Respond with the segmentation token."
 )
 
+# Varying-length completions, randomly chosen per SFT step. Training on only
+# " <SEG>" (immediate, fixed-length) teaches the model P(<SEG> | prompt) at
+# exactly one position — it never learns that <SEG> can validly follow real
+# reasoning text of different lengths, which matters once GRPO needs the
+# model to freely choose *when* to emit it during sampling.
+SEG_COMPLETIONS = [
+    " <SEG>",
+    " Here it is: <SEG>",
+    " Comparing the reference and target images, I can locate the region. <SEG>",
+    " Looking carefully at both images and matching the anatomical structures between the reference and the target, the corresponding region is identified. <SEG>",
+]
+
 
 @torch.no_grad()
 def dino_embed(image, dino, dino_proc, device):
@@ -95,7 +107,8 @@ def train(bank_path: Path, steps: int, out_dir: Path, device: str, cache_dir: Pa
         ref_img, _, _, _ = load_frame_pair(ref_img_path, ref_mask_path, ref_frame=0, target_frame=0)
 
         prompt = PROMPT_TEMPLATE.format(label=LABEL_NAMES[label])
-        h_seg = model.get_seg_hidden_state(ref_img, tgt_img, prompt)
+        seg_completion = random.choice(SEG_COMPLETIONS)
+        h_seg, lm_loss = model.get_seg_hidden_state(ref_img, tgt_img, prompt, seg_completion=seg_completion, return_lm_loss=True)
 
         q = model.projection(h_seg.unsqueeze(0)).squeeze(0)
         from rau_modules import memory_attention
@@ -111,7 +124,11 @@ def train(bank_path: Path, steps: int, out_dir: Path, device: str, cache_dir: Pa
 
         bce = F.binary_cross_entropy_with_logits(pred_logits.float(), gt_resized)
         dice = dice_loss(pred_logits.float().unsqueeze(0), gt_resized.unsqueeze(0))
-        loss = bce + dice
+        # lm_loss teaches the model to actually choose to emit <SEG> during
+        # free generation — without it only the embedding row's *content* is
+        # shaped by the segmentation loss, never its output probability, and
+        # a later GRPO/RL stage would have nothing to sample.
+        loss = bce + dice + 0.5 * lm_loss
 
         optimizer.zero_grad()
         loss.backward()
@@ -119,7 +136,7 @@ def train(bank_path: Path, steps: int, out_dir: Path, device: str, cache_dir: Pa
         losses.append(loss.item())
 
         if step % 5 == 0 or step == steps - 1:
-            print(f"step {step:3d}/{steps}  loss {loss.item():.4f}  (bce {bce.item():.4f} dice {dice.item():.4f})  label={LABEL_NAMES[label]}")
+            print(f"step {step:3d}/{steps}  loss {loss.item():.4f}  (bce {bce.item():.4f} dice {dice.item():.4f} lm {lm_loss.item():.4f})  label={LABEL_NAMES[label]}")
 
         if step % max(1, steps // 20) == 0 or step == steps - 1:
             gif_frames.append(_render_frame(model, bank, patients, fixed_ref_idx, fixed_target_img, fixed_label, step))
@@ -137,7 +154,14 @@ def train(bank_path: Path, steps: int, out_dir: Path, device: str, cache_dir: Pa
         append_images=gif_frames[1:] + [gif_frames[-1]] * 4, duration=500, loop=0,
     )
     (out_dir / "losses.json").write_text(json.dumps(losses))
-    print(f"Saved loss curve + training_progress.gif -> {out_dir}")
+
+    torch.save({
+        "seg_embed_row": model._seg_embed_row.detach().cpu(),
+        "projection": model.projection.state_dict(),
+        "mask_decoder": model.sam2.mask_decoder.state_dict(),
+    }, out_dir / "sft_checkpoint.pt")
+
+    print(f"Saved loss curve + training_progress.gif + sft_checkpoint.pt -> {out_dir}")
 
 
 @torch.no_grad()

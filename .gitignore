@@ -15,6 +15,7 @@ notebooks/paper-hpma-sam3/prototypes.pt
 notebooks/paper-rau-sam2/.venv/
 notebooks/paper-rau-sam2/camus_cache/
 notebooks/paper-rau-sam2/train_out/
+notebooks/paper-rau-sam2/grpo_out*/
 notebooks/paper-rau-sam2/reference_bank.pt
 
 **/*.quarto_ipynb
