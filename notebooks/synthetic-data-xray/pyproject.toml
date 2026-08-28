@@ -10,6 +10,7 @@ dependencies = [
     "matplotlib>=3.9",
     "pillow>=10.0",
     "requests>=2.32",
+    "gdown>=5.2",
 ]
 
 [dependency-groups]
