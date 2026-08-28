@@ -28,6 +28,8 @@ website:
             file: posts/series/anomaly-detection/index.qmd
           - text: "Local-AI Defect Inspection"
             file: posts/series/local-ai-defect-inspection/index.qmd
+          - text: "Synthetic Data Series"
+            file: posts/series/synthetic-data/index.qmd
           - text: "Paper of the Week"
             file: posts/series/papers/index.qmd
           - text: "Online Course Notes"
@@ -160,6 +162,14 @@ website:
             href: posts/series/local-ai-defect-inspection/index.qmd
           - text: "3. Fine-Tuning LFM2-VL for X-ray Defects"
             href: posts/series/local-ai-defect-inspection/03-finetuning-lfm2-vl-xray-defects.qmd
+      - section: "Synthetic Data Series"
+        collapse: true
+        collapsed: true
+        contents:
+          - text: "Introduction"
+            href: posts/series/synthetic-data/index.qmd
+          - text: "1. Physics-Based X-ray Simulation"
+            href: posts/series/synthetic-data/01-physics-based-xray-simulation.qmd
       - section: "Paper of the Week"
         collapse: true
         collapsed: true

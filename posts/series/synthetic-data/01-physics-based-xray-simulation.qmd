@@ -1,0 +1,445 @@
+---
+title: "Physics-Based X-ray Simulation"
+description: "No access to the X-ray equipment that shot our images? Invert the physics on a real image instead of simulating from a CAD model that doesn't exist."
+author: "Hasan Goni"
+date: last-modified
+categories: [computer-vision, synthetic-data, X-ray, physics]
+image: images/synth-xray-eli5-sketch.png
+toc: true
+series:
+  name: "Synthetic Data Series"
+  number: 1
+format:
+  html:
+    code-fold: true
+    code-tools: true
+---
+
+:::{.callout-tip}
+This post is part of the [Synthetic Data Series](index.qmd) series.
+:::
+
+## The problem
+
+Industrial X-ray inspection has a data problem that's the mirror image of most computer vision
+problems: good images are everywhere, bad ones are rare. A production line that's doing its job
+produces mostly defect-free welds, castings, and solder joints -- which is great for the factory
+and terrible for training a defect detector. Rare defect classes (a hairline crack, a small void,
+a bent lead) might show up a handful of times a year, nowhere near enough to teach a model what
+one looks like in every lighting, material, and geometry combination it needs to generalize
+across.
+
+The standard workaround is manual: an engineer crops a real defect out of one image and pastes it
+into a good image, maybe blends the edges a bit so it doesn't look glued on. It works, sort of,
+and it's the Part 4 baseline this series will come back to. But it has an honest failure mode --
+paste a crack from an image lit one way onto an image lit another way and the physics doesn't
+match: the crack's local contrast and noise texture belong to the source image, not the target.
+
+This post asks a more literal question first: what if we didn't paste pixels, but instead undid
+the *physics* that produced them, edited the thing the physics actually operates on, and then
+re-ran the physics forward again? No CAD model of the part, no access to an actual X-ray source
+or detector -- none of that is available here. What *is* available is a real public dataset
+([GDXray](https://github.com/computervision-xray-testing/GDXray)) of real X-ray images with real
+pixel statistics baked into them, which turns out to be enough to fit every physical parameter we
+need directly from the pixels themselves.
+
+## Explain it like I'm five
+
+![Physics-based synthesis, sketched out.](images/synth-xray-eli5-sketch.png)
+
+Think of an X-ray image like a shadow puppet show. The light (X-rays) shines through your hand
+(the part being inspected) and lands on the wall (the detector) as a shadow. Thicker or denser
+parts of your hand block more light, so they cast a darker shadow; thin gaps let more light
+through, so they're brighter.
+
+Now say you want a shadow of a hand with a *cut* in one finger, but you don't have a real cut
+hand to shine light through. Here's the trick: take a photo of the *shadow* you already have (a
+real X-ray image), and mathematically work backwards to guess how thick the hand must have been
+at every point to cast that exact shadow (step 2 in the diagram -- inverting the physics gets you
+a "thickness map"). Now you can *edit the thickness map directly* -- carve a thin groove into it
+right where you want the cut to be (step 4, editing inside a mask). Then you shine the (simulated)
+light through your edited thickness map all over again and see what shadow it casts now (step 5 --
+re-render, add the blur and graininess a real detector would add). You end up with a brand-new
+shadow that has a scar in exactly the shape you drew, and because you know exactly which pixels
+you carved, you get a perfect answer key (a segmentation mask) completely for free (step 6).
+No new hand needed -- just a shadow, some math, and an eraser.
+
+## Explain it like I'm a data scientist
+
+The physics is the [Beer-Lambert law](https://en.wikipedia.org/wiki/Beer%E2%80%93Lambert_law),
+the same attenuation model that governs how light dims passing through any absorbing medium:
+
+$$I = I_0 \, e^{-\mu t}$$
+
+where $I_0$ is the unattenuated beam intensity, $\mu$ is the material's linear attenuation
+coefficient, and $t$ is the material thickness the beam travels through. A single 2D X-ray
+projection measures $I$ at every pixel and nothing else -- $\mu$ and $t$ never appear separately
+in that equation, only as the product $\mu t$ in the exponent. Given one image, there is no way
+to recover $\mu$ (what the material is) and $t$ (how thick it is) individually; you'd need either
+a known material (so $\mu$ is fixed and $t$ falls out) or multiple views / multiple X-ray energies
+(spectral or tomographic imaging) to separate them.
+
+Concretely: a thin, very dense void and a thick, mildly-attenuating gap can produce the *exact
+same* pixel intensity if their $\mu t$ products match. Since we're working from single 2D
+projections of GDXray images with no access to a CAD model or known material properties, the
+honest move is to stop pretending we can recover $\mu$ and $t$ separately, and instead work
+entirely in **attenuation-depth units** -- the combined quantity $\mu t$ (call it $d$, in
+"attenuation lengths"). Rewriting Beer-Lambert in terms of $d$:
+
+$$I = I_0 \, e^{-d} \qquad\Longleftrightarrow\qquad d = -\ln(I / I_0)$$
+
+That's the entire invertible core of the pipeline: given a real image and a fitted $I_0$, invert
+every pixel to its attenuation depth; edit the attenuation-depth map (a defect that removes
+material lowers $d$ locally, since less material means less attenuation and hence a brighter
+pixel -- or raises it, if the defect is itself an attenuating inclusion, more on that sign in the
+calibration section below); then forward-render the edited depth map back to intensity with the
+same equation run the other way. Everything downstream of that inversion -- blur, photon noise --
+is modeled and calibrated separately, and is covered next.
+
+## Jargon buster
+
+| Term | Plain-English meaning |
+|---|---|
+| Attenuation depth (mu·t) | How much an X-ray beam is dimmed passing through material -- the only thing a single 2D X-ray image actually tells you, since attenuation coefficient (mu) and thickness (t) can't be separated without spectral or multi-view data |
+| Beer-Lambert law | The physics equation for that dimming: I = I0 * exp(-mu*t) |
+| Photon-transfer curve | Plotting noise variance against signal mean to characterize a photon-limited (Poisson) sensor |
+| Line-spread function | How a sharp edge gets smeared out by geometric and detector blur -- fitting a Gaussian to it recovers the blur width |
+| GDXray | Public X-ray dataset of castings, welds, baggage, and more, with defect ground truth |
+
+## Architecture
+
+The pipeline lives in a small `synth_xray` package, traced here from the real function calls in
+`generate_examples.py` and `synth_xray/pipeline.py`:
+
+```{mermaid}
+flowchart TB
+    subgraph DATA["synth_xray.data"]
+        DL["download_and_extract('Welds', ...)\n(gdown, Google Drive mirror --\nGDXray's original Dropbox links are dead)"]
+        DL --> SD["find_series_dirs\n-> series_dir (W0001)"]
+        SD --> GT["find_groundtruth_file\n-> ground_truth.txt"]
+        SD --> IMGS["find_images_in_series\n-> images[0] (defect), images[1] (clean)"]
+    end
+
+    subgraph GROUNDTRUTH["synth_xray.groundtruth"]
+        GT --> PB["parse_gdxray_bboxes\n(col_min col_max row_min row_max)"]
+        PB --> BM["bbox_to_mask -> roi_mask"]
+        IMGS --> RO["refine_mask_otsu\n(defect_image, roi_mask) -> defect_mask"]
+        BM --> RO
+    end
+
+    subgraph CALIBRATION["synth_xray.calibration (fit from real pixels)"]
+        IMGS --> I0["estimate_I0\n(99th percentile) -> I0"]
+        RO --> DELTA["fit_defect_attenuation_depth\n(defect_mask, background_mask, I0) -> delta"]
+        IMGS --> NOISE["fit_noise_model\n(dense 20x20 flat patches) -> a, b"]
+        IMGS --> BLUR["fit_blur_sigma\n(edge profile) -> sigma\n(clamped to a physically-plausible range)"]
+    end
+
+    subgraph EDIT["synth_xray.defect_edit"]
+        CRACK["generate_crack_mask\n(random-walk crack shape)\n-> synthetic_mask"]
+    end
+
+    subgraph PIPELINE["synth_xray.pipeline.synthesize_defect_image"]
+        INV["physics.invert_to_attenuation_depth\n(clean_image, I0) -> depth"]
+        EDITD["defect_edit.edit_attenuation_depth\n(depth, synthetic_mask, delta) -> edited_depth"]
+        REND["physics.render_xray\n(edited_depth, I0) -> rendered"]
+        BLURF["physics.apply_gaussian_blur\n(rendered, blur_sigma) -> blurred"]
+        NOISEF["physics.apply_photon_noise\n(blurred, gain) -> synthetic_image"]
+        INV --> EDITD --> REND --> BLURF --> NOISEF
+    end
+
+    IMGS -->|clean_image| INV
+    I0 --> INV
+    I0 --> REND
+    DELTA --> EDITD
+    CRACK --> EDITD
+    NOISE --> NOISEF
+    BLUR --> BLURF
+    NOISEF --> OUT["synthetic_image, synthetic_mask\n(free ground truth)"]
+
+    style PIPELINE fill:#2c5,color:#000
+```
+
+`synthesize_defect_image` itself is a five-line function -- `invert_to_attenuation_depth` on the
+whole image, `edit_attenuation_depth` inside the mask, `render_xray` on the whole edited depth map,
+then blur and noise applied globally. That "whole image" detail matters and comes back in the
+results section below.
+
+## Calibrating from real images
+
+Every number the pipeline needs is fit from real pixel statistics on a real GDXray image, not
+assumed or hand-picked. The series used is **W0001** from GDXray's Welds group -- the first weld
+radiograph series that ships a `ground_truth.txt` file. Running `generate_examples.py` against it
+prints the actual calibration report:
+
+```
+series: W0001
+fitted I0: 245.00
+fitted attenuation-depth delta: -0.4925
+fitted noise model: variance = 0.288 * mean + 28.249
+fitted blur sigma: 1.500 px
+```
+
+A few things worth calling out, because they're the kind of thing that looks wrong until you
+check it against the real image:
+
+- **$I_0 = 245$**, close to the top of the 0-255 range. That's consistent with the 99th-percentile
+  brightest pixels in this image being the bright weld-bead band, close to saturation -- a
+  physically sane place for the "unattenuated beam" estimate to land.
+- **delta is negative** (-0.4925). The docstring intuition for a void/crack is "material missing
+  → less attenuation → brighter pixel," which would be a *positive* delta. This particular weld
+  image's defects are small pores that render *darker* than their surroundings, not brighter --
+  confirmed by eye (a string of small dark dots along the bright band in the real image) as well
+  as by the fit. `edit_attenuation_depth` handles a negative delta correctly (it *increases*
+  attenuation depth under the mask, darkening those pixels), so this isn't a bug to fix -- it's
+  the real, dataset-specific polarity, and a good reminder that "defects are brighter" is a
+  convenient default, not a law of physics.
+- **The noise model needed a fix to the naive approach.** The obvious way to sample "flat"
+  patches for a photon-transfer-curve fit is a 2x2 grid of quadrants. This image has a strong,
+  slow brightness gradient (the bright weld-bead band sweeping across an otherwise dark plate),
+  so each quadrant patch spans most of that gradient -- its variance reflects the gradient, not
+  pixel-level photon noise. Fitting on quadrants predicted a standard deviation of 15-20 gray
+  levels in a region that actually measures ~4 by eye; applying that everywhere made the
+  synthetic image visibly over-grainy. Switching to a dense grid of small 20x20 patches (each one
+  small enough to sit inside a single locally-flat region) gives the reported
+  `variance = 0.288*mean + 28.249`, which predicts a standard deviation of roughly 6-8 gray
+  levels across the image's brightness range -- much closer to the real local noise.
+- **Blur sigma needed a sanity clamp.** Every edge profile tried (through the defect box, through
+  the weld-bead band's edge elsewhere in the image) fit a sigma of 10-40 pixels, because none of
+  them contain an actual local step edge -- they're all riding the same slow gradient the noise
+  patches ran into. A blur that large would smear the synthetic crack (about 11x11 pixels) down
+  to invisibility. Real detector/geometric unsharpness at this resolution is a few pixels at
+  most, so the fit is clamped to `(0, 5]` px and falls back to a constant 1.5 px outside that
+  range -- which is what actually got used here.
+
+Two more real-world details worth flagging rather than hiding, since they're the kind of thing
+that trips up anyone reproducing this: GDXray's original Dropbox download links are entirely
+dead (verified across all five groups); the working source is a maintainer-posted Google Drive
+replacement, downloaded with `gdown`. And GDXray's ground-truth text files order their columns as
+`image_id col_min col_max row_min row_max` -- initially assumed to be
+`image_id row_min col_min row_max col_max`, which silently produced nonsense boxes until it was
+caught by checking parsed box extents against each image's real pixel dimensions and
+cross-checking against a third-party open-source GDXray parser. Both are the unglamorous parts of
+working with a real, imperfectly-maintained public dataset, and both are now handled in
+`synth_xray/data.py` and `synth_xray/groundtruth.py` respectively.
+
+## Real code
+
+The package is a small `uv`-managed project at `notebooks/synthetic-data-xray/`, four modules
+doing one job each.
+
+```{.python filename="notebooks/synthetic-data-xray/src/synth_xray/physics.py"}
+"""Beer-Lambert forward/inverse rendering, blur, and photon-noise models."""
+import numpy as np
+from scipy.ndimage import gaussian_filter
+
+
+def render_xray(attenuation_depth: np.ndarray, I0: float) -> np.ndarray:
+    """Forward-render an attenuation-depth map (mu*t, in attenuation lengths) to intensity."""
+    return I0 * np.exp(-attenuation_depth)
+
+
+def invert_to_attenuation_depth(image: np.ndarray, I0: float, eps: float = 1e-6) -> np.ndarray:
+    """Invert Beer-Lambert to recover the attenuation-depth map implied by a real image."""
+    ratio = np.clip(image / I0, eps, None)
+    return -np.log(ratio)
+
+
+def apply_gaussian_blur(image: np.ndarray, sigma: float) -> np.ndarray:
+    """Apply detector/geometric-unsharpness blur as a Gaussian filter."""
+    if sigma <= 0:
+        return image
+    return gaussian_filter(image, sigma=sigma)
+
+
+def apply_photon_noise(
+    image: np.ndarray, gain: float, rng: np.random.Generator | None = None
+) -> np.ndarray:
+    """Apply photon-limited (Poisson) noise: variance scales with signal, per `gain` electrons/count."""
+    rng = rng if rng is not None else np.random.default_rng()
+    photon_counts = np.clip(image, 0, None) / gain
+    noisy_counts = rng.poisson(photon_counts).astype(np.float64)
+    return noisy_counts * gain
+```
+
+```{.python filename="notebooks/synthetic-data-xray/src/synth_xray/calibration.py"}
+"""Fitting physics-model parameters from real GDXray image statistics."""
+import numpy as np
+from scipy.optimize import curve_fit
+
+from synth_xray.physics import invert_to_attenuation_depth
+
+
+def estimate_I0(image: np.ndarray, percentile: float = 99.0) -> float:
+    """Estimate the unattenuated beam intensity as a high percentile of the image."""
+    return float(np.percentile(image, percentile))
+
+
+def fit_defect_attenuation_depth(
+    image: np.ndarray, defect_mask: np.ndarray, background_mask: np.ndarray, I0: float
+) -> float:
+    """Fit the attenuation-depth difference (background - defect) a real defect represents.
+
+    Positive for a void/crack (material missing -> less attenuation -> brighter pixels).
+    """
+    depth = invert_to_attenuation_depth(image, I0)
+    background_depth = float(np.median(depth[background_mask]))
+    defect_depth = float(np.median(depth[defect_mask]))
+    return background_depth - defect_depth
+
+
+def fit_noise_model(image: np.ndarray, patch_masks: list[np.ndarray]) -> tuple[float, float]:
+    """Fit variance = a*mean + b (photon-transfer curve) across flat patches."""
+    means = np.array([image[mask].mean() for mask in patch_masks])
+    variances = np.array([image[mask].var() for mask in patch_masks])
+    a, b = np.polyfit(means, variances, deg=1)
+    return float(a), float(b)
+
+
+def _gaussian_cdf_edge(x: np.ndarray, amplitude: float, center: float, sigma: float, offset: float) -> np.ndarray:
+    from scipy.special import erf
+    return offset + amplitude * 0.5 * (1 + erf((x - center) / (sigma * np.sqrt(2))))
+
+
+def fit_blur_sigma(edge_profile: np.ndarray) -> float:
+    """Fit a Gaussian-blurred step edge to a 1D intensity profile; return sigma in pixels."""
+    x = np.arange(edge_profile.size, dtype=float)
+    amplitude_guess = edge_profile[-1] - edge_profile[0]
+    center_guess = x[np.argmin(np.abs(edge_profile - edge_profile.mean()))]
+    p0 = [amplitude_guess, center_guess, 2.0, edge_profile[0]]
+    popt, _ = curve_fit(_gaussian_cdf_edge, x, edge_profile, p0=p0, maxfev=5000)
+    return float(abs(popt[2]))
+```
+
+```{.python filename="notebooks/synthetic-data-xray/src/synth_xray/defect_edit.py"}
+"""Synthetic defect shape generation and attenuation-depth map editing."""
+import numpy as np
+from skimage.draw import disk
+
+
+def generate_crack_mask(
+    image_shape: tuple[int, int],
+    start: tuple[int, int],
+    length: int,
+    thickness: int = 1,
+    rng: np.random.Generator | None = None,
+) -> np.ndarray:
+    """Generate a thin random-walk crack-shaped mask starting at `start`."""
+    rng = rng if rng is not None else np.random.default_rng()
+    mask = np.zeros(image_shape, dtype=bool)
+    row, col = start
+    radius = max(thickness - 1, 0)
+
+    # Mark the starting position
+    if radius > 0:
+        rr, cc = disk((row, col), radius + 1, shape=image_shape)
+        mask[rr, cc] = True
+    else:
+        mask[row, col] = True
+
+    for _ in range(length):
+        row = int(np.clip(row + rng.integers(-1, 2), 0, image_shape[0] - 1))
+        col = int(np.clip(col + rng.integers(-1, 2), 0, image_shape[1] - 1))
+        if radius > 0:
+            rr, cc = disk((row, col), radius + 1, shape=image_shape)
+            mask[rr, cc] = True
+        else:
+            mask[row, col] = True
+    return mask
+
+
+def edit_attenuation_depth(attenuation_depth: np.ndarray, mask: np.ndarray, delta: float) -> np.ndarray:
+    """Reduce attenuation depth under `mask` by `delta` (a void/crack: material is missing)."""
+    edited = attenuation_depth.copy()
+    edited[mask] = np.clip(edited[mask] - delta, 0.0, None)
+    return edited
+```
+
+```{.python filename="notebooks/synthetic-data-xray/src/synth_xray/pipeline.py"}
+"""End-to-end physics-based synthetic defect image generation."""
+import numpy as np
+
+from synth_xray.physics import (
+    render_xray,
+    invert_to_attenuation_depth,
+    apply_gaussian_blur,
+    apply_photon_noise,
+)
+from synth_xray.defect_edit import edit_attenuation_depth
+
+
+def synthesize_defect_image(
+    clean_image: np.ndarray,
+    I0: float,
+    defect_mask: np.ndarray,
+    delta: float,
+    noise_gain: float,
+    blur_sigma: float,
+    rng: np.random.Generator | None = None,
+) -> tuple[np.ndarray, np.ndarray]:
+    """Invert a real clean image to attenuation depth, inject a defect, and re-render.
+
+    Steps: invert -> edit under mask -> forward render -> blur -> photon noise.
+    Returns (synthetic_image, defect_mask) so the mask travels with its image as
+    free ground truth.
+    """
+    depth = invert_to_attenuation_depth(clean_image, I0)
+    edited_depth = edit_attenuation_depth(depth, defect_mask, delta)
+    rendered = render_xray(edited_depth, I0)
+    blurred = apply_gaussian_blur(rendered, blur_sigma)
+    noisy = apply_photon_noise(blurred, gain=noise_gain, rng=rng)
+    return noisy, defect_mask
+```
+
+Every function above is real, tested code from `notebooks/synthetic-data-xray/src/synth_xray/`
+(24/24 tests passing), run for real against the downloaded GDXray Welds data by
+`notebooks/synthetic-data-xray/generate_examples.py` to produce the images below.
+
+## Results
+
+::: {layout-ncol=3}
+![Real clean image](images/synth-xray-clean.png)
+
+![Real defect image](images/synth-xray-defect-real.png)
+
+![Synthetic defect image](images/synth-xray-defect-synthetic.png)
+:::
+
+The synthetic image holds up at a glance: the overall gradient structure (dark plate, bright
+weld-bead band) matches the clean source, the naturally-occurring real pore dots that were
+already in the clean image pass straight through the invert-edit-render round trip, and the grain
+level looks like a real X-ray image rather than the over-grainy first attempt described above.
+Zooming into the injected crack's location shows a clearly visible dark blob distinct from the
+surrounding noise texture -- confirmed with a direct pixel-difference check against the clean
+source (roughly 34-39 gray levels of contrast before blur and noise, still legible after both).
+The crack itself is small (an 11x11 pixel random walk) relative to the full ~4900-pixel-wide
+panorama, so it reads as a small, easy-to-miss local flaw rather than a dramatic feature -- which
+is actually consistent with how this dataset's own real pore defects look.
+
+One honest caveat that's important not to gloss over: this is **not** a surgical, local edit.
+`synthesize_defect_image` inverts, re-renders, re-blurs, and re-samples fresh Poisson noise for
+the *entire* image, not just the pixels under the defect mask. The signal (attenuation depth)
+outside the mask is unchanged, but the noise realization outside the mask is a fresh random draw,
+not a copy of the clean image's own noise -- so the clean/synthetic pair differs everywhere at
+low magnitude, not only where the defect was injected. In practice that difference is small
+enough not to be visually obvious next to the actual defect, but it means a naive pixel-diff
+between clean and synthetic images is not itself a ground-truth defect mask -- the real mask
+returned by `synthesize_defect_image` is what to use, not a diff.
+
+Where the physics-only approach visibly falls short: the injected crack is geometrically correct
+(a thin random-walk shape with the right local contrast and noise texture) but has no learned
+notion of what a *real* crack or pore looks like beyond that -- no branching, no texture beyond
+what the blur and noise models provide, no correlation with the surrounding material's actual
+microstructure. It's a physically-consistent placeholder shape, not a learned one. That's exactly
+the bar Part 2's diffusion fine-tune needs to clear: can a model that's actually seen real defect
+textures do better than physics alone at the *shape and texture* of the defect, while still
+respecting the same underlying image statistics this post calibrated by hand?
+
+Known follow-up, not blocking for this post: the three PNGs above are large, wide-aspect real
+GDXray panoramas (up to ~2.6MB for the synthetic one) -- fine for `quarto render`, but worth a
+size check and possible downscaling before `quarto publish`, given quarto.pub's upload-size
+sensitivity.
+
+## What's next
+
+Part 2 fine-tunes a mask-conditioned diffusion model on the same real GDXray defect crops --
+does learning the texture from data beat re-rendering it from physics?

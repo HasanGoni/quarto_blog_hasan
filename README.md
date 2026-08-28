@@ -14,6 +14,8 @@ structured as multi-part series rather than one-off posts.
 - **Data Science Steps** — a working process for EDA through modeling
 - **Command Line Mastery for HPC** — shell, SSH, and job scheduling for research computing
 - **Vim Mastery** — editing efficiently from survival mode to advanced usage
+- **Synthetic Data Series** — generating synthetic X-ray defect images for industrial inspection
+  when real examples are scarce (physics, diffusion, GANs, cut-paste, compared)
 
 ## Local development
 
