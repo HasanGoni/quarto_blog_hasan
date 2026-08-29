@@ -105,8 +105,11 @@ Python-native alternatives (e.g. `transformers` running a small local model) ove
   every individual post (unlike other series) — that's the existing convention, not an oversight.
   A deep-dive paper post's structure (established with the RAU post): paper summary, "explain
   like I'm five" + "explain like I'm a data scientist" (two reading levels), a jargon-buster
-  glossary table, a Mermaid architecture diagram traced from the actual library source, an
-  optional hand-drawn/xkcd-style sketch diagram for the ELI5 section, full real code, real
-  captured output, and a real before/after result (static images + a size-optimized GIF, since
-  quarto.pub rejects uploads much above ~1MB — check GIF size and shrink with
-  `Image.quantize`/frame-subsampling before publishing, don't assume it'll fit).
+  glossary table, an "Architecture" section tracing the actual library/source-code calls as prose
+  or a bulleted walkthrough — **no Mermaid diagrams** (user preference, stated explicitly; earlier
+  posts in this style used Mermaid before this was corrected — don't propagate that pattern to new
+  posts, and don't retrofit old ones without being asked), an optional hand-drawn/xkcd-style sketch
+  diagram for the ELI5 section, full real code, real captured output, and a real before/after
+  result (static images + a size-optimized GIF, since quarto.pub rejects uploads much above ~1MB —
+  check GIF size and shrink with `Image.quantize`/frame-subsampling before publishing, don't assume
+  it'll fit).

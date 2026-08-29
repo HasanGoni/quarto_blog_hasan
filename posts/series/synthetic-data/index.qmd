@@ -29,7 +29,28 @@ generating more of it.
    statistics: an attenuation-depth calibration, a photon-noise model, a blur kernel -- then a
    real base radiograph is inverted, edited inside a mask, and re-rendered into a synthetic defect
    image with a ground-truth mask for the injected defect, free.
-2. **Part 2** -- Mask-conditioned diffusion fine-tuning. Coming soon.
-3. **Part 3** -- GAN-based synthesis. Coming soon.
-4. **Part 4** -- Cut-paste + Poisson blending baseline. Coming soon.
-5. **Part 5** -- Compare everything. Coming soon.
+2. **Part 2** -- [Mask-Conditioned Diffusion Fine-Tuning](02-mask-conditioned-diffusion-finetuning.qmd).
+   LoRA fine-tunes a real Stable Diffusion inpainting model on real GDXray defect crops, so it
+   learns actual defect *texture* instead of physics's hand-drawn shape -- compared directly
+   against Part 1 on the identical mask.
+3. **Part 3** -- [ControlNet-Conditioned Diffusion](03-controlnet-conditioned-diffusion.qmd). Same
+   SD1.5 setup as Part 2, plus a ControlNet fed the *real* defect silhouette instead of a synthetic
+   crack shape -- confirmed real and measurably different from Part 2's output, but inconclusive
+   on a single example whether it reads as more authentic; the real test is Part 9's downstream
+   comparison.
+4. **Part 4** -- Flux-based mask-conditioned generation. Swaps in a larger, higher-fidelity base
+   model for the same fine-tune recipe. Coming soon.
+5. **Part 5** -- Joint image+mask diffusion generation. Instead of feeding a mask in as a
+   conditioning input (Parts 2-4's approach), trains the model to generate the defect image *and*
+   its mask together, so shape comes from the real distribution of defect shapes rather than being
+   drawn by hand or borrowed from another crop -- directly inspired by NVIDIA's MAISI architecture,
+   scoped down to 2D. Coming soon.
+6. **Part 6** -- Combining what works. Takes whichever of Parts 3-5 actually helped, combines it
+   with Part 1's calibrated noise model, and reports whether the improvements actually stack.
+   Coming soon.
+7. **Part 7** -- GAN-based synthesis. Coming soon.
+8. **Part 8** -- Cut-paste + Poisson blending baseline. Coming soon.
+9. **Part 9** -- Post-training a real detector on synthetic data (the payoff). Post-trains the
+   same baseline detector separately on real+synthetic splits from every method above, ablates
+   the real:synthetic ratio, and reports which method's data actually moves a real downstream
+   model. Coming soon.
