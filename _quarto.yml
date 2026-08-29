@@ -177,6 +177,8 @@ website:
             href: posts/series/synthetic-data/02-mask-conditioned-diffusion-finetuning.qmd
           - text: "3. ControlNet-Conditioned Diffusion"
             href: posts/series/synthetic-data/03-controlnet-conditioned-diffusion.qmd
+          - text: "4. Flux-Based Mask-Conditioned Generation"
+            href: posts/series/synthetic-data/04-flux-mask-conditioned-generation.qmd
       - section: "Paper of the Week"
         collapse: true
         collapsed: true

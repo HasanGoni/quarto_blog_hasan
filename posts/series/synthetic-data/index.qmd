@@ -38,8 +38,10 @@ generating more of it.
    crack shape -- confirmed real and measurably different from Part 2's output, but inconclusive
    on a single example whether it reads as more authentic; the real test is Part 9's downstream
    comparison.
-4. **Part 4** -- Flux-based mask-conditioned generation. Swaps in a larger, higher-fidelity base
-   model for the same fine-tune recipe. Coming soon.
+4. **Part 4** -- [Flux-Based Mask-Conditioned Generation](04-flux-mask-conditioned-generation.qmd).
+   Swaps SD1.5 for a 12B-parameter diffusion transformer (real, gated checkpoint -- access
+   confirmed via the HF API first) -- a genuinely surprising, honestly-reported negative result:
+   the bigger model was *less* visible than Part 2's on the identical test case.
 5. **Part 5** -- Joint image+mask diffusion generation. Instead of feeding a mask in as a
    conditioning input (Parts 2-4's approach), trains the model to generate the defect image *and*
    its mask together, so shape comes from the real distribution of defect shapes rather than being

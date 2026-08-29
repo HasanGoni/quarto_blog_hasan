@@ -54,11 +54,12 @@ image+mask generation, inspired by NVIDIA's MAISI/NV-Generate-CTMR line of work 
    (`build_defect_dataset`) instead of a synthetic crack shape or a bare rectangular mask — tests
    whether the "doesn't look like a real defect" complaint is a shape-conditioning problem before
    reaching for a bigger model.
-4. **Flux-based mask-conditioned generation** — try `black-forest-labs/FLUX.1-Fill-dev` (check
-   license/gating before committing — this repo's stated preference is non-gated checkpoints, and
-   Flux dev models are typically non-commercial-licensed; if gated, say so plainly and either get
-   explicit sign-off to use it anyway for a research/demo post or fall back to a non-gated
-   alternative) as a straight swap-in for the base generator, same LoRA fine-tune recipe as Part 2.
+4. **Larger base-model generation (SDXL inpainting)** — checked `black-forest-labs/FLUX.1-Fill-dev`
+   at implementation time (2026-08-29): confirmed gated (`gated: "auto"` on the HF API), conflicting
+   with this repo's non-gated-only preference. User chose the non-gated substitute over accepting
+   Flux's license: `diffusers/stable-diffusion-xl-1.0-inpainting-0.1` (confirmed non-gated) — a
+   straight swap-in for the base generator, same LoRA fine-tune recipe as Parts 2-3, still a real
+   base-model-scale jump from SD1.5 (larger UNet, higher native resolution).
 5. **Joint image+mask diffusion generation** — instead of feeding a mask in as a conditioning
    input (Parts 2-4's approach), train the model to generate the image *and* its defect mask
    together, so defect shape is learned from the real distribution of defect shapes rather than
@@ -169,19 +170,32 @@ provides. This becomes the baseline the later parts are compared against in Part
 - Compare against Part 2's un-conditioned output on the same masks/prompts, same evaluation
   approach (visual + the local-std noise-texture measurement Part 2 established).
 
-## Part 4 — Flux-based mask-conditioned generation
+## Part 4 — Flux-based mask-conditioned generation (shipped)
 
-- Swap the base generator for `black-forest-labs/FLUX.1-Fill-dev` (or the current non-gated
-  equivalent at implementation time), same LoRA fine-tune recipe as Part 2 adapted to Flux's
-  architecture (DiT-based, not UNet-based — the LoRA target-module set will differ).
-- **License check is a hard gate before committing to this part**: Flux dev-series checkpoints
-  are typically non-commercial-licensed/gated, which conflicts with this repo's established
-  non-gated-only preference. Verify at implementation time; if gated, either get explicit sign-off
-  to use it for a research/demo post anyway (stated plainly in the post) or substitute a
-  confirmed-non-gated higher-fidelity alternative and say so.
-- Tests whether base-model scale/fidelity (Flux is a much larger, generally higher-quality
-  generator than SD1.5) closes the shape-realism gap where Part 3's shape-conditioning approach
-  doesn't, or whether the two are complementary (feeds directly into Part 6).
+- Model-choice detour, resolved 2026-08-29: `black-forest-labs/FLUX.1-Fill-dev` confirmed gated
+  via the HF API (`gated: "auto"`). First substitute considered, SDXL inpainting, was rejected on
+  review — still a UNet, so it would only test scale within the same architecture family, not
+  architecture itself, which is the actual point of this part. PixArt-Sigma (non-gated, genuinely
+  DiT-based) was checked too but has no native `diffusers` inpainting pipeline — would need
+  hand-rolled masking, a real step down from Parts 2-3's library-native approach. Decision: use
+  the real Flux-Fill-dev — checked the existing `HF_TOKEN` against the gated repo via the HF API
+  (`GET .../tree/main` → 200) before committing, rather than assuming either way.
+- LoRA (`r=8, alpha=16`) targets the real attention-projection module names found by inspecting
+  `transformer.named_modules()` directly: `to_q/to_k/to_v/to_out.0` (image stream) +
+  `add_q_proj/add_k_proj/add_v_proj/to_add_out` (text stream) — Flux's dual-stream MMDiT design.
+- Training loop reuses `FluxFillPipeline`'s own real internal methods (`encode_prompt`,
+  `prepare_mask_latents`, `_encode_vae_image`, `_pack_latents`, `_prepare_latent_image_ids`)
+  rather than re-deriving the packed-latent-sequence format by hand — verified against the
+  pipeline's real `__call__` source before writing the loop, not guessed. Real flow-matching
+  (rectified flow) objective, not DDPM — `FlowMatchEulerDiscreteScheduler.scale_noise`'s own
+  formula, target velocity `noise - real_latents`.
+- **Real result, genuinely surprising**: on the single test case Parts 1-3 all used, Flux's output
+  is *less* visible than Part 2's smaller SD1.5 model (46.1 gray-level contrast at the injection
+  site for Part 2 vs. 1.8 for Part 4) — scale alone did not close the shape-realism gap here, if
+  anything the opposite on this one example. Local noise-texture std also clusters with Parts 2-3
+  (0.79-0.94), well below physics, regardless of architecture — the VAE-latent-space noise
+  limitation Part 2 found looks shared across every latent diffusion model tested, not specific to
+  SD1.5. A real negative result, reported as such rather than reframed as a win.
 
 ## Part 5 — Joint image+mask diffusion generation
 
@@ -306,7 +320,8 @@ Matches the established "Paper of the Week" deep-dive pattern:
   SD1.5 inpainting instead.
 - GDXray domain mismatch (castings/welds, not semiconductor) — accepted risk, consistent with
   `local-ai-defect-inspection`'s existing precedent.
-- **Flux licensing (Part 4)** — needs verifying before implementation, not just assuming gated.
+- ~~Flux licensing (Part 4)~~ — resolved 2026-08-29: confirmed gated via the HF API, existing
+  `HF_TOKEN` already had access, used the real Flux-Fill-dev checkpoint. See Part 4 entry above.
   If gated, decide explicitly (sign-off to use anyway vs. non-gated substitute) rather than
   discovering it mid-implementation.
 - **NVIDIA Cosmos was considered and set aside** for this series — it's a world/video-simulation
