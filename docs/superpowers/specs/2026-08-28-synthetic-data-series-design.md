@@ -25,7 +25,7 @@ limitation" ethos of the `local-ai-defect-inspection` series.
 - Not attempting to acquire or license the CXR-AD dataset (arXiv 2505.03412) as part of this
   series — no confirmed public download exists at time of writing. Worth revisiting later as a
   follow-up if it becomes available; not a blocker for this series.
-- Not building a production defect-detection pipeline. The measured comparison in Part 5 uses
+- Not building a production defect-detection pipeline. The measured comparison in Part 9 uses
   a downstream task as an *evaluation signal* for the synthetic-data methods, not as a
   deliverable in its own right.
 
@@ -36,16 +36,51 @@ New standalone series: `posts/series/synthetic-data/`. Considered folding into
 framing (VLM eval, LinkedIn-first) doesn't fit a generative/physics-methods series. Cross-link
 both directions instead.
 
-Five posts, in this order:
+Nine posts, in this order (expanded 2026-08-28 after Part 2 shipped — the physics-vs-diffusion
+comparison landed, but the diffusion defect *shape* still doesn't read as a real defect; SD1.5's
+plain inpainting mask barely constrains internal shape, and there was appetite to try both a
+shape-conditioning add-on and a stronger base model before the final comparison, rather than
+declare "diffusion" done after one checkpoint; expanded again 2026-08-29 to add joint
+image+mask generation, inspired by NVIDIA's MAISI/NV-Generate-CTMR line of work for synthesizing
+3D medical images with paired segmentation masks — see Part 5 below):
 
 1. **Physics-based X-ray simulation** — Beer-Lambert forward model, calibrated from real GDXray
    images since no equipment access exists.
-2. **Mask-conditioned diffusion fine-tuning** — LoRA fine-tune on real GDXray defect crops+masks.
-3. **GAN-based synthesis** — small GAN (DFMGAN-style) trained on the same crops.
-4. **Cut-paste + Poisson blending baseline** — the classical manual-workflow approach, formalized.
-5. **Compare everything** — run all four methods' synthetic output through the same downstream
-   task, report which helps for which of the two goals (rare-defect augmentation vs. minimizing
-   labeling effort).
+2. **Mask-conditioned diffusion fine-tuning** — LoRA fine-tune (SD1.5 inpainting) on real GDXray
+   defect crops+masks. Shipped; honest finding was defect *texture* beats physics, defect *noise
+   statistics* and *shape fidelity* don't yet — see Parts 3-5 below.
+3. **ControlNet-conditioned diffusion** — same SD1.5 base, add a ControlNet (edge/scribble
+   conditioning) fed the *real* Otsu-refined defect silhouette from Part 2's own dataset builder
+   (`build_defect_dataset`) instead of a synthetic crack shape or a bare rectangular mask — tests
+   whether the "doesn't look like a real defect" complaint is a shape-conditioning problem before
+   reaching for a bigger model.
+4. **Flux-based mask-conditioned generation** — try `black-forest-labs/FLUX.1-Fill-dev` (check
+   license/gating before committing — this repo's stated preference is non-gated checkpoints, and
+   Flux dev models are typically non-commercial-licensed; if gated, say so plainly and either get
+   explicit sign-off to use it anyway for a research/demo post or fall back to a non-gated
+   alternative) as a straight swap-in for the base generator, same LoRA fine-tune recipe as Part 2.
+5. **Joint image+mask diffusion generation** — instead of feeding a mask in as a conditioning
+   input (Parts 2-4's approach), train the model to generate the image *and* its defect mask
+   together, so defect shape is learned from the real distribution of defect shapes rather than
+   drawn by hand or borrowed from another crop. Directly inspired by NVIDIA's MAISI architecture
+   (latent diffusion / rectified flow trained to jointly output a 3D medical volume and its
+   segmentation), scoped down to 2D single-channel masks on GDXray. See Part 5 below for the
+   adaptation.
+6. **Combining what works** — take whichever of ControlNet-shape-conditioning (Part 3), Flux's
+   higher base fidelity (Part 4), and joint generation's learned shape distribution (Part 5)
+   actually helped (empirically, from Parts 3-5, not assumed), combine them, and layer Part 1's
+   calibrated Poisson noise model on top in pixel space (mask region only, after compositing real
+   pixels back in outside it) to close the noise-statistics gap Part 2 found. Real open question
+   going in: does combining actually compound the gains, or do the improvements not stack.
+7. **GAN-based synthesis** — small GAN (DFMGAN-style) trained on the same crops. A distinct third
+   generative family, independent of the diffusion track above.
+8. **Cut-paste + Poisson blending baseline** — the classical manual-workflow approach, formalized.
+9. **Post-training a real detector on synthetic data (the payoff)** — real baseline, then
+   post-train the same model separately on real+synthetic splits from every method (physics,
+   diffusion, ControlNet, Flux, joint generation, the combined hybrid, GAN, cut-paste), same
+   recipe across conditions, ablate the real:synthetic ratio, report which method's data actually
+   moves a real downstream model, broken out by the two original goals (rare-defect augmentation
+   vs. minimizing labeling effort). Real training runs and real metrics, not a one-shot eval.
 
 Each post gets a `series:` frontmatter block and opens with a callout linking back to
 `index.qmd`, per the repo's established series pattern (`CLAUDE.md`). Wiring into
@@ -54,7 +89,7 @@ not this design doc.
 
 ## Data
 
-**GDXray** (castings + welds groups) is the real-data anchor for all five posts — publicly
+**GDXray** (castings + welds groups) is the real-data anchor for all nine posts — publicly
 downloadable, free for research/education use, already integrated in this repo
 (`local-ai-defect-inspection` series uses it), and has pixel-level defect masks for some series.
 No semiconductor-specific category exists in GDXray, but casting voids and weld-porosity defects
@@ -66,7 +101,7 @@ tradeoff is accepted the same way `local-ai-defect-inspection` already accepted 
 
 New `uv`-managed subproject: `notebooks/synthetic-data-xray/`, following the
 `paper-rau-sam2`/`paper-hpma-sam3` pattern — scoped `pyproject.toml`, `.venv` gitignored,
-`uv sync` to set up. Shared across all five posts (common data-loading/GDXray utilities), with
+`uv sync` to set up. Shared across all nine posts (common data-loading/GDXray utilities), with
 per-post scripts/notebooks inside.
 
 ## Part 1 — Physics-based X-ray simulation
@@ -98,44 +133,154 @@ Concretely:
 
 Output: a synthetic defect image *and* its ground-truth mask (free, since the mask was the
 edit target), physically grounded rather than hallucinated, using only images GDXray already
-provides. This becomes the baseline the later parts are compared against in Part 5.
+provides. This becomes the baseline the later parts are compared against in Part 9.
 
-## Part 2 — Mask-conditioned diffusion fine-tuning
+## Part 2 — Mask-conditioned diffusion fine-tuning (shipped)
 
-- Same GDXray defect crops + masks used to calibrate Part 1.
-- LoRA fine-tune a mask-conditioned inpainting/diffusion model (Stable Diffusion inpainting +
-  ControlNet-seg, or the `Boogu-Image` checkpoint already explored in
-  `notebooks/_drafts/boogu-image-semiconductor-defect-editing.ipynb` if it exposes mask
-  conditioning — check first) so the model learns GDXray's actual X-ray texture instead of a
-  natural-image prior.
-- Compare output against Part 1's physics-rendered images on the same masks.
-- Deliverable includes a GIF (training-progress or physics-vs-diffusion-vs-real comparison).
+- Same GDXray defect crops + masks used to calibrate Part 1 (338 real (image, mask) pairs via
+  `synth_xray.diffusion_data.build_defect_dataset`).
+- LoRA fine-tune of `stable-diffusion-v1-5/stable-diffusion-inpainting` (non-gated; `Boogu-Image`
+  was checked and rejected — it's instruction-text editing only, `pipe(image=..., prompt=...)`,
+  no mask parameter anywhere).
+- Compared output against Part 1's physics-rendered images on the same synthetic-crack mask.
+- **Real, honest finding**: diffusion learns defect *texture* physics has no way to learn
+  (convincing porosity-pattern continuation), but stays close to background-smooth on local noise
+  (1.03 vs. physics's 1.87, vs. a 0.87 clean baseline, vs. 4.45 for a real defect) — the VAE's 8x
+  spatial compression structurally resists fine photon-noise texture. Separately, the generated
+  defect *shape* still doesn't read as authentically defect-like — SD-inpainting's plain mask
+  conditioning tells the model what region to fill, not what shape the content inside should
+  take. Parts 3-6 below exist specifically to chase that second gap before Part 9 declares a
+  winner.
+- Known gap not yet fixed as of this doc's last update: the demo doesn't composite the real
+  unmasked pixels back into the output, so the *whole* generated image (not just the masked
+  region) differs slightly from the real input due to the VAE round-trip — fix before Parts 3-6
+  reuse this pipeline, since noise-matching in Part 6 only makes sense once the non-mask region is
+  pixel-identical to the real input.
 
-## Part 3 — GAN-based synthesis
+## Part 3 — ControlNet-conditioned diffusion
+
+- Same SD1.5 base and LoRA recipe as Part 2. Add a ControlNet (edge/scribble-style conditioning,
+  non-gated `lllyasviel/control_v11p_sd15_*` checkpoints) fed the *real* Otsu-refined defect
+  silhouette already produced by Part 2's `build_defect_dataset` — not a synthetic crack shape,
+  not a bare rectangular box mask.
+- Directly targets Part 2's shape-realism gap: does telling the model the real internal shape of
+  a defect (not just its bounding region) produce more authentic-looking output, independent of
+  base-model scale?
+- Compare against Part 2's un-conditioned output on the same masks/prompts, same evaluation
+  approach (visual + the local-std noise-texture measurement Part 2 established).
+
+## Part 4 — Flux-based mask-conditioned generation
+
+- Swap the base generator for `black-forest-labs/FLUX.1-Fill-dev` (or the current non-gated
+  equivalent at implementation time), same LoRA fine-tune recipe as Part 2 adapted to Flux's
+  architecture (DiT-based, not UNet-based — the LoRA target-module set will differ).
+- **License check is a hard gate before committing to this part**: Flux dev-series checkpoints
+  are typically non-commercial-licensed/gated, which conflicts with this repo's established
+  non-gated-only preference. Verify at implementation time; if gated, either get explicit sign-off
+  to use it for a research/demo post anyway (stated plainly in the post) or substitute a
+  confirmed-non-gated higher-fidelity alternative and say so.
+- Tests whether base-model scale/fidelity (Flux is a much larger, generally higher-quality
+  generator than SD1.5) closes the shape-realism gap where Part 3's shape-conditioning approach
+  doesn't, or whether the two are complementary (feeds directly into Part 6).
+
+## Part 5 — Joint image+mask diffusion generation
+
+**The idea, and why it's different from Parts 2-4:** every prior diffusion part treats the mask
+as a *conditioning input* — something drawn (Part 2's synthetic crack), or lifted from a real
+defect crop (Part 3's ControlNet silhouette) — that tells the model *where* to generate, not
+*what shape* to generate there. NVIDIA's MAISI/NV-Generate-CTMR line of work (3D CT/MRI synthesis
+with paired segmentation masks) takes the opposite approach: train the model to generate the
+image *and* its mask together, as a joint output, so the mask itself is a learned sample from the
+real distribution of defect shapes rather than something supplied externally. Applied to GDXray's
+2D defects, this directly targets Part 2's honest finding that "SD-inpainting's plain mask
+conditioning tells the model what region to fill, not what shape the content inside should take."
+
+**Scoped down from MAISI for 2D:** NVIDIA's models generate full 3D volumes at up to 512×512×256
+using latent diffusion (MAISI-v1) or latent rectified flow (MAISI-v2, ~33x faster inference) —
+this part is the same core idea at 2D, single-channel-mask scale, which is far cheaper to train
+and fits comfortably on local GB10 hardware. Architecture direction to resolve at implementation
+time (real open question, not decided here):
+- Stack image + binary mask as extra channels through a jointly-trained VAE/UNet (channel
+  expansion on top of Part 2's SD1.5 inpainting checkpoint, if that fine-tunes cleanly), vs.
+- A smaller custom joint latent diffusion model trained from scratch on the ~338 real
+  (image, mask) pairs from Part 2's `build_defect_dataset`, given the dataset is far too small
+  for a from-scratch 3D-scale model but may be workable at this scale and resolution.
+- Worth a literature check before committing to either (search terms: "joint image and mask
+  diffusion," "image-and-label synthesis diffusion," "MedSegDiff") in case an existing 2D
+  joint-generation recipe is directly adaptable, rather than assuming a from-scratch design.
+- Higher implementation risk than Parts 3-4 (which are straight swap-ins on Part 2's recipe) —
+  say so plainly in the post if the joint architecture underperforms or doesn't converge cleanly
+  on this little data; that's a legitimate, reportable finding for Part 6/9, not a result to hide.
+
+**Especially visual by nature, lean into it:** unlike a single before/after pair, a joint
+generative model naturally produces a *grid* of sampled (image, mask) pairs — show a sampling
+grid, not just one result. Same deliverable bar as every post (whiteboard-style ELI5 diagram,
+size-optimized GIF, real code, jargon table), but this post is a strong candidate to make the GIF
+an actual sampling-diversity loop (cycling through several generated pairs) rather than a
+training-progress curve, given how visual the joint-output format already is.
+
+- Compare generated mask shapes against Part 2/3's approaches and against real GDXray defect
+  shapes (the same Otsu-refined silhouettes Part 3 uses) — does a jointly-generated mask actually
+  look more like a real defect silhouette than a hand-drawn crack or a copied one?
+- Feeds into Part 6 as a third candidate technique alongside Part 3's ControlNet conditioning and
+  Part 4's Flux base model.
+
+## Part 6 — Combining what works
+
+- Take whichever of Part 3 (real-shape ControlNet conditioning), Part 4 (Flux base model), and
+  Part 5 (joint image+mask generation) empirically helped — not assumed, measured — and combine
+  them.
+- Layer Part 1's calibrated Poisson noise model on top in pixel space, masked-region only, after
+  compositing real pixels back into the rest of the image (the Part 2 gap noted above) — closing
+  the noise-statistics deficit Part 2 found without asking a VAE-based diffusion model to solve a
+  problem it's structurally bad at.
+- Real open question going in, stated as such in the post: do the individual improvements from
+  Parts 2-5 actually compound when combined, or does combining them hit diminishing returns /
+  conflicts (e.g., ControlNet's shape constraint fighting Flux's own generative prior, or joint
+  generation's learned shapes fighting an externally-supplied ControlNet silhouette)? Report
+  whatever's actually found.
+
+## Part 7 — GAN-based synthesis
 
 - Small GAN (DFMGAN-style: defect-aware generator conditioned on a mask + defect-free base)
   trained on the same GDXray defect crops.
-- Third distinct generative family alongside physics (Part 1) and diffusion (Part 2).
+- A distinct third generative family, independent of the diffusion track in Parts 2-6.
 - Honest-limitation angle expected: GANs are notoriously unstable on small datasets — likely
   mode collapse or training instability with so few real examples. That's a legitimate, useful
-  finding for Part 5, not a post to avoid because it might not "win."
+  finding for Part 9, not a post to avoid because it might not "win."
 
-## Part 4 — Cut-paste + Poisson blending baseline
+## Part 8 — Cut-paste + Poisson blending baseline
 
 - Formalizes the manual workflow Hasan already does at work: crop a real defective region,
   Poisson-blend it into a good image.
-- Cheapest method computationally and conceptually. Sets the floor the other three methods need
-  to beat in Part 5.
+- Cheapest method computationally and conceptually. Sets the floor the other methods need to beat
+  in Part 9.
 
-## Part 5 — Compare everything
+## Part 9 — Post-training a real detector on synthetic data (the payoff)
 
-- Run all four methods' synthetic images through the same downstream task (fine-tune a
-  segmenter/detector on real+synthetic vs. real-only splits), reusing eval machinery from
-  `local-ai-defect-inspection` Parts 3-4 where it fits.
-- Report which method actually helps, broken out by the two original goals: rare-defect
-  augmentation vs. minimizing labeling effort (mask-conditioned generation methods get "free"
-  ground-truth masks; cut-paste does not, since it needs a source mask to begin with).
-- Empirical result, not a literature summary — the payoff post.
+Reframed 2026-08-28: this is not a quick eval tacked onto the comparison — **post-training a real
+segmenter/detector is the actual payoff of the whole series**, and gets the same rigor this blog
+already gives an SFT/RL post-training stage (see the RAU post's SFT + GRPO stages, or HPMA's
+adapter training) rather than a one-shot "does it help, y/n" fine-tune.
+
+- Real baseline: a pretrained segmenter/detector (reuse `local-ai-defect-inspection`'s model
+  choice/eval machinery where it fits, e.g. Parts 3-4's fine-tuning setup) evaluated on real
+  GDXray data only, before any synthetic augmentation — the number every other condition below
+  has to beat.
+- Post-train that same baseline separately on real+synthetic splits from each method (physics,
+  diffusion, ControlNet, Flux, joint generation, the Part 6 combined hybrid, GAN, cut-paste) —
+  same training recipe/hyperparameters across conditions, only the data differs, so differences
+  in the result
+  are attributable to the synthetic data's quality, not incidental training differences.
+- Worth ablating, not just a single real:synthetic ratio: does more synthetic data monotonically
+  help, plateau, or hurt (a real, reportable finding either way) for each method.
+- Report which method's synthetic data actually improves the post-trained model, broken out by
+  the two original goals: rare-defect augmentation vs. minimizing labeling effort
+  (mask-conditioned generation methods get "free" ground-truth masks; cut-paste does not, since it
+  needs a source mask to begin with).
+- Empirical result, not a literature summary — real training runs, real before/after metrics on a
+  real held-out eval set, same "real code, real captured output" bar as every other post in this
+  series.
 
 ## Deliverable bar (all posts)
 
@@ -156,7 +301,22 @@ Matches the established "Paper of the Week" deep-dive pattern:
 
 - CXR-AD dataset access — revisit if it becomes publicly downloadable; would be a closer domain
   match than GDXray.
-- Whether `Boogu-Image` exposes true mask-conditioned generation or only instruction-text
-  editing — needs checking before committing Part 2's model choice.
+- ~~Whether `Boogu-Image` exposes true mask-conditioned generation or only instruction-text
+  editing~~ — checked: instruction-text editing only, no mask parameter. Resolved; Part 2 used
+  SD1.5 inpainting instead.
 - GDXray domain mismatch (castings/welds, not semiconductor) — accepted risk, consistent with
   `local-ai-defect-inspection`'s existing precedent.
+- **Flux licensing (Part 4)** — needs verifying before implementation, not just assuming gated.
+  If gated, decide explicitly (sign-off to use anyway vs. non-gated substitute) rather than
+  discovering it mid-implementation.
+- **NVIDIA Cosmos was considered and set aside** for this series — it's a world/video-simulation
+  model family for physical-AI/robotics, not built around 2D masked image inpainting; no clear
+  fit for this task's shape was found without a lot more research, so it isn't in the Part 3/4/6
+  lineup above. Revisit only if a concrete Cosmos-based 2D-inpainting workflow surfaces later.
+  (NVIDIA's *MAISI* line of work, by contrast, was a direct fit — see Part 5.)
+- **Part 2's missing mask-compositing step** carries forward as a prerequisite for Part 6's
+  noise-matching step specifically (see Part 2 entry above) — fix it once, reuse in both.
+- **Part 5's joint image+mask architecture is genuinely unresolved** (channel-expansion fine-tune
+  of Part 2's checkpoint vs. a from-scratch small joint model vs. adapting an existing published
+  recipe) — higher implementation risk than the straight swap-ins in Parts 3-4, flagged in Part
+  5's own section above. Decide the concrete architecture at implementation time, not here.
