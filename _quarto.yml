@@ -179,6 +179,8 @@ website:
             href: posts/series/synthetic-data/03-controlnet-conditioned-diffusion.qmd
           - text: "4. Flux-Based Mask-Conditioned Generation"
             href: posts/series/synthetic-data/04-flux-mask-conditioned-generation.qmd
+          - text: "5. Joint Image and Mask Diffusion"
+            href: posts/series/synthetic-data/05-joint-image-mask-diffusion.qmd
       - section: "Paper of the Week"
         collapse: true
         collapsed: true

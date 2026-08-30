@@ -22,5 +22,6 @@ notebooks/synthetic-data-xray/.data_cache/
 notebooks/synthetic-data-xray/diffusion_out/
 notebooks/synthetic-data-xray/controlnet_out/
 notebooks/synthetic-data-xray/flux_out/
+notebooks/synthetic-data-xray/joint_out/
 
 **/*.quarto_ipynb

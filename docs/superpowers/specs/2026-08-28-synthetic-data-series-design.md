@@ -197,7 +197,25 @@ provides. This becomes the baseline the later parts are compared against in Part
   limitation Part 2 found looks shared across every latent diffusion model tested, not specific to
   SD1.5. A real negative result, reported as such rather than reframed as a win.
 
-## Part 5 — Joint image+mask diffusion generation
+## Part 5 — Joint image+mask diffusion generation (shipped)
+
+**Resolved 2026-08-29**: literature check done (search terms below) — found MedSegFactory
+(dual-stream diffusion, cross-attention between an image stream and a mask stream), confirming
+the "real" version of this idea is a bigger undertaking than fits here. Went with the from-scratch
+option: a small `UNet2DModel` (16.06M params, `in_channels=out_channels=2`, no VAE, no text
+encoder, no pretrained weights anywhere), trained directly in pixel space at 64x64 on the stacked
+(image, mask) pair, real DDPM, 2000 real steps.
+
+**Real result — a genuine, informative negative result, not a technicality**: real sample quality
+(checked via `sample_joint`'s actual reverse-diffusion loop at multiple checkpoints, not inferred
+from loss) peaked around step 500 (real emerging texture + small sparse mask specks) and had
+fully collapsed to near-uniform, low-diversity noise by step 2000 — the checkpoint the run's own
+`--steps 2000` default would have shipped. The training loss curve does **not** show this
+degradation at all; it drops fast and stays low-and-flat for the entire back half of training,
+looking equally "converged" at step 500 and step 2000. Real, general, worth-remembering lesson:
+noise-prediction MSE loss does not track sampling quality reliably on a small dataset/model, and
+checkpoint selection needs real generated samples, not just the loss curve. Weakest visual result
+of Parts 2-5 by direct inspection — reported as such.
 
 **The idea, and why it's different from Parts 2-4:** every prior diffusion part treats the mask
 as a *conditioning input* — something drawn (Part 2's synthetic crack), or lifted from a real
@@ -237,7 +255,9 @@ training-progress curve, given how visual the joint-output format already is.
   shapes (the same Otsu-refined silhouettes Part 3 uses) — does a jointly-generated mask actually
   look more like a real defect silhouette than a hand-drawn crack or a copied one?
 - Feeds into Part 6 as a third candidate technique alongside Part 3's ControlNet conditioning and
-  Part 4's Flux base model.
+  Part 4's Flux base model — **update after shipping**: given the real negative result above, Part
+  6 likely does not carry joint generation forward as-is (nothing here to combine, since even its
+  best checkpoint underperformed); note that explicitly in Part 6 rather than silently dropping it.
 
 ## Part 6 — Combining what works
 
