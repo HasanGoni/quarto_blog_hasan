@@ -20,7 +20,8 @@ from first-principles physics to learned generative models, using the real, publ
 Every post ends with an honest limitation, not just a win -- same ethos as the
 [Local-AI Defect Inspection](../local-ai-defect-inspection/index.qmd) series, which this one
 complements: that series evaluates and fine-tunes models on real defect data; this one is about
-generating more of it.
+generating more of it. The [Video & Sound Generation](../video-sound-generation/index.qmd) series
+picks up the same real GDXray data and asks the video+audio version of this question.
 
 ### Posts in this series
 
@@ -44,9 +45,10 @@ generating more of it.
    the bigger model was *less* visible than Part 2's on the identical test case.
 5. **Part 5** -- [Joint Image and Mask Diffusion](05-joint-image-mask-diffusion.qmd). A
    from-scratch model trained to generate the defect image *and* its mask together, no
-   conditioning at all -- directly inspired by NVIDIA's MAISI architecture, scoped to 2D. An
-   honest negative result: it overfit, and the training loss never showed it -- real sample
-   quality peaked mid-training and collapsed by the end, the weakest result in the series so far.
+   conditioning at all -- directly inspired by NVIDIA's MAISI architecture, scoped to 2D. First
+   run overfit with no warning from the loss curve; revised after a reader question surfaced a
+   missing standard technique (EMA weight smoothing) -- real, better, still-imperfect results
+   after adding it, still the weakest method in the series so far, but closer.
 6. **Part 6** -- Combining what works. Takes whichever of Parts 3-5 actually helped, combines it
    with Part 1's calibrated noise model, and reports whether the improvements actually stack.
    Coming soon.

@@ -217,6 +217,20 @@ noise-prediction MSE loss does not track sampling quality reliably on a small da
 checkpoint selection needs real generated samples, not just the loss curve. Weakest visual result
 of Parts 2-5 by direct inspection — reported as such.
 
+**Revised 2026-08-30, prompted by a reader question**: asked why a from-scratch model would
+underperform MAISI's *harder* 3D version of the same idea. Honest answer: the first run was
+missing EMA (exponential moving average) weight smoothing — a standard part of essentially every
+real diffusion training recipe, including MAISI's, that this post's first pass skipped, not a
+limit of the joint-generation idea itself. Added `diffusers`' own `EMAModel` (decay=0.995, tuned
+to this run's real 2000-step budget, not the library's 0.9999 default sized for much longer runs)
+and reran. Result: genuinely better, still genuinely imperfect. The good-sample region widened
+from a narrow step-500 peak to a stable step-500–1000 plateau, and the step-2000 checkpoint no
+longer uniformly collapses (roughly half its panels still show real structure, versus zero before).
+The loss curve still shows none of this — same shape, same blindness to sample quality, with or
+without EMA. Real defect *localization* still never emerges cleanly in any checkpoint; the model
+learns the background texture distribution well before it learns to place a small, legible defect
+in it. Still the weakest result of Parts 2-5, now for a narrower, more honest reason.
+
 **The idea, and why it's different from Parts 2-4:** every prior diffusion part treats the mask
 as a *conditioning input* — something drawn (Part 2's synthetic crack), or lifted from a real
 defect crop (Part 3's ControlNet silhouette) — that tells the model *where* to generate, not

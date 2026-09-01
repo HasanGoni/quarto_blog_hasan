@@ -16,6 +16,8 @@ structured as multi-part series rather than one-off posts.
 - **Vim Mastery** — editing efficiently from survival mode to advanced usage
 - **Synthetic Data Series** — generating synthetic X-ray defect images for industrial inspection
   when real examples are scarce (physics, diffusion, GANs, cut-paste, compared)
+- **Video & Sound Generation Series** — applying joint video+audio generation models to real
+  industrial-inspection X-ray imagery
 
 ## Local development
 

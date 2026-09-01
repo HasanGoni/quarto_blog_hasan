@@ -23,5 +23,9 @@ notebooks/synthetic-data-xray/diffusion_out/
 notebooks/synthetic-data-xray/controlnet_out/
 notebooks/synthetic-data-xray/flux_out/
 notebooks/synthetic-data-xray/joint_out/
+notebooks/synthetic-data-xray/joint_out_ema/
+notebooks/video-sound-xray/.venv/
+notebooks/video-sound-xray/out/
+notebooks/video-sound-xray/*.log
 
 **/*.quarto_ipynb

@@ -1,0 +1,29 @@
+---
+title: "Video & Sound Generation Series"
+description: "Applying joint video+audio generation models to real industrial-inspection X-ray imagery -- what a general-purpose model can and can't do when handed one real radiograph and asked to imagine motion and sound around it."
+author: "Hasan Goni"
+date: last-modified
+categories: [series, computer-vision, video-generation, audio-generation, X-ray]
+image: images/vsxray-eli5-sketch.png
+toc: true
+---
+
+## Series Overview
+
+Every post in the [Synthetic Data Series](../synthetic-data/index.qmd) generates a single static
+image. Real industrial inspection is often a video problem -- radioscopy scan heads and conveyors
+moving parts past an X-ray detector, with real ambient mechanical sound alongside the picture.
+This series asks whether general-purpose joint video+audio generation models, applied to that real
+domain, actually stay *in* that domain -- or quietly drift back to whatever they were trained on
+most.
+
+Same ethos as the rest of this blog: real code, real captured output, honest limitations reported
+alongside anything that works.
+
+### Posts in this series
+
+1. **Part 1** -- [X-ray Inspection Video + Sound Generation](01-xray-inspection-video-sound.qmd).
+   A real GDXray weld radiograph, LTX-2 (a real, non-gated 19B joint video+audio diffusion
+   transformer, int4-quantized to fit real memory constraints), and a real, honest failure mode:
+   the model holds the X-ray domain faithfully for the one real conditioning frame, then drifts
+   into ordinary color industrial photography for the rest of the generated motion.

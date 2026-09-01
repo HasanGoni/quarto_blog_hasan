@@ -33,6 +33,8 @@ website:
             file: posts/series/local-ai-defect-inspection/index.qmd
           - text: "Synthetic Data Series"
             file: posts/series/synthetic-data/index.qmd
+          - text: "Video & Sound Generation Series"
+            file: posts/series/video-sound-generation/index.qmd
           - text: "Paper of the Week"
             file: posts/series/papers/index.qmd
           - text: "Online Course Notes"
@@ -181,6 +183,14 @@ website:
             href: posts/series/synthetic-data/04-flux-mask-conditioned-generation.qmd
           - text: "5. Joint Image and Mask Diffusion"
             href: posts/series/synthetic-data/05-joint-image-mask-diffusion.qmd
+      - section: "Video & Sound Generation Series"
+        collapse: true
+        collapsed: true
+        contents:
+          - text: "Introduction"
+            href: posts/series/video-sound-generation/index.qmd
+          - text: "1. X-ray Inspection Video + Sound Generation"
+            href: posts/series/video-sound-generation/01-xray-inspection-video-sound.qmd
       - section: "Paper of the Week"
         collapse: true
         collapsed: true

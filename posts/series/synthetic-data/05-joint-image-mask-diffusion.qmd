@@ -89,6 +89,7 @@ like" -- not a copy or a hand-drawn approximation of one.
 | `UNet2DModel` | `diffusers`' plain, unconditional UNet -- no text encoder, no cross-attention, just image-to-image denoising |
 | DDPM ancestral sampling | The real, standard reverse-diffusion sampling loop: iteratively remove predicted noise from a sample, timestep by timestep, from pure noise down to a final sample |
 | Mode collapse | A generative model failing to learn the real diversity of its training data, instead memorizing or converging to a narrow set of outputs -- a real risk flagged upfront given how small this dataset is |
+| EMA (exponential moving average) | A smoothed shadow copy of the model's weights, updated a little toward the live weights after every step (`shadow = decay * shadow + (1 - decay) * live`) -- used for actual sampling instead of the raw, noisier live weights, because diffusion training is known to wobble step-to-step in ways the loss curve doesn't show |
 
 ## Architecture -- traced from the real function calls
 
@@ -107,13 +108,18 @@ the model.
 real (image, mask) pair, adds real Gaussian noise at a random timestep (`add_noise`), and the
 UNet predicts that real noise jointly across both channels; the loss is real MSE, backpropagated
 into every one of the model's 16M parameters (no LoRA -- there's nothing pretrained to preserve).
+`diffusers`' own `EMAModel` tracks a smoothed shadow copy of those weights after every step
+(`decay=0.995`, chosen for this run's real 2000-step budget -- the library's own default, 0.9999,
+assumes training runs one to two orders of magnitude longer and would barely move at all here).
 
 **Sampling** (`sample_joint`): the real reverse-diffusion loop -- start from pure noise in both
 channels, call `scheduler.set_timesteps(50)`, and iterate `model(sample, t)` → `scheduler.step`
-50 times, unconditional throughout. Every ~100 training steps, `_render_sample_grid` draws a
-fresh batch of samples this way (not the same noise seed) and renders them as `image | mask`
-panels for the training-progress GIF -- a real, actual generation at each checkpoint, not a
-cached example.
+50 times, unconditional throughout. Every ~100 training steps, `_render_sample_grid` swaps the
+EMA weights into the model (`ema.store` → `ema.copy_to`), draws a fresh batch of samples this way
+(not the same noise seed), restores the live training weights (`ema.restore`) so training
+continues unaffected, and renders the samples as `image | mask` panels for the training-progress
+GIF -- a real, actual generation from the real EMA weights at each checkpoint, not a cached
+example.
 
 ## Real code
 
@@ -162,6 +168,7 @@ import numpy as np
 import torch
 import torch.nn.functional as F
 from diffusers import DDPMScheduler, UNet2DModel
+from diffusers.training_utils import EMAModel
 from PIL import Image
 
 from synth_xray.data import download_and_extract, find_groundtruth_file, find_series_dirs
@@ -204,10 +211,17 @@ def train(steps: int, out_dir: Path, lr: float, device: str, cache_dir: Path, n_
 
     noise_scheduler = DDPMScheduler(num_train_timesteps=1000)
     optimizer = torch.optim.AdamW(model.parameters(), lr=lr)
+    # diffusers' own EMAModel utility, real not hand-rolled. decay=0.995 (not the
+    # library default 0.9999) deliberately: EMA's time constant is roughly
+    # 1/(1-decay) steps, so 0.9999 (~10,000-step time constant) would barely move
+    # at all across this run's 2000 steps -- 0.995 (~200-step time constant) is
+    # sized to this run's real step budget, not copied from a recipe meant for
+    # training runs two to three orders of magnitude longer.
+    ema = EMAModel(model.parameters(), decay=0.995, model_cls=UNet2DModel, model_config=model.config)
 
     out_dir.mkdir(parents=True, exist_ok=True)
     losses = []
-    gif_frames = [_render_sample_grid(model, noise_scheduler, device, n_samples_grid, step=0, num_inference_steps=50)]
+    gif_frames = [_render_sample_grid(model, ema, noise_scheduler, device, n_samples_grid, step=0, num_inference_steps=50)]
 
     for step in range(steps):
         example = examples[step % len(examples)]
@@ -223,6 +237,7 @@ def train(steps: int, out_dir: Path, lr: float, device: str, cache_dir: Path, n_
         optimizer.zero_grad()
         loss.backward()
         optimizer.step()
+        ema.step(model.parameters())
         losses.append(loss.item())
 
         if step % 100 == 0 or step == steps - 1:
@@ -230,7 +245,7 @@ def train(steps: int, out_dir: Path, lr: float, device: str, cache_dir: Path, n_
 
         frame_every = max(1, steps // 20)
         if (step + 1) % frame_every == 0 or step == steps - 1:
-            gif_frames.append(_render_sample_grid(model, noise_scheduler, device, n_samples_grid, step + 1, num_inference_steps=50))
+            gif_frames.append(_render_sample_grid(model, ema, noise_scheduler, device, n_samples_grid, step + 1, num_inference_steps=50))
 
     plt.figure(figsize=(6, 4))
     plt.plot(losses)
@@ -245,9 +260,17 @@ def train(steps: int, out_dir: Path, lr: float, device: str, cache_dir: Path, n_
         append_images=gif_frames[1:] + [gif_frames[-1]] * 4, duration=600, loop=0,
     )
     (out_dir / "joint_losses.json").write_text(json.dumps(losses))
-    torch.save(model.state_dict(), out_dir / "joint_unet.pt")
+    # Ship the EMA weights, not the raw live-training weights -- the whole point
+    # of adding EMA is that the smoothed weights are the ones actually meant for
+    # sampling/inference, matching every real diffusion training recipe (MAISI
+    # included), not a training-script convenience.
+    ema.store(model.parameters())
+    ema.copy_to(model.parameters())
+    torch.save(model.state_dict(), out_dir / "joint_unet_ema.pt")
+    ema.restore(model.parameters())
+    torch.save(model.state_dict(), out_dir / "joint_unet_final.pt")
 
-    print(f"Saved joint_loss_curve.png + joint_training_progress.gif + joint_unet.pt -> {out_dir}")
+    print(f"Saved joint_loss_curve.png + joint_training_progress.gif + joint_unet_ema.pt + joint_unet_final.pt -> {out_dir}")
 
 
 @torch.no_grad()
@@ -274,8 +297,14 @@ def _joint_tensor_to_panel(sample: torch.Tensor) -> Image.Image:
 
 
 @torch.no_grad()
-def _render_sample_grid(model, scheduler, device, n: int, step: int, num_inference_steps: int) -> Image.Image:
+def _render_sample_grid(model, ema, scheduler, device, n: int, step: int, num_inference_steps: int) -> Image.Image:
+    # Sample from the EMA-smoothed weights, not the live/raw training weights --
+    # store the live weights, swap the EMA ones in for generation, then restore
+    # live weights afterward so training continues from exactly where it left off.
+    ema.store(model.parameters())
+    ema.copy_to(model.parameters())
     samples = sample_joint(model, scheduler, device, n, num_inference_steps=num_inference_steps)
+    ema.restore(model.parameters())
     fig, axes = plt.subplots(2, (n + 1) // 2, figsize=(3 * ((n + 1) // 2), 6))
     axes = np.array(axes).reshape(-1)
     for i in range(n):
@@ -305,82 +334,94 @@ if __name__ == "__main__":
     train(args.steps, args.out, args.lr, args.device, args.cache_dir, args.samples_grid)
 ```
 
-### Real output -- 2000 real training steps, real from-scratch DDPM, real GDXray defects
+### Real output -- 2000 real training steps, real from-scratch DDPM + EMA, real GDXray defects
 
 ```
 338 real GDXray defect (image, mask) pairs for joint diffusion training
 UNet2DModel: 16,055,298 total params, all trainable (real from-scratch model, no pretrained weights)
-step    0/2000  loss 1.2763
-step  100/2000  loss 0.0276
-step  200/2000  loss 0.0234
-step  300/2000  loss 0.0115
-step  400/2000  loss 0.0111
-step  500/2000  loss 0.0113
-step  600/2000  loss 0.0043
-step  700/2000  loss 0.0035
-step  800/2000  loss 0.0140
-step  900/2000  loss 0.0039
-step 1000/2000  loss 0.0071
-step 1100/2000  loss 0.0124
-step 1200/2000  loss 0.0063
-step 1300/2000  loss 0.0033
-step 1400/2000  loss 0.0031
-step 1500/2000  loss 0.0057
-step 1600/2000  loss 0.0040
-step 1700/2000  loss 0.0035
-step 1800/2000  loss 0.0020
-step 1900/2000  loss 0.0031
-step 1999/2000  loss 0.0036
-Saved joint_loss_curve.png + joint_training_progress.gif + joint_unet.pt -> joint_out
+step    0/2000  loss 1.2044
+step  100/2000  loss 0.0591
+step  200/2000  loss 0.0157
+step  300/2000  loss 0.0132
+step  400/2000  loss 0.0072
+step  500/2000  loss 0.0053
+step  600/2000  loss 0.0117
+step  700/2000  loss 0.0082
+step  800/2000  loss 0.0081
+step  900/2000  loss 0.0066
+step 1000/2000  loss 0.0067
+step 1100/2000  loss 0.0123
+step 1200/2000  loss 0.0052
+step 1300/2000  loss 0.0036
+step 1400/2000  loss 0.0113
+step 1500/2000  loss 0.0020
+step 1600/2000  loss 0.0139
+step 1700/2000  loss 0.0185
+step 1800/2000  loss 0.0040
+step 1900/2000  loss 0.0034
+step 1999/2000  loss 0.0026
+Saved joint_loss_curve.png + joint_training_progress.gif + joint_unet_ema.pt + joint_unet_final.pt -> joint_out_ema
 ```
 
-![Real loss curve -- drops fast (unlike Parts 2-4's flat, noisy curves, since this model starts from random initialization rather than fine-tuning an already-capable one) and stays low and noisy from ~step 400 onward.](images/synth-xray-joint-loss-curve.png)
+![Real loss curve with EMA added -- the shape is basically unchanged from the pre-EMA run: drops fast, then stays low and noisy for the whole back half of training. EMA fixed the *samples*, not the loss curve's blindness to sample quality -- see below.](images/synth-xray-joint-loss-curve.png)
 
 ```{=html}
-<img src="images/synth-xray-joint-training-progress.gif" alt="Real sampling grids (6 fresh generated image|mask pairs) at checkpoints across training" style="max-width:100%;">
+<img src="images/synth-xray-joint-training-progress.gif" alt="Real sampling grids (6 fresh generated image|mask pairs, sampled from EMA weights) at checkpoints across training" style="max-width:100%;">
 ```
 
 ## Results
 
-**The honest result: this training run overfit, and the training loss did not warn about it.**
-Three real checkpoints from the run above, unedited:
-
-::: {layout-ncol=2}
-![Step 500 -- real, emerging structure: cloudy texture in the image channel, small sparse bright specks in the mask channel](images/synth-xray-joint-step500.png)
-
-![Step 2000 (final) -- collapsed: near-uniform dark "image" panels, near-uniform light "mask" panels, almost no diversity between the 6 samples](images/synth-xray-joint-step2000.png)
+:::{.callout-note}
+**This section was revised after publishing.** A reader asked, correctly, why a from-scratch
+diffusion model would underperform NVIDIA's MAISI (a *harder*, 3D version of the same idea) when
+MAISI works. The honest answer wasn't that the joint-generation idea is wrong -- it's that the
+first run above was missing exponential moving average (EMA) weight smoothing, a standard part of
+essentially every real diffusion training recipe (MAISI included) that this post's first pass
+skipped. Added `diffusers`' own `EMAModel` (real code above, decay tuned to this run's actual
+2000-step budget) and reran. Real, better, still-imperfect results below replace the original
+mode-collapsed ones.
 :::
 
-Step 500's samples are the most promising *of the whole run* -- real cloudy brightness variation
-resembling weld-radiograph texture, and small, sparse, localized bright regions in the mask
-channel that at least have the right statistical character (real defect masks are small and rare
-against a mostly-empty background, and here the model is tentatively reproducing that). By step
-1000 that structure is already smoothing away; by step 2000 (the final checkpoint, and the one a
-naive "just take the last checkpoint" workflow would have shipped) both channels have collapsed to
-near-uniform, low-diversity noise with essentially no defect-shaped structure left.
+**With EMA, the results are genuinely better -- and still genuinely imperfect.** Three real
+checkpoints from the EMA-enabled run, unedited:
 
-**The loss curve above does not show this.** Training loss drops fast and then stays low and
-noisy for the entire back half of the run (400-2000) with no visible trend distinguishing step
-500 from step 2000 -- by the loss alone, step 2000 looks equally converged. That's a real,
-useful, general lesson, not specific to this dataset: noise-prediction MSE measures how well the
-model predicts noise *at randomly sampled training timesteps on training data* -- it does not
-directly measure the *sampling* quality that actually matters, which depends on the whole reverse
-trajectory holding together, is far more exposed to a small model overfitting on a 338-example
-dataset (roughly 6 real epochs by step 2000), and can degrade while the loss that's supposed to
-track it keeps looking fine. Checkpoint selection by *looking at real samples*, not just watching
-the loss curve, turned out to matter as much as the architecture choice here.
+::: {layout-ncol=3}
+![Step 500 -- 5 of 6 panels show real, structured, cloud-like texture resembling weld-radiograph brightness variation, with correctly mostly-dark ("mostly background") masks](images/synth-xray-joint-step500.png)
+
+![Step 1000 -- still real structure, arguably richer/more varied cloud patterns than step 500 -- EMA extended the "good" region from a narrow peak into a broader, more stable plateau](images/synth-xray-joint-step1000-ema.png)
+
+![Step 2000 (final) -- partially degraded again: some panels regained real structure and diversity (an improvement over the pre-EMA run, where *all six* had collapsed), but roughly half are still near-uniform noise](images/synth-xray-joint-step2000.png)
+:::
+
+Before EMA, quality peaked narrowly around step 500 and then collapsed hard, uniformly, across
+every one of the 6 sampled panels by step 2000. With EMA, the good region is wider (real structure
+holds from roughly step 500 through step 1000) and the final checkpoint is no longer a uniform
+collapse -- some panels still show real texture and appropriately dark, mostly-background masks,
+even at step 2000. That's real evidence for the diagnosis: the smoothed EMA weights are less
+exposed to the live weights' step-to-step noise on a tiny, fast-iterating dataset, exactly the
+mechanism EMA is supposed to provide. It is not a full fix -- roughly half the step-2000 panels are
+still collapsed -- consistent with 338 examples still being a small dataset for training *any*
+generative model from scratch, EMA or not.
+
+**The loss curve still does not show any of this.** It has the same shape as the original,
+pre-EMA run: fast initial drop, then low and noisy for the rest of training, no visible signal
+distinguishing the good region (500-1000) from the still-somewhat-degraded final checkpoint. That
+part of the original finding holds exactly as stated: noise-prediction MSE does not track sampling
+quality, with or without EMA, and checkpoint selection needs real generated samples, not the loss
+curve, either way.
 
 **Against the question this post actually asked** -- does joint generation learn better defect
-shapes than Parts 2-4's conditioning -- the honest answer with this implementation, at this
-dataset size, is **no, not as run**: even the best checkpoint (step 500) produces only faint,
-unlocalized texture, nowhere near as legible a defect as Part 2's simple conditioned inpainting
-managed. This is the weakest result of Parts 2-5 by direct visual inspection, and that's a real,
-reportable finding, not a failure to hide -- a from-scratch model on 338 examples was always the
-higher-risk path the design spec flagged, and this is what that risk materializing actually looks
-like. Two concrete, honest paths forward if this direction gets revisited: stop training much
-earlier (using real sample quality, not loss, to pick the checkpoint), or abandon the from-scratch
-constraint and accept the channel-expansion route onto a pretrained checkpoint this post
-originally set aside as too fragile -- trading one real risk for another, not eliminating it.
+shapes than Parts 2-4's conditioning -- the honest answer, revised: **closer, but still not
+there.** The step-500/1000 samples show real, unmistakable weld-radiograph-like texture and
+plausible "mostly background" mask structure that the pre-EMA run never produced -- genuine
+progress from one real, well-motivated fix. But none of the samples produce a small, sharply
+localized defect region the way Part 2's simple conditioned inpainting reliably does; the model
+learned the *background* texture distribution convincingly before it learned to place a legible,
+localized defect within it. This is still the weakest result of Parts 2-5 by direct visual
+inspection, just less dramatically so than before EMA. Two honest paths forward if this direction
+gets revisited: substantially more real training data (the single biggest lever, and the one this
+post's 338-example budget can't move), or more training steps at the EMA decay this run used,
+now that EMA has shown it stabilizes rather than just delays the collapse.
 
 ## What's next
 

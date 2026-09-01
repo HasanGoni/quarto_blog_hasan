@@ -1,0 +1,26 @@
+[project]
+name = "video-sound-xray"
+version = "0.1.0"
+description = "Joint video+audio generation from a real GDXray weld radiograph, using LTX-2 (Lightricks) via diffusers' LTX2Pipeline -- Part 1 of the Video & Sound Generation series."
+requires-python = ">=3.11"
+dependencies = [
+    "torch>=2.4",
+    "torchvision>=0.19",
+    "diffusers>=0.40.0",
+    "transformers>=4.57",
+    "accelerate>=0.34",
+    "bitsandbytes>=0.45",
+    "pillow>=10.4",
+    "numpy",
+    "scipy",
+    "scikit-image",
+    "gdown",
+    "huggingface_hub>=0.25",
+    "imageio[ffmpeg]>=2.34",
+    "av",
+    "soundfile>=0.12",
+    "matplotlib>=3.9",
+]
+
+[tool.uv]
+package = false

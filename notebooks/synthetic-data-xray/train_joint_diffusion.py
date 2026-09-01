@@ -40,6 +40,7 @@ import numpy as np
 import torch
 import torch.nn.functional as F
 from diffusers import DDPMScheduler, UNet2DModel
+from diffusers.training_utils import EMAModel
 from PIL import Image
 
 from synth_xray.data import download_and_extract, find_groundtruth_file, find_series_dirs
@@ -82,10 +83,17 @@ def train(steps: int, out_dir: Path, lr: float, device: str, cache_dir: Path, n_
 
     noise_scheduler = DDPMScheduler(num_train_timesteps=1000)
     optimizer = torch.optim.AdamW(model.parameters(), lr=lr)
+    # diffusers' own EMAModel utility, real not hand-rolled. decay=0.995 (not the
+    # library default 0.9999) deliberately: EMA's time constant is roughly
+    # 1/(1-decay) steps, so 0.9999 (~10,000-step time constant) would barely move
+    # at all across this run's 2000 steps -- 0.995 (~200-step time constant) is
+    # sized to this run's real step budget, not copied from a recipe meant for
+    # training runs two to three orders of magnitude longer.
+    ema = EMAModel(model.parameters(), decay=0.995, model_cls=UNet2DModel, model_config=model.config)
 
     out_dir.mkdir(parents=True, exist_ok=True)
     losses = []
-    gif_frames = [_render_sample_grid(model, noise_scheduler, device, n_samples_grid, step=0, num_inference_steps=50)]
+    gif_frames = [_render_sample_grid(model, ema, noise_scheduler, device, n_samples_grid, step=0, num_inference_steps=50)]
 
     for step in range(steps):
         example = examples[step % len(examples)]
@@ -101,6 +109,7 @@ def train(steps: int, out_dir: Path, lr: float, device: str, cache_dir: Path, n_
         optimizer.zero_grad()
         loss.backward()
         optimizer.step()
+        ema.step(model.parameters())
         losses.append(loss.item())
 
         if step % 100 == 0 or step == steps - 1:
@@ -108,7 +117,7 @@ def train(steps: int, out_dir: Path, lr: float, device: str, cache_dir: Path, n_
 
         frame_every = max(1, steps // 20)
         if (step + 1) % frame_every == 0 or step == steps - 1:
-            gif_frames.append(_render_sample_grid(model, noise_scheduler, device, n_samples_grid, step + 1, num_inference_steps=50))
+            gif_frames.append(_render_sample_grid(model, ema, noise_scheduler, device, n_samples_grid, step + 1, num_inference_steps=50))
 
     plt.figure(figsize=(6, 4))
     plt.plot(losses)
@@ -123,9 +132,17 @@ def train(steps: int, out_dir: Path, lr: float, device: str, cache_dir: Path, n_
         append_images=gif_frames[1:] + [gif_frames[-1]] * 4, duration=600, loop=0,
     )
     (out_dir / "joint_losses.json").write_text(json.dumps(losses))
-    torch.save(model.state_dict(), out_dir / "joint_unet.pt")
+    # Ship the EMA weights, not the raw live-training weights -- the whole point
+    # of adding EMA is that the smoothed weights are the ones actually meant for
+    # sampling/inference, matching every real diffusion training recipe (MAISI
+    # included), not a training-script convenience.
+    ema.store(model.parameters())
+    ema.copy_to(model.parameters())
+    torch.save(model.state_dict(), out_dir / "joint_unet_ema.pt")
+    ema.restore(model.parameters())
+    torch.save(model.state_dict(), out_dir / "joint_unet_final.pt")
 
-    print(f"Saved joint_loss_curve.png + joint_training_progress.gif + joint_unet.pt -> {out_dir}")
+    print(f"Saved joint_loss_curve.png + joint_training_progress.gif + joint_unet_ema.pt + joint_unet_final.pt -> {out_dir}")
 
 
 @torch.no_grad()
@@ -152,8 +169,14 @@ def _joint_tensor_to_panel(sample: torch.Tensor) -> Image.Image:
 
 
 @torch.no_grad()
-def _render_sample_grid(model, scheduler, device, n: int, step: int, num_inference_steps: int) -> Image.Image:
+def _render_sample_grid(model, ema, scheduler, device, n: int, step: int, num_inference_steps: int) -> Image.Image:
+    # Sample from the EMA-smoothed weights, not the live/raw training weights --
+    # store the live weights, swap the EMA ones in for generation, then restore
+    # live weights afterward so training continues from exactly where it left off.
+    ema.store(model.parameters())
+    ema.copy_to(model.parameters())
     samples = sample_joint(model, scheduler, device, n, num_inference_steps=num_inference_steps)
+    ema.restore(model.parameters())
     fig, axes = plt.subplots(2, (n + 1) // 2, figsize=(3 * ((n + 1) // 2), 6))
     axes = np.array(axes).reshape(-1)
     for i in range(n):
