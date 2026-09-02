@@ -154,6 +154,38 @@ list entry, following the exact same wiring pattern as every other series in thi
 `index.qmd` given the thematic overlap (industrial inspection, GDXray), without merging the two
 series.
 
+## Part 2 — video conditioning vs. Part 1's single-image conditioning (shipped 2026-09-02)
+
+User asked about a technique they'd heard of ("insert this video and next time it is better") --
+real web research confirmed this matches LTX-2's own documented "video conditioning" / "Extend
+Video" feature (a "Video Strength" + "Context Duration" mechanism, real sources: MindStudio's
+LTX-2.3 video-to-video writeup, Scenario's LTX-2 Extend Video docs, LTX's own character-
+consistency blog post), exposed in `diffusers` as `LTX2ConditionPipeline` +
+`LTX2VideoCondition(frames=<PIL image(s) or video>, index=int, strength=float)`. Real, testable
+hypothesis: does conditioning on *many* real frames (not just one) hold the X-ray domain longer
+than Part 1's single-frame conditioning did?
+
+**Method** (`generate_video_sound_conditioned.py`): same model, same int4 quantization strategy,
+same prompt/negative prompt, same output settings (768x512, 121 frames, 30 steps) as Part 1 --
+only variable changed is the conditioning signal: the real seed image repeated 41 times (~1.7s)
+as a `LTX2VideoCondition(frames=[seed]*41, index=0, strength=1.0)`, vs. Part 1's single frame.
+`LTX2ConditionPipeline` shares the exact same component set as `LTX2ImageToVideoPipeline`, so
+`build_pipeline` needed only a pipeline-class swap, not new loading logic.
+
+**Real result, quantified, not just eyeballed**: mean color saturation (RGB max-min/max) at
+matched frame indices (0/60/119) -- Part 1 late frames: 0.097-0.101; Part 2 late frames:
+0.0033-0.0086, roughly 12-30x lower. Video conditioning **dramatically reduced color drift** --
+the drifted-to content stayed monochrome/grayscale throughout, unlike Part 1's clear shift to
+full color. But it did **not** fix content/semantic drift: by mid-clip the visible content still
+shifts from X-ray radiograph texture to what reads as black-and-white industrial-machinery
+footage -- a real, different failure mode (grayscale drift, not color drift), not a full fix.
+**Real tradeoff, also measured, not assumed**: audio got dramatically quieter under the longer
+video condition (`ffmpeg volumedetect`: mean -71.3dB / max -66.8dB, vs. Part 1's mean -44.5dB /
+max -31.4dB) -- holding the visual domain harder seems to have suppressed the audio branch's
+generative freedom. Memory and generation time were unchanged (24.52GB build / 29.95GB peak /
+~1154s generation, matching Part 1 almost exactly) -- video conditioning cost nothing extra on
+either axis here, thanks to the same tiling-bounded memory ceiling found in Part 1.
+
 ## Open risks / follow-ups (not blockers)
 
 - Whether `diffusers`' `LTX2Pipeline` support is mature/stable given how recently LTX-2 shipped

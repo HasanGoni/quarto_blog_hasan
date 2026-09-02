@@ -27,3 +27,8 @@ alongside anything that works.
    transformer, int4-quantized to fit real memory constraints), and a real, honest failure mode:
    the model holds the X-ray domain faithfully for the one real conditioning frame, then drifts
    into ordinary color industrial photography for the rest of the generated motion.
+2. **Part 2** -- [Video Conditioning vs. Single-Frame Conditioning](02-video-conditioning-vs-single-frame.qmd).
+   A reader question about a real LTX-2 feature -- conditioning on many real frames instead of
+   one -- tested directly against Part 1. Real, measured result: color drift drops roughly
+   12-30x, but content drift (X-ray texture to industrial-machinery footage) persists, and audio
+   gets noticeably quieter. A real partial fix, not a full one.

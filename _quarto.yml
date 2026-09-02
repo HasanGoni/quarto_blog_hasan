@@ -191,6 +191,8 @@ website:
             href: posts/series/video-sound-generation/index.qmd
           - text: "1. X-ray Inspection Video + Sound Generation"
             href: posts/series/video-sound-generation/01-xray-inspection-video-sound.qmd
+          - text: "2. Video Conditioning vs. Single-Frame Conditioning"
+            href: posts/series/video-sound-generation/02-video-conditioning-vs-single-frame.qmd
       - section: "Paper of the Week"
         collapse: true
         collapsed: true
