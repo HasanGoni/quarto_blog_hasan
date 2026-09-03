@@ -52,7 +52,12 @@ picks up the same real GDXray data and asks the video+audio version of this ques
 6. **Part 6** -- Combining what works. Takes whichever of Parts 3-5 actually helped, combines it
    with Part 1's calibrated noise model, and reports whether the improvements actually stack.
    Coming soon.
-7. **Part 7** -- GAN-based synthesis. Coming soon.
+7. **Part 7** -- [GAN-Based Synthesis](07-gan-based-synthesis.qmd). A distinct third generative
+   family: a from-scratch, defect-aware conditional GAN. The adversarial half broke almost
+   immediately (the discriminator dominated by step 100 of 3000) -- exactly the failure mode
+   this series' design spec predicted -- and the L1 reconstruction term alone produced a real,
+   visible defect mark, but with an architecture-specific checkerboard artifact that inflates
+   local texture variance *above* the real defect's own.
 8. **Part 8** -- Cut-paste + Poisson blending baseline. Coming soon.
 9. **Part 9** -- Post-training a real detector on synthetic data (the payoff). Post-trains the
    same baseline detector separately on real+synthetic splits from every method above, ablates

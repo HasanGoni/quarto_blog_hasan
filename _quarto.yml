@@ -183,6 +183,8 @@ website:
             href: posts/series/synthetic-data/04-flux-mask-conditioned-generation.qmd
           - text: "5. Joint Image and Mask Diffusion"
             href: posts/series/synthetic-data/05-joint-image-mask-diffusion.qmd
+          - text: "7. GAN-Based Synthesis"
+            href: posts/series/synthetic-data/07-gan-based-synthesis.qmd
       - section: "Video & Sound Generation Series"
         collapse: true
         collapsed: true

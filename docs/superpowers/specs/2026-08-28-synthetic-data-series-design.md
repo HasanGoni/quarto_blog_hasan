@@ -288,10 +288,23 @@ training-progress curve, given how visual the joint-output format already is.
   generation's learned shapes fighting an externally-supplied ControlNet silhouette)? Report
   whatever's actually found.
 
-## Part 7 — GAN-based synthesis
+## Part 7 — GAN-based synthesis (shipped 2026-09-04)
 
 - Small GAN (DFMGAN-style: defect-aware generator conditioned on a mask + defect-free base)
   trained on the same GDXray defect crops.
+
+**Real result**: pix2pix-style conditional GAN (6.3M-param U-Net generator, 663K-param
+PatchGAN discriminator, LSGAN + λ=100 L1 loss), 128x128, from scratch, 3000 real steps on the
+same 338 real GDXray Welds examples. The predicted instability happened exactly as expected --
+D's loss collapsed to ~0 and G's adversarial loss pinned near LSGAN's max (~1.0) by step 100,
+meaning ~97% of training ran with no real adversarial gradient; L1 alone drove all visible
+improvement. Real, measured on the same standard test mask/window every part uses: contrast
+19.67 (between Part 2's 46.1 and Part 4's 1.8 -- a real, moderate, visible mark), but local std
+in the defect ROI came out to 16.28 -- *higher* than the real defect's own 4.45, and far above
+every other method's 0.79-0.94 cluster. Traced to a real, visible transposed-convolution
+checkerboard artifact in the training GIF, not genuine texture detail -- a distinct, GAN-specific
+failure mode from any other part's finding so far. Real code:
+`notebooks/synthetic-data-xray/train_gan.py` + `generate_gan_comparison.py`.
 - A distinct third generative family, independent of the diffusion track in Parts 2-6.
 - Honest-limitation angle expected: GANs are notoriously unstable on small datasets — likely
   mode collapse or training instability with so few real examples. That's a legitimate, useful
