@@ -18,6 +18,11 @@ structured as multi-part series rather than one-off posts.
   when real examples are scarce (physics, diffusion, GANs, cut-paste, compared)
 - **Video & Sound Generation Series** — applying joint video+audio generation models to real
   industrial-inspection X-ray imagery
+- **Image Registration Series** — aligning drifted semiconductor inspection images back to a
+  golden reference: classical (phase correlation, ECC, SIFT+RANSAC) vs. deep learning (a
+  from-scratch affine CNN, LoFTR deep feature matching, a VoxelMorph-style deformable network),
+  scored against a synthetic ground-truth benchmark, plus which methods are actually licensed
+  for company use
 
 ## Local development
 

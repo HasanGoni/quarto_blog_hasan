@@ -1,0 +1,52 @@
+---
+title: "Image Registration Series"
+description: "Aligning drifted semiconductor inspection images back to a golden reference -- classical methods (phase correlation, ECC, SIFT+RANSAC) vs. deep learning (a from-scratch affine CNN, LoFTR deep feature matching, a VoxelMorph-style deformable network), scored against a synthetic ground-truth benchmark, plus which methods are actually licensed for company use."
+author: "Hasan Goni"
+date: last-modified
+categories: [series, computer-vision, image-registration, deep-learning, semiconductor]
+image: images/benchmark-pairs.png
+toc: true
+---
+
+## Series Overview
+
+A wafer stage vibrates. A die heats up a few microns off its nominal position between one
+inspection frame and the next. A part gets re-fixtured slightly rotated. None of that is a defect
+-- it's just the image having moved -- but every downstream step (die-to-die comparison,
+overlay metrology, a defect detector trained on a fixed coordinate frame) assumes the image
+*hasn't* moved. **Image registration** is the fix: finding the transform that maps a drifted
+image back onto a reference frame so the two line up pixel-for-pixel again.
+
+This series builds a small, fully-controlled synthetic benchmark -- a golden "die image" plus two
+known-drift scenarios (pure rigid/affine stage drift, and affine drift plus a smooth local elastic
+warp standing in for thermal drift) -- specifically so every method below can be scored against
+ground truth in pixels, not eyeballed from an overlay. Every method runs on the *same* pair, with
+real code, so the comparison is apples-to-apples. Same ethos as the rest of this blog: real code,
+real captured numbers, honest limitations reported alongside anything that works -- including a
+phase-correlation failure mode that turned out to be a genuinely useful lesson about periodic
+industrial patterns.
+
+The last post in the series is the one that prompted the whole series: **which of these methods
+are actually licensed for company (not just research) use** -- because a permissive code license
+and a permissive pretrained-weights license are two different questions, and popular papers
+(SuperGlue/SuperPoint) are a real trap here.
+
+### Posts in this series
+
+1. **Part 1** -- [The Benchmark and Classical Methods](01-classical-methods.qmd). Builds the
+   synthetic die-image benchmark with known ground-truth drift, then runs phase correlation, ECC,
+   and SIFT+RANSAC against it -- including an honest, explained failure: phase correlation gets
+   confused by the image's own periodic grid pattern.
+2. **Part 2** -- [Deep Learning: Affine Regression and Deep Feature Matching](02-dl-affine-and-feature-matching.qmd).
+   A from-scratch CNN trained unsupervised to regress an affine transform, and LoFTR (a
+   transformer-based deep feature matcher) as the commercially-licensed alternative to
+   SuperGlue/SuperPoint -- with a genuinely surprising result about which one actually wins.
+3. **Part 3** -- [Deep Learning: Deformable Registration](03-dl-deformable-registration.qmd). A
+   from-scratch VoxelMorph-style network (U-Net + spatial transformer, trained unsupervised on a
+   similarity + smoothness loss) -- the only method in the series that can actually correct the
+   non-rigid "thermal drift" scenario, since every affine-only method above hits a hard floor
+   there by construction.
+4. **Part 4** -- [Head-to-Head, Licensing, and the Recommendation](04-comparison-licensing-recommendation.qmd).
+   Every method's measured accuracy side by side, a license table (code license *and* pretrained-
+   weights license, checked separately), and a concrete recommendation for semiconductor
+   inspection work.

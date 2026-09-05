@@ -1,0 +1,282 @@
+---
+title: "3 Papers Worth Reading — Week of September 3, 2026"
+author: "Hasan Goni"
+date: 2026-09-03
+categories: ["papers", "weekly-pick", "computer-vision", "remote-sensing", "anomaly-detection", "segmentation"]
+toc: true
+series:
+  name: "Paper of the Week"
+  number: 8
+paper-urls:
+  - https://arxiv.org/abs/2609.02187
+  - https://arxiv.org/abs/2609.02075
+  - https://arxiv.org/abs/2609.02171
+paper-topics:
+  - "Vision-Language Models"
+  - "Anomaly Detection"
+  - "Segmentation"
+format:
+  html: default
+---
+
+:::{.callout-tip}
+This post is part of the [Paper of the Week](index.qmd) series — a handful of papers a week, picked and explained for my own semiconductor CV/VLM work.
+:::
+
+Three this week, all reader-submitted, all landing closer to home than most weeks: a cheap way to
+point a general VLM at sensor data it was never trained on, a way to generate *realistic*
+industrial anomalies by borrowing them from other products instead of hallucinating them, and a
+weakly-supervised change-detection pipeline built on SAM2 priors. Same format as always:
+one-sentence version, ELI5, jargon buster, then the full data-scientist breakdown with a code
+sketch and an honest read on whether it's actually useful for what I'm building.
+
+## 1. Lightweight Adaptation of General-Purpose VLMs for Multispectral and SAR Image Understanding
+
+[https://arxiv.org/abs/2609.02187](https://arxiv.org/abs/2609.02187) · _Adapts a general VLM to sensor data it's never seen, via prompting + LoRA rather than a new encoder — directly relevant to reusing one VLM checkpoint across multiple inspection sensor types._ · **Vision-Language Models**
+
+### The One-Sentence Version
+
+Instead of building a dedicated encoder for multispectral and SAR (radar) imagery, this paper
+renders each sensor reading as a handful of labeled "views" a general-purpose VLM can already
+look at, then LoRA-tunes the language model and a few vision-transformer components to make sense
+of them.
+
+### Explain it like I'm five
+
+Imagine you have a friend who's great at describing regular photos, but someone hands them a
+weird infrared picture and a radar blip instead. Your friend's never seen those before and
+wouldn't know what to say. This paper's trick: chop the weird data into several normal-looking
+pictures, stick a little label on each one ("this one's the infrared view," "this one's the radar
+view"), and hand your friend the whole stack at once. Your friend already knows how to look at
+*several* pictures together and talk about them — so with a little extra practice, they can figure
+out the new kind too, without having to learn to see all over again.
+
+### Jargon buster
+
+- **Multispectral imagery** — Images captured across several wavelength bands beyond visible RGB (near-infrared, short-wave infrared, etc.), common in satellite/remote-sensing and increasingly in industrial inspection cameras.
+- **SAR (Synthetic Aperture Radar)** — A radar imaging technique that works day or night, through cloud cover — produces images that look nothing like an optical photo.
+- **Multi-image interface** — The ability many VLMs already have to accept several images in one prompt and reason across them jointly (originally built for things like comparing two photos or reading a multi-page document).
+- **LoRA (Low-Rank Adaptation)** — Freeze the pretrained weights, add a small trainable low-rank update on top — a cheap way to specialize a big model.
+- **Land-cover classification** — Labeling each region of a satellite/aerial image by what's physically there (water, forest, urban, bare soil, etc.) — the paper's evaluation task.
+
+### Explain it like I'm a data scientist
+
+**What problem does it solve?**
+
+Multispectral and SAR data don't fit the 3-channel RGB assumption baked into virtually every
+pretrained vision-language model. The standard fix is a dedicated sensor-specific encoder plus
+domain pretraining — expensive, slow to iterate on, and it means every time a better general VLM
+ships, adopting it means redoing all that domain-specific work from scratch.
+
+**How does it solve it?**
+
+Rather than touching the architecture, the authors exploit an interface that's already there: most
+modern VLMs accept multiple images per prompt. A multispectral/SAR observation gets rendered as
+five optical-band views plus one SAR view, each given a short named text label ("NIR band," "SAR
+amplitude," etc.), and passed to the VLM as a normal multi-image conversation. LoRA adapters on
+the language model and select vision-transformer layers then teach the model to actually use the
+extra views instead of ignoring them. No new encoder, no pretraining from scratch — just a
+re-framing of the input plus lightweight fine-tuning.
+
+**Minimal code sketch**
+
+```python
+# Pseudocode -- illustrative, not the paper's actual implementation
+def render_sensor_as_views(multispectral_stack, sar_image):
+    views = []
+    for band_name, band_img in named_optical_bands(multispectral_stack):  # 5 views
+        views.append((f"[{band_name}]", to_rgb_composite(band_img)))
+    views.append(("[SAR amplitude]", to_rgb_composite(sar_image)))        # 1 view
+    return views
+
+def build_prompt(views, question):
+    content = [{"type": "text", "text": label} for label, _ in views]
+    content += [{"type": "image", "image": img} for _, img in views]
+    content.append({"type": "text", "text": question})
+    return content
+
+# LoRA only on the language model + a subset of vision-transformer blocks
+lora_config = LoraConfig(target_modules=["q_proj", "v_proj", "vit.blocks.[-4:]"])
+model = get_peft_model(base_vlm, lora_config)
+```
+
+### Why this matters for my work
+
+The multi-image-as-adapter trick is the actually portable idea here, independent of remote
+sensing. My own inspection stack has several sensor "views" of the same physical defect (raw
+X-ray, a processed/enhanced version, sometimes a visible-light reference shot) — right now those
+get handled by separate pipelines. This paper is a fairly direct argument for instead handing all
+of them to one VLM as labeled multi-image input and LoRA-tuning it, rather than maintaining
+per-sensor encoders. The land-cover classification task itself isn't my domain, but the "reuse the
+multi-image interface instead of building a new encoder" pattern is exactly the kind of low-effort
+adaptation I'd want before reaching for a bespoke fusion architecture.
+
+## 2. DPA: Decoupling Product-Agnostic Anomaly Representations for Zero-shot Anomaly Generation
+
+[https://arxiv.org/abs/2609.02075](https://arxiv.org/abs/2609.02075) · _Generates realistic industrial defects by transferring real anomalies from other products instead of synthesizing from texture/text — the most directly applicable paper this week for my synthetic-defect-data work._ · **Anomaly Detection**
+
+### The One-Sentence Version
+
+Instead of synthesizing a plausible-looking defect from a texture patch or a text prompt, DPA
+learns a product-agnostic "what an anomaly looks like" representation from real defects on *other*
+products, then transfers it onto a new product that has no defect examples of its own.
+
+### Explain it like I'm five
+
+Say you've never seen a scratch on *this* toy car before, but you've seen plenty of scratches on
+*other* toy cars. DPA is like taking a scratch you've seen on a red toy car and carefully
+repainting it onto a blue one — not just copy-pasting the scratch (it wouldn't look right on a
+different shape and color), but understanding "scratch-ness" well enough to redraw a believable
+one in the right spot on the new toy, and even drawing you a little map of exactly where it put
+it.
+
+### Jargon buster
+
+- **Zero-shot anomaly generation** — Producing realistic defect images for a product with *zero* real defect examples of its own to learn from.
+- **Anomaly transfer** — This paper's core idea: reuse real anomalies observed on other, different products rather than synthesizing new ones from scratch.
+- **Product-agnostic anomaly embedding** — A representation of "what kind of defect this is" (scratch, dent, discoloration) that's been stripped of anything specific to the product it was originally observed on, so it can be reapplied elsewhere.
+- **Mismatched data pairs** — Training pairs deliberately drawn from *different* products, forcing the model to learn the defect concept independent of any one product's appearance.
+- **Anomaly type filtering** — A selection step that decides which source-product anomalies are actually plausible to transfer onto a given target product (a rust anomaly doesn't belong on a product that can't rust).
+- **Adaptive mask-guided pipeline** — Controls where and how large the transferred anomaly appears, keeping it spatially and geometrically plausible on the new product.
+- **Training-free labeling** — The pipeline produces a pixel-level ground-truth mask for each generated anomaly automatically, without a separate labeling model or human annotation step.
+
+### Explain it like I'm a data scientist
+
+**What problem does it solve?**
+
+Industrial anomaly detectors need anomaly examples to be good at catching anomalies, but a newly
+deployed product line almost by definition has none yet. Existing zero-shot generation methods
+either paint on a defect-looking texture patch or generate from a text description — both tend to
+produce anomalies that look synthetic, or that don't respect the target product's real geometry
+and material properties, and neither reliably transfers a specific real defect *type* from one
+product to a genuinely different one.
+
+**How does it solve it?**
+
+DPA trains on deliberately mismatched (source-product-anomaly, target-product-normal) pairs so the
+model is forced to encode "this defect's essential character" separately from "this particular
+product's appearance" — a decoupled, product-agnostic anomaly embedding. At generation time, an
+anomaly-type filter first checks which source anomalies are even plausible for the target product,
+a diffusion model conditioned on the transferred embedding renders the defect, and an adaptive
+mask-guided step keeps the result spatially and geometrically consistent with the target image.
+Because the generation process tracks exactly where and how it edited the image, it can emit a
+pixel-level mask for free — no separate labeling pass needed.
+
+**Minimal code sketch**
+
+```python
+# Pseudocode -- illustrative, not the paper's actual implementation
+def train_step(source_anomaly_img, source_product_id, target_normal_img, target_product_id):
+    assert source_product_id != target_product_id  # mismatched pair, by construction
+    anomaly_embedding = anomaly_encoder(source_anomaly_img)   # product-agnostic
+    generated = diffusion_model(target_normal_img, condition=anomaly_embedding)
+    loss = diffusion_loss(generated, target_normal_img, anomaly_embedding)
+    return loss
+
+def generate_for_new_product(target_normal_img, target_product_id, anomaly_bank):
+    candidates = anomaly_type_filter(anomaly_bank, target_product_id)  # plausibility check
+    embedding = sample_embedding(candidates)
+    generated, mask = mask_guided_diffusion(target_normal_img, embedding)  # mask is free
+    return generated, mask
+```
+
+### Why this matters for my work
+
+This is the closest match to something I've directly worked on -- the whole
+[Synthetic Data Series](../synthetic-data/index.qmd) on this blog is exactly this problem
+(scarce real defect examples for semiconductor X-ray inspection), tackled with physics simulation,
+diffusion fine-tuning, ControlNet, and a from-scratch joint model, in that order of increasing
+(and, honestly, decreasing) success. DPA's anomaly-transfer framing is a genuinely different angle
+I haven't tried: instead of generating a defect from a hand-specified shape or a text prompt,
+*borrow* a real one from a different (but related) product line's defect bank -- e.g. transferring
+a void or crack pattern seen on one casting geometry onto a new, defect-free casting geometry with
+no real defect history yet. The free pixel-level mask is exactly the kind of thing Part 1 of that
+series had to hand-engineer through physics inversion; getting it for free from the generation
+process itself would be a real simplification if the anomaly-type filtering holds up on X-ray
+data rather than the paper's presumably more visually distinct RGB industrial textures.
+
+## 3. Progressive Pseudo-Label Optimization for Point-Supervised Change Detection
+
+[https://arxiv.org/abs/2609.02171](https://arxiv.org/abs/2609.02171) · _Uses SAM2 to turn a handful of point clicks into reliable pixel-level pseudo-labels for change detection -- the same "point-to-mask" idea I'd want for cheaply labeling new defect types._ · **Segmentation**
+
+### The One-Sentence Version
+
+A two-stage pipeline turns sparse point annotations on before/after image pairs into full
+pixel-level change masks -- first by using SAM2's segmentation priors to convert points into
+object-aware pseudo-labels, then by refining those labels through a teacher-student self-training
+loop that keeps updating both the model and its own labels.
+
+### Explain it like I'm five
+
+Instead of coloring in every single pixel that changed between a "before" and "after" photo,
+imagine just putting a dot on each spot that changed. That's way faster! But dots alone don't tell
+you the *shape* of the change. This paper uses a smart shape-guessing tool (SAM2) to turn each dot
+into a full outline, then has a "teacher" and a "student" version of the model take turns
+double-checking and improving each other's guesses, over and over, until the outlines get really
+good -- almost as good as if someone had colored in every pixel by hand.
+
+### Jargon buster
+
+- **Point-supervised change detection** — Training a change-detection model using only sparse point clicks marking changed regions, instead of full pixel-level masks -- much cheaper to annotate.
+- **Bi-temporal images** — A pair of images of the same location/object taken at two different times, used to detect what changed between them.
+- **SAM2 priors** — Using SAM2's pretrained, promptable segmentation ability (point-in, mask-out) as a source of high-quality object boundaries, without training a segmentation model from scratch.
+- **Bi-temporal selection strategy** — A rule for deciding, given SAM2's masks on both the before and after image, which regions actually represent a genuine change versus just noisy segmentation.
+- **Uncertainty-aware loss** — A loss function that down-weights pixels the model (or the pseudo-label source) is unsure about, instead of treating every pixel as equally reliable ground truth.
+- **Teacher-student self-training** — A "teacher" model (updated slowly, via exponential moving average of the "student") generates and periodically refreshes pseudo-labels that the faster-updating "student" trains on -- a closed loop that improves both over successive rounds.
+- **Pseudo-label** — A machine-generated label used as if it were ground truth, refined iteratively since it isn't real ground truth to begin with.
+
+### Explain it like I'm a data scientist
+
+**What problem does it solve?**
+
+Fully-supervised change detection needs pixel-accurate masks for every changed region in every
+training pair -- expensive at any real scale. Point annotations are far cheaper, but a handful of
+points per image gives very limited spatial coverage, so pseudo-labels derived naively from them
+tend to be incomplete (missing parts of the changed region) and noisy (imprecise boundaries) --
+both of which directly hurt whatever model trains on them.
+
+**How does it solve it?**
+
+Stage one uses SAM2's promptable segmentation to convert each point click into a full object-aware
+mask on both the before and after image, then a bi-temporal selection strategy decides which of
+those masks actually correspond to real change (versus SAM2 just segmenting an unchanged object
+that happened to be near a point). A lightweight CNN, trained with an uncertainty-aware loss,
+refines the resulting boundaries. Stage two treats this as a starting point rather than a final
+answer: a teacher-student self-training setup (the teacher an EMA of the student) periodically
+regenerates pseudo-labels using the improving model itself, closing the loop between "the labels
+train the model" and "the model improves the labels" across multiple rounds.
+
+**Minimal code sketch**
+
+```python
+# Pseudocode -- illustrative, not the paper's actual implementation
+def stage1_pseudo_labels(before_img, after_img, point_clicks, sam2):
+    masks_before = [sam2.predict(before_img, point=p) for p in point_clicks]
+    masks_after = [sam2.predict(after_img, point=p) for p in point_clicks]
+    change_regions = bi_temporal_select(masks_before, masks_after)  # keep only real changes
+    return refine_boundaries_cnn(change_regions, loss_fn=uncertainty_aware_loss)
+
+def stage2_self_train(student, teacher, before_img, after_img, pseudo_labels, steps):
+    for step in range(steps):
+        pred = student(before_img, after_img)
+        loss = change_loss(pred, pseudo_labels)
+        loss.backward(); optimizer.step()
+        teacher.params = ema_update(teacher.params, student.params)  # slow-moving teacher
+        if step % refresh_every == 0:
+            pseudo_labels = teacher(before_img, after_img)  # teacher relabels, closing the loop
+    return student
+```
+
+### Why this matters for my work
+
+The point-to-mask trick via SAM2 is directly reusable outside change detection -- it's essentially
+the same "one click, one full mask" workflow I'd want for cheaply bootstrapping labels on a *new*
+defect type that shows up on the line with no existing annotated examples: click a few points on
+a handful of real defect images, let SAM2 promote those to full masks, then keep the
+uncertainty-aware refinement step rather than trusting SAM2's raw output outright (which, per the
+[HPMA-SAM3 post](2026-08-27-hpma-sam3.qmd) two weeks ago, isn't always reliable on low-contrast
+industrial imagery without help). The teacher-student self-training loop in Stage 2 is the more
+speculative piece for my use case -- worth trying once labeling volume is large enough to make a
+self-training loop pay off, but for a first pass at cheap defect labeling, Stage 1 alone (SAM2 +
+bi-temporal-style selection + uncertainty-aware refinement) is the part I'd actually reach for
+first.

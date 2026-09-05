@@ -1,0 +1,20 @@
+[project]
+name = "paper-nctfad-continual"
+version = "0.1.0"
+description = "Real, runnable reimplementation of NC-TFAD (Neural-Collapse-guided Task-Free Continual Anomaly Detection, arXiv:2609.03406) -- a fixed simplex Equiangular Tight Frame (ETF) prototype space, a frozen DINOv2 backbone with a small trainable projection head, CutPaste-style synthetic anomalies, and a focal neural-collapse contrastive loss, streamed sequentially across real MVTec-AD categories with no announced task boundaries -- measuring real forgetting curves against a naive drifting-prototype baseline."
+requires-python = ">=3.11"
+dependencies = [
+    "torch>=2.4",
+    "torchvision>=0.19",
+    "transformers>=4.49",
+    "accelerate>=0.34",
+    "datasets>=2.20",
+    "pillow>=10.4",
+    "matplotlib>=3.9",
+    "numpy",
+    "scikit-learn>=1.5",
+    "imageio>=2.37.4",
+    "imageio-ffmpeg>=0.6.0",
+]
+[tool.uv]
+package = false

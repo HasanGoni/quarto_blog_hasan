@@ -4,6 +4,7 @@ project:
   render:
     - "*"
     - "!docs/**"
+    - "!notebooks/**"
 
 website:
   title: "Hasan's Data Science & AI Blog"
@@ -27,6 +28,10 @@ website:
             file: posts/series/vlm.qmd
           - text: "Agentic Development"
             file: posts/series/agentic-development/index.qmd
+          - text: "Agentic Developer: Zero to Advanced"
+            file: posts/series/agentic-zero-to-advanced/index.qmd
+          - text: "Agentic Architecture: Supply Chain"
+            file: posts/series/agentic-supply-chain/index.qmd
           - text: "Anomaly Detection"
             file: posts/series/anomaly-detection/index.qmd
           - text: "Local-AI Defect Inspection"
@@ -35,6 +40,8 @@ website:
             file: posts/series/synthetic-data/index.qmd
           - text: "Video & Sound Generation Series"
             file: posts/series/video-sound-generation/index.qmd
+          - text: "Image Registration Series"
+            file: posts/series/image-registration/index.qmd
           - text: "Paper of the Week"
             file: posts/series/papers/index.qmd
           - text: "Online Course Notes"
@@ -159,6 +166,20 @@ website:
             href: posts/series/agentic-development/08-finetuning-distillation.qmd
           - text: "9. Retrieval / RAG"
             href: posts/series/agentic-development/09-retrieval-rag.qmd
+      - section: "Agentic Developer: Zero to Advanced"
+        collapse: true
+        collapsed: true
+        contents:
+          - text: "Roadmap"
+            href: posts/series/agentic-zero-to-advanced/index.qmd
+          - text: "1. Introduction"
+            href: posts/series/agentic-zero-to-advanced/01-introduction.qmd
+      - section: "Agentic Architecture: Supply Chain"
+        collapse: true
+        collapsed: true
+        contents:
+          - text: "Introduction / Roadmap"
+            href: posts/series/agentic-supply-chain/index.qmd
       - section: "Local-AI Defect Inspection"
         collapse: true
         collapsed: true
@@ -195,6 +216,20 @@ website:
             href: posts/series/video-sound-generation/01-xray-inspection-video-sound.qmd
           - text: "2. Video Conditioning vs. Single-Frame Conditioning"
             href: posts/series/video-sound-generation/02-video-conditioning-vs-single-frame.qmd
+      - section: "Image Registration Series"
+        collapse: true
+        collapsed: true
+        contents:
+          - text: "Introduction"
+            href: posts/series/image-registration/index.qmd
+          - text: "1. The Benchmark and Classical Methods"
+            href: posts/series/image-registration/01-classical-methods.qmd
+          - text: "2. Deep Learning: Affine Regression and Deep Feature Matching"
+            href: posts/series/image-registration/02-dl-affine-and-feature-matching.qmd
+          - text: "3. Deep Learning: Deformable Registration"
+            href: posts/series/image-registration/03-dl-deformable-registration.qmd
+          - text: "4. Head-to-Head, Licensing, and the Recommendation"
+            href: posts/series/image-registration/04-comparison-licensing-recommendation.qmd
       - section: "Paper of the Week"
         collapse: true
         collapsed: true

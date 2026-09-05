@@ -1,0 +1,122 @@
+---
+title: "Head-to-Head, Licensing, and the Recommendation"
+description: "Every registration method's measured accuracy side by side, a license table checking code and pretrained weights separately, and a concrete recommendation for semiconductor inspection work."
+author: "Hasan Goni"
+date: last-modified
+categories: [computer-vision, image-registration, semiconductor, licensing]
+image: images/benchmark-pairs.png
+toc: true
+series:
+  name: "Image Registration Series"
+  number: 4
+format:
+  html:
+    code-fold: true
+    code-tools: true
+---
+
+:::{.callout-tip}
+This post is part of the [Image Registration Series](index.qmd) series.
+:::
+
+Five methods, one benchmark, ground-truth pixel error throughout. Here's everything from
+[Part 1](01-classical-methods.qmd), [Part 2](02-dl-affine-and-feature-matching.qmd), and
+[Part 3](03-dl-deformable-registration.qmd) side by side, plus the question that actually started
+this series: which of these are you allowed to ship in a company's product.
+
+## Head-to-head results
+
+| Method | Type | Scenario A (affine) | Scenario B (affine+elastic) |
+|---|---|---|---|
+| Phase correlation | Classical, translation-only | 10.23 px | 10.21 px |
+| ECC (affine) | Classical, intensity-based | **0.02 px** | 0.21 px |
+| SIFT + RANSAC | Classical, feature-based | 0.05 px | 0.20 px |
+| DL affine CNN | Deep learning, learned regressor | 5.26 px | 5.26 px |
+| LoFTR + RANSAC | Deep learning, deep feature matching | 0.04 px | 0.19 px |
+| VoxelMorph-style, single network on raw drift | Deep learning, deformable | 9.99 px | 10.02 px |
+| **VoxelMorph-style, ECC affine + residual network** | Deep learning, two-stage deformable | 0.38 px | **0.41 px** |
+
+Four things stand out:
+
+1. **On pure affine drift, classical intensity-based (ECC) and feature-based (SIFT+RANSAC)
+   optimization are already essentially perfect** -- sub-pixel, no training data, no GPU. Nothing
+   here beat them; LoFTR tied them.
+2. **The DL method that replaces the optimizer (the affine CNN) underperformed the DL method that
+   replaces the feature detector (LoFTR) by roughly two orders of magnitude** on this benchmark.
+   That's not a general law about deep learning and registration -- it's a statement about how much
+   harder "learn to regress a precise transform end to end from a small dataset" is than "learn
+   generically useful local correspondences," at the model sizes and training budgets used here.
+3. **Only a deformable network can touch Scenario B's non-rigid component at all** -- every
+   affine-only method, classical or deep, hits a hard representational ceiling there, by
+   construction, regardless of how well-trained or well-optimized it is. But *asking one dense-field
+   network to also absorb a large rigid component first is a real, measured mistake* (9.99-10.02px)
+   -- chaining classical affine pre-alignment in front of a residual-only deformable network fixed
+   it completely (0.38-0.41px, competitive with the best classical methods). This is standard
+   practice in the actual literature, not a workaround invented for this post.
+4. **The best non-rigid result in the series is a hybrid**: one classical method (ECC) doing what
+   it's already excellent at, feeding a small deep network that only ever has to learn the part
+   ECC structurally cannot represent.
+
+## Licensing: code license and weights license are two different questions
+
+This is the question that started the series, and it deserves the same rigor as the accuracy
+numbers above: a permissive **code** license does not automatically mean the **pretrained weights**
+are equally free to use in a company product. Always check both, separately.
+
+| Method | Code license | Pretrained weights | Commercial/company use |
+|---|---|---|---|
+| Phase correlation, ECC (OpenCV) | Apache License 2.0 | n/a (no learned weights) | **Yes** |
+| SIFT (OpenCV `cv2.SIFT_create`) | Apache License 2.0 | n/a | **Yes** -- SIFT's original US patent (6,711,293) expired March 2020; OpenCV moved it out of the patent-encumbered `opencv-contrib` "nonfree" module into the main package after that |
+| VoxelMorph (original) | Apache License 2.0 | Apache License 2.0 | **Yes** |
+| TransMorph | Permissive (MIT-style) | Permissive (MIT-style) | **Yes** -- verify the exact license file in the specific repo/version you pull, since terms can change between releases |
+| LoFTR (via kornia) | Apache License 2.0 | Apache License 2.0 (`pretrained="outdoor"`/`"indoor"`) | **Yes** |
+| MONAI registration modules | Apache License 2.0 | Apache License 2.0 | **Yes** |
+| ANTs / ANTsPy, elastix/SimpleElastix | Apache License 2.0 | n/a (classical, no learned weights) | **Yes** |
+| **SuperPoint / SuperGlue** (Magic Leap) | **CC BY-NC-SA 4.0** | **CC BY-NC-SA 4.0** | **No** -- non-commercial, share-alike; needs a separate commercial license from Magic Leap for company use |
+
+The one to actually remember: **SuperGlue/SuperPoint is everywhere in registration and SLAM
+papers, tutorials, and demo repos, and it is not licensed for company work.** LoFTR (used in
+[Part 2](02-dl-affine-and-feature-matching.qmd)) is the practical, Apache-2.0, commercially-clean
+way to get the same category of deep feature matching.
+
+The general trap worth internalizing beyond this specific table: a repo's top-level `LICENSE` file
+covers the *code*. Pretrained checkpoints are sometimes released under different terms in the same
+repo (a separate `MODEL_LICENSE`, a clause in the README, or -- worse -- silence, which legally
+defaults to "all rights reserved" and needs the author's explicit permission), and a checkpoint
+trained on a restricted dataset can carry that dataset's redistribution restrictions even when the
+training *code* is Apache/MIT. **When a company's legal/compliance process asks "is this okay to
+ship," "the GitHub repo is Apache 2.0" is an incomplete answer** -- confirm the weights file's terms
+separately, and when a checkpoint's provenance is unclear, the safe move is retraining a
+permissively-licensed architecture (VoxelMorph, TransMorph, LoFTR/kornia are all good bets here) on
+your own data instead of trusting an unlabeled checkpoint.
+
+## The recommendation
+
+For a semiconductor inspection pipeline correcting stage/fixture drift:
+
+- **If the drift is purely rigid/affine (the common case for stage repeatability)**: use **ECC or
+  SIFT+RANSAC**. Both are sub-pixel accurate on this benchmark, need no training data or GPU, are
+  fully permissively licensed, and are simpler to validate and maintain than a trained model. This
+  is not a close call -- there is no accuracy reason to reach for deep learning here.
+- **If you need deep feature matching anyway** (e.g. the imaging conditions vary enough that a
+  learned matcher's robustness is worth it, or you're already standardized on a DL stack): use
+  **LoFTR via kornia**, not SuperGlue/SuperPoint -- same job, same accuracy tier on this benchmark,
+  actually licensed for the work.
+- **If the drift has a real non-rigid/local component** (thermal drift, fixture flex, anything a
+  single affine matrix structurally can't represent): **don't hand a deformable network the raw
+  drifted image and expect it to do everything.** Run classical affine pre-alignment (ECC) first,
+  then a VoxelMorph-style network trained only on the residual local warp -- this series' own
+  numbers show that split is worth roughly 25x the accuracy of a single network trying to do both
+  jobs at once. The deformable stage, and the practical architectures around it (SynthMorph,
+  TransMorph), are Apache/MIT licensed and safe to build on.
+- **Don't train a small from-scratch affine regressor as a first move.** This series' own DL affine
+  CNN (5.26px) badly underperformed classical optimization on a problem ECC already solves to
+  sub-pixel accuracy with less code and no training pipeline to maintain -- and it wasn't even the
+  weakest deep-learning number in this series, since asking one network to do affine *and*
+  deformable correction together (Part 3's first attempt) did worse still (~10px). **The general
+  shape of every failure in this series is the same: a deep model doing a job a purpose-built
+  classical method already does better.**
+
+The pattern across the whole series: **reach for deep learning where it earns its complexity --
+non-rigid deformation, or matching robustness under real visual variation -- not as a default
+replacement for a classical method that already works.**

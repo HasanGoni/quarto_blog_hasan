@@ -1,6 +1,7 @@
 ---
 title: "Building Adaptive AI Agents — Hands-On, Open-Source Edition"
 subtitle: "Real code, real output, no paid services — reproducing all three course lessons on this machine"
+search: false
 author: "Hasan Goni"
 date: 2026-08-27
 categories: [agentic-ai, course-notes, open-source]

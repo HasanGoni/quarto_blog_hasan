@@ -1,6 +1,7 @@
 ---
 title: "Mask-Conditioned Diffusion Fine-Tuning"
 description: "Part 1 got the physics right by calibration. This post asks the mirror-image question: what if a model just learned real defect texture from data instead?"
+search: false
 author: "Hasan Goni"
 date: last-modified
 categories: [computer-vision, synthetic-data, X-ray, diffusion, LoRA]

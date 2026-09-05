@@ -19,6 +19,7 @@ Every week I pick a handful of the most relevant papers from arXiv and the HF Da
 
 Most recent first.
 
+- **2026-09-04** — [5 Papers Worth Reading — Week of September 4, 2026](2026-09-04.qmd) (5 papers)
 - **2026-09-04** — [Reimplementing NC-TFAD — Fixed Prototypes vs. a Naive Baseline, Streamed Honestly](2026-09-04-nctfad-continual.qmd) — real fixed simplex-ETF prototypes vs. a naive drifting-mean baseline for task-free continual anomaly detection, streamed through all 15 real MVTec-AD categories with no announced task boundaries. Honest finding: the naive baseline actually ends up ahead (0.713 vs. 0.671 final mean AUROC), with a real streaming video replaying the measured forgetting curve category-by-category.
 - **2026-09-04** — [Reimplementing PL-SCEA — When a Clever Idea Makes Real Numbers Worse](2026-09-04-plscea-anomaly-detection.qmd) — real token self-correlation reconfiguration applied to frozen DINOv2 features, tested honestly on all 15 real MVTec-AD categories. A real negative result: mean AUROC dropped from 0.831 (raw) to 0.739 (PL-SCEA), hurting 12 of 15 categories, with a real per-patch error-map video and interactive slider showing the damage is a quiet ranking-metric effect rather than an obvious visual artifact.
 - **2026-09-04** — [Reimplementing ENEAS — Catching a Tracker Before It Grabs the Wrong Fish, With Real Code](2026-09-04-eneas-tracking.qmd) — real SAM2 point-prompted tracking-by-detection plus a real two-stage semantic verification layer (DINOv2 embedding match, falling back to real Qwen2-VL when ambiguous), tested on a real DAVIS-2017 sequence with 6 look-alike goldfish. Real result: mean IoU 0.828 (naive) vs. 0.847 (verified), with the naive tracker catastrophically losing the target mid-clip while the verified tracker holds on -- includes a real tracking-progress video and an interactive before/after slider on the exact drift frame.
@@ -33,4 +34,3 @@ Most recent first.
 - **2026-08-25** — [1 Paper Worth Reading — FlowEvo, Week of August 25, 2026](2026-08-25.qmd) (1 paper)
 - **2026-08-21** — [5 Papers Worth Reading — Week of August 21, 2026](2026-08-21.qmd) (5 papers)
 - **2026-08-15** — [4 Papers Worth Reading — Week of August 15, 2026](2026-08-15.qmd) (4 papers)
-- **2026-09-04** — [5 Papers Worth Reading — Week of September 4, 2026](2026-09-04.qmd) (5 papers)

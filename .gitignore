@@ -28,5 +28,26 @@ notebooks/synthetic-data-xray/gan_out/
 notebooks/video-sound-xray/.venv/
 notebooks/video-sound-xray/out/
 notebooks/video-sound-xray/*.log
+notebooks/image-registration/.venv/
+notebooks/image-registration/data/
+notebooks/paper-insteditseg/.venv/
+notebooks/paper-insteditseg/out/
+notebooks/paper-insteditseg/out_800steps_backup/
+notebooks/paper-vlm-multispectral-sar/.venv/
+notebooks/paper-vlm-multispectral-sar/out/
+notebooks/paper-vlm-multispectral-sar/data/
+notebooks/paper-dpa-anomaly/.venv/
+notebooks/paper-dpa-anomaly/out/
+notebooks/paper-sam2-change-detection/.venv/
+notebooks/paper-sam2-change-detection/out/
+notebooks/paper-sam2-change-detection/data/
+notebooks/paper-sam2-change-detection/out_*.txt
+notebooks/paper-plscea-anomaly/.venv/
+notebooks/paper-plscea-anomaly/out/
+notebooks/paper-nctfad-continual/.venv/
+notebooks/paper-nctfad-continual/out/
+notebooks/paper-eneas-tracking/.venv/
+notebooks/paper-eneas-tracking/out/
+notebooks/paper-eneas-tracking/data/
 
 **/*.quarto_ipynb

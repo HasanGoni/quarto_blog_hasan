@@ -1,6 +1,7 @@
 ---
 title: "Physics-Based X-ray Simulation"
 description: "No access to the X-ray equipment that shot our images? Invert the physics on a real image instead of simulating from a CAD model that doesn't exist."
+search: false
 author: "Hasan Goni"
 date: last-modified
 categories: [computer-vision, synthetic-data, X-ray, physics]
