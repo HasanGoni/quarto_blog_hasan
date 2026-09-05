@@ -49,5 +49,7 @@ notebooks/paper-nctfad-continual/out/
 notebooks/paper-eneas-tracking/.venv/
 notebooks/paper-eneas-tracking/out/
 notebooks/paper-eneas-tracking/data/
+notebooks/agentic-zero-to-advanced/.venv/
+notebooks/agentic-zero-to-advanced/out/
 
 **/*.quarto_ipynb

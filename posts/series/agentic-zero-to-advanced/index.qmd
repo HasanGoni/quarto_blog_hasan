@@ -1,0 +1,95 @@
+---
+title: "Agentic Developer: Zero to Advanced"
+description: "A from-scratch path through agentic AI development -- tool calling, LangGraph, multi-agent orchestration, RAG, fine-tuning, VLMs, and production hardening -- all built around one running use case: X-ray defect detection (GDXray / DeepPCB)."
+author: "Hasan Goni"
+date: last-modified
+categories: [series, agentic-ai, langgraph, computer-vision, python]
+toc: true
+---
+
+## Series Overview
+
+Most agentic AI tutorials jump straight to "build a LangGraph agent" without ever showing why
+each piece exists, or what a plain (non-agentic) baseline even looks like. This series starts
+there instead: one running use case, X-ray defect detection (GDXray / DeepPCB), carried all the
+way from a bare CV model with zero agentic anything, through tool calling and structured output,
+into a real multi-node LangGraph pipeline, then multi-agent orchestration, RAG, fine-tuning,
+VLM-first architectures, and finally the production concerns (evaluation, cost, deployment,
+monitoring) that tutorials usually skip.
+
+A companion series, [Agentic Architecture: Supply Chain](../agentic-supply-chain/index.qmd),
+takes the same architecture built here and re-applies it to a completely different domain --
+proof that the pattern, not the domain data, is the reusable part.
+
+This is a roadmap post: links go live as each part is written, in order.
+
+### Arc 1 -- Foundations
+
+1. [Introduction -- why agentic AI, why X-ray defect detection as the teaching example](01-introduction.qmd)
+2. [The dataset and the baseline model](02-dataset-baseline.qmd) -- loading real GDXray data,
+   running a plain classical CV detector, no agent yet, scored honestly against real ground truth
+3. Your first tool-calling LLM -- wrapping the detector as a "tool", one LLM call that reads
+   structured output and writes a plain-English explanation
+4. Prompting and structured output -- getting reliable JSON/structured responses from the LLM
+   about defect type, severity, confidence
+
+### Arc 2 -- The Agent Loop
+
+5. What makes it an "agent" -- planning, tool use, memory, control flow
+6. Building the graph -- LangGraph basics: state, nodes, edges
+7. Multi-step pipeline -- classify defect, check business rules, decide, report, as a real
+   LangGraph graph
+8. Tool design -- deterministic tools (rule checks) vs. LLM-reasoning tools (report writing), and
+   why mixing them matters for cost and reliability
+9. Human-in-the-loop -- flagging uncertain cases for review, approval workflows
+
+### Arc 3 -- Scaling Up: Multi-Agent and Deep Agents
+
+10. When one agent isn't enough -- sub-agents per defect category or per inspection stage
+11. Deep Agents harness -- planning, virtual filesystem, context management for long-running
+    investigations
+12. Orchestration patterns -- supervisor agents, delegation, aggregating sub-agent results
+13. Wayfinder-style planning -- handling investigations that span multiple sessions, ticket-based
+    maps for open-ended defect investigations
+
+### Arc 4 -- Knowledge and Precision
+
+14. RAG over your defect catalog -- retrieval-augmented generation so the agent grounds its
+    reasoning in your actual defect taxonomy and documentation
+15. Building the retrieval pipeline -- chunking, embeddings, vector store, evaluation of
+    retrieval quality
+16. Fine-tuning -- when RAG isn't enough, fine-tuning a model on your labeled defect explanations
+    and decisions for domain precision
+17. Vision-language models -- letting the model reason directly over the X-ray image instead of
+    only structured detector output; comparing VLM-first vs. CV-model-first architectures
+
+### Arc 5 -- Production and Evaluation
+
+18. Evaluation -- building an eval set, using LangSmith (or similar) to trace and score agent
+    decisions
+19. Cost and latency tuning -- model selection per step, caching, batching
+20. Failure handling -- retries, fallbacks, graceful degradation
+21. Deployment -- turning the pipeline into a real triggered service
+22. Monitoring in production -- drift detection, feedback loops, continuous improvement
+
+### Arc 6 -- Expert-Level Topics
+
+23. Security and safety for agents -- prompt injection risks when reading external documents or
+    web content, guardrails around autonomous actions vs. actions requiring human approval
+24. Multi-agent communication protocols and standards -- how agents talk to each other, emerging
+    standards in the field
+25. Agent memory design -- long-term vs. short-term memory, deciding what an agent should remember
+    across sessions vs. what it should forget
+26. Cost and business ROI framing -- justifying an agent project to management, measuring time
+    saved and errors caught, not just technical cost/latency tuning
+27. Testing and simulation -- testing an agent before production using simulated and adversarial
+    scenarios, not just live evaluation
+28. Choosing an agent framework -- the broader landscape beyond LangGraph and Deep Agents, how to
+    evaluate and pick a framework for a given use case
+29. Versioning and change management for agents -- prompts, tools, and models drift over time; how
+    to version agent behavior and roll back safely when a change breaks production
+
+### Capstone
+
+30. Putting it all together -- a full end-to-end agentic defect-inspection system, architecture
+    diagram, lessons learned, what to build next

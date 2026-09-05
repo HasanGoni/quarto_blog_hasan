@@ -174,6 +174,8 @@ website:
             href: posts/series/agentic-zero-to-advanced/index.qmd
           - text: "1. Introduction"
             href: posts/series/agentic-zero-to-advanced/01-introduction.qmd
+          - text: "2. Dataset and Baseline"
+            href: posts/series/agentic-zero-to-advanced/02-dataset-baseline.qmd
       - section: "Agentic Architecture: Supply Chain"
         collapse: true
         collapsed: true

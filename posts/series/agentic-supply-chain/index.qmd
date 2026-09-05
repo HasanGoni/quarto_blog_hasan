@@ -1,0 +1,40 @@
+---
+title: "Agentic Architecture: Supply Chain"
+description: "The same planning, tool-use, and reasoning architecture from Agentic Developer: Zero to Advanced, re-applied to a demand/delivery anomaly investigation agent -- proof the pattern is domain-agnostic, not X-ray-specific."
+author: "Hasan Goni"
+date: last-modified
+categories: [series, agentic-ai, langgraph, supply-chain]
+toc: true
+---
+
+## Series Overview
+
+[Agentic Developer: Zero to Advanced](../agentic-zero-to-advanced/index.qmd) builds its whole
+agent architecture around one use case: X-ray defect detection. This short companion series asks
+the obvious follow-up question -- is any of that actually specific to X-ray images, or is it just
+a reusable shape? To find out, the identical planning/tool-use/reasoning pattern gets rebuilt
+around a completely different domain: supply chain.
+
+**The business case:** late or failed deliveries and demand mismatches cost real money, through
+expedited shipping, stockouts, or excess inventory. Today a human analyst has to notice something
+is off and manually dig through order and shipment data to find the cause. An agent can do that
+investigation automatically: it watches incoming orders and shipments, flags anomalies (unusual
+delay patterns, a demand spike that doesn't match forecast), reasons over possible causes
+(supplier issue, regional disruption, data error), and either recommends an action or drafts an
+explanation for a human to review -- turning a reactive, manual investigation process into a
+proactive one.
+
+**Dataset:** the DataCo SMART Supply Chain dataset (Mendeley) -- order, shipment, customer, and
+product data suitable for a demand/delivery anomaly investigation agent. (Alternative considered:
+the SupplyGraph benchmark, graph-structured supply chain planning data from an FMCG company.)
+
+This is a roadmap post: links go live as each part is written, in order.
+
+### Posts in this Series
+
+1. Architecture recap -- same graph, same agent loop shape as the X-ray series, explained briefly
+   for readers coming in fresh on this series
+2. Swapping in the supply chain scenario -- a demand/delivery anomaly investigation agent built
+   with the identical planning and tool-calling pattern, using the DataCo dataset
+3. What stayed the same vs. what changed -- defect catalog vs. supplier docs, defect severity vs.
+   stockout risk; reflection on architecture portability across domains

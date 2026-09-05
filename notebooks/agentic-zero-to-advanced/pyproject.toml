@@ -1,0 +1,14 @@
+[project]
+name = "agentic-zero-to-advanced"
+version = "0.1.0"
+requires-python = ">=3.11"
+dependencies = [
+    "numpy",
+    "scipy",
+    "opencv-python-headless",
+    "pillow",
+    "matplotlib",
+]
+
+[tool.uv]
+package = false
