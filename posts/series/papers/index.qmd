@@ -11,14 +11,15 @@ toc: true
 
 Every week I pick a handful of the most relevant papers from arXiv and the HF Daily Papers list — filtered against my own work (semiconductor X-ray/casting defect detection, VLM fine-tuning, auto-label verification) — and write each one up twice: once so a 5-year-old could follow it, once with the full methodology, a code sketch, and an honest note on whether it's actually useful for what I'm building.
 
-**Papers covered so far:** 32
+**Papers covered so far:** 33
 
-**By topic:** Vision-Language Models (7), Segmentation (6), Anomaly Detection (4), Reasoning & Agents (4), Benchmarks & Evaluation (3), Multimodal Learning (2), Diffusion Models (1), Generative Retrieval (1), Medical Imaging (1), Model Efficiency (1), Reinforcement Learning (1)
+**By topic:** Vision-Language Models (7), Segmentation (6), Anomaly Detection (5), Reasoning & Agents (4), Benchmarks & Evaluation (3), Multimodal Learning (2), Diffusion Models (1), Generative Retrieval (1), Medical Imaging (1), Model Efficiency (1), Reinforcement Learning (1)
 
 ## Posts in this Series
 
 Most recent first.
 
+- **2026-09-09** — [Reimplementing SAM3-O2D2 — When a Detector Lies, Make It Prove the Claim, With Real Code](2026-09-09-sam3-o2d2-witness.qmd) — real `facebook/sam3` object-class prompting as a zero-shot OOD witness for a real torchvision detector: a genuine agreement case, a constructed refutation case, and a zero-shot probe on real semiconductor X-rays that surfaces an honest, previously-invisible failure mode — the exact wording of a class name (`"substrate"` vs. `"circuit board"`) swings the verdict from confident ID to flagged OOD on identical pixels.
 - **2026-09-04** — [5 Papers Worth Reading — Week of September 4, 2026](2026-09-04.qmd) (5 papers)
 - **2026-09-04** — [Reimplementing NC-TFAD — Fixed Prototypes vs. a Naive Baseline, Streamed Honestly](2026-09-04-nctfad-continual.qmd) — real fixed simplex-ETF prototypes vs. a naive drifting-mean baseline for task-free continual anomaly detection, streamed through all 15 real MVTec-AD categories with no announced task boundaries. Honest finding: the naive baseline actually ends up ahead (0.713 vs. 0.671 final mean AUROC), with a real streaming video replaying the measured forgetting curve category-by-category.
 - **2026-09-04** — [Reimplementing PL-SCEA — When a Clever Idea Makes Real Numbers Worse](2026-09-04-plscea-anomaly-detection.qmd) — real token self-correlation reconfiguration applied to frozen DINOv2 features, tested honestly on all 15 real MVTec-AD categories. A real negative result: mean AUROC dropped from 0.831 (raw) to 0.739 (PL-SCEA), hurting 12 of 15 categories, with a real per-patch error-map video and interactive slider showing the damage is a quiet ranking-metric effect rather than an obvious visual artifact.

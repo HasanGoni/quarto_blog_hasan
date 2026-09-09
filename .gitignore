@@ -53,3 +53,5 @@ notebooks/agentic-zero-to-advanced/.venv/
 notebooks/agentic-zero-to-advanced/out/
 
 **/*.quarto_ipynb
+notebooks/paper-sam3-o2d2/.venv/
+notebooks/paper-sam3-o2d2/out/
