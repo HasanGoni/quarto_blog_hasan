@@ -55,3 +55,9 @@ notebooks/agentic-zero-to-advanced/out/
 **/*.quarto_ipynb
 notebooks/paper-sam3-o2d2/.venv/
 notebooks/paper-sam3-o2d2/out/
+notebooks/paper-marigold-v2/.venv/
+notebooks/paper-marigold-v2/repo/
+notebooks/paper-marigold-v2/output/
+notebooks/paper-marigold-v2/images/train/
+notebooks/paper-marigold-v2/xray_inputs/
+notebooks/paper-marigold-v2/download.log

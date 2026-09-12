@@ -11,14 +11,16 @@ toc: true
 
 Every week I pick a handful of the most relevant papers from arXiv and the HF Daily Papers list — filtered against my own work (semiconductor X-ray/casting defect detection, VLM fine-tuning, auto-label verification) — and write each one up twice: once so a 5-year-old could follow it, once with the full methodology, a code sketch, and an honest note on whether it's actually useful for what I'm building.
 
-**Papers covered so far:** 38
+**Papers covered so far:** 39
 
-**By topic:** Vision-Language Models (8), Segmentation (7), Anomaly Detection (5), Reasoning & Agents (5), Benchmarks & Evaluation (4), Model Efficiency (2), Multimodal Learning (2), Diffusion Models (1), Generative Models (1), Generative Retrieval (1), Medical Imaging (1), Reinforcement Learning (1)
+**By topic:** Vision-Language Models (8), Segmentation (7), Anomaly Detection (5), Reasoning & Agents (5), Benchmarks & Evaluation (4), Model Efficiency (2), Multimodal Learning (2), Diffusion Models (2), Generative Models (1), Generative Retrieval (1), Medical Imaging (1), Reinforcement Learning (1)
 
 ## Posts in this Series
 
 Most recent first.
 
+- **2026-09-11** — [Reimplementing Marigold V2 — One Forward Pass, and the Fine-Tuned Checkpoint That Made Things Worse](2026-09-11-marigold-v2-depth-on-xrays.qmd) — the real `huawei-bayerlab/marigold-v2-0` LoRA on the real, frozen `Qwen-Image-Edit-2509` DiT (851.8M/21.3B trainable, single forward pass at a hardcoded `t=0.499`, no denoising loop), run zero-shot on real GDXray+ Castings X-rays from this blog's own defect dataset. The fine-tuned checkpoint collapses depth and normals to smooth brightness-driven gradients with zero correspondence to real casting structure -- but the real surprise is the checkpoint-difference experiment: the raw, un-fine-tuned base model (no LoRA at all, same pipeline) traces the actual spokes and cast holes far more faithfully, making this a genuine "fine-tuning made it worse" result, with interactive before/after sliders and a real 2x3 depth+normals comparison grid.
+- **2026-09-11** — [5 Papers Worth Reading — Week of September 11, 2026](2026-09-11.qmd) (5 papers)
 - **2026-09-09** — [Reimplementing SAM3-O2D2 — When a Detector Lies, Make It Prove the Claim, With Real Code](2026-09-09-sam3-o2d2-witness.qmd) — real `facebook/sam3` object-class prompting as a zero-shot OOD witness for a real torchvision detector: a genuine agreement case, a constructed refutation case, and a zero-shot probe on real semiconductor X-rays that surfaces an honest, previously-invisible failure mode — the exact wording of a class name (`"substrate"` vs. `"circuit board"`) swings the verdict from confident ID to flagged OOD on identical pixels.
 - **2026-09-04** — [5 Papers Worth Reading — Week of September 4, 2026](2026-09-04.qmd) (5 papers)
 - **2026-09-04** — [Reimplementing NC-TFAD — Fixed Prototypes vs. a Naive Baseline, Streamed Honestly](2026-09-04-nctfad-continual.qmd) — real fixed simplex-ETF prototypes vs. a naive drifting-mean baseline for task-free continual anomaly detection, streamed through all 15 real MVTec-AD categories with no announced task boundaries. Honest finding: the naive baseline actually ends up ahead (0.713 vs. 0.671 final mean AUROC), with a real streaming video replaying the measured forgetting curve category-by-category.
@@ -35,4 +37,3 @@ Most recent first.
 - **2026-08-25** — [1 Paper Worth Reading — FlowEvo, Week of August 25, 2026](2026-08-25.qmd) (1 paper)
 - **2026-08-21** — [5 Papers Worth Reading — Week of August 21, 2026](2026-08-21.qmd) (5 papers)
 - **2026-08-15** — [4 Papers Worth Reading — Week of August 15, 2026](2026-08-15.qmd) (4 papers)
-- **2026-09-11** — [5 Papers Worth Reading — Week of September 11, 2026](2026-09-11.qmd) (5 papers)
