@@ -31,6 +31,29 @@ GRIMA (Pontificia Universidad Católica de Chile), for educational and research 
 Across all 72 images, `ground_truth.txt` marks **256 real defect instances** -- most images have
 2-4 small, faint boxes a few dozen pixels wide, in the aluminum where a void or inclusion sits.
 
+## What am I actually looking at?
+
+If you open one of these X-rays cold and think *I have no idea what the labels mean*, that is the
+correct first reaction. The defects are real, but they are tiny and low-contrast. GDXray Castings
+is a **single-class** dataset: every box just says *a defect is here*, not whether it is porosity,
+an inclusion, or a crack. A trained radiographer drew tight rectangles around local density
+anomalies -- places where the aluminum is not quite uniform.
+
+Frame `C0001_0001` has only **three** labeled defects. Here they are, numbered on the full frame:
+
+![The three ground-truth boxes on C0001_0001, numbered.](images/baseline-gt-overview.png)
+
+At full resolution (768×572) those boxes are 10–31 pixels wide. Zoomed in, each one wraps a faint
+smudge that is only a few grayscale levels darker or brighter than the surrounding metal:
+
+![Zoomed crops of the three labeled defects on C0001_0001.](images/baseline-gt-zoom-panels.png)
+
+That is what you are searching for: not the wheel shape, not the bright air gaps between spokes,
+not the spoke edges (the classical baseline flags those constantly) -- just a blob of slightly
+wrong density, often sitting on top of structural texture that is already hard to read. On a
+laptop screen at blog-post resolution, many of these labels look like rectangles on noise. That
+is the task, not a failure of your eyes.
+
 ## The baseline: no learning at all
 
 The detector here is deliberately not deep learning. It's four classical steps, and that's the
@@ -44,6 +67,11 @@ whole method:
    doesn't get treated as a candidate defect.
 3. **Percentile thresholding.** Keep only the top 0.5% strongest responses inside the object mask.
 4. **Connected components.** Turn surviving blobs into candidate bounding boxes.
+
+```{=html}
+<details>
+<summary><strong>Show <code>detect_candidates()</code></strong></summary>
+```
 
 ```python
 def detect_candidates(gray, return_stages=False):
@@ -65,6 +93,10 @@ def detect_candidates(gray, return_stages=False):
         if area >= MIN_BLOB_AREA
     ]
     return boxes
+```
+
+```{=html}
+</details>
 ```
 
 Every candidate box gets matched against the real ground-truth boxes by IoU (details below). No
@@ -140,40 +172,44 @@ architecture behind it looks.
 ## Jargon, explained simply
 
 **Ground truth.** The real, correct answer, established independently of whatever your model
-predicts.
-*Daily-life version:* the answer key a teacher already has before grading anyone's exam.
+predicts. Think of the answer key a teacher already has before grading anyone's exam.
 
 **Bounding box.** A rectangle marking roughly where something is in an image, not its exact
-pixel-perfect shape.
-*Daily-life version:* "the treasure is somewhere in this square on the map" -- not the exact spot,
-just a region.
+pixel-perfect shape. For example, "the treasure is somewhere in this square on the map" -- not the
+exact spot, just a region.
 
 **IoU (Intersection over Union).** How much a predicted box overlaps a real one, as a fraction of
-their combined area.
-*Daily-life version:* you and a friend each draw a circle on the ground guessing where a dropped
-coin landed. IoU is how much your two circles overlap, divided by the total ground either circle
-covers.
+their combined area. Suppose you and a friend each draw a circle on the ground guessing where a
+dropped coin landed -- IoU is how much your two circles overlap, divided by the total ground either
+circle covers.
 
-**Precision.** Of everything the model flagged, what fraction was actually real.
-*Daily-life version:* of every parking ticket you wrote today, what fraction of cars were actually
-illegally parked.
+**Precision.** Of everything the model flagged, what fraction was actually real. If you wrote ten
+parking tickets today, precision is what fraction of those cars were actually illegally parked.
 
-**Recall.** Of everything that was actually real, what fraction the model actually caught.
-*Daily-life version:* of every car that actually was illegally parked today, what fraction you
-actually caught and ticketed.
+**Recall.** Of everything that was actually real, what fraction the model actually caught. Suppose
+twenty cars were illegally parked today -- recall is what fraction of them you actually ticketed.
 
 **Classical computer vision.** Image analysis via fixed, hand-written rules (thresholds, filters,
-morphology) rather than a model that learned patterns from labeled examples.
-*Daily-life version:* reading a thermometer versus asking a doctor who's examined a thousand
-patients -- one follows a rule you could write down on paper, the other learned from experience.
+morphology) rather than a model that learned patterns from labeled examples. Think of reading a
+thermometer versus asking a doctor who's examined a thousand patients -- one follows a rule you
+could write down on paper, the other learned from experience.
 
 ## Reproduce this yourself
+
+```{=html}
+<details>
+<summary><strong>Show reproduce commands</strong></summary>
+```
 
 ```bash
 git clone https://github.com/HasanGoni/quarto_blog_hasan
 cd quarto_blog_hasan/notebooks/agentic-zero-to-advanced
 uv sync
 uv run python baseline_detector.py
+```
+
+```{=html}
+</details>
 ```
 
 The script expects GDXray Castings series C0001 (a Kaggle mirror of the original GRIMA dataset --

@@ -108,6 +108,55 @@ def draw_overlay(gray, gt_boxes, candidates) -> np.ndarray:
     return vis
 
 
+def contrast_delta(gray: np.ndarray, x1: int, y1: int, x2: int, y2: int, pad: int = 15) -> float:
+    """Mean intensity inside the box minus mean of a padded ring around it."""
+    h, w = gray.shape
+    inner = gray[y1:y2, x1:x2].astype(np.float32)
+    y0, y1p = max(0, y1 - pad), min(h, y2 + pad)
+    x0, x1p = max(0, x1 - pad), min(w, x2 + pad)
+    ring = gray[y0:y1p, x0:x1p].astype(np.float32).copy()
+    ring[y1 - y0 : y2 - y0, x1 - x0 : x2 - x0] = np.nan
+    surround = np.nanmean(ring)
+    return float(inner.mean() - surround)
+
+
+def save_gt_zoom_figures(gray: np.ndarray, gt_boxes: list[tuple[float, float, float, float]], out_dir: Path):
+    """Zoomed crops + numbered overview for the 'what is actually labeled?' section."""
+    h, w = gray.shape
+    vis = cv2.cvtColor(gray, cv2.COLOR_GRAY2BGR)
+    for i, (x1, y1, x2, y2) in enumerate(gt_boxes, start=1):
+        xi1, yi1, xi2, yi2 = int(x1), int(y1), int(x2), int(y2)
+        cv2.rectangle(vis, (xi1, yi1), (xi2, yi2), (0, 220, 0), 2)
+        cv2.putText(vis, str(i), (xi1, max(yi1 - 6, 14)), cv2.FONT_HERSHEY_SIMPLEX, 0.65, (0, 220, 0), 2)
+    cv2.imwrite(str(out_dir / "baseline-gt-overview.png"), vis)
+
+    pad = 45
+    n = len(gt_boxes)
+    fig, axes = plt.subplots(1, n, figsize=(4.2 * n, 4.2))
+    if n == 1:
+        axes = [axes]
+    for ax, (i, box) in zip(axes, enumerate(gt_boxes, start=1)):
+        x1, y1, x2, y2 = (int(v) for v in box)
+        cx0, cy0 = max(0, x1 - pad), max(0, y1 - pad)
+        cx1, cy1 = min(w, x2 + pad), min(h, y2 + pad)
+        crop = gray[cy0:cy1, cx0:cx1].copy()
+        crop_vis = cv2.cvtColor(crop, cv2.COLOR_GRAY2BGR)
+        cv2.rectangle(crop_vis, (x1 - cx0, y1 - cy0), (x2 - cx0, y2 - cy0), (0, 220, 0), 2)
+        delta = contrast_delta(gray, x1, y1, x2, y2)
+        bw, bh = x2 - x1, y2 - y1
+        ax.imshow(cv2.cvtColor(crop_vis, cv2.COLOR_BGR2RGB))
+        ax.set_title(f"Defect {i}: {bw}×{bh} px, Δ≈{delta:+.0f} gray levels", fontsize=10)
+        ax.axis("off")
+    fig.suptitle(
+        "What ground_truth.txt actually marks on C0001_0001 (green = expert-labeled defect)",
+        fontsize=12,
+        fontweight="bold",
+    )
+    plt.tight_layout()
+    plt.savefig(out_dir / "baseline-gt-zoom-panels.png", dpi=150)
+    plt.close(fig)
+
+
 def save_pipeline_figure(gray, stages, gt_boxes, candidates, out_path):
     vis_final = draw_overlay(gray, gt_boxes, candidates)
     panels = [
@@ -151,6 +200,7 @@ def main():
             cv2.imwrite(str(POST_IMAGES_DIR / "baseline-slider-before.png"), gray)
             cv2.imwrite(str(POST_IMAGES_DIR / "baseline-slider-after.png"), draw_overlay(gray, gt_boxes, candidates))
             save_pipeline_figure(gray, stages, gt_boxes, candidates, POST_IMAGES_DIR / "baseline-pipeline-diagram.png")
+            save_gt_zoom_figures(gray, gt_boxes, POST_IMAGES_DIR)
 
     precision = total_tp / (total_tp + total_fp) if (total_tp + total_fp) else 0.0
     recall = total_tp / (total_tp + total_fn) if (total_tp + total_fn) else 0.0
