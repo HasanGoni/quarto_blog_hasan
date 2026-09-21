@@ -1,0 +1,266 @@
+---
+title: "Agentic Developer: Zero to Advanced, Part 3: Your First Tool-Calling LLM"
+subtitle: "Wrap the Part 2 classical detector as a callable tool — one LLM request, real structured output, plain-English explanation"
+author: "Hasan Goni"
+date: 2026-09-14
+categories: [agentic-ai, computer-vision, gdxray, python]
+toc: true
+series:
+  name: "Agentic Developer: Zero to Advanced"
+  number: 3
+---
+
+:::{.callout-tip}
+This post is part of the [Agentic Developer: Zero to Advanced](index.qmd) series. It follows on
+from [Part 2 — the dataset and the classical baseline](02-dataset-baseline.qmd).
+:::
+
+Part 2 ended with a detector that works, badly. Precision 0.066, recall 0.094 — honest numbers,
+no LLM anywhere. This post adds the first agentic ingredient: **tool calling**. The classical
+detector becomes a Python function the model can invoke. You send one request; the model calls
+the tool, reads the structured JSON it returns, and writes a short explanation a human operator
+could actually use.
+
+Still no planning loop, no memory, no LangGraph. Just: **ask → tool runs → model explains**.
+
+## Why wrap the detector at all
+
+A plain LLM asked "are there defects in this X-ray?" has to guess. It has never seen the image
+bytes in Part 3's setup — only your words. Tool calling fixes that gap: the model decides
+*when* to run the real detector, gets back real coordinates and counts, and only then writes
+its verdict.
+
+Think of the difference between asking a colleague "does this look defective?" versus handing
+them the image **and** a measurement report from the actual inspection algorithm. The second
+conversation starts from evidence.
+
+## The tool: structured detector output
+
+The tool is a normal Python function with a docstring. `aisuite` reads that docstring and builds
+the JSON schema the model uses to call it — same pattern as the [Agentic Development tool-use
+post](../agentic-development/03-tool-use-mcp.qmd), but scoped to the GDXray baseline from Part 2.
+
+```{=html}
+<details>
+<summary><strong>Show <code>inspect_casting_xray()</code></strong></summary>
+```
+
+```python
+def inspect_casting_xray(image_path: str) -> str:
+    """Run the classical top-hat defect detector from Part 2 on one GDXray casting frame.
+
+    Args:
+        image_path: Path to a GDXray Castings .png frame (e.g. C0001_0001.png).
+
+    Returns:
+        JSON string with candidate boxes, counts, and ground-truth comparison when available.
+    """
+    gray = cv2.imread(image_path, cv2.IMREAD_GRAYSCALE)
+    candidates = detect_candidates(gray)
+    gt_boxes = ground_truth_for(image_path)
+    tp, fp, fn = score_image(gt_boxes, candidates)
+    return json.dumps({
+        "image": Path(image_path).name,
+        "ground_truth_boxes": len(gt_boxes),
+        "candidate_boxes": len(candidates),
+        "true_positives": tp,
+        "false_positives": fp,
+        "false_negatives": fn,
+        "candidates": [...],
+    }, indent=2)
+```
+
+```{=html}
+</details>
+```
+
+On `C0001_0001.png`, the tool returns this (real output from `detector_tool.py`):
+
+```json
+{
+  "image": "C0001_0001.png",
+  "ground_truth_boxes": 3,
+  "candidate_boxes": 3,
+  "true_positives": 0,
+  "false_positives": 3,
+  "false_negatives": 3,
+  "candidates": [
+    {"x1": 107, "y1": 51, "x2": 117, "y2": 64, "width": 10, "height": 13},
+    {"x1": 30, "y1": 266, "x2": 41, "y2": 283, "width": 11, "height": 17},
+    {"x1": 711, "y1": 340, "x2": 731, "y2": 374, "width": 20, "height": 34}
+  ],
+  "detector": "classical top-hat baseline (Part 2)"
+}
+```
+
+That is the bridge between Part 2's raw boxes and something an LLM can reason over: counts,
+coordinates, and an honest score against ground truth when the frame has labels.
+
+## One LLM call, three internal steps
+
+Under the hood, `aisuite` with `max_turns=3` does a short loop:
+
+1. You send the user message.
+2. The model returns a **tool call** (`inspect_casting_xray`).
+3. Python runs the detector, feeds the JSON back.
+4. The model writes the final explanation.
+
+You write one `create()` call; the client handles the hand-off.
+
+## Where the API key usually lives
+
+Most tutorials start with a `.env` file next to your script:
+
+```bash
+# notebooks/agentic-zero-to-advanced/.env
+OPENAI_API_KEY=sk-...
+AGENTIC_ZERO_MODEL=openai:gpt-4o-mini
+```
+
+`first_tool_call.py` loads that file on startup (without overwriting variables you already
+exported in the shell). `aisuite` passes `OPENAI_API_KEY` straight through to the OpenAI client —
+that is the normal cloud path.
+
+I'm not using that here. I have **Qwen3-Coder-30B** running locally through **vLLM**, which
+exposes an OpenAI-compatible HTTP API on port 8000. Same `aisuite` code, different endpoint:
+
+```bash
+# notebooks/agentic-zero-to-advanced/.env
+OPENAI_API_KEY=local                          # vLLM does not check the value
+OPENAI_BASE_URL=http://localhost:8000/v1      # your local vLLM server
+AGENTIC_ZERO_MODEL=openai:qwen3-coder         # model id from: curl localhost:8000/v1/models
+```
+
+Copy `.env.example` in that folder if you want a starting template. The `openai:` prefix is
+`aisuite`'s provider tag; everything after the colon must match the model name your vLLM server
+advertises.
+
+```{=html}
+<details>
+<summary><strong>Show <code>first_tool_call.py</code></strong></summary>
+```
+
+```python
+import aisuite as ai
+from detector_tool import DATA_DIR, inspect_casting_xray
+
+IMAGE = DATA_DIR / "C0001_0001.png"
+client = ai.Client()
+response = client.chat.completions.create(
+    model="openai:qwen3-coder",          # or openai:gpt-4o-mini for cloud
+    messages=[
+        {"role": "system", "content": (
+            "You are an industrial X-ray inspection assistant. "
+            "Always call inspect_casting_xray before answering."
+        )},
+        {"role": "user", "content": (
+            f"Inspect this frame and tell me pass or human review. "
+            f"Image path: {IMAGE}"
+        )},
+    ],
+    tools=[inspect_casting_xray],
+    max_turns=3,
+)
+print(response.choices[0].message.content)
+```
+
+```{=html}
+</details>
+```
+
+One practical note: models often pass just the filename (`C0001_0001.png`) to the tool instead of
+the full path. `inspect_casting_xray` resolves bare filenames against the GDXray `C0001` folder
+automatically so the detector still finds the image.
+
+## What the local model said
+
+I ran this against my local vLLM server (`qwen3-coder`, the output of
+`curl http://localhost:8000/v1/models`). Given the tool result above — three candidates, zero
+overlaps with the three real defects — here is the explanation it returned:
+
+:::{.callout-note}
+The detector found 3 candidate defects in this casting frame, but all were false positives.
+There are 3 true defects present according to ground truth, but none were detected. This means
+the detector missed all actual defects while incorrectly flagging 3 areas as defective. The image
+needs human review because the detector failed to identify real defects. The false alarms could
+lead to unnecessary rework if not verified by a human inspector.
+
+The detector's performance is poor for this frame with 0 true positives, 3 false positives, and
+3 false negatives.
+:::
+
+That is the payoff: the model did not invent defect counts. It read them from the tool, matched
+them against the pass/fail question, and recommended human review — which is the right call when
+precision and recall are both near zero on the frame. Same tool, same JSON — whether the LLM runs
+on OpenAI's API or on a vLLM instance on your own GPU.
+
+## What this is not (yet)
+
+- **Not an agent.** There is no replanning, no second tool choice, no "try a different threshold."
+- **Not structured output.** The final answer is free-form prose. Part 4 tightens that to reliable JSON fields (defect type, severity, confidence).
+- **Not better detection.** The underlying detector is still Part 2's classical baseline. The LLM layer adds *interpretation*, not accuracy.
+
+## Jargon, explained simply
+
+**Tool calling.** The mechanism by which an LLM invokes a real function and receives a real
+result back, instead of guessing from memory. Think of asking someone to check the thermometer
+instead of estimating the temperature from how the room feels.
+
+**Schema.** A machine-readable description of what a function expects and returns, built from
+the Python docstring so the model knows how to call the tool correctly.
+
+**max_turns.** A safety cap on how many back-and-forth steps (tool call → result → response)
+the client allows in one request. Suppose you set it to 3: the model gets at most one tool call
+and one final answer in this post's setup.
+
+**Structured output (next post).** A response forced into a fixed JSON shape so downstream code
+can parse it reliably — not the free-form paragraph above.
+
+**vLLM.** A local inference server that serves an LLM behind an OpenAI-compatible REST API.
+Think of it as running your own private `api.openai.com` on `localhost:8000` — same request
+format, no data leaves the machine.
+
+## Reproduce this yourself
+
+```{=html}
+<details>
+<summary><strong>Show reproduce commands</strong></summary>
+```
+
+```bash
+git clone https://github.com/HasanGoni/quarto_blog_hasan
+cd quarto_blog_hasan/notebooks/agentic-zero-to-advanced
+uv sync
+cp .env.example .env            # edit for cloud OpenAI or local vLLM
+uv run python first_tool_call.py
+```
+
+Cloud `.env`:
+
+```bash
+OPENAI_API_KEY=sk-...
+AGENTIC_ZERO_MODEL=openai:gpt-4o-mini
+```
+
+Local vLLM `.env` (what I used for the captured output above):
+
+```bash
+OPENAI_API_KEY=local
+OPENAI_BASE_URL=http://localhost:8000/v1
+AGENTIC_ZERO_MODEL=openai:qwen3-coder
+```
+
+```{=html}
+</details>
+```
+
+The script always writes `out/tool_result.json`. With an API key set (real or dummy for vLLM), it
+also writes `out/llm_explanation.txt` with the live model response.
+
+GDXray Castings C0001 must be on disk (same Kaggle mirror as Part 2). For local inference,
+start vLLM first and confirm the model id with `curl http://localhost:8000/v1/models`.
+
+## What's next
+
+[Part 4](04-prompting-structured-output.qmd) keeps the same tool but forces the LLM's final answer into reliable JSON — defect type, severity, confidence — so the explanation is machine-parseable, not just readable.
+severity, confidence — so the explanation is machine-parseable, not just readable.
