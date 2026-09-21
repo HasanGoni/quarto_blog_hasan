@@ -1,0 +1,399 @@
+---
+title: "Agentic Developer: Zero to Advanced, Part 4: Prompting and Structured Output"
+subtitle: "Getting reliable JSON/structured responses from the LLM about defect type, severity, confidence"
+author: "Hasan Goni"
+date: 2026-09-15
+categories: [agentic-ai, langgraph, computer-vision, python]
+toc: true
+series:
+  name: "Agentic Developer: Zero to Advanced"
+  number: 4
+---
+
+:::{.callout-tip}
+This post is part of the [Agentic Developer: Zero to Advanced](index.qmd) series. It follows on
+from [Part 3 -- your first tool-calling LLM](03-first-tool-call.qmd).
+:::
+
+In Part 3, we wrapped our classical computer vision detector as a tool and called it from an LLM. But the LLM response was still a free-form text explanation. This post introduces structured output -- getting the LLM to return data in a predictable format (like JSON) that we can reliably parse and use in downstream code.
+
+## Why structured output matters
+
+When an LLM gives you free-form text, you're essentially getting a human-readable explanation. While helpful for humans, this makes it hard for code to consume the output automatically. In an agentic system, you want the LLM to return structured data that can be:
+
+- Parsed programmatically 
+- Used as input for other tools
+- Stored in databases
+- Compared with previous outputs
+- Tracked and evaluated
+
+## The problem with unstructured responses
+
+Here's what a typical unstructured response might look like:
+
+```
+The image shows a casting with a potential defect. There's a small dark spot near the rim of the casting that appears to be a void. The defect is approximately 15x15 pixels in size and seems to be located in the lower left quadrant of the image. It's not very pronounced but could be significant if it represents a manufacturing flaw.
+```
+
+This response is informative for a human, but it's not machine-actionable. Parsing it reliably requires complex NLP and would be fragile to changes in the LLM's output format.
+
+## Interactive comparison: Unstructured vs Structured
+
+Drag the slider below to see the difference between unstructured text and structured JSON output:
+
+::: {.column-body}
+```{=html}
+<div style="position:relative;max-width:560px;margin:1.5em auto;">
+  <img id="unstruct-before" src="images/unstruct-example.png" style="width:100%;display:block;border-radius:8px;border:1px solid #ddd;">
+  <img id="unstruct-after" src="images/struct-example.png" style="width:100%;display:block;position:absolute;top:0;left:0;border-radius:8px;border:1px solid #ddd;clip-path:inset(0 50% 0 0);">
+  <div style="position:absolute;top:0;bottom:0;left:50%;width:2px;background:white;box-shadow:0 0 4px rgba(0,0,0,0.5);" id="unstruct-handle"></div>
+  <input id="unstruct-range" type="range" min="0" max="100" value="50" style="width:100%;margin-top:10px;">
+  <p style="text-align:center;font-size:0.85em;color:#666;">left: unstructured text &nbsp;|&nbsp; right: structured JSON</p>
+</div>
+<script>
+(function(){
+  var r = document.getElementById('unstruct-range');
+  var a = document.getElementById('unstruct-after');
+  var h = document.getElementById('unstruct-handle');
+  if (r && a && h) {
+    r.addEventListener('input', function(){
+      a.style.clipPath = 'inset(0 ' + (100 - r.value) + '% 0 0)';
+      h.style.left = r.value + '%';
+    });
+  }
+})();
+</script>
+```
+:::
+
+## Getting structured output from LLMs
+
+There are several approaches to get structured output from LLMs:
+
+1. **Prompt engineering** - Carefully crafting prompts that encourage the LLM to output in a specific format
+2. **System prompts** - Using system instructions to set the tone and format expectations  
+3. **JSON schema specification** - Explicitly defining the expected structure
+4. **Output parsing** - Adding validation and error handling to catch malformed responses
+
+## Using JSON schema with LLMs
+
+Let's look at how we can structure our tool to return well-defined JSON:
+
+```{=html}
+<details>
+<summary><strong>Click to see structured JSON schema</strong></summary>
+```
+
+```json
+{
+  "defects": [
+    {
+      "bbox": [150, 200, 165, 215],
+      "type": "void",
+      "severity": "medium",
+      "confidence": 0.85,
+      "explanation": "A small dark circular region in the lower left quadrant that appears to be a void or gas pocket in the aluminum casting material."
+    }
+  ]
+}
+```
+
+```{=html}
+</details>
+```
+
+## Interactive Schema Explorer
+
+Below is an interactive tool that helps visualize how different JSON schemas can be structured for defect detection:
+
+::: {.column-body}
+```{=html}
+<div style="border:1px solid #ddd;padding:15px;border-radius:8px;background:#f8f9fa;">
+  <h4>JSON Schema Playground</h4>
+  <p>Try modifying the defect properties below:</p>
+  <div style="display:flex;flex-wrap:wrap;gap:10px;margin-bottom:10px;">
+    <div style="flex:1;min-width:200px;">
+      <label>BBox Coordinates:</label>
+      <input type="text" id="bbox-input" value="[150, 200, 165, 215]" style="width:100%;">
+    </div>
+    <div style="flex:1;min-width:200px;">
+      <label>Defect Type:</label>
+      <select id="type-select">
+        <option value="void">Void</option>
+        <option value="inclusion">Inclusion</option>
+        <option value="crack">Crack</option>
+        <option value="porosity">Porosity</option>
+        <option value="other">Other</option>
+      </select>
+    </div>
+  </div>
+  <div style="display:flex;flex-wrap:wrap;gap:10px;">
+    <div style="flex:1;min-width:200px;">
+      <label>Severity:</label>
+      <select id="severity-select">
+        <option value="low">Low</option>
+        <option value="medium">Medium</option>
+        <option value="high">High</option>
+      </select>
+    </div>
+    <div style="flex:1;min-width:200px;">
+      <label>Confidence:</label>
+      <input type="range" id="confidence-slider" min="0" max="1" step="0.01" value="0.85" style="width:100%;">
+      <span id="confidence-value">0.85</span>
+    </div>
+  </div>
+  <button onclick="generateExample()" style="margin-top:10px;padding:8px 15px;background:#007bff;color:white;border:none;border-radius:4px;">Generate Example JSON</button>
+  <pre id="example-output" style="background:#eee;padding:10px;border-radius:4px;margin-top:10px;font-size:0.9em;overflow:auto;"></pre>
+</div>
+
+<script>
+function updateConfidenceValue() {
+  const slider = document.getElementById('confidence-slider');
+  const valueSpan = document.getElementById('confidence-value');
+  valueSpan.textContent = slider.value;
+}
+
+document.getElementById('confidence-slider').addEventListener('input', updateConfidenceValue);
+
+function generateExample() {
+  const bbox = document.getElementById('bbox-input').value;
+  const type = document.getElementById('type-select').value;
+  const severity = document.getElementById('severity-select').value;
+  const confidence = document.getElementById('confidence-slider').value;
+  
+  const example = {
+    defects: [{
+      bbox: JSON.parse(bbox),
+      type: type,
+      severity: severity,
+      confidence: parseFloat(confidence),
+      explanation: `A ${type} defect detected with ${severity} severity at coordinates ${bbox}`
+    }]
+  };
+  
+  document.getElementById('example-output').textContent = JSON.stringify(example, null, 2);
+}
+
+// Initialize
+updateConfidenceValue();
+</script>
+```
+:::
+
+## Creating a structured tool wrapper
+
+Here's how we can modify our tool to return structured data:
+
+```python
+import json
+from typing import List, Dict, Any
+from pydantic import BaseModel, Field
+
+class Defect(BaseModel):
+    bbox: List[float] = Field(description="Bounding box coordinates [x1, y1, x2, y2]")
+    type: str = Field(description="Type of defect: void, inclusion, crack, porosity, other")
+    severity: str = Field(description="Severity level: low, medium, high")
+    confidence: float = Field(description="Confidence score 0-1")
+    explanation: str = Field(description="Detailed explanation of the defect")
+
+class DefectDetectionResult(BaseModel):
+    defects: List[Defect] = Field(description="List of detected defects")
+
+def structured_defect_detection(image_path: str) -> DefectDetectionResult:
+    """
+    Detect defects in an X-ray image and return structured data
+    """
+    # Call the classical detector
+    raw_defects = classical_detector(image_path)
+    
+    # Process the raw detections into structured format
+    structured_defects = []
+    for defect in raw_defects:
+        # Convert raw detection to structured format
+        structured_defect = Defect(
+            bbox=defect['bbox'],
+            type="unknown",  # Would be determined by additional analysis
+            severity="medium",  # Would be determined by confidence scoring
+            confidence=defect['confidence'],
+            explanation=f"Detected defect at {defect['bbox']} with confidence {defect['confidence']}"
+        )
+        structured_defects.append(structured_defect)
+    
+    return DefectDetectionResult(defects=structured_defects)
+```
+
+## Implementing the structured prompt
+
+Here's how we would use this in practice with an LLM:
+
+```python
+def create_structured_prompt(image_analysis: Dict[str, Any]) -> str:
+    """Create a prompt that encourages structured output"""
+    prompt = STRUCTURED_PROMPT.format(schema=json.dumps(STRUCTURED_OUTPUT_SCHEMA, indent=2))
+    
+    # Add the image analysis to the prompt
+    prompt += f"\n\nHere's the image analysis:\n{json.dumps(image_analysis, indent=2)}"
+    
+    return prompt
+
+# Usage example
+def analyze_with_structured_output(image_path: str) -> Dict[str, Any]:
+    # Get the classical detection result
+    detection_result = classical_detector(image_path)
+    
+    # Create structured prompt
+    prompt = create_structured_prompt({
+        "image_path": image_path,
+        "detections": detection_result
+    })
+    
+    # Call LLM with structured prompt
+    response = llm.call(prompt)
+    
+    # Parse the structured response
+    try:
+        parsed_response = json.loads(response)
+        return parsed_response
+    except json.JSONDecodeError:
+        # Handle malformed responses gracefully
+        raise ValueError("LLM did not return valid JSON")
+```
+
+## Validating structured output
+
+A key part of structured output is validation. We want to make sure that the LLM's response conforms to our expected schema:
+
+```python
+def validate_structured_output(output: Dict[str, Any]) -> bool:
+    """Validate that the output conforms to our expected schema"""
+    try:
+        DefectDetectionResult(**output)
+        return True
+    except Exception:
+        return False
+
+def safe_structured_call(image_path: str) -> Dict[str, Any]:
+    """Safely call the structured detection with validation"""
+    # Get raw detection
+    raw_result = classical_detector(image_path)
+    
+    # Create prompt with schema
+    prompt = create_structured_prompt({"detections": raw_result})
+    
+    # Call LLM
+    response = llm.call(prompt)
+    
+    # Validate response
+    try:
+        parsed = json.loads(response)
+        if validate_structured_output(parsed):
+            return parsed
+        else:
+            # Return a default structure if validation fails
+            return {"defects": []}
+    except json.JSONDecodeError:
+        # If response is not valid JSON, return empty
+        return {"defects": []}
+```
+
+## Benefits of structured output
+
+Structured output brings several benefits to our agentic system:
+
+1. **Reliability**: Code can parse responses without complex NLP
+2. **Consistency**: Predictable data formats across different LLM calls
+3. **Usability**: Easy to store, compare, and analyze results
+4. **Integration**: Can easily connect to databases, APIs, and other systems
+5. **Evaluation**: Simple metrics can be computed on structured data
+
+## Interactive Benefits Visualization
+
+Here's a visual representation of how structured output improves system reliability:
+
+::: {.column-body}
+```{=html}
+<div style="border:1px solid #ddd;padding:15px;border-radius:8px;background:#fff;">
+  <h4>Structured Output Benefits</h4>
+  <div style="display:flex;justify-content:space-around;flex-wrap:wrap;">
+    <div style="text-align:center;margin:10px;padding:10px;border:1px solid #ccc;border-radius:5px;flex:1;min-width:150px;">
+      <div style="font-size:24px;margin-bottom:5px;">✅</div>
+      <h5>Reliable Parsing</h5>
+      <p>Automated extraction of data</p>
+    </div>
+    <div style="text-align:center;margin:10px;padding:10px;border:1px solid #ccc;border-radius:5px;flex:1;min-width:150px;">
+      <div style="font-size:24px;margin-bottom:5px;">🔄</div>
+      <h5>Consistent Format</h5>
+      <p>Same structure every time</p>
+    </div>
+    <div style="text-align:center;margin:10px;padding:10px;border:1px solid #ccc;border-radius:5px;flex:1;min-width:150px;">
+      <div style="font-size:24px;margin-bottom:5px;">📊</div>
+      <h5>Easy Analysis</h5>
+      <p>Simple metrics and reporting</p>
+    </div>
+  </div>
+</div>
+```
+:::
+
+## Common pitfalls with structured output
+
+1. **LLMs sometimes ignore instructions**: Even with careful prompting, LLMs may return unstructured text
+2. **Schema mismatches**: The LLM might not follow the exact schema you defined
+3. **Validation complexity**: Need robust validation and error handling
+4. **Performance overhead**: Validation adds computational cost
+
+## Best practices for structured output
+
+1. **Start simple**: Begin with a minimal schema and expand as needed
+2. **Use Pydantic**: Leverage libraries like Pydantic for automatic validation
+3. **Include examples**: Provide clear examples in your prompts
+4. **Add fallbacks**: Have fallback mechanisms when validation fails
+5. **Test thoroughly**: Test with various inputs to ensure robustness
+
+## What's next
+
+[Part 5](05-what-makes-it-an-agent.qmd) explores what makes a system truly "agentic" - planning, tool use, memory, and control flow. We'll move beyond simple tool calling to build systems that can make decisions and iterate on their approach.
+
+## Jargon, explained simply
+
+**Structured output.** A model response constrained to a defined shape (JSON with specific fields, for example) rather than free-form prose, so downstream code can reliably parse it.
+
+*Daily-life version:* a tax form with labeled boxes for name, income, and date, instead of a rambling free-text letter explaining your finances -- the person (or program) on the other end can process a filled-in box far more reliably than prose.
+
+**Pydantic.** A Python library for validating data structures using type hints, making it easy to define and validate complex data schemas.
+
+*Daily-life version:* a recipe card that not only tells you what ingredients to use, but also validates that you have the right amount of each one before you start cooking.
+
+**JSON schema.** A way to describe the structure of JSON data, specifying what fields are required, what types they should be, and what values they can take.
+
+*Daily-life version:* a blueprint for a house that specifies exactly what materials to use, where each room should go, and how many windows and doors are required.
+
+**Validation.** Checking that data conforms to expected rules and formats before accepting it as valid.
+
+*Daily-life version:* checking that a driver's license has the right photo, name, and ID number before letting someone drive.
+
+## Reproduce this yourself
+
+```{=html}
+<details>
+<summary><strong>Show reproduce commands</strong></summary>
+```
+
+```bash
+git clone https://github.com/HasanGoni/quarto_blog_hasan
+cd quarto_blog_hasan/notebooks/agentic-zero-to-advanced
+uv sync
+uv run python structured_output_demo.py
+```
+
+```{=html}
+</details>
+```
+
+The script demonstrates structured output techniques and shows how to validate LLM responses.
+
+## Further reading
+
+- [LangChain Structured Outputs Documentation](https://python.langchain.com/docs/modules/model_io/output_parsers/)
+- [Pydantic Data Validation](https://docs.pydantic.dev/latest/)
+- [JSON Schema Specification](https://json-schema.org/)
