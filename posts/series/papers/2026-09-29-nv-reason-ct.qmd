@@ -1,0 +1,194 @@
+---
+title: "NV-Reason-CT — What Transfers From Radiologist Chain-of-Thought on 3D CT"
+subtitle: "NVIDIA's open 3D CT VLM keeps every volumetric token and trains CoT like a radiologist — draft applicability notes for defect-inspection VLMs, not a reimplementation yet"
+author: "Hasan Goni"
+date: 2026-09-29
+categories: [papers, computer-vision, VLM, medical-imaging, semiconductor]
+draft: true
+toc: true
+series:
+  name: "Paper of the Week"
+  number: 21
+paper-urls:
+  - https://arxiv.org/abs/2609.27511
+paper-topics:
+  - "Medical Imaging"
+  - "Vision-Language Models"
+  - "Reasoning"
+# image: images/TODO-nv-reason-ct.png
+format:
+  html:
+    code-fold: true
+    code-tools: true
+---
+
+:::{.callout-tip}
+This post is part of the [Paper of the Week](index.qmd) series — a **draft** applicability
+audit of NVIDIA's NV-Reason-CT for my own X-ray / void-detection VLM work. Not a full
+reimplementation yet.
+:::
+
+:::{.callout-warning}
+## Draft status
+Skeleton is filled from the paper + NVIDIA blog. Still TODO before publish:
+
+- [ ] Decide whether to run a real smoke test (`nvidia/NV-Reason-CT` on a public CT sample)
+      or keep this as a pure applicability write-up (FleXray-style)
+- [ ] Add an ELI5 sketch / architecture diagram if useful
+- [ ] Tighten the Will-try / Will-not shortlist after I've sat with the code
+- [ ] Remove `draft: true` and this callout
+:::
+
+## The paper
+
+**NV-Reason-CT: 3D Visual Language Model for CT Analysis** (Myronenko, Yang, Tang, Turkbey,
+Simon, Harmon, Makwana, Aboian, Azamat, Hamamci, Er, Menze, Edgar, He, Guo, Xu — NVIDIA /
+NIH / collaborators, [arXiv:2609.27511](https://arxiv.org/abs/2609.27511)).
+
+Code: [NVIDIA-Medtech/NV-Reason-CT](https://github.com/NVIDIA-Medtech/NV-Reason-CT).
+Weights: [`nvidia/NV-Reason-CT`](https://huggingface.co/nvidia/NV-Reason-CT).
+NVIDIA blog:
+[Introducing NV-Reason-CT](https://developer.nvidia.com/blog/introducing-nv-reason-ct-open-3d-ct-vlm-for-radiologist-chain-of-thought-reasoning/).
+
+CT is volumetric — hundreds of slices, findings that only make sense across depth, laterality, and
+extent. Most "3D" VLMs still flatten or aggressively pool the volume before the language model
+sees it, so the LLM gets a 1D bag of visual tokens without an explicit depth–height–width grid.
+NV-Reason-CT's bet is the opposite: a **native 3D ViT** (Primus / COLIPRI init) that keeps
+**all** visual tokens, passes them through a projector **without** spatial token merging, and
+feeds explicit 3D coordinates into the LLM via multimodal RoPE (paired with **Qwen3.5-4B**).
+
+On top of that geometry story sits the reasoning story, extended from their earlier
+[NV-Reason-CXR-3B](https://arxiv.org/abs/2510.23968) chest X-ray work: train the model to write
+radiologist-style chain-of-thought (observations → differentials → uncertainty → answer), not
+just a final label. Training is two-stage — **SFT** on a curated ~550k multimodal instruction
+corpus from ~70k CT inputs (expert-narrated interpretations + report-grounded synthetic
+reasoning + VQA / multi-turn / refusals), then **GRPO** with verifiable rewards over chest and
+abdominal abnormality sets.
+
+Headline numbers from the paper (as published, not re-run here): on CT-RATE, macro-F1 **0.614**
+and macro-AUROC **0.871** *without* a task-specific classification head; report-derived
+macro-F1 **0.592**. A preliminary radiologist study reported favorable confidence and about
+**50%** lower average interpretation/reporting time when assisted by the model.
+
+## Explaining in easy words
+
+Imagine a doctor flipping through a thick flip-book of body slices. A hollow spot only becomes
+"a nodule in the upper left lung" when they remember where they are in the book (top vs bottom,
+left vs right) and how many pages the spot spans. Most AI systems glance at a few pages, mash
+them into a short summary sticky-note, and ask a language model to write the report from that
+sticky-note. NV-Reason-CT instead keeps a sticky-note for *every* little cube of the volume,
+labels each sticky-note with its page/row/column, and makes the language model reason while
+those location labels are still attached. Separately, it practices thinking out loud the way a
+radiologist does — "I see X, that could be A or B, I'm less sure about C" — and gets rewarded
+when the final call matches verifiable abnormality checklists.
+
+## Explaining for a data scientist
+
+Two design choices matter more than the marketing:
+
+1. **Dense 3D tokens into the LLM, with coordinates.** The vision tower emits a $24 \times 24
+   \times 24$ grid (~13.8k tokens). No attention pooling / Perceiver-style compression before
+   the language model. Explicit depth/height/width indices ride along via MRoPE so
+   left-vs-right and craniocaudal extent are first-class during joint vision–text attention —
+   not only inside the ViT. That is a deliberate contrast with CT-CHAT / Merlin / COLIPRI-CRM
+   style connectors that flatten or pool away the grid.
+
+2. **Reasoning as supervised product + RL on verifiable findings.** Expert-narrated CT reads
+   (scarce) seed both direct SFT targets and a rewriting pipeline that turns source reports into
+   synthetic narrated interpretations *constrained by the report*. GRPO then optimizes
+   region-specific abnormality and report-structure rewards — so you can RL without needing an
+   expert CoT for every volume. The paper is explicit that a fluent rationale is *not* proof of
+   faithful internal computation; the CoT is treated as a reviewable clinical explanation
+   alongside the image and final answer.
+
+The older sibling NV-Reason-CXR did the SFT→GRPO recipe on 2D chest X-ray with Qwen2.5-VL-3B;
+CT is the volumetric generalization, not a different philosophy.
+
+## Jargon-buster
+
+| Term | Plain meaning |
+|---|---|
+| **Native 3D ViT** | A vision transformer that treats the CT as a volume of patches with 3-axis position, not a stack of independent 2D images. Think of reading the flip-book as one 3D object instead of unrelated photos. |
+| **Spatial token merging / pooling** | Compressing thousands of visual tokens into a short sequence before the LLM. Saves compute; throws away fine spatial layout the LLM never sees. |
+| **MRoPE (multimodal rotary positional encoding)** | Rotary position encodings that can index vision tokens with depth/height/width (and text with sequence position) in the same attention stack. |
+| **COLIPRI / Primus** | NVIDIA's prior CT representation work; NV-Reason-CT initializes its 3D encoder from those weights, then trains end-to-end (encoder not permanently frozen). |
+| **GRPO (Group Relative Policy Optimization)** | An RL algorithm (DeepSeek-R1 family) that scores several sampled answers relative to each other. Here the rewards are verifiable abnormality / report-structure checks. |
+| **Verifiable reward** | A scorer you can compute automatically (e.g. does the answer match the abnormality label set?) so RL doesn't need a human preference judge every step. |
+| **Report-grounded synthetic reasoning** | LLM-rewritten "radiologist thinking" text constrained by the real report — scales CoT supervision without inventing clinical facts not in the source. |
+
+## Architecture — traced from the paper
+
+Pipeline, in order:
+
+- **Input.** Regional chest or abdominal CT volume (not a random 2D slice salad).
+- **3D vision encoder.** Primus ViT with three-axis RoPE, initialized from COLIPRI; emits
+  dense volumetric patch tokens ($24^3$).
+- **Projector.** Learned map into the LLM embedding space — **keeps every token**, no extra
+  spatial merge.
+- **Language model.** Qwen3.5-4B; visual tokens enter with explicit 3D coordinates via MRoPE.
+- **Outputs.** Structured reasoning + answers: abnormality Q&A, report generation, multi-turn
+  follow-up, with observations / differentials / uncertainty made explicit for human review.
+- **Training stage 1 — SFT.** End-to-end on ~550k instruction examples (~70k unique CT inputs):
+  reports, finding- and anatomy-focused Qs, multi-turn, refusals, expert + synthetic narrations.
+- **Training stage 2 — GRPO.** Region-specific verifiable rewards on chest/abdomen abnormality
+  sets and report structure.
+
+:::{.callout-note}
+## Smoke-test placeholder
+If I run a real inference later, capture: model id + revision, one public CT sample (path
+outside git if proprietary), prompt, raw CoT + answer, wall-clock / VRAM. Until then this stays
+an applicability draft — same honesty bar as the FleXray post.
+:::
+
+## What I'm taking / skipping for defect-inspection VLMs
+
+Personal shortlist — mapped to GDXray / casting void work and the agentic defect series, not to
+"deploy this CT model on the line."
+
+**Will try (ideas, not the CT checkpoint):**
+
+- **Verifiable-reward GRPO after reasoning SFT.** For multi-label defect vocabularies, a CoT
+  that ends in a checkable abnormality / defect set is a cleaner RL target than vague
+  preference scores. Same shape as "measure reject rate on generative edits" discipline —
+  reward what you can verify.
+- **Expert traces as seeds, report/label-grounded synthetic CoT as scale.** I will never have
+  550k radiologist narrations for voids; I might have a handful of inspector think-alouds plus
+  lots of bbox/mask labels. The paper's split — scarce expert demos guide rewriting, source
+  labels constrain content — is the transferable data recipe.
+- **Make spatial indices first-class when the modality is volumetric.** If I ever go micro-CT
+  / multi-view rather than single 2D radiograph, "don't pool away the grid before the LLM"
+  is the architectural warning label to remember.
+- **Treat CoT as an audit artifact, not proof of internals.** Useful for human review and
+  error analysis (their radiologist study angle); dangerous if I market it as "the model
+  showed its work faithfully."
+
+**Will not test:**
+
+- **Dropping `nvidia/NV-Reason-CT` onto GDXray castings.** Wrong modality (3D clinical CT vs
+  2D industrial X-ray), wrong ontology (chest/abdomen findings vs porosity), and the useful
+  part is the training recipe, not the checkpoint.
+- **Replicating the full 550k / two-region medical corpus pipeline.** Out of scope for a
+  semiconductor defect blog post; also not the bottleneck I have (I lack inspector CoT and
+  rare-defect volume, not another CT-RATE).
+- **Assuming fluent reasoning ⇒ calibrated uncertainty.** Paper already hedges this; I should
+  too.
+
+**If time allows:**
+
+- **Side-by-side with NV-Reason-CXR-3B on 2D radiographs** as a closer relative to industrial
+  X-ray than the CT model — still medical, still OOD for castings, but the 2D reasoning stack
+  is the fairer "does CoT+GRPO help classification?" probe.
+- **Tiny GRPO toy on a verifiable defect checklist** (e.g. presence of ≥1 bbox-overlapping
+  prediction) after a short SFT CoT stage on local Qwen-VL — measure whether verifiable RL
+  moves checklist F1 or just makes longer prose.
+
+## The honest bottom line
+
+NV-Reason-CT is not a model to fine-tune for void detection. It is a clear, open recipe for
+**keeping 3D structure all the way into the LLM** and for **training reviewable radiologist-style
+reasoning with SFT → verifiable GRPO**. For my line of work, the geometry lesson applies only
+when the input is truly volumetric; the reasoning+RL lesson applies now, on 2D X-ray VLMs,
+if I'm willing to build a small expert-seeded CoT set and a checklist reward I actually trust.
+
+Next concrete step when this draft graduates: either a CXR-3B smoke test on a public chest
+film (closer modality) or a minimal verifiable-GRPO toy on GDXray — not a CT reimplementation.
