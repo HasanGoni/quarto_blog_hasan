@@ -5,6 +5,7 @@ date: 2026-09-04
 categories: ["papers", "weekly-pick", "computer-vision", "VLM", "Vision-Language Models", "Generative Retrieval", "Reasoning & Agents", "Multimodal Learning"]
 image: "https://cdn-thumbnails.huggingface.co/social-thumbnails/papers/2609.00111.png"
 toc: true
+search: false
 series:
   name: "Paper of the Week"
   number: 15

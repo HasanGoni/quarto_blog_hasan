@@ -6,6 +6,7 @@ date: last-modified
 categories: [computer-vision, synthetic-data, X-ray, diffusion, Flux, LoRA]
 image: images/synth-xray-flux-eli5-sketch.png
 toc: true
+search: false
 series:
   name: "Synthetic Data Series"
   number: 4

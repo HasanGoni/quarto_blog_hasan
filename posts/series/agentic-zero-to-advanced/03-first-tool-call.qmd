@@ -263,4 +263,3 @@ start vLLM first and confirm the model id with `curl http://localhost:8000/v1/mo
 ## What's next
 
 [Part 4](04-prompting-structured-output.qmd) keeps the same tool but forces the LLM's final answer into reliable JSON — defect type, severity, confidence — so the explanation is machine-parseable, not just readable.
-severity, confidence — so the explanation is machine-parseable, not just readable.

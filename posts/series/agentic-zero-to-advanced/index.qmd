@@ -28,9 +28,9 @@ This is a roadmap post: links go live as each part is written, in order.
 1. [Introduction -- why agentic AI, why X-ray defect detection as the teaching example](01-introduction.qmd)
 2. [The dataset and the baseline model](02-dataset-baseline.qmd) -- loading real GDXray data,
    running a plain classical CV detector, no agent yet, scored honestly against real ground truth
-3. Your first tool-calling LLM -- wrapping the detector as a "tool", one LLM call that reads
-   structured output and writes a plain-English explanation
-4. Prompting and structured output -- getting reliable JSON/structured responses from the LLM
+3. [Your first tool-calling LLM](03-first-tool-call.qmd) -- wrapping the detector as a "tool",
+   one LLM call that reads structured output and writes a plain-English explanation
+4. [Prompting and structured output -- getting reliable JSON/structured responses from the LLM](04-prompting-structured-output.qmd)
    about defect type, severity, confidence
 
 ### Arc 2 -- The Agent Loop

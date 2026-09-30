@@ -6,6 +6,7 @@ date: last-modified
 categories: [computer-vision, synthetic-data, X-ray, diffusion, generative-modeling]
 image: images/synth-xray-joint-eli5-sketch.png
 toc: true
+search: false
 series:
   name: "Synthetic Data Series"
   number: 5

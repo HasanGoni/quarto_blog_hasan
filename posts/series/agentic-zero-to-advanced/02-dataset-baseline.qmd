@@ -218,6 +218,6 @@ is free for educational and research use only.
 
 ## What's next
 
-Part 3 wraps this exact detector as a callable tool and puts one LLM call in front of it: reading
-the detector's raw output and writing a plain-English explanation. Still no planning, no
-iteration, no real agent yet -- just the first tool call.
+[Part 3](03-first-tool-call.qmd) wraps this exact detector as a callable tool and puts one LLM
+call in front of it: reading the detector's raw output and writing a plain-English explanation.
+Still no planning, no iteration, no real agent yet -- just the first tool call.

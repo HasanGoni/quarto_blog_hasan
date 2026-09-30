@@ -6,6 +6,7 @@ date: last-modified
 categories: [computer-vision, synthetic-data, X-ray, diffusion, ControlNet, LoRA]
 image: images/synth-xray-controlnet-eli5-sketch.png
 toc: true
+search: false
 series:
   name: "Synthetic Data Series"
   number: 3

@@ -5,6 +5,7 @@ date: 2026-08-21
 categories: ["papers", "weekly-pick", "computer-vision", "VLM", "Model Efficiency", "Vision-Language Models", "Benchmarks & Evaluation", "Reinforcement Learning"]
 image: "https://cdn-thumbnails.huggingface.co/social-thumbnails/papers/2608.17402.png"
 toc: true
+search: false
 series:
   name: "Paper of the Week"
   number: 2

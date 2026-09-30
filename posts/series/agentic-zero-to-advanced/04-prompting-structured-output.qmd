@@ -43,12 +43,22 @@ Drag the slider below to see the difference between unstructured text and struct
 
 ::: {.column-body}
 ```{=html}
-<div style="position:relative;max-width:560px;margin:1.5em auto;">
-  <img id="unstruct-before" src="images/unstruct-example.png" style="width:100%;display:block;border-radius:8px;border:1px solid #ddd;">
-  <img id="unstruct-after" src="images/struct-example.png" style="width:100%;display:block;position:absolute;top:0;left:0;border-radius:8px;border:1px solid #ddd;clip-path:inset(0 50% 0 0);">
+<div style="position:relative;max-width:560px;height:220px;margin:1.5em auto;font-family:ui-monospace,SFMono-Regular,Menlo,monospace;font-size:0.85em;">
+  <pre id="unstruct-before" style="width:100%;height:100%;margin:0;padding:14px;box-sizing:border-box;white-space:pre-wrap;display:block;border-radius:8px;border:1px solid #ddd;background:#fafafa;overflow:auto;">The image shows a casting with a potential defect. There's a small dark spot
+near the rim of the casting that appears to be a void. The defect is
+approximately 15x15 pixels in size and seems to be located in the lower left
+quadrant of the image. It's not very pronounced but could be significant if
+it represents a manufacturing flaw.</pre>
+  <pre id="unstruct-after" style="width:100%;height:100%;margin:0;padding:14px;box-sizing:border-box;white-space:pre-wrap;display:block;position:absolute;top:0;left:0;border-radius:8px;border:1px solid #ddd;background:#f4f8ff;clip-path:inset(0 50% 0 0);overflow:auto;">{
+  "defect_type": "void",
+  "location": "lower_left_quadrant",
+  "size_px": [15, 15],
+  "severity": "low",
+  "confidence": 0.62
+}</pre>
   <div style="position:absolute;top:0;bottom:0;left:50%;width:2px;background:white;box-shadow:0 0 4px rgba(0,0,0,0.5);" id="unstruct-handle"></div>
   <input id="unstruct-range" type="range" min="0" max="100" value="50" style="width:100%;margin-top:10px;">
-  <p style="text-align:center;font-size:0.85em;color:#666;">left: unstructured text &nbsp;|&nbsp; right: structured JSON</p>
+  <p style="text-align:center;font-size:0.85em;color:#666;margin-top:8px;">left: unstructured text &nbsp;|&nbsp; right: structured JSON (illustrative sketch -- field names like <code>defect_type</code>/<code>size_px</code> are simplified for this comparison, not the real <code>Defect</code> schema below)</p>
 </div>
 <script>
 (function(){
@@ -180,121 +190,253 @@ updateConfidenceValue();
 ```
 :::
 
-## Creating a structured tool wrapper
+## The schema, for real
 
-Here's how we can modify our tool to return structured data:
+Traced from `notebooks/agentic-zero-to-advanced/structured_output_demo.py` -- this is the actual
+Pydantic model the LLM's response gets validated against, not a sketch:
 
-```python
-import json
-from typing import List, Dict, Any
+```{.python filename="notebooks/agentic-zero-to-advanced/structured_output_demo.py (schema)"}
+from typing import List, Literal
 from pydantic import BaseModel, Field
 
 class Defect(BaseModel):
-    bbox: List[float] = Field(description="Bounding box coordinates [x1, y1, x2, y2]")
-    type: str = Field(description="Type of defect: void, inclusion, crack, porosity, other")
-    severity: str = Field(description="Severity level: low, medium, high")
-    confidence: float = Field(description="Confidence score 0-1")
-    explanation: str = Field(description="Detailed explanation of the defect")
+    bbox: List[int] = Field(description="[x1, y1, x2, y2] in pixels")
+    type: Literal["void", "inclusion", "crack", "porosity", "other"]
+    severity: Literal["low", "medium", "high"]
+    confidence: float = Field(ge=0.0, le=1.0)
+    explanation: str
 
-class DefectDetectionResult(BaseModel):
-    defects: List[Defect] = Field(description="List of detected defects")
-
-def structured_defect_detection(image_path: str) -> DefectDetectionResult:
-    """
-    Detect defects in an X-ray image and return structured data
-    """
-    # Call the classical detector
-    raw_defects = classical_detector(image_path)
-    
-    # Process the raw detections into structured format
-    structured_defects = []
-    for defect in raw_defects:
-        # Convert raw detection to structured format
-        structured_defect = Defect(
-            bbox=defect['bbox'],
-            type="unknown",  # Would be determined by additional analysis
-            severity="medium",  # Would be determined by confidence scoring
-            confidence=defect['confidence'],
-            explanation=f"Detected defect at {defect['bbox']} with confidence {defect['confidence']}"
-        )
-        structured_defects.append(structured_defect)
-    
-    return DefectDetectionResult(defects=structured_defects)
+class DefectReport(BaseModel):
+    defects: List[Defect]
 ```
 
-## Implementing the structured prompt
+The `Literal` types matter more than they look like they should: they turn "the model made up a
+new category" into a hard validation failure instead of a silent, unnoticed drift in your data.
 
-Here's how we would use this in practice with an LLM:
+## The real input: Part 2's detector, not a raw image
+
+The model here is Qwen3-Coder-30B, served locally via vLLM -- a text model, no vision. It never
+sees the X-ray. What it gets is the real JSON from Part 3's `inspect_casting_xray` tool: the
+classical top-hat detector's candidate boxes, with no semantic label attached. The LLM's actual job
+is to turn "these pixel coordinates and this confidence number" into a defect type, a severity, and
+a human-readable explanation -- which is a genuinely harder and more honest task than it sounds,
+because it has to admit when the numbers alone can't tell it what kind of defect this is.
+
+```{.python filename="notebooks/agentic-zero-to-advanced/structured_output_demo.py (prompt)"}
+SCHEMA_JSON = json.dumps(DefectReport.model_json_schema(), indent=2)
+
+SYSTEM_PROMPT = f"""You are an industrial X-ray inspection assistant. You will be given the raw
+output of a classical computer-vision defect detector (candidate bounding boxes, no semantic
+labels) for one aluminum casting X-ray frame. Turn it into a structured defect report.
+
+Output ONLY a single JSON object matching this schema -- no markdown fences, no prose before or
+after it:
+
+{SCHEMA_JSON}
+
+Rules:
+- Emit exactly one entry in "defects" per candidate box in the input, in the same order.
+- Infer "type" and "severity" from the box's size, position, and the detector's confidence score
+  -- you do not have the image, only these numbers, so be conservative and say so in
+  "explanation" when the numbers are genuinely ambiguous.
+- If the detector reports zero candidate boxes, return {{"defects": []}} -- that is a valid,
+  clean result, not a failure.
+- Never invent a defect that is not backed by a candidate box in the input."""
+```
+
+`{SCHEMA_JSON}` is a plain f-string substitution (the variable, computed one line above from
+Pydantic's own `.model_json_schema()`, so the prompt's schema can never drift out of sync with the
+code that validates against it). `{{"defects": []}}` is the escaped-brace way to put a *literal*
+`{"defects": []}` into an f-string. If you're copying this into your own prompt-templating code
+and it's not an f-string (e.g. `.format()`), the escaping rules differ -- check which one you're
+actually using before assuming this pastes in unchanged.
+
+## Validating structured output, with a real retry -- and a fix for the bug in this post's first draft
+
+An earlier draft of this exact section had this fallback:
 
 ```python
-def create_structured_prompt(image_analysis: Dict[str, Any]) -> str:
-    """Create a prompt that encourages structured output"""
-    prompt = STRUCTURED_PROMPT.format(schema=json.dumps(STRUCTURED_OUTPUT_SCHEMA, indent=2))
-    
-    # Add the image analysis to the prompt
-    prompt += f"\n\nHere's the image analysis:\n{json.dumps(image_analysis, indent=2)}"
-    
-    return prompt
-
-# Usage example
-def analyze_with_structured_output(image_path: str) -> Dict[str, Any]:
-    # Get the classical detection result
-    detection_result = classical_detector(image_path)
-    
-    # Create structured prompt
-    prompt = create_structured_prompt({
-        "image_path": image_path,
-        "detections": detection_result
-    })
-    
-    # Call LLM with structured prompt
-    response = llm.call(prompt)
-    
-    # Parse the structured response
-    try:
-        parsed_response = json.loads(response)
-        return parsed_response
-    except json.JSONDecodeError:
-        # Handle malformed responses gracefully
-        raise ValueError("LLM did not return valid JSON")
+except json.JSONDecodeError:
+    return {"defects": []}
 ```
 
-## Validating structured output
+That line looks harmless and is actually the most dangerous line in the whole post: it makes "the
+model's response was malformed" and "the casting is genuinely defect-free" produce the *identical*
+output. Anything downstream that reads `defects: []` can no longer tell "all clear" from "I have no
+idea what happened here" -- exactly the failure mode a real inspection system cannot afford.
 
-A key part of structured output is validation. We want to make sure that the LLM's response conforms to our expected schema:
+The fix actually implemented here: parse, validate against the Pydantic schema above, and if either
+step fails, retry once with the *exact* error message fed back to the model. If it still fails
+after the retry, return an explicit `needs_review` status with the raw response attached -- never
+an empty list standing in for a failure.
 
-```python
-def validate_structured_output(output: Dict[str, Any]) -> bool:
-    """Validate that the output conforms to our expected schema"""
+```{.python filename="notebooks/agentic-zero-to-advanced/structured_output_demo.py (validate + retry)"}
+def parse_and_validate(raw_text: str) -> tuple[DefectReport | None, str | None]:
+    """Returns (report, None) on success, (None, error_message) on failure."""
     try:
-        DefectDetectionResult(**output)
-        return True
-    except Exception:
-        return False
-
-def safe_structured_call(image_path: str) -> Dict[str, Any]:
-    """Safely call the structured detection with validation"""
-    # Get raw detection
-    raw_result = classical_detector(image_path)
-    
-    # Create prompt with schema
-    prompt = create_structured_prompt({"detections": raw_result})
-    
-    # Call LLM
-    response = llm.call(prompt)
-    
-    # Validate response
+        data = json.loads(strip_fences(raw_text))
+    except json.JSONDecodeError as exc:
+        return None, f"JSONDecodeError: {exc}"
     try:
-        parsed = json.loads(response)
-        if validate_structured_output(parsed):
-            return parsed
-        else:
-            # Return a default structure if validation fails
-            return {"defects": []}
-    except json.JSONDecodeError:
-        # If response is not valid JSON, return empty
-        return {"defects": []}
+        return DefectReport(**data), None
+    except ValidationError as exc:
+        return None, f"ValidationError: {exc}"
+
+
+def structured_report_for_image(client, image_path: Path) -> dict:
+    tool_result = inspect_casting_xray(str(image_path))
+    messages = [
+        {"role": "system", "content": SYSTEM_PROMPT},
+        {"role": "user", "content": f"Detector output for {image_path.name}:\n{tool_result}"},
+    ]
+
+    raw = call_llm(client, messages)
+    report, error = parse_and_validate(raw)
+    if report is not None:
+        return {"image": image_path.name, "status": "ok", "attempts": 1,
+                "defects": [d.model_dump() for d in report.defects]}
+
+    # One retry: feed the exact error back, ask for a fix, nothing else.
+    messages += [
+        {"role": "assistant", "content": raw},
+        {"role": "user", "content": (
+            f"That response failed validation with this error:\n{error}\n\n"
+            "Return ONLY the corrected JSON object matching the schema above. "
+            "No markdown fences, no explanation."
+        )},
+    ]
+    raw_retry = call_llm(client, messages)
+    report_retry, error_retry = parse_and_validate(raw_retry)
+    if report_retry is not None:
+        return {"image": image_path.name, "status": "recovered_after_retry", "attempts": 2,
+                "first_attempt_error": error,
+                "defects": [d.model_dump() for d in report_retry.defects]}
+
+    return {"image": image_path.name, "status": "needs_review", "attempts": 2,
+            "first_attempt_error": error, "second_attempt_error": error_retry,
+            "raw_response": raw_retry[:800]}
 ```
+
+## The real result, measured on all 72 real GDXray frames
+
+Ran against Qwen3-Coder-30B (local vLLM, `temperature=0.2`) over every real frame in GDXray
+Castings series C0001 -- not a curated subset:
+
+| | |
+|---|---|
+| Images | 72 |
+| Valid on first try | **72 / 72 (100%)** |
+| Recovered after retry | 0 |
+| Needs review (both attempts failed) | 0 |
+| Total defect entries emitted | 366 |
+| Candidate-box <-> defect-entry mismatches | **0 / 72** |
+
+The honest headline: **the retry path never fired in this run.** With a strict system prompt,
+`temperature=0.2`, and a small, capable coder model, malformed JSON simply didn't happen across 72
+real calls. That's a genuinely different story than the illustrative version of this post implied
+(a `except JSONDecodeError` branch presented as if it would obviously be needed) -- it wasn't
+needed here, and claiming otherwise would be dishonest.
+
+What the run *did* verify, and what actually matters going into a production pipeline: every single
+one of the 72 responses respected the "exactly one defect entry per candidate box, same order"
+rule, with zero count mismatches. That's the property the rest of this series' downstream tools
+(Arc 2's business-rule checks, Arc 2's report generation) will depend on -- not "did it produce
+valid JSON" alone, but "does the structure stay faithful to the input it was given."
+
+**Valid JSON is not the same claim as correct labels.** The model never sees the image -- it infers
+`type` and `severity` purely from box size, position, and the detector's confidence number. The
+`Literal` type guarantees every label is *one of the five allowed strings*, not that it's the
+*right* one. Here's what those 366 entries actually broke down as:
+
+::: {.columns}
+::: {.column width="48%"}
+| type | count |
+|---|---|
+| porosity | 133 |
+| void | 88 |
+| other | 43 |
+| inclusion | 68 |
+| crack | 34 |
+:::
+::: {.column width="4%"}
+:::
+::: {.column width="48%"}
+| severity | count |
+|---|---|
+| low | 268 |
+| medium | 88 |
+| high | 10 |
+:::
+:::
+
+43 entries (12%) landed in the catch-all `other` bucket, and the model was explicitly told to do
+that "when the numbers are genuinely ambiguous" -- a reasonable amount of honest uncertainty for a
+model working from four numbers and no pixels, not a metric to celebrate or worry about without a
+ground-truth defect-type label to check it against. That check belongs to a future evaluation-arc
+post, not this one -- this post's claim is scoped to *structural* correctness (valid JSON, right
+shape, right count), not *semantic* correctness (right label).
+
+**The count-fidelity result is the easier half of this problem, too:** the boxes themselves are
+handed to the model by the detector -- getting the count right is a copying task, not a perception
+task. The harder half (does `type`/`severity` match reality) is exactly the part this run cannot
+speak to.
+
+Two caveats, stated plainly rather than glossed over:
+
+- **This run never exercised the "zero candidate boxes -> empty defect list" instruction** --
+  every one of the 72 frames had at least one detector candidate (1-11 per image), so the "genuinely
+  clean casting" path is untested here. Worth a follow-up specifically targeting clean frames.
+- **This is one model, one prompt, one temperature setting, on structured extraction from numbers
+  it was already handed** -- not a general claim that "structured output never fails." The
+  retry + `needs_review` scaffolding stays in the code because it's a safety net for failure modes
+  this particular 72-image run happened not to hit, not because it was proven unnecessary.
+
+Full per-image output: `notebooks/agentic-zero-to-advanced/out/structured_output_results.json`.
+
+### Proving the untested paths actually work
+
+Since the real run never hit `recovered_after_retry` or `needs_review`, those two branches were
+technically unexercised code -- a safety net nobody had actually pulled on. So
+`notebooks/agentic-zero-to-advanced/test_retry_paths.py` injects known responses through a fake
+client with the same `.chat.completions.create(...)` interface aisuite uses (mocking only what the
+LLM *would have said*, not our own parsing/validation/retry logic), and runs the real
+`structured_report_for_image` function against them:
+
+```{.python filename="notebooks/agentic-zero-to-advanced/test_retry_paths.py (the three cases)"}
+r1 = run_case("valid on first try", [VALID_JSON])
+assert r1["status"] == "ok" and r1["attempts"] == 1
+
+r2 = run_case("broken JSON first, valid on retry", [BROKEN_JSON, VALID_JSON])
+assert r2["status"] == "recovered_after_retry" and r2["attempts"] == 2
+
+r3 = run_case("fails validation both times", [INVALID_SCHEMA, BROKEN_JSON])
+assert r3["status"] == "needs_review" and r3["attempts"] == 2
+assert "raw_response" in r3
+```
+
+Real output, all three assertions passing:
+
+```
+=== Case 2: broken JSON first, valid on retry ===
+{
+  "status": "recovered_after_retry",
+  "attempts": 2,
+  "first_attempt_error": "JSONDecodeError: Expecting property name enclosed in double quotes...",
+  "defects": [ ... ]
+}
+
+=== Case 3: fails validation both times -> needs_review ===
+{
+  "status": "needs_review",
+  "attempts": 2,
+  "first_attempt_error": "ValidationError: 4 validation errors for DefectReport\ndefects.0.type\n  Input should be 'void', 'inclusion', 'crack', 'porosity' or 'other' ...",
+  "second_attempt_error": "JSONDecodeError: Expecting property name enclosed in double quotes...",
+  "raw_response": "{ this is not valid json at all"
+}
+```
+
+Now the safety net is *tested*, not just *untried* -- both failure paths demonstrably do what the
+code claims, independent of whether the real 72-image run happened to need them.
 
 ## Benefits of structured output
 
@@ -306,41 +448,24 @@ Structured output brings several benefits to our agentic system:
 4. **Integration**: Can easily connect to databases, APIs, and other systems
 5. **Evaluation**: Simple metrics can be computed on structured data
 
-## Interactive Benefits Visualization
-
-Here's a visual representation of how structured output improves system reliability:
-
-::: {.column-body}
-```{=html}
-<div style="border:1px solid #ddd;padding:15px;border-radius:8px;background:#fff;">
-  <h4>Structured Output Benefits</h4>
-  <div style="display:flex;justify-content:space-around;flex-wrap:wrap;">
-    <div style="text-align:center;margin:10px;padding:10px;border:1px solid #ccc;border-radius:5px;flex:1;min-width:150px;">
-      <div style="font-size:24px;margin-bottom:5px;">✅</div>
-      <h5>Reliable Parsing</h5>
-      <p>Automated extraction of data</p>
-    </div>
-    <div style="text-align:center;margin:10px;padding:10px;border:1px solid #ccc;border-radius:5px;flex:1;min-width:150px;">
-      <div style="font-size:24px;margin-bottom:5px;">🔄</div>
-      <h5>Consistent Format</h5>
-      <p>Same structure every time</p>
-    </div>
-    <div style="text-align:center;margin:10px;padding:10px;border:1px solid #ccc;border-radius:5px;flex:1;min-width:150px;">
-      <div style="font-size:24px;margin-bottom:5px;">📊</div>
-      <h5>Easy Analysis</h5>
-      <p>Simple metrics and reporting</p>
-    </div>
-  </div>
-</div>
-```
-:::
-
 ## Common pitfalls with structured output
 
-1. **LLMs sometimes ignore instructions**: Even with careful prompting, LLMs may return unstructured text
+1. **LLMs sometimes ignore instructions.** Didn't happen in this post's 72-image run (see above),
+   but plan for it anyway -- the retry/`needs_review` scaffolding exists precisely because prompt
+   compliance isn't a guarantee, only an empirical result for one model/prompt/temperature
+   combination, on one day, against one image set.
 2. **Schema mismatches**: The LLM might not follow the exact schema you defined
 3. **Validation complexity**: Need robust validation and error handling
 4. **Performance overhead**: Validation adds computational cost
+
+A natural question: since this is served through vLLM already, why not use vLLM's own **guided
+decoding** (constrained generation that forces the output tokens to match a JSON schema
+grammar, so malformed JSON becomes structurally impossible rather than just unlikely) instead of
+prompt-and-retry? It's a real, better answer for this exact setup -- deliberately left out of this
+post's own pipeline, though: prompt-plus-validation is the general-purpose pattern that also works
+against a cloud API with no grammar-constraint support, and the retry/`needs_review` path this post
+builds is what you fall back on for those cases regardless. Worth its own follow-up now that the
+prompt-only version has a real measured baseline to compare against.
 
 ## Best practices for structured output
 
@@ -352,7 +477,7 @@ Here's a visual representation of how structured output improves system reliabil
 
 ## What's next
 
-[Part 5](05-what-makes-it-an-agent.qmd) explores what makes a system truly "agentic" - planning, tool use, memory, and control flow. We'll move beyond simple tool calling to build systems that can make decisions and iterate on their approach.
+Part 5 kicks off [Arc 2](index.qmd#arc-2-the-agent-loop) — what makes a system truly "agentic": planning, tool use, memory, and control flow. We'll move beyond simple tool calling to build systems that can make decisions and iterate on their approach. Link goes live once that post is written.
 
 ## Jargon, explained simply
 
@@ -383,6 +508,7 @@ Here's a visual representation of how structured output improves system reliabil
 git clone https://github.com/HasanGoni/quarto_blog_hasan
 cd quarto_blog_hasan/notebooks/agentic-zero-to-advanced
 uv sync
+cp .env.example .env   # edit: local vLLM (see below) or your own OPENAI_API_KEY
 uv run python structured_output_demo.py
 ```
 
@@ -390,7 +516,12 @@ uv run python structured_output_demo.py
 </details>
 ```
 
-The script demonstrates structured output techniques and shows how to validate LLM responses.
+Needs either a cloud `OPENAI_API_KEY`, or a local OpenAI-compatible server (this post's run used
+`vllm serve Qwen/Qwen3-Coder-30B-A3B-Instruct` on `localhost:8000`, matching Part 3's setup) with
+`.env` set to `OPENAI_API_KEY=local` and `OPENAI_BASE_URL=http://localhost:8000/v1`. Runs over
+every real frame in GDXray Castings series C0001 by default (72 images,
+`AGENTIC_ZERO_MAX_IMAGES=N` to cap it) and writes per-image results plus a summary to
+`out/structured_output_results.json` / `out/structured_output_summary.json`.
 
 ## Further reading
 

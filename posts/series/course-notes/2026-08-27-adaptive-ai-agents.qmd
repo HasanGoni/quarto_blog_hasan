@@ -5,6 +5,7 @@ author: "Hasan Goni"
 date: 2026-08-27
 categories: [agentic-ai, course-notes]
 toc: true
+search: false
 series:
   name: "Online Course Notes"
   number: 1

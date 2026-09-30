@@ -5,6 +5,7 @@ date: 2026-08-15
 categories: [papers, weekly-pick, computer-vision, VLM]
 image: "https://cdn-thumbnails.huggingface.co/social-thumbnails/papers/2608.10628.png"
 toc: true
+search: false
 series:
   name: "Paper of the Week"
   number: 1

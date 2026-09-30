@@ -176,6 +176,10 @@ website:
             href: posts/series/agentic-zero-to-advanced/01-introduction.qmd
           - text: "2. Dataset and Baseline"
             href: posts/series/agentic-zero-to-advanced/02-dataset-baseline.qmd
+          - text: "3. First Tool Call"
+            href: posts/series/agentic-zero-to-advanced/03-first-tool-call.qmd
+          - text: "4. Prompting and Structured Output"
+            href: posts/series/agentic-zero-to-advanced/04-prompting-structured-output.qmd
       - section: "Agentic Architecture: Supply Chain"
         collapse: true
         collapsed: true

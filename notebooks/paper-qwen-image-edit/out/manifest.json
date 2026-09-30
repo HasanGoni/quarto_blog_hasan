@@ -1,0 +1,518 @@
+{
+  "model": "Qwen/Qwen-Image-2.1",
+  "pipeline_class": "QwenImage21Pipeline",
+  "diffusers_version": "0.41.0.dev0",
+  "num_inference_steps": 28,
+  "mask_radius_px": 22,
+  "load_time_s": 166.7,
+  "load_mem_gb": 32.46,
+  "results": [
+    {
+      "image": "C0001_0001.png",
+      "test": "defect_type_diversity",
+      "defect_type": "void",
+      "seed": 0,
+      "mask_center_src": [
+        325,
+        93
+      ],
+      "inference_s": 105.59,
+      "peak_mem_gb": 41.85,
+      "before_stats": {
+        "mean": 148.33006286621094,
+        "std": 43.4424934387207,
+        "laplacian_var": 15.507726669311523
+      },
+      "after_stats": {
+        "mean": 110.18641662597656,
+        "std": 61.69473648071289,
+        "laplacian_var": 169.83834838867188
+      },
+      "out_file": "C0001_0001_void_seed0.png"
+    },
+    {
+      "image": "C0001_0001.png",
+      "test": "defect_type_diversity",
+      "defect_type": "void",
+      "seed": 1,
+      "mask_center_src": [
+        325,
+        93
+      ],
+      "inference_s": 103.26,
+      "peak_mem_gb": 41.85,
+      "before_stats": {
+        "mean": 148.33006286621094,
+        "std": 43.4424934387207,
+        "laplacian_var": 15.507726669311523
+      },
+      "after_stats": {
+        "mean": 109.12564849853516,
+        "std": 56.16143035888672,
+        "laplacian_var": 367.0554504394531
+      },
+      "out_file": "C0001_0001_void_seed1.png"
+    },
+    {
+      "image": "C0001_0001.png",
+      "test": "defect_type_diversity",
+      "defect_type": "void",
+      "seed": 2,
+      "mask_center_src": [
+        325,
+        93
+      ],
+      "inference_s": 103.61,
+      "peak_mem_gb": 41.85,
+      "before_stats": {
+        "mean": 148.33006286621094,
+        "std": 43.4424934387207,
+        "laplacian_var": 15.507726669311523
+      },
+      "after_stats": {
+        "mean": 125.70069122314453,
+        "std": 52.672386169433594,
+        "laplacian_var": 224.9760284423828
+      },
+      "out_file": "C0001_0001_void_seed2.png"
+    },
+    {
+      "image": "C0001_0001.png",
+      "test": "defect_type_diversity",
+      "defect_type": "crack",
+      "seed": 0,
+      "mask_center_src": [
+        467,
+        437
+      ],
+      "inference_s": 103.49,
+      "peak_mem_gb": 41.85,
+      "before_stats": {
+        "mean": 198.09194946289062,
+        "std": 0.5629919171333313,
+        "laplacian_var": 4.969383716583252
+      },
+      "after_stats": {
+        "mean": 189.9788055419922,
+        "std": 23.565275192260742,
+        "laplacian_var": 303.0635681152344
+      },
+      "out_file": "C0001_0001_crack_seed0.png"
+    },
+    {
+      "image": "C0001_0001.png",
+      "test": "defect_type_diversity",
+      "defect_type": "crack",
+      "seed": 1,
+      "mask_center_src": [
+        467,
+        437
+      ],
+      "inference_s": 103.3,
+      "peak_mem_gb": 41.85,
+      "before_stats": {
+        "mean": 198.09194946289062,
+        "std": 0.5629919171333313,
+        "laplacian_var": 4.969383716583252
+      },
+      "after_stats": {
+        "mean": 182.8936004638672,
+        "std": 21.616125106811523,
+        "laplacian_var": 299.90203857421875
+      },
+      "out_file": "C0001_0001_crack_seed1.png"
+    },
+    {
+      "image": "C0001_0001.png",
+      "test": "defect_type_diversity",
+      "defect_type": "crack",
+      "seed": 2,
+      "mask_center_src": [
+        467,
+        437
+      ],
+      "inference_s": 103.44,
+      "peak_mem_gb": 41.85,
+      "before_stats": {
+        "mean": 198.09194946289062,
+        "std": 0.5629919171333313,
+        "laplacian_var": 4.969383716583252
+      },
+      "after_stats": {
+        "mean": 180.0337371826172,
+        "std": 34.27824020385742,
+        "laplacian_var": 165.0659637451172
+      },
+      "out_file": "C0001_0001_crack_seed2.png"
+    },
+    {
+      "image": "C0001_0001.png",
+      "test": "defect_type_diversity",
+      "defect_type": "inclusion",
+      "seed": 0,
+      "mask_center_src": [
+        270,
+        412
+      ],
+      "inference_s": 103.31,
+      "peak_mem_gb": 41.85,
+      "before_stats": {
+        "mean": 198.5387420654297,
+        "std": 0.5516197085380554,
+        "laplacian_var": 4.766012191772461
+      },
+      "after_stats": {
+        "mean": 131.5268096923828,
+        "std": 58.05717086791992,
+        "laplacian_var": 695.0696411132812
+      },
+      "out_file": "C0001_0001_inclusion_seed0.png"
+    },
+    {
+      "image": "C0001_0001.png",
+      "test": "defect_type_diversity",
+      "defect_type": "inclusion",
+      "seed": 1,
+      "mask_center_src": [
+        270,
+        412
+      ],
+      "inference_s": 103.17,
+      "peak_mem_gb": 41.85,
+      "before_stats": {
+        "mean": 198.5387420654297,
+        "std": 0.5516197085380554,
+        "laplacian_var": 4.766012191772461
+      },
+      "after_stats": {
+        "mean": 163.90008544921875,
+        "std": 45.30085754394531,
+        "laplacian_var": 289.1748962402344
+      },
+      "out_file": "C0001_0001_inclusion_seed1.png"
+    },
+    {
+      "image": "C0001_0001.png",
+      "test": "defect_type_diversity",
+      "defect_type": "inclusion",
+      "seed": 2,
+      "mask_center_src": [
+        270,
+        412
+      ],
+      "inference_s": 103.31,
+      "peak_mem_gb": 41.85,
+      "before_stats": {
+        "mean": 198.5387420654297,
+        "std": 0.5516197085380554,
+        "laplacian_var": 4.766012191772461
+      },
+      "after_stats": {
+        "mean": 160.94052124023438,
+        "std": 47.696170806884766,
+        "laplacian_var": 260.3397521972656
+      },
+      "out_file": "C0001_0001_inclusion_seed2.png"
+    },
+    {
+      "image": "C0001_0001.png",
+      "test": "severity_control",
+      "severity": "faint",
+      "seed": 7,
+      "mask_center_src": [
+        717,
+        360
+      ],
+      "inference_s": 102.77,
+      "peak_mem_gb": 41.85,
+      "after_stats": {
+        "mean": 124.2729263305664,
+        "std": 33.67991638183594,
+        "laplacian_var": 101.0995864868164
+      },
+      "out_file": "C0001_0001_severity_faint.png"
+    },
+    {
+      "image": "C0001_0001.png",
+      "test": "severity_control",
+      "severity": "pronounced",
+      "seed": 7,
+      "mask_center_src": [
+        717,
+        360
+      ],
+      "inference_s": 103.24,
+      "peak_mem_gb": 41.85,
+      "after_stats": {
+        "mean": 62.42625427246094,
+        "std": 62.37347412109375,
+        "laplacian_var": 166.93153381347656
+      },
+      "out_file": "C0001_0001_severity_pronounced.png"
+    },
+    {
+      "image": "C0001_0030.png",
+      "test": "defect_type_diversity",
+      "defect_type": "void",
+      "seed": 0,
+      "mask_center_src": [
+        422,
+        362
+      ],
+      "inference_s": 103.6,
+      "peak_mem_gb": 41.85,
+      "before_stats": {
+        "mean": 197.92665100097656,
+        "std": 0.5959508419036865,
+        "laplacian_var": 5.514946937561035
+      },
+      "after_stats": {
+        "mean": 126.35553741455078,
+        "std": 79.68072509765625,
+        "laplacian_var": 485.1840515136719
+      },
+      "out_file": "C0001_0030_void_seed0.png"
+    },
+    {
+      "image": "C0001_0030.png",
+      "test": "defect_type_diversity",
+      "defect_type": "void",
+      "seed": 1,
+      "mask_center_src": [
+        422,
+        362
+      ],
+      "inference_s": 103.45,
+      "peak_mem_gb": 41.85,
+      "before_stats": {
+        "mean": 197.92665100097656,
+        "std": 0.5959508419036865,
+        "laplacian_var": 5.514946937561035
+      },
+      "after_stats": {
+        "mean": 123.38775634765625,
+        "std": 61.0463981628418,
+        "laplacian_var": 467.24774169921875
+      },
+      "out_file": "C0001_0030_void_seed1.png"
+    },
+    {
+      "image": "C0001_0030.png",
+      "test": "defect_type_diversity",
+      "defect_type": "void",
+      "seed": 2,
+      "mask_center_src": [
+        422,
+        362
+      ],
+      "inference_s": 103.52,
+      "peak_mem_gb": 41.85,
+      "before_stats": {
+        "mean": 197.92665100097656,
+        "std": 0.5959508419036865,
+        "laplacian_var": 5.514946937561035
+      },
+      "after_stats": {
+        "mean": 104.5304946899414,
+        "std": 73.98828125,
+        "laplacian_var": 269.29840087890625
+      },
+      "out_file": "C0001_0030_void_seed2.png"
+    },
+    {
+      "image": "C0001_0030.png",
+      "test": "defect_type_diversity",
+      "defect_type": "crack",
+      "seed": 0,
+      "mask_center_src": [
+        286,
+        459
+      ],
+      "inference_s": 103.95,
+      "peak_mem_gb": 41.85,
+      "before_stats": {
+        "mean": 198.6063995361328,
+        "std": 0.5426445603370667,
+        "laplacian_var": 4.398077011108398
+      },
+      "after_stats": {
+        "mean": 189.02508544921875,
+        "std": 28.439661026000977,
+        "laplacian_var": 439.8078918457031
+      },
+      "out_file": "C0001_0030_crack_seed0.png"
+    },
+    {
+      "image": "C0001_0030.png",
+      "test": "defect_type_diversity",
+      "defect_type": "crack",
+      "seed": 1,
+      "mask_center_src": [
+        286,
+        459
+      ],
+      "inference_s": 103.68,
+      "peak_mem_gb": 41.85,
+      "before_stats": {
+        "mean": 198.6063995361328,
+        "std": 0.5426445603370667,
+        "laplacian_var": 4.398077011108398
+      },
+      "after_stats": {
+        "mean": 186.34494018554688,
+        "std": 22.56150245666504,
+        "laplacian_var": 397.96649169921875
+      },
+      "out_file": "C0001_0030_crack_seed1.png"
+    },
+    {
+      "image": "C0001_0030.png",
+      "test": "defect_type_diversity",
+      "defect_type": "crack",
+      "seed": 2,
+      "mask_center_src": [
+        286,
+        459
+      ],
+      "inference_s": 103.78,
+      "peak_mem_gb": 41.85,
+      "before_stats": {
+        "mean": 198.6063995361328,
+        "std": 0.5426445603370667,
+        "laplacian_var": 4.398077011108398
+      },
+      "after_stats": {
+        "mean": 184.68858337402344,
+        "std": 36.06803894042969,
+        "laplacian_var": 619.5191650390625
+      },
+      "out_file": "C0001_0030_crack_seed2.png"
+    },
+    {
+      "image": "C0001_0030.png",
+      "test": "defect_type_diversity",
+      "defect_type": "inclusion",
+      "seed": 0,
+      "mask_center_src": [
+        514,
+        91
+      ],
+      "inference_s": 103.8,
+      "peak_mem_gb": 41.85,
+      "before_stats": {
+        "mean": 167.5728302001953,
+        "std": 30.511308670043945,
+        "laplacian_var": 13.953896522521973
+      },
+      "after_stats": {
+        "mean": 128.44485473632812,
+        "std": 58.35105514526367,
+        "laplacian_var": 87.43567657470703
+      },
+      "out_file": "C0001_0030_inclusion_seed0.png"
+    },
+    {
+      "image": "C0001_0030.png",
+      "test": "defect_type_diversity",
+      "defect_type": "inclusion",
+      "seed": 1,
+      "mask_center_src": [
+        514,
+        91
+      ],
+      "inference_s": 103.75,
+      "peak_mem_gb": 41.85,
+      "before_stats": {
+        "mean": 167.5728302001953,
+        "std": 30.511308670043945,
+        "laplacian_var": 13.953896522521973
+      },
+      "after_stats": {
+        "mean": 128.65225219726562,
+        "std": 55.887603759765625,
+        "laplacian_var": 150.382080078125
+      },
+      "out_file": "C0001_0030_inclusion_seed1.png"
+    },
+    {
+      "image": "C0001_0030.png",
+      "test": "defect_type_diversity",
+      "defect_type": "inclusion",
+      "seed": 2,
+      "mask_center_src": [
+        514,
+        91
+      ],
+      "inference_s": 103.38,
+      "peak_mem_gb": 41.85,
+      "before_stats": {
+        "mean": 167.5728302001953,
+        "std": 30.511308670043945,
+        "laplacian_var": 13.953896522521973
+      },
+      "after_stats": {
+        "mean": 137.12738037109375,
+        "std": 50.49254608154297,
+        "laplacian_var": 172.2755126953125
+      },
+      "out_file": "C0001_0030_inclusion_seed2.png"
+    },
+    {
+      "image": "C0001_0030.png",
+      "test": "severity_control",
+      "severity": "faint",
+      "seed": 7,
+      "mask_center_src": [
+        646,
+        422
+      ],
+      "inference_s": 103.57,
+      "peak_mem_gb": 41.85,
+      "after_stats": {
+        "mean": 175.25216674804688,
+        "std": 25.151933670043945,
+        "laplacian_var": 85.77523803710938
+      },
+      "out_file": "C0001_0030_severity_faint.png"
+    },
+    {
+      "image": "C0001_0030.png",
+      "test": "severity_control",
+      "severity": "pronounced",
+      "seed": 7,
+      "mask_center_src": [
+        646,
+        422
+      ],
+      "inference_s": 103.78,
+      "peak_mem_gb": 41.85,
+      "after_stats": {
+        "mean": 60.86959457397461,
+        "std": 61.50396728515625,
+        "laplacian_var": 182.0564422607422
+      },
+      "out_file": "C0001_0030_severity_pronounced.png"
+    },
+    {
+      "image": "C0001_0001.png",
+      "test": "failure_mode",
+      "case": "no_location_given",
+      "mask_center_src": null,
+      "inference_s": 103.46,
+      "peak_mem_gb": 41.83,
+      "out_file": "failure_no_location_given.png"
+    },
+    {
+      "image": "C0001_0001.png",
+      "test": "failure_mode",
+      "case": "contradictory",
+      "mask_center_src": [
+        464,
+        260
+      ],
+      "inference_s": 103.3,
+      "peak_mem_gb": 41.83,
+      "out_file": "failure_contradictory.png"
+    }
+  ]
+}
