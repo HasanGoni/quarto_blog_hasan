@@ -62,46 +62,7 @@ mechanism actually works and actually learns — not a benchmark run.
 This isn't a schematic of an idealized system — every box below is a real module in
 `transformers.models.sam3.modeling_sam3`, traced from the actual installed library source:
 
-```{mermaid}
-flowchart TB
-    subgraph SAM3["facebook/sam3 (frozen, 840M params)"]
-        IMG[pixel_values 1008x1008] --> VE["vision_encoder\n(Sam3VisionModel)"]
-        VE -->|"fpn_hidden_states[0]\n288x288, local/F0"| F0[High-res features]
-        VE -->|"fpn_hidden_states[1]\n144x144, structural"| F1[Mid-res features]
-        VE -->|"fpn_hidden_states[2]\n72x72, global"| F2[Low-res features]
-        TXT[category text] --> TE["text_encoder + text_projection\n(CLIP text model)"]
-        TE -->|"pooler_output\n(B,32,256) token seq"| TOK[Text tokens Tc]
-        F2 --> DENC["detr_encoder"]
-        TOK --> DENC
-        DENC --> DDEC["detr_decoder\n(query_embed: 200x256)"]
-        DDEC --> MDEC["mask_decoder"]
-        MDEC --> OUT["pred_masks (200,288,288)\npred_logits (200,)"]
-    end
-
-    subgraph HPMA["HPMA additions (trainable, ~real params)"]
-        PB[("Frozen Prototype Bank\nP: 3 scales x 7 categories x K=4 x 256d\nbuilt offline via K-Means")]
-        GA["GlobalCouplingAdapter\ncross-attention, Tc=queries"]
-        SA["StructuralCouplingAdapter\nadditive MLP delta"]
-        LA["local_alignment_loss\ncosine distance, train-time only"]
-    end
-
-    PB -->|global prototypes| GA
-    TOK -.->|monkey-patched\nget_text_features| GA
-    GA -.->|"T̃c replaces Tc"| DENC
-
-    PB -->|structural prototypes| SA
-    SA -.->|"query_embed.weight + delta\n(subclassed forward)"| DDEC
-
-    PB -->|local prototypes| LA
-    F0 -.->|masked-pooled at train time| LA
-    LA -.->|"+ 0.01·L_align"| LOSS[Total loss]
-    OUT --> LOSS
-
-    style PB fill:#2c5,color:#000
-    style GA fill:#58a,color:#fff
-    style SA fill:#58a,color:#fff
-    style LA fill:#58a,color:#fff
-```
+![HPMA architecture: the frozen prototype bank feeds three adapters, each hooked into a different real SAM3 module.](images/hpma-architecture.png){fig-alt="Diagram of frozen SAM3 pipeline with HPMA global, structural and local adapters plugged in"}
 
 Two integration details that took real source-reading to get right (not guessed):
 
@@ -117,19 +78,7 @@ Two integration details that took real source-reading to get right (not guessed)
 
 ## Prototype construction — the part that has to stay frozen
 
-```{mermaid}
-flowchart LR
-    A["Real EndoVis2017 images\n(tyluan/Endovis2017 on HF,\nnon-gated mirror)"] --> B["Real SAM3 vision_encoder\nforward pass"]
-    B --> C["3 FPN feature maps\nper image"]
-    D["Real per-pixel\nground-truth masks"] --> E["Resize mask to each\nscale's H x W (nearest)"]
-    C --> F["Masked average pool\nper category, per scale"]
-    E --> F
-    F --> G["K-Means, K=4\n(scikit-learn)"]
-    G --> H[("Frozen Prototype Bank\n3 x 7 x 4 x 256")]
-    H -.->|"never updated\nby gradient descent"| I["Coupling adapters\n(read-only access)"]
-
-    style H fill:#2c5,color:#000
-```
+![Building the frozen prototype bank from real EndoVis2017 images and ground-truth masks.](images/hpma-prototype-construction.png){fig-alt="Flow from images and masks through SAM3 features, masked pooling and K-Means into the prototype bank"}
 
 This ran for real against 200 real images from the train split — no synthetic data, no mocked
 features:

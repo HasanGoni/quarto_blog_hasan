@@ -104,38 +104,7 @@ in-domain-style eval vs. only 34% OOD on LERA); RL-driven spatial reasoning gene
 Traced from the real, installed `transformers` source (`Sam2Model.forward`, `Sam2MaskDecoder`,
 `Sam2TwoWayTransformer`) — not a schematic guess:
 
-```{mermaid}
-flowchart TB
-    subgraph VLM["Qwen2.5-VL-3B-Instruct (frozen except one embedding row)"]
-        REF["reference image"] --> QW["Qwen2.5-VL\nforward pass"]
-        TGT["target image"] --> QW
-        PROMPT["text prompt:\n'find the {label} in image 2'"] --> QW
-        QW -->|"teacher-forced\n... <SEG>"| HSEG["h_seg\n(hidden state at <SEG>)"]
-    end
-
-    subgraph FUSION["RAU fusion (trainable)"]
-        PROJ["SegQueryProjection\nMLP: vlm_dim -> 256"]
-        BANK[("Reference memory\nmasked-avg-pooled SAM2\nfeatures, per label\n(built offline)")]
-        ATTN["dot-product attention\nEq. 7"]
-    end
-
-    HSEG --> PROJ
-    PROJ -->|q| ATTN
-    BANK -->|memory slots m_j| ATTN
-    ATTN -->|z| TARGET_EMB
-
-    subgraph SAM2["SAM2 (vision/prompt encoders frozen, mask decoder trainable)"]
-        TGT2["target image"] --> VE["vision_encoder"]
-        VE --> ME["image_embeddings"]
-        TARGET_EMB["target_embedding=z\n(public Sam2Model param,\nnormally used by PerSAM)"] --> MD["mask_decoder\n(Sam2TwoWayTransformer)"]
-        ME --> MD
-        MD --> OUT["pred_masks"]
-    end
-
-    style BANK fill:#2c5,color:#000
-    style PROJ fill:#58a,color:#fff
-    style ATTN fill:#58a,color:#fff
-```
+![RAU architecture: Qwen2.5-VL produces a `<SEG>` hidden state, the fusion block turns it into a query that attends over the reference memory, and the result `z` is fed to SAM2's mask decoder through its `target_embedding` argument.](images/rau-architecture.png){fig-alt="Three-column architecture diagram: Qwen2.5-VL, RAU fusion, SAM2"}
 
 One real bug this required fixing, not glossed over: `Sam2TwoWayTransformer.forward` (the
 transformer inside SAM2's mask decoder) does `queries += target_embedding` — an **in-place**
