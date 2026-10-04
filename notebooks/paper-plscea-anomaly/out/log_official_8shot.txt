@@ -1,0 +1,24 @@
+official: 15 categories, 8-shot, seeds [0, 1, 2], variants ['qk', 'g2', 'g4']
+bottle       n_eval= 83  qk 0.998  g2 0.999  g4 0.999   (209s)
+cable        n_eval=150  qk 0.933  g2 0.943  g4 0.938   (224s)
+capsule      n_eval=132  qk 0.808  g2 0.842  g4 0.828   (206s)
+carpet       n_eval=117  qk 1.000  g2 1.000  g4 1.000   (213s)
+grid         n_eval= 78  qk 1.000  g2 1.000  g4 1.000   (220s)
+hazelnut     n_eval=110  qk 1.000  g2 0.997  g4 0.999   (197s)
+leather      n_eval=124  qk 1.000  g2 1.000  g4 1.000   (207s)
+metal_nut    n_eval=115  qk 1.000  g2 1.000  g4 1.000   (223s)
+pill         n_eval=167  qk 0.982  g2 0.973  g4 0.971   (259s)
+screw        n_eval=160  qk 0.864  g2 0.820  g4 0.839   (260s)
+tile         n_eval=117  qk 1.000  g2 1.000  g4 1.000   (215s)
+toothbrush   n_eval= 42  qk 0.971  g2 0.961  g4 0.965   (236s)
+transistor   n_eval=100  qk 0.861  g2 0.857  g4 0.841   (260s)
+wood         n_eval= 79  qk 1.000  g2 1.000  g4 1.000   (257s)
+zipper       n_eval=151  qk 0.969  g2 0.949  g4 0.954   (266s)
+
+Macro-mean over 15 categories (official, 8-shot), mean +- std over seeds:
+  AUROC qk     95.91 +- 0.75
+  AUROC g2     95.62 +- 0.81
+  AUROC g4     95.57 +- 0.65
+  AUPR qk     97.31 +- 0.23
+  AUPR g2     97.16 +- 0.19
+  AUPR g4     97.16 +- 0.12

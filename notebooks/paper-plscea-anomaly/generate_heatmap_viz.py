@@ -1,140 +1,78 @@
-"""Real visualization: per-patch VAE reconstruction-error heatmaps, raw DINOv2 features vs.
-PL-SCEA-reconfigured features, on real defective 'bottle' images -- the category where SCEA
-hurt AUROC the most dramatically (0.947 raw -> 0.675 SCEA). Reuses the exact same support-set
-construction (same class-iteration order + seed) as run_eval.py so the two scripts' 'bottle'
-support set and fitted VAEs match.
+"""Real visualization: per-patch anomaly maps from the corrected pipeline, original QK attention vs.
+PL-SCEA (gamma=2), on real defective MVTec-AD images of one category.
+
+Uses the exact same support-set construction as run_eval.py (official protocol / setup B, seed 0, 8-shot,
+same permutation of the category's train/good images), and the same LNM-VAE head, so the maps correspond to the seed-0 numbers.
+
+usage: python generate_heatmap_viz.py [CLASS] [N_FRAMES]
 
 Produces:
-  - plscea-heatmap-video.mp4: cycles through several real defective bottle images, raw vs SCEA
-    heatmap side by side.
-  - plscea-heatmap-before.jpg / plscea-heatmap-after.jpg: one clean image pair for an interactive
-    before/after slider in the post (raw heatmap vs SCEA heatmap on the SAME defective image).
+  - plscea-heatmap-{TARGET_CLASS}-video.mp4: cycles through real defective images, QK vs PL-SCEA side by side.
+  - plscea-heatmap-{TARGET_CLASS}-before.jpg / plscea-heatmap-{TARGET_CLASS}-after.jpg: one clean image pair for an interactive
+    before/after slider (QK map vs PL-SCEA map on the SAME defective image, shared color scale).
 """
-import os
+import sys
+
+import imageio
+import matplotlib.cm as cm
+import matplotlib.pyplot as plt
 import numpy as np
 import torch
-import torch.nn as nn
-import torch.nn.functional as F
-from transformers import AutoImageProcessor, AutoModel
-import matplotlib.pyplot as plt
-import matplotlib.cm as cm
-import imageio
 from PIL import Image
 
-from common import load_mvtec, resize, sceareconfigure, IMG_SIZE, K_SHOT, GAMMA
+import data
+from common import Radio, fit_lnm, patch_score_map, IMG_SIZE, GAMMA
 
-device = "cuda" if torch.cuda.is_available() else "cpu"
-torch.manual_seed(0)
+K_SHOT = 8
+SEED = 0
 IMG_OUT = "../../posts/series/papers/images"
-TARGET_CLASS = "bottle"
-GRID = 16  # DINOv2-small, patch size 14, 224/14 = 16 -> 256 patches
-
-DINO_ID = "facebook/dinov2-small"
-processor = AutoImageProcessor.from_pretrained(DINO_ID)
-dino = AutoModel.from_pretrained(DINO_ID).to(device).eval()
+TARGET_CLASS = sys.argv[1] if len(sys.argv) > 1 else "capsule"
+N_FRAMES = int(sys.argv[2]) if len(sys.argv) > 2 else 6
+device = "cuda" if torch.cuda.is_available() else "cpu"
 
 
-@torch.no_grad()
-def extract_patch_tokens(img):
-    inputs = processor(images=resize(img), return_tensors="pt").to(device)
-    out = dino(**inputs).last_hidden_state[0, 1:]
-    return F.normalize(out, dim=-1)
-
-
-class TinyVAE(nn.Module):
-    def __init__(self, dim, latent=32):
-        super().__init__()
-        self.enc = nn.Sequential(nn.Linear(dim, 128), nn.ReLU(), nn.Linear(128, latent * 2))
-        self.dec = nn.Sequential(nn.Linear(latent, 128), nn.ReLU(), nn.Linear(128, dim))
-        self.latent = latent
-
-    def forward(self, x):
-        h = self.enc(x)
-        mu, logvar = h[:, :self.latent], h[:, self.latent:]
-        std = (0.5 * logvar).exp()
-        z = mu + std * torch.randn_like(std)
-        recon = self.dec(z)
-        kl = -0.5 * (1 + logvar - mu.pow(2) - logvar.exp()).sum(-1)
-        return recon, kl
-
-
-def fit_vae(support_features, steps=400):
-    vae = TinyVAE(support_features.shape[1]).to(device)
-    opt = torch.optim.Adam(vae.parameters(), lr=1e-3)
-    for _ in range(steps):
-        recon, kl = vae(support_features)
-        loss = F.mse_loss(recon, support_features) + 1e-3 * kl.mean()
-        opt.zero_grad(); loss.backward(); opt.step()
-    vae.eval()
-    return vae
-
-
-@torch.no_grad()
-def per_patch_error_map(vae, features):
-    recon, _ = vae(features)
-    per_patch = (recon - features).pow(2).mean(-1).cpu().numpy()  # (256,)
-    grid = per_patch.reshape(GRID, GRID)
-    grid = (grid - grid.min()) / (grid.max() - grid.min() + 1e-8)
-    return grid
-
-
-def overlay_heatmap(img: Image.Image, grid: np.ndarray) -> Image.Image:
-    heat = Image.fromarray((cm.inferno(grid)[:, :, :3] * 255).astype(np.uint8)).resize((IMG_SIZE, IMG_SIZE), Image.BILINEAR)
-    base = resize(img)
-    blended = Image.blend(base, heat, alpha=0.5)
-    return blended
+def overlay(img: Image.Image, score_map: np.ndarray, vmin: float, vmax: float) -> Image.Image:
+    g = np.clip((score_map - vmin) / (vmax - vmin + 1e-8), 0, 1)
+    heat = Image.fromarray((cm.inferno(g)[:, :, :3] * 255).astype(np.uint8)).resize((IMG_SIZE, IMG_SIZE), Image.BILINEAR)
+    base = img.convert("RGB").resize((IMG_SIZE, IMG_SIZE))
+    return Image.blend(base, heat, alpha=0.5)
 
 
 if __name__ == "__main__":
-    ds = load_mvtec()
-    classes = sorted(set(ds["class"]))
-    rng = np.random.default_rng(0)
+    d = data.official_class(TARGET_CLASS)
+    radio = Radio(device)
+    order = list(np.random.default_rng(SEED).permutation(d["pool"]))
+    support = order[:K_SHOT]
+    all_defects = [k for k in d["cands"] if d["label"][k] == 1]
+    defects = [all_defects[int(j)] for j in np.linspace(0, len(all_defects) - 1, N_FRAMES)]  # spread over defect types
 
-    for cls in classes:  # replicate run_eval.py's exact iteration to reproduce the same rng state
-        idxs = [i for i, c in enumerate(ds["class"]) if c == cls]
-        good_idxs = [i for i in idxs if ds[i]["gt_label"] == 0]
-        if len(good_idxs) <= K_SHOT:
-            continue
-        rng.shuffle(good_idxs)
-        if cls == TARGET_CLASS:
-            support_idxs = good_idxs[:K_SHOT]
-            defect_idxs = [i for i in idxs if ds[i]["gt_label"] == 1][:6]
-            break
-
-    print(f"Refitting VAEs on '{TARGET_CLASS}' support set ({len(support_idxs)} shots) ...")
-    support_raw, support_scea = [], []
-    for i in support_idxs:
-        feats = extract_patch_tokens(ds[i]["image"])
-        support_raw.append(feats)
-        support_scea.append(sceareconfigure(feats, GAMMA))
-    vae_raw = fit_vae(torch.cat(support_raw, dim=0))
-    vae_scea = fit_vae(torch.cat(support_scea, dim=0))
+    heads = {}
+    for name, mode in [("qk", "qk"), ("plscea", "plscea")]:
+        sup = torch.cat([radio.patch_tokens(d["load"](i), mode, GAMMA) for i in support], dim=0)
+        heads[name] = (mode, *fit_lnm(sup, seed=SEED))
+        print(f"fitted {name} head on {len(support)} real '{TARGET_CLASS}' shots", flush=True)
 
     frames = []
-    for j, i in enumerate(defect_idxs):
-        img = ds[i]["image"]
-        feats = extract_patch_tokens(img)
-        raw_grid = per_patch_error_map(vae_raw, feats)
-        scea_grid = per_patch_error_map(vae_scea, sceareconfigure(feats, GAMMA))
-
-        raw_overlay = overlay_heatmap(img, raw_grid)
-        scea_overlay = overlay_heatmap(img, scea_grid)
-
+    for j, i in enumerate(defects):
+        img = d["load"](i)
+        maps = {n: patch_score_map(m, mean, std, radio.patch_tokens(img, mode, GAMMA), "paper")
+                for n, (mode, m, mean, std) in heads.items()}
+        vmin = min(mp.min() for mp in maps.values()); vmax = max(mp.max() for mp in maps.values())
+        ov = {n: overlay(img, mp, vmin, vmax) for n, mp in maps.items()}
         if j == 0:
-            raw_overlay.save(f"{IMG_OUT}/plscea-heatmap-before.jpg", quality=90)
-            scea_overlay.save(f"{IMG_OUT}/plscea-heatmap-after.jpg", quality=90)
+            ov["qk"].save(f"{IMG_OUT}/plscea-heatmap-{TARGET_CLASS}-before.jpg", quality=88)
+            ov["plscea"].save(f"{IMG_OUT}/plscea-heatmap-{TARGET_CLASS}-after.jpg", quality=90)
 
         fig, axes = plt.subplots(1, 3, figsize=(9, 3.2))
-        axes[0].imshow(resize(img)); axes[0].set_title("real defective bottle", fontsize=9); axes[0].axis("off")
-        axes[1].imshow(raw_overlay); axes[1].set_title("raw DINOv2 error map", fontsize=9); axes[1].axis("off")
-        axes[2].imshow(scea_overlay); axes[2].set_title("PL-SCEA error map", fontsize=9); axes[2].axis("off")
+        axes[0].imshow(img.convert("RGB").resize((IMG_SIZE, IMG_SIZE))); axes[0].set_title(f"real defective {TARGET_CLASS}", fontsize=9)
+        axes[1].imshow(ov["qk"]); axes[1].set_title("original QK attention", fontsize=9)
+        axes[2].imshow(ov["plscea"]); axes[2].set_title("PL-SCEA (gamma = 2)", fontsize=9)
+        for a in axes: a.axis("off")
         plt.tight_layout()
         fig.canvas.draw()
-        frame_img = Image.frombuffer("RGBA", fig.canvas.get_width_height(),
-                                      fig.canvas.buffer_rgba(), "raw", "RGBA", 0, 1).convert("RGB")
-        frames.append(np.array(frame_img))
+        frames.append(np.asarray(fig.canvas.buffer_rgba())[:, :, :3].copy())
         plt.close(fig)
-        print(f"  frame {j}: image idx {i} done")
+        print(f"  frame {j}: image idx {i} done", flush=True)
 
-    imageio.mimsave(f"{IMG_OUT}/plscea-heatmap-video.mp4", frames, fps=1, macro_block_size=16)
-    print("Saved plscea-heatmap-video.mp4, plscea-heatmap-before.jpg, plscea-heatmap-after.jpg")
+    imageio.mimsave(f"{IMG_OUT}/plscea-heatmap-{TARGET_CLASS}-video.mp4", frames, fps=1, macro_block_size=16)
+    print(f"Saved heatmap video + before/after for {TARGET_CLASS}")

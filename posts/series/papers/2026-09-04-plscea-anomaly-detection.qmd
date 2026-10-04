@@ -1,8 +1,9 @@
 ---
-title: "Reimplementing PL-SCEA — When a Clever Idea Makes Real Numbers Worse"
-subtitle: "arXiv:2609.03655 — real token self-correlation reconfiguration, zero new parameters, tested honestly against raw frozen features on all 15 real MVTec-AD categories"
+title: "Reimplementing PL-SCEA — Take Two, After a GitHub Issue Told Me I Got It Wrong"
+subtitle: "arXiv:2609.03655 — a corrected reimplementation (RADIOv3-B, γ = 2, the real attention hook), run on two data protocols, and an honest account of what does and doesn't reproduce"
 author: "Hasan Goni"
 date: 2026-09-04
+date-modified: 2026-10-04
 categories: [papers, computer-vision, anomaly-detection, open-source]
 toc: true
 series:
@@ -24,180 +25,317 @@ This post is part of the [Paper of the Week](index.qmd) series -- real code, rea
 measured numbers, reported honestly even when they don't flatter the paper.
 :::
 
+:::{.callout-warning}
+## Correction (2026-10-04)
+
+The first version of this post was **wrong**, and I've rewritten it from scratch. A GitHub issue
+opened by `ysinjoro-coder` pointed out two mistakes -- the paper's default is **γ = 2** (not 4), and
+its backbone is **RADIOv3** (not DINO). Checking the paper's full text against my code, it was worse
+than that: I had also dropped the per-token standardization and applied the reweighting to the
+block's *output* instead of inside its attention. **The old headline -- "PL-SCEA dropped mean AUROC
+from 0.831 to 0.739" -- described a method that isn't PL-SCEA, and I retract it.** Thank you for
+the report.
+:::
+
+## What was wrong the first time
+
+| | The paper (arXiv:2609.03655) | My first version (wrong) | This version |
+|---|---|---|---|
+| Backbone | frozen **RADIOv3-B** | DINOv2-small | frozen **C-RADIOv3-B** (`nvidia/C-RADIOv3-B`) |
+| Power exponent γ | **2** by default (ablated in Fig. 5) | 4.0, "per the paper" | **2** (and 4, and a sweep) |
+| Correlation | cosine similarity, then **per-token standardization** (Eq. 5-6), keep only above-average | raw cosine, `relu`, self masked | standardized, `max(0, ·)^γ` (Eq. 7) |
+| Where it's applied | **replaces attention in the final block**: weights from `Y = softmax(QK^T/√d)·V`, re-aggregate the original `V` (Eq. 1-10) | after the fact, on the block's output tokens | hooked **inside** the final block's attention, exactly Eq. 1-10 |
+| Fallback | a token with no positive relation keeps itself (Eq. 8) | none | identity fallback |
+| Anomaly head | VAE, cosine loss, 64-d latent, AdamW 8e-4, noise, standardized scores | tiny MSE VAE, 32-d | the paper's recipe (details below) |
+
 ## The paper
 
-**[PL-SCEA: Power-Law Self-Correlation Enhanced Attention for Few-Shot Anomaly
-Detection](https://arxiv.org/abs/2609.03655)** proposes reconfiguring a frozen vision
-transformer's value features using their own pairwise self-correlation, before an anomaly
-detector ever sees them: for each patch token, keep only the *positive* correlations to other
-tokens, sharpen that correlation distribution with a power-law exponent, and replace the token
-with the resulting correlation-weighted average of its peers. No new attention parameters are
-trained -- it's a structural reconfiguration of features that are already there.
+**[PL-SCEA: Reconfiguring Pretrained Attention for Few-Shot Industrial Anomaly Detection](https://arxiv.org/abs/2609.03655)**
+argues that a frozen vision foundation model's *last attention layer* is tuned for semantic
+aggregation ("what object is this?"), not for exposing small local defects. PL-SCEA keeps the
+pretrained query-key attention only to build *semantically conditioned* values, then derives a new
+attention map from how those values correlate with each other, token by token -- with no new
+trainable attention parameters. A small VAE ("Latent Normality Modeling") is then fit on the
+reconfigured patch features of a handful of normal images, and reconstruction error is the anomaly
+score.
 
 ## Explain it like I'm five
 
 ![PL-SCEA, sketched out.](images/plscea-eli5-sketch.png)
 
-Picture a classroom where every student's answer gets nudged toward the average answer of the
-*other* students who agree with them the most, so a class that's mostly in consensus ends up
-looking even more uniform. The idea is: a genuine mistake (an anomaly) should stick out even more
-once everyone's answers get pulled toward their nearest neighbors' consensus, since the mistake
-has no real neighbors to average toward.
+Picture a classroom where every student asks "who in this room thinks *like I do*?" -- but each
+student only listens to the classmates they agree with **more than they agree with the average
+person**, and listens extra hard to their very closest friends. A class that's mostly in consensus
+ends up looking even more uniform. A genuine mistake (an anomaly) has no real friends to average
+toward, so it keeps sticking out.
 
 ## Explain it like I'm a data scientist
 
-The mechanism, applied post-hoc to frozen DINOv2-small patch tokens (a documented simplification
-of the paper's internal attention-value hook, noted below):
+Let $X$ be the patch tokens entering the final attention layer. Per head, the original attention
+gives contextualized values $Y = A_{qk}V$. PL-SCEA uses $Y$ only to *measure* relations:
 
 $$
-\text{sim} = X X^\top,\quad \text{sim}_{\text{pos}} = \text{ReLU}(\text{sim} - 2I),\quad
-w = \frac{\text{sim}_{\text{pos}}^{\gamma}}{\sum \text{sim}_{\text{pos}}^{\gamma}},\quad
-X' = w X
+\tilde y_i = \frac{y_i}{\lVert y_i\rVert},\quad S = \tilde Y\tilde Y^\top,\quad
+\hat S_{ij} = \frac{S_{ij}-\mu_i}{\sigma_i+\epsilon},\quad
+R_{ij} = \max(0,\hat S_{ij})^{\gamma},\quad
+A^{\text{PL-SCEA}}_{ij} = \frac{R_{ij}}{\sum_j R_{ij}}
 $$
 
-Self-similarity is masked out, only *positive* correlations survive the ReLU, the power-law
-exponent $\gamma$ (4.0 here, per the paper) sharpens the weighting toward the strongest matches,
-and each token becomes a weighted average of its most similar peers. Zero new trainable
-parameters -- this is exactly the kind of "free" architectural idea worth actually testing rather
-than taking on faith.
+and then re-aggregates the *original* values, $O = A^{\text{PL-SCEA}}V$. The key idea is the
+standardization: $\mu_i,\sigma_i$ are the mean and std of token $i$'s own row of $S$, so "positive"
+means "more related to me than the typical token is" -- a *token-adaptive* threshold. The exponent
+$\gamma$ then decides how winner-takes-all the surviving relations are.
 
-**So I tested it, honestly, on all 15 real MVTec-AD categories** -- and it made few-shot anomaly
-detection *worse* in 12 of them.
+A concrete example: say a token's similarities to five peers are $[0.9, 0.8, 0.5, 0.4, 0.3]$. The
+row mean is $0.58$, std $\approx 0.23$, so the standardized scores are
+$[+1.4, +0.9, -0.3, -0.8, -1.2]$. Only the first two survive the $\max(0,\cdot)$. With
+$\gamma = 2$ their weights come out at roughly $68\%/32\%$; with $\gamma = 4$ at roughly
+$82\%/18\%$. Bigger $\gamma$ = a more "winner takes all" average. (My first version never did this standardization: with raw cosines, almost *every* peer
+survives, which is a very different operation.)
 
 ## Jargon buster
 
 | Term | Plain-English meaning |
 |---|---|
-| **Token-adaptive self-correlation** | Each patch token gets its own personalized re-weighting, based on which other tokens it agrees with |
-| **Positive-correlation filtering** | Only tokens that *positively* correlate contribute to the reweighted average -- via ReLU, negative correlations are zeroed out |
-| **Power-law reweighting** | Raising correlation scores to an exponent (here, 4.0) to sharpen the distribution toward the strongest matches, before normalizing to weights |
-| **Few-shot anomaly detection** | Deciding whether an image is anomalous having seen only a handful (here, 8) of examples of "normal" |
-| **AUROC** | Area under the ROC curve -- how well anomaly scores rank real defective images above real normal ones, this post's metric throughout |
-| **Frozen backbone** | A pretrained feature extractor (DINOv2-small here) used as-is, with no fine-tuning |
+| **Frozen backbone** | A pretrained feature extractor used as-is, no fine-tuning. Here: C-RADIOv3-B, a model distilled from several teachers (CLIP-, DINOv2-, SAM-style) into one |
+| **Contextualized value** ($Y = A_{qk}V$) | Each token's value vector after mixing in its neighbors using the ordinary attention weights -- "what this token means *in context*" |
+| **Token-adaptive standardization** | Judging each token's correlations against *its own* average, not one global threshold |
+| **Power-law reweighting** | Raising the surviving scores to the power $\gamma$ so the strongest relations dominate the weighted average |
+| **Latent Normality Modeling (LNM)** | A small VAE fit on a few normal images; anomalies reconstruct badly |
+| **Few-shot anomaly detection** | Deciding "defective or fine?" after seeing only a handful (1-8) of normal examples |
+| **AUROC / AUPR** | How well anomaly scores rank real defective images above real normal ones (AUPR: with "defective" as the positive class) |
+| **QK attention (baseline)** | The model's own, unmodified last-layer attention -- the control in every comparison below |
 
-## Honest scoping note
+## Architecture: where PL-SCEA sits
 
-Hooking DINOv2's internal per-layer value projections directly (the paper's exact mechanism)
-would require surgery on the model's forward pass. This reimplementation instead applies the same
-reconfiguration formula post-hoc to DINOv2's final-layer patch tokens -- a documented
-simplification, not a hidden one, and one that still tests the mechanism's actual mathematical
-claim: that self-correlation reweighting improves anomaly separability.
+The code below follows the data through the real library calls, no pseudocode:
 
-## Real data and real pipeline
+- `AutoModel.from_pretrained("nvidia/C-RADIOv3-B", trust_remote_code=True)` loads the frozen
+  encoder. Its trunk is a 12-block timm ViT (`model.model.blocks`), patch size 16, with a handful of
+  prefix tokens (CLS + registers) in front of the patch tokens.
+- The *last* block's `attn` is a stock `timm.models.vision_transformer.Attention`
+  (`qkv` → softmax(QK) → `proj`). I replace only its `forward` with a version that has two modes:
+  `"qk"` (the original computation, verified identical to the stock module to ~3e-7) and
+  `"plscea"`.
+- In `"plscea"` mode the prefix tokens still get the ordinary attention output; the patch tokens
+  get `A_PL-SCEA @ V` built from the standardized, power-law-reweighted self-correlation of
+  `Y = softmax(QK^T/√d) V`, computed **per head**.
+- The block's residual, LayerNorm, MLP and all earlier blocks are untouched. The 28×28 = 784
+  patch tokens that come out (448×448 input) are L2-normalized and fed to the VAE head.
+- The VAE (`LNM`): L2-normalized feature + Gaussian noise → re-normalize → encoder → 64-d latent →
+  decoder; loss = cosine reconstruction + β·KL. At test time it is deterministic: encode the clean
+  feature, decode the posterior mean, anomaly score = 1 − cosine(feature, reconstruction),
+  standardized by the training patches' score statistics.
 
-15 real MVTec-AD categories, 1,725 real test images total, via the `katiehahm/mvtec_ad` mirror
-(CC-BY-NC-4.0). Since this mirror only ships the test split, 8 real "good"-labeled images per
-category are held out as the few-shot support set (a legitimate few-shot construction, not the
-paper's exact official train/test split -- documented in `common.py`). A tiny VAE is fit on the
-support set's patch tokens, and anomaly score = top-10%-worst-patch reconstruction error --
-**the same VAE architecture and same support set, run twice**: once on raw DINOv2 features, once
-on PL-SCEA-reconfigured features. A clean ablation.
+Because the *same frozen weights* are used for both modes, every comparison below changes exactly
+one thing: the final block's attention.
 
-## The real mechanism — real code
+## The real mechanism -- real code
 
 ```{python}
 #| echo: true
 #| eval: false
-def sceareconfigure(features: torch.Tensor, gamma: float = 4.0) -> torch.Tensor:
-    sim = features @ features.T                      # (N, N) cosine sim, features L2-normalized
-    sim = sim - torch.eye(sim.shape[0], device=sim.device) * 2   # mask self-similarity out
-    sim_pos = F.relu(sim)                             # positive-correlation filtering
-    weights = sim_pos.pow(gamma)                      # power-law reweighting
-    weights = weights / (weights.sum(dim=1, keepdim=True) + 1e-8)
-    return weights @ features
+def plscea_weights(y: torch.Tensor, gamma: float) -> torch.Tensor:
+    """Paper Eq. 3-9. y: (B, H, N, d) contextualized values of the PATCH tokens only."""
+    y_n = F.normalize(y, dim=-1, eps=EPS)                      # Eq. 3: L2-normalize tokens
+    s = y_n @ y_n.transpose(-2, -1)                            # Eq. 4: cosine self-correlation
+    mu = s.mean(dim=-1, keepdim=True)                          # Eq. 5: per-token mean / std
+    sigma = s.std(dim=-1, keepdim=True, unbiased=False)
+    s_hat = (s - mu) / (sigma + EPS)                           # Eq. 6: token-adaptive standardization
+    r = F.relu(s_hat).pow(gamma)                               # Eq. 7: above-average only, power-law
+    d = r.sum(dim=-1, keepdim=True)                            # Eq. 8: row-normalize ...
+    eye = torch.eye(r.shape[-1], device=r.device, dtype=r.dtype)
+    return torch.where(d > 0, r / d.clamp_min(1e-12), eye)     # ... identity fallback
+
+def _attn_forward(self, x, attn_mask=None, is_causal=False):    # replaces timm Attention.forward
+    B, N, C = x.shape
+    qkv = self.qkv(x).reshape(B, N, 3, self.num_heads, self.head_dim).permute(2, 0, 3, 1, 4)
+    q, k, v = qkv.unbind(0)
+    attn = ((q * self.scale) @ k.transpose(-2, -1)).softmax(dim=-1)
+    y = attn @ v                                               # Eq. 1-2: Y = A_qk V
+    if self.scea_mode == "plscea":
+        p = N - GRID * GRID                                    # prefix (cls/register) tokens
+        a_pl = plscea_weights(y[:, :, p:], self.scea_gamma)
+        y = torch.cat([y[:, :, :p], a_pl @ v[:, :, p:]], dim=2)  # Eq. 10: O = A_PL-SCEA V
+    out = y.transpose(1, 2).reshape(B, N, self.attn_dim)
+    return self.proj_drop(self.proj(self.norm(out)))
 ```
 
 ```{python}
 #| echo: true
 #| eval: false
-# same support set, same VAE architecture, run twice for a clean ablation
-vae_raw  = fit_vae(support_raw)                        # raw DINOv2 patch tokens
-vae_scea = fit_vae(support_scea)                       # sceareconfigure(support_raw)
+radio = Radio(device)                               # frozen C-RADIOv3-B, final-block attention hooked
+support_qk = torch.cat([radio.patch_tokens(img, "qk")     for img in shots])   # k normal images
+support_pl = torch.cat([radio.patch_tokens(img, "plscea", gamma=2.0) for img in shots])
 
-score_raw  = anomaly_score(vae_raw,  extract_patch_tokens(test_img))
-score_scea = anomaly_score(vae_scea, sceareconfigure(extract_patch_tokens(test_img)))
+lnm_qk, mean_qk, std_qk = fit_lnm(support_qk)       # same head, same shots, run twice
+lnm_pl, mean_pl, std_pl = fit_lnm(support_pl)
+
+score = image_score(patch_score_map(lnm_pl, mean_pl, std_pl, radio.patch_tokens(test_img, "plscea")))
 ```
 
-## Real result: it made things worse
+## Two data protocols (and why there are two)
 
-![Real AUROC, raw DINOv2 features vs. PL-SCEA reconfiguration, all 15 real MVTec-AD categories, 8-shot.](images/plscea-auroc-comparison.png)
+My first attempt used a Hugging Face mirror (`katiehahm/mvtec_ad`) that only ships MVTec-AD's *test*
+split. So I ran everything twice:
 
-| Category | Raw AUROC | PL-SCEA AUROC | Change |
+- **Setup A -- test-split holdout.** `k` "good" test images per category are held out as the
+  few-shot support set; the rest of the test images are evaluated. Score map smoothed with σ = 1 on
+  the 28×28 patch grid. This is what I had; it is *not* the paper's protocol.
+- **Setup B -- official protocol (closer to the paper).** Support set drawn from the official
+  `train/good` images; evaluation on the **full official test set** (good + defective, 1,725
+  images over 15 categories); score map upsampled to 448 px and Gaussian-smoothed with σ = 4 as in
+  AnomalyDINO, whose preprocessing the paper follows. Data from the `foersben/mvtec-ad` mirror
+  (original MVTec layout, CC BY-NC-SA 4.0).
+
+Both: 3 support-set seeds (0, 1, 2), same seeds and same shots for every variant, the paper's VAE
+recipe (cosine loss, 64-d latent, AdamW lr 8e-4, wd 1e-5, batch 512, 600 epochs), image score =
+mean of the top 1% of patch scores, metrics = image-level AUROC and AUPR macro-averaged over the 15
+categories, reported as mean ± std over the seeds.
+
+### What is *still* different from the paper
+
+I'd rather list these than let the numbers imply a faithful reproduction:
+
+- **VAE details the paper doesn't give** -- hidden width (512), input-noise std (0.05) and β (1e-3)
+  are my choices, and I train a fixed 600 epochs rather than "up to 600".
+- **AnomalyDINO's PCA background masking and rotation augmentation** aren't implemented.
+- **Smoothing / top-1% ordering** is my reading of the description (upsample → σ = 4 → mean of the
+  top 1% of pixels), not the authors' code.
+- **Different support images** than the paper's seeds, naturally.
+- **Pixel-level metrics are not measured.** The paper's largest claimed gains are pixel-level
+  (e.g. +3.78 pixel-F1-max over QK in its Table 3); this post only measures image-level AUROC/AUPR.
+- **My baseline is weaker than theirs.** My QK-attention control gets 91.5 AUROC at 1-shot and 95.9
+  at 8-shot (setup B), vs. the paper's 96.5 (QK, 1-shot ablation) and 98.0 (PL-SCEA, 8-shot). So my
+  head/pipeline does not reach the paper's absolute level, and everything below is conditional on
+  *this* pipeline.
+
+## Results
+
+### 8-shot, setup B (official protocol)
+
+![Per-category image AUROC, original QK attention vs. PL-SCEA (γ = 2), 8-shot, official MVTec-AD protocol, 3 seeds.](images/plscea-auroc-comparison.png)
+
+| Category | QK (original) | PL-SCEA γ=2 | PL-SCEA γ=4 | Δ (γ=2 − QK) |
+|---|---|---|---|---|
+| bottle | 99.8 | 99.9 | 99.9 | +0.1 |
+| cable | 93.3 | 94.3 | 93.8 | +1.0 |
+| capsule | 80.8 | 84.2 | 82.8 | **+3.4** |
+| carpet | 100.0 | 100.0 | 100.0 | +0.0 |
+| grid | 100.0 | 100.0 | 100.0 | -0.0 |
+| hazelnut | 100.0 | 99.7 | 99.9 | -0.2 |
+| leather | 100.0 | 100.0 | 100.0 | +0.0 |
+| metal_nut | 100.0 | 100.0 | 100.0 | -0.0 |
+| pill | 98.2 | 97.3 | 97.1 | -0.9 |
+| screw | 86.4 | 82.0 | 83.9 | **-4.4** |
+| tile | 100.0 | 100.0 | 100.0 | +0.0 |
+| toothbrush | 97.1 | 96.1 | 96.5 | -1.0 |
+| transistor | 86.1 | 85.7 | 84.1 | -0.4 |
+| wood | 100.0 | 100.0 | 100.0 | +0.0 |
+| zipper | 96.9 | 94.9 | 95.4 | -2.0 |
+| **macro AUROC, mean ± std over seeds** | **95.91 ± 0.75** | **95.62 ± 0.81** | **95.57 ± 0.65** | **-0.29** |
+| macro AUPR | 97.31 | 97.16 | 97.16 | -0.15 |
+
+Six categories are saturated at ~100 for every variant. Among the rest, PL-SCEA helps `capsule`
+(+3.4) and `cable` (+1.0) and hurts `screw` (-4.4) and `zipper` (-2.0). The macro difference
+(-0.29) is smaller than the seed-to-seed std (~0.8), so on this pipeline **PL-SCEA is a wash at
+8-shot, not a clear win and not the collapse my first version reported.** γ = 2 is slightly better
+than γ = 4 on average, which is the direction the paper's ablation predicts.
+
+### 8-shot, setup A (test-split holdout) -- same story
+
+| | QK (original) | PL-SCEA γ=2 | PL-SCEA γ=4 |
 |---|---|---|---|
-| bottle | 0.947 | 0.675 | -0.272 |
-| cable | 0.735 | 0.528 | -0.207 |
-| capsule | 0.722 | 0.634 | -0.088 |
-| carpet | 0.992 | 0.985 | -0.007 |
-| grid | 0.965 | 0.930 | -0.035 |
-| hazelnut | 0.960 | 0.867 | -0.093 |
-| leather | 1.000 | 1.000 | 0.000 |
-| metal_nut | 0.546 | 0.419 | -0.127 |
-| pill | 0.729 | 0.432 | -0.297 |
-| screw | 0.501 | 0.483 | -0.018 |
-| tile | 0.996 | 0.998 | **+0.002** |
-| toothbrush | 0.842 | 0.783 | -0.059 |
-| transistor | 0.760 | 0.727 | -0.033 |
-| wood | 0.914 | 0.950 | **+0.036** |
-| zipper | 0.862 | 0.667 | -0.195 |
+| macro AUROC, mean ± std over seeds | **97.05 ± 0.34** | 96.90 ± 0.27 | 96.76 ± 0.30 |
 
-**Mean AUROC across 15 categories: raw 0.831, PL-SCEA 0.739.** PL-SCEA reconfiguration improved
-only 2 of 15 categories (`tile`, `wood`) and hurt the rest, sometimes badly (`bottle`: -0.272,
-`pill`: -0.297). This is a real, reproducible negative result, not a bug -- both scripts ran
-successfully, on the same data, same seed, same VAE.
+Per category it is the same pattern: `capsule` +2.3 and `cable` +0.4 up; `screw` -2.4, `pill` -1.1
+down (full per-category numbers are in `notebooks/paper-plscea-anomaly/out/setupA_test_holdout/`).
+Absolute scores are higher than in setup B (the holdout is an easier protocol -- the support
+images come from the same pool as the test images), but the PL-SCEA-vs-QK difference is again
+within noise.
 
-### What the reconfiguration is actually doing to the features
+### The γ sweep -- what the issue's plot showed, and what I get
+
+The issue included the paper's Fig. 5: image-level AUROC and AUPR as the power exponent $\gamma$
+varies, both peaking at $\gamma = 2$. Here is the same experiment on my pipeline (1-shot, 15
+categories, 3 seeds; dotted lines = the original QK attention):
+
+![γ sweep, setup B (official protocol), 1-shot. AUROC (blue) and AUPR (orange) vs. the power exponent; dotted lines are the original QK attention.](images/plscea-gamma-sweep.png)
+
+![γ sweep, setup A (test-split holdout), 1-shot.](images/plscea-gamma-sweep-setupA.png)
+
+**This does not reproduce the paper's peak at γ = 2.** In both setups AUROC and AUPR rise steadily
+with γ and are still climbing at γ = 6. In setup B (AUROC): 90.08 (γ=0.5) → 90.46 (γ=2) → 91.08
+(γ=4) → 91.37 (γ=6), against 91.49 for the original attention; AUPR crosses the QK line at γ = 6
+(95.23 vs 95.13). Everything is within ~1.4 points and the seed std is ~0.2-0.3 here, so it is a
+small, consistent trend rather than noise -- but it is a trend *toward the baseline*, with
+PL-SCEA never clearly beating it.
+
+### What the maps look like
+
+Seed-0 anomaly maps from the same VAE heads (8-shot, setup B), original attention vs. PL-SCEA
+(γ = 2), on real defective images. First `capsule`, the category where PL-SCEA helps most:
 
 <video autoplay loop muted playsinline width="100%" style="max-width:640px;display:block;margin:1em auto;">
-  <source src="images/plscea-heatmap-video.mp4" type="video/mp4">
+  <source src="images/plscea-heatmap-capsule-video.mp4" type="video/mp4">
 </video>
-
-Per-patch VAE reconstruction-error heatmaps on 6 real defective bottle images -- raw DINOv2
-features (middle) vs. PL-SCEA-reconfigured features (right). The visual difference between the
-two heatmaps is genuinely subtle -- the reconfiguration doesn't obviously scramble the spatial
-error pattern -- which is itself the interesting finding: **the damage PL-SCEA does isn't visible
-as an obvious spatial artifact, it's a quieter shift in the numeric error distribution that
-degrades ranking (AUROC) without producing a dramatically different-looking heatmap.**
-
-### Same defective image, raw vs. reconfigured error map
 
 ::: {.column-body}
 ```{=html}
 <div style="position:relative;max-width:420px;margin:1.5em auto;">
-  <img id="ps-before" src="images/plscea-heatmap-before.jpg" style="width:100%;display:block;border-radius:8px;">
-  <img id="ps-after" src="images/plscea-heatmap-after.jpg" style="width:100%;display:block;position:absolute;top:0;left:0;border-radius:8px;clip-path:inset(0 50% 0 0);">
-  <div style="position:absolute;top:0;bottom:0;left:50%;width:2px;background:white;box-shadow:0 0 4px rgba(0,0,0,0.5);" id="ps-handle"></div>
-  <input id="ps-range" type="range" min="0" max="100" value="50" style="width:100%;margin-top:10px;">
-  <p style="text-align:center;font-size:0.85em;color:#666;">left: raw DINOv2 error map &nbsp;|&nbsp; right: PL-SCEA-reconfigured error map, same real defective bottle</p>
+  <img id="cap-before" src="images/plscea-heatmap-capsule-before.jpg" style="width:100%;display:block;border-radius:8px;">
+  <img id="cap-after" src="images/plscea-heatmap-capsule-after.jpg" style="width:100%;display:block;position:absolute;top:0;left:0;border-radius:8px;clip-path:inset(0 50% 0 0);">
+  <div style="position:absolute;top:0;bottom:0;left:50%;width:2px;background:white;box-shadow:0 0 4px rgba(0,0,0,0.5);" id="cap-handle"></div>
+  <input id="cap-range" type="range" min="0" max="100" value="50" style="width:100%;margin-top:10px;">
+  <p style="text-align:center;font-size:0.85em;color:#666;">left: PL-SCEA (γ = 2) &nbsp;|&nbsp; right: original QK attention -- drag to compare (same real defective capsule, shared color scale)</p>
+</div>
+```
+:::
+
+And `screw`, where it hurts most:
+
+<video autoplay loop muted playsinline width="100%" style="max-width:640px;display:block;margin:1em auto;">
+  <source src="images/plscea-heatmap-screw-video.mp4" type="video/mp4">
+</video>
+
+::: {.column-body}
+```{=html}
+<div style="position:relative;max-width:420px;margin:1.5em auto;">
+  <img id="scr-before" src="images/plscea-heatmap-screw-before.jpg" style="width:100%;display:block;border-radius:8px;">
+  <img id="scr-after" src="images/plscea-heatmap-screw-after.jpg" style="width:100%;display:block;position:absolute;top:0;left:0;border-radius:8px;clip-path:inset(0 50% 0 0);">
+  <div style="position:absolute;top:0;bottom:0;left:50%;width:2px;background:white;box-shadow:0 0 4px rgba(0,0,0,0.5);" id="scr-handle"></div>
+  <input id="scr-range" type="range" min="0" max="100" value="50" style="width:100%;margin-top:10px;">
+  <p style="text-align:center;font-size:0.85em;color:#666;">left: PL-SCEA (γ = 2) &nbsp;|&nbsp; right: original QK attention -- drag to compare (same real defective screw, shared color scale)</p>
 </div>
 <script>
 (function(){
-  var r = document.getElementById('ps-range');
-  var a = document.getElementById('ps-after');
-  var h = document.getElementById('ps-handle');
-  if (r && a && h) {
-    r.addEventListener('input', function(){
-      a.style.clipPath = 'inset(0 ' + (100 - r.value) + '% 0 0)';
-      h.style.left = r.value + '%';
-    });
+  function wire(p){
+    var r=document.getElementById(p+'-range'),a=document.getElementById(p+'-after'),h=document.getElementById(p+'-handle');
+    if(r&&a&&h){r.addEventListener('input',function(){a.style.clipPath='inset(0 '+(100-r.value)+'% 0 0)';h.style.left=r.value+'%';});}
   }
+  wire('cap'); wire('scr');
 })();
 </script>
 ```
 :::
 
-## Why this probably happens
+## So what can I actually conclude?
 
-This reimplementation's best hypothesis: the reconfiguration is fundamentally a **smoothing**
-operation -- every token gets pulled toward a weighted average of its positively-correlated
-peers. Smoothing helps *within-category* consensus features look more uniform, but a genuine
-anomalous patch, almost by definition, has fewer positively-correlated neighbors to draw on --
-which should make it stand out. In practice, the top-10%-worst-patch VAE reconstruction-error
-scoring this post uses seems to get its signal partly *from* the raw variance in the patches, and
-smoothing away that variance appears to remove some of the anomaly signal along with the noise.
-An unexplored alternative worth trying next: a **discrepancy score** -- comparing a patch's raw
-feature to its own SCEA-reconfigured version, rather than feeding the reconfigured features
-directly into the anomaly scorer -- since a genuine anomaly should discrepant *more* from its own
-smoothed version than a normal patch would.
+- **Not "PL-SCEA is bad" and not "PL-SCEA works as advertised".** On a faithful-in-mechanism
+  but not-fully-faithful-in-recipe reimplementation, PL-SCEA is within noise of the original
+  last-layer attention for image-level detection at 8-shot, mixed per category, and trends toward
+  (never past) the baseline as γ grows at 1-shot.
+- **I could not reproduce the γ = 2 optimum.** I don't know whether that's my VAE hyperparameters
+  (unspecified in the paper), the missing masking/augmentation, my smoothing/scoring choices, or
+  a genuine difference. The paper's improvement may also live mainly at the pixel level, which I
+  didn't measure.
+- **My pipeline is ~2-5 AUROC points below the paper's absolute numbers**, so a gap I fail to
+  see could be hiding in whatever my head does worse. Anyone wanting to adjudicate this should run
+  the authors' code on the official split rather than rely on this post.
+- **The correction mattered a lot.** The same idea went from "-9 AUROC points" (wrong
+  implementation) to "-0.3, within noise" (right mechanism). A reimplementation that silently
+  differs from the paper in the details that define the method can generate a confident, wrong
+  verdict.
 
 ## Reproduce this yourself
 
@@ -205,24 +343,28 @@ smoothed version than a normal patch would.
 git clone https://github.com/HasanGoni/quarto_blog_hasan
 cd quarto_blog_hasan/notebooks/paper-plscea-anomaly
 uv sync
-uv run run_eval.py           # full 15-category ablation
-uv run generate_heatmap_viz.py  # heatmap video + slider images
+# official MVTec-AD layout (train/good + test/*), ~5 GB, to ./data/mvtec_ad:
+uv run python -c "from huggingface_hub import snapshot_download as s; s('foersben/mvtec-ad', repo_type='dataset', local_dir='data/mvtec_ad', allow_patterns=['*/train/good/*','*/test/*/*'])"
+uv run run_eval.py official 8 2,4                      # setup B, 8-shot, gamma 2 and 4
+uv run run_eval.py official 1 0.5,1,1.5,2,3,4,6        # setup B, 1-shot gamma sweep
+uv run run_eval.py holdout 8 2,4                       # setup A (needs katiehahm/mvtec_ad)
+uv run generate_plots.py && uv run generate_heatmap_viz.py capsule && uv run generate_heatmap_viz.py screw
 ```
 
-No gated models or datasets -- DINOv2-small and `katiehahm/mvtec_ad` both download directly.
+`nvidia/C-RADIOv3-B` and both dataset mirrors download without gating (`trust_remote_code=True`
+is required for RADIO's model code). Runs checkpoint per category and resume if killed. Raw
+results (per-category, per-seed AUROC and AUPR) are in `out/`.
 
 ## Take this into your own workflow
 
-- **Zero-new-parameters architectural ideas still need a real ablation.** "No new weights to
-  train" makes an idea cheap to try, but cheap to try is not the same as helpful -- this
-  reimplementation is a concrete example of an elegant, parameter-free idea that measurably hurt
-  performance on 12 of 15 real categories when actually tested end-to-end.
-- **A visually subtle change in intermediate features can still hide a real ranking-metric
-  regression.** The heatmaps above look nearly identical side by side; the AUROC drop is real and
-  large regardless. Don't let "the visualization looks fine" substitute for measuring the actual
-  downstream metric.
-- **Reporting a negative result honestly is more useful than silently moving on.** If you're
-  evaluating a similar attention/feature-reconfiguration idea for your own anomaly-detection
-  pipeline, the actual finding here -- smoothing patch features can trade away exactly the local
-  variance an anomaly detector relies on -- is worth checking for before assuming a paper's
-  reported gains transfer to your data.
+- **Reimplement the formula, not the vibe.** Standardization, the fallback branch, and *where* in
+  the network the operation sits are part of the method. Dropping them produced a plausible-looking
+  but wrong experiment -- and a confident blog post about it.
+- **When a reimplementation disagrees with a paper, say which parts you matched and which you
+  didn't.** The list under "What is *still* different" is more useful to a reader than a clean
+  headline either way.
+- **Check the author's ablation before trusting your own default.** The paper's γ ablation was a
+  one-figure check that would have caught my γ = 4.
+- **Run your control through the identical pipeline.** The QK-attention baseline here shares
+  weights, head, shots and seeds with PL-SCEA, which is what makes the "within noise" statement
+  meaningful.

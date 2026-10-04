@@ -1,0 +1,21 @@
+1725 real MVTec-AD test images, 15 categories, 1-shot, seeds [0, 1, 2]
+bottle       n_eval~ 82  qk 0.997  plscea_g2 0.998  plscea_g4 0.998   (34s)
+cable        n_eval~149  qk 0.884  plscea_g2 0.873  plscea_g4 0.885   (40s)
+capsule      n_eval~131  qk 0.675  plscea_g2 0.701  plscea_g4 0.692   (43s)
+carpet       n_eval~116  qk 1.000  plscea_g2 1.000  plscea_g4 1.000   (40s)
+grid         n_eval~ 77  qk 0.999  plscea_g2 0.997  plscea_g4 0.999   (38s)
+hazelnut     n_eval~109  qk 0.971  plscea_g2 0.960  plscea_g4 0.970   (43s)
+leather      n_eval~123  qk 1.000  plscea_g2 1.000  plscea_g4 1.000   (44s)
+metal_nut    n_eval~114  qk 0.997  plscea_g2 0.992  plscea_g4 0.995   (41s)
+pill         n_eval~166  qk 0.971  plscea_g2 0.939  plscea_g4 0.956   (43s)
+screw        n_eval~159  qk 0.655  plscea_g2 0.609  plscea_g4 0.641   (40s)
+tile         n_eval~116  qk 1.000  plscea_g2 1.000  plscea_g4 1.000   (32s)
+toothbrush   n_eval~ 41  qk 0.918  plscea_g2 0.876  plscea_g4 0.901   (33s)
+transistor   n_eval~ 99  qk 0.822  plscea_g2 0.817  plscea_g4 0.800   (40s)
+wood         n_eval~ 78  qk 1.000  plscea_g2 0.999  plscea_g4 0.999   (35s)
+zipper       n_eval~150  qk 0.937  plscea_g2 0.926  plscea_g4 0.925   (36s)
+
+Macro-mean image AUROC over 15 categories (1-shot), mean +- std over seeds:
+  qk         92.18 +- 1.29   per-seed [91.43, 91.43, 93.67]
+  plscea_g2  91.25 +- 1.92   per-seed [89.96, 90.34, 93.45]
+  plscea_g4  91.75 +- 1.70   per-seed [90.47, 91.1, 93.69]

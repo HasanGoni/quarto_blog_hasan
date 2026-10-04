@@ -62,3 +62,5 @@ notebooks/paper-marigold-v2/output/
 notebooks/paper-marigold-v2/images/train/
 notebooks/paper-marigold-v2/xray_inputs/
 notebooks/paper-marigold-v2/download.log
+
+notebooks/paper-plscea-anomaly/data/
