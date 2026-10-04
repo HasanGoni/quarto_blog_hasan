@@ -23,6 +23,15 @@ structured as multi-part series rather than one-off posts.
   from-scratch affine CNN, LoFTR deep feature matching, a VoxelMorph-style deformable network),
   scored against a synthetic ground-truth benchmark, plus which methods are actually licensed
   for company use
+- **Paper of the Week** — a handful of arXiv / HF Daily papers a week, filtered for semiconductor
+  CV/VLM defect inspection: ELI5 first, then the technical breakdown, plus full single-paper
+  reimplementations that report real numbers, including negative or corrected ones
+- **Online Course Notes** — consolidated notes (and hands-on reproductions) from online courses
+- **Agentic Development** — rebuilding DeepLearning.AI's *Agentic AI* course around real X-ray/AOI
+  inspection work, then production hardening, A2A interoperability, distillation and retrieval
+- **Agentic Developer: Zero to Advanced** — a from-scratch path through agentic AI (tool calling,
+  LangGraph, multi-agent, RAG, fine-tuning, production hardening) built around one running use case:
+  X-ray defect detection
 
 ## Local development
 

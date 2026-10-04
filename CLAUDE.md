@@ -62,7 +62,12 @@ quarto publish quarto-pub --no-prompt   # push the rendered site to the live qua
 ```
 
 Always `quarto render` the touched files (and ideally the whole site) before publishing, and check
-the tail of the output for `ERROR`/`WARN` lines. **Publishing is a real deploy to a live, public
+the tail of the output for `ERROR`/`WARN` lines. The system `python3` has no
+Jupyter, so render with the repo's venv: `QUARTO_PYTHON=$PWD/.venv-quarto/bin/python quarto render`.
+After a full render, `quarto publish quarto-pub --no-prompt --no-render` publishes exactly what was
+rendered (only changed files upload). `quarto publish` deploys the *whole working tree* -- uncommitted
+posts and nav entries from other work go live too, so check `git status` first. Beware that
+`@name` in prose is parsed as a citation; write handles in backticks. **Publishing is a real deploy to a live, public
 site — always confirm with the user before running `quarto publish`.**
 
 ## Python environments — one `uv`-managed venv per purpose
@@ -77,6 +82,8 @@ its own purpose-named venv at the location that subproject's tooling expects, ke
 | `notebooks/course-notes-adaptive-agents/.venv` | Hands-on demo scripts for the "Online Course Notes" series (code knowledge graph, skill induction, LoRA fine-tuning) | **`uv`**, deps declared in that folder's `pyproject.toml` (`[tool.uv] package = false`) |
 | `notebooks/paper-hpma-sam3/.venv` | Real reimplementation of a "Paper of the Week" post (HPMA adapters wired into the real `facebook/sam3` model, trained on real EndoVis2017 data) | **`uv`**, same `pyproject.toml` pattern |
 | `notebooks/paper-rau-sam2/.venv` | Real reimplementation of a "Paper of the Week" post (Qwen2.5-VL + SAM2 fusion via SAM2's `target_embedding`, trained on real CAMUS data) | **`uv`**, same `pyproject.toml` pattern |
+| `notebooks/paper-plscea-anomaly/.venv` | Real, corrected reimplementation of the PL-SCEA "Paper of the Week" post (frozen `nvidia/C-RADIOv3-B` with the PL-SCEA attention hooked into its last block, evaluated on real MVTec-AD at image and pixel level). Data lives in `data/mvtec_ad/` (~5 GB, gitignored, downloaded from `foersben/mvtec-ad`); small result JSONs in `out/` are force-added | **`uv`**, same `pyproject.toml` pattern |
+| `notebooks/agentic-zero-to-advanced/.venv` | Demo scripts for the "Agentic Developer: Zero to Advanced" series (baseline detector, tool calling, structured output, the hand-written agent loop) | **`uv`**, same `pyproject.toml` pattern |
 
 When adding a new Python-dependent subproject, follow the newest pattern: a scoped `pyproject.toml`
 next to the code, `uv sync` to create its venv, and add the venv path to `.gitignore`. Don't add
@@ -113,3 +120,9 @@ Python-native alternatives (e.g. `transformers` running a small local model) ove
   result (static images + a size-optimized GIF, since quarto.pub rejects uploads much above ~1MB —
   check GIF size and shrink with `Image.quantize`/frame-subsampling before publishing, don't assume
   it'll fit).
+  **Corrections:** if a reimplementation post turns out to be wrong (the PL-SCEA post was: wrong
+  backbone, wrong default exponent, dropped a normalization step -- caught via a GitHub issue),
+  verify against the paper's *full text* (`curl` the arXiv PDF + `pdftotext`, not just the abstract
+  page), rewrite rather than patch, put a visible "Correction" callout at the top, set
+  `date-modified`, retract the old numbers explicitly, and keep earlier result files out of the
+  way (`out/old_*`). List every remaining difference from the paper in the post.
