@@ -180,6 +180,8 @@ website:
             href: posts/series/agentic-zero-to-advanced/03-first-tool-call.qmd
           - text: "4. Prompting and Structured Output"
             href: posts/series/agentic-zero-to-advanced/04-prompting-structured-output.qmd
+          - text: "5. What Makes It an Agent"
+            href: posts/series/agentic-zero-to-advanced/05-what-makes-an-agent.qmd
       - section: "Agentic Architecture: Supply Chain"
         collapse: true
         collapsed: true

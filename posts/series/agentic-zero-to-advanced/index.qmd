@@ -35,12 +35,20 @@ This is a roadmap post: links go live as each part is written, in order.
 
 ### Arc 2 -- The Agent Loop
 
-5. What makes it an "agent" -- planning, tool use, memory, control flow
+5. [What makes it an "agent"](05-what-makes-an-agent.qmd) -- planning, tool use, memory, control flow;
+   a hand-written agent loop, scored against real ground truth
 6. Building the graph -- LangGraph basics: state, nodes, edges
 7. Multi-step pipeline -- classify defect, check business rules, decide, report, as a real
    LangGraph graph
 8. Tool design -- deterministic tools (rule checks) vs. LLM-reasoning tools (report writing), and
-   why mixing them matters for cost and reliability
+   why mixing them matters for cost and reliability. Adds a third kind of tool in between: typed
+   judgments from small "System One" models, which return typed answers and calibrated
+   probabilities instead of generated text. Two are compared head to head on the same narrow
+   semantic calls in the pipeline (e.g. "does this inspector note describe a solder void?", "is
+   this defect description consistent with the detector's label?"): [TypeSafe's Jev](https://typesafe.ai)
+   (hosted) and the open-source [Laya](https://huggingface.co/convaiinnovations/laya) (Apache-2.0,
+   runs locally). Compared on accuracy, calibration, latency and cost, with the probability feeding
+   the same confidence threshold that routes uncertain cases to the human review in post 9
 9. Human-in-the-loop -- flagging uncertain cases for review, approval workflows
 
 ### Arc 3 -- Scaling Up: Multi-Agent and Deep Agents
