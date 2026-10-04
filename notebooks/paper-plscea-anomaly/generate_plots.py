@@ -59,3 +59,21 @@ sweep_plot("out/setup_official/results_1shot.json", "plscea-gamma-sweep.png",
            "Setup B (official train/test split): 1-shot, 15 MVTec-AD categories, 3 seeds")
 sweep_plot("out/setupA_test_holdout/sweep_1shot.json", "plscea-gamma-sweep-setupA.png",
            "Setup A (test-split holdout): 1-shot, 15 MVTec-AD categories, 3 seeds")
+
+
+# ---- pixel-level: per-category change in pixel F1-max (PL-SCEA gamma=2 minus original QK), setup B
+rp = json.load(open("out/setup_official/results_pixel.json")); px = rp["pixel"]; cl = rp["classes"]
+def dF1(K):
+    q = np.array([[px[K]["qk"]["p_f1max"][c][s] for c in cl] for s in range(3)])
+    g = np.array([[px[K]["g2"]["p_f1max"][c][s] for c in cl] for s in range(3)])
+    return 100 * (g - q).mean(0)
+d1, d8 = dF1("1"), dF1("8"); order = np.argsort(d8)[::-1]; x = np.arange(len(cl))
+fig, ax = plt.subplots(figsize=(10, 4.8))
+ax.bar(x - 0.2, d1[order], 0.4, color="#56B4E9", label=f"1-shot (macro {d1.mean():+.1f})")
+ax.bar(x + 0.2, d8[order], 0.4, color=BLUE, label=f"8-shot (macro {d8.mean():+.1f})")
+ax.axhline(0, color="black", lw=1)
+ax.set_xticks(x); ax.set_xticklabels([cl[i] for i in order], rotation=45, ha="right")
+ax.set_ylabel("change in pixel F1-max (points)\nPL-SCEA (γ=2) minus original attention")
+ax.set_title("Pixel-level: where PL-SCEA helps and hurts (official protocol, mean of 3 seeds)")
+ax.legend(); plt.tight_layout(); plt.savefig(f"{IMG_OUT}/plscea-pixel-f1-delta.png", dpi=130); plt.close()
+print("saved plscea-pixel-f1-delta.png")

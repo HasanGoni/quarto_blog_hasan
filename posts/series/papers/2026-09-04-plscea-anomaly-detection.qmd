@@ -1,6 +1,6 @@
 ---
 title: "Reimplementing PL-SCEA — Take Two, After a GitHub Issue Told Me I Got It Wrong"
-subtitle: "arXiv:2609.03655 — a corrected reimplementation (RADIOv3-B, γ = 2, the real attention hook), run on two data protocols, and an honest account of what does and doesn't reproduce"
+subtitle: "arXiv:2609.03655 — a corrected reimplementation (RADIOv3-B, γ = 2, the real attention hook), run on two data protocols at image and pixel level, and an honest account of what does and doesn't reproduce"
 author: "Hasan Goni"
 date: 2026-09-04
 date-modified: 2026-10-04
@@ -203,12 +203,14 @@ I'd rather list these than let the numbers imply a faithful reproduction:
 - **Smoothing / top-1% ordering** is my reading of the description (upsample → σ = 4 → mean of the
   top 1% of pixels), not the authors' code.
 - **Different support images** than the paper's seeds, naturally.
-- **Pixel-level metrics are not measured.** The paper's largest claimed gains are pixel-level
-  (e.g. +3.78 pixel-F1-max over QK in its Table 3); this post only measures image-level AUROC/AUPR.
-- **My baseline is weaker than theirs.** My QK-attention control gets 91.5 AUROC at 1-shot and 95.9
-  at 8-shot (setup B), vs. the paper's 96.5 (QK, 1-shot ablation) and 98.0 (PL-SCEA, 8-shot). So my
-  head/pipeline does not reach the paper's absolute level, and everything below is conditional on
-  *this* pipeline.
+- **Pixel-level metrics are only measured in setup B** (official protocol), not in setup A -- the
+  paper's largest claimed gains are pixel-level, so I added that evaluation after the first
+  publication of this rewrite (see "Pixel level" below).
+- **My baseline is weaker than theirs.** My QK-attention control gets 91.5 image AUROC at 1-shot
+  and 95.9 at 8-shot (setup B), vs. the paper's 96.5 (QK, 1-shot ablation) and 98.0 (PL-SCEA,
+  8-shot); at pixel level my 1-shot QK control gets 94.5 / 51.6 / 88.4 (AUROC / F1-max / PRO)
+  vs. the paper's 97.1 / 61.5 / 93.6. So my head/pipeline does not reach the paper's absolute
+  level, and everything below is conditional on *this* pipeline.
 
 ## Results
 
@@ -271,6 +273,49 @@ with γ and are still climbing at γ = 6. In setup B (AUROC): 90.08 (γ=0.5) →
 small, consistent trend rather than noise -- but it is a trend *toward the baseline*, with
 PL-SCEA never clearly beating it.
 
+### Pixel level -- where the paper says the gains are
+
+The paper's biggest claimed gains are at the pixel level (its Table 3, 1-shot, single seed:
+pixel F1-max 61.54 → 65.32, **+3.78**; pixel AUROC +0.44; PRO +0.19). So I also scored my anomaly
+maps against the official MVTec-AD ground-truth masks: pixel AUROC, pixel F1-max, and PRO (per-region
+overlap, integrated up to a false-positive rate of 0.3), per category over all test images,
+macro-averaged over the 15 categories, setup B, same shots and seeds as above (1-shot and 8-shot):
+
+| Shots | Metric | QK (original) | PL-SCEA γ=2 | Δ (mean of per-seed differences) |
+|---|---|---|---|---|
+| 1-shot | pixel AUROC | 94.46 ± 0.13 | 94.18 ± 0.16 | -0.27 |
+| 1-shot | **pixel F1-max** | 51.58 ± 0.44 | 54.06 ± 0.33 | **+2.48** |
+| 1-shot | PRO | 88.43 ± 0.33 | 87.10 ± 0.21 | -1.33 |
+| 8-shot | pixel AUROC | 96.87 ± 0.17 | 97.08 ± 0.23 | +0.22 |
+| 8-shot | **pixel F1-max** | 56.12 ± 0.81 | 58.28 ± 0.74 | **+2.16** |
+| 8-shot | PRO | 91.84 ± 0.32 | 91.60 ± 0.23 | -0.24 |
+
+![Per-category change in pixel F1-max, PL-SCEA (γ = 2) minus the original attention, official protocol, mean of 3 seeds.](images/plscea-pixel-f1-delta.png)
+
+**Here the paper's direction does show up -- for one metric.**
+
+- **Pixel F1-max improves, consistently.** +2.5 at 1-shot and +2.2 at 8-shot, positive in every one
+  of the 3 seeds (per-seed differences +2.2 to +2.6 at 1-shot, +2.1 to +2.3 at 8-shot), with 10-11
+  of 15 categories improved. That is the same sign as the paper's +3.78, a bit smaller in
+  size.
+- **Pixel AUROC and PRO do not reproduce the paper's small gains.** Pixel AUROC is -0.3 at 1-shot
+  and +0.2 at 8-shot; PRO is lower with PL-SCEA (-1.3 and -0.2). The paper reports +0.44 and +0.19
+  at 1-shot.
+- **Who wins and who loses is not random.** The gains are largest on the *textures* -- `leather`
+  (+9.6 / +10.7 F1-max at 1-/8-shot), `grid`, `tile`, `carpet`, `wood` -- and the losses are on
+  objects with small, distinct structures: `screw` (-8.7 / -7.3), `zipper`, `cable`, `toothbrush`.
+  My (untested) reading: pulling each patch toward the patches most like it sharpens the
+  boundary of a defect on a repetitive texture, but washes out a small part-level detail on an
+  object where nearly every patch is unique.
+- **Why F1-max can move while AUROC doesn't:** F1-max rewards a sharply-localized, high-contrast
+  region at the best single threshold, whereas pixel AUROC and PRO weigh the *whole* ranking
+  (all the low-scoring background and every region equally), so a reconfiguration can sharpen the
+  top of the map without improving the overall ordering.
+
+So, at the pixel level, a real but modest F1-max gain that depends strongly on the object category --
+not the across-the-board improvement the paper's headline tables suggest, and it still comes from a
+baseline that is several points weaker than the paper's.
+
 ### What the maps look like
 
 Seed-0 anomaly maps from the same VAE heads (8-shot, setup B), original attention vs. PL-SCEA
@@ -321,21 +366,27 @@ And `screw`, where it hurts most:
 
 ## So what can I actually conclude?
 
-- **Not "PL-SCEA is bad" and not "PL-SCEA works as advertised".** On a faithful-in-mechanism
-  but not-fully-faithful-in-recipe reimplementation, PL-SCEA is within noise of the original
-  last-layer attention for image-level detection at 8-shot, mixed per category, and trends toward
-  (never past) the baseline as γ grows at 1-shot.
-- **I could not reproduce the γ = 2 optimum.** I don't know whether that's my VAE hyperparameters
-  (unspecified in the paper), the missing masking/augmentation, my smoothing/scoring choices, or
-  a genuine difference. The paper's improvement may also live mainly at the pixel level, which I
-  didn't measure.
-- **My pipeline is ~2-5 AUROC points below the paper's absolute numbers**, so a gap I fail to
-  see could be hiding in whatever my head does worse. Anyone wanting to adjudicate this should run
-  the authors' code on the official split rather than rely on this post.
+- **It depends on the metric.** On this reimplementation, PL-SCEA is within noise of the original
+  last-layer attention for **image-level** detection (8-shot: 95.9 vs 95.6 AUROC), and gives a
+  **consistent, modest gain in pixel F1-max** (+2.2 to +2.5 points, same sign in every seed) while
+  pixel AUROC and PRO are flat to slightly worse. Not "PL-SCEA is bad", and not "PL-SCEA works as
+  advertised everywhere".
+- **The gain is category-dependent.** Texture categories (`leather`, `grid`, `tile`, `carpet`,
+  `wood`) gain the most; objects with small, distinct structures (`screw`, `zipper`, `cable`,
+  `toothbrush`) lose. A macro average hides that split.
+- **I could not reproduce the γ = 2 optimum.** Image-level AUROC and AUPR rise with γ up to 6 and
+  never clearly pass the baseline. I don't know whether that is my VAE hyperparameters
+  (unspecified in the paper), the missing masking/augmentation, my smoothing/scoring choices, or a
+  genuine difference. I did not rerun the γ sweep at pixel level, where the paper's gains live,
+  so γ = 2 may behave differently on F1-max than it does on the image metrics I swept.
+- **My pipeline is below the paper's absolute numbers** (2-5 image-AUROC points; ~3-10 points at
+  pixel level), so a gap I fail to see could be hiding in whatever my head does worse. Anyone
+  wanting to adjudicate this should run the authors' code on the official split rather than rely
+  on this post.
 - **The correction mattered a lot.** The same idea went from "-9 AUROC points" (wrong
-  implementation) to "-0.3, within noise" (right mechanism). A reimplementation that silently
-  differs from the paper in the details that define the method can generate a confident, wrong
-  verdict.
+  implementation) to "-0.3, within noise" at image level and "+2 F1-max" at pixel level (right
+  mechanism). A reimplementation that silently differs from the paper in the details that define
+  the method can generate a confident, wrong verdict.
 
 ## Reproduce this yourself
 
@@ -348,12 +399,15 @@ uv run python -c "from huggingface_hub import snapshot_download as s; s('foersbe
 uv run run_eval.py official 8 2,4                      # setup B, 8-shot, gamma 2 and 4
 uv run run_eval.py official 1 0.5,1,1.5,2,3,4,6        # setup B, 1-shot gamma sweep
 uv run run_eval.py holdout 8 2,4                       # setup A (needs katiehahm/mvtec_ad)
+# pixel level needs the official ground-truth masks too (~1,258 small PNGs):
+uv run python -c "from huggingface_hub import snapshot_download as s; s('foersben/mvtec-ad', repo_type='dataset', local_dir='data/mvtec_ad', allow_patterns=['*/ground_truth/*/*'])"
+uv run run_pixel.py 1 8                                # pixel AUROC / F1-max / PRO, 1- and 8-shot
 uv run generate_plots.py && uv run generate_heatmap_viz.py capsule && uv run generate_heatmap_viz.py screw
 ```
 
 `nvidia/C-RADIOv3-B` and both dataset mirrors download without gating (`trust_remote_code=True`
 is required for RADIO's model code). Runs checkpoint per category and resume if killed. Raw
-results (per-category, per-seed AUROC and AUPR) are in `out/`.
+results (per-category, per-seed image AUROC/AUPR and pixel AUROC/F1-max/PRO) are in `out/`.
 
 ## Take this into your own workflow
 
@@ -365,6 +419,9 @@ results (per-category, per-seed AUROC and AUPR) are in `out/`.
   headline either way.
 - **Check the author's ablation before trusting your own default.** The paper's γ ablation was a
   one-figure check that would have caught my γ = 4.
+- **Evaluate at the granularity the paper claims its gain at.** Image-level numbers alone made
+  PL-SCEA look like a wash; its modest F1-max gain only showed up once I scored the maps against
+  the pixel masks. A method can be flat on one metric and useful on another.
 - **Run your control through the identical pipeline.** The QK-attention baseline here shares
   weights, head, shots and seeds with PL-SCEA, which is what makes the "within noise" statement
   meaningful.

@@ -1,0 +1,61 @@
+bottle       K=1  qk AUROC 98.5 F1 75.4 PRO 94.6  g2 AUROC 98.6 F1 76.8 PRO 94.8
+bottle       K=8  qk AUROC 98.9 F1 78.8 PRO 95.9  g2 AUROC 98.9 F1 78.8 PRO 95.5
+  (195s)
+cable        K=1  qk AUROC 92.5 F1 58.1 PRO 81.8  g2 AUROC 93.0 F1 56.3 PRO 79.5
+cable        K=8  qk AUROC 95.2 F1 59.9 PRO 87.0  g2 AUROC 95.1 F1 58.2 PRO 85.7
+  (244s)
+capsule      K=1  qk AUROC 91.8 F1 20.3 PRO 82.0  g2 AUROC 96.5 F1 29.5 PRO 89.7
+capsule      K=8  qk AUROC 96.5 F1 38.7 PRO 92.7  g2 AUROC 98.2 F1 41.2 PRO 94.4
+  (226s)
+carpet       K=1  qk AUROC 99.1 F1 61.2 PRO 97.5  g2 AUROC 99.3 F1 64.9 PRO 97.9
+carpet       K=8  qk AUROC 99.1 F1 60.5 PRO 97.4  g2 AUROC 99.3 F1 64.9 PRO 97.9
+  (212s)
+grid         K=1  qk AUROC 99.0 F1 41.4 PRO 95.4  g2 AUROC 99.3 F1 49.9 PRO 96.5
+grid         K=8  qk AUROC 99.1 F1 41.9 PRO 95.7  g2 AUROC 99.4 F1 50.0 PRO 96.8
+  (199s)
+hazelnut     K=1  qk AUROC 99.1 F1 69.1 PRO 96.3  g2 AUROC 99.0 F1 69.0 PRO 95.0
+hazelnut     K=8  qk AUROC 99.3 F1 72.7 PRO 97.5  g2 AUROC 99.3 F1 73.2 PRO 97.0
+  (202s)
+leather      K=1  qk AUROC 98.8 F1 34.3 PRO 97.1  g2 AUROC 99.2 F1 43.9 PRO 97.9
+leather      K=8  qk AUROC 98.6 F1 31.2 PRO 96.5  g2 AUROC 99.2 F1 41.9 PRO 97.5
+  (209s)
+metal_nut    K=1  qk AUROC 94.2 F1 65.6 PRO 93.3  g2 AUROC 95.6 F1 71.8 PRO 93.9
+metal_nut    K=8  qk AUROC 97.4 F1 79.6 PRO 96.0  g2 AUROC 97.9 F1 81.9 PRO 96.0
+  (219s)
+pill         K=1  qk AUROC 90.2 F1 60.1 PRO 95.2  g2 AUROC 90.9 F1 65.0 PRO 93.6
+pill         K=8  qk AUROC 95.7 F1 65.8 PRO 96.8  g2 AUROC 96.7 F1 69.7 PRO 96.1
+  (253s)
+screw        K=1  qk AUROC 92.1 F1 28.3 PRO 81.0  g2 AUROC 82.2 F1 19.6 PRO 63.3
+screw        K=8  qk AUROC 95.5 F1 33.4 PRO 86.5  g2 AUROC 94.4 F1 26.1 PRO 83.7
+  (252s)
+tile         K=1  qk AUROC 96.4 F1 66.8 PRO 89.0  g2 AUROC 97.6 F1 72.6 PRO 92.7
+tile         K=8  qk AUROC 96.0 F1 65.7 PRO 88.2  g2 AUROC 97.6 F1 73.2 PRO 92.7
+  (209s)
+toothbrush   K=1  qk AUROC 97.2 F1 48.4 PRO 89.6  g2 AUROC 97.0 F1 45.7 PRO 87.6
+toothbrush   K=8  qk AUROC 98.7 F1 55.7 PRO 93.8  g2 AUROC 98.4 F1 54.1 PRO 92.3
+  (174s)
+transistor   K=1  qk AUROC 81.7 F1 37.9 PRO 57.4  g2 AUROC 82.2 F1 39.2 PRO 54.4
+transistor   K=8  qk AUROC 91.9 F1 45.7 PRO 70.8  g2 AUROC 92.0 F1 47.9 PRO 69.2
+  (220s)
+wood         K=1  qk AUROC 95.8 F1 65.0 PRO 95.0  g2 AUROC 97.6 F1 68.9 PRO 96.3
+wood         K=8  qk AUROC 96.4 F1 64.4 PRO 95.0  g2 AUROC 98.0 F1 68.8 PRO 96.5
+  (195s)
+zipper       K=1  qk AUROC 90.4 F1 41.8 PRO 81.1  g2 AUROC 84.7 F1 37.8 PRO 73.4
+zipper       K=8  qk AUROC 94.7 F1 48.1 PRO 87.9  g2 AUROC 91.9 F1 44.4 PRO 82.7
+  (235s)
+
+Pixel-level, K=1: macro over 15 categories, mean +- std over seeds
+  qk  p_auroc  94.46 +- 0.13
+  qk  p_f1max  51.58 +- 0.44
+  qk  pro      88.43 +- 0.33
+  g2  p_auroc  94.18 +- 0.16
+  g2  p_f1max  54.06 +- 0.33
+  g2  pro      87.10 +- 0.21
+
+Pixel-level, K=8: macro over 15 categories, mean +- std over seeds
+  qk  p_auroc  96.87 +- 0.17
+  qk  p_f1max  56.12 +- 0.81
+  qk  pro      91.84 +- 0.32
+  g2  p_auroc  97.08 +- 0.23
+  g2  p_f1max  58.28 +- 0.74
+  g2  pro      91.60 +- 0.23

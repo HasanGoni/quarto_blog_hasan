@@ -30,3 +30,15 @@ rA = json.load(open("out/setupA_test_holdout/results_8shot.json"))
 tmp = tempfile.NamedTemporaryFile("w", suffix=".json", delete=False)
 json.dump({"auroc": {"qk": rA["auroc"]["qk"], "g2": rA["auroc"]["plscea_g2"], "g4": rA["auroc"]["plscea_g4"]}}, tmp); tmp.close()
 print("\n### SETUP A 8-shot\n" + table(tmp.name, ["qk", "g2", "g4"], names, ap=False))
+
+
+# ---- pixel-level macro table
+rp = json.load(open("out/setup_official/results_pixel.json")); px = rp["pixel"]; cl = rp["classes"]
+def mac(K, v, m):
+    a = 100 * np.array([[px[K][v][m][c][s] for c in cl] for s in range(3)]).mean(1)
+    return a
+print("\n### PIXEL macro (setup B)\n| Shots | Metric | QK (original) | PL-SCEA γ=2 | Δ (mean of per-seed differences) |\n|---|---|---|---|---|")
+for K in ("1", "8"):
+    for m, name in (("p_auroc", "pixel AUROC"), ("p_f1max", "pixel F1-max"), ("pro", "PRO")):
+        q, g = mac(K, "qk", m), mac(K, "g2", m)
+        print(f"| {K}-shot | {name} | {q.mean():.2f} ± {q.std(ddof=1):.2f} | {g.mean():.2f} ± {g.std(ddof=1):.2f} | {(g-q).mean():+.2f} |")
