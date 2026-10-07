@@ -13,6 +13,11 @@
   </form>
   <p class="cta-fine">Runnable code in every lesson. No spam, unsubscribe any time.</p>
 </section>
+<section class="feedback-prompt" id="feedback-prompt">
+  <h3>Questions, corrections or feedback?</h3>
+  <p>Found a mistake, or want a topic covered next? Leave a comment below (sign in with GitHub),
+  or write to <a href="mailto:hasanme1412@gmail.com">hasanme1412@gmail.com</a>. I read everything.</p>
+</section>
 <style>
   .cta-course { margin: 2.5rem 0 2rem; padding: 1.75rem 2rem; border: 1px solid #d6e4f7; border-left: 5px solid #2c7be5;
     border-radius: 10px; background: #f5f9ff; color: #1f2937; }
@@ -26,6 +31,9 @@
     color: #fff; font-size: 1rem; font-weight: 600; cursor: pointer; }
   .cta-course .cta-form input[type="submit"]:hover { background: #1b63c6; }
   .cta-course .cta-fine { margin: .75rem 0 0; font-size: .8rem; color: #5b6676; }
+  .feedback-prompt { margin: 0 0 1rem; padding: 1rem 0 0; border-top: 1px solid #e2e6ec; }
+  .feedback-prompt h3 { margin: 0 0 .4rem; font-size: 1.25rem; }
+  .feedback-prompt p { margin: 0; color: #4b5563; }
   .cta-sr { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); }
 </style>
 <script>
@@ -33,6 +41,8 @@
   document.addEventListener("DOMContentLoaded", function () {
     var cta = document.getElementById("free-course");
     var article = document.getElementById("quarto-document-content");
+    var fb = document.getElementById("feedback-prompt");
     if (cta && article) article.appendChild(cta);
+    if (fb && article) article.appendChild(fb);
   });
 </script>
