@@ -26,6 +26,8 @@ format:
     reference-location: margin
     citation-location: margin
     footnotes-hover: true
+    include-after-body:
+      - file: _cta.html
     
 # Common settings
 author: "Hasan"
@@ -50,14 +52,17 @@ execute:
   cache: true
   freeze: auto
 
-# Comments and sharing
+# Comments and sharing (Giscus = GitHub Discussions on this repo)
 comments:
   giscus:
     repo: HasanGoni/quarto_blog_hasan
-  hypothesis: true
-  utterances: 
-    repo: yourusername/quarto_blog_hasan
-    theme: github-light
+    repo-id: R_kgDOKi-twQ
+    category: Announcements
+    category-id: DIC_kwDOKi-twc4DHRHJ
+    mapping: pathname
+    reactions-enabled: true
+    loading: lazy
+    language: en
 
 # Social sharing
 share: [twitter, linkedin, facebook]
