@@ -1,41 +1,40 @@
-<div class="cta-course">
-  <h3>Free 7-day course: Industrial Vision Foundations</h3>
-  <p>Agents can write the code, but someone still has to know <em>which</em> method fits a real inspection line.
-  Seven short daily lessons on the classical computer vision techniques that still run production systems,
-  with examples you can run. No fluff.</p>
-  <form
-    action="https://buttondown.com/api/emails/embed-subscribe/hasangoni"
-    method="post"
-    target="_blank"
-    class="embeddable-buttondown-form"
-  >
-    <label for="bd-email">Enter your email</label>
-    <input type="email" name="email" id="bd-email" required />
-    <input type="submit" value="Send me Day 1" />
-    <p>
-      <a href="https://buttondown.com/refer/hasangoni" target="_blank">
-        Powered by Buttondown.
-      </a>
-    </p>
+<section class="cta-course" id="free-course">
+  <div class="cta-eyebrow">Free email course &middot; 7 days</div>
+  <h3>Industrial Vision Foundations</h3>
+  <p class="cta-lead">AI can write the code, but someone still has to know <em>which</em> method fits a real inspection line.
+  One short lesson a day for 7 days on the classical computer vision techniques that still run production systems.</p>
+
+
+  <form action="https://buttondown.com/api/emails/embed-subscribe/hasangoni"
+        method="post" target="_blank" class="cta-form">
+    <label for="bd-email" class="cta-sr">Email address</label>
+    <input type="email" name="email" id="bd-email" placeholder="you@company.com" required />
+    <input type="submit" value="Get the free 7-day course" />
   </form>
-</div>
+  <p class="cta-fine">Runnable code in every lesson. No spam, unsubscribe any time.
+    <a href="https://buttondown.com/refer/hasangoni" target="_blank" rel="noopener">Powered by Buttondown</a></p>
+</section>
 <style>
-  .cta-course { margin: 3rem 0 1rem; padding: 1.25rem 1.5rem; border: 1px solid #2c7be5; border-radius: 8px; }
-  .cta-course h3 { margin-top: 0; }
-  .embeddable-buttondown-form {
-    display: flex; flex-direction: column; gap: 8px; box-sizing: border-box;
-    max-width: 384px; padding: 16px; border: 1px solid #e4e4e7; border-radius: 6px;
-    background: #fff; color: #18181b; font: 14px/1.4 system-ui, sans-serif;
-  }
-  .embeddable-buttondown-form label { font-weight: 500; }
-  .embeddable-buttondown-form input[type="email"] {
-    box-sizing: border-box; width: 100%; padding: 6px 8px; border: 1px solid #d4d4d8;
-    border-radius: 4px; background: #fff; color: inherit; font: inherit;
-  }
-  .embeddable-buttondown-form input[type="submit"] {
-    padding: 8px 12px; border: 0; border-radius: 4px; background: #18181b; color: #fff;
-    font: inherit; font-weight: 500; cursor: pointer;
-  }
-  .embeddable-buttondown-form p { margin: 0; font-size: 12px; text-align: center; }
-  .embeddable-buttondown-form p a { color: #71717a; }
+  .cta-course { margin: 2.5rem 0 2rem; padding: 1.75rem 2rem; border: 1px solid #d6e4f7; border-left: 5px solid #2c7be5;
+    border-radius: 10px; background: #f5f9ff; color: #1f2937; }
+  .cta-course .cta-eyebrow { font-size: .78rem; font-weight: 700; letter-spacing: .08em; text-transform: uppercase; color: #2c7be5; }
+  .cta-course h3 { margin: .25rem 0 .6rem; font-size: 1.6rem; }
+  .cta-course .cta-lead { margin: 0 0 1.25rem; max-width: 46rem; }
+  .cta-course .cta-form { display: flex; flex-wrap: wrap; gap: .6rem; max-width: 36rem; }
+  .cta-course .cta-form input[type="email"] { flex: 1 1 14rem; padding: .7rem .9rem; border: 1px solid #b8c4d6;
+    border-radius: 6px; font-size: 1rem; background: #fff; color: #111; }
+  .cta-course .cta-form input[type="submit"] { padding: .7rem 1.3rem; border: 0; border-radius: 6px; background: #2c7be5;
+    color: #fff; font-size: 1rem; font-weight: 600; cursor: pointer; }
+  .cta-course .cta-form input[type="submit"]:hover { background: #1b63c6; }
+  .cta-course .cta-fine { margin: .75rem 0 0; font-size: .8rem; color: #5b6676; }
+  .cta-course .cta-fine a { color: #5b6676; }
+  .cta-sr { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); }
 </style>
+<script>
+  // Show the offer above the comment box, where readers who finish the post will see it
+  document.addEventListener("DOMContentLoaded", function () {
+    var cta = document.getElementById("free-course");
+    var comments = document.getElementById("quarto-comments");
+    if (cta && comments && comments.parentNode) comments.parentNode.insertBefore(cta, comments);
+  });
+</script>
