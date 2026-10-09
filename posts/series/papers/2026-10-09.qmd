@@ -1,0 +1,362 @@
+---
+title: "5 Papers Worth Reading — Week of October 9, 2026"
+author: "Hasan Goni"
+date: 2026-10-09
+categories: ["papers", "weekly-pick", "computer-vision", "VLM", "Reasoning & Agents", "Generative Models"]
+image: "https://cdn-thumbnails.huggingface.co/social-thumbnails/papers/2610.07862.png"
+toc: true
+series:
+  name: "Paper of the Week"
+  number: 23
+paper-urls:
+  - https://huggingface.co/papers/2610.07862
+  - https://huggingface.co/papers/2610.07250
+  - https://huggingface.co/papers/2610.12403
+  - https://huggingface.co/papers/2610.06100
+  - https://huggingface.co/papers/2610.12468
+paper-topics:
+  - "Reasoning & Agents"
+  - "Generative Models"
+  - "Reasoning & Agents"
+  - "Reasoning & Agents"
+  - "Generative Models"
+format:
+  html: default
+---
+
+:::{.callout-tip}
+This post is part of the [Paper of the Week](index.qmd) series — a handful of papers a week, picked and explained for my own semiconductor CV/VLM work.
+:::
+
+This week I scanned 124 candidates from arXiv and HF Daily Papers and picked 5 worth writing up in full — same format as always: one-sentence version, ELI5, then the full data-scientist breakdown with a code sketch and an honest read on whether it's actually useful for what I'm building.
+
+## 1. A self-learning scientific agent for X-ray diffraction
+
+[https://huggingface.co/papers/2610.07862](https://huggingface.co/papers/2610.07862) · _This paper addresses self-learning scientific agents for X-ray diffraction, directly relevant to industrial X-ray defect detection work._ · **Reasoning & Agents**
+
+### The One-Sentence Version
+
+A self-improving scientific agent learns from its own mistakes in X-ray diffraction analysis, updating its behavior without retraining or changing underlying physics models.
+
+### Explain It Like I'm 5
+
+Imagine you're trying to figure out what toys are inside a box by shaking it and listening to the sounds they make. If you guess wrong, you try again—but instead of just guessing differently, you think about why your last guess was wrong and change how you listen next time. That’s kind of what this paper does, but with X-rays and crystals, and it remembers lessons so it doesn’t repeat them.
+
+### Jargon Buster
+
+**X-ray diffraction** — When X-rays hit a crystal, they bounce off in patterns that tell us what the crystal is made of. Used to identify materials in science and industry.
+
+**Gan Jiang** — The name of the self-learning agent described in the paper; it's like a smart robot that gets better at analyzing X-ray data over time.
+
+**XMatcher** — A tool that matches observed X-ray patterns with known crystal structures to identify what materials are present.
+
+**XQueryer** — Helps search through databases of known crystal structures to find matches for new X-ray data.
+
+**XDecomposer** — Breaks down complex X-ray patterns into individual components from different materials.
+
+**WPEM** — A physics-based modeling approach used to simulate and fit full X-ray diffraction patterns.
+
+**Phase identification** — Determining which crystalline phases (types of material structure) are present in a sample.
+
+**Multiphase decomposition** — Separating mixed signals from multiple materials in an X-ray pattern to analyze each one individually.
+
+### Explain It Like I'm a Data Scientist
+
+**What problem does it solve?**
+
+Most scientific agents rely on fixed rules or trained models that can’t adapt when they encounter unexpected cases. In X-ray diffraction, especially in industrial settings like semiconductor inspection, real-world samples often deviate from training data due to noise, impurities, or unusual crystal orientations. These agents fail silently or require expensive retraining. This paper introduces a system where the agent actively diagnoses errors, revises its own methods, and improves without needing to retrain the language model or alter the physical models behind the analysis.
+
+**How does it solve it?**
+
+The authors build a modular framework called XMatcher, XQueryer, XDecomposer, and WPEM to handle various stages of diffraction analysis. Gan Jiang, the self-learning agent, uses feedback from failed analyses to refine both its instruction set and code logic. It evaluates changes before adopting them, ensuring that improvements are grounded in physical reality rather than spurious correlations. Crucially, this process avoids retraining the language model or modifying the physics-based models—keeping the system stable while enabling adaptive learning.
+
+**Minimal code sketch**
+
+```python
+class SelfLearningAgent:
+    def __init__(self):
+        self.skills = {}
+        self.feedback_log = []
+
+    def diagnose_failure(self, input_data, prediction, ground_truth):
+        # Compare prediction vs truth, log discrepancy
+        error = self.calculate_error(prediction, ground_truth)
+        return {"error": error, "input": input_data}
+
+    def revise_skill(self, diagnosis):
+        # Modify skill instructions or code based on error
+        skill_id = diagnosis["input"]["skill_used"]
+        updated_code = self.update_code(skill_id, diagnosis["error"])
+        return updated_code
+
+    def validate_and_store(self, revised_code):
+        # Run validation tests before storing updated skill
+        if self.validate(revised_code):
+            self.skills["updated_skill"] = revised_code
+            return True
+        return False
+
+# Example usage:
+agent = SelfLearningAgent()
+failure = agent.diagnose_failure(data, pred, true_label)
+revised = agent.revise_skill(failure)
+if agent.validate_and_store(revised):
+    print("Skill updated successfully")
+```
+
+### Why This Matters For My Work
+
+This is directly relevant to how I approach defect detection in X-ray images—where anomalies might not match any known patterns in training data. The idea of a system that learns from misclassification and adapts its own processing pipeline without full retraining aligns with how I want to improve my local VLMs for auto-labeling and verification tasks. While the domain differs (crystallography vs. industrial vision), the core concept of autonomous skill refinement underpins similar challenges in robustness and generalization across edge cases. It also suggests a path toward more adaptive systems that don’t just classify but evolve their understanding over time.
+
+## 2. Internalizing Agent Experience into Diffusion Model Weights via On-Policy Context Distillation
+
+[https://huggingface.co/papers/2610.07250](https://huggingface.co/papers/2610.07250) · _On-policy context distillation can enhance VLM agents with agentic capabilities, useful for auto-label verification and judging in defect detection._ · **Generative Models**
+
+### The One-Sentence Version
+
+This paper teaches diffusion models to internally mimic the behavior of an agentic prompt-refinement system, so they can produce better outputs without needing the full agent at inference time.
+
+### Explain It Like I'm 5
+
+Imagine you have a robot that draws pictures based on your instructions. Normally, the robot asks you questions and fixes its drawing step-by-step. But what if the robot could learn to draw better just from the first instruction, like a smart kid who remembers how to fix things even after the teacher leaves? That’s kind of what this paper does — it teaches the drawing machine (the diffusion model) to remember how to improve itself, so it doesn’t need the helper anymore.
+
+### Jargon Buster
+
+- **Diffusion Model** — A type of image generator that works by slowly removing noise from random images until it makes something recognizable. Used here to generate text-to-image outputs.
+- **On-Policy Context Distillation** — A training method where a model learns from real-time decisions made during interaction, rather than pre-recorded data. Here, it uses agent feedback to improve the model’s internal understanding.
+- **Agent** — A software system that can plan, act, and refine its actions over time, like a helpful assistant that improves prompts iteratively.
+- **Text-to-Image** — A task where you give a text description and get an image out; e.g., “a red car” → picture of a red car.
+- **Prompt** — A natural language instruction given to a model to guide output generation.
+- **Distillation** — A technique where a smaller or simpler model learns from a larger or more complex one. In this case, the agent’s improved prompts teach the diffusion model new tricks.
+- **Auto Skill** — A component of the agent that automatically selects and applies relevant tools or techniques to improve prompt quality.
+- **VLM** — Vision-Language Model, a model trained to understand both images and text, often used in tasks like image captioning or visual question answering.
+
+### Explain It Like I'm a Data Scientist
+
+**What problem does it solve?**
+
+Current text-to-image models rely heavily on external agents to refine prompts and iterate toward better results. While these agents significantly boost performance, their benefits are lost once the agent is gone — the model must relearn everything from scratch. This limits scalability and deployment flexibility, especially in production systems where running full agents isn't feasible.
+
+**How does it solve it?**
+
+The authors train a diffusion model to mimic the behavior of an agent that refines prompts on-the-fly. They use a process called *on-policy context distillation*, where the agent generates improved versions of prompts, and those refined prompts are used to adjust the model’s internal weights directly. The idea is to embed the agent’s reasoning into the model itself, so it can produce high-quality outputs even when acting alone.
+
+**Minimal code sketch**
+
+```python
+# Pseudocode for distillation loop
+for batch in dataset:
+    # Original prompt -> agent improves it
+    original_prompt = batch["prompt"]
+    refined_prompt = agent.refine(original_prompt)
+
+    # Generate image with both prompts
+    img_original = diffusion_model(original_prompt)
+    img_refined = diffusion_model(refined_prompt)
+
+    # Train diffusion model to match refined output using original input
+    loss = mse(img_refined, diffusion_model(original_prompt))
+    optimizer.zero_grad()
+    loss.backward()
+    optimizer.step()
+```
+
+### Why This Matters For My Work
+
+This approach could help me build more robust defect detection pipelines where I don’t always need to run a full agent for prompt refinement or label verification. If I can embed some of that logic into lightweight local models like LFM2-VL or Qwen3-VL, it might reduce latency and simplify deployment in edge environments. However, since most of my work involves low-resource settings and small models, the practicality of distilling agent behaviors into such constrained architectures remains uncertain. Still, it's a promising direction for future experimentation in auto-labeling and quality control workflows.
+
+## 3. ViSkill: Reinforcing VLM Agents with Evolving Visual-Native Skills
+
+[https://huggingface.co/papers/2610.12403](https://huggingface.co/papers/2610.12403) · _ViSkill reinforces VLM agents with evolving visual-native skills, aligning with fine-tuning small VLMs for defect localization._ · **Reasoning & Agents**
+
+### The One-Sentence Version
+
+ViSkill improves vision-language model agents by letting them learn and reuse visual “skill cards” that encode successful actions and observations, enabling more efficient reinforcement learning in visual tasks.
+
+### Explain It Like I'm 5
+
+Imagine you're playing with blocks and figure out how to build a tower without knocking it down. Instead of just remembering “put the red block on top,” you remember a whole picture of how your hands moved and where everything went. Now, when you play again, you pull out that memory card and use it to help build faster. That’s kind of what this paper does—except instead of building towers, it helps robots or AI systems learn better by remembering full visual scenes of success.
+
+### Jargon Buster
+
+- **VLM** — A Vision-Language Model, like a smart robot brain that understands both images and words. Used here to make decisions based on what it sees.
+- **Skill cards** — Visual summaries of good actions and outcomes, stored like sticky notes so the agent can pull them up later during decision-making.
+- **Reward shaping** — Giving the AI extra points for doing things that look promising, even if they don’t lead to final success yet. Helps it learn faster.
+- **Closed feedback loop** — When the system learns from its successes and uses those lessons to get better, then keeps repeating that cycle forever.
+- **Visual-native skills** — Skills that are built directly from visual information, not translated through text first, so they keep all the important shape and layout details.
+- **Evolving skills** — Skills that change and improve over time as the agent gets more experience, rather than being static.
+
+### Explain It Like I'm a Data Scientist
+
+**What problem does it solve?**
+
+Most current methods for teaching AI agents to act in visual environments rely heavily on language-based representations. These models lose crucial geometric and spatial relationships when translating visual input into text. As a result, policies trained using such abstractions often fail to generalize well across new visual situations or miss subtle cues essential for precise control and localization tasks.
+
+**How does it solve it?**
+
+ViSkill introduces a skill library where each skill is encoded as a composite visual card summarizing past successful interactions. These cards are retrieved during inference to guide both perception and action selection, while also being updated with new experience via a closed-loop feedback mechanism. By keeping skills visual-native and tightly coupled with policy updates, the approach avoids the loss of structure inherent in text-linearized representations.
+
+**Minimal code sketch**
+
+```python
+# Pseudocode for skill retrieval and updating in ViSkill
+class SkillLibrary:
+    def __init__(self):
+        self.skills = []
+
+    def store_skill(self, visual_observation, action_sequence, reward):
+        # Store a skill as a visual skill card
+        skill_card = {"obs": visual_observation, "actions": action_sequence, "reward": reward}
+        self.skills.append(skill_card)
+
+    def retrieve_skills(self, query_obs):
+        # Return most similar skill cards based on visual similarity
+        return [s for s in self.skills if self.similarity(s["obs"], query_obs) > threshold]
+
+# During training loop:
+for episode in episodes:
+    obs = env.reset()
+    trajectory = []
+    while not done:
+        # Retrieve relevant skills
+        relevant_skills = skill_lib.retrieve_skills(obs)
+        # Use skills to inform policy or reward shaping
+        policy_output = policy(obs, relevant_skills)
+        action = sample_action(policy_output)
+        next_obs, reward, done = env.step(action)
+        trajectory.append((obs, action, reward))
+        obs = next_obs
+
+    # Update skill library with successful trajectory
+    skill_lib.store_skill(trajectory[-1][0], [a for _, a, _ in trajectory], total_reward)
+```
+
+### Why This Matters For My Work
+
+This work aligns closely with my goal of fine-tuning small VLMs for defect localization and segmentation in semiconductor inspection. The idea of storing and reusing visual-native skills could help improve the consistency and accuracy of models like LFM2-VL or Qwen3-VL when applied to complex, low-data scenarios. While the method isn't directly tailored to X-ray or casting defects, the general principle of leveraging reusable visual patterns might translate into better performance on domain-specific tasks where visual fidelity matters more than textual abstraction. It also opens up interesting possibilities for auto-labeling workflows, especially if skill cards can be used to validate or correct predictions in real-time.
+
+## 4. From Traces to Agentic Worlds: Agentic Language World Models for Interactive Environment Simulation
+
+[https://huggingface.co/papers/2610.06100](https://huggingface.co/papers/2610.06100) · _Agentic language world models can simulate interactive environments for training and evaluating vision-language models in defect detection scenarios._ · **Reasoning & Agents**
+
+### The One-Sentence Version
+
+This paper introduces Trace2Env, a framework that builds interactive simulation environments from historical interaction logs, enabling training and testing of vision-language models without access to the original system.
+
+### Explain It Like I'm 5
+
+Imagine you have a toy robot that you can’t fix because it broke, but you still have a notebook full of notes about how it used to behave. Instead of trying to fix the robot, you make up a new pretend version of it based on your notes, so you can still play with it and teach it new tricks. That’s kind of what this paper does—except instead of a robot, they're using computers and making fake worlds out of old data.
+
+### Jargon Buster
+
+- **Agentic language world model** — A type of AI that acts like a character in a world and can talk about or change that world using language. Used here to simulate environments.
+- **Trace2Env** — The name of the system proposed in the paper that turns old interaction data into a usable simulated environment.
+- **Worldbook** — A structured collection of information about an environment, including rules, examples, and behaviors, built from historical data.
+- **Stateful simulation** — Simulating something where the past matters, like remembering whether a door is open or closed, not just starting fresh each time.
+- **Interactive environment simulation** — Creating a digital space where agents (like robots or models) can act and see results, as if they were in a real place.
+- **Vision-language model (VLM)** — An AI that understands both images and text, often used for tasks like identifying defects in images.
+- **Defect detection** — Finding flaws or problems in manufacturing, like cracks in metal or misshapen parts.
+- **Fine-tuning** — Adjusting a pre-trained model to do a very specific job, like detecting certain types of defects.
+
+### Explain It Like I'm a Data Scientist
+
+**What problem does it solve?**
+
+Training and evaluating vision-language models (VLMs) in industrial settings often requires access to real-world environments, which may be expensive, proprietary, or physically inaccessible. In such cases, traditional approaches rely on building or acquiring synthetic environments, which are costly and time-consuming. The paper addresses this by proposing a method to simulate realistic environments directly from historical interaction traces — essentially recreating a “world” from past behavior logs.
+
+**How does it solve it?**
+
+The approach uses a learning-free framework called Trace2Env. It takes logs of previous interactions with a system (e.g., human actions in a factory setting), extracts environmental schema, grounded evidence, and behavioral patterns, and stores them in a structured format called a “worldbook.” At runtime, a world model agent consults this worldbook to simulate future states and guide a task agent through a realistic, stateful environment, even when the original system isn’t available.
+
+**Minimal code sketch**
+
+```python
+class Worldbook:
+    def __init__(self):
+        self.schemas = {}
+        self.evidence = []
+        self.behaviors = {}
+
+class WorldModelAgent:
+    def __init__(self, worldbook):
+        self.worldbook = worldbook
+
+    def simulate(self, action, current_state):
+        # Consult worldbook for valid transitions
+        next_state = self.worldbook.lookup_transition(action, current_state)
+        return next_state
+
+# Example usage
+wb = Worldbook()
+wb.add_schema("door", {"open": True, "closed": False})
+wb.add_evidence("user opened door at 10:00")
+agent = WorldModelAgent(wb)
+new_state = agent.simulate("open_door", {"door": "closed"})
+```
+
+### Why This Matters For My Work
+
+This is relevant to my work in semiconductor defect detection because it offers a way to train and evaluate VLMs in simulated industrial environments without needing access to the actual production line or its control systems. While I’m working with local models like Qwen3-VL and LFMs fine-tuned for defect localization, having a robust simulation framework could help me generate more diverse training data from historical logs. However, since the focus is on agentic interaction rather than purely image-based tasks, the direct applicability is limited unless we can map defect detection workflows into an interactive agent-based scenario. Still, it’s an interesting direction for future experimentation with synthetic data generation.
+
+## 5. DreamTrue: Action-Faithful Robot World Model with Counterfactual Post-Training
+
+[https://huggingface.co/papers/2610.12468](https://huggingface.co/papers/2610.12468) · _DreamTrue's action-faithful robot world model supports physically plausible video prediction, beneficial for understanding defect dynamics in industrial settings._ · **Generative Models**
+
+### The One-Sentence Version
+
+DreamTrue improves robot world models by making them more faithful to real-world actions through geometric calibration and counterfactual post-training, enabling better video prediction for industrial defect analysis.
+
+### Explain It Like I'm 5
+
+Imagine you're trying to teach a robot how to stack blocks without knocking them over. But the robot keeps getting confused because it doesn’t understand where its arms really are, or it only learns from the times it succeeds. So you make it practice more by pretending it did different things, and also fix its “eyes” so they match what it’s actually seeing. That way, it gets better at predicting what happens next when it moves.
+
+### Jargon Buster
+
+- **World model** — A system that tries to predict what will happen in the world based on what it has seen before; used here to simulate robot behavior.
+- **Action-faithful** — Predictions that match what the robot actually does, not just what looks good visually.
+- **Counterfactual post-training** — A technique where you tweak past actions and see what would’ve happened if those had been done differently, to train the model on more scenarios.
+- **Cross-embodiment** — Using one kind of robot body to learn something that can later be applied to another kind of robot body.
+- **Geometric calibration** — Adjusting camera or sensor views so that visual inputs match up with physical movements.
+- **Multi-view** — Using multiple cameras or sensors to get a fuller picture of the environment.
+- **Video prediction** — Trying to guess what a video will show next, based on earlier frames.
+
+### Explain It Like I'm a Data Scientist
+
+**What problem does it solve?**
+
+Existing robot world models often fail to accurately simulate real-world actions due to two main issues: poor alignment between visual input and motion (caused by inaccurate calibration), and limited training data that biases predictions toward successful outcomes. These problems reduce their utility in safety-critical or industrial applications where precise behavior modeling matters.
+
+**How does it solve it?**
+
+To address calibration issues, DreamTrue uses geometric calibration to ensure that rendered action trajectories align properly with real video frames. For broader interaction coverage, it introduces counterfactual post-training, which modifies recorded actions and generates new video sequences under varied conditions. Together, these methods improve both the realism and generalization of the model’s predictions.
+
+**Minimal code sketch**
+
+```python
+# Simulate action trajectory rendering + calibration
+def render_action_trajectory(action, camera_params):
+    # Render action in image space
+    return project_to_image_space(action, camera_params)
+
+def calibrate_video_alignment(rendered_traj, real_frame):
+    # Align rendered trajectory with actual video frame
+    return align_images(rendered_traj, real_frame)
+
+# Counterfactual modification
+def modify_action(action, perturbation):
+    # Change action slightly to simulate alternate outcomes
+    return apply_perturbation(action, perturbation)
+
+# Video generation loop
+for recorded_action in dataset:
+    calibrated_traj = render_action_trajectory(recorded_action, cam_calib)
+    aligned_frame = calibrate_video_alignment(calibrated_traj, real_video_frame)
+    
+    # Generate counterfactual version
+    cf_action = modify_action(recorded_action, noise)
+    cf_video = predict_future_video(cf_action, aligned_frame)
+```
+
+### Why This Matters For My Work
+
+This approach could help refine how I train small vision-language models to detect defects in semiconductor manufacturing—especially when dealing with subtle variations in casting or X-ray images that might reflect different process states. While DreamTrue focuses on robotic control, its idea of using counterfactual reasoning to expand training data is relevant to improving robustness in defect classification tasks. However, applying it directly to my domain would require adapting it to image-based rather than video-based inputs, and integrating it into existing pipelines for auto-labeling or anomaly detection.
