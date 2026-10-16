@@ -1,6 +1,6 @@
 # nbdev tutorial reels: "nbdev, the right way" (design)
 
-Status: revised 2026-10-16 from one long video to a **series of short vertical reels**. Draft for the author's review. Nothing is built yet beyond two spikes (Motion Canvas render, nbdev setup).
+Status: revised 2026-10-16 from one long video to a **series of short vertical reels**, warm tone only (author decision). Draft for the author's review. Nothing is built yet beyond two spikes (Motion Canvas render, nbdev setup).
 
 ## Intent
 - **Audience:** people who already use nbdev but use it wrongly (A) and newcomers who want a correct first project (B). First viewers are the author's colleagues at Infineon (the department is standardising on uv and introducing nbdev to the team); later LinkedIn, YouTube Shorts and Instagram Reels.
