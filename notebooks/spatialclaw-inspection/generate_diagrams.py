@@ -71,4 +71,30 @@ with plt.xkcd():
         for j, r in enumerate(rows):
             box(ax, x, 3.3 - j * 0.95, 2.9, 0.7, r, c, fs=9.5)
     fig.savefig(OUT / "keep-swap-drop.png", dpi=130, bbox_inches="tight", facecolor="white"); plt.close(fig)
+
+with plt.xkcd():
+    # 4 -- Part 3: the minimal loop, what is in and what is left out
+    fig, ax = canvas(11, 5.6, "Part 3: the smallest loop that still works")
+    box(ax, 0.3, 3.3, 2.1, 1.0, "question +\nimage as `img`", BLUE)
+    box(ax, 3.1, 3.3, 2.5, 1.0, "model writes\none python cell", INK)
+    box(ax, 6.3, 3.3, 2.1, 1.0, "run in the\npersistent kernel", INK)
+    box(ax, 8.9, 3.3, 1.9, 1.0, "stdout, error,\nvariables", GREEN)
+    arrow(ax, (2.4, 3.8), (3.1, 3.8)); arrow(ax, (5.6, 3.8), (6.3, 3.8)); arrow(ax, (8.4, 3.8), (8.9, 3.8))
+    arrow(ax, (9.85, 3.3), (4.35, 3.3), color=GOLD, rad=-0.3, label="next turn (budget: 8)", ly=-1.25)
+    ax.text(1.0, 1.55, "IN:", fontsize=13, weight="bold", color=GREEN)
+    ax.text(1.0, 1.05, "kernel, one cell per turn, feedback, step budget,\nsubmit(), rule layer, REVIEW on any failure", fontsize=10.5, color=INK)
+    ax.text(6.4, 1.55, "LEFT OUT (on purpose):", fontsize=13, weight="bold", color=RED)
+    ax.text(6.4, 1.05, "planner, show() images, reflection gate,\nreal sandbox  ->  Parts 4 and 5", fontsize=10.5, color=INK)
+    fig.savefig(OUT / "part3-minimal-loop.png", dpi=130, bbox_inches="tight", facecolor="white"); plt.close(fig)
+
+    # 5 -- who decides
+    fig, ax = canvas(11, 4.8, "The model measures. A plain rule decides.")
+    box(ax, 0.4, 2.4, 2.6, 1.1, "model + kernel:\nsubmit(void_ratio)", BLUE)
+    box(ax, 4.4, 2.4, 2.6, 1.1, "decide():\nordinary code", INK)
+    box(ax, 8.2, 3.5, 2.2, 0.8, "PASS / FAIL", GREEN)
+    box(ax, 8.2, 1.4, 2.2, 0.8, "REVIEW", RED)
+    arrow(ax, (3.0, 2.95), (4.4, 2.95), label="a number", ly=0.2)
+    arrow(ax, (7.0, 3.2), (8.2, 3.85), GREEN); arrow(ax, (7.0, 2.6), (8.2, 1.9), RED)
+    ax.text(0.4, 0.45, "no number (out of turns, too many errors)  ->  REVIEW. Never a guessed PASS.", fontsize=11, color=RED)
+    fig.savefig(OUT / "who-decides.png", dpi=130, bbox_inches="tight", facecolor="white"); plt.close(fig)
 print("wrote", sorted(p.name for p in OUT.glob("*.png")))

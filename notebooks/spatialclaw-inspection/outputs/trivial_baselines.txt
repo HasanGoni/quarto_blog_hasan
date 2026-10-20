@@ -1,0 +1,6 @@
+n=12  limit=1.5%  ground-truth FAIL count: 3  PASS count: 9
+constant guess (median of all 600 DEV images = 0.86%): mean abs error 0.80 pp, median 0.46
+agent:                                              mean abs error 0.67 pp, median 0.26
+'always PASS': agrees on 9 of 12, false PASS 3, false FAIL 0
+agent:         agrees on 9 of 12, false PASS 1, false FAIL 2
+rank correlation agent vs truth (Spearman): 0.45

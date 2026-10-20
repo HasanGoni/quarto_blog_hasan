@@ -146,6 +146,6 @@ tasks, the series says so and stops being a recommendation.
 
 ## Where this goes next
 
-[Part 3](index.qmd#roadmap) is the first code: the smallest loop that can write a cell, run it in a
+[Part 3](03-minimal-kernel-loop.qmd) is the first code: the smallest loop that can write a cell, run it in a
 persistent kernel and read the result back. Before it ships, it must pass the same rule as every
 paper post here: run one real step, show the real output, label every stand-in.

@@ -1,0 +1,4 @@
+image         gt%  agent%  abs err     gt  agent steps  tokens    sec  reason
+val_00000    1.62    0.11     1.51   FAIL   PASS     8   13636   69.2  rule: 0.11 <= 1.50
+Traceback (most recent call last):
+(attempt 1 stopped here: vLLM container restarted, openai.APIConnectionError; retry logic added afterwards)

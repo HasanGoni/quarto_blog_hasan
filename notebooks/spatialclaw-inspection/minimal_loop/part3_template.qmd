@@ -1,0 +1,235 @@
+---
+title: "SpatialClaw for Inspection, Part 3: The Smallest Kernel Loop"
+subtitle: "About 270 lines of my own code, a local 27B model, 12 real images with exact ground truth, and a result that is honest about how little it proves."
+author: "Hasan Goni"
+date: 2026-10-20
+categories: [series, agentic-ai, computer-vision, inspection]
+toc: true
+search: false
+series:
+  name: "SpatialClaw for Inspection"
+  number: 3
+---
+
+:::{.callout-tip}
+This post is part of the [SpatialClaw for Inspection](index.qmd) series. It builds the loop planned in
+[Part 2](02-adapting-for-image-inspection.qmd). Everything in the loop is **my own code**, written from the
+description in the paper, as the licence section of Part 2 promised.
+:::
+
+:::{.callout-note}
+**What was run.** The loop and kernel below ran for real: 9 control-flow tests against the real kernel (with a
+scripted stand-in for the model), then 12 episodes with the local `Qwen3.8-27B` (FP8, served by vLLM) on the first
+12 images of the **DEV** split of my [synthetic defect dataset, v2](../agentic-factory-segmentation/01-synthetic-void-dataset.qmd#version-2-what-was-wrong-with-v1-and-how-i-fixed-it).
+The held-out test split was **not touched**; it is saved for the Part 6 experiment. One earlier attempt crashed
+when the model server restarted; I kept its output and added retry logic (details below).
+:::
+
+Part 1 explained what SpatialClaw does, and Part 2 planned what to keep. This post builds the **smallest** version
+that still deserves the name: a model writes one Python cell, a kernel runs it, the printed result goes back, and
+the variables stay alive for the next cell. It ends with a number from a real run, and the number is not flattering.
+That is the point of running it.
+
+```{=html}
+<div style="margin:1em 0;">
+  <button id="toggle-outputs" type="button" style="padding:6px 14px;border:1px solid #1971c2;border-radius:4px;background:#1971c2;color:white;cursor:pointer;">Show all outputs</button>
+  <span style="color:#666;font-size:0.9em;margin-left:8px;">Outputs are collapsed by default. Each one is the real captured output of the code above it.</span>
+</div>
+<script>
+(function(){
+  var b = document.getElementById("toggle-outputs"), open = false;
+  b.onclick = function(){
+    open = !open;
+    document.querySelectorAll("details.out").forEach(function(d){ d.open = open; });
+    b.textContent = open ? "Hide all outputs" : "Show all outputs";
+  };
+})();
+</script>
+```
+
+## The result first
+
+12 images, one run each, 8 turns allowed per image. Ground truth is the exact void ratio from the mask.
+
+| | Agent | Constant guess (0.86 %) | "Always PASS" |
+|---|---|---|---|
+| Mean absolute error of the void ratio | **0.67** pp | 0.80 pp | n/a |
+| Median absolute error | **0.26** pp | 0.46 pp | n/a |
+| Verdicts that match ground truth | **9 of 12** | n/a | 9 of 12 |
+| False PASS (a real FAIL called PASS) | **1** | n/a | 3 |
+| False FAIL | 2 | n/a | 0 |
+| Ended in REVIEW | 0 | n/a | n/a |
+
+Read it honestly. The loop **works**: 12 of 12 episodes produced a measurement, no cell crashed the kernel, and
+the agent's numbers are better than a constant guess. But "9 of 12 verdicts right" is exactly what a rule that
+says PASS to everything scores on these images, because 9 of the 12 are genuine passes. What the agent buys is
+fewer *missed* failures (1 instead of 3) at the price of 2 false alarms. With 12 images that is a direction, not
+a finding. The rank correlation between the agent's numbers and the truth is 0.45, which on 12 points I would
+not lean on.
+
+## What is in, and what is left out on purpose
+
+![The minimal loop. The grey area of the paper (planner, show(), reflection, sandbox) is deliberately absent.](images/part3-minimal-loop.png){fig-alt="Hand-drawn loop: question and image go to the model, which writes one python cell, run in a persistent kernel, whose stdout, error and variables come back for the next turn, with a budget of 8 turns. Below: what is in (kernel, one cell per turn, feedback, step budget, submit, rule layer, REVIEW on any failure) and what is left out on purpose (planner, show images, reflection gate, real sandbox)"}
+
+Left out, each for a later part: the **planner** (a separate first call that writes a plan without seeing
+the image), `show()` (feeding images back to the model; Part 4), the **reflection gate** (off by default
+upstream too), and a **real sandbox** (Part 5). Part 3 answers only one question: does the loop run, and what
+does it produce?
+
+## Two reading levels
+
+**Explain like I'm five.** A lab assistant sits at a desk with a notebook. You give them an X-ray and say: "tell
+me how much of this part is hollow." They may write one thing in the notebook at a time, look at the result, and
+write the next. They must hand in **one number**. They do not get to say "pass" or "fail": a supervisor with a
+ruler does that. If the assistant runs out of time without a number, the supervisor says "send it to a human".
+
+**Explain like I'm a data scientist.** A persistent IPython kernel holds `img`, `np`, `ndi` and a `submit()`
+function. Each turn the model returns one `python` block. We run it, capture stdout, the last lines of any
+traceback and a summary of the variables, and append that as the next user message. The loop ends when
+`submit()` has been called or a budget runs out (8 turns, 4 failures). A plain function turns the submitted
+number into PASS or FAIL against a limit. Anything without a number is REVIEW.
+
+## Jargon buster
+
+| Term | What it means | Daily-life version |
+|---|---|---|
+| Turn (step) | One model reply plus its execution. | One move in a board game. |
+| Budget | The cap on turns and failures. | A parking meter. |
+| Persistent kernel | A Python process that keeps variables between cells. | A workbench that is not cleared between jobs. |
+| Rule layer | Ordinary code that turns a measurement into a verdict. | The ruler the supervisor holds. |
+| REVIEW | "No trustworthy number, a human must look." | Handing the form to a person at the counter. |
+| Ground truth | The exact answer from the mask, used only for scoring. | The answer key, kept in another room. |
+| DEV split | Images I am allowed to look at while building. | Practice exam questions. |
+| False PASS | A bad part called good. | A smoke alarm that stays silent in a fire. |
+| Stand-in | A fake used only to test plumbing. | A crash-test dummy. |
+
+## The task, stated exactly
+
+- **Data:** the v2 DEV split (`val.npz`, 600 images), synthetic X-ray-like silhouettes with exact masks. Voids are
+  mask value 1, cracks are value 2. The agent must measure voids and **not** count cracks.
+- **Measurement:** `void_ratio_pct = 100 * void pixels / part pixels`, with the part as the whole silhouette.
+- **Spec:** FAIL when `void_ratio_pct > 1.5`. **This limit is illustrative**: I picked it because it splits the
+  DEV images (about a third above it). It is not from any standard.
+- **Images used:** `val_00000` to `val_00011`, in order, not picked by outcome.
+- **Ground truth** is read only in the scoring script, after the agent has finished. The kernel's working
+  directory holds only a copy of the one image.
+
+## The code, from the real files
+
+### The kernel session (`minimal_loop/kernel_session.py`)
+
+It wraps `jupyter_client`: start a kernel in a throw-away directory, run a cell with a timeout, collect stdout
+and the traceback, and ask the kernel for a summary of its variables and for the submission, with
+`user_expressions`.
+
+{{FILE:minimal_loop/kernel_session.py}}
+
+### The loop and the rule layer (`minimal_loop/loop.py`)
+
+{{FILE:minimal_loop/loop.py}}
+
+Three decisions in that file are the Part 2 plan made real:
+
+1. `submit()` takes a **measurement**, never a verdict. `decide()` is plain code (the "rule layer").
+2. Running out of turns, or too many errors, returns **REVIEW**, with the reason. There is no best-guess fallback.
+3. A model-server outage is retried and **not** counted as an agent failure. (Upstream treats connection
+   errors as transient too. I learned why the hard way, see the last section.)
+
+## Test every path first, with a scripted stand-in
+
+Before spending model time I tested each way an episode can end. The "model" here is a **scripted list of
+replies** (a stand-in), so every path is deterministic; the kernel, the timeout, the variable persistence and the
+rule layer are real.
+
+{{FILE:minimal_loop/test_paths.py}}
+
+{{OUT:outputs/test_paths.txt}}
+
+Worth noticing: the `timeout interrupts, kernel lives` case. A cell that loops forever is interrupted after the
+timeout, and the *next* cell still runs in the same kernel with its variables intact.
+
+## The real run
+
+{{FILE:minimal_loop/run_dev.py}}
+
+{{OUT:outputs/run_dev_output.txt}}
+
+### Step through what the agent actually did
+
+Pick an image, then step through its cells. Everything below is read from the saved run: the agent's purpose
+line, its code, and what the kernel printed. The end of each episode shows the agent's number next to the
+ground truth.
+
+{{< include _trace_widget.md >}}
+
+### Context: trivial rules on the same 12 images
+
+{{FILE:minimal_loop/trivial_baselines.py}}
+
+{{OUT:outputs/trivial_baselines.txt}}
+
+## What the traces show
+
+- **The agent does real work.** The typical episode: look at the histogram, threshold the part, fill holes, look
+  inside the part, label components, check each component's shape, compute the ratio, submit. Cells like
+  `ndi.label` on a brightness mask and an aspect-ratio filter to keep roundish voids and drop crack-like lines are
+  what the paper means by composition.
+- **The budget is the binding constraint.** All 12 episodes submitted on their last or second-to-last turn
+  (turns 7 or 8 of 8). Nobody submitted early out of confidence. Had an episode needed one more turn, the rule
+  layer would have returned REVIEW; none did here, but 12 of 12 sitting at the edge says 8 is too tight to
+  learn anything about the agent. Part 6 uses a larger budget and will report the distribution of turns used.
+- **Mistakes are in the measurement, not in the plumbing.** In `val_00008` the ground truth has three voids
+  (389, 195 and 119 pixels). The agent's own printout lists components of 200 and 120 pixels, plus long thin
+  components that are not in the ground truth, and it ends at 2.18 % against a true 5.02 %. I checked that my
+  prompt wording was not the cause: across these 12 images, every ground-truth void pixel belongs to a component
+  that a "roundish" filter would keep. I do not know the exact cause of the miss and I did not rerun to find out.
+- **No `show()`.** The model never sees the image, only numbers it chooses to print. That is a heavy handicap
+  for an inspection task and the reason Part 4 exists.
+
+## Security: model-written code ran on my machine
+
+`KernelSession` is not a sandbox (its docstring says so). The model's cells ran as my user, in a temporary
+directory, with a 60 s timeout, against a local model I run myself. An automated review of the code flagged
+exactly this, and it is right to. Two things I did about it:
+
+- **Audited every executed cell.** 93 cells over 12 episodes. Imports: `numpy` (15), `scipy` (2),
+  `scipy.ndimage` (5), and nothing else. No `open`, `eval`, `exec`, `__import__`, `getattr`, `os`, `subprocess`,
+  file reads or writes. This audit is evidence about **this** run with **this** model. It is not a guarantee
+  about the next one.
+- **Checked what real isolation is available here.** On this machine unprivileged network namespaces are
+  blocked (`unshare -rn` and `bwrap --unshare-net` both fail), while Docker is installed. So the plan for
+  Part 5 is a container with `--network none`, a read-only filesystem and a scratch directory, and then trying to
+  break it.
+
+## Where this differs from the paper
+
+- No planner, no `show()`, no reflection, no benchmark harness.
+- A text-only model run with thinking **switched off** (the paper's configs enable thinking). Part 3 is about
+  the loop, not about squeezing the model.
+- My own kernel wrapper, my own prompt, my own feedback format. The paper's feedback also includes images.
+- Turn budget of 8, not 30.
+- The answer is a measurement checked by a rule, not a free-form answer.
+
+## What I did not do
+
+- **One run per image, 12 images, temperature 0.3.** The model is not deterministic; a second run would give
+  different numbers. I did not measure run-to-run spread.
+- **No held-out data.** Nothing here was tuned, but the DEV split is where I will make choices, and this run was
+  the first look at it.
+- **No claim that code-as-action helps.** There is no tool-call baseline in this post. That comparison is
+  Part 6.
+
+## The first attempt crashed
+
+My first run died on episode 2 with `openai.APIConnectionError`: the vLLM container had restarted (another
+job, not mine) while my loop was waiting. The first episode before the crash had finished (a false PASS at
+1.62 true vs 0.11 submitted), and I kept that output unedited. I then added retry-with-wait to the chat wrapper
+(the `chat()` function above), because a server restart is an infrastructure event, not something the agent
+should be blamed for, and re-ran all 12 from scratch. The table above is the second run only.
+
+{{OUT:outputs/run_dev_attempt1_crashed.txt}}
+
+## Next
+
+[Part 4](index.qmd#roadmap) gives the model eyes and hands: `show()` to feed images back, and a small inspection
+tool API (segment, measure, crop, overlay). Then the same 12 images again, to see whether looking helps.

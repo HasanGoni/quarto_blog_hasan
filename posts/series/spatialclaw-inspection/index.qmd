@@ -30,9 +30,9 @@ Two rules for the whole series:
 
 | Part | Post | Status |
 |---|---|---|
-| 1 | [What SpatialClaw actually does](01-spatialclaw-deep-dive.qmd): paper, code, two real runs, weaknesses | Published |
-| 2 | [The adaptation plan](02-adapting-for-image-inspection.qmd): keep, swap, drop, licences, the experiment | Published |
-| 3 | A minimal kernel loop with a local model | Planned |
+| 1 | [What SpatialClaw actually does](01-spatialclaw-deep-dive.qmd): paper, code, two real runs, weaknesses | Written (not yet published) |
+| 2 | [The adaptation plan](02-adapting-for-image-inspection.qmd): keep, swap, drop, licences, the experiment | Written (not yet published) |
+| 3 | [The smallest kernel loop](03-minimal-kernel-loop.qmd): my own code, a local 27B model, 12 real images | Written (not yet published) |
 | 4 | The inspection tool API and `show()` | Planned |
 | 5 | A real sandbox, and trying to break it | Planned |
 | 6 | The A/B/C experiment: detector vs tool-call agent vs code-kernel agent | Planned |

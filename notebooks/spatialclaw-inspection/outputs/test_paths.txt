@@ -1,0 +1,11 @@
+ok   submit above limit                             -> FAIL   rule: 2.00 > 1.50  (steps=1)
+ok   submit below limit                             -> PASS   rule: 0.50 <= 1.50  (steps=1)
+ok   variables persist between cells                -> FAIL   rule: 3.00 > 1.50  (steps=2)
+ok   never submits -> REVIEW                        -> REVIEW out_of_steps  (steps=3)
+ok   errors only -> REVIEW                          -> REVIEW too_many_failures  (steps=2)
+ok   recovers after an error                        -> PASS   rule: 0.20 <= 1.50  (steps=2)
+ok   invalid submit is rejected                     -> PASS   rule: 1.00 <= 1.50  (steps=2)
+ok   timeout interrupts, kernel lives               -> PASS   rule: 0.10 <= 1.50  (steps=2)
+ok   format error is counted                        -> REVIEW too_many_failures  (steps=2)
+variable summary the model sees after cell 1: see trace -> 9.0 | cells: 2
+ALL PATHS OK
