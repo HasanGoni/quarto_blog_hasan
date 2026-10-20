@@ -28,7 +28,7 @@ Visual: bar chart 53.4, 56.7, 59.9 (paper Table 2, average of 20 benchmarks, Gem
 BLINK row (75.7 without tools, 73.4 with SpatialClaw).
 1. The paper reports **59.9 percent** on average, with the same model throughout.
 2. With no tools the score is **53.4**, and a plain tool-call agent reaches **56.7**.
-3. So the notebook idea itself is worth about **three points**; the tools are worth more.
+3. So the notebook idea is worth about **three points**, and the tools themselves about **three more**.
 4. And on the BLINK benchmark, the no-tool model scored **75.7** against 73.4 with tools.
 5. When the question is mostly recognition, tools can **hurt**.
 
