@@ -64,3 +64,7 @@ notebooks/paper-marigold-v2/xray_inputs/
 notebooks/paper-marigold-v2/download.log
 
 notebooks/paper-plscea-anomaly/data/
+
+# SpatialClaw-for-inspection: upstream clone (non-commercial licence, never commit), venv
+notebooks/spatialclaw-inspection/upstream/
+notebooks/spatialclaw-inspection/.venv/

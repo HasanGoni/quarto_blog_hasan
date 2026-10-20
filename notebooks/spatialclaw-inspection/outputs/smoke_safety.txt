@@ -1,0 +1,9 @@
+PASSED   benign: mask area          -> None
+PASSED   benign: scipy distance     -> None
+BLOCKED  direct: import os          -> Forbidden import: 'os'. Module 'os' is not allowed.
+BLOCKED  direct: open()             -> Forbidden builtin call: 'open()'. This operation is not allowed.
+BLOCKED  direct: eval               -> Forbidden builtin call: 'eval()'. This operation is not allowed.
+PASSED   indirect: getattr open     -> None
+PASSED   indirect: dunder import    -> None
+PASSED   indirect: via numpy        -> None
+PASSED   indirect: str format       -> None

@@ -32,6 +32,8 @@ website:
             file: posts/series/agentic-zero-to-advanced/index.qmd
           - text: "Agentic Architecture: Supply Chain"
             file: posts/series/agentic-supply-chain/index.qmd
+          - text: "SpatialClaw for Inspection"
+            file: posts/series/spatialclaw-inspection/index.qmd
           - text: "Anomaly Detection"
             file: posts/series/anomaly-detection/index.qmd
           - text: "Local-AI Defect Inspection"
@@ -188,6 +190,16 @@ website:
         contents:
           - text: "Introduction / Roadmap"
             href: posts/series/agentic-supply-chain/index.qmd
+      - section: "SpatialClaw for Inspection"
+        collapse: true
+        collapsed: true
+        contents:
+          - text: "Roadmap"
+            href: posts/series/spatialclaw-inspection/index.qmd
+          - text: "1. What SpatialClaw Actually Does"
+            href: posts/series/spatialclaw-inspection/01-spatialclaw-deep-dive.qmd
+          - text: "2. The Adaptation Plan"
+            href: posts/series/spatialclaw-inspection/02-adapting-for-image-inspection.qmd
       - section: "Local-AI Defect Inspection"
         collapse: true
         collapsed: true

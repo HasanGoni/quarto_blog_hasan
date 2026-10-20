@@ -1,0 +1,43 @@
+---
+title: "SpatialClaw for Inspection"
+description: "A step-by-step build of a code-as-action agent for image-only inspection, inspired by NVIDIA's SpatialClaw: what the paper really does, what to keep and drop, and how to test whether it beats a plain tool-call agent."
+author: "Hasan Goni"
+date: last-modified
+categories: [series, agentic-ai, computer-vision, inspection]
+toc: true
+---
+
+## Series Overview
+
+NVIDIA's [SpatialClaw](https://github.com/NVlabs/SpatialClaw) lets a vision-language model write
+Python, one cell at a time, in a notebook that remembers everything. It is built for 3D spatial
+questions on photos and video. Inspection systems have a different job: one image, a known scale,
+and a verdict someone is accountable for.
+
+This series is about taking the **idea** and rebuilding it for that job, in public, with every
+number measured on data I generate myself. It is deliberately *not* part of the
+[agentic development](../agentic-zero-to-advanced/index.qmd) series: that one teaches how agents
+work; this one asks whether a specific new idea earns a place in a production inspection stack.
+
+Two rules for the whole series:
+
+- **Run it, or say so.** Every code block that claims a result shows real captured output. Stand-ins
+  are labelled. Anything not run is stated as not run.
+- **Licences first.** SpatialClaw's code is non-commercial research only. This series rebuilds the
+  design from the paper with my own code and tracks the licence of every piece.
+
+## Roadmap
+
+| Part | Post | Status |
+|---|---|---|
+| 1 | [What SpatialClaw actually does](01-spatialclaw-deep-dive.qmd): paper, code, two real runs, weaknesses | Published |
+| 2 | [The adaptation plan](02-adapting-for-image-inspection.qmd): keep, swap, drop, licences, the experiment | Published |
+| 3 | A minimal kernel loop with a local model | Planned |
+| 4 | The inspection tool API and `show()` | Planned |
+| 5 | A real sandbox, and trying to break it | Planned |
+| 6 | The A/B/C experiment: detector vs tool-call agent vs code-kernel agent | Planned |
+| 7 | Typed verdicts, the rule layer, audit log, human review | Planned |
+| 8 | Production patterns on real inspection tasks | Planned |
+
+Links go live as each part is written, in order. Each post will have a narrated animation in the
+same warm voice as the rest of the blog.
