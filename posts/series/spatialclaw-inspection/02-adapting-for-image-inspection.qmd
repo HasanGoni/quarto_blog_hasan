@@ -5,6 +5,7 @@ author: "Hasan Goni"
 date: 2026-10-20
 categories: [series, agentic-ai, computer-vision, inspection]
 toc: true
+search: false
 series:
   name: "SpatialClaw for Inspection"
   number: 2

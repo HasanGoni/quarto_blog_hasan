@@ -5,6 +5,7 @@ author: "Hasan Goni"
 date: last-modified
 categories: [series, agentic-ai, computer-vision, inspection]
 toc: true
+search: false
 ---
 
 ## Series Overview
