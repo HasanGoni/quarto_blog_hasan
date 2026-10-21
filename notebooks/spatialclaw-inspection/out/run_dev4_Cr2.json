@@ -1,0 +1,1260 @@
+{
+ "cond": "C",
+ "limit_pct": 1.5,
+ "max_steps": 14,
+ "rows": [
+  {
+   "image": "val_00000",
+   "gt_pct": 1.6173072883847932,
+   "agent_pct": 1.550794650983687,
+   "abs_err": 0.06651263740110624,
+   "gt_status": "FAIL",
+   "agent_status": "FAIL",
+   "steps": 5,
+   "tokens": 12843,
+   "seconds": 67.36335837293882,
+   "reason": "rule: 1.55 > 1.50",
+   "pictures": 5
+  },
+  {
+   "image": "val_00001",
+   "gt_pct": 0.6059820473767783,
+   "agent_pct": 0.5605,
+   "abs_err": 0.0454820473767783,
+   "gt_status": "PASS",
+   "agent_status": "PASS",
+   "steps": 9,
+   "tokens": 29740,
+   "seconds": 132.5872587970225,
+   "reason": "rule: 0.56 <= 1.50",
+   "pictures": 9
+  },
+  {
+   "image": "val_00002",
+   "gt_pct": 0.9647394524084517,
+   "agent_pct": 0.7133636795977988,
+   "abs_err": 0.25137577281065293,
+   "gt_status": "PASS",
+   "agent_status": "PASS",
+   "steps": 5,
+   "tokens": 9255,
+   "seconds": 55.94210377999116,
+   "reason": "rule: 0.71 <= 1.50",
+   "pictures": 3
+  },
+  {
+   "image": "val_00003",
+   "gt_pct": 0.6521739130434783,
+   "agent_pct": 0.4759191607735362,
+   "abs_err": 0.17625475226994208,
+   "gt_status": "PASS",
+   "agent_status": "PASS",
+   "steps": 10,
+   "tokens": 37350,
+   "seconds": 142.12401365395635,
+   "reason": "rule: 0.48 <= 1.50",
+   "pictures": 8
+  },
+  {
+   "image": "val_00004",
+   "gt_pct": 0.4621000310655483,
+   "agent_pct": 0.439,
+   "abs_err": 0.02310003106554831,
+   "gt_status": "PASS",
+   "agent_status": "PASS",
+   "steps": 9,
+   "tokens": 27862,
+   "seconds": 112.3906586059602,
+   "reason": "rule: 0.44 <= 1.50",
+   "pictures": 4
+  },
+  {
+   "image": "val_00005",
+   "gt_pct": 0.16818128171839963,
+   "agent_pct": 0.06504257332071901,
+   "abs_err": 0.10313870839768062,
+   "gt_status": "PASS",
+   "agent_status": "PASS",
+   "steps": 7,
+   "tokens": 22073,
+   "seconds": 93.3461493239738,
+   "reason": "rule: 0.07 <= 1.50",
+   "pictures": 6
+  },
+  {
+   "image": "val_00006",
+   "gt_pct": 0.4878651269066881,
+   "agent_pct": 0.469338603100105,
+   "abs_err": 0.018526523806583095,
+   "gt_status": "PASS",
+   "agent_status": "PASS",
+   "steps": 4,
+   "tokens": 8849,
+   "seconds": 60.421700631966814,
+   "reason": "rule: 0.47 <= 1.50",
+   "pictures": 4
+  },
+  {
+   "image": "val_00007",
+   "gt_pct": 1.148390002251745,
+   "agent_pct": 0.990767845079937,
+   "abs_err": 0.15762215717180805,
+   "gt_status": "PASS",
+   "agent_status": "PASS",
+   "steps": 5,
+   "tokens": 11375,
+   "seconds": 95.19544781500008,
+   "reason": "rule: 0.99 <= 1.50",
+   "pictures": 6
+  },
+  {
+   "image": "val_00008",
+   "gt_pct": 5.018919111872635,
+   "agent_pct": 4.253497002569226,
+   "abs_err": 0.765422109303409,
+   "gt_status": "FAIL",
+   "agent_status": "FAIL",
+   "steps": 5,
+   "tokens": 14537,
+   "seconds": 75.96899400604889,
+   "reason": "rule: 4.25 > 1.50",
+   "pictures": 5
+  },
+  {
+   "image": "val_00009",
+   "gt_pct": 1.38222671042666,
+   "agent_pct": 0.297,
+   "abs_err": 1.08522671042666,
+   "gt_status": "PASS",
+   "agent_status": "PASS",
+   "steps": 10,
+   "tokens": 37324,
+   "seconds": 121.75565381301567,
+   "reason": "rule: 0.30 <= 1.50",
+   "pictures": 9
+  },
+  {
+   "image": "val_00010",
+   "gt_pct": 1.812601552626828,
+   "agent_pct": 1.3756499133448874,
+   "abs_err": 0.4369516392819406,
+   "gt_status": "FAIL",
+   "agent_status": "PASS",
+   "steps": 5,
+   "tokens": 12197,
+   "seconds": 54.23214786697645,
+   "reason": "rule: 1.38 <= 1.50",
+   "pictures": 6
+  },
+  {
+   "image": "val_00011",
+   "gt_pct": 0.0,
+   "agent_pct": 0.0,
+   "abs_err": 0.0,
+   "gt_status": "PASS",
+   "agent_status": "PASS",
+   "steps": 5,
+   "tokens": 11730,
+   "seconds": 77.52530334808398,
+   "reason": "rule: 0.00 <= 1.50",
+   "pictures": 3
+  }
+ ],
+ "traces": [
+  {
+   "image": "val_00000",
+   "cells": [
+    {
+     "step": 1,
+     "purpose": "Purpose: Inspect the image and get the part silhouette.",
+     "code": "print(img.shape, img.min(), img.max())\npm = part_mask(img)\nprint(\"part pixels:\", pm.sum())\nshow(img, \"original\")\nshow(pm.astype(np.uint8)*255, \"part mask\")\n",
+     "stdout": "(224, 224) 46 255\npart pixels: 28566\n[show #1] original  (shape (224, 224))\n[show #2] part mask  (shape (224, 224))\n",
+     "error": "",
+     "seconds": 0.04,
+     "images": [
+      {
+       "title": "original",
+       "file": "val_00000_s01_0.png"
+      },
+      {
+       "title": "part mask",
+       "file": "val_00000_s01_1.png"
+      }
+     ]
+    },
+    {
+     "step": 2,
+     "purpose": "Purpose: Find bright blobs inside the part that could be voids.",
+     "code": "# voids appear brighter than the dark part\ninside = img[pm]\nprint(\"part brightness stats:\", inside.min(), inside.mean(), inside.max())\n# threshold: pixels inside part that are much brighter than part mean\nthr = inside.mean() + 2*inside.std()\nprint(\"threshold:\", thr)\nvoid_cand = pm & (img > thr)\nlab, blobs = label_blobs(void_cand, min_area=3)\nfor b in blobs:\n    print(b)\nshow(overlay(img, [pm, void_cand]), \"void candidates\")\n",
+     "stdout": "part brightness stats: 46 64.57431912063292 185\nthreshold: 97.53274368618878\n{'id': 70, 'area': 443, 'cy': 132.0, 'cx': 154.0, 'bbox': (117, 144, 148, 165), 'elongation': 2.03}\n{'id': 106, 'area': 53, 'cy': 202.0, 'cx': 122.0, 'bbox': (202, 96, 203, 149), 'elongation': 488364.62}\n{'id': 1, 'area': 47, 'cy': 6.0, 'cx': 112.0, 'bbox': (6, 89, 7, 136), 'elongation': 433589.67}\n{'id': 62, 'area': 40, 'cy': 73.5, 'cx': 38.0, 'bbox': (54, 38, 94, 39), 'elongation': 369684.55}\n{'id': 74, 'area': 34, 'cy': 146.5, 'cx': 32.0, 'bbox': (130, 32, 164, 33), 'elongation': 314907.39}\n{'id': 76, 'area': 31, 'cy': 163.0, 'cx': 188.0, 'bbox': (148, 188, 179, 189), 'elongation': 287518.12}\n{'id': 67, 'area': 30, 'cy': 111.5, 'cx': 185.0, 'bbox': (97, 185, 127, 186), 'elongation': 278388.22}\n{'id': 64, 'area': 23, 'cy': 85.0, 'cx': 184.0, 'bbox': (74, 184, 97, 185), 'elongation': 214476.11}\n{'id': 119, 'area': 21, 'cy': 215.8, 'cx': 177.2, 'bbox': (213, 170, 218, 187), 'elongation': 7.96}\n{'id': 77, 'area': 17, 'cy': 172.0, 'cx': 33.0, 'bbox': (164, 33, 181, 34), 'elongation': 159687.19}\n{'id': 63, 'area': 14, 'cy': 66.5, 'cx': 183.0, 'bbox': (60, 183, 74, 184), 'elongation': 132287.57}\n{'id': 82, 'area': 13, 'cy': 197.0, 'cx': 31.0, 'bbox': (191, 31, 204, 32), 'elongation': 123153.02}\n{'id': 65, 'area': 12, 'cy': 99.5, 'cx': 37.0, 'bbox': (94, 37, 106, 38), 'elongation': 114017.54}\n{'id': 75, 'area': 12, 'cy': 141.5, 'cx': 187.0, 'bbox': (136, 187, 148, 188), 'elongation': 114017.54}\n{'id': 126, 'area': 11, 'cy': 217.0, 'cx': 42.0, 'bbox': (217, 37, 218, 48), 'elongation': 104880.88}\n{'id': 79, 'area': 10, 'cy': 185.5, 'cx': 32.0, 'bbox': (181, 32, 191, 33), 'elongation': 95742.71}\n{'id': 73, 'area': 9, 'cy': 131.0, 'cx': 186.0, 'bbox': (127, 186, 136, 187), 'elongation': 86602.54}\n{'id': 89, 'area': 9, 'cy': 201.0, 'cx': 192.0, 'bbox': (197, 192, 206, 193), 'elongation': 86602.54}\n{'id': 58, 'area': 8, 'cy': 49.5, 'cx': 39.0, 'bbox': (46, 39, 54, 40), 'elongation': 77459.67}\n{'id': 6",
+     "error": "",
+     "seconds": 0.03,
+     "images": [
+      {
+       "title": "void candidates",
+       "file": "val_00000_s02_0.png"
+      }
+     ]
+    },
+    {
+     "step": 3,
+     "purpose": "Purpose: Keep only roundish blobs that are truly inside the part (not edge noise).",
+     "code": "# erode part mask to require blobs to be well inside\npm_er = ndi.binary_erosion(pm, iterations=3)\nvoid_cand2 = pm_er & (img > thr)\nlab2, blobs2 = label_blobs(void_cand2, min_area=5)\nvoids = []\nfor b in blobs2:\n    if b['elongation'] < 3:  # roundish\n        voids.append(b)\n        print(\"VOID:\", b)\n    else:\n        print(\"skip (elongated):\", b['id'], b['area'], b['elongation'])\nvoid_mask = np.isin(lab2, [b['id'] for b in voids])\nprint(\"void pixels:\", void_mask.sum(), \"part pixels:\", pm.sum())\nprint(\"ratio pct:\", 100*void_mask.sum()/pm.sum())\nshow(overlay(img, [pm, void_mask]), \"voids only\")\n",
+     "stdout": "VOID: {'id': 2, 'area': 443, 'cy': 132.0, 'cx': 154.0, 'bbox': (117, 144, 148, 165), 'elongation': 2.03}\nvoid pixels: 443 part pixels: 28566\nratio pct: 1.550794650983687\n[show #4] voids only  (shape (224, 224, 3))\n",
+     "error": "",
+     "seconds": 0.03,
+     "images": [
+      {
+       "title": "voids only",
+       "file": "val_00000_s03_0.png"
+      }
+     ]
+    },
+    {
+     "step": 4,
+     "purpose": "Purpose: Check the small faint spot near the big void to decide if it's a second void.",
+     "code": "show(crop(img, 110, 150, r=20, zoom=4), \"small spot region\")\nprint(\"values around small spot:\", img[105:115, 145:155])\n",
+     "stdout": "[show #5] small spot region  (shape (160, 160))\nvalues around small spot: [[60 63 62 59 61 65 59 60 60 59]\n [59 58 63 60 59 63 61 62 64 64]\n [66 61 62 63 63 58 59 60 61 59]\n [63 64 58 61 60 59 58 62 60 64]\n [59 61 58 63 60 60 63 59 56 64]\n [61 60 60 64 62 61 62 60 60 58]\n [58 66 61 64 57 57 58 60 60 58]\n [61 60 63 59 58 65 55 57 61 60]\n [57 59 63 59 59 62 59 61 57 61]\n [55 60 61 62 63 66 61 57 60 57]]\n",
+     "error": "",
+     "seconds": 0.01,
+     "images": [
+      {
+       "title": "small spot region",
+       "file": "val_00000_s04_0.png"
+      }
+     ]
+    },
+    {
+     "step": 5,
+     "purpose": "Purpose: Confirm the small spot is just noise (values ~60, same as part) and finalize.",
+     "code": "# small spot values ~55-66, same as part background (~64). Not a void.\n# Only the bright oval (443 px) is a real void.\nprint(\"final void pixels:\", void_mask.sum(), \"part:\", pm.sum())\nprint(\"ratio:\", 100*void_mask.sum()/pm.sum())\nsubmit(100*void_mask.sum()/pm.sum(), \"one bright oval void (443 px) inside part; small spot is noise\")\n",
+     "stdout": "final void pixels: 443 part: 28566\nratio: 1.550794650983687\n[submitted] {\"void_ratio_pct\": 1.550794650983687, \"note\": \"one bright oval void (443 px) inside part; small spot is noise\"}\n",
+     "error": "",
+     "seconds": 0.02,
+     "images": []
+    }
+   ]
+  },
+  {
+   "image": "val_00001",
+   "cells": [
+    {
+     "step": 1,
+     "purpose": "Purpose: Inspect the image and get the part silhouette to understand brightness levels.",
+     "code": "print(img.shape, img.dtype, img.min(), img.max(), img.mean())\npm = part_mask(img)\nprint(\"part pixels:\", pm.sum())\nshow(img, \"original\")\nshow(pm.astype(np.uint8)*255, \"part mask\")\n",
+     "stdout": "(224, 224) uint8 12 255 109.43881536989795\npart pixels: 31940\n[show #1] original  (shape (224, 224))\n[show #2] part mask  (shape (224, 224))\n",
+     "error": "",
+     "seconds": 0.04,
+     "images": [
+      {
+       "title": "original",
+       "file": "val_00001_s01_0.png"
+      },
+      {
+       "title": "part mask",
+       "file": "val_00001_s01_1.png"
+      }
+     ]
+    },
+    {
+     "step": 2,
+     "purpose": "Purpose: The part mask missed the bright handle hole; I'll fill holes to get the full silhouette and examine interior brightness.",
+     "code": "filled = ndi.binary_fill_holes(pm)\nprint(\"filled part pixels:\", filled.sum())\ninterior = filled & ~pm\nprint(\"hole pixels (handle):\", interior.sum())\n# brightness stats inside part\nvals = img[filled]\nprint(\"part brightness min/max/mean:\", vals.min(), vals.max(), vals.mean())\nshow(filled.astype(np.uint8)*255, \"filled part\")\n",
+     "stdout": "filled part pixels: 31940\nhole pixels (handle): 0\npart brightness min/max/mean: 12 255 42.70911083281152\n[show #3] filled part  (shape (224, 224))\n",
+     "error": "",
+     "seconds": 0.02,
+     "images": [
+      {
+       "title": "filled part",
+       "file": "val_00001_s02_0.png"
+      }
+     ]
+    },
+    {
+     "step": 3,
+     "purpose": "Purpose: The handle hole is open to the background so fill_holes didn't catch it; I'll use morphological closing to build the full silhouette.",
+     "code": "from scipy.ndimage import binary_closing, binary_dilation, binary_erosion\nclosed = binary_closing(pm, structure=np.ones((15,15)))\nfilled2 = ndi.binary_fill_holes(closed)\nprint(\"closed:\", closed.sum(), \"filled2:\", filled2.sum())\nshow(filled2.astype(np.uint8)*255, \"filled2 silhouette\")\n",
+     "stdout": "closed: 31835 filled2: 31835\n[show #4] filled2 silhouette  (shape (224, 224))\n",
+     "error": "",
+     "seconds": 0.03,
+     "images": [
+      {
+       "title": "filled2 silhouette",
+       "file": "val_00001_s03_0.png"
+      }
+     ]
+    },
+    {
+     "step": 4,
+     "purpose": "Purpose: Use a larger closing to bridge the handle opening and capture the full silhouette including the handle hole.",
+     "code": "closed3 = binary_closing(pm, structure=np.ones((41,41)))\nfilled3 = ndi.binary_fill_holes(closed3)\nprint(\"closed3:\", closed3.sum(), \"filled3:\", filled3.sum())\nshow(filled3.astype(np.uint8)*255, \"filled3 silhouette\")\n",
+     "stdout": "closed3: 29359 filled3: 29359\n[show #5] filled3 silhouette  (shape (224, 224))\n",
+     "error": "",
+     "seconds": 0.13,
+     "images": [
+      {
+       "title": "filled3 silhouette",
+       "file": "val_00001_s04_0.png"
+      }
+     ]
+    },
+    {
+     "step": 5,
+     "purpose": "Purpose: Inspect the handle region to see if the hole is open to background or enclosed, and check brightness there.",
+     "code": "show(crop(img, 60, 112, r=30, zoom=3), \"handle region\")\n# check the hole area brightness\nys, xs = np.where(~pm)\nprint(\"non-part pixels:\", len(ys))\n# look at a horizontal line through the handle\nprint(\"row 60 sample:\", img[60, 90:135:3])\nprint(\"row 55 sample:\", img[55, 90:135:3])\n",
+     "stdout": "[show #6] handle region  (shape (180, 180))\nnon-part pixels: 18236\nrow 60 sample: [ 54 145 190 221 229 241 232 245 231 226 239 214 219 227 218]\nrow 55 sample: [217 223 233 222 231 225 230 224 235 209 232 235 237 228 234]\n",
+     "error": "",
+     "seconds": 0.02,
+     "images": [
+      {
+       "title": "handle region",
+       "file": "val_00001_s05_0.png"
+      }
+     ]
+    },
+    {
+     "step": 6,
+     "purpose": "Purpose: Build the full silhouette by closing the handle gap, then find interior bright blobs (voids) and check their shapes.",
+     "code": "sil = ndi.binary_fill_holes(binary_closing(pm, structure=np.ones((25,25))))\nprint(\"silhouette pixels:\", sil.sum())\n# interior = silhouette minus the dark part body\ninterior = sil & ~pm\nprint(\"interior (handle) pixels:\", interior.sum())\n# voids: bright pixels inside silhouette\nbright = (img > 120) & sil\nprint(\"bright interior pixels:\", bright.sum())\nlab, blobs = label_blobs(bright, min_area=3)\nfor b in blobs[:10]:\n    print(b)\nshow(overlay(img, [sil, bright]), \"sil(red) + bright(green)\")\n",
+     "stdout": "silhouette pixels: 31221\ninterior (handle) pixels: 244\nbright interior pixels: 1351\n{'id': 7, 'area': 1086, 'cy': 52.4, 'cx': 118.4, 'bbox': (40, 85, 63, 151), 'elongation': 2.77}\n{'id': 10, 'area': 109, 'cy': 77.1, 'cx': 20.4, 'bbox': (65, 18, 89, 26), 'elongation': 2.52}\n{'id': 15, 'area': 61, 'cy': 195.9, 'cx': 66.9, 'bbox': (194, 57, 198, 79), 'elongation': 5.09}\n{'id': 16, 'area': 29, 'cy': 195.6, 'cx': 97.3, 'bbox': (195, 89, 197, 107), 'elongation': 9.36}\n{'id': 11, 'area': 26, 'cy': 99.1, 'cx': 19.0, 'bbox': (94, 18, 104, 22), 'elongation': 2.54}\n{'id': 17, 'area': 26, 'cy': 195.7, 'cx': 150.7, 'bbox': (195, 143, 197, 160), 'elongation': 9.03}\n[show #7] sil(red) + bright(green)  (shape (224, 224, 3))\n",
+     "error": "",
+     "seconds": 0.04,
+     "images": [
+      {
+       "title": "sil(red) + bright(green)",
+       "file": "val_00001_s06_0.png"
+      }
+     ]
+    },
+    {
+     "step": 7,
+     "purpose": "Purpose: The void is a bright blob inside the dark part; I'll find it via local contrast and check its shape.",
+     "code": "# local mean via gaussian\nfrom scipy.ndimage import gaussian_filter\nsm = gaussian_filter(img.astype(float), 15)\ndiff = img.astype(float) - sm  # positive = brighter than surroundings\ncand = (diff > 15) & sil\nprint(\"candidate bright-above-local pixels:\", cand.sum())\nlab2, blobs2 = label_blobs(cand, min_area=5)\nfor b in blobs2[:10]:\n    print(b)\nshow(overlay(img, [sil, cand]), \"sil(red)+localbright(green)\")\n",
+     "stdout": "candidate bright-above-local pixels: 1502\n{'id': 1, 'area': 1086, 'cy': 52.5, 'cx': 118.3, 'bbox': (40, 85, 63, 151), 'elongation': 2.81}\n{'id': 4, 'area': 175, 'cy': 118.6, 'cx': 82.5, 'bbox': (111, 75, 127, 91), 'elongation': 1.68}\n{'id': 2, 'area': 106, 'cy': 77.4, 'cx': 20.4, 'bbox': (66, 18, 89, 26), 'elongation': 2.4}\n{'id': 7, 'area': 58, 'cy': 195.9, 'cx': 66.6, 'bbox': (194, 57, 198, 78), 'elongation': 5.04}\n{'id': 8, 'area': 28, 'cy': 195.6, 'cx': 97.1, 'bbox': (195, 89, 197, 107), 'elongation': 9.5}\n{'id': 3, 'area': 25, 'cy': 99.3, 'cx': 19.0, 'bbox': (95, 18, 104, 22), 'elongation': 2.31}\n{'id': 9, 'area': 22, 'cy': 195.7, 'cx': 150.7, 'bbox': (195, 144, 197, 159), 'elongation': 8.16}\n[show #8] sil(red)+localbright(green)  (shape (224, 224, 3))\n",
+     "error": "",
+     "seconds": 0.03,
+     "images": [
+      {
+       "title": "sil(red)+localbright(green)",
+       "file": "val_00001_s07_0.png"
+      }
+     ]
+    },
+    {
+     "step": 8,
+     "purpose": "Purpose: The void is the roundish blob (area 175, elongation 1.68) at (118,82); others are edge/handle artifacts. I'll confirm with a crop and compute the ratio.",
+     "code": "show(crop(img, 118, 82, r=20, zoom=4), \"void crop\")\nvoid_mask = (lab2 == 4)\nprint(\"void pixels:\", void_mask.sum())\nprint(\"silhouette pixels:\", sil.sum())\nratio = 100*void_mask.sum()/sil.sum()\nprint(\"void_ratio_pct:\", ratio)\n",
+     "stdout": "[show #9] void crop  (shape (160, 160))\nvoid pixels: 175\nsilhouette pixels: 31221\nvoid_ratio_pct: 0.5605201627109958\n",
+     "error": "",
+     "seconds": 0.02,
+     "images": [
+      {
+       "title": "void crop",
+       "file": "val_00001_s08_0.png"
+      }
+     ]
+    },
+    {
+     "step": 9,
+     "purpose": "The crop confirms a single roundish bright void inside the dark part (elongation 1.68, area 175). Other bright blobs are the handle hole and edge artifacts, not voids. The void ratio is 175/31221 \u2248 0.",
+     "code": "submit(0.5605, \"one roundish void (175 px) inside part silhouette (31221 px); handle hole and edge artifacts excluded\")\n",
+     "stdout": "[submitted] {\"void_ratio_pct\": 0.5605, \"note\": \"one roundish void (175 px) inside part silhouette (31221 px); handle hole and edge artifacts excluded\"}\n",
+     "error": "",
+     "seconds": 0.01,
+     "images": []
+    }
+   ]
+  },
+  {
+   "image": "val_00002",
+   "cells": [
+    {
+     "step": 1,
+     "purpose": "Purpose: Inspect the image and get the part silhouette.",
+     "code": "print(img.shape, img.min(), img.max())\npm = part_mask(img)\nprint(\"part pixels:\", pm.sum())\nshow(img, \"original\")\n",
+     "stdout": "(224, 224) 43 255\npart pixels: 14719\n[show #1] original  (shape (224, 224))\n",
+     "error": "",
+     "seconds": 0.03,
+     "images": [
+      {
+       "title": "original",
+       "file": "val_00002_s01_0.png"
+      }
+     ]
+    },
+    {
+     "step": 2,
+     "purpose": "Purpose: Find bright blobs inside the part that could be voids.",
+     "code": "inside = img[pm]\nprint(\"inside stats:\", inside.min(), inside.max(), inside.mean())\n# voids are brighter than part. Threshold inside part.\nthr = np.percentile(inside, 99)\nprint(\"p99 inside:\", thr)\ncand = (img > thr) & pm\nlab, blobs = label_blobs(cand, min_area=3)\nfor b in blobs[:15]:\n    print(b)\n",
+     "stdout": "inside stats: 43 169 71.80025816971262\np99 inside: 137.0\n{'id': 6, 'area': 105, 'cy': 14.6, 'cx': 109.6, 'bbox': (9, 104, 22, 116), 'elongation': 1.67}\n",
+     "error": "",
+     "seconds": 0.02,
+     "images": []
+    },
+    {
+     "step": 3,
+     "purpose": "Purpose: Examine the candidate blob and check for cracks.",
+     "code": "b = blobs[0]\nprint(b)\nshow(crop(img, b['cy'], b['cx'], r=20, zoom=4), \"candidate void\")\n# check elongation of all part-internal bright structures with lower threshold\ncand2 = (img > 100) & pm\nlab2, blobs2 = label_blobs(cand2, min_area=3)\nfor b in blobs2[:15]:\n    print(b)\n",
+     "stdout": "{'id': 6, 'area': 105, 'cy': 14.6, 'cx': 109.6, 'bbox': (9, 104, 22, 116), 'elongation': 1.67}\n[show #2] candidate void  (shape (136, 160))\n{'id': 16, 'area': 144, 'cy': 14.3, 'cx': 109.2, 'bbox': (8, 103, 22, 116), 'elongation': 1.54}\n{'id': 67, 'area': 50, 'cy': 145.5, 'cx': 150.0, 'bbox': (121, 150, 171, 151), 'elongation': 460977.22}\n{'id': 34, 'area': 47, 'cy': 56.0, 'cx': 70.0, 'bbox': (33, 70, 80, 71), 'elongation': 433589.67}\n{'id': 86, 'area': 46, 'cy': 166.5, 'cx': 103.0, 'bbox': (144, 103, 190, 104), 'elongation': 424460.44}\n{'id': 87, 'area': 43, 'cy': 165.0, 'cx': 126.0, 'bbox': (144, 126, 187, 127), 'elongation': 397072.62}\n{'id': 94, 'area': 25, 'cy': 185.0, 'cx': 149.0, 'bbox': (173, 149, 198, 150), 'elongation': 232737.33}\n{'id': 37, 'area': 21, 'cy': 53.0, 'cx': 157.0, 'bbox': (43, 157, 64, 158), 'elongation': 196214.17}\n{'id': 100, 'area': 21, 'cy': 201.0, 'cx': 127.0, 'bbox': (191, 127, 212, 128), 'elongation': 196214.17}\n{'id': 97, 'area': 15, 'cy': 193.0, 'cx': 78.0, 'bbox': (186, 78, 201, 79), 'elongation': 141421.36}\n{'id': 51, 'area': 13, 'cy': 95.0, 'cx': 118.0, 'bbox': (89, 118, 102, 119), 'elongation': 123153.02}\n{'id': 55, 'area': 13, 'cy': 104.0, 'cx': 151.0, 'bbox': (98, 151, 111, 152), 'elongation': 123153.02}\n{'id': 99, 'area': 11, 'cy': 195.0, 'cx': 102.0, 'bbox': (190, 102, 201, 103), 'elongation': 104880.88}\n{'id': 103, 'area': 10, 'cy': 205.5, 'cx': 101.0, 'bbox': (201, 101, 211, 102), 'elongation': 95742.71}\n{'id': 48, 'area': 9, 'cy': 90.0, 'cx': 110.0, 'bbox': (86, 110, 95, 111), 'elongation': 86602.54}\n{'id': 54, 'area': 9, 'cy': 100.0, 'cx': 109.0, 'bbox': (96, 109, 105, 110), 'elongation': 86602.54}\n",
+     "error": "",
+     "seconds": 0.02,
+     "images": [
+      {
+       "title": "candidate void",
+       "file": "val_00002_s03_0.png"
+      }
+     ]
+    },
+    {
+     "step": 4,
+     "purpose": "Purpose: Verify the void mask and compute the ratio.",
+     "code": "void_mask = (lab == 6)\nprint(\"void pixels:\", void_mask.sum(), \"part pixels:\", pm.sum())\nprint(\"void inside part:\", (void_mask & pm).sum())\nshow(overlay(img, [pm, void_mask]), \"part(red) void(green)\")\nratio = 100 * void_mask.sum() / pm.sum()\nprint(\"ratio:\", ratio)\n",
+     "stdout": "void pixels: 105 part pixels: 14719\nvoid inside part: 105\n[show #3] part(red) void(green)  (shape (224, 224, 3))\nratio: 0.7133636795977988\n",
+     "error": "",
+     "seconds": 0.02,
+     "images": [
+      {
+       "title": "part(red) void(green)",
+       "file": "val_00002_s04_0.png"
+      }
+     ]
+    },
+    {
+     "step": 5,
+     "purpose": "Purpose: The single roundish bright blob is the only void; thin lines are cracks. Submit.",
+     "code": "submit(ratio, \"One roundish bright void (105 px) inside part; thin lines are cracks, excluded.\")\n",
+     "stdout": "[submitted] {\"void_ratio_pct\": 0.7133636795977988, \"note\": \"One roundish bright void (105 px) inside part; thin lines are cracks, excluded.\"}\n",
+     "error": "",
+     "seconds": 0.01,
+     "images": []
+    }
+   ]
+  },
+  {
+   "image": "val_00003",
+   "cells": [
+    {
+     "step": 1,
+     "purpose": "Purpose: Inspect the image and get the part silhouette.",
+     "code": "print(img.shape, img.dtype, img.min(), img.max(), img.mean())\npm = part_mask(img)\nprint(\"part pixels:\", pm.sum())\nshow(img, \"original\")\nshow(pm.astype(np.uint8)*255, \"part mask\")\n",
+     "stdout": "(224, 224) uint8 50 255 159.04324776785714\npart pixels: 29837\n[show #1] original  (shape (224, 224))\n[show #2] part mask  (shape (224, 224))\n",
+     "error": "",
+     "seconds": 0.04,
+     "images": [
+      {
+       "title": "original",
+       "file": "val_00003_s01_0.png"
+      },
+      {
+       "title": "part mask",
+       "file": "val_00003_s01_1.png"
+      }
+     ]
+    },
+    {
+     "step": 2,
+     "purpose": "Purpose: Find bright blobs inside the part to identify voids vs cracks.",
+     "code": "inside = pm & (img > 120)\nlab, blobs = label_blobs(inside, min_area=3)\nfor b in blobs:\n    print(b)\nshow(overlay(img, [pm, inside]), \"part + bright inside\")\n",
+     "stdout": "{'id': 20, 'area': 3101, 'cy': 76.6, 'cx': 41.0, 'bbox': (32, 22, 152, 71), 'elongation': 2.9}\n{'id': 154, 'area': 353, 'cy': 149.1, 'cx': 161.0, 'bbox': (127, 132, 164, 185), 'elongation': 4.43}\n{'id': 170, 'area': 142, 'cy': 177.0, 'cx': 108.1, 'bbox': (170, 102, 186, 116), 'elongation': 1.79}\n{'id': 195, 'area': 33, 'cy': 194.0, 'cx': 105.0, 'bbox': (194, 89, 195, 122), 'elongation': 305777.7}\n{'id': 211, 'area': 28, 'cy': 201.0, 'cx': 56.5, 'bbox': (201, 43, 202, 71), 'elongation': 260128.17}\n{'id': 33, 'area': 27, 'cy': 45.9, 'cx': 14.4, 'bbox': (38, 11, 56, 20), 'elongation': 10.15}\n{'id': 160, 'area': 23, 'cy': 155.9, 'cx': 205.6, 'bbox': (146, 205, 167, 207), 'elongation': 12.26}\n{'id': 196, 'area': 22, 'cy': 194.0, 'cx': 133.5, 'bbox': (194, 123, 195, 145), 'elongation': 205345.24}\n{'id': 1, 'area': 19, 'cy': 22.4, 'cx': 48.8, 'bbox': (22, 41, 24, 58), 'elongation': 12.94}\n{'id': 103, 'area': 19, 'cy': 66.0, 'cx': 208.5, 'bbox': (59, 207, 74, 210), 'elongation': 9.0}\n{'id': 117, 'area': 19, 'cy': 79.5, 'cx': 8.9, 'bbox': (73, 8, 87, 11), 'elongation': 9.01}\n{'id': 192, 'area': 18, 'cy': 193.0, 'cx': 189.5, 'bbox': (193, 181, 194, 199), 'elongation': 168819.43}\n{'id': 114, 'area': 16, 'cy': 75.1, 'cx': 199.0, 'bbox': (69, 198, 83, 201), 'elongation': 11.52}\n{'id': 17, 'area': 14, 'cy': 32.4, 'cx': 23.1, 'bbox': (30, 21, 37, 27), 'elongation': 3.94}\n{'id': 96, 'area': 14, 'cy': 58.5, 'cx': 177.0, 'bbox': (52, 177, 66, 178), 'elongation': 132287.57}\n{'id': 97, 'area': 14, 'cy': 56.9, 'cx': 199.2, 'bbox': (52, 199, 63, 201), 'elongation': 7.4}\n{'id': 133, 'area': 14, 'cy': 96.9, 'cx': 8.2, 'bbox': (91, 8, 103, 10), 'elongation': 9.49}\n{'id': 19, 'area': 13, 'cy': 31.9, 'cx': 191.7, 'bbox': (31, 188, 34, 197), 'elongation': 5.78}\n{'id': 36, 'area': 13, 'cy': 40.5, 'cx': 187.6, 'bbox': (39, 183, 43, 192), 'elongation': 4.67}\n{'id': 143, 'area': 13, 'cy': 107.2, 'cx': 7.4, 'bbox': (103, 7, 113, 9), 'elongation': 7.2}\n{'id': 93, 'area': 10, 'cy': 53.4, 'cx': 207.7,",
+     "error": "",
+     "seconds": 0.03,
+     "images": [
+      {
+       "title": "part + bright inside",
+       "file": "val_00003_s02_0.png"
+      }
+     ]
+    },
+    {
+     "step": 3,
+     "purpose": "Purpose: Examine the two roundish blobs (170 and 154) to confirm they are voids.",
+     "code": "show(crop(img, 177, 108, r=20, zoom=4), \"blob 170 (round)\")\nshow(crop(img, 149, 161, r=24, zoom=4), \"blob 154 (crack?)\")\n",
+     "stdout": "[show #4] blob 170 (round)  (shape (160, 160))\n[show #5] blob 154 (crack?)  (shape (192, 192))\n",
+     "error": "",
+     "seconds": 0.02,
+     "images": [
+      {
+       "title": "blob 170 (round)",
+       "file": "val_00003_s03_0.png"
+      },
+      {
+       "title": "blob 154 (crack?)",
+       "file": "val_00003_s03_1.png"
+      }
+     ]
+    },
+    {
+     "step": 4,
+     "purpose": "Purpose: Check the part's interior brightness to pick a robust void threshold, and verify blob 170 is fully inside the part.",
+     "code": "vals = img[pm]\nprint(\"part interior percentiles:\", np.percentile(vals, [50,90,95,99,99.5,100]))\n# blob 170 fully inside part?\nm170 = (lab==170)\nprint(\"blob170 area:\", m170.sum(), \"inside part:\", (m170 & pm).sum())\n# how many bright pixels are clearly void-level (>=150) inside part\nfor t in [140,150,160,170]:\n    print(t, (pm & (img>=t)).sum())\n",
+     "stdout": "part interior percentiles: [ 80. 179. 248. 255. 255. 255.]\nblob170 area: 142 inside part: 142\n140 3864\n150 3508\n160 3191\n170 3068\n",
+     "error": "",
+     "seconds": 0.01,
+     "images": []
+    },
+    {
+     "step": 5,
+     "purpose": "Purpose: Verify the part mask is solid (no holes) and confirm only blob 170 is a round void.",
+     "code": "filled = ndi.binary_fill_holes(pm)\nprint(\"part mask holes:\", (filled & ~pm).sum())\n# roundish blobs inside part: elongation < 2.5 and area>=10\nvoids = [b for b in blobs if b['elongation'] < 2.5 and b['area']>=10 and (lab==b['id'])[pm].sum()==b['area']]\nfor b in voids: print(\"VOID\", b)\nvoid_px = sum(b['area'] for b in voids)\nprint(\"void px:\", void_px, \"part px:\", pm.sum(), \"ratio%:\", 100*void_px/pm.sum())\nshow(overlay(img,[pm, (lab==170)]), \"part + void170\")\n",
+     "stdout": "part mask holes: 0\nVOID {'id': 170, 'area': 142, 'cy': 177.0, 'cx': 108.1, 'bbox': (170, 102, 186, 116), 'elongation': 1.79}\nvoid px: 142 part px: 29837 ratio%: 0.4759191607735362\n[show #6] part + void170  (shape (224, 224, 3))\n",
+     "error": "",
+     "seconds": 0.03,
+     "images": [
+      {
+       "title": "part + void170",
+       "file": "val_00003_s05_0.png"
+      }
+     ]
+    },
+    {
+     "step": 6,
+     "purpose": "Purpose: Confirm the faint gray spot near the void is not a second void before submitting.",
+     "code": "show(crop(img, 194, 105, r=18, zoom=4), \"faint spot near void\")\nprint(\"faint spot max:\", img[190:198, 88:124].max())\n",
+     "stdout": "[show #7] faint spot near void  (shape (144, 144))\nfaint spot max: 255\n",
+     "error": "",
+     "seconds": 0.02,
+     "images": [
+      {
+       "title": "faint spot near void",
+       "file": "val_00003_s06_0.png"
+      }
+     ]
+    },
+    {
+     "step": 7,
+     "purpose": "Purpose: Final check that the faint spot is outside the part (background) and not a void.",
+     "code": "print(\"faint spot inside part px:\", (pm[190:198, 88:124]).sum())\nprint(\"final void ratio %:\", 100*void_px/pm.sum())\n",
+     "stdout": "faint spot inside part px: 180\nfinal void ratio %: 0.4759191607735362\n",
+     "error": "",
+     "seconds": 0.02,
+     "images": []
+    },
+    {
+     "step": 8,
+     "purpose": "Purpose: Re-examine the faint spot region to decide if it's a second void.",
+     "code": "show(crop(img, 194, 105, r=14, zoom=5), \"faint spot zoom\")\nsub = img[188:200, 90:122]\nprint(\"sub max:\", sub.max(), \"mean:\", sub.mean())\nprint(\"pixels>120 in sub:\", (sub>120).sum())\n",
+     "stdout": "[show #8] faint spot zoom  (shape (140, 140))\nsub max: 255 mean: 149.24479166666666\npixels>120 in sub: 192\n",
+     "error": "",
+     "seconds": 0.02,
+     "images": [
+      {
+       "title": "faint spot zoom",
+       "file": "val_00003_s08_0.png"
+      }
+     ]
+    },
+    {
+     "step": 9,
+     "purpose": "Purpose: Check the faint spot's brightness to confirm it's not a void.",
+     "code": "sub2 = img[190:198, 92:118]\nprint(\"faint spot region max:\", sub2.max(), \"mean:\", sub2.mean())\nprint(\"part interior median:\", np.median(img[pm]))\n",
+     "stdout": "faint spot region max: 255 mean: 142.53846153846155\npart interior median: 80.0\n",
+     "error": "",
+     "seconds": 0.02,
+     "images": []
+    },
+    {
+     "step": 10,
+     "purpose": "Purpose: Final confirmation that the faint spot is background, then submit.",
+     "code": "print(\"faint spot inside part px:\", pm[190:198, 92:118].sum(), \"of\", (198-190)*(118-92))\nprint(\"void ratio %:\", 100*void_px/pm.sum())\nsubmit(100*void_px/pm.sum(), \"single round void (142px) inside part; crack and background excluded\")\n",
+     "stdout": "faint spot inside part px: 130 of 208\nvoid ratio %: 0.4759191607735362\n[submitted] {\"void_ratio_pct\": 0.4759191607735362, \"note\": \"single round void (142px) inside part; crack and background excluded\"}\n",
+     "error": "",
+     "seconds": 0.01,
+     "images": []
+    }
+   ]
+  },
+  {
+   "image": "val_00004",
+   "cells": [
+    {
+     "step": 1,
+     "purpose": "Purpose: Get the part silhouette and basic stats to understand the image.",
+     "code": "pm = part_mask(img)\nprint(\"part pixels:\", pm.sum())\nprint(\"img min/max:\", img.min(), img.max())\nprint(\"part mean:\", img[pm].mean())\nprint(\"bg mean:\", img[~pm].mean())\n",
+     "stdout": "part pixels: 25732\nimg min/max: 30 255\npart mean: 56.264612156070264\nbg mean: 228.53260513827524\n",
+     "error": "",
+     "seconds": 0.02,
+     "images": []
+    },
+    {
+     "step": 2,
+     "purpose": "Purpose: Look at the image and the part mask to understand the layout.",
+     "code": "show(img, \"img\")\nshow(pm.astype(np.uint8)*255, \"part mask\")\n",
+     "stdout": "[show #1] img  (shape (224, 224))\n[show #2] part mask  (shape (224, 224))\n",
+     "error": "",
+     "seconds": 0.04,
+     "images": [
+      {
+       "title": "img",
+       "file": "val_00004_s02_0.png"
+      },
+      {
+       "title": "part mask",
+       "file": "val_00004_s02_1.png"
+      }
+     ]
+    },
+    {
+     "step": 3,
+     "purpose": "Purpose: Find brighter blobs inside the part (voids are brighter than the dark part).",
+     "code": "# voids are brighter than part. Threshold inside part.\npart_vals = img[pm]\nprint(\"part percentiles:\", np.percentile(part_vals, [50,90,95,99,99.5,100]))\n# threshold: pixels inside part that are brighter than part median + margin\nthr = 100\nvoid_cand = pm & (img > thr)\nprint(\"void cand pixels:\", void_cand.sum())\nlab, blobs = label_blobs(void_cand, min_area=3)\nfor b in blobs:\n    print(b)\n",
+     "stdout": "part percentiles: [ 54.  64.  73. 118. 125. 140.]\nvoid cand pixels: 685\n{'id': 51, 'area': 53, 'cy': 168.3, 'cx': 91.5, 'bbox': (162, 88, 175, 96), 'elongation': 1.96}\n{'id': 36, 'area': 38, 'cy': 116.5, 'cx': 55.0, 'bbox': (98, 55, 136, 56), 'elongation': 351425.67}\n{'id': 38, 'area': 34, 'cy': 116.5, 'cx': 169.0, 'bbox': (100, 169, 134, 170), 'elongation': 314907.39}\n{'id': 2, 'area': 33, 'cy': 6.1, 'cx': 161.9, 'bbox': (6, 146, 9, 177), 'elongation': 25.45}\n{'id': 94, 'area': 31, 'cy': 217.0, 'cx': 159.0, 'bbox': (217, 144, 218, 175), 'elongation': 287518.12}\n{'id': 1, 'area': 28, 'cy': 6.0, 'cx': 66.5, 'bbox': (6, 53, 7, 81), 'elongation': 260128.17}\n{'id': 27, 'area': 28, 'cy': 40.5, 'cx': 54.0, 'bbox': (27, 54, 55, 55), 'elongation': 260128.17}\n{'id': 88, 'area': 28, 'cy': 217.0, 'cx': 82.5, 'bbox': (217, 69, 218, 97), 'elongation': 260128.17}\n{'id': 30, 'area': 22, 'cy': 60.5, 'cx': 170.0, 'bbox': (50, 170, 72, 171), 'elongation': 205345.24}\n{'id': 32, 'area': 22, 'cy': 78.5, 'cx': 54.0, 'bbox': (68, 54, 90, 55), 'elongation': 205345.24}\n{'id': 34, 'area': 18, 'cy': 88.5, 'cx': 170.0, 'bbox': (80, 170, 98, 171), 'elongation': 168819.43}\n{'id': 20, 'area': 16, 'cy': 14.0, 'cx': 111.5, 'bbox': (14, 104, 15, 120), 'elongation': 150554.53}\n{'id': 28, 'area': 16, 'cy': 34.8, 'cx': 172.2, 'bbox': (28, 172, 43, 174), 'elongation': 14.07}\n{'id': 18, 'area': 15, 'cy': 13.0, 'cx': 128.0, 'bbox': (13, 121, 14, 136), 'elongation': 141421.36}\n{'id': 41, 'area': 15, 'cy': 149.7, 'cx': 53.7, 'bbox': (143, 53, 157, 55), 'elongation': 13.4}\n{'id': 56, 'area': 15, 'cy': 182.0, 'cx': 178.0, 'bbox': (175, 178, 190, 179), 'elongation': 141421.36}\n{'id': 87, 'area': 14, 'cy': 217.0, 'cx': 60.5, 'bbox': (217, 54, 218, 68), 'elongation': 132287.57}\n{'id': 92, 'area': 14, 'cy': 217.0, 'cx': 121.5, 'bbox': (217, 115, 218, 129), 'elongation': 132287.57}\n{'id': 93, 'area': 13, 'cy': 217.0, 'cx': 136.0, 'bbox': (217, 130, 218, 143), 'elongation': 123153.02}\n{'id': 17, 'area': 11, 'cy': 1",
+     "error": "",
+     "seconds": 0.02,
+     "images": []
+    },
+    {
+     "step": 4,
+     "purpose": "Purpose: The threshold caught edge noise. Use a higher threshold and require roundness to isolate true voids.",
+     "code": "thr = 120\nvoid_cand = pm & (img > thr)\nlab, blobs = label_blobs(void_cand, min_area=3)\nprint(\"num blobs:\", len(blobs))\nfor b in blobs:\n    print(b['id'], b['area'], b['cy'], b['cx'], round(b['elongation'],2), b['bbox'])\n",
+     "stdout": "num blobs: 16\n34 8 13.0 124.5 77459.67 (13, 121, 14, 129)\n26 7 13.0 177.0 68313.01 (10, 177, 17, 178)\n9 5 6.0 78.0 50000.0 (6, 76, 7, 81)\n38 5 14.0 110.0 50000.0 (14, 108, 15, 113)\n4 4 6.0 61.5 40824.83 (6, 60, 7, 64)\n15 4 6.0 162.5 40824.83 (6, 161, 7, 165)\n16 4 6.0 167.5 40824.83 (6, 166, 7, 170)\n17 3 6.0 174.0 31622.78 (6, 173, 7, 176)\n49 3 35.0 172.0 31622.78 (34, 172, 37, 173)\n61 3 62.0 170.0 31622.78 (61, 170, 64, 171)\n69 3 81.0 54.0 31622.78 (80, 54, 83, 55)\n70 3 81.0 170.0 31622.78 (80, 170, 83, 171)\n72 3 88.0 54.0 31622.78 (87, 54, 90, 55)\n100 3 160.0 176.0 31622.78 (159, 176, 162, 177)\n104 3 165.0 177.0 31622.78 (164, 177, 167, 178)\n136 3 217.0 55.0 31622.78 (217, 54, 218, 57)\n",
+     "error": "",
+     "seconds": 0.02,
+     "images": []
+    },
+    {
+     "step": 5,
+     "purpose": "Purpose: The real void is the round blob at (168,91). Let me inspect it and the part interior to set a proper threshold.",
+     "code": "print(\"crop around void:\")\nshow(crop(img, 168, 91, r=20, zoom=4), \"void region\")\n# interior stats: erode part to avoid edges\ner = ndi.binary_erosion(pm, iterations=4)\nprint(\"eroded interior pixels:\", er.sum())\nprint(\"interior percentiles:\", np.percentile(img[er],[50,90,95,99,99.5,100]))\n",
+     "stdout": "crop around void:\n[show #3] void region  (shape (160, 160))\neroded interior pixels: 23068\ninterior percentiles: [ 53.     61.     64.     70.     79.665 117.   ]\n",
+     "error": "",
+     "seconds": 0.02,
+     "images": [
+      {
+       "title": "void region",
+       "file": "val_00004_s05_0.png"
+      }
+     ]
+    },
+    {
+     "step": 6,
+     "purpose": "Purpose: Use a threshold above the interior 99.5th percentile, restricted to the eroded interior, to isolate the void.",
+     "code": "thr = 80\nvoid_cand = er & (img > thr)\nlab, blobs = label_blobs(void_cand, min_area=3)\nprint(\"num blobs:\", len(blobs))\nfor b in blobs:\n    print(b['id'], b['area'], round(b['cy'],1), round(b['cx'],1), round(b['elongation'],2), b['bbox'])\n",
+     "stdout": "num blobs: 1\n1 113 168.0 91.9 1.8 (161, 87, 176, 98)\n",
+     "error": "",
+     "seconds": 0.02,
+     "images": []
+    },
+    {
+     "step": 7,
+     "purpose": "Purpose: Verify the void mask visually and check threshold sensitivity.",
+     "code": "show(overlay(img, [pm, void_cand]), \"part(red) void(green)\")\nfor t in [70,75,80,85,90]:\n    vc = er & (img>t)\n    print(t, vc.sum())\n",
+     "stdout": "[show #4] part(red) void(green)  (shape (224, 224, 3))\n70 196\n75 127\n80 113\n85 94\n90 83\n",
+     "error": "",
+     "seconds": 0.02,
+     "images": [
+      {
+       "title": "part(red) void(green)",
+       "file": "val_00004_s07_0.png"
+      }
+     ]
+    },
+    {
+     "step": 8,
+     "purpose": "Purpose: Compute the void ratio using the void mask (113 px) over the full part silhouette.",
+     "code": "void_px = void_cand.sum()\npart_px = pm.sum()\nratio = 100*void_px/part_px\nprint(\"void px:\", void_px, \"part px:\", part_px, \"ratio%:\", ratio)\n",
+     "stdout": "void px: 113 part px: 25732 ratio%: 0.43914192445204414\n",
+     "error": "",
+     "seconds": 0.02,
+     "images": []
+    },
+    {
+     "step": 9,
+     "purpose": "Purpose: Submit the void ratio. One roundish void (~113 px) inside the part; no cracks counted.",
+     "code": "submit(0.439, \"single roundish void ~113px inside part, ratio over 25732 part px\")\n",
+     "stdout": "[submitted] {\"void_ratio_pct\": 0.439, \"note\": \"single roundish void ~113px inside part, ratio over 25732 part px\"}\n",
+     "error": "",
+     "seconds": 0.01,
+     "images": []
+    }
+   ]
+  },
+  {
+   "image": "val_00005",
+   "cells": [
+    {
+     "step": 1,
+     "purpose": "Purpose: Get an overview of the image and the part silhouette.",
+     "code": "print(img.shape, img.min(), img.max(), img.mean())\npm = part_mask(img)\nprint(\"part pixels:\", pm.sum())\nshow(img, \"img\")\nshow(pm.astype(np.uint8)*255, \"part mask\")\n",
+     "stdout": "(224, 224) 34 255 119.75392617984694\npart pixels: 33824\n[show #1] img  (shape (224, 224))\n[show #2] part mask  (shape (224, 224))\n",
+     "error": "",
+     "seconds": 0.03,
+     "images": [
+      {
+       "title": "img",
+       "file": "val_00005_s01_0.png"
+      },
+      {
+       "title": "part mask",
+       "file": "val_00005_s01_1.png"
+      }
+     ]
+    },
+    {
+     "step": 2,
+     "purpose": "Purpose: Find bright blobs inside the part to identify voids vs cracks.",
+     "code": "inner = img[pm].astype(float)\nprint(\"part brightness stats: mean\", inner.mean(), \"std\", inner.std(), \"min\", inner.min(), \"max\", inner.max())\n# threshold bright regions inside part\nthr = img > (inner.mean() + 1.5*inner.std())\ncand = thr & pm\nlab, blobs = label_blobs(cand, min_area=3)\nfor b in blobs:\n    print(b)\nshow(overlay(img, [cand]), \"bright candidates\")\n",
+     "stdout": "part brightness stats: mean 63.93738174077578 std 20.168638727750754 min 34.0 max 219.0\n{'id': 20, 'area': 705, 'cy': 77.0, 'cx': 129.6, 'bbox': (46, 93, 99, 157), 'elongation': 4.72}\n{'id': 44, 'area': 76, 'cy': 110.5, 'cx': 38.0, 'bbox': (73, 38, 149, 39), 'elongation': 698331.34}\n{'id': 88, 'area': 64, 'cy': 202.0, 'cx': 156.5, 'bbox': (201, 126, 204, 188), 'elongation': 54.37}\n{'id': 1, 'area': 61, 'cy': 11.4, 'cx': 130.1, 'bbox': (11, 101, 14, 159), 'elongation': 51.4}\n{'id': 70, 'area': 61, 'cy': 166.0, 'cx': 193.0, 'bbox': (136, 193, 197, 194), 'elongation': 561397.07}\n{'id': 94, 'area': 53, 'cy': 208.5, 'cx': 72.3, 'bbox': (207, 48, 210, 98), 'elongation': 28.23}\n{'id': 15, 'area': 39, 'cy': 44.4, 'cx': 203.2, 'bbox': (37, 194, 48, 215), 'elongation': 4.68}\n{'id': 2, 'area': 38, 'cy': 13.0, 'cx': 63.7, 'bbox': (12, 46, 15, 82), 'elongation': 48.93}\n{'id': 45, 'area': 34, 'cy': 86.2, 'cx': 8.8, 'bbox': (75, 8, 98, 11), 'elongation': 12.48}\n{'id': 58, 'area': 29, 'cy': 119.5, 'cx': 14.1, 'bbox': (112, 11, 126, 16), 'elongation': 4.48}\n{'id': 91, 'area': 28, 'cy': 207.4, 'cx': 110.9, 'bbox': (205, 98, 209, 123), 'elongation': 12.41}\n{'id': 4, 'area': 25, 'cy': 13.0, 'cx': 171.0, 'bbox': (13, 159, 14, 184), 'elongation': 232737.33}\n{'id': 72, 'area': 23, 'cy': 146.3, 'cx': 21.4, 'bbox': (140, 17, 154, 26), 'elongation': 7.63}\n{'id': 48, 'area': 22, 'cy': 99.8, 'cx': 194.1, 'bbox': (97, 191, 104, 198), 'elongation': 1.68}\n{'id': 77, 'area': 21, 'cy': 169.2, 'cx': 37.8, 'bbox': (161, 36, 180, 39), 'elongation': 13.7}\n{'id': 3, 'area': 19, 'cy': 12.1, 'cx': 91.3, 'bbox': (12, 83, 14, 101), 'elongation': 23.16}\n{'id': 9, 'area': 19, 'cy': 27.2, 'cx': 192.8, 'bbox': (19, 192, 37, 194), 'elongation': 17.87}\n{'id': 23, 'area': 19, 'cy': 52.8, 'cx': 218.5, 'bbox': (48, 215, 57, 224), 'elongation': 3.69}\n{'id': 47, 'area': 18, 'cy': 101.7, 'cx': 213.2, 'bbox': (96, 210, 108, 217), 'elongation': 8.08}\n{'id': 46, 'area': 17, 'cy': 90.1, 'cx': 218.7, 'bbox': (87, 216, 96, 2",
+     "error": "",
+     "seconds": 0.03,
+     "images": [
+      {
+       "title": "bright candidates",
+       "file": "val_00005_s02_0.png"
+      }
+     ]
+    },
+    {
+     "step": 3,
+     "purpose": "Purpose: Inspect the crack and the small bright spot to classify them.",
+     "code": "show(crop(img, 77, 130, r=30, zoom=3), \"crack region\")\nshow(crop(img, 100, 194, r=12, zoom=6), \"small spot\")\n",
+     "stdout": "[show #4] crack region  (shape (180, 180))\n[show #5] small spot  (shape (144, 144))\n",
+     "error": "",
+     "seconds": 0.02,
+     "images": [
+      {
+       "title": "crack region",
+       "file": "val_00005_s03_0.png"
+      },
+      {
+       "title": "small spot",
+       "file": "val_00005_s03_1.png"
+      }
+     ]
+    },
+    {
+     "step": 4,
+     "purpose": "Purpose: Check the small roundish spot's brightness and shape to decide if it's a void.",
+     "code": "sub = img[95:106, 189:199]\nprint(\"spot values:\\n\", sub)\nprint(\"spot mean\", sub.mean(), \"part mean\", inner.mean())\n# elongation of that blob\nfor b in blobs:\n    if b['id']==48:\n        print(b)\n",
+     "stdout": "spot values:\n [[ 58  69  78  79  75  75  81  66  74  67]\n [ 72  86  84  88  83  83  71  73  68  65]\n [ 81  91  83  93 100  96  91  79  69  65]\n [ 76  87  99  99 103  99  93  80  80  69]\n [ 69  85  89  96 101 104  93  95  89  73]\n [ 73  76  99  90 101  97 103  98  94  86]\n [ 69  73  73  90  93  93 102 112 103  85]\n [ 70  66  76  87  97  96 102  97  93  83]\n [ 63  67  61  79  88  98  90  89  80  80]\n [ 63  58  54  63  78  84  83  85  83  80]\n [ 62  63  61  70  65  66  77  72  67  67]]\nspot mean 81.77272727272727 part mean 63.93738174077578\n{'id': 48, 'area': 22, 'cy': 99.8, 'cx': 194.1, 'bbox': (97, 191, 104, 198), 'elongation': 1.68}\n",
+     "error": "",
+     "seconds": 0.01,
+     "images": []
+    },
+    {
+     "step": 5,
+     "purpose": "Purpose: Build a void mask from roundish interior blobs and compute the ratio.",
+     "code": "# interior = part eroded to avoid edge noise\ner = ndi.binary_erosion(pm, iterations=3)\nvoid_mask = np.zeros_like(pm)\nfor b in blobs:\n    if b['elongation'] < 3 and b['area'] >= 10:\n        # must be interior\n        cy, cx = int(b['cy']), int(b['cx'])\n        if er[cy, cx]:\n            void_mask |= (lab == b['id'])\n            print(\"void blob\", b['id'], \"area\", b['area'], \"elong\", b['elongation'])\nvp = void_mask.sum()\nprint(\"void pixels\", vp, \"part pixels\", pm.sum())\nratio = 100*vp/pm.sum()\nprint(\"void ratio pct\", ratio)\nshow(overlay(img, [void_mask]), \"voids\")\n",
+     "stdout": "void blob 48 area 22 elong 1.68\nvoid pixels 22 part pixels 33824\nvoid ratio pct 0.06504257332071901\n[show #6] voids  (shape (224, 224, 3))\n",
+     "error": "",
+     "seconds": 0.03,
+     "images": [
+      {
+       "title": "voids",
+       "file": "val_00005_s05_0.png"
+      }
+     ]
+    },
+    {
+     "step": 6,
+     "purpose": "Purpose: Verify the single void is the only roundish interior bright region.",
+     "code": "# list all interior blobs regardless of elongation to be safe\nfor b in blobs:\n    cy, cx = int(b['cy']), int(b['cx'])\n    if er[cy, cx]:\n        print(\"interior blob\", b['id'], \"area\", b['area'], \"elong\", round(b['elongation'],2))\n",
+     "stdout": "interior blob 20 area 705 elong 4.72\ninterior blob 48 area 22 elong 1.68\n",
+     "error": "",
+     "seconds": 0.01,
+     "images": []
+    },
+    {
+     "step": 7,
+     "purpose": "Purpose: Submit the void ratio (one roundish void, crack excluded).",
+     "code": "submit(0.06504257332071901, \"One roundish void (22 px) inside part; elongated crack excluded; ratio=22/33824\")\n",
+     "stdout": "[submitted] {\"void_ratio_pct\": 0.06504257332071901, \"note\": \"One roundish void (22 px) inside part; elongated crack excluded; ratio=22/33824\"}\n",
+     "error": "",
+     "seconds": 0.01,
+     "images": []
+    }
+   ]
+  },
+  {
+   "image": "val_00006",
+   "cells": [
+    {
+     "step": 1,
+     "purpose": "Purpose: Inspect the image and get the part silhouette to understand brightness levels.",
+     "code": "import numpy as np\npm = part_mask(img)\nprint(\"img shape:\", img.shape, \"dtype:\", img.dtype)\nprint(\"part pixels:\", pm.sum())\nprint(\"bg pixels:\", (~pm).sum())\nprint(\"part mean brightness:\", img[pm].mean(), \"bg mean:\", img[~pm].mean())\nprint(\"part min/max:\", img[pm].min(), img[pm].max())\nshow(img, \"original\")\nshow(pm.astype(np.uint8)*255, \"part mask\")\n",
+     "stdout": "img shape: (224, 224) dtype: uint8\npart pixels: 16193\nbg pixels: 33983\npart mean brightness: 38.59278700673131 bg mean: 237.6943471735868\npart min/max: 17 129\n[show #1] original  (shape (224, 224))\n[show #2] part mask  (shape (224, 224))\n",
+     "error": "",
+     "seconds": 0.04,
+     "images": [
+      {
+       "title": "original",
+       "file": "val_00006_s01_0.png"
+      },
+      {
+       "title": "part mask",
+       "file": "val_00006_s01_1.png"
+      }
+     ]
+    },
+    {
+     "step": 2,
+     "purpose": "Purpose: Find bright blobs inside the part (voids are brighter than the dark part) and list them with size and elongation.",
+     "code": "# voids are brighter than part; threshold inside part\npart_vals = img[pm]\nthr = part_vals.mean() + 1.5*part_vals.std()\nprint(\"part mean/std:\", part_vals.mean(), part_vals.std(), \"thr:\", thr)\nvoid_cand = pm & (img > thr)\nlab, blobs = label_blobs(void_cand, min_area=3)\nfor b in blobs:\n    print(b)\nshow(overlay(img, [pm, void_cand]), \"part(red) + void candidates(green)\")\n",
+     "stdout": "part mean/std: 38.59278700673131 12.898381119519518 thr: 57.94035868601058\n{'id': 67, 'area': 95, 'cy': 176.0, 'cx': 126.0, 'bbox': (130, 125, 224, 127), 'elongation': 144.91}\n{'id': 54, 'area': 76, 'cy': 116.1, 'cx': 75.2, 'bbox': (111, 71, 122, 81), 'elongation': 1.57}\n{'id': 31, 'area': 58, 'cy': 98.3, 'cx': 63.0, 'bbox': (70, 63, 127, 65), 'elongation': 127.88}\n{'id': 82, 'area': 43, 'cy': 178.0, 'cx': 152.0, 'bbox': (157, 152, 200, 153), 'elongation': 397072.62}\n{'id': 96, 'area': 24, 'cy': 198.8, 'cx': 86.7, 'bbox': (188, 86, 211, 88), 'elongation': 22.34}\n{'id': 78, 'area': 19, 'cy': 159.0, 'cx': 105.0, 'bbox': (150, 105, 169, 106), 'elongation': 177951.3}\n{'id': 19, 'area': 16, 'cy': 42.5, 'cx': 159.0, 'bbox': (35, 159, 51, 160), 'elongation': 150554.53}\n{'id': 42, 'area': 16, 'cy': 100.5, 'cx': 153.0, 'bbox': (93, 153, 109, 154), 'elongation': 150554.53}\n{'id': 95, 'area': 16, 'cy': 192.9, 'cx': 112.6, 'bbox': (186, 112, 201, 114), 'elongation': 14.78}\n{'id': 61, 'area': 15, 'cy': 133.0, 'cx': 155.0, 'bbox': (126, 155, 141, 156), 'elongation': 141421.36}\n{'id': 56, 'area': 14, 'cy': 120.5, 'cx': 97.0, 'bbox': (114, 97, 128, 98), 'elongation': 132287.57}\n{'id': 33, 'area': 13, 'cy': 80.7, 'cx': 156.7, 'bbox': (75, 156, 87, 158), 'elongation': 11.21}\n{'id': 40, 'area': 12, 'cy': 93.5, 'cx': 104.0, 'bbox': (88, 104, 100, 105), 'elongation': 114017.54}\n{'id': 2, 'area': 11, 'cy': 4.4, 'cx': 150.6, 'bbox': (0, 150, 10, 152), 'elongation': 9.4}\n{'id': 10, 'area': 10, 'cy': 18.4, 'cx': 155.1, 'bbox': (15, 154, 23, 157), 'elongation': 6.3}\n{'id': 24, 'area': 10, 'cy': 55.0, 'cx': 157.5, 'bbox': (51, 157, 60, 159), 'elongation': 8.72}\n{'id': 52, 'area': 10, 'cy': 113.0, 'cx': 154.5, 'bbox': (109, 154, 118, 156), 'elongation': 8.72}\n{'id': 74, 'area': 10, 'cy': 145.5, 'cx': 154.0, 'bbox': (141, 154, 151, 155), 'elongation': 95742.71}\n{'id': 27, 'area': 9, 'cy': 63.0, 'cx': 63.0, 'bbox': (59, 63, 68, 64), 'elongation': 86602.54}\n{'id': 29, 'area': 9, 'cy': 67.0, 'cx':",
+     "error": "",
+     "seconds": 0.03,
+     "images": [
+      {
+       "title": "part(red) + void candidates(green)",
+       "file": "val_00006_s02_0.png"
+      }
+     ]
+    },
+    {
+     "step": 3,
+     "purpose": "Purpose: The only roundish blob (elongation ~1.57) is the void; the rest are thin edge/crack lines. Compute ratio using that blob.",
+     "code": "voids = [b for b in blobs if b['elongation'] < 3 and b['area'] >= 5]\nprint(\"void blobs:\", [(b['id'], b['area'], round(b['elongation'],2)) for b in voids])\nvoid_px = sum(b['area'] for b in voids)\npart_px = pm.sum()\nratio = 100*void_px/part_px\nprint(\"void_px:\", void_px, \"part_px:\", part_px, \"ratio%:\", ratio)\nshow(overlay(img, [pm, np.isin(lab, [b['id'] for b in voids])]), \"part(red)+void(green)\")\n",
+     "stdout": "void blobs: [(54, 76, 1.57)]\nvoid_px: 76 part_px: 16193 ratio%: 0.469338603100105\n[show #4] part(red)+void(green)  (shape (224, 224, 3))\n",
+     "error": "",
+     "seconds": 0.03,
+     "images": [
+      {
+       "title": "part(red)+void(green)",
+       "file": "val_00006_s03_0.png"
+      }
+     ]
+    },
+    {
+     "step": 4,
+     "purpose": "Purpose: The single roundish blob (area 76, elongation 1.57) is the void; all other candidates are thin edge/crack lines. Submit the ratio.",
+     "code": "submit(0.469338603100105, \"one round void (76 px) inside 16193-px part; thin elongated lines excluded as cracks/edges\")\n",
+     "stdout": "[submitted] {\"void_ratio_pct\": 0.469338603100105, \"note\": \"one round void (76 px) inside 16193-px part; thin elongated lines excluded as cracks/edges\"}\n",
+     "error": "",
+     "seconds": 0.02,
+     "images": []
+    }
+   ]
+  },
+  {
+   "image": "val_00007",
+   "cells": [
+    {
+     "step": 1,
+     "purpose": "Purpose: Inspect the image and the part silhouette to understand brightness levels and part size.",
+     "code": "print(img.shape, img.dtype)\nprint(\"min/max/mean:\", img.min(), img.max(), img.mean())\npm = part_mask(img)\nprint(\"part pixels:\", pm.sum())\nprint(\"part mean brightness:\", img[pm].mean())\nprint(\"bg mean brightness:\", img[~pm].mean())\nshow(img, \"original\")\nshow(pm.astype(np.uint8)*255, \"part mask\")\n",
+     "stdout": "(224, 224) uint8\nmin/max/mean: 58 255 189.52505181760205\npart pixels: 13323\npart mean brightness: 76.96667417248368\nbg mean brightness: 230.21686158521695\n[show #1] original  (shape (224, 224))\n[show #2] part mask  (shape (224, 224))\n",
+     "error": "",
+     "seconds": 0.04,
+     "images": [
+      {
+       "title": "original",
+       "file": "val_00007_s01_0.png"
+      },
+      {
+       "title": "part mask",
+       "file": "val_00007_s01_1.png"
+      }
+     ]
+    },
+    {
+     "step": 2,
+     "purpose": "Purpose: Find bright blobs inside the part (voids are brighter than the dark part) and inspect their shapes.",
+     "code": "# voids are brighter than part; part is dark (~77). Use a threshold within the part.\npart_vals = img[pm]\nprint(\"part brightness stats: min\", part_vals.min(), \"max\", part_vals.max(), \"mean\", part_vals.mean())\n# threshold: pixels brighter than, say, 120 inside part\nthr = 120\ncand = pm & (img > thr)\nprint(\"candidate bright pixels in part:\", cand.sum())\nlab, blobs = label_blobs(cand, min_area=3)\nprint(\"num blobs:\", len(blobs))\nfor b in blobs:\n    print(b)\nshow(overlay(img, [pm, cand]), \"part(red) + bright cand(green)\")\n",
+     "stdout": "part brightness stats: min 58 max 184 mean 76.96667417248368\ncandidate bright pixels in part: 419\nnum blobs: 4\n{'id': 72, 'area': 166, 'cy': 136.3, 'cx': 176.2, 'bbox': (122, 162, 148, 193), 'elongation': 6.88}\n{'id': 85, 'area': 73, 'cy': 140.5, 'cx': 35.2, 'bbox': (136, 30, 146, 40), 'elongation': 1.07}\n{'id': 76, 'area': 48, 'cy': 130.0, 'cx': 66.1, 'bbox': (127, 62, 134, 71), 'elongation': 1.44}\n{'id': 79, 'area': 11, 'cy': 132.7, 'cx': 50.1, 'bbox': (131, 49, 136, 52), 'elongation': 1.56}\n[show #3] part(red) + bright cand(green)  (shape (224, 224, 3))\n",
+     "error": "",
+     "seconds": 0.03,
+     "images": [
+      {
+       "title": "part(red) + bright cand(green)",
+       "file": "val_00007_s02_0.png"
+      }
+     ]
+    },
+    {
+     "step": 3,
+     "purpose": "Purpose: Classify blobs by elongation (crack vs void) and compute the void ratio.",
+     "code": "void_blobs = [b for b in blobs if b['elongation'] < 3.0]\ncrack_blobs = [b for b in blobs if b['elongation'] >= 3.0]\nprint(\"void blobs:\", [(b['id'], b['area'], round(b['elongation'],2)) for b in void_blobs])\nprint(\"crack blobs:\", [(b['id'], b['area'], round(b['elongation'],2)) for b in crack_blobs])\nvoid_px = sum(b['area'] for b in void_blobs)\nprint(\"void pixels:\", void_px, \"part pixels:\", pm.sum())\nratio = 100*void_px/pm.sum()\nprint(\"void ratio pct:\", ratio)\n# build a void mask to visualize\nvmask = np.zeros_like(pm, dtype=bool)\nfor b in void_blobs:\n    vmask |= (lab == b['id'])\nshow(overlay(img, [pm, vmask]), \"part(red) + voids(green)\")\n",
+     "stdout": "void blobs: [(85, 73, 1.07), (76, 48, 1.44), (79, 11, 1.56)]\ncrack blobs: [(72, 166, 6.88)]\nvoid pixels: 132 part pixels: 13323\nvoid ratio pct: 0.990767845079937\n[show #4] part(red) + voids(green)  (shape (224, 224, 3))\n",
+     "error": "",
+     "seconds": 0.03,
+     "images": [
+      {
+       "title": "part(red) + voids(green)",
+       "file": "val_00007_s03_0.png"
+      }
+     ]
+    },
+    {
+     "step": 4,
+     "purpose": "Purpose: Sanity-check the three void blobs with zoomed crops to confirm they are roundish voids, not noise.",
+     "code": "for b in void_blobs:\n    print(\"blob\", b['id'], \"area\", b['area'], \"elong\", round(b['elongation'],2), \"center\", (round(b['cy'],1), round(b['cx'],1)))\nshow(crop(img, 140.5, 35.2, r=12, zoom=6), \"void 85\")\nshow(crop(img, 130.0, 66.1, r=12, zoom=6), \"void 76\")\n",
+     "stdout": "blob 85 area 73 elong 1.07 center (140.5, 35.2)\nblob 76 area 48 elong 1.44 center (130.0, 66.1)\nblob 79 area 11 elong 1.56 center (132.7, 50.1)\n[show #5] void 85  (shape (144, 144))\n[show #6] void 76  (shape (144, 144))\n",
+     "error": "",
+     "seconds": 0.02,
+     "images": [
+      {
+       "title": "void 85",
+       "file": "val_00007_s04_0.png"
+      },
+      {
+       "title": "void 76",
+       "file": "val_00007_s04_1.png"
+      }
+     ]
+    },
+    {
+     "step": 5,
+     "purpose": "Purpose: The three roundish bright blobs are confirmed voids; the elongated one is a crack. Submit the void ratio.",
+     "code": "submit(0.990767845079937, \"3 roundish bright voids (132 px) inside 13323 px part; elongated bright line excluded as crack\")\n",
+     "stdout": "[submitted] {\"void_ratio_pct\": 0.990767845079937, \"note\": \"3 roundish bright voids (132 px) inside 13323 px part; elongated bright line excluded as crack\"}\n",
+     "error": "",
+     "seconds": 0.01,
+     "images": []
+    }
+   ]
+  },
+  {
+   "image": "val_00008",
+   "cells": [
+    {
+     "step": 1,
+     "purpose": "Purpose: Inspect the image and get the part silhouette to understand brightness levels.",
+     "code": "print(img.shape, img.dtype, img.min(), img.max())\npm = part_mask(img)\nprint(\"part pixels:\", pm.sum())\nshow(img, \"original\")\nshow(pm.astype(np.uint8)*255, \"part mask\")\n",
+     "stdout": "(224, 224) uint8 51 255\npart pixels: 14012\n[show #1] original  (shape (224, 224))\n[show #2] part mask  (shape (224, 224))\n",
+     "error": "",
+     "seconds": 0.04,
+     "images": [
+      {
+       "title": "original",
+       "file": "val_00008_s01_0.png"
+      },
+      {
+       "title": "part mask",
+       "file": "val_00008_s01_1.png"
+      }
+     ]
+    },
+    {
+     "step": 2,
+     "purpose": "Purpose: Find bright blobs inside the part that could be voids, and check their shapes.",
+     "code": "# voids are brighter than the dark part\npart_vals = img[pm]\nprint(\"part brightness stats:\", part_vals.min(), part_vals.max(), np.median(part_vals))\n# threshold: pixels inside part that are notably brighter than part median\nthr = np.median(part_vals) + 30\nvoid_cand = pm & (img > thr)\nlab, blobs = label_blobs(void_cand, min_area=3)\nfor b in blobs:\n    print(b)\nshow(overlay(img, [pm, void_cand]), \"part(red) + void candidates(green)\")\n",
+     "stdout": "part brightness stats: 51 209 70.0\n{'id': 16, 'area': 230, 'cy': 61.0, 'cx': 87.9, 'bbox': (53, 79, 70, 98), 'elongation': 1.11}\n{'id': 13, 'area': 223, 'cy': 58.4, 'cx': 127.3, 'bbox': (48, 117, 70, 138), 'elongation': 1.59}\n{'id': 35, 'area': 143, 'cy': 102.4, 'cx': 89.8, 'bbox': (97, 81, 109, 98), 'elongation': 1.69}\n{'id': 14, 'area': 75, 'cy': 85.0, 'cx': 71.8, 'bbox': (49, 71, 120, 75), 'elongation': 40.64}\n{'id': 8, 'area': 59, 'cy': 44.2, 'cx': 152.1, 'bbox': (18, 145, 66, 155), 'elongation': 8.05}\n{'id': 34, 'area': 46, 'cy': 116.5, 'cx': 104.0, 'bbox': (94, 104, 140, 105), 'elongation': 424460.44}\n{'id': 42, 'area': 42, 'cy': 156.5, 'cx': 117.0, 'bbox': (136, 117, 178, 118), 'elongation': 387943.29}\n{'id': 37, 'area': 41, 'cy': 123.3, 'cx': 132.7, 'bbox': (104, 132, 142, 135), 'elongation': 20.23}\n{'id': 43, 'area': 33, 'cy': 156.0, 'cx': 105.0, 'bbox': (140, 105, 173, 106), 'elongation': 305777.7}\n{'id': 53, 'area': 30, 'cy': 172.5, 'cx': 76.0, 'bbox': (158, 76, 188, 77), 'elongation': 278388.22}\n{'id': 38, 'area': 28, 'cy': 132.2, 'cx': 76.3, 'bbox': (120, 75, 146, 78), 'elongation': 20.7}\n{'id': 36, 'area': 23, 'cy': 110.5, 'cx': 112.5, 'bbox': (100, 112, 122, 114), 'elongation': 23.35}\n{'id': 52, 'area': 23, 'cy': 168.0, 'cx': 149.0, 'bbox': (157, 149, 180, 150), 'elongation': 214476.11}\n{'id': 12, 'area': 21, 'cy': 38.0, 'cx': 70.0, 'bbox': (28, 70, 49, 71), 'elongation': 196214.17}\n{'id': 30, 'area': 20, 'cy': 93.5, 'cx': 134.0, 'bbox': (84, 134, 104, 135), 'elongation': 187082.87}\n{'id': 1, 'area': 14, 'cy': 6.5, 'cx': 78.0, 'bbox': (0, 78, 14, 79), 'elongation': 132287.57}\n{'id': 55, 'area': 14, 'cy': 184.5, 'cx': 116.0, 'bbox': (178, 116, 192, 117), 'elongation': 132287.57}\n{'id': 54, 'area': 13, 'cy': 180.0, 'cx': 104.0, 'bbox': (174, 104, 187, 105), 'elongation': 123153.02}\n{'id': 31, 'area': 12, 'cy': 87.0, 'cx': 107.7, 'bbox': (85, 106, 91, 110), 'elongation': 1.68}\n{'id': 3, 'area': 11, 'cy': 8.7, 'cx': 148.3, 'bbox': (4, 148, 14, 150), 'elon",
+     "error": "",
+     "seconds": 0.03,
+     "images": [
+      {
+       "title": "part(red) + void candidates(green)",
+       "file": "val_00008_s02_0.png"
+      }
+     ]
+    },
+    {
+     "step": 3,
+     "purpose": "Purpose: Keep only roundish blobs (elongation < 3) as voids, excluding the thin crack lines.",
+     "code": "voids = [b for b in blobs if b['elongation'] < 3]\nprint(\"void blobs:\")\nfor b in voids:\n    print(b)\nvoid_px = sum(b['area'] for b in voids)\nprint(\"void pixels:\", void_px, \"part pixels:\", pm.sum())\nprint(\"void ratio pct:\", 100*void_px/pm.sum())\n# build a void mask for visualization\nvm = np.zeros_like(pm)\nfor b in voids:\n    vm[lab==b['id']] = True\nshow(overlay(img, [pm, vm]), \"part(red) + voids(green)\")\n",
+     "stdout": "void blobs:\n{'id': 16, 'area': 230, 'cy': 61.0, 'cx': 87.9, 'bbox': (53, 79, 70, 98), 'elongation': 1.11}\n{'id': 13, 'area': 223, 'cy': 58.4, 'cx': 127.3, 'bbox': (48, 117, 70, 138), 'elongation': 1.59}\n{'id': 35, 'area': 143, 'cy': 102.4, 'cx': 89.8, 'bbox': (97, 81, 109, 98), 'elongation': 1.69}\n{'id': 31, 'area': 12, 'cy': 87.0, 'cx': 107.7, 'bbox': (85, 106, 91, 110), 'elongation': 1.68}\n{'id': 67, 'area': 5, 'cy': 201.8, 'cx': 100.8, 'bbox': (201, 100, 204, 103), 'elongation': 2.89}\n{'id': 79, 'area': 5, 'cy': 210.8, 'cx': 126.2, 'bbox': (210, 125, 213, 128), 'elongation': 2.89}\n{'id': 89, 'area': 5, 'cy': 218.2, 'cx': 142.2, 'bbox': (217, 141, 220, 144), 'elongation': 2.89}\n{'id': 7, 'area': 4, 'cy': 19.0, 'cx': 74.5, 'bbox': (18, 74, 21, 76), 'elongation': 2.62}\n{'id': 66, 'area': 4, 'cy': 199.0, 'cx': 103.5, 'bbox': (198, 103, 201, 105), 'elongation': 2.62}\n{'id': 83, 'area': 4, 'cy': 215.0, 'cx': 76.5, 'bbox': (214, 76, 217, 78), 'elongation': 2.62}\n{'id': 88, 'area': 4, 'cy': 217.5, 'cx': 132.0, 'bbox': (217, 131, 219, 134), 'elongation': 2.62}\n{'id': 19, 'area': 3, 'cy': 62.3, 'cx': 121.7, 'bbox': (62, 121, 64, 123), 'elongation': 1.73}\n{'id': 24, 'area': 3, 'cy': 70.7, 'cx': 129.3, 'bbox': (70, 129, 72, 131), 'elongation': 1.73}\n{'id': 46, 'area': 3, 'cy': 145.7, 'cx': 143.3, 'bbox': (145, 143, 147, 145), 'elongation': 1.73}\n{'id': 85, 'area': 3, 'cy': 215.3, 'cx': 129.7, 'bbox': (215, 129, 217, 131), 'elongation': 1.73}\nvoid pixels: 651 part pixels: 14012\nvoid ratio pct: 4.646017699115045\n[show #4] part(red) + voids(green)  (shape (224, 224, 3))\n",
+     "error": "",
+     "seconds": 0.03,
+     "images": [
+      {
+       "title": "part(red) + voids(green)",
+       "file": "val_00008_s03_0.png"
+      }
+     ]
+    },
+    {
+     "step": 4,
+     "purpose": "Purpose: The three large round blobs are the real voids; the tiny 3-5 px specks are noise. Keep only blobs with area >= 20.",
+     "code": "real_voids = [b for b in voids if b['area'] >= 20]\nprint(\"real voids:\")\nfor b in real_voids:\n    print(b)\nvoid_px = sum(b['area'] for b in real_voids)\nprint(\"void pixels:\", void_px, \"part pixels:\", pm.sum())\nprint(\"void ratio pct:\", 100*void_px/pm.sum())\nvm2 = np.zeros_like(pm)\nfor b in real_voids:\n    vm2[lab==b['id']] = True\nshow(overlay(img, [pm, vm2]), \"part(red) + real voids(green)\")\n",
+     "stdout": "real voids:\n{'id': 16, 'area': 230, 'cy': 61.0, 'cx': 87.9, 'bbox': (53, 79, 70, 98), 'elongation': 1.11}\n{'id': 13, 'area': 223, 'cy': 58.4, 'cx': 127.3, 'bbox': (48, 117, 70, 138), 'elongation': 1.59}\n{'id': 35, 'area': 143, 'cy': 102.4, 'cx': 89.8, 'bbox': (97, 81, 109, 98), 'elongation': 1.69}\nvoid pixels: 596 part pixels: 14012\nvoid ratio pct: 4.253497002569226\n[show #5] part(red) + real voids(green)  (shape (224, 224, 3))\n",
+     "error": "",
+     "seconds": 0.04,
+     "images": [
+      {
+       "title": "part(red) + real voids(green)",
+       "file": "val_00008_s04_0.png"
+      }
+     ]
+    },
+    {
+     "step": 5,
+     "purpose": "Purpose: The three round blobs are clearly the voids (cracks excluded by elongation, noise excluded by area). Submit the ratio.",
+     "code": "submit(100*596/14012, \"3 roundish bright voids (areas 230,223,143) inside part; cracks and noise excluded\")\n",
+     "stdout": "[submitted] {\"void_ratio_pct\": 4.253497002569226, \"note\": \"3 roundish bright voids (areas 230,223,143) inside part; cracks and noise excluded\"}\n",
+     "error": "",
+     "seconds": 0.01,
+     "images": []
+    }
+   ]
+  },
+  {
+   "image": "val_00009",
+   "cells": [
+    {
+     "step": 1,
+     "purpose": "Purpose: Inspect the image and get the part silhouette.",
+     "code": "print(img.shape, img.dtype, img.min(), img.max())\npm = part_mask(img)\nprint(\"part pixels:\", pm.sum())\nshow(img, \"original\")\nshow(pm.astype(np.uint8)*255, \"part mask\")\n",
+     "stdout": "(224, 224) uint8 36 255\npart pixels: 15825\n[show #1] original  (shape (224, 224))\n[show #2] part mask  (shape (224, 224))\n",
+     "error": "",
+     "seconds": 0.04,
+     "images": [
+      {
+       "title": "original",
+       "file": "val_00009_s01_0.png"
+      },
+      {
+       "title": "part mask",
+       "file": "val_00009_s01_1.png"
+      }
+     ]
+    },
+    {
+     "step": 2,
+     "purpose": "Purpose: Find bright blobs inside the part (voids and cracks) and inspect their shapes.",
+     "code": "inside = img[pm]\nprint(\"inside stats: min\", inside.min(), \"max\", inside.max(), \"mean\", inside.mean())\n# threshold: voids are brighter than part\nthr = 120\ncand = (img > thr) & pm\nlab, blobs = label_blobs(cand, min_area=3)\nprint(\"num blobs:\", len(blobs))\nfor b in blobs:\n    print(b)\n",
+     "stdout": "inside stats: min 36 max 195 mean 66.53870458135862\nnum blobs: 85\n{'id': 28, 'area': 237, 'cy': 68.7, 'cx': 129.5, 'bbox': (55, 115, 86, 139), 'elongation': 2.97}\n{'id': 22, 'area': 47, 'cy': 41.9, 'cx': 82.6, 'bbox': (38, 79, 47, 87), 'elongation': 1.6}\n{'id': 26, 'area': 19, 'cy': 58.0, 'cx': 159.0, 'bbox': (49, 159, 68, 160), 'elongation': 177951.3}\n{'id': 143, 'area': 16, 'cy': 210.3, 'cx': 70.2, 'bbox': (203, 70, 218, 72), 'elongation': 14.37}\n{'id': 88, 'area': 14, 'cy': 140.5, 'cx': 68.0, 'bbox': (134, 68, 148, 69), 'elongation': 132287.57}\n{'id': 23, 'area': 13, 'cy': 45.0, 'cx': 71.0, 'bbox': (39, 71, 52, 72), 'elongation': 123153.02}\n{'id': 76, 'area': 12, 'cy': 122.5, 'cx': 68.0, 'bbox': (117, 68, 129, 69), 'elongation': 114017.54}\n{'id': 84, 'area': 12, 'cy': 134.5, 'cx': 125.0, 'bbox': (129, 125, 141, 126), 'elongation': 114017.54}\n{'id': 46, 'area': 11, 'cy': 84.0, 'cx': 67.0, 'bbox': (79, 67, 90, 68), 'elongation': 104880.88}\n{'id': 8, 'area': 9, 'cy': 13.0, 'cx': 76.0, 'bbox': (9, 76, 18, 77), 'elongation': 86602.54}\n{'id': 62, 'area': 8, 'cy': 104.5, 'cx': 65.0, 'bbox': (101, 65, 109, 66), 'elongation': 77459.67}\n{'id': 64, 'area': 8, 'cy': 105.5, 'cx': 103.0, 'bbox': (102, 103, 110, 104), 'elongation': 77459.67}\n{'id': 81, 'area': 8, 'cy': 128.5, 'cx': 97.0, 'bbox': (125, 97, 133, 98), 'elongation': 77459.67}\n{'id': 139, 'area': 8, 'cy': 201.5, 'cx': 153.0, 'bbox': (198, 153, 206, 154), 'elongation': 77459.67}\n{'id': 11, 'area': 7, 'cy': 23.0, 'cx': 77.0, 'bbox': (20, 77, 27, 78), 'elongation': 68313.01}\n{'id': 43, 'area': 7, 'cy': 80.0, 'cx': 157.0, 'bbox': (77, 157, 84, 158), 'elongation': 68313.01}\n{'id': 51, 'area': 7, 'cy': 88.0, 'cx': 156.0, 'bbox': (85, 156, 92, 157), 'elongation': 68313.01}\n{'id': 53, 'area': 7, 'cy': 95.0, 'cx': 66.0, 'bbox': (92, 66, 99, 67), 'elongation': 68313.01}\n{'id': 103, 'area': 7, 'cy': 157.0, 'cx': 125.0, 'bbox': (154, 125, 161, 126), 'elongation': 68313.01}\n{'id': 104, 'area': 7, 'cy': 158.0, 'cx': 68.0, 'bbox':",
+     "error": "",
+     "seconds": 0.02,
+     "images": []
+    },
+    {
+     "step": 3,
+     "purpose": "Purpose: Visualize the candidate bright regions to distinguish voids from cracks.",
+     "code": "show(overlay(img, [pm, cand]), \"part(red) + bright candidates(green)\")\n",
+     "stdout": "[show #3] part(red) + bright candidates(green)  (shape (224, 224, 3))\n",
+     "error": "",
+     "seconds": 0.03,
+     "images": [
+      {
+       "title": "part(red) + bright candidates(green)",
+       "file": "val_00009_s03_0.png"
+      }
+     ]
+    },
+    {
+     "step": 4,
+     "purpose": "Purpose: Classify blobs as voids (round) vs cracks (elongated) and compute the ratio.",
+     "code": "void_mask = np.zeros_like(pm)\nfor b in blobs:\n    if b['elongation'] < 3 and b['area'] >= 5:  # roundish, not a line\n        void_mask |= (lab == b['id'])\nprint(\"void pixels:\", void_mask.sum(), \"part pixels:\", pm.sum())\nprint(\"ratio pct:\", 100*void_mask.sum()/pm.sum())\nshow(overlay(img, [pm, void_mask]), \"part(red) + voids(green)\")\n",
+     "stdout": "void pixels: 284 part pixels: 15825\nratio pct: 1.7946287519747235\n[show #4] part(red) + voids(green)  (shape (224, 224, 3))\n",
+     "error": "",
+     "seconds": 0.03,
+     "images": [
+      {
+       "title": "part(red) + voids(green)",
+       "file": "val_00009_s04_0.png"
+      }
+     ]
+    },
+    {
+     "step": 5,
+     "purpose": "The void mask includes the curved crack (elongation 2.97, just under my threshold). Let me tighten the elongation cutoff to exclude it.",
+     "code": "void_mask2 = np.zeros_like(pm)\nfor b in blobs:\n    if b['elongation'] < 2.0 and b['area'] >= 5:\n        void_mask2 |= (lab == b['id'])\nprint(\"void pixels:\", void_mask2.sum(), \"ratio pct:\", 100*void_mask2.sum()/pm.sum())\nshow(overlay(img, [pm, void_mask2]), \"part(red) + voids(green) tight\")\n",
+     "stdout": "void pixels: 47 ratio pct: 0.296998420221169\n[show #5] part(red) + voids(green) tight  (shape (224, 224, 3))\n",
+     "error": "",
+     "seconds": 0.04,
+     "images": [
+      {
+       "title": "part(red) + voids(green) tight",
+       "file": "val_00009_s05_0.png"
+      }
+     ]
+    },
+    {
+     "step": 6,
+     "purpose": "The top-right region is a dim void my threshold missed. Let me lower the threshold and re-examine all blobs.",
+     "code": "thr2 = 90\ncand2 = (img > thr2) & pm\nlab2, blobs2 = label_blobs(cand2, min_area=3)\nfor b in blobs2:\n    if b['area'] >= 5:\n        print(b['id'], b['area'], round(b['elongation'],2), b['cy'], b['cx'])\n",
+     "stdout": "27 326 2.72 68.7 129.3\n24 238 34.63 123.9 154.3\n32 139 41.94 165.9 69.2\n28 137 23.53 119.8 122.1\n25 115 31.59 75.0 68.4\n26 76 1.49 42.3 82.8\n31 70 11.31 126.7 98.6\n35 43 20.51 199.4 121.0\n4 40 7.4 21.9 76.0\n36 37 12.79 202.4 98.9\n33 34 29.49 171.7 97.6\n30 30 13.6 87.6 106.0\n29 14 5.34 71.9 110.9\n37 14 5.12 219.3 124.5\n9 10 8.66 17.2 153.9\n2 9 7.57 3.6 151.4\n1 7 5.42 2.6 79.6\n22 7 3.33 24.9 155.6\n40 7 2.18 221.7 95.6\n5 5 50000.0 10.0 153.0\n17 5 1.89 17.6 141.4\n",
+     "error": "",
+     "seconds": 0.02,
+     "images": []
+    },
+    {
+     "step": 7,
+     "purpose": "Let me look closely at the top-right region to confirm it's a void.",
+     "code": "show(crop(img, 42, 153, r=20, zoom=4), \"top-right region\")\nshow(crop(img, 42, 83, r=15, zoom=4), \"left void region\")\n",
+     "stdout": "[show #6] top-right region  (shape (160, 160))\n[show #7] left void region  (shape (120, 120))\n",
+     "error": "",
+     "seconds": 0.02,
+     "images": [
+      {
+       "title": "top-right region",
+       "file": "val_00009_s07_0.png"
+      },
+      {
+       "title": "left void region",
+       "file": "val_00009_s07_1.png"
+      }
+     ]
+    },
+    {
+     "step": 8,
+     "purpose": "The top-right is just the part edge (background), not a void. The left region is a clear round void. Let me check the curved feature and the dim top-right blob.",
+     "code": "show(crop(img, 69, 129, r=20, zoom=4), \"curved feature\")\nshow(crop(img, 42, 153, r=12, zoom=6), \"dim top-right blob\")\n",
+     "stdout": "[show #8] curved feature  (shape (160, 160))\n[show #9] dim top-right blob  (shape (144, 144))\n",
+     "error": "",
+     "seconds": 0.02,
+     "images": [
+      {
+       "title": "curved feature",
+       "file": "val_00009_s08_0.png"
+      },
+      {
+       "title": "dim top-right blob",
+       "file": "val_00009_s08_1.png"
+      }
+     ]
+    },
+    {
+     "step": 9,
+     "purpose": "The curved feature is a crack (elongated line), and the top-right is just the part edge. The only true void is the round left blob. Let me verify the final count.",
+     "code": "print(\"void pixels:\", void_mask2.sum(), \"part pixels:\", pm.sum())\nprint(\"ratio pct:\", 100*void_mask2.sum()/pm.sum())\n",
+     "stdout": "void pixels: 47 part pixels: 15825\nratio pct: 0.296998420221169\n",
+     "error": "",
+     "seconds": 0.02,
+     "images": []
+    },
+    {
+     "step": 10,
+     "purpose": "The only true void is the single round bright blob (47 px); the curved feature is a crack and the top-right is the part edge. Submitting.",
+     "code": "submit(0.297, \"One round void (47 px) inside part; curved feature is a crack, top-right is part edge\")\n",
+     "stdout": "[submitted] {\"void_ratio_pct\": 0.297, \"note\": \"One round void (47 px) inside part; curved feature is a crack, top-right is part edge\"}\n",
+     "error": "",
+     "seconds": 0.02,
+     "images": []
+    }
+   ]
+  },
+  {
+   "image": "val_00010",
+   "cells": [
+    {
+     "step": 1,
+     "purpose": "Purpose: Look at the image and get the part silhouette.",
+     "code": "show(img, \"original\")\npm = part_mask(img)\nprint(\"part pixels:\", pm.sum(), \"of\", img.size)\nshow(pm.astype(np.uint8)*255, \"part mask\")\n",
+     "stdout": "[show #1] original  (shape (224, 224))\npart pixels: 27696 of 50176\n[show #2] part mask  (shape (224, 224))\n",
+     "error": "",
+     "seconds": 0.03,
+     "images": [
+      {
+       "title": "original",
+       "file": "val_00010_s01_0.png"
+      },
+      {
+       "title": "part mask",
+       "file": "val_00010_s01_1.png"
+      }
+     ]
+    },
+    {
+     "step": 2,
+     "purpose": "Purpose: Find bright blobs inside the part and inspect their shapes to separate voids from cracks.",
+     "code": "inside = img[pm]\nprint(\"part brightness stats: min\", inside.min(), \"max\", inside.max(), \"mean\", inside.mean())\n# threshold inside part for brighter-than-part regions\nthr = inside.mean() + 1.5*inside.std()\nprint(\"threshold:\", thr)\nbright = (img > thr) & pm\nlab, blobs = label_blobs(bright, min_area=3)\nfor b in blobs:\n    print(b)\nshow(overlay(img, [pm, bright]), \"bright regions in part\")\n",
+     "stdout": "part brightness stats: min 24 max 186 mean 57.67381571346043\nthreshold: 80.77281671588622\n{'id': 145, 'area': 278, 'cy': 125.0, 'cx': 123.9, 'bbox': (116, 110, 135, 139), 'elongation': 2.18}\n{'id': 88, 'area': 263, 'cy': 37.7, 'cx': 118.5, 'bbox': (22, 108, 52, 133), 'elongation': 3.69}\n{'id': 155, 'area': 193, 'cy': 170.4, 'cx': 141.1, 'bbox': (153, 131, 186, 154), 'elongation': 5.76}\n{'id': 150, 'area': 103, 'cy': 140.1, 'cx': 92.2, 'bbox': (135, 85, 146, 100), 'elongation': 1.41}\n{'id': 1, 'area': 96, 'cy': 6.2, 'cx': 112.1, 'bbox': (6, 74, 9, 150), 'elongation': 43.85}\n{'id': 161, 'area': 70, 'cy': 193.0, 'cx': 106.5, 'bbox': (193, 72, 194, 142), 'elongation': 643557.82}\n{'id': 147, 'area': 46, 'cy': 144.5, 'cx': 37.0, 'bbox': (122, 37, 168, 38), 'elongation': 424460.44}\n{'id': 142, 'area': 40, 'cy': 98.5, 'cx': 186.0, 'bbox': (79, 186, 119, 187), 'elongation': 369684.55}\n{'id': 144, 'area': 35, 'cy': 104.2, 'cx': 38.2, 'bbox': (88, 38, 122, 40), 'elongation': 33.03}\n{'id': 188, 'area': 27, 'cy': 217.0, 'cx': 52.0, 'bbox': (216, 39, 218, 65), 'elongation': 42.98}\n{'id': 187, 'area': 26, 'cy': 216.8, 'cx': 177.3, 'bbox': (215, 165, 218, 189), 'elongation': 14.85}\n{'id': 152, 'area': 25, 'cy': 147.0, 'cx': 189.6, 'bbox': (136, 189, 159, 191), 'elongation': 13.6}\n{'id': 137, 'area': 21, 'cy': 67.2, 'cx': 184.8, 'bbox': (58, 184, 78, 186), 'elongation': 19.05}\n{'id': 159, 'area': 19, 'cy': 185.0, 'cx': 37.0, 'bbox': (176, 37, 195, 38), 'elongation': 177951.3}\n{'id': 157, 'area': 18, 'cy': 174.5, 'cx': 191.0, 'bbox': (166, 191, 184, 192), 'elongation': 168819.43}\n{'id': 160, 'area': 16, 'cy': 191.5, 'cx': 192.0, 'bbox': (184, 192, 200, 193), 'elongation': 150554.53}\n{'id': 175, 'area': 16, 'cy': 207.5, 'cx': 65.0, 'bbox': (200, 65, 216, 66), 'elongation': 150554.53}\n{'id': 4, 'area': 14, 'cy': 12.1, 'cx': 69.6, 'bbox': (8, 68, 18, 73), 'elongation': 8.09}\n{'id': 148, 'area': 14, 'cy': 128.5, 'cx': 188.0, 'bbox': (122, 188, 136, 189), 'elongation': 132287.57}\n{'id': 1",
+     "error": "",
+     "seconds": 0.04,
+     "images": [
+      {
+       "title": "bright regions in part",
+       "file": "val_00010_s02_0.png"
+      }
+     ]
+    },
+    {
+     "step": 3,
+     "purpose": "Purpose: Keep only roundish, sufficiently large interior blobs (voids), excluding elongated cracks and edge noise.",
+     "code": "voids = [b for b in blobs if b['area']>=40 and b['elongation']<2.5]\nfor b in voids: print(b)\nvoid_mask = np.isin(lab, [b['id'] for b in voids])\nprint(\"void pixels:\", void_mask.sum(), \"part pixels:\", pm.sum())\nprint(\"void ratio pct:\", 100*void_mask.sum()/pm.sum())\nshow(overlay(img, [pm, void_mask]), \"voids (green) in part\")\n",
+     "stdout": "{'id': 145, 'area': 278, 'cy': 125.0, 'cx': 123.9, 'bbox': (116, 110, 135, 139), 'elongation': 2.18}\n{'id': 150, 'area': 103, 'cy': 140.1, 'cx': 92.2, 'bbox': (135, 85, 146, 100), 'elongation': 1.41}\nvoid pixels: 381 part pixels: 27696\nvoid ratio pct: 1.3756499133448874\n[show #4] voids (green) in part  (shape (224, 224, 3))\n",
+     "error": "",
+     "seconds": 0.03,
+     "images": [
+      {
+       "title": "voids (green) in part",
+       "file": "val_00010_s03_0.png"
+      }
+     ]
+    },
+    {
+     "step": 4,
+     "purpose": "Purpose: Verify the two selected voids are roundish interior blobs and the excluded ones are cracks.",
+     "code": "show(crop(img, 125, 124, r=20), \"void 1 (125,124)\")\nshow(crop(img, 140, 92, r=16), \"void 2 (140,92)\")\n",
+     "stdout": "[show #5] void 1 (125,124)  (shape (160, 160))\n[show #6] void 2 (140,92)  (shape (128, 128))\n",
+     "error": "",
+     "seconds": 0.02,
+     "images": [
+      {
+       "title": "void 1 (125,124)",
+       "file": "val_00010_s04_0.png"
+      },
+      {
+       "title": "void 2 (140,92)",
+       "file": "val_00010_s04_1.png"
+      }
+     ]
+    },
+    {
+     "step": 5,
+     "purpose": "Purpose: Confirm the two roundish interior blobs are voids and the elongated ones are cracks; the void ratio is 381/27696.",
+     "code": "submit(100*void_mask.sum()/pm.sum(), \"two roundish interior voids (381 px) over 27696 part px; cracks excluded\")\n",
+     "stdout": "[submitted] {\"void_ratio_pct\": 1.3756499133448874, \"note\": \"two roundish interior voids (381 px) over 27696 part px; cracks excluded\"}\n",
+     "error": "",
+     "seconds": 0.01,
+     "images": []
+    }
+   ]
+  },
+  {
+   "image": "val_00011",
+   "cells": [
+    {
+     "step": 1,
+     "purpose": "Purpose: Get the part silhouette and look at the image to understand brightness levels.",
+     "code": "pm = part_mask(img)\nprint(\"part pixels:\", pm.sum(), \"of\", img.size)\nprint(\"img min/max:\", img.min(), img.max())\nprint(\"mean inside part:\", img[pm].mean(), \"mean outside:\", img[~pm].mean())\nshow(img, \"original\")\n",
+     "stdout": "part pixels: 28240 of 50176\nimg min/max: 29 251\nmean inside part: 51.16037535410765 mean outside: 233.15855215171408\n[show #1] original  (shape (224, 224))\n",
+     "error": "",
+     "seconds": 0.03,
+     "images": [
+      {
+       "title": "original",
+       "file": "val_00011_s01_0.png"
+      }
+     ]
+    },
+    {
+     "step": 2,
+     "purpose": "Purpose: Find bright regions inside the part (voids/cracks) by thresholding the part interior.",
+     "code": "# Inside part, voids are brighter than the dark part\ninside = img.copy().astype(int)\ninside[~pm] = 0\n# part mean ~51, background ~233. Voids are brighter than part.\n# Let's see histogram of inside-part values\nvals = img[pm]\nprint(\"percentiles inside part:\", np.percentile(vals, [50,75,90,95,99,99.5,100]))\n# threshold: anything notably brighter than part\nthr = 100\ncand = (img > thr) & pm\nprint(\"candidate bright pixels inside part:\", cand.sum())\nlab, blobs = label_blobs(cand, min_area=3)\nfor b in blobs[:15]:\n    print(b)\n",
+     "stdout": "percentiles inside part: [ 49.  52.  55.  63. 126. 143. 166.]\ncandidate bright pixels inside part: 791\n{'id': 110, 'area': 259, 'cy': 141.1, 'cx': 106.3, 'bbox': (127, 93, 149, 127), 'elongation': 1.99}\n{'id': 180, 'area': 53, 'cy': 217.0, 'cx': 133.0, 'bbox': (217, 107, 218, 160), 'elongation': 488364.62}\n{'id': 179, 'area': 35, 'cy': 217.0, 'cx': 76.0, 'bbox': (217, 59, 218, 94), 'elongation': 324037.03}\n{'id': 6, 'area': 17, 'cy': 6.0, 'cx': 125.0, 'bbox': (6, 117, 7, 134), 'elongation': 159687.19}\n{'id': 121, 'area': 16, 'cy': 160.5, 'cx': 36.0, 'bbox': (153, 36, 169, 37), 'elongation': 150554.53}\n{'id': 127, 'area': 16, 'cy': 177.5, 'cx': 37.0, 'bbox': (170, 37, 186, 38), 'elongation': 150554.53}\n{'id': 94, 'area': 12, 'cy': 94.5, 'cx': 41.0, 'bbox': (89, 41, 101, 42), 'elongation': 114017.54}\n{'id': 98, 'area': 12, 'cy': 107.5, 'cx': 42.0, 'bbox': (102, 42, 114, 43), 'elongation': 114017.54}\n{'id': 108, 'area': 12, 'cy': 131.5, 'cx': 36.0, 'bbox': (126, 36, 138, 37), 'elongation': 114017.54}\n{'id': 129, 'area': 11, 'cy': 181.0, 'cx': 195.0, 'bbox': (176, 195, 187, 196), 'elongation': 104880.88}\n{'id': 177, 'area': 11, 'cy': 216.0, 'cx': 100.0, 'bbox': (216, 95, 217, 106), 'elongation': 104880.88}\n{'id': 88, 'area': 8, 'cy': 80.5, 'cx': 183.0, 'bbox': (77, 183, 85, 184), 'elongation': 77459.67}\n{'id': 99, 'area': 8, 'cy': 108.5, 'cx': 188.0, 'bbox': (105, 188, 113, 189), 'elongation': 77459.67}\n{'id': 132, 'area': 8, 'cy': 193.5, 'cx': 35.0, 'bbox': (190, 35, 198, 36), 'elongation': 77459.67}\n{'id': 173, 'area': 8, 'cy': 211.5, 'cx': 169.0, 'bbox': (208, 169, 216, 170), 'elongation': 77459.67}\n",
+     "error": "",
+     "seconds": 0.02,
+     "images": []
+    },
+    {
+     "step": 3,
+     "purpose": "Purpose: Inspect the main bright blob (the crack) and check edge artifacts.",
+     "code": "show(crop(img, 141, 106, r=30, zoom=4), \"main bright region\")\n# The big blob area 259 elongation 1.99 is the crack (L-shaped). \n# Edge blobs are 1-2 px wide lines at part boundary -> noise/edge, not voids.\n# Let's see if there are any roundish blobs (elongation ~1-2) with decent area\nfor b in blobs:\n    if b['area']>=10 and b['elongation']<5:\n        print(\"roundish:\", b)\n",
+     "stdout": "[show #2] main bright region  (shape (240, 240))\nroundish: {'id': 110, 'area': 259, 'cy': 141.1, 'cx': 106.3, 'bbox': (127, 93, 149, 127), 'elongation': 1.99}\n",
+     "error": "",
+     "seconds": 0.02,
+     "images": [
+      {
+       "title": "main bright region",
+       "file": "val_00011_s03_0.png"
+      }
+     ]
+    },
+    {
+     "step": 4,
+     "purpose": "Purpose: Verify there are no roundish voids by checking all blobs and the part interior visually.",
+     "code": "# Check all blobs with area>=8, print elongation to find roundish ones\nprint(\"All blobs area>=8:\")\nfor b in blobs:\n    if b['area']>=8:\n        print(b['area'], round(b['elongation'],2), b['bbox'])\n# The only interior feature is the L-shaped crack (elongated). No round voids.\n# Edge blobs are 1px-wide boundary noise.\nshow(overlay(img, [pm, cand]), \"part + bright candidates\")\n",
+     "stdout": "All blobs area>=8:\n259 1.99 (127, 93, 149, 127)\n53 488364.62 (217, 107, 218, 160)\n35 324037.03 (217, 59, 218, 94)\n17 159687.19 (6, 117, 7, 134)\n16 150554.53 (153, 36, 169, 37)\n16 150554.53 (170, 37, 186, 38)\n12 114017.54 (89, 41, 101, 42)\n12 114017.54 (102, 42, 114, 43)\n12 114017.54 (126, 36, 138, 37)\n11 104880.88 (176, 195, 187, 196)\n11 104880.88 (216, 95, 217, 106)\n8 77459.67 (77, 183, 85, 184)\n8 77459.67 (105, 188, 113, 189)\n8 77459.67 (190, 35, 198, 36)\n8 77459.67 (208, 169, 216, 170)\n[show #3] part + bright candidates  (shape (224, 224, 3))\n",
+     "error": "",
+     "seconds": 0.02,
+     "images": [
+      {
+       "title": "part + bright candidates",
+       "file": "val_00011_s04_0.png"
+      }
+     ]
+    },
+    {
+     "step": 5,
+     "purpose": "The only interior feature is the L-shaped crack (elongated, not a void); all other bright blobs are 1-2px edge noise. There are no roundish voids inside the part.",
+     "code": "void_pixels = 0\nvoid_ratio_pct = 100.0 * void_pixels / pm.sum()\nprint(\"void ratio pct:\", void_ratio_pct)\nsubmit(void_ratio_pct, \"No roundish voids inside part; only an L-shaped crack (excluded) and 1-2px edge noise.\")\n",
+     "stdout": "void ratio pct: 0.0\n[submitted] {\"void_ratio_pct\": 0.0, \"note\": \"No roundish voids inside part; only an L-shaped crack (excluded) and 1-2px edge noise.\"}\n",
+     "error": "",
+     "seconds": 0.01,
+     "images": []
+    }
+   ]
+  }
+ ]
+}

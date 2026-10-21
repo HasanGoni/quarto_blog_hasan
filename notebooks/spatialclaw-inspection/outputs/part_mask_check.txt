@@ -1,0 +1,6 @@
+part_mask vs exact part mask, 600 DEV images: mean IoU 0.9877, median 0.9994, min 0.57
+images with IoU < 0.95: 52 of 600 (8.7 %)
+first 12 images (the ones the agent sees): IoU [1.0, 0.966, 1.0, 0.902, 0.999, 0.998, 1.0, 1.0, 1.0, 0.998, 1.0, 1.0]
+worst 3: val_00135 0.57, val_00092 0.73, val_00261 0.80
+exact part masks with an enclosed hole of > 200 px (cut-out the silhouette does not include): 68 of 600
+  of the 52 low-IoU images, 52 have such a hole

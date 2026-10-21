@@ -1,0 +1,14 @@
+ok   show: image part attached to next message            parts=['text', 'image_url']
+ok   show: data URL is a PNG                              
+ok   show: title travels in the text                      
+ok   show: trace keeps the picture                        
+ok   show: at most 2 pictures per turn                    parts=3
+ok   no-show condition: show() is a NameError             NameError: name 'show' is not defined
+ok   no-tools condition: part_mask is a NameError         
+ok   tools: part_mask finds the 24x24 square              part px 576
+ok   tools: label_blobs finds the 16 px void              
+ok   tools: submit uses them                              rule: 2.78 > 1.50
+ok   overlay + crop produce 2 pictures                    
+ok   show: bad shape is a readable error                  
+ok   out of budget still -> REVIEW                        
+ALL PART-4 PATHS OK

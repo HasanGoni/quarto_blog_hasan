@@ -1,0 +1,176 @@
+---
+title: "SpatialClaw for Inspection, Part 4: Eyes and Hands for the Loop"
+subtitle: "Part 3's agent could only read numbers it printed. I gave it show() and four small tools, ran the same 12 images three ways, then ran everything twice. The honest answer is not the one I hoped for."
+author: "Hasan Goni"
+date: 2026-10-21
+categories: [series, agentic-ai, computer-vision, inspection]
+toc: true
+search: false
+resources:
+  - images/part4/*.jpg
+series:
+  name: "SpatialClaw for Inspection"
+  number: 4
+---
+
+:::{.callout-tip}
+This post is part of the [SpatialClaw for Inspection](index.qmd) series. It extends the loop from
+[Part 3](03-minimal-kernel-loop.qmd). All code below is my own, written from the paper's description.
+:::
+
+:::{.callout-note}
+**What was run.** The tests (13 checks against the real kernel, scripted stand-in model) and the three set-ups
+below ran for real: the same 12 images of the **DEV** split of my
+[synthetic defect dataset, v2](../agentic-factory-segmentation/01-synthetic-void-dataset.qmd#version-2-what-was-wrong-with-v1-and-how-i-fixed-it),
+local `Qwen3.8-27B` (FP8, vLLM), thinking off, temperature 0.3, one 14-turn budget. Every set-up was run **twice**, to
+see how much the numbers move by themselves. The held-out test split is **not touched**.
+:::
+
+Part 3 ended with a loop that works and a model that is nearly blind: it only saw what it chose to `print()`.
+SpatialClaw's answer to that is `show()`, a function that puts a picture in front of the model. This post builds
+`show()` and a small tool API, and then asks the question that matters for a production decision: **does looking
+(and having tools) make the measurement better than simply giving the same text-only agent more turns?**
+
+```{=html}
+<div style="margin:1em 0;">
+  <button id="toggle-outputs" type="button" style="padding:6px 14px;border:1px solid #1971c2;border-radius:4px;background:#1971c2;color:white;cursor:pointer;">Show all outputs</button>
+  <span style="color:#666;font-size:0.9em;margin-left:8px;">Outputs are collapsed by default. Each one is the real captured output of the code above it.</span>
+</div>
+<script>
+(function(){
+  var b = document.getElementById("toggle-outputs"), open = false;
+  b.onclick = function(){
+    open = !open;
+    document.querySelectorAll("details.out").forEach(function(d){ d.open = open; });
+    b.textContent = open ? "Hide all outputs" : "Show all outputs";
+  };
+})();
+</script>
+```
+
+## The result first
+
+{{RESULT_PROSE}}
+
+## What is new
+
+![Part 4: the same loop, now with a picture channel and four helper functions. The rule layer is untouched.](images/part4-eyes-and-hands.png){fig-alt="Hand-drawn loop: the model writes one python cell, the persistent kernel runs it, text (stdout and variables) and a picture from show() both go back to the model. Below: hands, the helper functions part_mask, label_blobs, overlay and crop; and the unchanged rule layer where the model submits a number and plain code says PASS, FAIL or REVIEW."}
+
+Three additions, nothing else changed:
+
+1. **`show(array, "title")`** saves a picture inside the kernel; the host attaches it to the next message.
+2. **Four helper functions** (`part_mask`, `label_blobs`, `overlay`, `crop`): building blocks, **not a detector**.
+   The model still has to decide which regions are voids and which are cracks or noise.
+3. **Switches**, so each addition can be measured alone: A has neither, B has `show()`, C has both. The rule
+   layer, the budget logic and the REVIEW path are the Part 3 code, imported unchanged.
+
+## Two reading levels
+
+**Explain like I'm five.** Last time the lab assistant worked with a blindfold: they could ask the computer
+questions and read the answers aloud, but never look at the X-ray. Now they may take the blindfold off whenever
+they ask for a picture, and they get a small toolbox: a stencil that outlines the part, a magnifier, a
+highlighter pen. They still hand in one number, and the supervisor with the ruler still decides.
+
+**Explain like I'm a data scientist.** The kernel gets a `show()` that writes a PNG (2x nearest-neighbour upscale,
+at most two per turn). After each cell the host collects new PNGs and puts them into the next user message as
+`image_url` parts next to the usual stdout, error and variable summary. The tool functions are plain
+numpy/scipy, injected into the kernel as source text. A switch decides which names exist in the kernel at all, so
+in condition A, `show` is a `NameError` the model has to read, not a hidden no-op.
+
+## Jargon buster
+
+| Term | What it means | Daily-life version |
+|---|---|---|
+| `show()` | Put a picture in front of the model. | Taking the blindfold off. |
+| Tool API | A few named helper functions the model can call. | A toolbox on the workbench. |
+| Ablation | Switch one feature on or off to see what it was worth. | Taking one ingredient out of a recipe and tasting again. |
+| Condition (A, B, C) | One fixed set-up of the same experiment. | A, B and C are three versions of the same exam. |
+| Run-to-run noise | The model gives different answers to the same question. | Asking the same person twice and getting two slightly different estimates. |
+| Plausibility check | A rule that rejects numbers that cannot be right. | The cashier who stops when a coffee scans at 4,000 euros. |
+| IoU | Overlap of two masks, 1 = identical. | How well two cookie cutters line up. |
+
+## The code, from the real files
+
+### The tool API that runs inside the kernel (`minimal_loop/kernel_tools.py`)
+
+{{FILE:minimal_loop/kernel_tools.py}}
+
+### The session and the loop (`session4.py`, `loop4.py`)
+
+`Session4` subclasses Part 3's `KernelSession` (that file is untouched), loads the tool source, and removes the
+names a condition does not offer. `run_episode4` is the Part 3 loop with one change: feedback may carry pictures.
+
+{{FILE:minimal_loop/session4.py}}
+
+{{FILE:minimal_loop/loop4.py}}
+
+## Test first, with a scripted stand-in
+
+The same pattern as Part 3: the "model" is a **scripted list of replies** (stand-in), the kernel, the tools, the
+picture capture and the rule layer are real.
+
+{{FILE:minimal_loop/test_paths4.py}}
+
+{{OUT:outputs/test_paths4.txt}}
+
+## Check the tool before blaming the model
+
+`part_mask` is the tool the agent will lean on most, so I scored it against the exact part masks of all 600 DEV
+images **before** any agent run.
+
+{{FILE:minimal_loop/part_mask_check.py}}
+
+{{OUT:outputs/part_mask_check.txt}}
+
+Mean overlap is very high, and the 52 low-overlap images all have one cause: the exact part mask contains a large
+enclosed cut-out (a hole through the silhouette), and `part_mask` fills holes, so it counts the cut-out as part.
+That is a **definition** mismatch, not noise, and it affects 8.7 % of DEV images. I left the tool as it is and
+report this, instead of tuning it on the way to a better number.
+
+## The real runs
+
+{{FILE:minimal_loop/run_dev4.py}}
+
+{{OUT:outputs/run_dev4_A_output.txt}}
+
+{{OUT:outputs/run_dev4_B_output.txt}}
+
+{{OUT:outputs/run_dev4_C_output.txt}}
+
+### The summary table, computed from the saved runs
+
+{{FILE:minimal_loop/summarize_part4.py}}
+
+{{OUT:outputs/part4_summary.txt}}
+
+### Step through what the agent did, and what it saw
+
+Pick an image and a condition, then step through the cells. For B and C you also see the pictures the model was
+shown on that turn. Everything is read from the saved first run.
+
+{{< include _trace_widget4.md >}}
+
+## What the traces show
+
+{{TRACE_PROSE}}
+
+## Where this differs from the paper
+
+- Still no planner, no reflection gate, no benchmark harness. A text-and-picture model with thinking **switched off**.
+- The paper's `show()` and tools are for 3D spatial tasks (segmentation, depth). My tool API is four 2-D
+  building blocks for this one measurement, and I wrote them without reading any upstream tool code.
+- 12 images, 2 runs per set-up, temperature 0.3. That supports a direction, not a ranking.
+
+## What I did not do
+
+- **No claim that eyes or tools do not help in general.** This is one model, one prompt, 12 images of a synthetic
+  dataset, with a tool API I wrote in one sitting. A better prompt or a better tool could change the picture.
+- **No tuning on the held-out split** (it is untouched) and **no prompt tuning** between the runs.
+- **No sandbox yet.** `show()` writes files and the tools are more code the model can call; the kernel still runs
+  as my user. Part 5 is the container.
+
+## Next
+
+[Part 5](index.qmd#roadmap) puts the kernel in a real sandbox (`docker run --network none`, read-only filesystem,
+scratch directory) and then tries to break it. After that, Part 6 is the experiment this series has been building
+towards, on the held-out split, with a plain tool-call agent as the opponent.

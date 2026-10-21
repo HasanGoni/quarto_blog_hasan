@@ -1,0 +1,21 @@
+condition C: show=True tools=True max_steps=14
+image         gt%  agent%  abs err     gt  agent steps  tokens    sec  reason
+val_00000    1.62    1.44     0.18   FAIL   PASS    10   37868  178.4  rule: 1.44 <= 1.50
+val_00001    0.61    0.49     0.12   PASS   PASS     6   18637   97.0  rule: 0.49 <= 1.50
+val_00002    0.96    0.96     0.00   PASS   PASS     6   13786  105.2  rule: 0.96 <= 1.50
+val_00003    0.65   28.99    28.34   PASS   FAIL    14   65576  182.3  rule: 28.99 > 1.50
+val_00004    0.46    0.42     0.04   PASS   PASS     5   10999   42.0  rule: 0.42 <= 1.50
+val_00005    0.17    0.00     0.17   PASS   PASS     8   25243  108.9  rule: 0.00 <= 1.50
+val_00006    0.49    0.48     0.01   PASS   PASS     9   34860  144.2  rule: 0.48 <= 1.50
+val_00007    1.15    1.50     0.35   PASS   FAIL     8   26032   79.3  rule: 1.50 > 1.50
+val_00008    5.02    6.69     1.67   FAIL   FAIL     6   14652   68.4  rule: 6.69 > 1.50
+val_00009    1.38    1.79     0.41   PASS   FAIL     9   31253  126.7  rule: 1.79 > 1.50
+val_00010    1.81    1.59     0.22   FAIL   FAIL     9   39968  121.3  rule: 1.59 > 1.50
+val_00011    0.00    0.00     0.00   PASS   PASS     4    8647   70.9  rule: 0.00 <= 1.50
+
+SUMMARY condition C (n=12, DEV split, limit 1.5%)
+  finished with a measurement: 12 | REVIEW: 0
+  mean abs error (pct points): 2.63 | median: 0.18 | max: 28.34
+  verdict agrees with ground truth: 8 of 12
+  FALSE PASS (gt FAIL, agent PASS): 1 | false FAIL: 3
+  mean steps: 7.8 | mean tokens: 27293 | mean seconds: 110.4 | pictures shown: 77

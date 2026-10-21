@@ -34,3 +34,9 @@ Data: `../agentic-factory-segmentation/data/void_dataset_v2/val.npz` (DEV split 
 Results: `out/run_dev.json` (every cell of every episode), `outputs/*.txt` (captured stdout).
 The model-written cells run UNSANDBOXED (Part 5 adds a container); see the post for the audit of all 93 executed cells.
 Video: `video/part3_video.py` (classes `P3a`..`P3c`), clips in `video/chapters/p3{a,b,c}.warm.mp4`.
+
+## Part 4 (eyes and hands)
+`minimal_loop/`: `kernel_tools.py` (show + 4 tools, run inside the kernel), `session4.py`, `loop4.py`, `test_paths4.py`, `part_mask_check.py`,
+`run_dev4.py A|B|C [N] [r2]`, `summarize_part4.py`, `build_trace_widget4.py`, `build_part4_post.py`. Runs: `out/run_dev4_{A,B,C}[r2].json`
+(+ `out/part4_*_images/`). Video: `video/part4_video.py` (P4a-c), build with `make_chapter.sh part4_video.py P4a p4a clone warm`
+(symlink the module into `paper-explainers-2026-10-09/videos/` with an absolute target, set `VC`).

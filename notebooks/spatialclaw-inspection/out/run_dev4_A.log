@@ -1,0 +1,33 @@
+[IPKernelApp] WARNING | Kernel is running over TCP without encryption. All communication (including code and outputs) is sent in plain text and is susceptible to eavesdropping. Use IPC transport or launch with kernel manager-provisioned CurveZMQ keys to enable transport encryption.
+condition A: show=False tools=False max_steps=14
+image         gt%  agent%  abs err     gt  agent steps  tokens    sec  reason
+val_00000    1.62    1.57     0.05   FAIL   FAIL     6    9946   95.8  rule: 1.57 > 1.50
+[IPKernelApp] WARNING | Kernel is running over TCP without encryption. All communication (including code and outputs) is sent in plain text and is susceptible to eavesdropping. Use IPC transport or launch with kernel manager-provisioned CurveZMQ keys to enable transport encryption.
+val_00001    0.61    0.14     0.46   PASS   PASS    13   61257  282.3  rule: 0.14 <= 1.50
+[IPKernelApp] WARNING | Kernel is running over TCP without encryption. All communication (including code and outputs) is sent in plain text and is susceptible to eavesdropping. Use IPC transport or launch with kernel manager-provisioned CurveZMQ keys to enable transport encryption.
+val_00002    0.96    1.18     0.21   PASS   PASS     9   24732  169.3  rule: 1.18 <= 1.50
+[IPKernelApp] WARNING | Kernel is running over TCP without encryption. All communication (including code and outputs) is sent in plain text and is susceptible to eavesdropping. Use IPC transport or launch with kernel manager-provisioned CurveZMQ keys to enable transport encryption.
+val_00003    0.65    0.45     0.20   PASS   PASS    12   29109  155.4  rule: 0.45 <= 1.50
+[IPKernelApp] WARNING | Kernel is running over TCP without encryption. All communication (including code and outputs) is sent in plain text and is susceptible to eavesdropping. Use IPC transport or launch with kernel manager-provisioned CurveZMQ keys to enable transport encryption.
+val_00004    0.46       -        -   PASS REVIEW    14   58849  211.2  out_of_steps
+[IPKernelApp] WARNING | Kernel is running over TCP without encryption. All communication (including code and outputs) is sent in plain text and is susceptible to eavesdropping. Use IPC transport or launch with kernel manager-provisioned CurveZMQ keys to enable transport encryption.
+val_00005    0.17    0.31     0.14   PASS   PASS    12   42070  213.3  rule: 0.31 <= 1.50
+[IPKernelApp] WARNING | Kernel is running over TCP without encryption. All communication (including code and outputs) is sent in plain text and is susceptible to eavesdropping. Use IPC transport or launch with kernel manager-provisioned CurveZMQ keys to enable transport encryption.
+val_00006    0.49    0.47     0.02   PASS   PASS    14   46204  232.8  rule: 0.47 <= 1.50
+[IPKernelApp] WARNING | Kernel is running over TCP without encryption. All communication (including code and outputs) is sent in plain text and is susceptible to eavesdropping. Use IPC transport or launch with kernel manager-provisioned CurveZMQ keys to enable transport encryption.
+val_00007    1.15    1.38     0.23   PASS   PASS    12   45642  135.9  rule: 1.38 <= 1.50
+[IPKernelApp] WARNING | Kernel is running over TCP without encryption. All communication (including code and outputs) is sent in plain text and is susceptible to eavesdropping. Use IPC transport or launch with kernel manager-provisioned CurveZMQ keys to enable transport encryption.
+val_00008    5.02    2.12     2.90   FAIL   FAIL    10   29094  141.9  rule: 2.12 > 1.50
+[IPKernelApp] WARNING | Kernel is running over TCP without encryption. All communication (including code and outputs) is sent in plain text and is susceptible to eavesdropping. Use IPC transport or launch with kernel manager-provisioned CurveZMQ keys to enable transport encryption.
+val_00009    1.38    0.19     1.20   PASS   PASS    14   62904  121.2  rule: 0.19 <= 1.50
+[IPKernelApp] WARNING | Kernel is running over TCP without encryption. All communication (including code and outputs) is sent in plain text and is susceptible to eavesdropping. Use IPC transport or launch with kernel manager-provisioned CurveZMQ keys to enable transport encryption.
+val_00010    1.81    0.16     1.65   FAIL   PASS    11   47720  198.3  rule: 0.16 <= 1.50
+[IPKernelApp] WARNING | Kernel is running over TCP without encryption. All communication (including code and outputs) is sent in plain text and is susceptible to eavesdropping. Use IPC transport or launch with kernel manager-provisioned CurveZMQ keys to enable transport encryption.
+val_00011    0.00    0.19     0.19   PASS   PASS    13   55406  206.8  rule: 0.19 <= 1.50
+
+SUMMARY condition A (n=12, DEV split, limit 1.5%)
+  finished with a measurement: 11 | REVIEW: 1
+  mean abs error (pct points): 0.66 | median: 0.21 | max: 2.90
+  verdict agrees with ground truth: 10 of 12
+  FALSE PASS (gt FAIL, agent PASS): 1 | false FAIL: 0
+  mean steps: 11.7 | mean tokens: 42744 | mean seconds: 180.4 | pictures shown: 0

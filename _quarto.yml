@@ -202,6 +202,8 @@ website:
             href: posts/series/spatialclaw-inspection/02-adapting-for-image-inspection.qmd
           - text: "3. The Smallest Kernel Loop"
             href: posts/series/spatialclaw-inspection/03-minimal-kernel-loop.qmd
+          - text: "4. Eyes and Hands for the Loop"
+            href: posts/series/spatialclaw-inspection/04-eyes-and-hands.qmd
       - section: "Local-AI Defect Inspection"
         collapse: true
         collapsed: true

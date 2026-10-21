@@ -1,0 +1,1332 @@
+{
+ "cond": "B",
+ "limit_pct": 1.5,
+ "max_steps": 14,
+ "rows": [
+  {
+   "image": "val_00000",
+   "gt_pct": 1.6173072883847932,
+   "agent_pct": 1.3746915756080367,
+   "abs_err": 0.24261571277675653,
+   "gt_status": "FAIL",
+   "agent_status": "PASS",
+   "steps": 6,
+   "tokens": 7735,
+   "seconds": 48.81145006895531,
+   "reason": "rule: 1.37 <= 1.50",
+   "pictures": 2
+  },
+  {
+   "image": "val_00001",
+   "gt_pct": 0.6059820473767783,
+   "agent_pct": 3.38,
+   "abs_err": 2.774017952623222,
+   "gt_status": "PASS",
+   "agent_status": "FAIL",
+   "steps": 7,
+   "tokens": 20612,
+   "seconds": 118.03034173196647,
+   "reason": "rule: 3.38 > 1.50",
+   "pictures": 4
+  },
+  {
+   "image": "val_00002",
+   "gt_pct": 0.9647394524084517,
+   "agent_pct": 0.8273504273504273,
+   "abs_err": 0.13738902505802442,
+   "gt_status": "PASS",
+   "agent_status": "PASS",
+   "steps": 5,
+   "tokens": 6753,
+   "seconds": 73.44836386595853,
+   "reason": "rule: 0.83 <= 1.50",
+   "pictures": 3
+  },
+  {
+   "image": "val_00003",
+   "gt_pct": 0.6521739130434783,
+   "agent_pct": 1.593,
+   "abs_err": 0.9408260869565217,
+   "gt_status": "PASS",
+   "agent_status": "FAIL",
+   "steps": 12,
+   "tokens": 39278,
+   "seconds": 202.7551915399963,
+   "reason": "rule: 1.59 > 1.50",
+   "pictures": 7
+  },
+  {
+   "image": "val_00004",
+   "gt_pct": 0.4621000310655483,
+   "agent_pct": 0.21920210434020165,
+   "abs_err": 0.24289792672534666,
+   "gt_status": "PASS",
+   "agent_status": "PASS",
+   "steps": 5,
+   "tokens": 6178,
+   "seconds": 70.48289640503936,
+   "reason": "rule: 0.22 <= 1.50",
+   "pictures": 2
+  },
+  {
+   "image": "val_00005",
+   "gt_pct": 0.16818128171839963,
+   "agent_pct": 0.0895,
+   "abs_err": 0.07868128171839964,
+   "gt_status": "PASS",
+   "agent_status": "PASS",
+   "steps": 9,
+   "tokens": 33610,
+   "seconds": 145.00419051398057,
+   "reason": "rule: 0.09 <= 1.50",
+   "pictures": 6
+  },
+  {
+   "image": "val_00006",
+   "gt_pct": 0.4878651269066881,
+   "agent_pct": 0.43616424699358214,
+   "abs_err": 0.05170087991310596,
+   "gt_status": "PASS",
+   "agent_status": "PASS",
+   "steps": 8,
+   "tokens": 22298,
+   "seconds": 133.72935850790236,
+   "reason": "rule: 0.44 <= 1.50",
+   "pictures": 6
+  },
+  {
+   "image": "val_00007",
+   "gt_pct": 1.148390002251745,
+   "agent_pct": 0.42783156946633644,
+   "abs_err": 0.7205584327854087,
+   "gt_status": "PASS",
+   "agent_status": "PASS",
+   "steps": 11,
+   "tokens": 33048,
+   "seconds": 141.87054572498892,
+   "reason": "rule: 0.43 <= 1.50",
+   "pictures": 7
+  },
+  {
+   "image": "val_00008",
+   "gt_pct": 5.018919111872635,
+   "agent_pct": 2.2175213363483843,
+   "abs_err": 2.8013977755242507,
+   "gt_status": "FAIL",
+   "agent_status": "FAIL",
+   "steps": 6,
+   "tokens": 8254,
+   "seconds": 54.43775846599601,
+   "reason": "rule: 2.22 > 1.50",
+   "pictures": 3
+  },
+  {
+   "image": "val_00009",
+   "gt_pct": 1.38222671042666,
+   "agent_pct": 2.538,
+   "abs_err": 1.15577328957334,
+   "gt_status": "PASS",
+   "agent_status": "FAIL",
+   "steps": 9,
+   "tokens": 29296,
+   "seconds": 155.09862454002723,
+   "reason": "rule: 2.54 > 1.50",
+   "pictures": 6
+  },
+  {
+   "image": "val_00010",
+   "gt_pct": 1.812601552626828,
+   "agent_pct": 2.595430884904569,
+   "abs_err": 0.7828293322777411,
+   "gt_status": "FAIL",
+   "agent_status": "FAIL",
+   "steps": 10,
+   "tokens": 50960,
+   "seconds": 162.6434386279434,
+   "reason": "rule: 2.60 > 1.50",
+   "pictures": 7
+  },
+  {
+   "image": "val_00011",
+   "gt_pct": 0.0,
+   "agent_pct": 0.9459166726839483,
+   "abs_err": 0.9459166726839483,
+   "gt_status": "PASS",
+   "agent_status": "PASS",
+   "steps": 4,
+   "tokens": 4598,
+   "seconds": 30.554326851968654,
+   "reason": "rule: 0.95 <= 1.50",
+   "pictures": 3
+  }
+ ],
+ "traces": [
+  {
+   "image": "val_00000",
+   "cells": [
+    {
+     "step": 1,
+     "purpose": "Purpose: Inspect basic image stats and visualize the raw image to understand part vs background brightness.",
+     "code": "print(img.shape, img.dtype, img.min(), img.max(), img.mean())\nshow(img, \"raw\")\n",
+     "stdout": "(224, 224) uint8 46 255 143.76265545280611\n[show #1] raw  (shape (224, 224))\n",
+     "error": "",
+     "seconds": 0.02,
+     "images": [
+      {
+       "title": "raw",
+       "file": "val_00000_s01_0.png"
+      }
+     ]
+    },
+    {
+     "step": 2,
+     "purpose": "Purpose: Threshold to get the part silhouette (dark part on light background) and check its size.",
+     "code": "part = img < 128\nprint(\"part pixels:\", part.sum())\nshow(part.astype(np.uint8)*255, \"part mask\")\n",
+     "stdout": "part pixels: 27980\n[show #2] part mask  (shape (224, 224))\n",
+     "error": "",
+     "seconds": 0.02,
+     "images": [
+      {
+       "title": "part mask",
+       "file": "val_00000_s02_0.png"
+      }
+     ]
+    },
+    {
+     "step": 3,
+     "purpose": "Purpose: Fill holes in the part mask to get the full silhouette, then find voids as the holes.",
+     "code": "part_filled = ndi.binary_fill_holes(part)\nprint(\"filled part pixels:\", part_filled.sum())\nholes = part_filled & ~part\nprint(\"hole pixels:\", holes.sum())\nlbl, n = ndi.label(holes)\nprint(\"num holes:\", n)\nsizes = ndi.sum(holes, lbl, range(1, n+1))\nprint(\"hole sizes:\", sorted(sizes, reverse=True))\n",
+     "stdout": "filled part pixels: 28370\nhole pixels: 390\nnum holes: 1\nhole sizes: [np.float64(390.0)]\n",
+     "error": "",
+     "seconds": 0.02,
+     "images": []
+    },
+    {
+     "step": 4,
+     "purpose": "Purpose: Verify the hole is roundish (a void) by checking its bounding box and aspect ratio.",
+     "code": "ys, xs = np.where(lbl==1)\nh = ys.max()-ys.min()+1\nw = xs.max()-xs.min()+1\nprint(\"bbox h,w:\", h, w, \"aspect:\", h/w, \"area:\", (lbl==1).sum(), \"fill ratio:\", (lbl==1).sum()/(h*w))\n",
+     "stdout": "bbox h,w: 31 19 aspect: 1.631578947368421 area: 390 fill ratio: 0.6621392190152802\n",
+     "error": "",
+     "seconds": 0.01,
+     "images": []
+    },
+    {
+     "step": 5,
+     "purpose": "Purpose: Compute the void ratio using the filled part silhouette as the part area.",
+     "code": "void_ratio_pct = 100 * holes.sum() / part_filled.sum()\nprint(\"void pixels:\", holes.sum(), \"part pixels:\", part_filled.sum(), \"void_ratio_pct:\", void_ratio_pct)\n",
+     "stdout": "void pixels: 390 part pixels: 28370 void_ratio_pct: 1.3746915756080367\n",
+     "error": "",
+     "seconds": 0.01,
+     "images": []
+    },
+    {
+     "step": 6,
+     "purpose": "The single hole is roundish (fill ratio 0.66, aspect 1.63), consistent with a void, not a thin crack. Void ratio \u2248 1.37%.",
+     "code": "submit(1.3746915756080367, \"One roundish void (390 px) inside 28370-px part silhouette; no cracks present.\")\n",
+     "stdout": "[submitted] {\"void_ratio_pct\": 1.3746915756080367, \"note\": \"One roundish void (390 px) inside 28370-px part silhouette; no cracks present.\"}\n",
+     "error": "",
+     "seconds": 0.01,
+     "images": []
+    }
+   ]
+  },
+  {
+   "image": "val_00001",
+   "cells": [
+    {
+     "step": 1,
+     "purpose": "Purpose: Inspect the image and its intensity distribution to understand part vs background and voids.",
+     "code": "import numpy as np\nprint(img.shape, img.dtype, img.min(), img.max())\nhist, edges = np.histogram(img, bins=32)\nfor h, e in zip(hist, edges):\n    print(f\"{e:6.1f}: {h}\")\nshow(img, \"original\")\n",
+     "stdout": "(224, 224) uint8 12 255\n  12.0: 189\n  19.6: 2736\n  27.2: 11059\n  34.8: 13506\n  42.4: 2077\n  50.0: 246\n  57.6: 130\n  65.2: 118\n  72.8: 127\n  80.3: 156\n  87.9: 215\n  95.5: 134\n 103.1: 63\n 110.7: 57\n 118.3: 37\n 125.9: 17\n 133.5: 34\n 141.1: 43\n 148.7: 81\n 156.3: 75\n 163.9: 152\n 171.5: 168\n 179.1: 145\n 186.7: 100\n 194.2: 150\n 201.8: 647\n 209.4: 2344\n 217.0: 3850\n 224.6: 4970\n 232.2: 3510\n 239.8: 2191\n 247.4: 849\n[show #1] original  (shape (224, 224))\n",
+     "error": "",
+     "seconds": 0.03,
+     "images": [
+      {
+       "title": "original",
+       "file": "val_00001_s01_0.png"
+      }
+     ]
+    },
+    {
+     "step": 2,
+     "purpose": "Purpose: Segment the part (dark) from background (light) and fill the handle hole to get the part silhouette.",
+     "code": "# Part is dark, background is light. Threshold around mid.\nthr = 128\npart_mask = img < thr\n# Fill holes (handle hole) to get full part silhouette\npart_filled = ndi.binary_fill_holes(part_mask)\n# Keep largest connected component to be safe\nlbl, n = ndi.label(part_filled)\nsizes = ndi.sum(part_filled, lbl, range(1, n+1))\nbiggest = np.argmax(sizes) + 1\npart_sil = (lbl == biggest)\nprint(\"part pixels:\", part_sil.sum())\nprint(\"filled vs raw:\", part_filled.sum(), part_mask.sum())\nshow(part_sil.astype(np.uint8)*255, \"part silhouette\")\n",
+     "stdout": "part pixels: 31936\nfilled vs raw: 31936 30856\n[show #2] part silhouette  (shape (224, 224))\n",
+     "error": "",
+     "seconds": 0.02,
+     "images": [
+      {
+       "title": "part silhouette",
+       "file": "val_00001_s02_0.png"
+      }
+     ]
+    },
+    {
+     "step": 3,
+     "purpose": "Purpose: Examine intensity distribution inside the part to find the void (lighter region) and any cracks.",
+     "code": "inside = img[part_sil]\nprint(\"inside min/max/mean:\", inside.min(), inside.max(), inside.mean())\nhist2, e2 = np.histogram(inside, bins=32)\nfor h, e in zip(hist2, e2):\n    print(f\"{e:6.1f}: {h}\")\n# Look at the lighter pixels inside the part\nlight_in = (img > 150) & part_sil\nprint(\"light pixels inside part:\", light_in.sum())\nshow(light_in.astype(np.uint8)*255, \"light inside part\")\n",
+     "stdout": "inside min/max/mean: 12 255 42.698365480961925\n  12.0: 189\n  19.6: 2736\n  27.2: 11059\n  34.8: 13506\n  42.4: 2077\n  50.0: 246\n  57.6: 130\n  65.2: 118\n  72.8: 127\n  80.3: 156\n  87.9: 215\n  95.5: 134\n 103.1: 63\n 110.7: 57\n 118.3: 37\n 125.9: 8\n 133.5: 6\n 141.1: 5\n 148.7: 21\n 156.3: 14\n 163.9: 37\n 171.5: 21\n 179.1: 20\n 186.7: 11\n 194.2: 15\n 201.8: 34\n 209.4: 127\n 217.0: 256\n 224.6: 304\n 232.2: 153\n 239.8: 49\n 247.4: 5\nlight pixels inside part: 1061\n[show #3] light inside part  (shape (224, 224))\n",
+     "error": "",
+     "seconds": 0.02,
+     "images": [
+      {
+       "title": "light inside part",
+       "file": "val_00001_s03_0.png"
+      }
+     ]
+    },
+    {
+     "step": 4,
+     "purpose": "Purpose: Label the light regions inside the part and inspect their sizes/shapes to identify the void vs cracks.",
+     "code": "lbl2, n2 = ndi.label(light_in)\nprint(\"num light components:\", n2)\nfor i in range(1, n2+1):\n    comp = (lbl2 == i)\n    sz = comp.sum()\n    ys, xs = np.where(comp)\n    h = ys.max()-ys.min()+1\n    w = xs.max()-xs.min()+1\n    fill = sz/(h*w)\n    print(f\"comp {i}: size={sz}, bbox={h}x{w}, fill={fill:.2f}, mean_int={img[comp].mean():.0f}\")\n",
+     "stdout": "num light components: 1\ncomp 1: size=1061, bbox=23x65, fill=0.71, mean_int=219\n",
+     "error": "",
+     "seconds": 0.01,
+     "images": []
+    },
+    {
+     "step": 5,
+     "purpose": "Purpose: Check the part's mean intensity and look for any other subtle voids/cracks with a lower threshold.",
+     "code": "print(\"part mean:\", img[part_sil].mean())\n# lower threshold to catch subtle lighter regions\nfor t in [80, 100, 120, 140]:\n    m = (img > t) & part_sil\n    l, nn = ndi.label(m)\n    comps = []\n    for i in range(1, nn+1):\n        c = (l==i)\n        if c.sum() >= 5:\n            ys,xs = np.where(c)\n            comps.append((c.sum(), ys.max()-ys.min()+1, xs.max()-xs.min()+1))\n    print(f\"thr>{t}: total={m.sum()}, comps(>=5px)={len(comps)}\", comps[:10])\n",
+     "stdout": "part mean: 42.698365480961925\nthr>80: total=1748, comps(>=5px)=38 [(np.int64(12), np.int64(1), np.int64(12)), (np.int64(6), np.int64(1), np.int64(6)), (np.int64(6), np.int64(1), np.int64(6)), (np.int64(5), np.int64(1), np.int64(5)), (np.int64(5), np.int64(1), np.int64(5)), (np.int64(5), np.int64(1), np.int64(5)), (np.int64(6), np.int64(1), np.int64(6)), (np.int64(1198), np.int64(25), np.int64(67)), (np.int64(9), np.int64(1), np.int64(9)), (np.int64(10), np.int64(1), np.int64(10))]\nthr>100: total=1281, comps(>=5px)=1 [(np.int64(1118), np.int64(24), np.int64(66))]\nthr>120: total=1110, comps(>=5px)=1 [(np.int64(1086), np.int64(23), np.int64(66))]\nthr>140: total=1074, comps(>=5px)=1 [(np.int64(1074), np.int64(23), np.int64(65))]\n",
+     "error": "",
+     "seconds": 0.04,
+     "images": []
+    },
+    {
+     "step": 6,
+     "purpose": "Purpose: Confirm the single roundish void (no cracks) and compute the void ratio.",
+     "code": "# The only substantial light region is the roundish void (~1061 px, 23x65, fill 0.71).\n# The tiny 1-px-tall components at thr>80 are edge noise, not cracks/voids.\nvoid_mask = (img > 128) & part_sil\nvoid_px = void_mask.sum()\npart_px = part_sil.sum()\nvoid_ratio_pct = 100.0 * void_px / part_px\nprint(\"void_px:\", void_px, \"part_px:\", part_px, \"void_ratio_pct:\", void_ratio_pct)\nshow(void_mask.astype(np.uint8)*255, \"void mask\")\n",
+     "stdout": "void_px: 1080 part_px: 31936 void_ratio_pct: 3.381763527054108\n[show #4] void mask  (shape (224, 224))\n",
+     "error": "",
+     "seconds": 0.02,
+     "images": [
+      {
+       "title": "void mask",
+       "file": "val_00001_s06_0.png"
+      }
+     ]
+    },
+    {
+     "step": 7,
+     "purpose": "Purpose: Submit the void ratio \u2014 one roundish void (~1080 px) inside a 31936-px part, no cracks present.",
+     "code": "submit(3.38, \"single roundish void ~1080px in 31936px part; no cracks\")\n",
+     "stdout": "[submitted] {\"void_ratio_pct\": 3.38, \"note\": \"single roundish void ~1080px in 31936px part; no cracks\"}\n",
+     "error": "",
+     "seconds": 0.01,
+     "images": []
+    }
+   ]
+  },
+  {
+   "image": "val_00002",
+   "cells": [
+    {
+     "step": 1,
+     "purpose": "Purpose: Inspect basic image stats and look at the image to understand part vs background brightness.",
+     "code": "print(img.shape, img.dtype, img.min(), img.max(), img.mean())\nshow(img, \"original\")\n",
+     "stdout": "(224, 224) uint8 43 255 197.00854990433675\n[show #1] original  (shape (224, 224))\n",
+     "error": "",
+     "seconds": 0.03,
+     "images": [
+      {
+       "title": "original",
+       "file": "val_00002_s01_0.png"
+      }
+     ]
+    },
+    {
+     "step": 2,
+     "purpose": "Purpose: Threshold to get the part silhouette (dark region) and fill holes to include voids.",
+     "code": "# part is dark, background is light\npart_mask = img < 128\n# fill holes so voids inside part are included in part area\npart_filled = ndi.binary_fill_holes(part_mask)\nprint(\"part pixels (raw):\", part_mask.sum())\nprint(\"part pixels (filled):\", part_filled.sum())\nshow(part_filled.astype(np.uint8)*255, \"part filled\")\n",
+     "stdout": "part pixels (raw): 14504\npart pixels (filled): 14625\n[show #2] part filled  (shape (224, 224))\n",
+     "error": "",
+     "seconds": 0.02,
+     "images": [
+      {
+       "title": "part filled",
+       "file": "val_00002_s02_0.png"
+      }
+     ]
+    },
+    {
+     "step": 3,
+     "purpose": "Purpose: Find the voids (holes inside part) and inspect their sizes and shapes to separate voids from cracks.",
+     "code": "holes = part_filled & ~part_mask  # regions inside part that are bright\nlbl, n = ndi.label(holes)\nprint(\"num hole components:\", n)\nsizes = ndi.sum(holes, lbl, range(1, n+1))\nfor i in range(1, n+1):\n    ys, xs = np.where(lbl == i)\n    h = ys.max()-ys.min()+1\n    w = xs.max()-xs.min()+1\n    print(f\"comp {i}: size={sizes[i-1]:.0f}, bbox h={h}, w={w}, aspect={max(h,w)/max(1,min(h,w)):.2f}\")\n",
+     "stdout": "num hole components: 1\ncomp 1: size=121, bbox h=14, w=13, aspect=1.08\n",
+     "error": "",
+     "seconds": 0.02,
+     "images": []
+    },
+    {
+     "step": 4,
+     "purpose": "Purpose: Check the hole's roundness (solidity) to confirm it's a void, and look at it visually.",
+     "code": "comp = (lbl == 1)\nys, xs = np.where(comp)\n# solidity = area / convex hull area\nfrom scipy.spatial import ConvexHull\npts = np.column_stack([xs, ys])\nhull = ConvexHull(pts)\nhull_area = hull.volume  # in 2D, volume = area\nsolidity = comp.sum() / hull_area\nprint(\"void area:\", comp.sum(), \"hull area:\", hull_area, \"solidity:\", solidity)\n# show the hole region zoomed\ny0,y1,x0,x1 = ys.min(), ys.max(), xs.min(), xs.max()\nshow(img[y0-2:y1+3, x0-2:x1+3], \"void region\")\n",
+     "stdout": "void area: 121 hull area: 112.50000000000003 solidity: 1.0755555555555554\n[show #3] void region  (shape (18, 17))\n",
+     "error": "",
+     "seconds": 0.16,
+     "images": [
+      {
+       "title": "void region",
+       "file": "val_00002_s04_0.png"
+      }
+     ]
+    },
+    {
+     "step": 5,
+     "purpose": "Purpose: Compute the void ratio using the single roundish void (121 px) over the filled part area.",
+     "code": "void_px = comp.sum()\npart_px = part_filled.sum()\nvoid_ratio_pct = 100 * void_px / part_px\nprint(\"void_px:\", void_px, \"part_px:\", part_px, \"void_ratio_pct:\", void_ratio_pct)\nsubmit(void_ratio_pct, \"single roundish void (121px, solidity~1.0) inside part; part area from filled silhouette\")\n",
+     "stdout": "void_px: 121 part_px: 14625 void_ratio_pct: 0.8273504273504273\n[submitted] {\"void_ratio_pct\": 0.8273504273504273, \"note\": \"single roundish void (121px, solidity~1.0) inside part; part area from filled silhouette\"}\n",
+     "error": "",
+     "seconds": 0.01,
+     "images": []
+    }
+   ]
+  },
+  {
+   "image": "val_00003",
+   "cells": [
+    {
+     "step": 1,
+     "purpose": "Purpose: Inspect basic image stats to understand brightness levels.",
+     "code": "print(img.shape, img.dtype, img.min(), img.max(), img.mean())\nprint(\"histogram (16 bins):\", np.histogram(img, bins=16, range=(0,256))[0])\n",
+     "stdout": "(224, 224) uint8 50 255 159.04324776785714\nhistogram (16 bins): [    0     0     0   648 13641  8075  2345   880   537   520   297   447\n   592   492  2809 18893]\n",
+     "error": "",
+     "seconds": 0.02,
+     "images": []
+    },
+    {
+     "step": 2,
+     "purpose": "Purpose: Visualize the image to see part vs background and voids.",
+     "code": "show(img, \"original\")\n",
+     "stdout": "[show #1] original  (shape (224, 224))\n",
+     "error": "",
+     "seconds": 0.02,
+     "images": [
+      {
+       "title": "original",
+       "file": "val_00003_s02_0.png"
+      }
+     ]
+    },
+    {
+     "step": 3,
+     "purpose": "Purpose: Threshold to separate dark part from light background, then fill holes to get full part silhouette.",
+     "code": "part_mask = img < 128\npart_filled = ndi.binary_fill_holes(part_mask)\nprint(\"part pixels:\", part_mask.sum(), \"filled part pixels:\", part_filled.sum())\nshow(part_filled.astype(np.uint8)*255, \"filled part\")\n",
+     "stdout": "part pixels: 25589 filled part pixels: 29107\n[show #2] filled part  (shape (224, 224))\n",
+     "error": "",
+     "seconds": 0.02,
+     "images": [
+      {
+       "title": "filled part",
+       "file": "val_00003_s03_0.png"
+      }
+     ]
+    },
+    {
+     "step": 4,
+     "purpose": "Purpose: Examine the holes (filled minus part) to see voids and cracks.",
+     "code": "holes = part_filled & ~part_mask\nprint(\"hole pixels:\", holes.sum())\nlbl, n = ndi.label(holes)\nsizes = ndi.sum(holes, lbl, range(1, n+1))\nprint(\"num holes:\", n)\nfor i,s in enumerate(sizes,1):\n    ys,xs = np.where(lbl==i)\n    h = ys.max()-ys.min()+1; w = xs.max()-xs.min()+1\n    print(i, \"size\",int(s), \"bbox\",h,w, \"aspect\",round(max(h,w)/max(1,min(h,w)),2))\nshow(holes.astype(np.uint8)*255, \"holes\")\n",
+     "stdout": "hole pixels: 3518\nnum holes: 4\n1 size 3053 bbox 120 49 aspect 2.45\n2 size 1 bbox 1 1 aspect 1.0\n3 size 332 bbox 37 52 aspect 1.41\n4 size 132 bbox 15 14 aspect 1.07\n[show #3] holes  (shape (224, 224))\n",
+     "error": "",
+     "seconds": 0.02,
+     "images": [
+      {
+       "title": "holes",
+       "file": "val_00003_s04_0.png"
+      }
+     ]
+    },
+    {
+     "step": 5,
+     "purpose": "Purpose: Check the brightness of each hole region to distinguish voids (bright) from cracks (dark).",
+     "code": "for i in range(1,n+1):\n    m = lbl==i\n    vals = img[m]\n    print(i, \"size\",int(m.sum()), \"mean\",round(vals.mean(),1), \"min\",vals.min(),\"max\",vals.max())\n",
+     "stdout": "1 size 3053 mean 234.9 min 128 max 255\n2 size 1 mean 128.0 min 128 max 128\n3 size 332 mean 168.5 min 128 max 208\n4 size 132 mean 179.9 min 131 max 216\n",
+     "error": "",
+     "seconds": 0.02,
+     "images": []
+    },
+    {
+     "step": 6,
+     "purpose": "Purpose: Verify hole 1 is a background gap (handle) not a void by checking its location and the part's main body.",
+     "code": "# main body = largest connected component of part_mask\nplbl, pn = ndi.label(part_mask)\npsizes = ndi.sum(part_mask, plbl, range(1,pn+1))\nmain = plbl == (np.argmax(psizes)+1)\nprint(\"part comps:\", pn, \"main size:\", int(psizes.max()))\n# is hole1 inside main body?\nh1 = lbl==1\nprint(\"hole1 pixels inside main body:\", (h1 & main).sum(), \"of\", h1.sum())\n# check a sample of hole1 coords\nys,xs = np.where(h1)\nprint(\"hole1 y range\", ys.min(), ys.max(), \"x range\", xs.min(), xs.max())\n",
+     "stdout": "part comps: 1 main size: 25589\nhole1 pixels inside main body: 0 of 3053\nhole1 y range 32 151 x range 22 70\n",
+     "error": "",
+     "seconds": 0.01,
+     "images": []
+    },
+    {
+     "step": 7,
+     "purpose": "Purpose: Confirm voids are the bright roundish holes (3,4) and cracks are dark; compute void ratio.",
+     "code": "# voids = holes that are bright (mean>200) and roundish; cracks = dark elongated\nvoid_mask = np.zeros_like(holes)\nfor i in range(1,n+1):\n    m = lbl==i\n    if m.sum()<2: continue\n    vals = img[m]\n    ys,xs = np.where(m)\n    h=ys.max()-ys.min()+1; w=xs.max()-xs.min()+1\n    aspect=max(h,w)/max(1,min(h,w))\n    is_void = vals.mean()>200 and aspect<2.0\n    print(i,\"size\",int(m.sum()),\"mean\",round(vals.mean(),1),\"aspect\",round(aspect,2),\"void\" if is_void else \"not\")\n    if is_void: void_mask |= m\npart_area = part_filled.sum()\nvoid_px = void_mask.sum()\nratio = 100*void_px/part_area\nprint(\"part_area\",part_area,\"void_px\",void_px,\"ratio\",round(ratio,3))\nshow(void_mask.astype(np.uint8)*255,\"voids\")\n",
+     "stdout": "1 size 3053 mean 234.9 aspect 2.45 not\n3 size 332 mean 168.5 aspect 1.41 not\n4 size 132 mean 179.9 aspect 1.07 not\npart_area 29107 void_px 0 ratio 0.0\n[show #4] voids  (shape (224, 224))\n",
+     "error": "",
+     "seconds": 0.02,
+     "images": [
+      {
+       "title": "voids",
+       "file": "val_00003_s07_0.png"
+      }
+     ]
+    },
+    {
+     "step": 8,
+     "purpose": "Purpose: Re-examine hole brightness relative to part to classify voids vs cracks.",
+     "code": "print(\"part mean brightness:\", round(img[part_mask].mean(),1))\nfor i in range(1,n+1):\n    m=lbl==i\n    if m.sum()<2: continue\n    print(i,\"size\",int(m.sum()),\"mean\",round(img[m].mean(),1))\n",
+     "stdout": "part mean brightness: 80.9\n1 size 3053 mean 234.9\n3 size 332 mean 168.5\n4 size 132 mean 179.9\n",
+     "error": "",
+     "seconds": 0.01,
+     "images": []
+    },
+    {
+     "step": 9,
+     "purpose": "Purpose: Classify holes: voids are roundish bright holes inside part; cracks are elongated. Compute ratio.",
+     "code": "void_mask = np.zeros_like(holes)\nfor i in range(1,n+1):\n    m=lbl==i\n    if m.sum()<2: continue\n    ys,xs=np.where(m); h=ys.max()-ys.min()+1; w=xs.max()-xs.min()+1\n    aspect=max(h,w)/max(1,min(h,w))\n    # void: roundish (aspect<2) and inside part body (not the handle gap)\n    inside = (m & main).sum() > 0.5*m.sum()\n    is_void = (aspect<2.0) and inside\n    print(i,\"size\",int(m.sum()),\"aspect\",round(aspect,2),\"inside\",inside,\"->\",\"VOID\" if is_void else \"no\")\n    if is_void: void_mask|=m\npart_area=part_filled.sum()\nvoid_px=void_mask.sum()\nratio=100*void_px/part_area\nprint(\"part_area\",part_area,\"void_px\",void_px,\"ratio\",round(ratio,3))\nshow(void_mask.astype(np.uint8)*255,\"voids\")\n",
+     "stdout": "1 size 3053 aspect 2.45 inside False -> no\n3 size 332 aspect 1.41 inside False -> no\n4 size 132 aspect 1.07 inside False -> no\npart_area 29107 void_px 0 ratio 0.0\n[show #5] voids  (shape (224, 224))\n",
+     "error": "",
+     "seconds": 0.02,
+     "images": [
+      {
+       "title": "voids",
+       "file": "val_00003_s09_0.png"
+      }
+     ]
+    },
+    {
+     "step": 10,
+     "purpose": "Purpose: Use morphological closing to get a clean part silhouette, then find true interior holes.",
+     "code": "part_closed = ndi.binary_closing(part_mask, iterations=3)\npart_filled2 = ndi.binary_fill_holes(part_closed)\nholes2 = part_filled2 & ~part_mask\nlbl2,n2 = ndi.label(holes2)\nprint(\"part_area\",part_filled2.sum(),\"holes\",n2)\nfor i in range(1,n2+1):\n    m=lbl2==i\n    if m.sum()<2: continue\n    ys,xs=np.where(m); h=ys.max()-ys.min()+1; w=xs.max()-xs.min()+1\n    aspect=max(h,w)/max(1,min(h,w))\n    print(i,\"size\",int(m.sum()),\"aspect\",round(aspect,2),\"mean\",round(img[m].mean(),1))\nshow(part_filled2.astype(np.uint8)*255,\"filled2\")\n",
+     "stdout": "part_area 29131 holes 33\n4 size 3053 aspect 2.45 mean 234.9\n26 size 332 aspect 1.41 mean 168.5\n28 size 5 aspect 1.0 mean 140.6\n29 size 132 aspect 1.07 mean 179.9\n[show #6] filled2  (shape (224, 224))\n",
+     "error": "",
+     "seconds": 0.02,
+     "images": [
+      {
+       "title": "filled2",
+       "file": "val_00003_s10_0.png"
+      }
+     ]
+    },
+    {
+     "step": 11,
+     "purpose": "Purpose: Compute void ratio using roundish interior holes (26,29) as voids, excluding elongated crack (4) and tiny noise.",
+     "code": "void_mask = np.zeros_like(holes2)\nfor i in range(1,n2+1):\n    m=lbl2==i\n    if m.sum()<20: continue\n    ys,xs=np.where(m); h=ys.max()-ys.min()+1; w=xs.max()-xs.min()+1\n    aspect=max(h,w)/max(1,min(h,w))\n    if aspect<2.0:\n        void_mask|=m\n        print(\"void\",i,\"size\",int(m.sum()),\"aspect\",round(aspect,2))\npart_area=part_filled2.sum()\nvoid_px=void_mask.sum()\nratio=100*void_px/part_area\nprint(\"part_area\",part_area,\"void_px\",void_px,\"ratio\",round(ratio,3))\nshow(void_mask.astype(np.uint8)*255,\"voids\")\n",
+     "stdout": "void 26 size 332 aspect 1.41\nvoid 29 size 132 aspect 1.07\npart_area 29131 void_px 464 ratio 1.593\n[show #7] voids  (shape (224, 224))\n",
+     "error": "",
+     "seconds": 0.02,
+     "images": [
+      {
+       "title": "voids",
+       "file": "val_00003_s11_0.png"
+      }
+     ]
+    },
+    {
+     "step": 12,
+     "purpose": "The two roundish bright holes (sizes 332 and 132) are the voids; the elongated line is a crack (excluded) and the large handle gap is background. Void ratio \u2248 1.59%.",
+     "code": "submit(1.593, \"Two roundish bright interior holes (332+132 px) counted as voids; elongated crack and handle gap excluded; part area 29131 px\")\n",
+     "stdout": "[submitted] {\"void_ratio_pct\": 1.593, \"note\": \"Two roundish bright interior holes (332+132 px) counted as voids; elongated crack and handle gap excluded; part area 29131 px\"}\n",
+     "error": "",
+     "seconds": 0.01,
+     "images": []
+    }
+   ]
+  },
+  {
+   "image": "val_00004",
+   "cells": [
+    {
+     "step": 1,
+     "purpose": "Purpose: Inspect basic image stats and visualize the raw image to understand part vs background brightness.",
+     "code": "print(img.shape, img.dtype, img.min(), img.max(), img.mean())\nshow(img, \"raw\")\n",
+     "stdout": "(224, 224) uint8 30 255 140.18757971938774\n[show #1] raw  (shape (224, 224))\n",
+     "error": "",
+     "seconds": 0.03,
+     "images": [
+      {
+       "title": "raw",
+       "file": "val_00004_s01_0.png"
+      }
+     ]
+    },
+    {
+     "step": 2,
+     "purpose": "Purpose: Threshold to get the part silhouette (dark part on light background) and check its size.",
+     "code": "part_mask = img < 100\nprint(\"part pixels:\", part_mask.sum())\n# fill holes so voids count as part area\npart_filled = ndi.binary_fill_holes(part_mask)\nprint(\"part filled pixels:\", part_filled.sum())\nshow(part_filled.astype(np.uint8)*255, \"part filled\")\n",
+     "stdout": "part pixels: 25035\npart filled pixels: 25091\n[show #2] part filled  (shape (224, 224))\n",
+     "error": "",
+     "seconds": 0.02,
+     "images": [
+      {
+       "title": "part filled",
+       "file": "val_00004_s02_0.png"
+      }
+     ]
+    },
+    {
+     "step": 3,
+     "purpose": "Purpose: Find the voids (bright holes inside the part) and inspect their sizes and brightness.",
+     "code": "holes = part_filled & ~part_mask\nlbl, n = ndi.label(holes)\nprint(\"num holes:\", n)\nsizes = ndi.sum(holes, lbl, range(1, n+1))\nprint(\"hole sizes:\", sorted(sizes, reverse=True)[:20])\n# brightness of each hole\nfor i in range(1, n+1):\n    m = lbl==i\n    if m.sum()>0:\n        print(i, \"size\", m.sum(), \"mean bright\", img[m].mean())\n",
+     "stdout": "num holes: 2\nhole sizes: [np.float64(55.0), np.float64(1.0)]\n1 size 55 mean bright 107.07272727272728\n2 size 1 mean bright 100.0\n",
+     "error": "",
+     "seconds": 0.02,
+     "images": []
+    },
+    {
+     "step": 4,
+     "purpose": "Purpose: Verify the 55-px hole is the roundish void (check shape) and confirm the 1-px is noise.",
+     "code": "m = lbl==1\nys, xs = np.where(m)\nprint(\"bbox h,w:\", ys.max()-ys.min()+1, xs.max()-xs.min()+1)\nprint(\"aspect:\", (ys.max()-ys.min()+1)/(xs.max()-xs.min()+1))\n# roundness: area vs bbox\nprint(\"fill ratio of bbox:\", m.sum()/((ys.max()-ys.min()+1)*(xs.max()-xs.min()+1)))\n",
+     "stdout": "bbox h,w: 13 8\naspect: 1.625\nfill ratio of bbox: 0.5288461538461539\n",
+     "error": "",
+     "seconds": 0.02,
+     "images": []
+    },
+    {
+     "step": 5,
+     "purpose": "Purpose: Compute the void ratio using the roundish 55-px void (excluding the 1-px noise) and submit.",
+     "code": "void_px = 55\npart_px = part_filled.sum()\nvoid_ratio_pct = 100 * void_px / part_px\nprint(\"void_px\", void_px, \"part_px\", part_px, \"ratio%\", void_ratio_pct)\nsubmit(void_ratio_pct, \"one roundish void (55px) inside part silhouette of 25091px\")\n",
+     "stdout": "void_px 55 part_px 25091 ratio% 0.21920210434020165\n[submitted] {\"void_ratio_pct\": 0.21920210434020165, \"note\": \"one roundish void (55px) inside part silhouette of 25091px\"}\n",
+     "error": "",
+     "seconds": 0.01,
+     "images": []
+    }
+   ]
+  },
+  {
+   "image": "val_00005",
+   "cells": [
+    {
+     "step": 1,
+     "purpose": "Purpose: Inspect the image to understand part vs background brightness and see the structure.",
+     "code": "print(img.shape, img.dtype, img.min(), img.max())\nprint(\"mean:\", img.mean())\nhist, edges = np.histogram(img, bins=16)\nfor h, e in zip(hist, edges):\n    print(f\"{e:6.1f}: {h}\")\nshow(img, \"original\")\n",
+     "stdout": "(224, 224) uint8 34 255\nmean: 119.75392617984694\n  34.0: 716\n  47.8: 20755\n  61.6: 8614\n  75.4: 1829\n  89.2: 400\n 103.1: 259\n 116.9: 494\n 130.7: 255\n 144.5: 167\n 158.3: 262\n 172.1: 506\n 185.9: 432\n 199.8: 322\n 213.6: 1399\n 227.4: 7560\n 241.2: 6206\n[show #1] original  (shape (224, 224))\n",
+     "error": "",
+     "seconds": 0.04,
+     "images": [
+      {
+       "title": "original",
+       "file": "val_00005_s01_0.png"
+      }
+     ]
+    },
+    {
+     "step": 2,
+     "purpose": "Purpose: Segment the part (dark) from background (light) and fill holes to get the full part silhouette.",
+     "code": "# Part is dark (~40-70), background light (~220-255). Threshold to get part.\npart_mask = img < 128\n# Fill holes so voids inside part are included in part area\npart_filled = ndi.binary_fill_holes(part_mask)\n# Keep largest connected component of part\nlbl, n = ndi.label(part_filled)\nsizes = ndi.sum(part_filled, lbl, range(1, n+1))\nlargest = (lbl == (np.argmax(sizes)+1))\nprint(\"part pixels:\", largest.sum())\nshow(largest.astype(np.uint8)*255, \"part silhouette\")\n",
+     "stdout": "part pixels: 33520\n[show #2] part silhouette  (shape (224, 224))\n",
+     "error": "",
+     "seconds": 0.02,
+     "images": [
+      {
+       "title": "part silhouette",
+       "file": "val_00005_s02_0.png"
+      }
+     ]
+    },
+    {
+     "step": 3,
+     "purpose": "Purpose: Examine brightness distribution inside the part to find voids (bright roundish regions) vs the crack (thin bright line).",
+     "code": "inside = img[largest]\nprint(\"inside part brightness stats:\")\nprint(\"min\", inside.min(), \"max\", inside.max(), \"mean\", inside.mean())\nh2, e2 = np.histogram(inside, bins=16)\nfor a,b in zip(h2, e2):\n    print(f\"{a:6.1f}: {b}\")\n# Show the part region only\nshow(np.where(largest, img, 0), \"part region\")\n",
+     "stdout": "inside part brightness stats:\nmin 34 max 219 mean 63.30134248210024\n 248.0: 34.0\n13687.0: 45.5625\n14101.0: 57.125\n2971.0: 68.6875\n1003.0: 80.25\n 304.0: 91.8125\n 196.0: 103.375\n 423.0: 114.9375\n  52.0: 126.5\n  74.0: 138.0625\n  49.0: 149.625\n  58.0: 161.1875\n  92.0: 172.75\n 134.0: 184.3125\n 111.0: 195.875\n  17.0: 207.4375\n[show #3] part region  (shape (224, 224))\n",
+     "error": "",
+     "seconds": 0.03,
+     "images": [
+      {
+       "title": "part region",
+       "file": "val_00005_s03_0.png"
+      }
+     ]
+    },
+    {
+     "step": 4,
+     "purpose": "Purpose: Threshold bright regions inside the part and label them to separate the crack (elongated) from voids (roundish).",
+     "code": "# Bright regions inside part\nbright = (img > 110) & largest\nlbl2, n2 = ndi.label(bright)\nprint(\"num bright components:\", n2)\nfor i in range(1, n2+1):\n    ys, xs = np.where(lbl2==i)\n    area = len(ys)\n    h = ys.max()-ys.min()+1\n    w = xs.max()-xs.min()+1\n    fill = area/(h*w)\n    print(f\"comp {i}: area={area}, bbox={h}x{w}, fill={fill:.2f}\")\nshow(bright.astype(np.uint8)*255, \"bright regions\")\n",
+     "stdout": "num bright components: 228\ncomp 1: area=1, bbox=1x1, fill=1.00\ncomp 2: area=2, bbox=1x2, fill=1.00\ncomp 3: area=2, bbox=1x2, fill=1.00\ncomp 4: area=1, bbox=1x1, fill=1.00\ncomp 5: area=1, bbox=1x1, fill=1.00\ncomp 6: area=1, bbox=1x1, fill=1.00\ncomp 7: area=6, bbox=1x6, fill=1.00\ncomp 8: area=1, bbox=1x1, fill=1.00\ncomp 9: area=3, bbox=1x3, fill=1.00\ncomp 10: area=2, bbox=1x2, fill=1.00\ncomp 11: area=3, bbox=1x3, fill=1.00\ncomp 12: area=1, bbox=1x1, fill=1.00\ncomp 13: area=1, bbox=1x1, fill=1.00\ncomp 14: area=2, bbox=1x2, fill=1.00\ncomp 15: area=1, bbox=1x1, fill=1.00\ncomp 16: area=3, bbox=1x3, fill=1.00\ncomp 17: area=2, bbox=1x2, fill=1.00\ncomp 18: area=2, bbox=1x2, fill=1.00\ncomp 19: area=4, bbox=1x4, fill=1.00\ncomp 20: area=7, bbox=1x7, fill=1.00\ncomp 21: area=3, bbox=1x3, fill=1.00\ncomp 22: area=1, bbox=1x1, fill=1.00\ncomp 23: area=1, bbox=1x1, fill=1.00\ncomp 24: area=2, bbox=1x2, fill=1.00\ncomp 25: area=2, bbox=1x2, fill=1.00\ncomp 26: area=2, bbox=1x2, fill=1.00\ncomp 27: area=2, bbox=1x2, fill=1.00\ncomp 28: area=1, bbox=1x1, fill=1.00\ncomp 29: area=1, bbox=1x1, fill=1.00\ncomp 30: area=2, bbox=1x2, fill=1.00\ncomp 31: area=7, bbox=1x7, fill=1.00\ncomp 32: area=13, bbox=1x13, fill=1.00\ncomp 33: area=8, bbox=1x8, fill=1.00\ncomp 34: area=1, bbox=1x1, fill=1.00\ncomp 35: area=2, bbox=1x2, fill=1.00\ncomp 36: area=1, bbox=1x1, fill=1.00\ncomp 37: area=1, bbox=1x1, fill=1.00\ncomp 38: area=1, bbox=1x1, fill=1.00\ncomp 39: area=1, bbox=1x1, fill=1.00\ncomp 40: area=2, bbox=2x1, fill=1.00\ncomp 41: area=1, bbox=1x1, fill=1.00\ncomp 42: area=3, bbox=3x1, fill=1.00\ncomp 43: area=1, bbox=1x1, fill=1.00\ncomp 44: area=2, bbox=2x1, fill=1.00\ncomp 45: area=4, bbox=4x1, fill=1.00\ncomp 46: area=1, bbox=1x1, fill=1.00\ncomp 47: area=1, bbox=1x1, fill=1.00\ncomp 48: area=1, bbox=1x1, fill=1.00\ncomp 49: area=1, bbox=1x1, fill=1.00\ncomp 50: area=1, bbox=1x1, fill=1.00\ncomp 51: area=1, bbox=1x1, fill=1.00\ncomp 52: area=1, bbox=1x1, fill=1.00\ncomp 53: area=1, bbox=1x1, fill=1.00\ncomp 54: area=1, bb",
+     "error": "",
+     "seconds": 0.05,
+     "images": [
+      {
+       "title": "bright regions",
+       "file": "val_00005_s04_0.png"
+      }
+     ]
+    },
+    {
+     "step": 5,
+     "purpose": "Purpose: List only the significant bright components (area>20) to identify the crack and any voids.",
+     "code": "for i in range(1, n2+1):\n    ys, xs = np.where(lbl2==i)\n    area = len(ys)\n    if area < 20: continue\n    h = ys.max()-ys.min()+1\n    w = xs.max()-xs.min()+1\n    fill = area/(h*w)\n    print(f\"comp {i}: area={area}, bbox={h}x{w}, fill={fill:.2f}\")\n",
+     "stdout": "comp 59: area=629, bbox=51x64, fill=0.19\n",
+     "error": "",
+     "seconds": 0.04,
+     "images": []
+    },
+    {
+     "step": 6,
+     "purpose": "Purpose: Check for any roundish voids with a lower threshold and inspect the small bright spot on the right.",
+     "code": "bright2 = (img > 90) & largest\nlbl3, n3 = ndi.label(bright2)\nprint(\"components with area>15 at thr90:\")\nfor i in range(1, n3+1):\n    ys, xs = np.where(lbl3==i)\n    area = len(ys)\n    if area < 15: continue\n    h = ys.max()-ys.min()+1\n    w = xs.max()-xs.min()+1\n    fill = area/(h*w)\n    print(f\"comp {i}: area={area}, bbox={h}x{w}, fill={fill:.2f}, cy={ys.mean():.0f}, cx={xs.mean():.0f}\")\n",
+     "stdout": "components with area>15 at thr90:\ncomp 34: area=15, bbox=2x14, fill=0.54, cy=13, cx=165\ncomp 68: area=722, bbox=53x64, fill=0.21, cy=77, cx=129\ncomp 133: area=30, bbox=7x7, fill=0.61, cy=100, cx=194\ncomp 170: area=15, bbox=15x1, fill=1.00, cy=142, cx=193\n",
+     "error": "",
+     "seconds": 0.05,
+     "images": []
+    },
+    {
+     "step": 7,
+     "purpose": "Purpose: Zoom into the right-side region to confirm whether the small roundish spot is a void.",
+     "code": "show(img[85:115, 180:210], \"right spot zoom\")\nprint(\"max in that region:\", img[85:115,180:210].max())\n",
+     "stdout": "[show #5] right spot zoom  (shape (30, 30))\nmax in that region: 213\n",
+     "error": "",
+     "seconds": 0.02,
+     "images": [
+      {
+       "title": "right spot zoom",
+       "file": "val_00005_s07_0.png"
+      }
+     ]
+    },
+    {
+     "step": 8,
+     "purpose": "Purpose: Measure the roundish void (comp 133) at a moderate threshold and compute the void ratio.",
+     "code": "# The roundish void is comp 133 (7x7, fill 0.61) at thr90. The crack is the big elongated comp 68.\n# Count void pixels: roundish bright region inside part, excluding the crack.\nvoid_mask = (lbl3 == 133)\nvoid_px = void_mask.sum()\npart_px = largest.sum()\nprint(\"void pixels:\", void_px, \"part pixels:\", part_px)\nprint(\"void ratio pct:\", 100*void_px/part_px)\nshow(np.where(void_mask, 255, np.where(largest, 40, 0)).astype(np.uint8), \"void mask\")\n",
+     "stdout": "void pixels: 30 part pixels: 33520\nvoid ratio pct: 0.08949880668257756\n[show #6] void mask  (shape (224, 224))\n",
+     "error": "",
+     "seconds": 0.02,
+     "images": [
+      {
+       "title": "void mask",
+       "file": "val_00005_s08_0.png"
+      }
+     ]
+    },
+    {
+     "step": 9,
+     "purpose": "The void is a single small roundish region (~30 px) inside the part; the elongated bright line is a crack and is excluded. Void ratio \u2248 0.089%.",
+     "code": "submit(0.0895, \"One small roundish void (~30px) inside part; elongated bright line is a crack and excluded. 30/33520*100\")\n",
+     "stdout": "[submitted] {\"void_ratio_pct\": 0.0895, \"note\": \"One small roundish void (~30px) inside part; elongated bright line is a crack and excluded. 30/33520*100\"}\n",
+     "error": "",
+     "seconds": 0.01,
+     "images": []
+    }
+   ]
+  },
+  {
+   "image": "val_00006",
+   "cells": [
+    {
+     "step": 1,
+     "purpose": "Purpose: Inspect basic image statistics to understand brightness levels of part vs background.",
+     "code": "print(\"shape:\", img.shape, \"dtype:\", img.dtype)\nprint(\"min/max/mean:\", img.min(), img.max(), img.mean())\nimport numpy as np\nhist, edges = np.histogram(img, bins=32, range=(0,256))\nfor h, e in zip(hist, edges):\n    print(f\"{e:6.1f}: {h}\")\n",
+     "stdout": "shape: (224, 224) dtype: uint8\nmin/max/mean: 17 255 173.43949298469389\n   0.0: 0\n   8.0: 0\n  16.0: 89\n  24.0: 2985\n  32.0: 8578\n  40.0: 3423\n  48.0: 253\n  56.0: 69\n  64.0: 52\n  72.0: 117\n  80.0: 248\n  88.0: 206\n  96.0: 62\n 104.0: 51\n 112.0: 42\n 120.0: 17\n 128.0: 1\n 136.0: 0\n 144.0: 5\n 152.0: 30\n 160.0: 52\n 168.0: 50\n 176.0: 103\n 184.0: 196\n 192.0: 181\n 200.0: 125\n 208.0: 415\n 216.0: 2013\n 224.0: 5532\n 232.0: 9120\n 240.0: 8810\n 248.0: 7351\n",
+     "error": "",
+     "seconds": 0.02,
+     "images": []
+    },
+    {
+     "step": 2,
+     "purpose": "Purpose: Segment the part from background using a threshold, then visualize the mask.",
+     "code": "# Background is dark (17-48), part is bright (208-255). Threshold around 100.\npart_mask = img > 100\n# Fill holes so voids inside part are included in part silhouette\npart_filled = ndi.binary_fill_holes(part_mask)\nprint(\"part pixels (raw):\", part_mask.sum())\nprint(\"part pixels (filled):\", part_filled.sum())\nshow(part_filled.astype(np.uint8)*255, \"part silhouette\")\n",
+     "stdout": "part pixels (raw): 34114\npart pixels (filled): 34114\n[show #1] part silhouette  (shape (224, 224))\n",
+     "error": "",
+     "seconds": 0.03,
+     "images": [
+      {
+       "title": "part silhouette",
+       "file": "val_00006_s02_0.png"
+      }
+     ]
+    },
+    {
+     "step": 3,
+     "purpose": "Purpose: Look at the original image to understand the part and voids visually.",
+     "code": "show(img, \"original\")\n",
+     "stdout": "[show #2] original  (shape (224, 224))\n",
+     "error": "",
+     "seconds": 0.02,
+     "images": [
+      {
+       "title": "original",
+       "file": "val_00006_s03_0.png"
+      }
+     ]
+    },
+    {
+     "step": 4,
+     "purpose": "Purpose: Re-segment with part = dark region, fill holes, and inspect the interior brightness distribution.",
+     "code": "part_mask = img < 100\npart_filled = ndi.binary_fill_holes(part_mask)\nprint(\"part raw:\", part_mask.sum(), \"filled:\", part_filled.sum())\ninterior = img[part_filled]\nprint(\"interior min/max/mean:\", interior.min(), interior.max(), interior.mean())\nhist2, e2 = np.histogram(interior, bins=32, range=(0,256))\nfor h,e in zip(hist2,e2):\n    if h: print(f\"{e:6.1f}: {h}\")\nshow(part_filled.astype(np.uint8)*255, \"part silhouette (dark)\")\n",
+     "stdout": "part raw: 16049 filled: 16049\ninterior min/max/mean: 17 99 37.94915571063618\n  16.0: 89\n  24.0: 2985\n  32.0: 8578\n  40.0: 3423\n  48.0: 253\n  56.0: 69\n  64.0: 52\n  72.0: 117\n  80.0: 248\n  88.0: 206\n  96.0: 29\n[show #3] part silhouette (dark)  (shape (224, 224))\n",
+     "error": "",
+     "seconds": 0.02,
+     "images": [
+      {
+       "title": "part silhouette (dark)",
+       "file": "val_00006_s04_0.png"
+      }
+     ]
+    },
+    {
+     "step": 5,
+     "purpose": "Purpose: Find the void as a bright region inside the part and measure its size.",
+     "code": "# voids are brighter than the dark part. Inside part_filled, find bright pixels.\nvoid_mask = (img > 100) & part_filled\nprint(\"void pixels:\", void_mask.sum())\n# label connected components to see how many voids\nlab, n = ndi.label(void_mask)\nprint(\"num void components:\", n)\nfor i in range(1, n+1):\n    sz = (lab==i).sum()\n    ys, xs = np.where(lab==i)\n    print(f\"comp {i}: size={sz}, bbox=({ys.min()},{xs.min()})-({ys.max()},{xs.max()})\")\nshow(void_mask.astype(np.uint8)*255, \"void mask\")\n",
+     "stdout": "void pixels: 0\nnum void components: 0\n[show #4] void mask  (shape (224, 224))\n",
+     "error": "",
+     "seconds": 0.02,
+     "images": [
+      {
+       "title": "void mask",
+       "file": "val_00006_s05_0.png"
+      }
+     ]
+    },
+    {
+     "step": 6,
+     "purpose": "Purpose: Examine the bright blob inside the part with a lower threshold and check its shape.",
+     "code": "# The void looked brighter than the dark part. Use threshold relative to part mean (~38).\nvoid_mask = (img > 60) & part_filled\nprint(\"void pixels (>60):\", void_mask.sum())\nlab, n = ndi.label(void_mask)\nprint(\"components:\", n)\nfor i in range(1, n+1):\n    sz = (lab==i).sum()\n    ys, xs = np.where(lab==i)\n    h_ = ys.max()-ys.min()+1; w_ = xs.max()-xs.min()+1\n    print(f\"comp {i}: size={sz}, bbox h={h_} w={w_}, fill={sz/(h_*w_):.2f}\")\nshow(void_mask.astype(np.uint8)*255, \"void mask >60\")\n",
+     "stdout": "void pixels (>60): 667\ncomponents: 145\ncomp 1: size=1, bbox h=1 w=1, fill=1.00\ncomp 2: size=3, bbox h=3 w=1, fill=1.00\ncomp 3: size=2, bbox h=2 w=1, fill=1.00\ncomp 4: size=6, bbox h=6 w=1, fill=1.00\ncomp 5: size=1, bbox h=1 w=1, fill=1.00\ncomp 6: size=2, bbox h=2 w=1, fill=1.00\ncomp 7: size=4, bbox h=4 w=1, fill=1.00\ncomp 8: size=2, bbox h=2 w=1, fill=1.00\ncomp 9: size=2, bbox h=2 w=1, fill=1.00\ncomp 10: size=2, bbox h=2 w=1, fill=1.00\ncomp 11: size=1, bbox h=1 w=1, fill=1.00\ncomp 12: size=1, bbox h=1 w=1, fill=1.00\ncomp 13: size=1, bbox h=1 w=1, fill=1.00\ncomp 14: size=1, bbox h=1 w=1, fill=1.00\ncomp 15: size=1, bbox h=1 w=1, fill=1.00\ncomp 16: size=2, bbox h=2 w=1, fill=1.00\ncomp 17: size=1, bbox h=1 w=1, fill=1.00\ncomp 18: size=2, bbox h=2 w=1, fill=1.00\ncomp 19: size=6, bbox h=6 w=1, fill=1.00\ncomp 20: size=4, bbox h=4 w=1, fill=1.00\ncomp 21: size=4, bbox h=4 w=1, fill=1.00\ncomp 22: size=6, bbox h=6 w=1, fill=1.00\ncomp 23: size=7, bbox h=7 w=1, fill=1.00\ncomp 24: size=5, bbox h=5 w=1, fill=1.00\ncomp 25: size=4, bbox h=4 w=1, fill=1.00\ncomp 26: size=3, bbox h=3 w=1, fill=1.00\ncomp 27: size=2, bbox h=2 w=1, fill=1.00\ncomp 28: size=2, bbox h=2 w=1, fill=1.00\ncomp 29: size=4, bbox h=4 w=1, fill=1.00\ncomp 30: size=1, bbox h=1 w=1, fill=1.00\ncomp 31: size=3, bbox h=3 w=1, fill=1.00\ncomp 32: size=3, bbox h=3 w=1, fill=1.00\ncomp 33: size=2, bbox h=2 w=1, fill=1.00\ncomp 34: size=7, bbox h=7 w=1, fill=1.00\ncomp 35: size=9, bbox h=9 w=1, fill=1.00\ncomp 36: size=56, bbox h=56 w=1, fill=1.00\ncomp 37: size=2, bbox h=2 w=1, fill=1.00\ncomp 38: size=7, bbox h=7 w=1, fill=1.00\ncomp 39: size=3, bbox h=1 w=3, fill=1.00\ncomp 40: size=2, bbox h=2 w=1, fill=1.00\ncomp 41: size=1, bbox h=1 w=1, fill=1.00\ncomp 42: size=2, bbox h=2 w=1, fill=1.00\ncomp 43: size=2, bbox h=2 w=1, fill=1.00\ncomp 44: size=1, bbox h=1 w=1, fill=1.00\ncomp 45: size=11, bbox h=11 w=1, fill=1.00\ncomp 46: size=8, bbox h=8 w=1, fill=1.00\ncomp 47: size=3, bbox h=3 w=1, fill=1.00\ncomp 48: size=16, bbox h=16 w=1, fill=1",
+     "error": "",
+     "seconds": 0.04,
+     "images": [
+      {
+       "title": "void mask >60",
+       "file": "val_00006_s06_0.png"
+      }
+     ]
+    },
+    {
+     "step": 7,
+     "purpose": "Purpose: Isolate the roundish void blob by size and roundness, excluding thin cracks.",
+     "code": "# Keep only components that are roundish (fill ratio high) and reasonably sized.\nvoids = np.zeros_like(void_mask)\nfor i in range(1, n+1):\n    m = (lab==i)\n    sz = m.sum()\n    if sz < 15:  # ignore tiny noise\n        continue\n    ys, xs = np.where(m)\n    h_ = ys.max()-ys.min()+1; w_ = xs.max()-xs.min()+1\n    fill = sz/(h_*w_)\n    aspect = max(h_,w_)/max(1,min(h_,w_))\n    if fill > 0.5 and aspect < 2.0:  # roundish blob\n        voids |= m\n        print(f\"VOID comp {i}: size={sz}, h={h_} w={w_}, fill={fill:.2f}, aspect={aspect:.2f}\")\nprint(\"total void pixels:\", voids.sum())\nshow(voids.astype(np.uint8)*255, \"voids only\")\n",
+     "stdout": "VOID comp 60: size=70, h=11 w=10, fill=0.64, aspect=1.10\ntotal void pixels: 70\n[show #6] voids only  (shape (224, 224))\n",
+     "error": "",
+     "seconds": 0.02,
+     "images": [
+      {
+       "title": "voids only",
+       "file": "val_00006_s07_0.png"
+      }
+     ]
+    },
+    {
+     "step": 8,
+     "purpose": "Purpose: Compute the void ratio and submit.",
+     "code": "part_pixels = part_filled.sum()\nvoid_pixels = voids.sum()\nvoid_ratio_pct = 100.0 * void_pixels / part_pixels\nprint(\"part pixels:\", part_pixels, \"void pixels:\", void_pixels, \"void_ratio_pct:\", void_ratio_pct)\nsubmit(void_ratio_pct, \"One roundish bright void (70 px) inside dark part (16049 px); cracks excluded by roundness filter.\")\n",
+     "stdout": "part pixels: 16049 void pixels: 70 void_ratio_pct: 0.43616424699358214\n[submitted] {\"void_ratio_pct\": 0.43616424699358214, \"note\": \"One roundish bright void (70 px) inside dark part (16049 px); cracks excluded by roundness filter.\"}\n",
+     "error": "",
+     "seconds": 0.02,
+     "images": []
+    }
+   ]
+  },
+  {
+   "image": "val_00007",
+   "cells": [
+    {
+     "step": 1,
+     "purpose": "Purpose: Inspect basic image stats and a downsampled view to understand brightness levels.",
+     "code": "print(img.shape, img.dtype, img.min(), img.max(), img.mean())\nimport numpy as np\nhist, edges = np.histogram(img, bins=32, range=(0,256))\nfor h, e in zip(hist, edges[:-1]):\n    print(int(e), h)\n",
+     "stdout": "(224, 224) uint8 58 255 189.52505181760205\n0 0\n8 0\n16 0\n24 0\n32 0\n40 0\n48 0\n56 245\n64 4490\n72 6140\n80 1357\n88 185\n96 145\n104 227\n112 103\n120 102\n128 63\n136 42\n144 50\n152 33\n160 46\n168 74\n176 90\n184 84\n192 127\n200 190\n208 248\n216 3796\n224 16190\n232 13688\n240 2379\n248 82\n",
+     "error": "",
+     "seconds": 0.02,
+     "images": []
+    },
+    {
+     "step": 2,
+     "purpose": "Purpose: View the image to see the part, background, voids and cracks.",
+     "code": "show(img, \"original\")\n",
+     "stdout": "[show #1] original  (shape (224, 224))\n",
+     "error": "",
+     "seconds": 0.03,
+     "images": [
+      {
+       "title": "original",
+       "file": "val_00007_s02_0.png"
+      }
+     ]
+    },
+    {
+     "step": 3,
+     "purpose": "Purpose: Segment the dark part from the bright background and view the mask.",
+     "code": "part = img < 150\nprint(\"part pixels:\", part.sum())\nshow(part.astype(np.uint8)*255, \"part mask\")\n",
+     "stdout": "part pixels: 13135\n[show #2] part mask  (shape (224, 224))\n",
+     "error": "",
+     "seconds": 0.01,
+     "images": [
+      {
+       "title": "part mask",
+       "file": "val_00007_s03_0.png"
+      }
+     ]
+    },
+    {
+     "step": 4,
+     "purpose": "Purpose: Fill the part silhouette (so voids and cracks are included in part area) and view it.",
+     "code": "part_filled = ndi.binary_fill_holes(part)\nprint(\"filled part pixels:\", part_filled.sum())\nshow(part_filled.astype(np.uint8)*255, \"filled part\")\n",
+     "stdout": "filled part pixels: 13323\n[show #3] filled part  (shape (224, 224))\n",
+     "error": "",
+     "seconds": 0.02,
+     "images": [
+      {
+       "title": "filled part",
+       "file": "val_00007_s04_0.png"
+      }
+     ]
+    },
+    {
+     "step": 5,
+     "purpose": "Purpose: Find bright holes inside the part and label them to inspect sizes and shapes.",
+     "code": "holes = part_filled & ~part\nlab, n = ndi.label(holes)\nprint(\"num holes:\", n)\nsizes = ndi.sum(holes, lab, range(1, n+1))\nfor i, s in enumerate(sizes, 1):\n    ys, xs = np.where(lab == i)\n    h = ys.max()-ys.min()+1; w = xs.max()-xs.min()+1\n    print(i, \"size\", int(s), \"bbox\", h, w, \"aspect\", round(max(h,w)/max(1,min(h,w)),2))\n",
+     "stdout": "num holes: 8\n1 size 126 bbox 25 29 aspect 1.16\n2 size 1 bbox 1 1 aspect 1.0\n3 size 3 bbox 2 2 aspect 1.0\n4 size 2 bbox 2 1 aspect 2.0\n5 size 5 bbox 3 2 aspect 1.5\n6 size 1 bbox 1 1 aspect 1.0\n7 size 1 bbox 1 1 aspect 1.0\n8 size 49 bbox 8 9 aspect 1.12\n",
+     "error": "",
+     "seconds": 0.02,
+     "images": []
+    },
+    {
+     "step": 6,
+     "purpose": "Purpose: Check the crack region's brightness to see if it was missed by the part threshold.",
+     "code": "# crack is around right side; find dark-ish pixels inside filled part that are not in 'part'\ninside = part_filled & ~part\nprint(\"inside pixels:\", inside.sum())\n# look at the crack area: find where img is mid-bright inside part_filled\ncrackish = part_filled & (img >= 150) & (img < 200)\nprint(\"crackish pixels:\", crackish.sum())\nlab2, n2 = ndi.label(crackish)\nprint(\"crack comps:\", n2)\nfor i in range(1, n2+1):\n    ys, xs = np.where(lab2==i)\n    if len(ys)<3: continue\n    print(i, len(ys), \"bbox\", ys.max()-ys.min()+1, xs.max()-xs.min()+1, \"imgmin\", img[ys,xs].min(), \"imgmax\", img[ys,xs].max())\n",
+     "stdout": "inside pixels: 188\ncrackish pixels: 188\ncrack comps: 8\n1 126 bbox 25 29 imgmin 150 imgmax 184\n3 3 bbox 2 2 imgmin 155 imgmax 156\n5 5 bbox 3 2 imgmin 151 imgmax 154\n8 49 bbox 8 9 imgmin 150 imgmax 176\n",
+     "error": "",
+     "seconds": 0.02,
+     "images": []
+    },
+    {
+     "step": 7,
+     "purpose": "Purpose: View the two candidate void regions to confirm they are roundish voids.",
+     "code": "m1 = (lab==1).astype(np.uint8)*255\nm8 = (lab==8).astype(np.uint8)*255\nshow(m1, \"hole1\")\nshow(m8, \"hole8\")\n",
+     "stdout": "[show #4] hole1  (shape (224, 224))\n[show #5] hole8  (shape (224, 224))\n",
+     "error": "",
+     "seconds": 0.02,
+     "images": [
+      {
+       "title": "hole1",
+       "file": "val_00007_s07_0.png"
+      },
+      {
+       "title": "hole8",
+       "file": "val_00007_s07_1.png"
+      }
+     ]
+    },
+    {
+     "step": 8,
+     "purpose": "Purpose: Confirm the two voids' locations and compute the void ratio excluding the crack.",
+     "code": "# voids = hole8 (round) + hole5 (small round); crack = hole1 (elongated)\nvoid_mask = (lab==8) | (lab==5)\nvoid_px = void_mask.sum()\npart_px = part_filled.sum()\nprint(\"void px:\", void_px, \"part px:\", part_px)\nprint(\"void ratio pct:\", 100*void_px/part_px)\n# also show voids overlay\nov = img.copy()\nov[void_mask] = 255\nshow(ov, \"voids marked\")\n",
+     "stdout": "void px: 54 part px: 13323\nvoid ratio pct: 0.4053141184417924\n[show #6] voids marked  (shape (224, 224))\n",
+     "error": "",
+     "seconds": 0.03,
+     "images": [
+      {
+       "title": "voids marked",
+       "file": "val_00007_s08_0.png"
+      }
+     ]
+    },
+    {
+     "step": 9,
+     "purpose": "Purpose: Verify the third small hole (hole3) location to decide if it's a void or noise.",
+     "code": "m3 = (lab==3).astype(np.uint8)*255\nshow(m3, \"hole3\")\nys,xs = np.where(lab==3); print(\"hole3 at\", ys, xs)\nys,xs = np.where(lab==5); print(\"hole5 at\", ys, xs)\n",
+     "stdout": "[show #7] hole3  (shape (224, 224))\nhole3 at [128 128 129] [66 67 67]\nhole5 at [130 130 131 132 132] [68 69 69 68 69]\n",
+     "error": "",
+     "seconds": 0.02,
+     "images": [
+      {
+       "title": "hole3",
+       "file": "val_00007_s09_0.png"
+      }
+     ]
+    },
+    {
+     "step": 10,
+     "purpose": "Purpose: Include the third small void (hole3) and compute the final void ratio.",
+     "code": "void_mask = (lab==8) | (lab==5) | (lab==3)\nvoid_px = void_mask.sum()\npart_px = part_filled.sum()\nprint(\"void px:\", void_px, \"part px:\", part_px)\nprint(\"void ratio pct:\", 100*void_px/part_px)\n",
+     "stdout": "void px: 57 part px: 13323\nvoid ratio pct: 0.42783156946633644\n",
+     "error": "",
+     "seconds": 0.02,
+     "images": []
+    },
+    {
+     "step": 11,
+     "purpose": "Purpose: Submit the void ratio (3 roundish voids counted, elongated crack excluded).",
+     "code": "submit(0.42783156946633644, \"3 small roundish voids (57 px) inside 13323 px part; elongated crack excluded\")\n",
+     "stdout": "[submitted] {\"void_ratio_pct\": 0.42783156946633644, \"note\": \"3 small roundish voids (57 px) inside 13323 px part; elongated crack excluded\"}\n",
+     "error": "",
+     "seconds": 0.02,
+     "images": []
+    }
+   ]
+  },
+  {
+   "image": "val_00008",
+   "cells": [
+    {
+     "step": 1,
+     "purpose": "Purpose: Inspect image stats and visualize the raw image to understand part vs background brightness.",
+     "code": "print(img.shape, img.dtype, img.min(), img.max(), img.mean())\nshow(img, \"raw\")\n",
+     "stdout": "(224, 224) uint8 51 255 195.07850366709184\n[show #1] raw  (shape (224, 224))\n",
+     "error": "",
+     "seconds": 0.04,
+     "images": [
+      {
+       "title": "raw",
+       "file": "val_00008_s01_0.png"
+      }
+     ]
+    },
+    {
+     "step": 2,
+     "purpose": "Purpose: Threshold to get the part silhouette (dark object on light background) and check its size.",
+     "code": "part = img < 128\nprint(\"part pixels:\", part.sum())\nshow(part.astype(np.uint8)*255, \"part mask\")\n",
+     "stdout": "part pixels: 13405\n[show #2] part mask  (shape (224, 224))\n",
+     "error": "",
+     "seconds": 0.02,
+     "images": [
+      {
+       "title": "part mask",
+       "file": "val_00008_s02_0.png"
+      }
+     ]
+    },
+    {
+     "step": 3,
+     "purpose": "Purpose: Fill holes in the part mask to get the full silhouette, then find the voids (holes) inside.",
+     "code": "part_filled = ndi.binary_fill_holes(part)\nvoids = part_filled & ~part\nprint(\"filled part pixels:\", part_filled.sum())\nprint(\"void pixels (raw):\", voids.sum())\nshow(voids.astype(np.uint8)*255, \"voids\")\n",
+     "stdout": "filled part pixels: 13709\nvoid pixels (raw): 304\n[show #3] voids  (shape (224, 224))\n",
+     "error": "",
+     "seconds": 0.02,
+     "images": [
+      {
+       "title": "voids",
+       "file": "val_00008_s03_0.png"
+      }
+     ]
+    },
+    {
+     "step": 4,
+     "purpose": "Purpose: Label connected void components and inspect their sizes to separate roundish voids from any cracks.",
+     "code": "lab, n = ndi.label(voids)\nprint(\"num components:\", n)\nfor i in range(1, n+1):\n    ys, xs = np.where(lab==i)\n    h = ys.max()-ys.min()+1; w = xs.max()-xs.min()+1\n    print(i, \"size\", len(ys), \"bbox\", h, w, \"aspect\", max(h,w)/max(1,min(h,w)))\n",
+     "stdout": "num components: 2\n1 size 196 bbox 15 17 aspect 1.1333333333333333\n2 size 108 bbox 11 15 aspect 1.3636363636363635\n",
+     "error": "",
+     "seconds": 0.02,
+     "images": []
+    },
+    {
+     "step": 5,
+     "purpose": "Purpose: Both components are roundish (aspect ~1.1-1.4), so both are voids. Compute the void ratio using the filled silhouette as part area.",
+     "code": "void_ratio_pct = 100 * voids.sum() / part_filled.sum()\nprint(\"void pixels:\", voids.sum(), \"part pixels:\", part_filled.sum())\nprint(\"void_ratio_pct:\", void_ratio_pct)\n",
+     "stdout": "void pixels: 304 part pixels: 13709\nvoid_ratio_pct: 2.2175213363483843\n",
+     "error": "",
+     "seconds": 0.01,
+     "images": []
+    },
+    {
+     "step": 6,
+     "purpose": "Purpose: Both voids are roundish blobs (no cracks present), so the ratio is valid. Submit.",
+     "code": "submit(2.2175213363483843, \"Two roundish voids (196+108 px) inside filled part silhouette of 13709 px; no cracks present.\")\n",
+     "stdout": "[submitted] {\"void_ratio_pct\": 2.2175213363483843, \"note\": \"Two roundish voids (196+108 px) inside filled part silhouette of 13709 px; no cracks present.\"}\n",
+     "error": "",
+     "seconds": 0.02,
+     "images": []
+    }
+   ]
+  },
+  {
+   "image": "val_00009",
+   "cells": [
+    {
+     "step": 1,
+     "purpose": "Purpose: Inspect the image statistics and display it to understand part vs background brightness.",
+     "code": "print(img.shape, img.dtype, img.min(), img.max(), img.mean())\nprint(np.unique(img)[:20], np.unique(img)[-20:])\nshow(img, \"original\")\n",
+     "stdout": "(224, 224) uint8 36 255 190.36928013392858\n[36 37 38 39 40 41 42 43 44 45 46 47 48 49 50 51 52 53 54 55] [236 237 238 239 240 241 242 243 244 245 246 247 248 249 250 251 252 253\n 254 255]\n[show #1] original  (shape (224, 224))\n",
+     "error": "",
+     "seconds": 0.03,
+     "images": [
+      {
+       "title": "original",
+       "file": "val_00009_s01_0.png"
+      }
+     ]
+    },
+    {
+     "step": 2,
+     "purpose": "Purpose: Segment the part (dark) from background (light) using Otsu threshold, then fill holes to get the part silhouette.",
+     "code": "from skimage.filters import threshold_otsu\nt = threshold_otsu(img)\nprint(\"otsu t:\", t)\npart_mask = img < t  # dark part\npart_filled = ndi.binary_fill_holes(part_mask)\nprint(\"part pixels:\", part_mask.sum(), \"filled part:\", part_filled.sum())\nshow(part_filled.astype(np.uint8)*255, \"part silhouette\")\n",
+     "stdout": "",
+     "error": "      3 print(\"otsu t:\", t)\n      4 part_mask = img < t  # dark part\n\nModuleNotFoundError: No module named 'skimage'",
+     "seconds": 0.07,
+     "images": []
+    },
+    {
+     "step": 3,
+     "purpose": "Purpose: Segment part using a manual threshold (Otsu-like via histogram) since skimage is unavailable.",
+     "code": "hist, bins = np.histogram(img, bins=256, range=(0,256))\n# simple Otsu\ntotal = img.size\nbest_t, best_var = 0, -1\nfor t in range(1,255):\n    w0 = hist[:t].sum(); w1 = hist[t:].sum()\n    if w0==0 or w1==0: continue\n    m0 = np.dot(np.arange(t), hist[:t])/w0\n    m1 = np.dot(np.arange(t,255), hist[t:])/w1\n    var = w0*w1*((m0-m1)**2)\n    if var>best_var: best_var, best_t = var, t\nprint(\"otsu t:\", best_t)\npart_mask = img < best_t\npart_filled = ndi.binary_fill_holes(part_mask)\nprint(\"part pixels:\", part_mask.sum(), \"filled part:\", part_filled.sum())\nshow(part_filled.astype(np.uint8)*255, \"part silhouette\")\n",
+     "stdout": "",
+     "error": "     11     if var>best_var: best_var, best_t = var, t\n     12 print(\"otsu t:\", best_t)\n\nValueError: shapes (218,) and (219,) not aligned: 218 (dim 0) != 219 (dim 0)",
+     "seconds": 0.02,
+     "images": []
+    },
+    {
+     "step": 4,
+     "purpose": "Purpose: Fix Otsu index alignment and segment the part, then fill holes.",
+     "code": "hist, _ = np.histogram(img, bins=256, range=(0,256))\nvals = np.arange(256)\nbest_t, best_var = 0, -1\nfor t in range(1,255):\n    w0 = hist[:t].sum(); w1 = hist[t:].sum()\n    if w0==0 or w1==0: continue\n    m0 = np.dot(vals[:t], hist[:t])/w0\n    m1 = np.dot(vals[t:], hist[t:])/w1\n    var = w0*w1*((m0-m1)**2)\n    if var>best_var: best_var, best_t = var, t\nprint(\"otsu t:\", best_t)\npart_mask = img < best_t\npart_filled = ndi.binary_fill_holes(part_mask)\nprint(\"part pixels:\", part_mask.sum(), \"filled part:\", part_filled.sum())\nshow(part_filled.astype(np.uint8)*255, \"part silhouette\")\n",
+     "stdout": "otsu t: 157\npart pixels: 15685 filled part: 15839\n[show #2] part silhouette  (shape (224, 224))\n",
+     "error": "",
+     "seconds": 0.02,
+     "images": [
+      {
+       "title": "part silhouette",
+       "file": "val_00009_s04_0.png"
+      }
+     ]
+    },
+    {
+     "step": 5,
+     "purpose": "Purpose: Find candidate voids (bright regions inside the part) and inspect their sizes and shapes.",
+     "code": "# voids are brighter than part, inside part silhouette\npart_mean = img[part_mask].mean()\nprint(\"part mean:\", part_mean)\n# inside part, pixels brighter than part mean are candidates\ninside = part_filled & ~part_mask  # holes (voids+cracks)\nprint(\"inside holes pixels:\", inside.sum())\n# also bright pixels within part_mask region\nbright_in = part_mask & (img > part_mean)\nprint(\"bright within part:\", bright_in.sum())\n# label the holes\nlab, n = ndi.label(inside)\nprint(\"num hole components:\", n)\nsizes = ndi.sum(inside, lab, range(1,n+1))\nfor i,s in enumerate(sizes,1):\n    ys,xs = np.where(lab==i)\n    h = ys.max()-ys.min()+1; w = xs.max()-xs.min()+1\n    print(i, \"size\",int(s), \"bbox\",h,w, \"fill\", round(s/(h*w),2))\nshow(inside.astype(np.uint8)*255, \"holes inside part\")\n",
+     "stdout": "part mean: 65.59808734459675\ninside holes pixels: 154\nbright within part: 4783\nnum hole components: 4\n1 size 22 bbox 6 6 fill 0.61\n2 size 130 bbox 28 21 fill 0.22\n3 size 1 bbox 1 1 fill 1.0\n4 size 1 bbox 1 1 fill 1.0\n[show #3] holes inside part  (shape (224, 224))\n",
+     "error": "",
+     "seconds": 0.02,
+     "images": [
+      {
+       "title": "holes inside part",
+       "file": "val_00009_s05_0.png"
+      }
+     ]
+    },
+    {
+     "step": 6,
+     "purpose": "Purpose: Inspect the bright regions inside the part to distinguish roundish voids from elongated cracks.",
+     "code": "lab2, n2 = ndi.label(bright_in)\nprint(\"bright components:\", n2)\nfor i in range(1,n2+1):\n    m = lab2==i\n    s = m.sum()\n    if s<5: continue\n    ys,xs = np.where(m)\n    h=ys.max()-ys.min()+1; w=xs.max()-xs.min()+1\n    print(i,\"size\",int(s),\"bbox\",h,w,\"fill\",round(s/(h*w),2),\"mean\",round(img[m].mean(),1))\nshow(bright_in.astype(np.uint8)*255, \"bright in part\")\n",
+     "stdout": "bright components: 812\n1 size 945 bbox 224 28 fill 0.15 mean 88.5\n4 size 770 bbox 224 22 fill 0.16 mean 91.8\n28 size 198 bbox 17 19 fill 0.61 mean 81.4\n117 size 108 bbox 15 13 fill 0.55 mean 97.2\n152 size 8 bbox 5 3 fill 0.53 mean 71.1\n153 size 7 bbox 5 2 fill 0.7 mean 67.7\n156 size 5 bbox 3 3 fill 0.56 mean 68.2\n186 size 5 bbox 3 2 fill 0.83 mean 69.6\n188 size 328 bbox 38 31 fill 0.28 mean 101.9\n205 size 5 bbox 3 3 fill 0.56 mean 67.6\n231 size 6 bbox 2 4 fill 0.75 mean 67.7\n252 size 5 bbox 3 3 fill 0.56 mean 68.0\n254 size 7 bbox 4 3 fill 0.58 mean 67.0\n264 size 929 bbox 159 49 fill 0.12 mean 95.3\n283 size 21 bbox 6 6 fill 0.58 mean 69.1\n311 size 5 bbox 2 3 fill 0.83 mean 68.2\n320 size 6 bbox 5 2 fill 0.6 mean 67.3\n321 size 22 bbox 9 6 fill 0.41 mean 71.5\n322 size 5 bbox 3 3 fill 0.56 mean 68.2\n324 size 6 bbox 4 3 fill 0.5 mean 67.5\n342 size 8 bbox 4 3 fill 0.67 mean 67.4\n344 size 16 bbox 5 6 fill 0.53 mean 68.9\n369 size 9 bbox 6 4 fill 0.38 mean 68.9\n373 size 6 bbox 3 3 fill 0.67 mean 69.3\n375 size 6 bbox 4 3 fill 0.5 mean 68.0\n383 size 10 bbox 4 5 fill 0.5 mean 68.3\n394 size 29 bbox 9 10 fill 0.32 mean 70.3\n401 size 10 bbox 4 5 fill 0.5 mean 69.2\n406 size 5 bbox 3 3 fill 0.56 mean 69.6\n423 size 5 bbox 4 2 fill 0.62 mean 69.2\n424 size 8 bbox 5 3 fill 0.53 mean 69.8\n431 size 5 bbox 3 3 fill 0.56 mean 68.0\n434 size 6 bbox 3 4 fill 0.5 mean 69.7\n435 size 27 bbox 8 6 fill 0.56 mean 71.5\n447 size 6 bbox 3 4 fill 0.5 mean 72.0\n450 size 6 bbox 3 3 fill 0.67 mean 68.7\n452 size 5 bbox 3 3 fill 0.56 mean 69.8\n458 size 7 bbox 2 4 fill 0.88 mean 69.3\n461 size 12 bbox 5 5 fill 0.48 mean 69.1\n467 size 11 bbox 4 6 fill 0.46 mean 70.9\n471 size 7 bbox 3 3 fill 0.78 mean 71.3\n479 size 6 bbox 2 4 fill 0.75 mean 71.0\n481 size 5 bbox 3 3 fill 0.56 mean 70.8\n488 size 7 bbox 3 4 fill 0.58 mean 68.7\n489 size 9 bbox 4 5 fill 0.45 mean 68.9\n491 size 5 bbox 3 2 fill 0.83 mean 68.0\n494 size 30 bbox 7 9 fill 0.48 mean 69.4\n501 size 7 bbox 4 4 fill 0.44 mean 70.6\n508 size 6 bbox 4 3 fill 0.5 me",
+     "error": "",
+     "seconds": 0.04,
+     "images": [
+      {
+       "title": "bright in part",
+       "file": "val_00009_s06_0.png"
+      }
+     ]
+    },
+    {
+     "step": 7,
+     "purpose": "Purpose: Use a higher brightness threshold to isolate the bright void blobs and the crack, then classify by shape.",
+     "code": "# voids are clearly brighter (mean ~100+) than part (~65). Use threshold ~90\nthr = 90\nvoid_cand = part_filled & (img > thr)\nlab3, n3 = ndi.label(void_cand)\nprint(\"components above thr:\", n3)\nvoid_px = 0\nfor i in range(1,n3+1):\n    m = lab3==i\n    s = m.sum()\n    if s<10: continue\n    ys,xs = np.where(m)\n    h=ys.max()-ys.min()+1; w=xs.max()-xs.min()+1\n    fill = s/(h*w)\n    aspect = max(h,w)/max(1,min(h,w))\n    print(i,\"size\",int(s),\"bbox\",h,w,\"fill\",round(fill,2),\"aspect\",round(aspect,2),\"mean\",round(img[m].mean(),1))\n    # roundish void: high fill, low aspect\n    if fill>0.4 and aspect<2.0:\n        void_px += s\nprint(\"void pixels:\", void_px, \"part pixels:\", part_filled.sum())\nshow(void_cand.astype(np.uint8)*255, \"bright candidates\")\n",
+     "stdout": "components above thr: 37\n3 size 40 bbox 29 7 fill 0.2 aspect 4.14 mean 121.4\n8 size 10 bbox 9 2 fill 0.56 aspect 4.5 mean 122.4\n23 size 242 bbox 187 13 fill 0.1 aspect 14.38 mean 121.6\n24 size 115 bbox 75 8 fill 0.19 aspect 9.38 mean 118.8\n25 size 76 bbox 11 11 fill 0.63 aspect 1.0 mean 134.5\n26 size 326 bbox 32 26 fill 0.39 aspect 1.23 mean 142.0\n27 size 139 bbox 112 13 fill 0.1 aspect 8.62 mean 121.8\n28 size 14 bbox 9 5 fill 0.31 aspect 1.8 mean 118.7\n29 size 31 bbox 23 6 fill 0.22 aspect 3.83 mean 122.9\n30 size 70 bbox 56 8 fill 0.16 aspect 7.0 mean 121.7\n31 size 139 bbox 112 8 fill 0.16 aspect 14.0 mean 122.2\n32 size 35 bbox 32 2 fill 0.55 aspect 16.0 mean 125.3\n33 size 62 bbox 45 8 fill 0.17 aspect 5.62 mean 121.0\n34 size 38 bbox 29 5 fill 0.26 aspect 5.8 mean 120.0\n35 size 12 bbox 7 4 fill 0.43 aspect 1.75 mean 126.3\nvoid pixels: 88 part pixels: 15839\n[show #5] bright candidates  (shape (224, 224))\n",
+     "error": "",
+     "seconds": 0.02,
+     "images": [
+      {
+       "title": "bright candidates",
+       "file": "val_00009_s07_0.png"
+      }
+     ]
+    },
+    {
+     "step": 8,
+     "purpose": "Purpose: Classify the two roundish bright blobs (voids) vs the elongated crack, and compute the void ratio.",
+     "code": "# From inspection: comp 25 (76px, round) and comp 26 (326px, roundish) are voids; comp 3 (40px, aspect4) is crack\nvoid_ids = [25,26]\nvoid_px = sum((lab3==i).sum() for i in void_ids)\nprint(\"void pixels:\", void_px, \"part pixels:\", part_filled.sum())\nratio = 100*void_px/part_filled.sum()\nprint(\"void ratio pct:\", round(ratio,3))\n# visualize voids\nvm = np.isin(lab3, void_ids)\nshow(vm.astype(np.uint8)*255, \"voids\")\n",
+     "stdout": "void pixels: 402 part pixels: 15839\nvoid ratio pct: 2.538\n[show #6] voids  (shape (224, 224))\n",
+     "error": "",
+     "seconds": 0.02,
+     "images": [
+      {
+       "title": "voids",
+       "file": "val_00009_s08_0.png"
+      }
+     ]
+    },
+    {
+     "step": 9,
+     "purpose": "Purpose: The two roundish bright blobs (76px and 326px) are the voids; the thin elongated lines are cracks. Submit the ratio.",
+     "code": "submit(2.538, \"Two roundish bright voids (76+326 px) inside part; thin elongated lines excluded as cracks; part area 15839 px\")\n",
+     "stdout": "[submitted] {\"void_ratio_pct\": 2.538, \"note\": \"Two roundish bright voids (76+326 px) inside part; thin elongated lines excluded as cracks; part area 15839 px\"}\n",
+     "error": "",
+     "seconds": 0.01,
+     "images": []
+    }
+   ]
+  },
+  {
+   "image": "val_00010",
+   "cells": [
+    {
+     "step": 1,
+     "purpose": "Purpose: Inspect basic image statistics and display the image to understand part vs background brightness.",
+     "code": "print(\"shape:\", img.shape, \"dtype:\", img.dtype)\nprint(\"min/max/mean:\", img.min(), img.max(), img.mean())\nhist, edges = np.histogram(img, bins=16, range=(0,256))\nfor h, e in zip(hist, edges):\n    print(f\"{e:6.1f}-{e+16:6.1f}: {h}\")\nshow(img, \"original\")\n",
+     "stdout": "shape: (224, 224) dtype: uint8\nmin/max/mean: 24 255 134.7175741390306\n   0.0-  16.0: 0\n  16.0-  32.0: 38\n  32.0-  48.0: 5128\n  48.0-  64.0: 17107\n  64.0-  80.0: 3680\n  80.0-  96.0: 744\n  96.0- 112.0: 518\n 112.0- 128.0: 248\n 128.0- 144.0: 103\n 144.0- 160.0: 110\n 160.0- 176.0: 141\n 176.0- 192.0: 333\n 192.0- 208.0: 844\n 208.0- 224.0: 5241\n 224.0- 240.0: 10493\n 240.0- 256.0: 5448\n[show #1] original  (shape (224, 224))\n",
+     "error": "",
+     "seconds": 0.04,
+     "images": [
+      {
+       "title": "original",
+       "file": "val_00010_s01_0.png"
+      }
+     ]
+    },
+    {
+     "step": 2,
+     "purpose": "Purpose: Segment the part (dark) from background (bright) using a threshold, then display the mask.",
+     "code": "# Part is dark (~32-64), background bright (~208-256). Threshold around 128.\npart_mask = img < 128\n# Clean up: fill holes so voids inside part are included in part silhouette\npart_filled = ndi.binary_fill_holes(part_mask)\nprint(\"part pixels (raw):\", part_mask.sum())\nprint(\"part pixels (filled):\", part_filled.sum())\nshow(part_filled.astype(np.uint8)*255, \"part silhouette filled\")\n",
+     "stdout": "part pixels (raw): 27463\npart pixels (filled): 27664\n[show #2] part silhouette filled  (shape (224, 224))\n",
+     "error": "",
+     "seconds": 0.02,
+     "images": [
+      {
+       "title": "part silhouette filled",
+       "file": "val_00010_s02_0.png"
+      }
+     ]
+    },
+    {
+     "step": 3,
+     "purpose": "Purpose: Find bright regions inside the part (voids + cracks) and inspect their sizes/shapes to separate voids from cracks.",
+     "code": "# Inside part, voids/cracks are brighter than the dark part.\ninside = part_filled & (img >= 128)\nlbl, n = ndi.label(inside)\nprint(\"num bright components inside part:\", n)\nsizes = ndi.sum(inside, lbl, range(1, n+1))\nfor i, s in enumerate(sizes, 1):\n    ys, xs = np.where(lbl == i)\n    h = ys.max()-ys.min()+1; w = xs.max()-xs.min()+1\n    print(f\"comp {i}: size={int(s)}, bbox={h}x{w}, aspect={max(h,w)/max(1,min(h,w)):.2f}, fill={s/(h*w):.2f}\")\nshow(inside.astype(np.uint8)*255, \"bright inside part\")\n",
+     "stdout": "num bright components inside part: 16\ncomp 1: size=179, bbox=28x23, aspect=1.22, fill=0.28\ncomp 2: size=1, bbox=1x1, aspect=1.00, fill=1.00\ncomp 3: size=1, bbox=1x1, aspect=1.00, fill=1.00\ncomp 4: size=1, bbox=1x1, aspect=1.00, fill=1.00\ncomp 5: size=1, bbox=1x1, aspect=1.00, fill=1.00\ncomp 6: size=1, bbox=1x1, aspect=1.00, fill=1.00\ncomp 7: size=2, bbox=1x2, aspect=2.00, fill=1.00\ncomp 8: size=1, bbox=1x1, aspect=1.00, fill=1.00\ncomp 9: size=1, bbox=1x1, aspect=1.00, fill=1.00\ncomp 10: size=2, bbox=2x1, aspect=2.00, fill=1.00\ncomp 11: size=2, bbox=2x1, aspect=2.00, fill=1.00\ncomp 12: size=1, bbox=1x1, aspect=1.00, fill=1.00\ncomp 13: size=4, bbox=2x3, aspect=1.50, fill=0.67\ncomp 14: size=1, bbox=1x1, aspect=1.00, fill=1.00\ncomp 15: size=2, bbox=1x2, aspect=2.00, fill=1.00\ncomp 16: size=1, bbox=1x1, aspect=1.00, fill=1.00\n[show #3] bright inside part  (shape (224, 224))\n",
+     "error": "",
+     "seconds": 0.02,
+     "images": [
+      {
+       "title": "bright inside part",
+       "file": "val_00010_s03_0.png"
+      }
+     ]
+    },
+    {
+     "step": 4,
+     "purpose": "Purpose: The voids are only slightly brighter than the part, so threshold 128 missed them. Use a lower threshold relative to the part's dark level to capture voids and cracks.",
+     "code": "# Part is dark ~32-64. Voids/cracks are brighter but still <128. Use threshold ~90.\ninside2 = part_filled & (img >= 90)\nlbl2, n2 = ndi.label(inside2)\nprint(\"num components:\", n2)\nsizes2 = ndi.sum(inside2, lbl2, range(1, n2+1))\nfor i, s in enumerate(sizes2, 1):\n    ys, xs = np.where(lbl2 == i)\n    h = ys.max()-ys.min()+1; w = xs.max()-xs.min()+1\n    print(f\"comp {i}: size={int(s)}, bbox={h}x{w}, aspect={max(h,w)/max(1,min(h,w)):.2f}, fill={s/(h*w):.2f}\")\nshow(inside2.astype(np.uint8)*255, \"inside2 (img>=90)\")\n",
+     "stdout": "num components: 194\ncomp 1: size=29, bbox=1x29, aspect=29.00, fill=1.00\ncomp 2: size=46, bbox=1x46, aspect=46.00, fill=1.00\ncomp 3: size=1, bbox=1x1, aspect=1.00, fill=1.00\ncomp 4: size=2, bbox=1x2, aspect=2.00, fill=1.00\ncomp 5: size=1, bbox=1x1, aspect=1.00, fill=1.00\ncomp 6: size=1, bbox=1x1, aspect=1.00, fill=1.00\ncomp 7: size=1, bbox=1x1, aspect=1.00, fill=1.00\ncomp 8: size=1, bbox=1x1, aspect=1.00, fill=1.00\ncomp 9: size=1, bbox=1x1, aspect=1.00, fill=1.00\ncomp 10: size=1, bbox=1x1, aspect=1.00, fill=1.00\ncomp 11: size=1, bbox=1x1, aspect=1.00, fill=1.00\ncomp 12: size=1, bbox=1x1, aspect=1.00, fill=1.00\ncomp 13: size=1, bbox=1x1, aspect=1.00, fill=1.00\ncomp 14: size=3, bbox=3x1, aspect=3.00, fill=1.00\ncomp 15: size=1, bbox=1x1, aspect=1.00, fill=1.00\ncomp 16: size=1, bbox=1x1, aspect=1.00, fill=1.00\ncomp 17: size=1, bbox=1x1, aspect=1.00, fill=1.00\ncomp 18: size=1, bbox=1x1, aspect=1.00, fill=1.00\ncomp 19: size=1, bbox=1x1, aspect=1.00, fill=1.00\ncomp 20: size=1, bbox=1x1, aspect=1.00, fill=1.00\ncomp 21: size=1, bbox=1x1, aspect=1.00, fill=1.00\ncomp 22: size=1, bbox=1x1, aspect=1.00, fill=1.00\ncomp 23: size=8, bbox=8x1, aspect=8.00, fill=1.00\ncomp 24: size=2, bbox=2x1, aspect=2.00, fill=1.00\ncomp 25: size=1, bbox=1x1, aspect=1.00, fill=1.00\ncomp 26: size=1, bbox=1x1, aspect=1.00, fill=1.00\ncomp 27: size=2, bbox=2x1, aspect=2.00, fill=1.00\ncomp 28: size=240, bbox=29x25, aspect=1.16, fill=0.33\ncomp 29: size=1, bbox=1x1, aspect=1.00, fill=1.00\ncomp 30: size=1, bbox=1x1, aspect=1.00, fill=1.00\ncomp 31: size=3, bbox=3x1, aspect=3.00, fill=1.00\ncomp 32: size=1, bbox=1x1, aspect=1.00, fill=1.00\ncomp 33: size=1, bbox=1x1, aspect=1.00, fill=1.00\ncomp 34: size=1, bbox=1x1, aspect=1.00, fill=1.00\ncomp 35: size=2, bbox=2x1, aspect=2.00, fill=1.00\ncomp 36: size=1, bbox=1x1, aspect=1.00, fill=1.00\ncomp 37: size=1, bbox=1x1, aspect=1.00, fill=1.00\ncomp 38: size=1, bbox=1x1, aspect=1.00, fill=1.00\ncomp 39: size=1, bbox=1x1, aspect=1.00, fill=1.00\ncomp 40: size=1, bbox=1x1, as",
+     "error": "",
+     "seconds": 0.04,
+     "images": [
+      {
+       "title": "inside2 (img>=90)",
+       "file": "val_00010_s04_0.png"
+      }
+     ]
+    },
+    {
+     "step": 5,
+     "purpose": "Purpose: List only the substantial components (size>=20) to identify the real voids and cracks, ignoring noise.",
+     "code": "for i, s in enumerate(sizes2, 1):\n    if s >= 20:\n        ys, xs = np.where(lbl2 == i)\n        h = ys.max()-ys.min()+1; w = xs.max()-xs.min()+1\n        print(f\"comp {i}: size={int(s)}, bbox={h}x{w}, aspect={max(h,w)/max(1,min(h,w)):.2f}, fill={s/(h*w):.2f}, cy={ys.mean():.0f}, cx={xs.mean():.0f}\")\n",
+     "stdout": "comp 1: size=29, bbox=1x29, aspect=29.00, fill=1.00, cy=6, cx=88\ncomp 2: size=46, bbox=1x46, aspect=46.00, fill=1.00, cy=6, cx=126\ncomp 28: size=240, bbox=29x25, aspect=1.16, fill=0.33, cy=38, cx=119\ncomp 83: size=20, bbox=20x1, aspect=20.00, fill=1.00, cy=106, cx=38\ncomp 88: size=20, bbox=6x6, aspect=1.00, fill=0.56, cy=119, cx=113\ncomp 90: size=20, bbox=6x8, aspect=1.33, fill=0.42, cy=121, cx=123\ncomp 104: size=26, bbox=7x8, aspect=1.14, fill=0.46, cy=127, cx=123\ncomp 124: size=26, bbox=26x1, aspect=26.00, fill=1.00, cy=144, cx=37\ncomp 128: size=34, bbox=8x9, aspect=1.12, fill=0.47, cy=139, cx=95\ncomp 142: size=170, bbox=33x22, aspect=1.50, fill=0.23, cy=170, cx=141\ncomp 155: size=23, bbox=1x23, aspect=23.00, fill=1.00, cy=193, cx=109\ncomp 194: size=22, bbox=1x22, aspect=22.00, fill=1.00, cy=217, cx=176\n",
+     "error": "",
+     "seconds": 0.02,
+     "images": []
+    },
+    {
+     "step": 6,
+     "purpose": "Purpose: The threshold 90 is too low (catches edge noise). Use a higher threshold to isolate the real voids and cracks, then inspect.",
+     "code": "inside3 = part_filled & (img >= 110)\nlbl3, n3 = ndi.label(inside3)\nsizes3 = ndi.sum(inside3, lbl3, range(1, n3+1))\nprint(\"num comps:\", n3)\nfor i, s in enumerate(sizes3, 1):\n    if s >= 15:\n        ys, xs = np.where(lbl3 == i)\n        h = ys.max()-ys.min()+1; w = xs.max()-xs.min()+1\n        print(f\"comp {i}: size={int(s)}, bbox={h}x{w}, aspect={max(h,w)/max(1,min(h,w)):.2f}, fill={s/(h*w):.2f}, cy={ys.mean():.0f}, cx={xs.mean():.0f}\")\nshow(inside3.astype(np.uint8)*255, \"inside3 (img>=110)\")\n",
+     "stdout": "num comps: 158\ncomp 30: size=211, bbox=29x23, aspect=1.26, fill=0.32, cy=38, cx=119\ncomp 92: size=46, bbox=15x11, aspect=1.36, fill=0.28, cy=163, cx=137\ncomp 99: size=28, bbox=10x5, aspect=2.00, fill=0.56, cy=176, cx=144\ncomp 106: size=20, bbox=4x7, aspect=1.75, fill=0.71, cy=183, cx=148\n[show #5] inside3 (img>=110)  (shape (224, 224))\n",
+     "error": "",
+     "seconds": 0.02,
+     "images": [
+      {
+       "title": "inside3 (img>=110)",
+       "file": "val_00010_s06_0.png"
+      }
+     ]
+    },
+    {
+     "step": 7,
+     "purpose": "Purpose: The voids are mid-gray (~90-110). Use threshold 95 and dilate to merge void pixels, then classify components by shape (roundish=void, elongated=crack).",
+     "code": "inside4 = part_filled & (img >= 95)\n# dilate to merge nearby void pixels\ninside4d = ndi.binary_dilation(inside4, iterations=2)\nlbl4, n4 = ndi.label(inside4d)\nsizes4 = ndi.sum(inside4d, lbl4, range(1, n4+1))\nprint(\"num comps:\", n4)\nfor i, s in enumerate(sizes4, 1):\n    if s >= 30:\n        ys, xs = np.where(lbl4 == i)\n        h = ys.max()-ys.min()+1; w = xs.max()-xs.min()+1\n        print(f\"comp {i}: size={int(s)}, bbox={h}x{w}, aspect={max(h,w)/max(1,min(h,w)):.2f}, fill={s/(h*w):.2f}, cy={ys.mean():.0f}, cx={xs.mean():.0f}\")\nshow(inside4d.astype(np.uint8)*255, \"inside4 dilated (img>=95)\")\n",
+     "stdout": "num comps: 5\ncomp 1: size=3104, bbox=216x163, aspect=1.33, fill=0.09, cy=121, cx=113\ncomp 2: size=379, bbox=33x28, aspect=1.18, fill=0.41, cy=38, cx=119\ncomp 3: size=379, bbox=23x31, aspect=1.35, fill=0.53, cy=125, cx=124\ncomp 4: size=138, bbox=14x17, aspect=1.21, fill=0.58, cy=140, cx=93\ncomp 5: size=312, bbox=36x26, aspect=1.38, fill=0.33, cy=170, cx=141\n[show #6] inside4 dilated (img>=95)  (shape (224, 224))\n",
+     "error": "",
+     "seconds": 0.02,
+     "images": [
+      {
+       "title": "inside4 dilated (img>=95)",
+       "file": "val_00010_s07_0.png"
+      }
+     ]
+    },
+    {
+     "step": 8,
+     "purpose": "Purpose: Use the undilated inside4 mask, label components, and classify each by aspect ratio to separate roundish voids from elongated cracks.",
+     "code": "lbl4u, n4u = ndi.label(inside4)\nsizes4u = ndi.sum(inside4, lbl4u, range(1, n4u+1))\nprint(\"num comps:\", n4u)\nvoid_px = 0\ncrack_px = 0\nfor i, s in enumerate(sizes4u, 1):\n    if s >= 15:\n        ys, xs = np.where(lbl4u == i)\n        h = ys.max()-ys.min()+1; w = xs.max()-xs.min()+1\n        aspect = max(h,w)/max(1,min(h,w))\n        kind = \"VOID\" if aspect < 2.0 else \"CRACK\"\n        if kind==\"VOID\": void_px += s\n        else: crack_px += s\n        print(f\"comp {i}: size={int(s)}, bbox={h}x{w}, aspect={aspect:.2f}, {kind}, cy={ys.mean():.0f}, cx={xs.mean():.0f}\")\nprint(\"void_px:\", void_px, \"crack_px:\", crack_px)\n",
+     "stdout": "num comps: 230\ncomp 1: size=29, bbox=1x29, aspect=29.00, CRACK, cy=6, cx=88\ncomp 2: size=46, bbox=1x46, aspect=46.00, CRACK, cy=6, cx=126\ncomp 20: size=229, bbox=29x24, aspect=1.21, VOID, cy=38, cx=119\ncomp 160: size=158, bbox=32x22, aspect=1.45, VOID, cy=170, cx=141\nvoid_px: 387.0 crack_px: 75.0\n",
+     "error": "",
+     "seconds": 0.02,
+     "images": []
+    },
+    {
+     "step": 9,
+     "purpose": "Purpose: The two mid voids (cy~120-140) were missed at threshold 95. Lower threshold to 85 and reclassify to capture all voids while excluding cracks.",
+     "code": "inside5 = part_filled & (img >= 85)\nlbl5, n5 = ndi.label(inside5)\nsizes5 = ndi.sum(inside5, lbl5, range(1, n5+1))\nprint(\"num comps:\", n5)\nvoid_px = 0\nfor i, s in enumerate(sizes5, 1):\n    if s >= 15:\n        ys, xs = np.where(lbl5 == i)\n        h = ys.max()-ys.min()+1; w = xs.max()-xs.min()+1\n        aspect = max(h,w)/max(1,min(h,w))\n        kind = \"VOID\" if aspect < 2.0 else \"CRACK\"\n        if kind==\"VOID\": void_px += s\n        print(f\"comp {i}: size={int(s)}, bbox={h}x{w}, aspect={aspect:.2f}, {kind}, cy={ys.mean():.0f}, cx={xs.mean():.0f}\")\nprint(\"void_px:\", void_px)\nshow(inside5.astype(np.uint8)*255, \"inside5 (img>=85)\")\n",
+     "stdout": "num comps: 169\ncomp 1: size=30, bbox=2x29, aspect=14.50, CRACK, cy=6, cx=88\ncomp 2: size=49, bbox=2x46, aspect=23.00, CRACK, cy=6, cx=126\ncomp 58: size=251, bbox=29x25, aspect=1.16, VOID, cy=38, cx=119\ncomp 102: size=15, bbox=15x1, aspect=15.00, CRACK, cy=70, cx=185\ncomp 107: size=40, bbox=40x1, aspect=40.00, CRACK, cy=98, cx=186\ncomp 110: size=20, bbox=20x1, aspect=20.00, CRACK, cy=106, cx=38\ncomp 111: size=187, bbox=19x23, aspect=1.21, VOID, cy=124, cx=122\ncomp 116: size=45, bbox=45x1, aspect=45.00, CRACK, cy=145, cx=37\ncomp 118: size=17, bbox=8x6, aspect=1.33, VOID, cy=128, cx=133\ncomp 125: size=83, bbox=11x14, aspect=1.27, VOID, cy=140, cx=93\ncomp 126: size=24, bbox=22x2, aspect=11.00, CRACK, cy=147, cx=190\ncomp 129: size=180, bbox=33x22, aspect=1.50, VOID, cy=170, cx=141\ncomp 131: size=17, bbox=17x1, aspect=17.00, CRACK, cy=175, cx=191\ncomp 133: size=19, bbox=19x1, aspect=19.00, CRACK, cy=185, cx=37\ncomp 134: size=15, bbox=15x1, aspect=15.00, CRACK, cy=192, cx=192\ncomp 135: size=49, bbox=1x49, aspect=49.00, CRACK, cy=193, cx=96\ncomp 136: size=20, bbox=1x20, aspect=20.00, CRACK, cy=193, cx=132\ncomp 151: size=15, bbox=15x1, aspect=15.00, CRACK, cy=207, cx=65\ncomp 167: size=22, bbox=1x22, aspect=22.00, CRACK, cy=217, cx=50\ncomp 169: size=22, bbox=1x22, aspect=22.00, CRACK, cy=217, cx=176\nvoid_px: 718.0\n[show #7] inside5 (img>=85)  (shape (224, 224))\n",
+     "error": "",
+     "seconds": 0.03,
+     "images": [
+      {
+       "title": "inside5 (img>=85)",
+       "file": "val_00010_s09_0.png"
+      }
+     ]
+    },
+    {
+     "step": 10,
+     "purpose": "Purpose: Compute the void ratio using the identified void pixels (718) over the part silhouette (27664) and submit.",
+     "code": "part_px = part_filled.sum()\nvoid_px = 718.0\nvoid_ratio_pct = 100 * void_px / part_px\nprint(\"part_px:\", part_px, \"void_px:\", void_px, \"void_ratio_pct:\", void_ratio_pct)\nsubmit(void_ratio_pct, \"Voids = roundish bright regions inside part (5 blobs, 718 px); cracks excluded by aspect ratio; part silhouette 27664 px.\")\n",
+     "stdout": "part_px: 27664 void_px: 718.0 void_ratio_pct: 2.595430884904569\n[submitted] {\"void_ratio_pct\": 2.595430884904569, \"note\": \"Voids = roundish bright regions inside part (5 blobs, 718 px); cracks excluded by aspect ratio; part silhouette 27664 px.\"}\n",
+     "error": "",
+     "seconds": 0.01,
+     "images": []
+    }
+   ]
+  },
+  {
+   "image": "val_00011",
+   "cells": [
+    {
+     "step": 1,
+     "purpose": "Purpose: Inspect basic image stats and visualize the raw image to understand part vs background brightness.",
+     "code": "print(img.shape, img.dtype, img.min(), img.max(), img.mean())\nshow(img, \"raw\")\n",
+     "stdout": "(224, 224) uint8 29 251 130.72654257015307\n[show #1] raw  (shape (224, 224))\n",
+     "error": "",
+     "seconds": 0.02,
+     "images": [
+      {
+       "title": "raw",
+       "file": "val_00011_s01_0.png"
+      }
+     ]
+    },
+    {
+     "step": 2,
+     "purpose": "Purpose: Threshold to separate the dark part from the light background, then label and keep the largest component as the part silhouette.",
+     "code": "# part is dark, background is light\npart_mask = img < 100\nlbl, n = ndi.label(part_mask)\nsizes = ndi.sum(part_mask, lbl, range(1, n+1))\nprint(\"components:\", n, \"sizes top5:\", sorted(sizes, reverse=True)[:5])\nbig = (lbl == (np.argmax(sizes)+1))\nprint(\"part pixels:\", big.sum())\nshow(big.astype(np.uint8)*255, \"part silhouette\")\n",
+     "stdout": "components: 1 sizes top5: [np.float64(27436.0)]\npart pixels: 27436\n[show #2] part silhouette  (shape (224, 224))\n",
+     "error": "",
+     "seconds": 0.02,
+     "images": [
+      {
+       "title": "part silhouette",
+       "file": "val_00011_s02_0.png"
+      }
+     ]
+    },
+    {
+     "step": 3,
+     "purpose": "Purpose: Fill the part silhouette to get the full part area (including the void), then find the void as the difference.",
+     "code": "part_filled = ndi.binary_fill_holes(big)\nprint(\"filled part pixels:\", part_filled.sum())\nvoid = part_filled & ~big\nlblv, nv = ndi.label(void)\nvsizes = ndi.sum(void, lblv, range(1, nv+1))\nprint(\"void components:\", nv, \"sizes:\", sorted(vsizes, reverse=True))\nshow(void.astype(np.uint8)*255, \"void mask\")\n",
+     "stdout": "filled part pixels: 27698\nvoid components: 1 sizes: [np.float64(262.0)]\n[show #3] void mask  (shape (224, 224))\n",
+     "error": "",
+     "seconds": 0.02,
+     "images": [
+      {
+       "title": "void mask",
+       "file": "val_00011_s03_0.png"
+      }
+     ]
+    },
+    {
+     "step": 4,
+     "purpose": "Purpose: Compute the void ratio using the filled part area as the denominator and submit.",
+     "code": "void_ratio_pct = 100 * void.sum() / part_filled.sum()\nprint(\"void px:\", void.sum(), \"part px:\", part_filled.sum(), \"ratio%:\", void_ratio_pct)\nsubmit(void_ratio_pct, \"single roundish void (262 px) inside filled part (27698 px)\")\n",
+     "stdout": "void px: 262 part px: 27698 ratio%: 0.9459166726839483\n[submitted] {\"void_ratio_pct\": 0.9459166726839483, \"note\": \"single roundish void (262 px) inside filled part (27698 px)\"}\n",
+     "error": "",
+     "seconds": 0.02,
+     "images": []
+    }
+   ]
+  }
+ ]
+}
