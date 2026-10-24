@@ -68,3 +68,6 @@ notebooks/paper-plscea-anomaly/data/
 # SpatialClaw-for-inspection: upstream clone (non-commercial licence, never commit), venv
 notebooks/spatialclaw-inspection/upstream/
 notebooks/spatialclaw-inspection/.venv/
+notebooks/podcast-wevisone/.venv/
+notebooks/podcast-wevisone/assets/
+notebooks/podcast-wevisone/out/

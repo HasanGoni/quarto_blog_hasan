@@ -1,0 +1,8 @@
+[project]
+name = "podcast-wevisone"
+version = "0.1.0"
+requires-python = ">=3.11,<3.13"
+dependencies = ["torch", "transformers @ git+https://github.com/huggingface/transformers", "safetensors", "soundfile", "numpy", "huggingface_hub", "accelerate"]
+
+[tool.uv]
+package = false

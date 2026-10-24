@@ -1,0 +1,314 @@
+[
+ [
+  "A",
+  "Welcome to the show. Today we are looking at a paper from Tencent's WeChat team, called We Vis One V L. The subtitle is: unified visual perception, from objects to pixels."
+ ],
+ [
+  "B",
+  "Okay, that is a lot of words. In one sentence, what is it?"
+ ],
+ [
+  "A",
+  "One vision language model that can find objects, point at them, count them, read text, cut out their masks, and even produce soft alpha mattes for hair and fur. All from the same text prompt."
+ ],
+ [
+  "B",
+  "So a Swiss army knife. But we already have SAM for masks, and detectors for boxes. Why do we need another one?"
+ ],
+ [
+  "A",
+  "Because the paper starts with an honest complaint. Today's vision language models hallucinate objects that are not there, they miss small objects, and they misread what the user actually means."
+ ],
+ [
+  "B",
+  "Right. Ask for a red car, and it happily draws a box around a blue one."
+ ],
+ [
+  "A",
+  "Exactly. And the fix they propose is not a clever new loss. It is mostly data, a good output format, and a small decoder. Let's go through them one at a time."
+ ],
+ [
+  "B",
+  "Start with the output format. How does a language model draw a box?"
+ ],
+ [
+  "A",
+  "It writes it, as text. They add special tokens, from zero to one thousand, that stand for normalized coordinates. So a box is four tokens: left, top, right, bottom."
+ ],
+ [
+  "B",
+  "So detection is just next token prediction. The model says: person, then four numbers, then the next person."
+ ],
+ [
+  "A",
+  "Yes. And if the thing you asked for is not in the image, the coordinate field simply says None. That tiny detail turns out to matter a lot. We will come back to it."
+ ],
+ [
+  "B",
+  "And how does that give you a mask? Text coordinates are not pixels."
+ ],
+ [
+  "A",
+  "Here is the neat trick. After each box, the model emits one extra special token, called the O B J token. Think of it as the model saying: I know exactly which object I mean. Here is my summary of it."
+ ],
+ [
+  "B",
+  "So the hidden state of that token is like a sticky note describing the object."
+ ],
+ [
+  "A",
+  "That is a good picture. A small pixel decoder reads the sticky note, the predicted box, and features from the vision encoder, and paints the mask for that one object."
+ ],
+ [
+  "B",
+  "And small means small?"
+ ],
+ [
+  "A",
+  "About nine point six million parameters for the whole decoder. Compare that with calling a separate large segmentation model. They explicitly say they do not need one."
+ ],
+ [
+  "B",
+  "Nice. How does the decoder work inside? Is it complicated?"
+ ],
+ [
+  "A",
+  "Three parts. First, it collects features from several layers of the vision encoder, so it keeps fine detail. Second, it is a deformable DETR style decoder, but the queries are not learned vectors. They are built from the O B J sticky note plus the box position."
+ ],
+ [
+  "B",
+  "So each object brings its own query."
+ ],
+ [
+  "A",
+  "Right. Third, a dynamic mask head. The query becomes a small kernel, which is applied to the pixel features. Then three upsampling steps refine the edges. For matting, an extra refinement branch handles fractional opacity."
+ ],
+ [
+  "B",
+  "Okay, architecture is clear. But you said data matters most. A hundred million images? That is not something you label by hand."
+ ],
+ [
+  "A",
+  "No. They built a data engine. Roughly a hundred million images and three point six billion boxes. The loop is: find concepts, propose boxes with detectors like SAM three and an in-house detector, and then ask Qwen three V L to verify each proposal."
+ ],
+ [
+  "B",
+  "So detectors give recall, and the language model gives precision."
+ ],
+ [
+  "A",
+  "Exactly that split. Then SAM two turns each verified box into a mask. And for matting, they train a dedicated annotator on top of a frozen SAM two, and re-annotate the whole corpus with it."
+ ],
+ [
+  "B",
+  "One thing I noticed. The data is labeled by other big models. So this model inherits their blind spots."
+ ],
+ [
+  "A",
+  "Fair point, and the paper does not hide it: manual spot checks only cover a subset. They do something smart with errors, though. After every training round, they review the mistakes, and only change the label if the label was actually wrong."
+ ],
+ [
+  "B",
+  "And the hard negatives?"
+ ],
+ [
+  "A",
+  "This is my favorite part. Changing red car to blue car does not prove there is no blue car. So they check each negative against the whole image. If the model still predicts a box for a verified negative, it becomes a hard negative, with an empty target set. The model learns to say None."
+ ],
+ [
+  "B",
+  "Now training. Walk me through it."
+ ],
+ [
+  "A",
+  "Three supervised stages, then reinforcement learning. Stage one: ninety million examples, vision encoder frozen, teach the format. They cap boxes per category at fifty, because dense samples early on made the model collapse into repeating itself."
+ ],
+ [
+  "B",
+  "Ha, the classic loop of the same box, again and again."
+ ],
+ [
+  "A",
+  "Stage two unfreezes everything, raises the image budget to nineteen hundred sixty visual tokens, and allows up to five hundred boxes per answer. That is the crowded scene stage."
+ ],
+ [
+  "B",
+  "And stage three is pixels."
+ ],
+ [
+  "A",
+  "Yes. First they warm up the decoder on two hundred fifty million segmentation samples. Then they attach it back and alternate: one step of text prediction, one step of pixel loss. Finally, the language model is frozen, and the decoder alone is fine tuned for matting."
+ ],
+ [
+  "B",
+  "What about the reinforcement learning part?"
+ ],
+ [
+  "A",
+  "They use G R P O. First, they pick prompts where the model is uncertain. The score is four times mu, times one minus mu, times sigma, where mu is the average reward in a group of answers, and sigma is its spread."
+ ],
+ [
+  "B",
+  "Let me make an example. If all eight answers are perfect, or all eight are wrong, there is nothing to learn."
+ ],
+ [
+  "A",
+  "Exactly, the score is zero. If half succeed and half fail, you get a strong signal. That gave about one hundred forty thousand samples, a hundred seventy eight thousand in total with pointing and extra box data."
+ ],
+ [
+  "B",
+  "And the reward?"
+ ],
+ [
+  "A",
+  "Two times the sum of I o U cubed over matched pairs, divided by the number of ground truth boxes plus predicted boxes. Missing an object hurts. Duplicating an object hurts. And the cube rewards tight boxes."
+ ],
+ [
+  "B",
+  "So a box with I o U zero point nine gets about zero point seven three, and a sloppy zero point five gets only an eighth. Sharp."
+ ],
+ [
+  "A",
+  "One detail: for segmentation and matting, the reinforcement learning only rewards the boxes. Nobody scores the masks directly."
+ ],
+ [
+  "B",
+  "Alright, results. Do they actually win?"
+ ],
+ [
+  "A",
+  "On detection, the four B model reaches fifty seven point one mean F one on COCO. But the big jump is Dense200, crowded scenes: seventy one point three, versus about fifty eight for Rex Omni and LocateAnything. Qwen three V L four B gets only fifteen."
+ ],
+ [
+  "B",
+  "Fifteen to seventy one. That is not a tuning difference, that is a different ability."
+ ],
+ [
+  "A",
+  "And counting, exact match, is the same story. Ninety three point seven percent on PixMo Count validation. On MixCount, forty two percent, where the next best gets twelve and a half."
+ ],
+ [
+  "B",
+  "What about the None behavior?"
+ ],
+ [
+  "A",
+  "Here the gap is dramatic. On RefCOCOg Rej, where the described object does not exist, the four B model rejects sixty seven percent. Rex Omni and LocateAnything reject about half a percent. They almost always draw a box anyway."
+ ],
+ [
+  "B",
+  "So the older models cannot say no."
+ ],
+ [
+  "A",
+  "On the in-house WeRef bench, it rejects ninety six percent. And on Ref ZOM segmentation, eighty six percent, while several earlier segmentation models stay near zero."
+ ],
+ [
+  "B",
+  "And segmentation quality, when the object does exist?"
+ ],
+ [
+  "A",
+  "Best on every RefCOCO family split. For example, eighty one point four on RefCOCO validation, and eighty four point five on test A. And matting: with a box prompt on A M two K, mean absolute difference five point oh, versus eleven for the best SAM two matting baseline. Lower is better."
+ ],
+ [
+  "B",
+  "Let me be the skeptic for a moment. Some benchmarks here are in-house. WeRef bench, WeRef Mat. And the authors ran the baselines themselves."
+ ],
+ [
+  "A",
+  "Yes, and it deserves saying. The public benchmarks still show the lead, but the largest margins are on the in-house ones. Also, in matting the two B model sometimes beats the four B model, on P three M and on PPM, so bigger is not always better there."
+ ],
+ [
+  "B",
+  "And their own limitations section?"
+ ],
+ [
+  "A",
+  "Four honest points. General abilities may drop compared to the base model. No chain of thought, so complex reasoning is limited. Single turn only. And real users are vague, while benchmark prompts are clean."
+ ],
+ [
+  "B",
+  "Before we finish, the practical question. What did they actually open source?"
+ ],
+ [
+  "A",
+  "Quite a lot. First, the weights, for the two B and the four B model, both on Hugging Face. Second, an inference package on GitHub, with a simple Python class, a transformers or V L L M backend, three cookbook notebooks, and a Gradio demo."
+ ],
+ [
+  "A",
+  "Third, the evaluation pipeline: scripts and metric code for the public benchmarks. And fourth, a separate branch called Mask two Alpha. That is the matting annotator from their data engine. It is a small head on top of a frozen SAM two, and its weights are in the repo."
+ ],
+ [
+  "B",
+  "And what is not released?"
+ ],
+ [
+  "A",
+  "Three things. The training data: the hundred million images and three point six billion boxes stay in house. The training code: in the README, the to do item called fine tuning code is still unchecked. And their in-house matting benchmark is marked, not yet released. I also did not find the WeRef bench in the evaluation guide, and the public benchmark data you have to download yourself."
+ ],
+ [
+  "B",
+  "Okay. Say I have my own images, maybe X ray images from an inspection line. Can I just use the model?"
+ ],
+ [
+  "A",
+  "Yes, you can run it zero shot. Install the package, load the checkpoint, and call predict with a task name and a text query. Detection, referring, counting, segmentation, matting, all through the same call. They pin transformers five point twelve and torch two point eleven. And note, the four B checkpoint is stored in full precision, about nineteen gigabytes, so load it in half precision."
+ ],
+ [
+  "B",
+  "But will it work on X ray?"
+ ],
+ [
+  "A",
+  "Nobody knows yet, and I have not tested it. The benchmarks are natural images, documents, and portraits. Industrial or X ray data is outside what they report. So my advice: label a small test set from your own data, include images with no defect, and measure two things. F one at I o U zero point five, and the rejection rate on the empty images."
+ ],
+ [
+  "B",
+  "And if the zero shot result is not good enough?"
+ ],
+ [
+  "A",
+  "Then fine tune, but there is no official recipe. What the paper does give you is the ingredients. The output format, with the ref tags, the coordinate tokens, and None for absent targets. And the settings: in stage three they used Loh-rah on the language model, rank one hundred twenty eight, alpha two hundred fifty six, with the token embeddings and output head fully trainable. For the reinforcement learning stage they describe the G R P O setup and the I o U cubed reward, so you could rebuild it."
+ ],
+ [
+  "B",
+  "So what would you recommend?"
+ ],
+ [
+  "A",
+  "This part is my suggestion, not the authors'. One: measure zero shot first. Two: convert your boxes into their exact text format, add defect free images as None examples, and do a Loh-rah fine tune of the language model. The model is a standard Qwen three V L architecture, so common Qwen fine tuning tools are a natural start, but I have not verified that they keep the special tokens intact."
+ ],
+ [
+  "A",
+  "Three: masks are the delicate part. The pixel decoder reads the hidden state of the O B J token, so if the language model changes, the decoder can drift. The authors alternated text and pixel steps for that reason. So fine tune boxes first, check the masks, and only train the nine point six million parameter decoder if you need to. Four: keep a held out set that never enters training."
+ ],
+ [
+  "B",
+  "And the license? Can I use it commercially?"
+ ],
+ [
+  "A",
+  "The code and the weights are both Apache two point oh. That allows commercial use, modification, and redistribution, as long as you keep the license and notices, and it includes a patent grant. One small trap: GitHub labels the repo as other, because the license file starts with a Tencent notice. But the text underneath is Apache two point oh, and the Hugging Face model cards say the same."
+ ],
+ [
+  "A",
+  "Two caveats. Third party components keep their own licenses, so check them. The base model, Qwen three V L four B, is also Apache two point oh on its hub page. I did not check SAM two or the benchmark datasets. And since the training data is not released, you cannot audit what the model was trained on. I am not a lawyer, so for a product, have someone check."
+ ],
+ [
+  "B",
+  "For me the takeaway is the None token. In industrial inspection, the most common truth is: there is no defect here. A model that always draws a box is useless."
+ ],
+ [
+  "A",
+  "I agree. That is why a model trained on hard negatives, and rewarded for predicting nothing, is interesting beyond this paper. The weights and code are released, so you can test it on your own images."
+ ],
+ [
+  "B",
+  "Which is the real test. Benchmarks are the authors' homework. Your data is the exam."
+ ],
+ [
+  "A",
+  "Perfect place to stop. Thanks for listening, and see you in the next paper."
+ ]
+]
