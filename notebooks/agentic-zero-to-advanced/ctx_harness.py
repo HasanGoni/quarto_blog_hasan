@@ -114,7 +114,8 @@ def t_ls(path: str = ".") -> str:
 
 
 def t_glob(pattern: str) -> str:
-    hits = sorted(ARCHIVE.glob(pattern))
+    root = ARCHIVE.resolve()
+    hits = sorted(h for h in ARCHIVE.glob(pattern) if root in h.resolve().parents)  # a "../" pattern must not escape
     return "\n".join(_rel(h) for h in hits[:200]) + (f"\n... {len(hits)} matches" if len(hits) > 200 else "") \
         or "no match"
 
