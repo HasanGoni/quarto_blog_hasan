@@ -1,7 +1,7 @@
 """Part 4: structured output over the Part 3 tool result, with real validation + retry.
 
-Takes the real `inspect_casting_xray` detector JSON (Part 2's classical top-hat detector,
-real GDXray Castings candidate boxes + ground-truth comparison) and asks a real local LLM
+Takes the real `inspect_xray` detector JSON (Part 2's classical top-hat detector on the synthetic
+void dataset: candidate boxes with a strength, no ground truth) and asks a real local LLM
 (Qwen3-Coder-30B via vLLM, OpenAI-compatible) to turn it into a structured defect report:
 bounding box -> defect type / severity / confidence / explanation.
 
@@ -11,7 +11,7 @@ The point of this script is the failure handling, not the happy path:
   3. If either step fails, retry ONCE with the exact error fed back to the model.
   4. If it still fails, return status="needs_review" with the raw text attached -- never
      silently fall back to an empty defect list, which is indistinguishable from a genuinely
-     clean casting.
+     clean part.
 
 Configure via .env (see .env.example):
   OPENAI_API_KEY=local
@@ -20,6 +20,7 @@ Configure via .env (see .env.example):
 """
 import json
 import os
+from concurrent.futures import ThreadPoolExecutor
 import re
 from pathlib import Path
 from typing import List, Literal
@@ -27,7 +28,8 @@ from typing import List, Literal
 import aisuite as ai
 from pydantic import BaseModel, Field, ValidationError
 
-from detector_tool import DATA_DIR, inspect_casting_xray
+import void_data as vd
+from detector_tool import inspect_xray
 
 OUT_DIR = Path(__file__).parent / "out"
 OUT_DIR.mkdir(exist_ok=True)
@@ -47,7 +49,8 @@ def load_dotenv(path: Path = ENV_FILE) -> None:
 
 load_dotenv()
 MODEL = os.environ.get("AGENTIC_ZERO_MODEL", "openai:gpt-4o-mini")
-MAX_IMAGES = int(os.environ.get("AGENTIC_ZERO_MAX_IMAGES", "0")) or None  # 0/unset = all
+MAX_IMAGES = int(os.environ.get("AGENTIC_ZERO_MAX_IMAGES", "0")) or None  # 0/unset = all 600 held-out images
+WORKERS = 8
 
 
 class Defect(BaseModel):
@@ -65,8 +68,9 @@ class DefectReport(BaseModel):
 SCHEMA_JSON = json.dumps(DefectReport.model_json_schema(), indent=2)
 
 SYSTEM_PROMPT = f"""You are an industrial X-ray inspection assistant. You will be given the raw
-output of a classical computer-vision defect detector (candidate bounding boxes, no semantic
-labels) for one aluminum casting X-ray frame. Turn it into a structured defect report.
+output of a classical computer-vision void detector (candidate bounding boxes, each with a
+strength, no semantic labels) for one X-ray image of a metal part. Turn it into a structured
+defect report.
 
 Output ONLY a single JSON object matching this schema -- no markdown fences, no prose before or
 after it:
@@ -75,7 +79,7 @@ after it:
 
 Rules:
 - Emit exactly one entry in "defects" per candidate box in the input, in the same order.
-- Infer "type" and "severity" from the box's size, position, and the detector's confidence score
+- Infer "type" and "severity" from the box's size, position, and the candidate's strength
   -- you do not have the image, only these numbers, so be conservative and say so in
   "explanation" when the numbers are genuinely ambiguous.
 - If the detector reports zero candidate boxes, return {{"defects": []}} -- that is a valid,
@@ -108,18 +112,18 @@ def call_llm(client: "ai.Client", messages: list[dict]) -> str:
     return response.choices[0].message.content or ""
 
 
-def structured_report_for_image(client: "ai.Client", image_path: Path) -> dict:
-    tool_result = inspect_casting_xray(str(image_path))
+def structured_report_for_image(client: "ai.Client", image_id: str) -> dict:
+    tool_result = inspect_xray(image_id)
     messages = [
         {"role": "system", "content": SYSTEM_PROMPT},
-        {"role": "user", "content": f"Detector output for {image_path.name}:\n{tool_result}"},
+        {"role": "user", "content": f"Detector output for {image_id}:\n{tool_result}"},
     ]
 
     raw = call_llm(client, messages)
     report, error = parse_and_validate(raw)
     if report is not None:
         return {
-            "image": image_path.name,
+            "image": image_id,
             "status": "ok",
             "attempts": 1,
             "defects": [d.model_dump() for d in report.defects],
@@ -141,7 +145,7 @@ def structured_report_for_image(client: "ai.Client", image_path: Path) -> dict:
     report_retry, error_retry = parse_and_validate(raw_retry)
     if report_retry is not None:
         return {
-            "image": image_path.name,
+            "image": image_id,
             "status": "recovered_after_retry",
             "attempts": 2,
             "first_attempt_error": error,
@@ -149,7 +153,7 @@ def structured_report_for_image(client: "ai.Client", image_path: Path) -> dict:
         }
 
     return {
-        "image": image_path.name,
+        "image": image_id,
         "status": "needs_review",
         "attempts": 2,
         "first_attempt_error": error,
@@ -166,18 +170,18 @@ def main():
             "For local vLLM, use OPENAI_API_KEY=local and OPENAI_BASE_URL=http://localhost:8000/v1."
         )
 
-    images = sorted(DATA_DIR.glob("C0001_*.png"))
+    image_ids = vd.split_ids("test")  # the held-out split, all of it
     if MAX_IMAGES:
-        images = images[:MAX_IMAGES]
-    if not images:
-        raise FileNotFoundError(f"No GDXray Castings frames found under {DATA_DIR}")
+        image_ids = image_ids[:MAX_IMAGES]
 
-    client = ai.Client()
-    results = []
-    for i, image_path in enumerate(images, 1):
-        result = structured_report_for_image(client, image_path)
-        results.append(result)
-        print(f"[{i}/{len(images)}] {image_path.name}: {result['status']}")
+    def work(image_id: str) -> dict:
+        return structured_report_for_image(ai.Client(), image_id)  # one client per thread
+
+    with ThreadPoolExecutor(WORKERS) as pool:
+        results = list(pool.map(work, image_ids))
+    for i, r in enumerate(results, 1):
+        if r["status"] != "ok":
+            print(f"[{i}/{len(results)}] {r['image']}: {r['status']}")
 
     n = len(results)
     ok = sum(1 for r in results if r["status"] == "ok")

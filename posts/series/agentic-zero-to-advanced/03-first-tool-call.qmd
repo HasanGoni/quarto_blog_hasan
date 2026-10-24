@@ -1,9 +1,10 @@
 ---
 title: "Agentic Developer: Zero to Advanced, Part 3: Your First Tool-Calling LLM"
-subtitle: "Wrap the Part 2 classical detector as a callable tool — one LLM request, real structured output, plain-English explanation"
+subtitle: "Wrap the Part 2 classical detector as a callable tool: one LLM request, real structured output, plain-English explanation"
 author: "Hasan Goni"
 date: 2026-09-14
-categories: [agentic-ai, computer-vision, gdxray, python]
+date-modified: 2026-10-18
+categories: [agentic-ai, computer-vision, synthetic-data, python]
 toc: true
 series:
   name: "Agentic Developer: Zero to Advanced"
@@ -15,18 +16,26 @@ This post is part of the [Agentic Developer: Zero to Advanced](index.qmd) series
 from [Part 2 — the dataset and the classical baseline](02-dataset-baseline.qmd).
 :::
 
-Part 2 ended with a detector that works, badly. Precision 0.066, recall 0.094 — honest numbers,
-no LLM anywhere. This post adds the first agentic ingredient: **tool calling**. The classical
-detector becomes a Python function the model can invoke. You send one request; the model calls
-the tool, reads the structured JSON it returns, and writes a short explanation a human operator
-could actually use.
+Part 2 ended with a detector that works, badly. Precision 0.165, recall 0.244 on the held-out
+images, honest numbers, no LLM anywhere. This post adds the first agentic ingredient: **tool
+calling**. The classical detector becomes a Python function the model can invoke. You send one
+request; the model calls the tool, reads the structured JSON it returns, and writes a short
+explanation a human operator could actually use.
 
-Still no planning loop, no memory, no LangGraph. Just: **ask → tool runs → model explains**.
+Still no planning loop, no memory, no LangGraph. Just: **ask, tool runs, model explains**.
+
+:::{.callout-note}
+**Rewritten on 2026-10-18** on the synthetic void dataset (see [Part 2](02-dataset-baseline.qmd)),
+because the first version used GDXray images that I may not redistribute. The tool also changed:
+the old one handed the model the ground truth. A deployed tool has no answer key, so this one
+does not, and the model can no longer say "false positive" with confidence. That is the honest
+setting.
+:::
 
 ## Why wrap the detector at all
 
-A plain LLM asked "are there defects in this X-ray?" has to guess. It has never seen the image
-bytes in Part 3's setup — only your words. Tool calling fixes that gap: the model decides
+A plain LLM asked "are there voids in this X-ray?" has to guess. It has never seen the image
+bytes in Part 3's setup, only your words. Tool calling fixes that gap: the model decides
 *when* to run the real detector, gets back real coordinates and counts, and only then writes
 its verdict.
 
@@ -37,71 +46,70 @@ conversation starts from evidence.
 ## The tool: structured detector output
 
 The tool is a normal Python function with a docstring. `aisuite` reads that docstring and builds
-the JSON schema the model uses to call it — same pattern as the [Agentic Development tool-use
-post](../agentic-development/03-tool-use-mcp.qmd), but scoped to the GDXray baseline from Part 2.
+the JSON schema the model uses to call it, the same pattern as the [Agentic Development tool-use
+post](../agentic-development/03-tool-use-mcp.qmd), scoped to the baseline from Part 2.
 
 ```{=html}
 <details>
-<summary><strong>Show <code>inspect_casting_xray()</code></strong></summary>
+<summary><strong>Show <code>inspect_xray()</code></strong></summary>
 ```
 
 ```python
-def inspect_casting_xray(image_path: str) -> str:
-    """Run the classical top-hat defect detector from Part 2 on one GDXray casting frame.
+def inspect_xray(image_id: str) -> str:
+    """Run the classical top-hat void detector from Part 2 on one X-ray image.
 
     Args:
-        image_path: Path to a GDXray Castings .png frame (e.g. C0001_0001.png).
+        image_id: Image id such as test_00009 (split name, underscore, five digits).
 
     Returns:
-        JSON string with candidate boxes, counts, and ground-truth comparison when available.
+        JSON string with the candidate boxes (pixels), each with its size and strength, where
+        strength is the peak response divided by the image's noise level.
     """
-    gray = cv2.imread(image_path, cv2.IMREAD_GRAYSCALE)
-    candidates = detect_candidates(gray)
-    gt_boxes = ground_truth_for(image_path)
-    tp, fp, fn = score_image(gt_boxes, candidates)
-    return json.dumps({
-        "image": Path(image_path).name,
-        "ground_truth_boxes": len(gt_boxes),
-        "candidate_boxes": len(candidates),
-        "true_positives": tp,
-        "false_positives": fp,
-        "false_negatives": fn,
-        "candidates": [...],
-    }, indent=2)
+    split, i = parse_image_id(image_id)
+    gray = vd.load_image(split, i)
+    boxes, st = detect_candidates(gray, K_DEV, return_stages=True)
+    sigma = max(st["sigma"], 1e-3)
+    cands = [{"x1": x1, "y1": y1, "x2": x2, "y2": y2, "width": x2 - x1, "height": y2 - y1,
+              "strength": round(float(st["response"][y1:y2, x1:x2].max()) / sigma, 1)}
+             for x1, y1, x2, y2 in boxes]
+    return json.dumps({"image": ..., "part_area_px": ..., "candidate_boxes": len(cands),
+                       "candidates": cands, "threshold": f"{K_DEV} x noise level", ...}, indent=2)
 ```
 
 ```{=html}
 </details>
 ```
 
-On `C0001_0001.png`, the tool returns this (real output from `detector_tool.py`):
+On `test_00009`, the held-out image from Part 2, the tool returns this (real output from
+`detector_tool.py`, abbreviated to one line per box):
 
 ```json
 {
-  "image": "C0001_0001.png",
-  "ground_truth_boxes": 3,
+  "image": "test_00009",
+  "image_size": {"width": 224, "height": 224},
+  "part_area_px": 26297,
   "candidate_boxes": 3,
-  "true_positives": 0,
-  "false_positives": 3,
-  "false_negatives": 3,
   "candidates": [
-    {"x1": 107, "y1": 51, "x2": 117, "y2": 64, "width": 10, "height": 13},
-    {"x1": 30, "y1": 266, "x2": 41, "y2": 283, "width": 11, "height": 17},
-    {"x1": 711, "y1": 340, "x2": 731, "y2": 374, "width": 20, "height": 34}
+    {"x1": 99,  "y1": 0,   "x2": 122, "y2": 5,   "width": 23, "height": 5, "strength": 11.2},
+    {"x1": 78,  "y1": 219, "x2": 88,  "y2": 224, "width": 10, "height": 5, "strength": 10.3},
+    {"x1": 135, "y1": 222, "x2": 138, "y2": 224, "width": 3,  "height": 2, "strength": 8.8}
   ],
+  "threshold": "8.0 x noise level",
   "detector": "classical top-hat baseline (Part 2)"
 }
 ```
 
-That is the bridge between Part 2's raw boxes and something an LLM can reason over: counts,
-coordinates, and an honest score against ground truth when the frame has labels.
+Three things are worth noticing. There is no ground truth in it. Every candidate sits at the
+image border (`y = 0` or `y = 224`), where the part is cut off by the frame. And in Part 2 this
+image had three real voids that the detector missed entirely, so all three candidates are false
+alarms. Neither the tool nor the model knows that. Part 7 adds a border rule for exactly this.
 
 ## One LLM call, three internal steps
 
 Under the hood, `aisuite` with `max_turns=3` does a short loop:
 
 1. You send the user message.
-2. The model returns a **tool call** (`inspect_casting_xray`).
+2. The model returns a **tool call** (`inspect_xray`).
 3. Python runs the detector, feeds the JSON back.
 4. The model writes the final explanation.
 
@@ -142,23 +150,23 @@ advertises.
 
 ```python
 import aisuite as ai
-from detector_tool import DATA_DIR, inspect_casting_xray
+from detector_tool import inspect_xray
 
-IMAGE = DATA_DIR / "C0001_0001.png"
 client = ai.Client()
 response = client.chat.completions.create(
     model="openai:qwen3-coder",          # or openai:gpt-4o-mini for cloud
     messages=[
         {"role": "system", "content": (
-            "You are an industrial X-ray inspection assistant. "
-            "Always call inspect_casting_xray before answering."
+            "You are an industrial X-ray inspection assistant. The tool reports candidate voids; "
+            "it has no answer key, so do not claim a candidate is a real defect. "
+            "Always call inspect_xray before answering."
         )},
         {"role": "user", "content": (
-            f"Inspect this frame and tell me pass or human review. "
-            f"Image path: {IMAGE}"
+            "Inspect this frame and tell me whether it looks like a pass or needs human review. "
+            "Image id: test_00009. Keep it under 100 words."
         )},
     ],
-    tools=[inspect_casting_xray],
+    tools=[inspect_xray],
     max_turns=3,
 )
 print(response.choices[0].message.content)
@@ -168,37 +176,58 @@ print(response.choices[0].message.content)
 </details>
 ```
 
-One practical note: models often pass just the filename (`C0001_0001.png`) to the tool instead of
-the full path. `inspect_casting_xray` resolves bare filenames against the GDXray `C0001` folder
-automatically so the detector still finds the image.
-
 ## What the local model said
 
-I ran this against my local vLLM server (`qwen3-coder`, the output of
-`curl http://localhost:8000/v1/models`). Given the tool result above — three candidates, zero
-overlaps with the three real defects — here is the explanation it returned:
+I ran this against my local vLLM server (`qwen3-coder`, the id returned by
+`curl http://localhost:8000/v1/models`). Given the tool result above, here is the explanation
+for `test_00009`:
 
 :::{.callout-note}
-The detector found 3 candidate defects in this casting frame, but all were false positives.
-There are 3 true defects present according to ground truth, but none were detected. This means
-the detector missed all actual defects while incorrectly flagging 3 areas as defective. The image
-needs human review because the detector failed to identify real defects. The false alarms could
-lead to unnecessary rework if not verified by a human inspector.
-
-The detector's performance is poor for this frame with 0 true positives, 3 false positives, and
-3 false negatives.
+The detector found three candidate voids in test_00009. Two are near the top and one near the
+bottom. All exceed the detection threshold of 8.0 times noise level. Recommend human review to
+confirm if these are actual defects or false positives. The part area is 26,297 pixels.
 :::
 
-That is the payoff: the model did not invent defect counts. It read them from the tool, matched
-them against the pass/fail question, and recommended human review — which is the right call when
-precision and recall are both near zero on the frame. Same tool, same JSON — whether the LLM runs
-on OpenAI's API or on a vLLM instance on your own GPU.
+The count is right and the recommendation is sensible, and there is already a mistake in it: the
+tool's boxes put **one** candidate at the top (`y = 0`) and **two** at the bottom (`y = 219` and
+`y = 222`), not two and one. The model reasoned about positions it could have read exactly and
+got them wrong. That is why I checked more than one image.
+
+## Checking it on ten held-out images
+
+I ran the same call on the first ten held-out images in order (`test_00000` to `test_00009`, not
+picked by outcome) and checked each answer two ways: automatically, does the explanation quote
+the number of candidates the tool returned, and by reading, does it claim anything the tool did
+not say? The raw answers are in `out/consistency.json`.
+
+| Check | Result |
+|---|---|
+| Quotes the correct candidate count | **10 of 10** |
+| Calls the candidates "dark" (3 of 10: `test_00000`, `test_00006`, `test_00009`) | wrong, a void is **brighter**, and the tool never mentions polarity |
+| Says strengths are "below the threshold" (`test_00007`) | wrong, every returned candidate is above it by construction |
+| Says "the image seems to pass" with 2 candidates raised (`test_00007`) | contradicts its own recommendation to review |
+| Gets the position of the candidates wrong (`test_00009`) | wrong, see above |
+
+So the part the tool supplies (the count) comes through reliably, and the part the model adds
+(what the candidates look like, whether they pass) is where it makes things up: 4 of the 10
+batch explanations (`test_00000`, `test_00006`, `test_00007`, `test_00009`) contain at least one
+claim I can show is false or inconsistent. The position error on `test_00009` came from the
+single call above, whose text differs from the batch run's, because sampling is not
+deterministic. Ten
+images is a small sample, and I wrote the checks after reading the answers, so
+treat the rates as an illustration of the kind of error, not a measurement.
+
+That is the payoff and the warning in one place. The model did not invent defect counts. It read
+them from the tool. But as soon as it is allowed to describe what it did not measure, it fills
+the gap with plausible words. Part 4 shrinks that freedom by forcing the answer into fields, and
+Part 7 takes the pass/review decision away from the model altogether.
 
 ## What this is not (yet)
 
 - **Not an agent.** There is no replanning, no second tool choice, no "try a different threshold."
 - **Not structured output.** The final answer is free-form prose. Part 4 tightens that to reliable JSON fields (defect type, severity, confidence).
 - **Not better detection.** The underlying detector is still Part 2's classical baseline. The LLM layer adds *interpretation*, not accuracy.
+- **Not a measured error rate.** The ten-image check above shows the kinds of mistakes, with a sample too small and a checklist too informal to quote as a rate.
 
 ## Jargon, explained simply
 
@@ -257,8 +286,10 @@ AGENTIC_ZERO_MODEL=openai:qwen3-coder
 The script always writes `out/tool_result.json`. With an API key set (real or dummy for vLLM), it
 also writes `out/llm_explanation.txt` with the live model response.
 
-GDXray Castings C0001 must be on disk (same Kaggle mirror as Part 2). For local inference,
-start vLLM first and confirm the model id with `curl http://localhost:8000/v1/models`.
+The dataset must be built first (see the commands in [Part 2](02-dataset-baseline.qmd)). For
+local inference, start vLLM first and confirm the model id with
+`curl http://localhost:8000/v1/models`. The script also runs the ten-image check, which makes
+eleven model calls in total.
 
 ## What's next
 

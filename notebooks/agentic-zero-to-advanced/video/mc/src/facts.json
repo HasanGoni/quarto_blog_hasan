@@ -1,0 +1,256 @@
+{
+ "costs": {
+  "rule_ns": 40,
+  "laya_gpu_ms": 20,
+  "laya_cpu_ms": 523,
+  "llm_judge_ms": 216,
+  "llm_judge_number_ms": 564,
+  "llm_note_ms": 2441,
+  "llm_note_tokens": 243,
+  "llm_judge_tokens": 171
+ },
+ "auc": {
+  "band": {
+   "guided": 0.641
+  },
+  "laya-english": {
+   "plain": 0.43,
+   "guided": 0.604
+  },
+  "llm-verbalized": {
+   "plain": 0.358,
+   "guided": 0.697
+  },
+  "llm-logprob": {
+   "plain": 0.671,
+   "guided": 0.643
+  }
+ },
+ "notes_acc": {
+  "laya-english": {
+   "escalate": 0.99,
+   "uncertain": 0.871,
+   "n_kept": 0.681
+  },
+  "llm-verbalized": {
+   "escalate": 0.715,
+   "uncertain": 0.933,
+   "n_kept": 0.937
+  },
+  "llm-logprob": {
+   "escalate": 0.771,
+   "uncertain": 0.931,
+   "n_kept": 0.925
+  }
+ },
+ "laya_guided": {
+  "ece": 0.028,
+  "flagged_at_0.5": 0
+ },
+ "guard": {
+  "n": 520,
+  "disagree": 72,
+  "agree": 448,
+  "laya_wrong": 70,
+  "ambiguous": 2,
+  "uncertain_false": 65,
+  "misread_verdict": 5,
+  "real_omissions": 0,
+  "flag_idx": {
+   "laya_called_a_fine_note_uncertain": [
+    2,
+    10,
+    23,
+    35,
+    36,
+    45,
+    51,
+    52,
+    58,
+    59,
+    62,
+    68,
+    71,
+    77,
+    82,
+    89,
+    101,
+    114,
+    122,
+    126,
+    142,
+    143,
+    147,
+    149,
+    153,
+    159,
+    162,
+    168,
+    175,
+    180,
+    192,
+    195,
+    205,
+    217,
+    218,
+    219,
+    229,
+    233,
+    234,
+    236,
+    240,
+    250,
+    253,
+    259,
+    269,
+    271,
+    274,
+    275,
+    284,
+    297,
+    316,
+    320,
+    351,
+    376,
+    383,
+    399,
+    400,
+    416,
+    463,
+    482,
+    483,
+    489,
+    508,
+    514,
+    516
+   ],
+   "laya_misread_an_explicit_verdict": [
+    37,
+    87,
+    282,
+    308,
+    364
+   ],
+   "ambiguous": [
+    309,
+    392
+   ],
+   "real_note_omissions": []
+  },
+  "all_flagged": [
+   2,
+   10,
+   23,
+   35,
+   36,
+   37,
+   45,
+   51,
+   52,
+   58,
+   59,
+   62,
+   68,
+   71,
+   77,
+   82,
+   87,
+   89,
+   101,
+   114,
+   122,
+   126,
+   142,
+   143,
+   147,
+   149,
+   153,
+   159,
+   162,
+   168,
+   175,
+   180,
+   192,
+   195,
+   205,
+   217,
+   218,
+   219,
+   229,
+   233,
+   234,
+   236,
+   240,
+   250,
+   253,
+   259,
+   269,
+   271,
+   274,
+   275,
+   282,
+   284,
+   297,
+   308,
+   309,
+   316,
+   320,
+   351,
+   364,
+   376,
+   383,
+   392,
+   399,
+   400,
+   416,
+   463,
+   482,
+   483,
+   489,
+   508,
+   514,
+   516
+  ]
+ },
+ "example_ok": {
+  "i": 6,
+  "image": "test_00018",
+  "note": "The inspection of image test_00018 resulted in an escalate verdict due to uncertainty about at least one surviving candidate. Candidate 1 was kept with major severity and uncertain status, having a confidence of 0.45 and contrast of 16.24. Candidates 0 and 2 were rejected by the classifier.",
+  "verdict": "escalate",
+  "kept": [
+   {
+    "id": 1,
+    "severity": "major",
+    "uncertain": true,
+    "confidence": 0.45,
+    "contrast": 16.24,
+    "area_px": 98
+   }
+  ],
+  "p_escalate": 0.97,
+  "p_uncertain": 0.927
+ },
+ "example_ambiguous": {
+  "i": 309,
+  "image": "test_00086",
+  "note": "The inspection pipeline escalated image test_00086 because 5 candidates survived the filtering process, exceeding the limit of 4. Candidates 3, 5, 10, 13, and 15 were kept with varying severities and confidence levels. The detector appeared confused, leading to the escalation decision.",
+  "verdict": "escalate"
+ },
+ "example_bad": {
+  "i": 2,
+  "image": "test_00006",
+  "note": "Image test_00006 received a review verdict due to 1 confident defect surviving the rules. Defect 1 (minor severity, confidence 0.85) was kept after inspection. Several other candidates were rejected by either the classifier or R1 border rules.",
+  "verdict": "review",
+  "kept": [
+   {
+    "id": 1,
+    "severity": "minor",
+    "uncertain": false,
+    "confidence": 0.85,
+    "contrast": 39.28,
+    "area_px": 35
+   }
+  ],
+  "p_uncertain": 0.653
+ }
+}

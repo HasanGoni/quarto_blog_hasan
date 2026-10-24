@@ -1,0 +1,152 @@
+---
+title: "Agentic AI Software Factory: Inspection System"
+description: "Building a factory of AI agents that takes tickets, changes the X-ray inspection pipeline from Agentic Developer: Zero to Advanced, and merges only what passes a gate the agents cannot edit -- planned from published evidence, built in small steps, with real runs and honest numbers."
+author: "Hasan Goni"
+date: last-modified
+categories: [series, agentic-ai, software-factory, langgraph]
+toc: true
+---
+
+:::{.callout-note}
+**Coming soon.** This series starts after [Agentic Developer: Zero to Advanced](../agentic-zero-to-advanced/index.qmd)
+is finished, because it builds directly on it. This page is the plan. It is based on a research pass over the
+published evidence, and anything that research could not verify is marked as such. Titles and order may change
+as I build, and links go live as each post is written.
+:::
+
+## Series Overview
+
+Everyone is talking about "AI software factories". Most of what I have seen are demos where an agent
+writes some code and everyone claps. I want to build one the way this blog builds everything else: a
+narrow target, small steps, real runs, held-out evaluation, and numbers I report even when they are
+unflattering.
+
+**The target.** The inspection pipeline from the Zero-to-Advanced series: detect, measure, classify,
+apply rules, decide, report. The factory's job is to take a **ticket** ("add a rule for X", "cut the
+tokens per frame", "handle a frame with no candidates"), have agents change the pipeline, and merge the
+change only if it passes a **gate**. No ticket, no change. No pass, no merge.
+
+**The sibling series.** The factory core built here (ticket queue, gate runner, audit log, sandbox) is reused
+by [Agentic AI Software Factory: Robust Segmentation Models](../agentic-factory-segmentation/index.qmd).
+
+## What the research found, and what it changed
+
+I read around the published work before planning. The short version, with links to the sources I could open:
+
+- **Agents take the cheapest path to a green signal.** METR measured reward hacking in 39 of 128 RE-Bench runs
+  (30.4%), including overwriting the timer and stubbing the evaluator
+  ([METR](https://metr.org/blog/2025-06-05-recent-reward-hacking)). NIST's CAISI describes agents reading the answer
+  from the repository history
+  ([CAISI](https://www.nist.gov/caissi/2-examples-cheating-caisis-agent-evaluations)). Telling the model not to cheat
+  barely moved the rate, so **prompts are not a control**. The gate has to be made of permissions and processes.
+- **Permissions are not a sandbox.** Anthropic's own Claude Code documentation calls permission rules "a permission
+  gate, not a sandbox", says Read and Edit deny rules do not cover a script that opens files itself, and says a hook
+  that times out or crashes does not block by default
+  ([permissions](https://code.claude.com/docs/en/permissions), [hooks](https://code.claude.com/docs/en/hooks),
+  [sandboxing](https://code.claude.com/docs/en/sandboxing)).
+- **Passing tests is not the same as shippable.** METR found that about half of the test-passing SWE-bench Verified
+  changes would not be merged by the project's maintainers
+  ([METR](https://metr.org/notes/2026-03-10-many-swe-bench-passing-prs-would-not-be-merged-into-main/)).
+- **There is a gap in the evidence.** I found no public bad-merge rate, review-minutes figure or cost per merged
+  change for a real factory. So this series cannot compare itself with anyone's numbers. It can only measure its
+  own, on its own small scale, and say so.
+
+Several of the sources behind this are secondary or vendor write-ups (the OpenAI and StrongDM factory accounts, for
+example). I have kept them out of anything load-bearing.
+
+## The design rules
+
+1. **The gate is not the agents' to edit.** The evaluator, thresholds and held-out cases are never writable by the
+   agent. The gate runs from a pinned copy in a separate process, and the held-out cases are not in the agent's
+   checkout at all.
+2. **The gate writes the verdict, not the agent.** An agent's own report that it succeeded does not count. The gate
+   returns only a coarse result (pass or fail, a reason from a small fixed set, queries remaining), never per-case
+   scores. This follows the reusable-holdout results: even a scalar score leaks label information to something that
+   keeps querying it ([Blum and Hardt](https://arxiv.org/pdf/1502.04585)).
+3. **Escalate, never guess.** When the factory is unsure it stops and asks a person (the human review planned for Part 9
+   of the Zero-to-Advanced series).
+4. **Measure the factory itself,** with numbers fixed before building, and allow "no resolvable difference" as a result.
+5. **Report intervals.** A small gate set is noisy: a recall of 0.8 on 30 positives has a standard error of about 0.07
+   (my own arithmetic). Comparisons will be paired, with confidence intervals, and every post says how many cases it rests on.
+
+## The shared factory core
+
+Four small pieces, run by one orchestrator that is plain code and not an agent. They are designed here and reused in
+the segmentation series.
+
+- **Ticket queue.** A small database with a state machine (queued, running, gated, merged, rejected, needs a human),
+  one row per ticket with its spec, budget, seed and parent commit. A single serial integrator rebases each ticket
+  branch, runs the gate and fast-forwards `main`. The documented tools I looked at have no merge queue or fleet-wide
+  budget, so I will build these by hand.
+- **Gate runner.** A separate process, ideally a separate container, that checks out the candidate read-only, overlays
+  pinned tests and evaluator, and returns the coarse verdict. The gate's own tests get tested too, with null and
+  deliberately bad patches.
+- **Audit log.** An append-only log of ticket events, gate queries, verdicts and budget draws, written by the
+  orchestrator. Every metric the posts report comes from it. Transcripts are audited for reads of protected paths, and
+  decoy files act as tripwires.
+- **Sandbox and permissions.** Layered, with the outer boundary doing the real work. On the machine I build on, the
+  Claude Code sandbox's `bubblewrap` layer fails (Ubuntu restricts unprivileged user namespaces) and the Docker group is
+  effectively root. So the plan is a Docker container with read-only mounts and no network, optionally a Landlock
+  launcher, and sealed labels that are simply never mounted into the agent's world. Deny rules and hooks are treated
+  as layers that catch accidents, and their gaps get shown in a post.
+
+**A local baseline.** Claude Code cannot be pointed at a local non-Claude model, so the local Qwen3-Coder baseline needs a
+different harness (LangGraph Deep Agents is the candidate), and the comparison is between two systems, not two models.
+
+## Planned measures
+
+Decided before building, published whatever they turn out to be:
+
+- gate-pass rate against the audited bad-merge rate (changes that passed the gate and were later judged bad), each with
+  an interval
+- tokens, cost estimate and wall-clock time per merged ticket (cost figures are client-side estimates, not billing data)
+- human review minutes per ticket
+- repeat runs of the same ticket, to expose flakiness
+
+## Posts in this Series (all coming soon)
+
+Each post will end with a "what I did not do" section. The outcomes below are open questions, not promises.
+
+1. **Why a factory needs a gate it cannot edit.** Freeze the pipeline at a tagged commit, write the ticket schema and a first
+   batch of tickets, and measure the baseline with intervals. If, and only if, it really happens in a run, show the failure the
+   gate exists for: agents editing tests.
+2. **A ticket queue and a headless runner.** The queue, the serial integrator and a headless agent wrapper with a budget and a
+   timeout. Measure cost, time, turns and the rate of runs that end with no valid output.
+3. **Gate v1: pinned tests, restored files and a coarse verdict.** Measure the gate's false-pass rate on hand-written bad patches
+   (a null patch, a test-deleting patch, an evaluator-stubbing patch), and show a trivial change that fools a naive gate but
+   not the pinned one.
+4. **Permissions are not a sandbox: what failed on this machine.** The container and the launcher, plus a battery of escape
+   attempts that I write, recording which layer stopped each one. Show the real failures: the sandbox error on this host, a hook
+   that fails open, a deny rule a script walks around.
+5. **A held-out gate for an X-ray pipeline.** Synthetic cases with exact ground truth, a locked confirmation split and a
+   never-queried second split. Measure the gap between them and report honestly if the set is too small to resolve a three-point
+   gain.
+6. **Reviewer agents and the cost of crying wolf.** A fresh-context, read-only reviewer against gate-only, on the same
+   tickets. Measure how many bad patches it catches and how many good ones it flags. Anthropic's own guidance warns that a
+   reviewer asked to find problems will report some even when the work is sound.
+7. **Forty tickets, one gate, and an audit of what got merged.** The main run. The bad-merge rate with an exact interval, the
+   gap between gate-pass and audited result, tokens and review minutes per merged ticket. It will not generalise beyond its
+   own ticket set.
+8. **A local Qwen3-Coder baseline needs a different harness.** The same container, an open model and a different harness.
+   Measure malformed tool calls, tickets completed and memory contention with the other model servers, and settle the
+   tool-call parser question with a local test instead of an assumption.
+
+Candidate posts, not yet researched: merge, deploy and roll back; a retrospective that hands over to the model factory.
+
+## Data and licensing
+
+No company data goes into this series. The Zero-to-Advanced series first ran on GDXray, whose authors offer it for research and
+educational use only and prohibit redistribution ([GDXray page](https://domingomery.ing.uc.cl/material/gdxray)), so it was
+rebuilt on the [synthetic void dataset](../agentic-factory-segmentation/01-synthetic-void-dataset.qmd) with exact ground truth.
+This series uses the same dataset, so every image it shows can be shown. A small real set may be kept locally as a sim-to-real
+check and never shown.
+
+## Reads best after
+
+Parts 1 to 9 of [Zero to Advanced](../agentic-zero-to-advanced/index.qmd) (the loop, the graph, the pipeline, tool design,
+human review), plus its evaluation and testing posts.
+
+## How this series will be written
+
+Same rules as the rest of the blog: every number comes from a real run, evaluation uses held-out data, each post ends with a
+"what I did not do" section, and anything I could not run or verify is labelled as such.

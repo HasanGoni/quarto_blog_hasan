@@ -1,72 +1,54 @@
-"""Wrap the Part 2 classical detector as a structured tool for LLM tool-calling."""
+"""Wrap the Part 2 classical detector as a structured tool for LLM tool-calling.
+
+The tool returns what a deployed detector would know: boxes and how strong each response is.
+It does NOT return ground truth (a production tool has no answer key); scoring happens outside.
+"""
 import json
 import re
-from pathlib import Path
 
-import cv2
+import numpy as np
 
-from baseline_detector import DATA_DIR, detect_candidates, load_ground_truth, score_image
+import void_data as vd
+from baseline_detector import K_DEV, detect_candidates
 
-IOU_HIT_THRESHOLD = 0.05
-GT = load_ground_truth(DATA_DIR)
-
-
-def _image_index(image_path: str) -> int | None:
-    match = re.search(r"_(\d{4})\.png$", Path(image_path).name)
-    return int(match.group(1)) if match else None
+_ID = re.compile(r"^(val|test|train)_(\d{5})$")
 
 
-def resolve_image_path(image_path: str) -> Path:
-    """Accept a full path or a bare C0001_XXXX.png filename under DATA_DIR."""
-    path = Path(image_path)
-    if path.exists():
-        return path
-    candidate = DATA_DIR / path.name
-    if candidate.exists():
-        return candidate
-    return path
+def parse_image_id(image_id: str):
+    m = _ID.match(image_id.strip().removesuffix(".png"))
+    return (m.group(1), int(m.group(2))) if m else None
 
 
-def inspect_casting_xray(image_path: str) -> str:
-    """Run the classical top-hat defect detector from Part 2 on one GDXray casting frame.
+def inspect_xray(image_id: str) -> str:
+    """Run the classical top-hat void detector from Part 2 on one X-ray image.
 
     Args:
-        image_path: Path to a GDXray Castings .png frame (e.g. C0001_0001.png).
+        image_id: Image id such as test_00009 (split name, underscore, five digits).
 
     Returns:
-        JSON string with candidate boxes, counts, and ground-truth comparison when available.
+        JSON string with the candidate boxes (pixels), each with its size and strength, where
+        strength is the peak response divided by the image's noise level.
     """
-    path = resolve_image_path(image_path)
-    gray = cv2.imread(str(path), cv2.IMREAD_GRAYSCALE)
-    if gray is None:
-        return json.dumps({"error": f"Could not read image: {image_path}"})
-
-    candidates = detect_candidates(gray)
-    idx = _image_index(image_path)
-    gt_boxes = GT.get(idx, []) if idx is not None else []
-    tp, fp, fn = score_image(gt_boxes, candidates) if gt_boxes else (0, len(candidates), 0)
-
-    payload = {
-        "image": path.name,
-        "image_index": idx,
+    parsed = parse_image_id(image_id)
+    if parsed is None:
+        return json.dumps({"error": f"Unknown image id: {image_id}. Expected e.g. test_00009."})
+    split, i = parsed
+    gray = vd.load_image(split, i)
+    boxes, st = detect_candidates(gray, K_DEV, return_stages=True)
+    sigma = max(st["sigma"], 1e-3)
+    cands = []
+    for x1, y1, x2, y2 in boxes:
+        peak = float(st["response"][y1:y2, x1:x2].max()) / sigma
+        cands.append({
+            "x1": x1, "y1": y1, "x2": x2, "y2": y2,
+            "width": x2 - x1, "height": y2 - y1, "strength": round(peak, 1),
+        })
+    return json.dumps({
+        "image": f"{split}_{i:05d}",
         "image_size": {"width": int(gray.shape[1]), "height": int(gray.shape[0])},
-        "ground_truth_boxes": len(gt_boxes),
-        "candidate_boxes": len(candidates),
-        "true_positives": tp,
-        "false_positives": fp,
-        "false_negatives": fn,
-        "candidates": [
-            {
-                "x1": int(x1),
-                "y1": int(y1),
-                "x2": int(x2),
-                "y2": int(y2),
-                "width": int(x2 - x1),
-                "height": int(y2 - y1),
-            }
-            for x1, y1, x2, y2 in candidates
-        ],
-        "iou_hit_threshold": IOU_HIT_THRESHOLD,
+        "part_area_px": int((st["mask"] > 0).sum()),
+        "candidate_boxes": len(cands),
+        "candidates": cands,
+        "threshold": f"{K_DEV} x noise level",
         "detector": "classical top-hat baseline (Part 2)",
-    }
-    return json.dumps(payload, indent=2)
+    }, indent=2)

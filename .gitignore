@@ -65,9 +65,69 @@ notebooks/paper-marigold-v2/download.log
 
 notebooks/paper-plscea-anomaly/data/
 
+# Free email course drafts (kept private until launch)
+notebooks/free-course-industrial-vision/
+
+# Paper explainers (2026-10-09): cloned third-party repos, venvs, downloaded weights
+notebooks/paper-explainers-2026-10-09/*/repo/
+notebooks/paper-explainers-2026-10-09/*/.venv/
+notebooks/paper-explainers-2026-10-09/*/downloads/
+
+# Paper explainers: screenshots, headless-browser profile, scratch work
+notebooks/paper-explainers-2026-10-09/_shots/
+notebooks/paper-explainers-2026-10-09/_ffprofile/
+notebooks/paper-explainers-2026-10-09/*/work/
+notebooks/paper-explainers-2026-10-09/dreamtrue/fake_models/
+notebooks/paper-explainers-2026-10-09/06-dinov3.html
+notebooks/paper-explainers-2026-10-09/dinov3/dinov3_demo.json
+notebooks/paper-explainers-2026-10-09/videos/assets/
+notebooks/paper-explainers-2026-10-09/videos/*.mp4
+notebooks/paper-explainers-2026-10-09/videos/*.wav
+
+# Voice cloning (Chatterbox) venv
+notebooks/voice-clone/.venv/
+notebooks/voice-clone/qwen/.venv/
+
+# Narrated videos (X-ray derived, private, never published): chapter/approved/final cuts, loose mp4/wav, Manim scratch
+notebooks/paper-explainers-2026-10-09/videos/chapters/
+notebooks/paper-explainers-2026-10-09/videos/approved/
+notebooks/paper-explainers-2026-10-09/videos/final/
+notebooks/paper-explainers-2026-10-09/videos/*.mp4
+notebooks/paper-explainers-2026-10-09/videos/*.wav
+notebooks/paper-explainers-2026-10-09/videos/_media_*/
+notebooks/paper-explainers-2026-10-09/videos/voice_samples/
+notebooks/paper-explainers-2026-10-09/videos/um_clips/
+notebooks/paper-explainers-2026-10-09/videos/nbdev/mc/node_modules/
+notebooks/paper-explainers-2026-10-09/videos/nbdev/mc/output/
+notebooks/paper-explainers-2026-10-09/videos/nbdev/mc/src/*/audio.wav
+notebooks/paper-explainers-2026-10-09/videos/nbdev/out/
+
+# Part 6 (agentic zero-to-advanced) narrated video: generated audio/clips/media; sources (p6_graph.py, vidbase.py, ...) are tracked
+notebooks/agentic-zero-to-advanced/video/assets/
+notebooks/agentic-zero-to-advanced/video/chapters/
+notebooks/agentic-zero-to-advanced/video/_media_*/
+# Part 8 Motion Canvas project (video/mc): dependencies, headless render frames, dev-server log, per-chapter extracted audio
+notebooks/agentic-zero-to-advanced/video/mc/node_modules/
+notebooks/agentic-zero-to-advanced/video/mc/output/
+notebooks/agentic-zero-to-advanced/video/mc/vite.log
+notebooks/agentic-zero-to-advanced/video/mc/*.png
+notebooks/agentic-zero-to-advanced/video/mc/render.mjs.bak
+notebooks/agentic-zero-to-advanced/video/mc/src/p8_*/audio.wav
+# Segmentation-factory dataset project: generated data and the venv are not committed (the generator is, and it is deterministic)
+notebooks/agentic-factory-segmentation/.venv/
+notebooks/agentic-factory-segmentation/data/
+private_assets/
+notebooks/agentic-zero-to-advanced/_legacy_gdxray/
+
 # SpatialClaw-for-inspection: upstream clone (non-commercial licence, never commit), venv
 notebooks/spatialclaw-inspection/upstream/
 notebooks/spatialclaw-inspection/.venv/
 notebooks/podcast-wevisone/.venv/
 notebooks/podcast-wevisone/assets/
 notebooks/podcast-wevisone/out/
+
+# AnomalyGen v2: upstream clone (Apache-2.0 code but gated weights, 140 GB checkpoints), venv, datasets, run results
+notebooks/synthetic-data-anomalygen/upstream/
+notebooks/synthetic-data-anomalygen/data/
+notebooks/synthetic-data-anomalygen/results/
+notebooks/agentic-factory-segmentation/out/sam3/

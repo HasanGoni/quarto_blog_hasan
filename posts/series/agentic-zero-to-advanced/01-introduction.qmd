@@ -3,7 +3,8 @@ title: "Agentic Developer: Zero to Advanced, Part 1: Why Agentic AI, Why X-ray D
 subtitle: "Setting up the running example the rest of this series builds on"
 author: "Hasan Goni"
 date: 2026-09-05
-categories: [agentic-ai, langgraph, computer-vision, python]
+date-modified: 2026-10-18
+categories: [agentic-ai, langgraph, computer-vision, synthetic-data, python]
 toc: true
 series:
   name: "Agentic Developer: Zero to Advanced"
@@ -14,14 +15,22 @@ series:
 This post is part of the [Agentic Developer: Zero to Advanced](index.qmd) series.
 :::
 
+:::{.callout-note}
+**Rewritten on 2026-10-18.** The first version of this series ran on the public GDXray casting
+radiographs. GDXray is free for research and education only and does not allow redistribution, so
+I should not have shown its images on a public blog. Every post in the series was redone on a
+synthetic dataset that I generate myself, with fresh runs and new numbers. Where a conclusion
+changed, the post says so.
+:::
+
 I already have an [Agentic Development](../agentic-development/index.qmd) series on this blog.
 That one exists because I went through Andrew Ng's *Agentic AI* course and rebuilt every example
 around my own work: semiconductor X-ray void detection, following the course's own five modules,
 then four more posts past where the course stops. It assumes you already know roughly what an
 agent is. And it uses proprietary imagery -- you can't actually run the code yourself.
 
-This series starts from zero instead. Public, downloadable datasets, so every example is
-something you can run. And it goes deeper into the actual framework mechanics -- LangGraph, Deep
+This series starts from zero instead. A dataset you can regenerate yourself in under half a
+minute, so every example is something you can run. And it goes deeper into the actual framework mechanics -- LangGraph, Deep
 Agents -- than a course survey has room for. Same author, same interest in defect inspection,
 just a different starting point and more ground covered. If you've read the other series, some of
 Arc 1 and Arc 2 here will feel familiar. If you haven't, that's fine too.
@@ -93,30 +102,37 @@ X-ray defect detection has that built in:
   need to be flagged for a human" is exactly the kind of structured decision an agent's tool-use
   and planning patterns are built for -- much closer to a real inspection workflow than "write me
   a poem."
-- **It stays reproducible.** No proprietary data, no NDA-covered imagery. Every dataset used here
-  is public, so every code example is something you can actually clone and run -- the biggest gap
-  in the older series.
+- **It stays reproducible.** No proprietary data, no NDA-covered imagery. The dataset is generated
+  by code in the repo, so every example is something you can actually clone and run -- the biggest
+  gap in the older series.
 - **It generalizes on purpose.** The companion supply-chain series exists to prove that none of
   the architecture built here is actually about X-rays -- swap the tools and the data, keep the
   graph.
 
-## The datasets: GDXray and DeepPCB
+## The dataset: synthetic voids with exact masks
 
-Two public X-ray datasets carry the running example, deliberately not just one:
+The running example is a synthetic X-ray void dataset that I generate with a short script. A
+Fashion-MNIST silhouette (a shirt, a sandal, a boot) plays the metal part. Its grey level is used as
+the part's thickness, voids are cut into it by removing thickness, and the image is rendered with
+Beer-Lambert attenuation, blur, gain drift and noise. That gives 4,000 images of 224 by 224 pixels
+with an **exact** mask for every void, split by source shape into 2,800 train, 600 validation and
+600 test images.
 
-**GDXray** is a large collection of grayscale X-ray images across several industrial inspection
-domains -- castings, welds, and baggage security screening among them -- released by the GRIMA
-research group at Pontificia Universidad Católica de Chile for defect-detection research. Closer
-to the void/porosity work in the other series, but public and citable.
+Why synthetic, and why this way:
 
-**DeepPCB** is a printed-circuit-board dataset: paired template and test images, with annotated
-locations for six defect classes (open, short, mousebite, spur, copper, pin-hole). Smaller, more
-structured than GDXray, which makes it a useful second surface later on -- if the architecture
-only works on one dataset's particular quirks, that's worth knowing, not something to hide.
+- **The licence is clean.** The generator is my code (MIT), the silhouettes come from Fashion-MNIST
+  (MIT), and the images can be shown on a public blog. I tried real casting radiographs first and
+  could not keep using them: the licence does not allow redistribution.
+- **The ground truth is exact.** Because I made the voids, every box and mask is right, and the
+  dataset records each void's contrast and size, so a failure can be sliced and explained.
+- **It is honestly unrealistic.** Shirts are not castings and the voids are smooth. The numbers in
+  this series say how a pipeline behaves on this data, not on a production line. The dataset post
+  lists exactly where it differs from real X-rays.
 
-Arc 1's baseline (next post) starts on GDXray, since castings defects map most directly onto "is
-this a real flaw and how bad is it." DeepPCB comes in later, once the architecture needs testing
-against something structurally different.
+[How the dataset is built](../agentic-factory-segmentation/01-synthetic-void-dataset.qmd) has the
+whole recipe, the code and the checks. Throughout the series the `val` split is the **dev** set
+(every choice is made there) and the `test` split is the **held-out** set (looked at once per
+question).
 
 ## Jargon, explained simply
 
@@ -150,13 +166,13 @@ fields, for example) rather than free-form prose, so downstream code can reliabl
 rambling free-text letter explaining your finances -- the person (or program) on the other end
 can process a filled-in box far more reliably than prose.
 
-**GDXray / DeepPCB.** The two public X-ray defect datasets this series' running example is built
-on -- see above.
-*Daily-life version:* a shared, public past-exam archive anyone can study from, instead of a
-school's private exam vault only current students can see.
+**Synthetic dataset.** Data generated by a program instead of collected from the world, so the
+right answer is known exactly.
+*Daily-life version:* a flight simulator. The "weather" is made up, which is the point: you know
+precisely what you put in, so you can check what the pilot did with it. It is not the sky.
 
 ## What's next
 
-[Part 2](02-dataset-baseline.qmd) loads GDXray, runs a plain CV detection model with no agent
-anywhere in sight, and establishes the ground-truth baseline every later post in Arc 1 and Arc 2
-gets compared against.
+[Part 2](02-dataset-baseline.qmd) loads the synthetic dataset, runs a plain CV detection model with
+no agent anywhere in sight, and establishes the ground-truth baseline every later post in Arc 1 and
+Arc 2 gets compared against.

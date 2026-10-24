@@ -5,6 +5,9 @@ project:
     - "*"
     - "!docs/**"
     - "!notebooks/**"
+  # Interactive explainers built by the weekly paper job are standalone HTML pages: copy them to the site as-is
+  resources:
+    - "posts/series/papers/explainers/**"
 
 website:
   title: "Hasan's Data Science & AI Blog"
@@ -32,6 +35,10 @@ website:
             file: posts/series/agentic-zero-to-advanced/index.qmd
           - text: "Agentic Architecture: Supply Chain"
             file: posts/series/agentic-supply-chain/index.qmd
+          - text: "Agentic AI Software Factory: Inspection System"
+            file: posts/series/agentic-factory-inspection/index.qmd
+          - text: "Agentic AI Software Factory: Robust Segmentation Models"
+            file: posts/series/agentic-factory-segmentation/index.qmd
           - text: "SpatialClaw for Inspection"
             file: posts/series/spatialclaw-inspection/index.qmd
           - text: "Anomaly Detection"
@@ -184,12 +191,34 @@ website:
             href: posts/series/agentic-zero-to-advanced/04-prompting-structured-output.qmd
           - text: "5. What Makes It an Agent"
             href: posts/series/agentic-zero-to-advanced/05-what-makes-an-agent.qmd
+          - text: "6. Building the Graph"
+            href: posts/series/agentic-zero-to-advanced/06-building-the-graph.qmd
+          - text: "7. The Inspection Pipeline"
+            href: posts/series/agentic-zero-to-advanced/07-the-inspection-pipeline.qmd
+          - text: "8. Tool Design"
+            href: posts/series/agentic-zero-to-advanced/08-tool-design.qmd
+          - text: "14. Context Engineering and Retrieval"
+            href: posts/series/agentic-zero-to-advanced/14-context-engineering-retrieval.qmd
       - section: "Agentic Architecture: Supply Chain"
         collapse: true
         collapsed: true
         contents:
           - text: "Introduction / Roadmap"
             href: posts/series/agentic-supply-chain/index.qmd
+      - section: "Agentic AI Software Factory: Inspection System"
+        collapse: true
+        collapsed: true
+        contents:
+          - text: "Plan (coming soon)"
+            href: posts/series/agentic-factory-inspection/index.qmd
+      - section: "Agentic AI Software Factory: Robust Segmentation Models"
+        collapse: true
+        collapsed: true
+        contents:
+          - text: "Plan (coming soon)"
+            href: posts/series/agentic-factory-segmentation/index.qmd
+          - text: "1. A Synthetic Void Dataset"
+            href: posts/series/agentic-factory-segmentation/01-synthetic-void-dataset.qmd
       - section: "SpatialClaw for Inspection"
         collapse: true
         collapsed: true
@@ -204,6 +233,8 @@ website:
             href: posts/series/spatialclaw-inspection/03-minimal-kernel-loop.qmd
           - text: "4. Eyes and Hands for the Loop"
             href: posts/series/spatialclaw-inspection/04-eyes-and-hands.qmd
+          - text: "5. A Real Sandbox"
+            href: posts/series/spatialclaw-inspection/05-sandbox.qmd
       - section: "Local-AI Defect Inspection"
         collapse: true
         collapsed: true

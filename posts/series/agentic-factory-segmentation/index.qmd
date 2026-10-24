@@ -1,0 +1,233 @@
+---
+title: "Agentic AI Software Factory: Robust Segmentation Models"
+description: "A factory of AI agents that proposes, runs and judges experiments to build better, more robust segmentation models for X-ray inspection -- with a sealed test set, a locked evaluator, and a plain hyperparameter sweep as the honest control. Planned from published evidence, built in small steps."
+author: "Hasan Goni"
+date: last-modified
+categories: [series, agentic-ai, segmentation, computer-vision]
+toc: true
+---
+
+:::{.callout-note}
+**Coming soon, with the first post already up** ([a synthetic void dataset with exact masks](01-synthetic-void-dataset.qmd)). This series comes after [Agentic AI Software Factory: Inspection System](../agentic-factory-inspection/index.qmd),
+whose factory core it reuses. This page is the plan. It is based on a research pass over the published evidence, and anything that
+research could not verify is marked as such. Titles and order may change as I build, and links go live as each post is written.
+:::
+
+## Series Overview
+
+Improving a segmentation model is an experiment loop: form a hypothesis, change something, train, evaluate, read the errors,
+repeat. Agents can run that loop. The hard part is not running it. It is **trusting the result**, because a factory that runs
+hundreds of experiments will find changes that look better on its evaluation and are not. The central question is how to
+build a model factory whose improvements are real, and whether it beats a plain search at the same cost.
+
+**Why this matters for the inspection system.** In
+[Part 7 of Zero to Advanced](../agentic-zero-to-advanced/07-the-inspection-pipeline.qmd) the whole pipeline turned out to be
+capped by its detector: the classical detector proposed a box for only 11 of the 125 real defects on the held-out frames, so
+nothing downstream could find the rest. A better segmentation model is the lever, and this factory is how I plan to build one.
+
+**What changes compared with the software factory.** The artifact is a trained model, not a code change. A ticket is a
+hypothesis ("heavier augmentation on thin voids will raise recall") with a GPU budget and an expected effect. The gate is a
+locked evaluator. And "robust" is defined before any score is seen.
+
+**The spine of the series: evaluate, analyse, recommend.** The factory does not just try things. After every evaluation it
+does an **error analysis** (what kinds of mistakes: missed defects, false alarms, merged or split regions, wrong boundaries)
+and a **slice analysis** (where does the model fail: which sizes, contrasts, noise levels, backgrounds), and then writes a
+**recommendation** for a better model: more real data of a specific kind, targeted new synthetic data, a model or training
+change, label fixes, or "leave it". Each recommendation carries its evidence (the slice table with counts and intervals) and
+a predicted effect, and it is then tried as an experiment. A recommendation that does not hold up is recorded as wrong.
+
+**The loop, run more than once.** Find the weakness, name a possible fix, try it, look at the result, and go round again with
+the next weakness. A typical round: a slice is bad because it has very little data. The recommendation is targeted synthetic
+data for that slice. The factory adds it, retrains, and checks whether the **real** slice improved. Each round is logged as
+weakness, fix tried and result, including the rounds where the fix did nothing or made it worse.
+
+**Synthetic data is an art, so it gets checked.** Making synthetic images is easy. Knowing whether they are realistic enough
+to be useful is the hard part, and "looks real" is not the same as "helps". So the series checks the synthetic data directly
+(do its statistics match real images, can a classifier or a person tell them apart) and, more importantly, by what it does
+downstream on real data.
+
+**Data curation, at two levels.** Before and between experiments the factory curates the training data, and curation works at
+two different levels:
+
+- **Whole-image curation.** Which images are in the set at all: exact and near-duplicate images removed (and overlapping tiles
+  cut from the same source), bad acquisitions filtered out
+  (blank, saturated, artefact-ridden), coverage across acquisition conditions checked, hard images found, and splits kept
+  free of near-duplicates of each other so nothing leaks from training into the test sets.
+- **Defect-mask curation.** What is inside the masks: **duplicate defects** (the same physical defect appearing in overlapping
+  tiles or repeated frames, or near-identical masks from a generator with too little variety), the distribution of defect sizes, contrasts and shapes, badly drawn or
+  inconsistent masks, suspected label errors (a person decides), rare defect types, and how defects are sampled, for example
+  crops centred on defects instead of whole images.
+
+Curation is also one of the actions the factory can recommend ("remove these 40 near-duplicates", "re-draw these masks",
+"oversample thin voids"). Like every other fix, it is tested against a plain control: a random subset of the same size.
+
+## What the research found, and what it changed
+
+- **Plain search is a serious competitor.** In published comparisons I could open, classical hyperparameter optimisation
+  matched or beat an LLM agent inside a fixed search space, and agents were competitive mainly when they could edit code. One of
+  those studies found an agent's early lead came from a default configuration it was seeded with
+  ([Ferreira et al.](https://arxiv.org/html/2603.24647v2), which has internal inconsistencies and leaves LLM inference time out
+  of the budget; [a budget-matched tabular study](https://arxiv.org/html/2606.21641)). I found no equal-compute comparison of a
+  full ML-engineering agent against a plain sweep, so this series will run one.
+- **Agents overfit the evaluation they can see.** In AIRA-dsl, choosing the final candidate by test score instead of validation
+  score changed the medal rate by 9 to 13 points ([AIRA-dsl](https://arxiv.org/html/2507.02554)). On the other side, one 2026
+  paper found little adaptive-overfitting risk under coarse feedback on 8 datasets (abstract read only)
+  ([arXiv 2606.11045](https://arxiv.org/abs/2606.11045)). So the honest position is that the effect size depends on the setup,
+  and this series will measure it instead of assuming it.
+- **A held-out set can be queried too often.** The reusable-holdout work shows how many queries a test set survives, and the
+  Ladder shows the leak even from a scalar score ([Thresholdout](https://arxiv.org/pdf/1506.02629.pdf),
+  [Ladder](https://arxiv.org/pdf/1502.04585)). Across more than 100 Kaggle competitions overfitting was small (typically under
+  1%), except where the test sets had only 90 to 209 examples; the authors suggest at least 10,000 examples
+  ([Roelofs et al.](https://papers.nips.cc/paper_files/paper/2019/file/ee39e503b6bedf0c98c388b7e8589aca-Paper.pdf)). That is far
+  more than tens of positives, which is why the sealed set here has to be large, and therefore synthetic.
+- **No published definition of a "false-win rate" exists.** I will define one in the posts (below) and say that it is my
+  definition.
+- **Agents tamper when they can.** The same evidence as in the software-factory series applies: an agent that can read or
+  write the evaluator will use it, and prompts are not a control. The same gate design is reused here.
+- **I have not yet researched the error-analysis side.** My research pass covered factories, ML-engineering agents, evaluation
+  overfitting, robustness metrics, datasets and sandboxing. It did not cover slice-discovery methods, learning-curve
+  extrapolation, or methods for judging how realistic synthetic images are (statistical comparison, two-sample tests,
+  train-on-synthetic and test-on-real), or for curation (near-duplicate detection, diversity and core-set selection; I did look at
+  confident-learning methods for label errors), so the posts on those parts will start with a reading pass before I plan them in detail.
+- **I found no X-ray or segmentation factory studies,** and no published agent for finding label errors in segmentation masks.
+  The closest segmentation-agent paper I found (Camyla) I read at abstract level only, so I am not building on its claims.
+
+## The design rules
+
+1. **Three evaluation tiers.** An open development set, a locked confirmation set that answers only "better than the current best
+   by more than a margin" at coarse precision, and a final sealed set touched once per milestone. Plus a second set that is never
+   queried, to detect leakage.
+2. **A locked evaluator** that agents cannot edit, running in a separate process from a pinned copy, with the sealed labels never
+   mounted into the agents' environment. Sandbox, permissions and audit log are the shared factory core from the software
+   factory series.
+3. **An honest control.** A TPE or random search over the same architecture's hyperparameters, seeded with the same default
+   configuration, with the same data, evaluator and equal GPU-hours, plus a second agent arm that may edit code. LLM tokens and time
+   are reported separately.
+4. **Pre-registered decisions.** The rule for calling a result a win is written down before the run.
+5. **Leakage checks** on every experiment (is a test image in the training data, did a label change).
+6. **Humans in the loop for labels.** Agents may find suspected label errors. A person decides.
+7. **Slices are found on one set and confirmed on another.** Scanning many slices for failures is itself a selection effect: look
+   at enough of them and some will look bad by chance. So slice findings carry counts and intervals, tiny slices are not
+   reported, and a finding has to reproduce on data that was not used to find it.
+8. **Synthetic data is judged by what it does on real data,** not by how real it looks. Realism checks are reported, but the test
+   that counts is whether a real held-out slice improves, against a plain-augmentation control with the same number of added
+   examples. Realism metrics can be good while the data still teaches the model the wrong thing, or bad while it still helps.
+9. **Curation, deduplication included, is judged against random selection.** A curated subset has to beat a random subset of the
+   same size (and removing duplicates against removing the same number of random items), and curation may
+   only touch the evaluation sets to remove leakage, with every such change logged. Otherwise "cleaner data" is a story, not a result.
+10. **A recommendation must be falsifiable.** It states the evidence, the action and the effect it predicts. The factory then runs
+   the action. If the sealed score does not move as predicted, the recommendation counts as wrong.
+
+**Defining the false-win rate (my definition, not a published one).** A run is a *win* if it beats the current best on development
+data by the pre-registered rule. It is a *false win* if its paired difference on the sealed set is not positive, or its interval
+falls below a margin. The false-win rate is false wins divided by wins, with a Wilson or Clopper-Pearson interval. To get a
+baseline, an A/A experiment sends the same configuration with different seeds, and no-op code edits, through the identical
+pipeline, so any "wins" are false by construction.
+
+## Data and licensing
+
+No company data goes into this series, and the main dataset will be synthetic.
+
+- GDXray, which the earlier series first used, is offered for research and educational use only, with redistribution and commercial use
+  prohibited, and its annotations are mostly boxes and image labels, not pixel masks
+  ([GDXray page](https://domingomery.ing.uc.cl/material/gdxray)). Those posts were rebuilt on this series' synthetic dataset.
+- My search found no radiographic defect dataset with pixel masks and a clearly permissive licence. I checked the candidates at their
+  sources: the Apache-2.0 weld-seam set on Zenodo turns out to be a text-recognition dataset (images paired with ID strings, no
+  defects and no masks), so it is no use here. MVTec AD (real defect masks, plus defect-free images) and KolektorSDD2 (surface
+  defects) are both CC BY-NC-SA 4.0: non-commercial and share-alike. The Magnetic Tile defect set states no licence at all.
+- So the plan is to generate **my own synthetic voids with exact masks** and release the generator. The first version exists and is described
+  in [post 1](01-synthetic-void-dataset.qmd): Fashion-MNIST silhouettes as parts, simulated X-ray attenuation and drawn voids, which avoids the image-licence
+  problem entirely and makes a large sealed set cheap. Real data is used only locally as a sim-to-real check and never shown.
+- The cost is stated up front: synthetic data cannot test real distribution shift, and published work finds that models trained only
+  on simulated X-rays often fail on real ones
+  ([wheel X-ray study](https://arxiv.org/html/2406.19175v1)).
+
+## Planned measures
+
+Decided before building, published whatever they turn out to be:
+
+- the **recommendation hit rate**: how often following a recommendation improves the sealed worst-slice score beyond noise,
+  against a default action at the same cost
+- on synthetic data, where I can plant a known cause (remove a size range from training, add label noise, shrink the model),
+  whether the analysis names that cause
+- how real the synthetic data is: how well a classifier separates real from synthetic images, how often a person does, and how
+  its size, contrast and noise statistics compare with real images
+- curated against random subsets of the same size, at the image level and at the defect level, on the sealed worst-slice score
+- the gain on a **real** slice from a synthetic top-up, against plain augmentation with the same number of examples, and against
+  adding nothing
+- the **false-win rate**, from the A/A experiment and from replaying wins against the sealed set
+- the gap between the queried and never-queried sets
+- the best sealed-set robustness score at equal GPU-hours, agents against the plain sweep, over three or more seeds
+- human minutes per reviewed image, and how many suspected label errors a person confirms
+
+## Posts in this Series (all coming soon)
+
+Each post will end with a "what I did not do" section. The outcomes below are open questions, not promises.
+
+1. **[A synthetic void dataset with exact masks](01-synthetic-void-dataset.qmd)** (written). Fashion-MNIST silhouettes as parts, simulated X-ray attenuation, and parametric voids (size, count, contrast, noise, thickness, background) with
+   metadata for slicing, with checks on the masks, the splits and the contrast range, and a plain list of what is unrealistic about it.
+2. **How real is the synthetic data?** Compare size, contrast, noise and edge statistics against real images, try to tell real from
+   synthetic with a classifier, and with a blind test on a person, and then show why none of that is enough: the real test is use.
+   Report the realism gaps I find, and what they probably mean for the later posts.
+3. **Metrics that do not hide tiny voids, and a robustness suite.** Defect-level recall and precision by connected component,
+   recall by size bin, boundary IoU, bootstrap over images (my recommendation, not a cited standard), plus about six
+   X-ray-plausible perturbations at five severities. Show a case where pixel recall is high and object recall is low. I found no
+   published X-ray corruption suite, so that part is my design.
+4. **Sealing the test set and locking the evaluator.** The three tiers behind the shared gate runner. Run a boosting-style attack
+   on a naive evaluator that returns scores, to show the leak, and report the queried against never-queried gap.
+5. **Data curation, part 1: whole images.** Deduplication first: exact duplicates by hashing, near-duplicates by embedding
+   similarity, and overlapping tiles traced back to their source image. Then quality filters, coverage across conditions,
+   hard-image mining, and split hygiene (no near-duplicates across training, validation and test). The similarity threshold is a
+   judgement call, so the post shows how the results move as it changes. Train on the curated set and on a random subset of the
+   same size, and report the difference, including when there is none.
+6. **Data curation, part 2: defect masks.** Deduplication at the defect level: the same defect in overlapping tiles or repeated
+   frames, near-identical masks, and low variety in my own synthetic generator, checked both within the training set and across
+   the split, because one physical defect in both training and test is a leak that image-level dedup misses. Then the
+   distribution of defect sizes, contrasts and shapes, inconsistent or badly drawn
+   masks, defect-centred sampling and rebalancing of rare defects, and a label-error workflow (confident learning ranks images for
+   a person to review, tested on label noise I inject into the synthetic set). Injected noise is easier than real annotator error,
+   and I found no labelled study of error rates in X-ray defect masks, so the post says what it cannot conclude. Again compared
+   with a random control.
+7. **Error analysis: reading the mistakes.** Sort every error into a small set of types (missed defect, false alarm, merged or
+   split region, wrong boundary), with counts and example crops. The aim is a ranked list of what is going wrong, in the spirit of
+   the error-analysis method from Part 4 of the Zero-to-Advanced series.
+8. **Slice analysis: where does the model fail?** Slice by the generator's metadata (size, contrast, noise, thickness,
+   background, count). Report worst-slice scores with counts and intervals, apply a minimum support, and confirm each finding on a
+   second set. Say what multiple slices do to false alarms in the analysis itself.
+9. **From analysis to a recommendation.** The decision the series is built around: more real data of a named kind, targeted
+   synthetic data, curation (images or masks), a model or training change, label fixes, or nothing. A rule-based report goes first
+   (slice table, train-versus-validation gap, a learning curve, a label-error estimate, perturbation results, mapped to actions by
+   rules), then an agent writes the recommendation. New real data costs a person, so the factory produces a request with its
+   evidence and a human approves.
+10. **Try the fix: a data-poor slice gets synthetic data.** Take a slice that is bad because it has few examples, add targeted
+    synthetic data, retrain and measure the **real** slice. Compare against plain augmentation with the same number of added
+    examples and against doing nothing, vary how much synthetic data is added, and look for the point where more stops helping or
+    starts hurting (the model learning synthetic artefacts). Report the result whichever way it goes.
+11. **Round two: the loop again.** The next weakest slice, and a different kind of fix (curation, or a training or model change).
+    Report the recommendation hit rate so far, and the rounds where the advice was wrong. On synthetic data, check whether the
+    analysis recovers a cause I planted.
+12. **The honest control: an equal-GPU-hour sweep.** The sweep against the agents, with LLM cost reported separately. If the sweep
+    ties or wins in a fixed search space, the post says so.
+13. **Agents that propose, run and judge experiments, on one shared GPU.** Recommendations feed the ticket queue, so the loop runs
+    without me in it. Proposer, runner and judge are separate roles, the judge seeing only the gate's coarse verdict. The runner needs
+    a scheduler for a machine shared with local model servers (memory estimates, admission control, OOM retry), and I have to measure
+    this machine's memory behaviour first. Count wins on development data, wins that survive the confirmation set, and attempts to
+    read protected paths from the audit log. Report all runs, not the best one.
+14. **Measuring the false-win rate.** The A/A experiment and the replay of the main run's wins against the sealed set, with the
+    definition above. The selection effect predicts that the best of many noisy runs looks better than it is (about 3 standard
+    deviations for 100 runs, my own calculation), and correlated runs shrink that.
+15. **The real-data check, and a retrospective.** A one-time local evaluation on real data with no images shown, what the
+    synthetic-data results do and do not say about it, and what I would change.
+
+The list may be trimmed or merged as I build. Posts 5 to 11 are the heart of the series.
+
+## Constraints I will be upfront about
+
+Everything runs on one GPU that is shared with other work, so scheduling is part of the design. Small test sets make small gains
+unresolvable, and a post will say so instead of declaring a winner. A synthetic sealed set solves the size problem but not the
+distribution-shift problem.
+
+## How this series will be written
+
+Same rules as the rest of the blog: every number comes from a real run, evaluation uses held-out data, each post ends with a
+"what I did not do" section, and anything I could not run or verify is labelled as such.

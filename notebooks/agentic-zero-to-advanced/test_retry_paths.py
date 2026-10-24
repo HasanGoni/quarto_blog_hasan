@@ -12,7 +12,7 @@ from types import SimpleNamespace
 
 from structured_output_demo import structured_report_for_image, DefectReport
 
-FAKE_IMAGE = Path(__file__).parent  # inspect_casting_xray is monkeypatched below, path unused
+FAKE_IMAGE = Path(__file__).parent  # inspect_xray is monkeypatched below, path unused
 
 
 class FakeResponse:
@@ -45,13 +45,13 @@ INVALID_SCHEMA = json.dumps({"defects": [{"bbox": [1, 2], "type": "not_a_real_ty
 
 def run_case(name: str, script: list[str], monkeypatch_tool: str = '{"candidate_boxes": 1}'):
     import structured_output_demo as mod
-    original = mod.inspect_casting_xray
-    mod.inspect_casting_xray = lambda path: monkeypatch_tool
+    original = mod.inspect_xray
+    mod.inspect_xray = lambda path: monkeypatch_tool
     try:
         client = ScriptedClient(script)
-        result = structured_report_for_image(client, Path("fake.png"))
+        result = structured_report_for_image(client, "test_00000")
     finally:
-        mod.inspect_casting_xray = original
+        mod.inspect_xray = original
     print(f"\n=== {name} ===")
     print(json.dumps(result, indent=2))
     return result

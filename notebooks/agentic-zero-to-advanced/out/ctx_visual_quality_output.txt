@@ -1,0 +1,1 @@
+share of the 4 nearest DINOv3 neighbours with the same part class: 0.728 (random neighbours: 0.101; 600 queries)

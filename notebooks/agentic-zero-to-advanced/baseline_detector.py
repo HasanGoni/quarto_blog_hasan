@@ -1,225 +1,237 @@
-"""Plain, non-agentic classical-CV baseline for GDXray Castings defect detection.
+"""Plain, non-agentic classical-CV baseline for the synthetic void dataset.
 
-No LLM, no agent, no learning at all -- top-hat morphology + Otsu object masking +
-connected components, scored against GDXray's real ground_truth.txt for series C0001.
-This is Arc 1 Part 2's baseline: the number every later, agentic post gets compared against.
+No LLM, no agent, no learning from labels -- white top-hat morphology, a part mask, one noise-scaled
+threshold, connected components. Scored against the exact void boxes. This is Part 2's baseline:
+the number every later, agentic addition in this series gets compared against.
+
+Protocol (void_data.py): the one free number `K` is chosen on DEV (val split); the HELD-OUT
+split (test) is scored once with it.
 """
 import json
 from pathlib import Path
 
 import cv2
+import matplotlib
+
+matplotlib.use("Agg")
 import matplotlib.pyplot as plt
 import numpy as np
 
-DATA_DIR = Path(
-    "/home/hasan-spark/.cache/kagglehub/datasets/samarthgoel2604/"
-    "gdxray-without-synthetic-for-defectd/versions/1/Castings kaggle/Castings (1)/Castings/C0001"
-)
+import void_data as vd
+
 OUT_DIR = Path(__file__).parent / "out"
 POST_IMAGES_DIR = Path(__file__).parent.parent.parent / "posts/series/agentic-zero-to-advanced/images"
 OUT_DIR.mkdir(exist_ok=True)
+POST_IMAGES_DIR.mkdir(parents=True, exist_ok=True)
 
-TOPHAT_KERNEL = cv2.getStructuringElement(cv2.MORPH_ELLIPSE, (25, 25))
+TOPHAT_KERNEL = cv2.getStructuringElement(cv2.MORPH_ELLIPSE, (31, 31))  # bigger than the biggest void (24 px)
 CLEAN_KERNEL = cv2.getStructuringElement(cv2.MORPH_ELLIPSE, (3, 3))
-MIN_BLOB_AREA = 9
-TOPHAT_PERCENTILE = 99.5
-IOU_HIT_THRESHOLD = 0.05
+EDGE_ERODE = cv2.getStructuringElement(cv2.MORPH_ELLIPSE, (9, 9))
+MIN_BLOB_AREA = 4
+IOU_HIT_THRESHOLD = 0.2
+K_GUESS = 4.0  # my first guess, before looking at any score
+K_DEV = 8.0  # the value the dev sweep picked (out/baseline_output.txt); used by every later part
+K_GRID = (2.0, 2.5, 3.0, 3.5, 4.0, 5.0, 6.0, 8.0, 10.0, 12.0, 16.0, 20.0)
 
 
-def load_ground_truth(series_dir: Path) -> dict[int, list[tuple[float, float, float, float]]]:
-    gt: dict[int, list[tuple[float, float, float, float]]] = {}
-    for line in (series_dir / "ground_truth.txt").read_text().splitlines():
-        if not line.strip():
-            continue
-        idx, x1, x2, y1, y2 = (float(v) for v in line.split())
-        gt.setdefault(int(idx), []).append((x1, y1, x2, y2))
-    return gt
+def part_mask(gray: np.ndarray) -> np.ndarray:
+    """Otsu-threshold the part (dark) away from the air (bright), then erode so the part's
+    own edge, a very strong and very boring top-hat response, is not a candidate defect."""
+    _, m = cv2.threshold(gray, 0, 255, cv2.THRESH_BINARY_INV + cv2.THRESH_OTSU)
+    return cv2.erode(m, EDGE_ERODE)
 
 
-def object_mask(gray: np.ndarray) -> np.ndarray:
-    """Otsu-threshold the casting body away from the surrounding air, eroded a bit
-    so the very edge of the casting (a strong, boring top-hat response) doesn't
-    get treated as a candidate defect."""
-    _, mask = cv2.threshold(gray, 0, 255, cv2.THRESH_BINARY + cv2.THRESH_OTSU)
-    if mask.mean() > 255 / 2:
-        mask = 255 - mask
-    mask = cv2.erode(mask, cv2.getStructuringElement(cv2.MORPH_ELLIPSE, (21, 21)))
-    return mask
+def response_map(gray: np.ndarray):
+    """White top-hat: small regions brighter than their surroundings, which is what a void is
+    (less material in the way, so more X-rays get through)."""
+    smooth = cv2.GaussianBlur(gray, (3, 3), 0)
+    return cv2.morphologyEx(smooth, cv2.MORPH_TOPHAT, TOPHAT_KERNEL).astype(np.float32)
 
 
-def detect_candidates(gray: np.ndarray, return_stages: bool = False):
-    white_hat = cv2.morphologyEx(gray, cv2.MORPH_TOPHAT, TOPHAT_KERNEL)
-    black_hat = cv2.morphologyEx(gray, cv2.MORPH_BLACKHAT, TOPHAT_KERNEL)
-    response = np.maximum(white_hat, black_hat)
-
-    mask = object_mask(gray)
-    response = cv2.bitwise_and(response, response, mask=mask)
-
-    thresh_val = np.percentile(response[mask > 0], TOPHAT_PERCENTILE)
-    binary = (response >= thresh_val).astype(np.uint8) * 255
+def detect_candidates(gray: np.ndarray, k: float = K_GUESS, return_stages: bool = False):
+    mask = part_mask(gray)
+    resp = response_map(gray) * (mask > 0)
+    inside = resp[mask > 0]
+    # robust noise scale of the response inside the part (median absolute deviation)
+    sigma = 1.4826 * np.median(np.abs(inside - np.median(inside))) if inside.size else 1.0
+    binary = (resp >= k * max(sigma, 1e-3)).astype(np.uint8) * 255
     binary = cv2.morphologyEx(binary, cv2.MORPH_OPEN, CLEAN_KERNEL)
 
     n, _, stats, _ = cv2.connectedComponentsWithStats(binary)
-    boxes = []
-    for i in range(1, n):
-        x, y, w, h, area = stats[i]
-        if area >= MIN_BLOB_AREA:
-            boxes.append((x, y, x + w, y + h))
-
+    boxes = [(int(x), int(y), int(x + w), int(y + h)) for x, y, w, h, a in stats[1:] if a >= MIN_BLOB_AREA]
     if return_stages:
-        return boxes, {"mask": mask, "response": response, "binary": binary}
+        return boxes, {"mask": mask, "response": resp, "binary": binary, "sigma": float(sigma)}
     return boxes
 
 
-def iou(a: tuple[float, float, float, float], b: tuple[float, float, float, float]) -> float:
-    ax1, ay1, ax2, ay2 = a
-    bx1, by1, bx2, by2 = b
-    ix1, iy1 = max(ax1, bx1), max(ay1, by1)
-    ix2, iy2 = min(ax2, bx2), min(ay2, by2)
+def iou(a, b) -> float:
+    ix1, iy1 = max(a[0], b[0]), max(a[1], b[1])
+    ix2, iy2 = min(a[2], b[2]), min(a[3], b[3])
     inter = max(0, ix2 - ix1) * max(0, iy2 - iy1)
-    area_a = (ax2 - ax1) * (ay2 - ay1)
-    area_b = (bx2 - bx1) * (by2 - by1)
-    union = area_a + area_b - inter
+    union = (a[2] - a[0]) * (a[3] - a[1]) + (b[2] - b[0]) * (b[3] - b[1]) - inter
     return inter / union if union > 0 else 0.0
 
 
-def score_image(gt_boxes, candidates):
-    matched_gt, matched_cand = set(), set()
-    for gi, g in enumerate(gt_boxes):
-        for ci, c in enumerate(candidates):
-            if ci in matched_cand:
-                continue
-            if iou(g, c) >= IOU_HIT_THRESHOLD:
-                matched_gt.add(gi)
-                matched_cand.add(ci)
-                break
-    tp = len(matched_gt)
-    fn = len(gt_boxes) - tp
-    fp = len(candidates) - len(matched_cand)
-    return tp, fp, fn
+def match(gt_boxes, candidates):
+    """Greedy one-to-one match; returns (matched_gt_indices, matched_candidate_indices)."""
+    pairs = sorted(
+        ((iou(g, c), gi, ci) for gi, g in enumerate(gt_boxes) for ci, c in enumerate(candidates)),
+        reverse=True,
+    )
+    mg, mc = set(), set()
+    for s, gi, ci in pairs:
+        if s < IOU_HIT_THRESHOLD:
+            break
+        if gi in mg or ci in mc:
+            continue
+        mg.add(gi)
+        mc.add(ci)
+    return mg, mc
 
 
-def draw_overlay(gray, gt_boxes, candidates) -> np.ndarray:
-    vis = cv2.cvtColor(gray, cv2.COLOR_GRAY2BGR)
+def run_split(split: str, k: float, keep_images: tuple[int, ...] = ()):
+    """Score one split. Per void: hit or miss plus its contrast and size, so the misses can be sliced."""
+    tp = fp = fn = 0
+    void_rows, per_image = [], []
+    px_inter = px_pred = px_true = 0
+    examples = {}
+    for i in range(len(vd.split_ids(split))):
+        gray = vd.load_image(split, i)
+        voids = vd.load_voids(split, i)
+        gt_boxes = [tuple(v["bbox"]) for v in voids]
+        cands, st = detect_candidates(gray, k, return_stages=True)
+        mg, mc = match(gt_boxes, cands)
+        tp += len(mg)
+        fn += len(gt_boxes) - len(mg)
+        fp += len(cands) - len(mc)
+        for gi, v in enumerate(voids):
+            void_rows.append({"image": i, "hit": gi in mg, "contrast": v["contrast"], "eq_diam_px": v["eq_diam_px"]})
+        per_image.append({"image": i, "gt": len(gt_boxes), "candidates": len(cands), "tp": len(mg)})
+        vm, _ = vd.load_masks(split, i)
+        pred = st["binary"] > 0
+        px_inter += int((pred & (vm > 0)).sum())
+        px_pred += int(pred.sum())
+        px_true += int((vm > 0).sum())
+        if i in keep_images:
+            examples[i] = (gray, gt_boxes, cands, st)
+    prec = tp / (tp + fp) if tp + fp else 0.0
+    rec = tp / (tp + fn) if tp + fn else 0.0
+    f1 = 2 * prec * rec / (prec + rec) if prec + rec else 0.0
+    dice = 2 * px_inter / (px_pred + px_true) if px_pred + px_true else 0.0
+    summary = {
+        "split": split, "k": k, "n_images": len(per_image), "gt_voids": tp + fn, "candidates": tp + fp,
+        "tp": tp, "fp": fp, "fn": fn, "precision": round(prec, 3), "recall": round(rec, 3),
+        "f1": round(f1, 3), "pixel_dice": round(dice, 3),
+    }
+    return summary, void_rows, per_image, examples
+
+
+def recall_by(void_rows, key, edges, labels):
+    out = {}
+    for lo, hi, lab in zip(edges[:-1], edges[1:], labels):
+        rows = [r for r in void_rows if lo <= r[key] < hi]
+        out[lab] = {"n": len(rows), "recall": round(sum(r["hit"] for r in rows) / len(rows), 3) if rows else None}
+    return out
+
+
+def draw_overlay(gray, gt_boxes, candidates, scale=3):
+    vis = cv2.cvtColor(cv2.resize(gray, None, fx=scale, fy=scale, interpolation=cv2.INTER_NEAREST), cv2.COLOR_GRAY2BGR)
     for x1, y1, x2, y2 in gt_boxes:
-        cv2.rectangle(vis, (int(x1), int(y1)), (int(x2), int(y2)), (0, 200, 0), 2)
+        cv2.rectangle(vis, (x1 * scale - 2, y1 * scale - 2), (x2 * scale + 2, y2 * scale + 2), (0, 200, 0), 2)
     for x1, y1, x2, y2 in candidates:
-        cv2.rectangle(vis, (x1, y1), (x2, y2), (0, 0, 255), 1)
+        cv2.rectangle(vis, (x1 * scale, y1 * scale), (x2 * scale, y2 * scale), (0, 0, 255), 1)
     return vis
 
 
-def contrast_delta(gray: np.ndarray, x1: int, y1: int, x2: int, y2: int, pad: int = 15) -> float:
-    """Mean intensity inside the box minus mean of a padded ring around it."""
-    h, w = gray.shape
-    inner = gray[y1:y2, x1:x2].astype(np.float32)
-    y0, y1p = max(0, y1 - pad), min(h, y2 + pad)
-    x0, x1p = max(0, x1 - pad), min(w, x2 + pad)
-    ring = gray[y0:y1p, x0:x1p].astype(np.float32).copy()
-    ring[y1 - y0 : y2 - y0, x1 - x0 : x2 - x0] = np.nan
-    surround = np.nanmean(ring)
-    return float(inner.mean() - surround)
-
-
-def save_gt_zoom_figures(gray: np.ndarray, gt_boxes: list[tuple[float, float, float, float]], out_dir: Path):
-    """Zoomed crops + numbered overview for the 'what is actually labeled?' section."""
-    h, w = gray.shape
-    vis = cv2.cvtColor(gray, cv2.COLOR_GRAY2BGR)
-    for i, (x1, y1, x2, y2) in enumerate(gt_boxes, start=1):
-        xi1, yi1, xi2, yi2 = int(x1), int(y1), int(x2), int(y2)
-        cv2.rectangle(vis, (xi1, yi1), (xi2, yi2), (0, 220, 0), 2)
-        cv2.putText(vis, str(i), (xi1, max(yi1 - 6, 14)), cv2.FONT_HERSHEY_SIMPLEX, 0.65, (0, 220, 0), 2)
-    cv2.imwrite(str(out_dir / "baseline-gt-overview.png"), vis)
-
-    pad = 45
-    n = len(gt_boxes)
-    fig, axes = plt.subplots(1, n, figsize=(4.2 * n, 4.2))
-    if n == 1:
-        axes = [axes]
-    for ax, (i, box) in zip(axes, enumerate(gt_boxes, start=1)):
-        x1, y1, x2, y2 = (int(v) for v in box)
-        cx0, cy0 = max(0, x1 - pad), max(0, y1 - pad)
-        cx1, cy1 = min(w, x2 + pad), min(h, y2 + pad)
-        crop = gray[cy0:cy1, cx0:cx1].copy()
-        crop_vis = cv2.cvtColor(crop, cv2.COLOR_GRAY2BGR)
-        cv2.rectangle(crop_vis, (x1 - cx0, y1 - cy0), (x2 - cx0, y2 - cy0), (0, 220, 0), 2)
-        delta = contrast_delta(gray, x1, y1, x2, y2)
-        bw, bh = x2 - x1, y2 - y1
-        ax.imshow(cv2.cvtColor(crop_vis, cv2.COLOR_BGR2RGB))
-        ax.set_title(f"Defect {i}: {bw}×{bh} px, Δ≈{delta:+.0f} gray levels", fontsize=10)
+def save_pipeline_figure(gray, stages, gt_boxes, candidates, out_path, title):
+    vis = cv2.cvtColor(draw_overlay(gray, gt_boxes, candidates), cv2.COLOR_BGR2RGB)
+    panels = [
+        (gray, "1. The image", "gray"),
+        (stages["mask"], "2. Part mask\n(edge eroded away)", "gray"),
+        (stages["response"], "3. White top-hat response\n(brighter than surroundings)", "gray"),
+        (stages["binary"], "4. Above K x noise level", "gray"),
+        (vis, "5. Candidates (red)\nvs exact voids (green)", None),
+    ]
+    fig, axes = plt.subplots(1, 5, figsize=(18, 4.2))
+    for ax, (img, t, cmap) in zip(axes, panels):
+        ax.imshow(img, cmap=cmap)
+        ax.set_title(t, fontsize=11)
         ax.axis("off")
-    fig.suptitle(
-        "What ground_truth.txt actually marks on C0001_0001 (green = expert-labeled defect)",
-        fontsize=12,
-        fontweight="bold",
-    )
-    plt.tight_layout()
-    plt.savefig(out_dir / "baseline-gt-zoom-panels.png", dpi=150)
+    fig.suptitle(title, fontsize=13, fontweight="bold")
+    plt.tight_layout(rect=(0, 0, 1, 0.92))
+    plt.savefig(out_path, dpi=120)
     plt.close(fig)
 
 
-def save_pipeline_figure(gray, stages, gt_boxes, candidates, out_path):
-    vis_final = draw_overlay(gray, gt_boxes, candidates)
-    panels = [
-        (gray, "1. Raw X-ray", "gray"),
-        (stages["response"], "2. Top-hat response\n(bright + dark blobs)", "gray"),
-        (stages["binary"], "3. Thresholded mask\n(99.5th percentile)", "gray"),
-        (cv2.cvtColor(vis_final, cv2.COLOR_BGR2RGB), "4. Candidates (red) vs\nground truth (green)", None),
-    ]
-    fig, axes = plt.subplots(1, 4, figsize=(16, 4.5))
-    for ax, (img, title, cmap) in zip(axes, panels):
-        ax.imshow(img, cmap=cmap)
-        ax.set_title(title, fontsize=11)
-        ax.axis("off")
-    fig.suptitle("The classical baseline pipeline, on one real GDXray image", fontsize=13, fontweight="bold")
-    plt.tight_layout()
+def save_recall_figure(by_contrast, by_size, out_path):
+    fig, axes = plt.subplots(1, 2, figsize=(10, 3.8))
+    for ax, data, xl in ((axes[0], by_contrast, "void contrast (how much brighter than around it)"),
+                         (axes[1], by_size, "void equivalent diameter")):
+        labs = list(data)
+        vals = [data[l]["recall"] or 0 for l in labs]
+        ax.bar(range(len(labs)), vals, color="#3b82c4")
+        for j, l in enumerate(labs):
+            ax.text(j, vals[j] + 0.02, f"{vals[j]:.0%}\nn={data[l]['n']}", ha="center", fontsize=9)
+        ax.set_xticks(range(len(labs)), labs, fontsize=9)
+        ax.set_ylim(0, 1.15)
+        ax.set_xlabel(xl)
+        ax.set_ylabel("recall")
+    fig.suptitle("Where the baseline misses (held-out test split)", fontsize=12, fontweight="bold")
+    plt.tight_layout(rect=(0, 0, 1, 0.94))
     plt.savefig(out_path, dpi=130)
     plt.close(fig)
 
 
+def pick_example(split="val"):
+    """A deterministic example with 3 voids of mixed contrast, so the figure is not cherry-picked
+    by outcome: the first dev image with exactly three voids."""
+    for i in range(len(vd.split_ids(split))):
+        if len(vd.load_voids(split, i)) == 3:
+            return i
+    return 0
+
+
 def main():
-    gt = load_ground_truth(DATA_DIR)
-    total_tp = total_fp = total_fn = 0
-    per_image = []
+    # 1. choose K on DEV
+    dev_grid = {}
+    for k in K_GRID:
+        s, *_ = run_split("val", k)
+        dev_grid[k] = s
+        print(f"dev  K={k:<4} P={s['precision']:.3f} R={s['recall']:.3f} F1={s['f1']:.3f} cand={s['candidates']}")
+    k_best = max(dev_grid, key=lambda k: dev_grid[k]["f1"])
+    print("chosen K on dev:", k_best)
 
-    for idx in sorted(gt):
-        img_path = DATA_DIR / f"C0001_{idx:04d}.png"
-        if not img_path.exists():
-            continue
-        gray = cv2.imread(str(img_path), cv2.IMREAD_GRAYSCALE)
-        candidates, stages = detect_candidates(gray, return_stages=True)
-        gt_boxes = gt[idx]
-        tp, fp, fn = score_image(gt_boxes, candidates)
-        total_tp += tp
-        total_fp += fp
-        total_fn += fn
-        per_image.append({"image": idx, "gt": len(gt_boxes), "candidates": len(candidates), "tp": tp, "fp": fp, "fn": fn})
+    # 2. HELD-OUT, once each for the guess and the dev-chosen K
+    ex_idx = pick_example("test")
+    test_guess, *_ = run_split("test", K_GUESS)
+    test_best, void_rows, per_image, examples = run_split("test", k_best, keep_images=(ex_idx,))
+    print("test (K guess)  :", test_guess)
+    print("test (K on dev) :", test_best)
 
-        if idx == 1:
-            cv2.imwrite(str(OUT_DIR / "c0001_0001_raw.png"), gray)
-            cv2.imwrite(str(OUT_DIR / "c0001_0001_overlay.png"), draw_overlay(gray, gt_boxes, candidates))
-            cv2.imwrite(str(POST_IMAGES_DIR / "baseline-slider-before.png"), gray)
-            cv2.imwrite(str(POST_IMAGES_DIR / "baseline-slider-after.png"), draw_overlay(gray, gt_boxes, candidates))
-            save_pipeline_figure(gray, stages, gt_boxes, candidates, POST_IMAGES_DIR / "baseline-pipeline-diagram.png")
-            save_gt_zoom_figures(gray, gt_boxes, POST_IMAGES_DIR)
+    by_contrast = recall_by(void_rows, "contrast", [0, 0.05, 0.15, 10], ["< 0.05", "0.05-0.15", ">= 0.15"])
+    by_size = recall_by(void_rows, "eq_diam_px", [0, 6, 12, 100], ["< 6 px", "6-12 px", ">= 12 px"])
+    print("recall by contrast:", by_contrast)
+    print("recall by size    :", by_size)
+    save_recall_figure(by_contrast, by_size, POST_IMAGES_DIR / "baseline-recall-slices.png")
 
-    precision = total_tp / (total_tp + total_fp) if (total_tp + total_fp) else 0.0
-    recall = total_tp / (total_tp + total_fn) if (total_tp + total_fn) else 0.0
+    gray, gt_boxes, cands, st = examples[ex_idx]
+    save_pipeline_figure(gray, st, gt_boxes, cands, POST_IMAGES_DIR / "baseline-pipeline-diagram.png",
+                         f"The classical baseline on one held-out image (test_{ex_idx:05d}), K = {k_best}")
+    cv2.imwrite(str(POST_IMAGES_DIR / "baseline-slider-before.png"),
+                cv2.resize(gray, None, fx=3, fy=3, interpolation=cv2.INTER_NEAREST))
+    cv2.imwrite(str(POST_IMAGES_DIR / "baseline-slider-after.png"), draw_overlay(gray, gt_boxes, cands))
 
-    summary = {
-        "series": "C0001",
-        "n_images": len(per_image),
-        "total_gt_defects": total_tp + total_fn,
-        "total_candidates_raised": total_tp + total_fp,
-        "true_positives": total_tp,
-        "false_positives": total_fp,
-        "false_negatives": total_fn,
-        "precision": round(precision, 3),
-        "recall": round(recall, 3),
+    out = {
+        "protocol": "K chosen on val (dev); test scored once per K",
         "iou_hit_threshold": IOU_HIT_THRESHOLD,
+        "dev_grid": {str(k): v for k, v in dev_grid.items()},
+        "k_guess": K_GUESS, "k_best": k_best,
+        "test_k_guess": test_guess, "test_k_dev": test_best,
+        "recall_by_contrast": by_contrast, "recall_by_size": by_size,
+        "example_image": f"test_{ex_idx:05d}",
     }
-    (OUT_DIR / "metrics.json").write_text(json.dumps(summary, indent=2))
+    (OUT_DIR / "metrics.json").write_text(json.dumps(out, indent=2))
     (OUT_DIR / "per_image.json").write_text(json.dumps(per_image, indent=2))
-    print(json.dumps(summary, indent=2))
 
 
 if __name__ == "__main__":

@@ -1,0 +1,1178 @@
+[
+ {
+  "target": "test_00072",
+  "arm": "narrow",
+  "n_files": 1,
+  "prompt_tokens": 377,
+  "est_body_tokens": 206,
+  "answer": "ANSWER: {\"verdict\": \"escalate\", \"confidence\": 0.4}",
+  "gold": {
+   "verdict": "escalate",
+   "confidence": 0.4
+  },
+  "correct": true,
+  "seconds": 1.5
+ },
+ {
+  "target": "test_00072",
+  "arm": "pad20-start",
+  "n_files": 20,
+  "prompt_tokens": 2644,
+  "est_body_tokens": 2194,
+  "answer": "- Report test_00072 has verdict: escalate\n- The first kept candidate (candidate 0) has confidence 0.4\n- The first kept candidate is marked as uncertain\n\nsource: reports/test_00072.md\nANSWER: {\"verdict\": \"escalate\", \"confidence\": 0.4}",
+  "gold": {
+   "verdict": "escalate",
+   "confidence": 0.4
+  },
+  "correct": true,
+  "seconds": 6.7
+ },
+ {
+  "target": "test_00072",
+  "arm": "pad20-middle",
+  "n_files": 20,
+  "prompt_tokens": 2644,
+  "est_body_tokens": 2194,
+  "answer": "- Report test_00072 has verdict: escalate\n- First kept candidate (candidate 0) has confidence: 0.4\n- First kept candidate (candidate 0) has severity: major\n- First kept candidate (candidate 0) is marked as uncertain: true\n\nsource: reports/test_00072.md\nANSWER: {\"verdict\": \"escalate\", \"confidence\": 0.4}",
+  "gold": {
+   "verdict": "escalate",
+   "confidence": 0.4
+  },
+  "correct": true,
+  "seconds": 6.5
+ },
+ {
+  "target": "test_00072",
+  "arm": "pad20-end",
+  "n_files": 20,
+  "prompt_tokens": 2644,
+  "est_body_tokens": 2194,
+  "answer": "- Report test_00072 has verdict: escalate\n- The first kept candidate (candidate 0) has confidence 0.4\n- Candidate 0 is marked as uncertain with severity major\nsource: reports/test_00072.md\nANSWER: {\"verdict\": \"escalate\", \"confidence\": 0.4}",
+  "gold": {
+   "verdict": "escalate",
+   "confidence": 0.4
+  },
+  "correct": true,
+  "seconds": 5.8
+ },
+ {
+  "target": "test_00072",
+  "arm": "pad100-start",
+  "n_files": 100,
+  "prompt_tokens": 13799,
+  "est_body_tokens": 11843,
+  "answer": "- Report test_00072 has verdict: escalate\n- The first kept candidate (candidate 0) has confidence: 0.4\n- Candidate 0 is marked as uncertain: true\n- Candidate 0 has severity: major\n\nsource: reports/test_00072.md\nANSWER: {\"verdict\": \"escalate\", \"confidence\": 0.4}",
+  "gold": {
+   "verdict": "escalate",
+   "confidence": 0.4
+  },
+  "correct": true,
+  "seconds": 23.1
+ },
+ {
+  "target": "test_00072",
+  "arm": "pad100-middle",
+  "n_files": 100,
+  "prompt_tokens": 13799,
+  "est_body_tokens": 11843,
+  "answer": "- Report test_00072 has a verdict of \"escalate\".\n- The first kept candidate listed is candidate 0.\n- Candidate 0 has a confidence of 0.4.\n- Candidate 0 is marked as uncertain (uncertain true).\n\nsource: reports/test_00072.md\nANSWER: {\"verdict\": \"escalate\", \"confidence\": 0.4}",
+  "gold": {
+   "verdict": "escalate",
+   "confidence": 0.4
+  },
+  "correct": true,
+  "seconds": 21.8
+ },
+ {
+  "target": "test_00072",
+  "arm": "pad100-end",
+  "n_files": 100,
+  "prompt_tokens": 13799,
+  "est_body_tokens": 11843,
+  "answer": "- Report test_00072 has a verdict of \"escalate\".\n- The first kept candidate listed is candidate 0.\n- Candidate 0 has a confidence of 0.4.\n- Candidate 0 is marked as uncertain (uncertain true).\n\nsource: reports/test_00072.md\nANSWER: {\"verdict\": \"escalate\", \"confidence\": 0.4}",
+  "gold": {
+   "verdict": "escalate",
+   "confidence": 0.4
+  },
+  "correct": true,
+  "seconds": 21.9
+ },
+ {
+  "target": "test_00166",
+  "arm": "narrow",
+  "n_files": 1,
+  "prompt_tokens": 353,
+  "est_body_tokens": 183,
+  "answer": "- The report test_00166 lists \"kept candidate 2\" as the first (and only) kept candidate.\n- The confidence for kept candidate 2 is 0.85.\n- The overall verdict for the report is \"review\".\nsource: reports/test_00166.md\nANSWER: {\"verdict\": \"review\", \"confidence\": 0.85}",
+  "gold": {
+   "verdict": "review",
+   "confidence": 0.85
+  },
+  "correct": true,
+  "seconds": 6.3
+ },
+ {
+  "target": "test_00166",
+  "arm": "pad20-start",
+  "n_files": 20,
+  "prompt_tokens": 2808,
+  "est_body_tokens": 2305,
+  "answer": "- Report test_00166 has verdict: review\n- The first (and only) kept candidate is candidate 2 with confidence 0.85\nsource: reports/test_00166.md\nANSWER: {\"verdict\": \"review\", \"confidence\": 0.85}",
+  "gold": {
+   "verdict": "review",
+   "confidence": 0.85
+  },
+  "correct": true,
+  "seconds": 5.2
+ },
+ {
+  "target": "test_00166",
+  "arm": "pad20-middle",
+  "n_files": 20,
+  "prompt_tokens": 2808,
+  "est_body_tokens": 2305,
+  "answer": "- Report test_00166 verdict: review\n- First kept candidate (candidate 2) confidence: 0.85\nsource: reports/test_00166.md\nANSWER: {\"verdict\": \"review\", \"confidence\": 0.85}",
+  "gold": {
+   "verdict": "review",
+   "confidence": 0.85
+  },
+  "correct": true,
+  "seconds": 5.7
+ },
+ {
+  "target": "test_00166",
+  "arm": "pad20-end",
+  "n_files": 20,
+  "prompt_tokens": 2808,
+  "est_body_tokens": 2305,
+  "answer": "- Report test_00166 has verdict: review\n- The first kept candidate is candidate 2 with confidence 0.85\n- Candidate 2 has severity minor and uncertain false\nsource: reports/test_00166.md\nANSWER: {\"verdict\": \"review\", \"confidence\": 0.85}",
+  "gold": {
+   "verdict": "review",
+   "confidence": 0.85
+  },
+  "correct": true,
+  "seconds": 8.3
+ },
+ {
+  "target": "test_00166",
+  "arm": "pad100-start",
+  "n_files": 100,
+  "prompt_tokens": 14705,
+  "est_body_tokens": 12680,
+  "answer": "- Report test_00166 has a verdict of \"review\".\n- The first (and only) kept candidate is candidate 2.\n- Candidate 2 has a confidence of 0.85.\nsource: reports/test_00166.md\nANSWER: {\"verdict\": \"review\", \"confidence\": 0.85}",
+  "gold": {
+   "verdict": "review",
+   "confidence": 0.85
+  },
+  "correct": true,
+  "seconds": 23.4
+ },
+ {
+  "target": "test_00166",
+  "arm": "pad100-middle",
+  "n_files": 100,
+  "prompt_tokens": 14705,
+  "est_body_tokens": 12680,
+  "answer": "- Report test_00166 has a verdict of \"review\".\n- The first kept candidate listed is candidate 2.\n- Candidate 2 has a confidence of 0.85.\n- Candidate 2 has a severity of minor.\n\nsource: reports/test_00166.md\nANSWER: {\"verdict\": \"review\", \"confidence\": 0.85}",
+  "gold": {
+   "verdict": "review",
+   "confidence": 0.85
+  },
+  "correct": true,
+  "seconds": 23.8
+ },
+ {
+  "target": "test_00166",
+  "arm": "pad100-end",
+  "n_files": 100,
+  "prompt_tokens": 14705,
+  "est_body_tokens": 12680,
+  "answer": "- Report test_00166 has a verdict of \"review\".\n- The first kept candidate listed is candidate 2.\n- Candidate 2 has a confidence of 0.85.\nsource: reports/test_00166.md\nANSWER: {\"verdict\": \"review\", \"confidence\": 0.85}",
+  "gold": {
+   "verdict": "review",
+   "confidence": 0.85
+  },
+  "correct": true,
+  "seconds": 23.4
+ },
+ {
+  "target": "test_00158",
+  "arm": "narrow",
+  "n_files": 1,
+  "prompt_tokens": 339,
+  "est_body_tokens": 172,
+  "answer": "ANSWER: {\"verdict\": \"escalate\", \"confidence\": 0.4}",
+  "gold": {
+   "verdict": "escalate",
+   "confidence": 0.4
+  },
+  "correct": true,
+  "seconds": 1.5
+ },
+ {
+  "target": "test_00158",
+  "arm": "pad20-start",
+  "n_files": 20,
+  "prompt_tokens": 2616,
+  "est_body_tokens": 2179,
+  "answer": "- Report test_00158 has verdict: escalate\n- The first kept candidate (candidate 0) has confidence: 0.4\n- Candidate 0 is marked as uncertain: true\n- Candidate 0 has severity: major\n\nsource: reports/test_00158.md\nANSWER: {\"verdict\": \"escalate\", \"confidence\": 0.4}",
+  "gold": {
+   "verdict": "escalate",
+   "confidence": 0.4
+  },
+  "correct": true,
+  "seconds": 6.4
+ },
+ {
+  "target": "test_00158",
+  "arm": "pad20-middle",
+  "n_files": 20,
+  "prompt_tokens": 2616,
+  "est_body_tokens": 2179,
+  "answer": "- Report test_00158 verdict: escalate\n- First kept candidate (candidate 0) confidence: 0.4\n- Candidate 0 is marked as uncertain (uncertain true)\n- All other candidates (1-4) were rejected by the classifier\n\nsource: reports/test_00158.md\nANSWER: {\"verdict\": \"escalate\", \"confidence\": 0.4}",
+  "gold": {
+   "verdict": "escalate",
+   "confidence": 0.4
+  },
+  "correct": true,
+  "seconds": 6.6
+ },
+ {
+  "target": "test_00158",
+  "arm": "pad20-end",
+  "n_files": 20,
+  "prompt_tokens": 2616,
+  "est_body_tokens": 2179,
+  "answer": "- Report test_00158 has a verdict of escalate.\n- The first kept candidate (candidate 0) has a confidence of 0.4.\nsource: reports/test_00158.md\nANSWER: {\"verdict\": \"escalate\", \"confidence\": 0.4}",
+  "gold": {
+   "verdict": "escalate",
+   "confidence": 0.4
+  },
+  "correct": true,
+  "seconds": 5.0
+ },
+ {
+  "target": "test_00158",
+  "arm": "pad100-start",
+  "n_files": 100,
+  "prompt_tokens": 14039,
+  "est_body_tokens": 12060,
+  "answer": "- Report test_00158 has verdict: escalate\n- The first kept candidate (candidate 0) has confidence: 0.4\n- Candidate 0 is marked as uncertain: true\n- Candidate 0 has severity: major\n\nsource: reports/test_00158.md\nANSWER: {\"verdict\": \"escalate\", \"confidence\": 0.4}",
+  "gold": {
+   "verdict": "escalate",
+   "confidence": 0.4
+  },
+  "correct": true,
+  "seconds": 21.8
+ },
+ {
+  "target": "test_00158",
+  "arm": "pad100-middle",
+  "n_files": 100,
+  "prompt_tokens": 14039,
+  "est_body_tokens": 12060,
+  "answer": "- Report test_00158 verdict: escalate\n- First kept candidate (candidate 0) confidence: 0.4\n- First kept candidate (candidate 0) severity: major\n- First kept candidate (candidate 0) uncertain: true\nsource: reports/test_00158.md\nANSWER: {\"verdict\": \"escalate\", \"confidence\": 0.4}",
+  "gold": {
+   "verdict": "escalate",
+   "confidence": 0.4
+  },
+  "correct": true,
+  "seconds": 21.8
+ },
+ {
+  "target": "test_00158",
+  "arm": "pad100-end",
+  "n_files": 100,
+  "prompt_tokens": 14039,
+  "est_body_tokens": 12060,
+  "answer": "- Report test_00158 has verdict: escalate\n- The first kept candidate is candidate 0\n- Candidate 0 has confidence: 0.4\n- Candidate 0 is marked as uncertain: true\n\nsource: reports/test_00158.md\nANSWER: {\"verdict\": \"escalate\", \"confidence\": 0.4}",
+  "gold": {
+   "verdict": "escalate",
+   "confidence": 0.4
+  },
+  "correct": true,
+  "seconds": 21.8
+ },
+ {
+  "target": "test_00046",
+  "arm": "narrow",
+  "n_files": 1,
+  "prompt_tokens": 330,
+  "est_body_tokens": 167,
+  "answer": "ANSWER: {\"verdict\": \"review\", \"confidence\": 0.85}",
+  "gold": {
+   "verdict": "review",
+   "confidence": 0.85
+  },
+  "correct": true,
+  "seconds": 2.2
+ },
+ {
+  "target": "test_00046",
+  "arm": "pad20-start",
+  "n_files": 20,
+  "prompt_tokens": 3148,
+  "est_body_tokens": 2618,
+  "answer": "- Report test_00046 has a verdict of \"review\".\n- The first kept candidate (candidate 0) has a confidence of 0.85.\nsource: reports/test_00046.md\nANSWER: {\"verdict\": \"review\", \"confidence\": 0.85}",
+  "gold": {
+   "verdict": "review",
+   "confidence": 0.85
+  },
+  "correct": true,
+  "seconds": 8.2
+ },
+ {
+  "target": "test_00046",
+  "arm": "pad20-middle",
+  "n_files": 20,
+  "prompt_tokens": 3148,
+  "est_body_tokens": 2618,
+  "answer": "- Report test_00046 has a verdict of \"review\".\n- The first kept candidate listed is candidate 0.\n- Candidate 0 has a confidence of 0.85.\nsource: reports/test_00046.md\nANSWER: {\"verdict\": \"review\", \"confidence\": 0.85}",
+  "gold": {
+   "verdict": "review",
+   "confidence": 0.85
+  },
+  "correct": true,
+  "seconds": 6.4
+ },
+ {
+  "target": "test_00046",
+  "arm": "pad20-end",
+  "n_files": 20,
+  "prompt_tokens": 3148,
+  "est_body_tokens": 2618,
+  "answer": "- Report test_00046 has a verdict of \"review\".\n- The first kept candidate listed is candidate 0.\n- Candidate 0 has a confidence of 0.85.\nsource: reports/test_00046.md\nANSWER: {\"verdict\": \"review\", \"confidence\": 0.85}",
+  "gold": {
+   "verdict": "review",
+   "confidence": 0.85
+  },
+  "correct": true,
+  "seconds": 6.9
+ },
+ {
+  "target": "test_00046",
+  "arm": "pad100-start",
+  "n_files": 100,
+  "prompt_tokens": 13877,
+  "est_body_tokens": 11882,
+  "answer": "- Report test_00046 has a verdict of \"review\".\n- The first kept candidate (candidate 0) has a confidence of 0.85.\nsource: reports/test_00046.md\nANSWER: {\"verdict\": \"review\", \"confidence\": 0.85}",
+  "gold": {
+   "verdict": "review",
+   "confidence": 0.85
+  },
+  "correct": true,
+  "seconds": 20.7
+ },
+ {
+  "target": "test_00046",
+  "arm": "pad100-middle",
+  "n_files": 100,
+  "prompt_tokens": 13877,
+  "est_body_tokens": 11882,
+  "answer": "- Report test_00046 has a verdict of \"review\".\n- The first kept candidate listed is candidate 0.\n- Candidate 0 has a confidence of 0.85.\nsource: reports/test_00046.md\nANSWER: {\"verdict\": \"review\", \"confidence\": 0.85}",
+  "gold": {
+   "verdict": "review",
+   "confidence": 0.85
+  },
+  "correct": true,
+  "seconds": 20.9
+ },
+ {
+  "target": "test_00046",
+  "arm": "pad100-end",
+  "n_files": 100,
+  "prompt_tokens": 13877,
+  "est_body_tokens": 11882,
+  "answer": "- Report test_00046 has a verdict of \"review\".\n- The first kept candidate listed is candidate 0.\n- Candidate 0 has a confidence of 0.85.\nsource: reports/test_00046.md\nANSWER: {\"verdict\": \"review\", \"confidence\": 0.85}",
+  "gold": {
+   "verdict": "review",
+   "confidence": 0.85
+  },
+  "correct": true,
+  "seconds": 21.1
+ },
+ {
+  "target": "test_00109",
+  "arm": "narrow",
+  "n_files": 1,
+  "prompt_tokens": 545,
+  "est_body_tokens": 333,
+  "answer": "ANSWER: {\"verdict\": \"review\", \"confidence\": 0.7}",
+  "gold": {
+   "verdict": "review",
+   "confidence": 0.7
+  },
+  "correct": true,
+  "seconds": 1.7
+ },
+ {
+  "target": "test_00109",
+  "arm": "pad20-start",
+  "n_files": 20,
+  "prompt_tokens": 3221,
+  "est_body_tokens": 2687,
+  "answer": "- Report test_00109 has verdict: review\n- The first kept candidate listed is candidate 2\n- Candidate 2 has confidence 0.7\nsource: reports/test_00109.md\nANSWER: {\"verdict\": \"review\", \"confidence\": 0.7}",
+  "gold": {
+   "verdict": "review",
+   "confidence": 0.7
+  },
+  "correct": true,
+  "seconds": 7.1
+ },
+ {
+  "target": "test_00109",
+  "arm": "pad20-middle",
+  "n_files": 20,
+  "prompt_tokens": 3221,
+  "est_body_tokens": 2687,
+  "answer": "- Report test_00109 has a verdict of \"review\".\n- The first kept candidate listed is candidate 2, which has a confidence of 0.7.\nsource: reports/test_00109.md\nANSWER: {\"verdict\": \"review\", \"confidence\": 0.7}",
+  "gold": {
+   "verdict": "review",
+   "confidence": 0.7
+  },
+  "correct": true,
+  "seconds": 7.1
+ },
+ {
+  "target": "test_00109",
+  "arm": "pad20-end",
+  "n_files": 20,
+  "prompt_tokens": 3221,
+  "est_body_tokens": 2687,
+  "answer": "- Report test_00109 has a verdict of \"review\".\n- The first kept candidate listed is candidate 2.\n- Candidate 2 has a confidence of 0.7.\nsource: reports/test_00109.md\nANSWER: {\"verdict\": \"review\", \"confidence\": 0.7}",
+  "gold": {
+   "verdict": "review",
+   "confidence": 0.7
+  },
+  "correct": true,
+  "seconds": 7.3
+ },
+ {
+  "target": "test_00109",
+  "arm": "pad100-start",
+  "n_files": 100,
+  "prompt_tokens": 13379,
+  "est_body_tokens": 11485,
+  "answer": "- Report test_00109 has a verdict of \"review\".\n- The first kept candidate listed is candidate 2.\n- Candidate 2 has a confidence of 0.7.\nsource: reports/test_00109.md\nANSWER: {\"verdict\": \"review\", \"confidence\": 0.7}",
+  "gold": {
+   "verdict": "review",
+   "confidence": 0.7
+  },
+  "correct": true,
+  "seconds": 20.0
+ },
+ {
+  "target": "test_00109",
+  "arm": "pad100-middle",
+  "n_files": 100,
+  "prompt_tokens": 13379,
+  "est_body_tokens": 11485,
+  "answer": "- Report test_00109 has a verdict of \"review\".\n- The first kept candidate listed is candidate 2.\n- Candidate 2 has a confidence of 0.7.\n- Candidate 2 has a severity of critical.\n\nsource: reports/test_00109.md\nANSWER: {\"verdict\": \"review\", \"confidence\": 0.7}",
+  "gold": {
+   "verdict": "review",
+   "confidence": 0.7
+  },
+  "correct": true,
+  "seconds": 20.7
+ },
+ {
+  "target": "test_00109",
+  "arm": "pad100-end",
+  "n_files": 100,
+  "prompt_tokens": 13379,
+  "est_body_tokens": 11485,
+  "answer": "- Report test_00109 has a verdict of \"review\".\n- The first kept candidate listed is candidate 2.\n- Candidate 2 has a confidence of 0.7.\nsource: reports/test_00109.md\nANSWER: {\"verdict\": \"review\", \"confidence\": 0.7}",
+  "gold": {
+   "verdict": "review",
+   "confidence": 0.7
+  },
+  "correct": true,
+  "seconds": 20.0
+ },
+ {
+  "target": "test_00170",
+  "arm": "narrow",
+  "n_files": 1,
+  "prompt_tokens": 281,
+  "est_body_tokens": 125,
+  "answer": "ANSWER: {\"verdict\": \"review\", \"confidence\": 0.9}",
+  "gold": {
+   "verdict": "review",
+   "confidence": 0.9
+  },
+  "correct": true,
+  "seconds": 1.5
+ },
+ {
+  "target": "test_00170",
+  "arm": "pad20-start",
+  "n_files": 20,
+  "prompt_tokens": 2561,
+  "est_body_tokens": 2115,
+  "answer": "- Report test_00170 verdict: review\n- First kept candidate (candidate 0) confidence: 0.9\nsource: reports/test_00170.md\nANSWER: {\"verdict\": \"review\", \"confidence\": 0.9}",
+  "gold": {
+   "verdict": "review",
+   "confidence": 0.9
+  },
+  "correct": true,
+  "seconds": 7.4
+ },
+ {
+  "target": "test_00170",
+  "arm": "pad20-middle",
+  "n_files": 20,
+  "prompt_tokens": 2561,
+  "est_body_tokens": 2115,
+  "answer": "- Report test_00170 verdict: review\n- First kept candidate: candidate 0\n- Candidate 0 confidence: 0.9\n- Candidate 0 severity: minor\n\nsource: reports/test_00170.md\nANSWER: {\"verdict\": \"review\", \"confidence\": 0.9}",
+  "gold": {
+   "verdict": "review",
+   "confidence": 0.9
+  },
+  "correct": true,
+  "seconds": 11.9
+ },
+ {
+  "target": "test_00170",
+  "arm": "pad20-end",
+  "n_files": 20,
+  "prompt_tokens": 2561,
+  "est_body_tokens": 2115,
+  "answer": "- Report test_00170 has a verdict of \"review\".\n- The first kept candidate (candidate 0) has a confidence of 0.9.\nsource: reports/test_00170.md\nANSWER: {\"verdict\": \"review\", \"confidence\": 0.9}",
+  "gold": {
+   "verdict": "review",
+   "confidence": 0.9
+  },
+  "correct": true,
+  "seconds": 9.1
+ },
+ {
+  "target": "test_00170",
+  "arm": "pad100-start",
+  "n_files": 100,
+  "prompt_tokens": 13852,
+  "est_body_tokens": 11952,
+  "answer": "- Report test_00170 has a verdict of \"review\".\n- The first kept candidate (candidate 0) has a confidence of 0.9.\n- Candidate 0 is listed with severity minor, uncertain false, contrast 51.11, and area_px 20.\nsource: reports/test_00170.md\nANSWER: {\"verdict\": \"review\", \"confidence\": 0.9}",
+  "gold": {
+   "verdict": "review",
+   "confidence": 0.9
+  },
+  "correct": true,
+  "seconds": 26.9
+ },
+ {
+  "target": "test_00170",
+  "arm": "pad100-middle",
+  "n_files": 100,
+  "prompt_tokens": 13852,
+  "est_body_tokens": 11952,
+  "answer": "- Report test_00170 has verdict: review\n- The first kept candidate is candidate 0 with confidence 0.9\n- Candidate 0 has severity minor and uncertain false\nsource: reports/test_00170.md\nANSWER: {\"verdict\": \"review\", \"confidence\": 0.9}",
+  "gold": {
+   "verdict": "review",
+   "confidence": 0.9
+  },
+  "correct": true,
+  "seconds": 18.5
+ },
+ {
+  "target": "test_00170",
+  "arm": "pad100-end",
+  "n_files": 100,
+  "prompt_tokens": 13852,
+  "est_body_tokens": 11952,
+  "answer": "- Report test_00170 has a verdict of \"review\".\n- The first kept candidate (candidate 0) has a confidence of 0.9.\nsource: reports/test_00170.md\nANSWER: {\"verdict\": \"review\", \"confidence\": 0.9}",
+  "gold": {
+   "verdict": "review",
+   "confidence": 0.9
+  },
+  "correct": true,
+  "seconds": 18.0
+ },
+ {
+  "target": "test_00139",
+  "arm": "narrow",
+  "n_files": 1,
+  "prompt_tokens": 399,
+  "est_body_tokens": 203,
+  "answer": "ANSWER: {\"verdict\": \"review\", \"confidence\": 0.85}",
+  "gold": {
+   "verdict": "review",
+   "confidence": 0.85
+  },
+  "correct": true,
+  "seconds": 1.5
+ },
+ {
+  "target": "test_00139",
+  "arm": "pad20-start",
+  "n_files": 20,
+  "prompt_tokens": 2782,
+  "est_body_tokens": 2284,
+  "answer": "- Report test_00139 has verdict: review\n- The first kept candidate listed is candidate 2\n- Candidate 2 has confidence 0.85\nsource: reports/test_00139.md\nANSWER: {\"verdict\": \"review\", \"confidence\": 0.85}",
+  "gold": {
+   "verdict": "review",
+   "confidence": 0.85
+  },
+  "correct": true,
+  "seconds": 8.5
+ },
+ {
+  "target": "test_00139",
+  "arm": "pad20-middle",
+  "n_files": 20,
+  "prompt_tokens": 2782,
+  "est_body_tokens": 2284,
+  "answer": "- Report test_00139 has a verdict of review.\n- The first kept candidate listed is candidate 2 with a confidence of 0.85.\nsource: reports/test_00139.md\nANSWER: {\"verdict\": \"review\", \"confidence\": 0.85}",
+  "gold": {
+   "verdict": "review",
+   "confidence": 0.85
+  },
+  "correct": true,
+  "seconds": 12.9
+ },
+ {
+  "target": "test_00139",
+  "arm": "pad20-end",
+  "n_files": 20,
+  "prompt_tokens": 2782,
+  "est_body_tokens": 2284,
+  "answer": "- Report test_00139 has verdict: review\n- The first kept candidate listed is candidate 2\n- Candidate 2 has confidence 0.85\nsource: reports/test_00139.md\nANSWER: {\"verdict\": \"review\", \"confidence\": 0.85}",
+  "gold": {
+   "verdict": "review",
+   "confidence": 0.85
+  },
+  "correct": true,
+  "seconds": 8.3
+ },
+ {
+  "target": "test_00139",
+  "arm": "pad100-start",
+  "n_files": 100,
+  "prompt_tokens": 14851,
+  "est_body_tokens": 12723,
+  "answer": "- Report test_00139 has verdict: review\n- The first kept candidate listed is candidate 2\n- Candidate 2 has confidence 0.85\n- Candidate 2 has severity critical\n\nsource: reports/test_00139.md\nANSWER: {\"verdict\": \"review\", \"confidence\": 0.85}",
+  "gold": {
+   "verdict": "review",
+   "confidence": 0.85
+  },
+  "correct": true,
+  "seconds": 23.7
+ },
+ {
+  "target": "test_00139",
+  "arm": "pad100-middle",
+  "n_files": 100,
+  "prompt_tokens": 14851,
+  "est_body_tokens": 12723,
+  "answer": "- Report test_00139 has a verdict of \"review\".\n- The first kept candidate listed is candidate 2.\n- Candidate 2 has a confidence of 0.85.\nsource: reports/test_00139.md\nANSWER: {\"verdict\": \"review\", \"confidence\": 0.85}",
+  "gold": {
+   "verdict": "review",
+   "confidence": 0.85
+  },
+  "correct": true,
+  "seconds": 23.9
+ },
+ {
+  "target": "test_00139",
+  "arm": "pad100-end",
+  "n_files": 100,
+  "prompt_tokens": 14851,
+  "est_body_tokens": 12723,
+  "answer": "- Report test_00139 has a verdict of \"review\".\n- The first kept candidate listed is candidate 2.\n- Candidate 2 has a confidence of 0.85.\nsource: reports/test_00139.md\nANSWER: {\"verdict\": \"review\", \"confidence\": 0.85}",
+  "gold": {
+   "verdict": "review",
+   "confidence": 0.85
+  },
+  "correct": true,
+  "seconds": 24.4
+ },
+ {
+  "target": "test_00173",
+  "arm": "narrow",
+  "n_files": 1,
+  "prompt_tokens": 307,
+  "est_body_tokens": 143,
+  "answer": "ANSWER: {\"verdict\": \"review\", \"confidence\": 0.85}",
+  "gold": {
+   "verdict": "review",
+   "confidence": 0.85
+  },
+  "correct": true,
+  "seconds": 3.7
+ },
+ {
+  "target": "test_00173",
+  "arm": "pad20-start",
+  "n_files": 20,
+  "prompt_tokens": 3058,
+  "est_body_tokens": 2523,
+  "answer": "- Report test_00173 verdict is review.\n- The first kept candidate (candidate 0) has a confidence of 0.85.\nsource: reports/test_00173.md\nANSWER: {\"verdict\": \"review\", \"confidence\": 0.85}",
+  "gold": {
+   "verdict": "review",
+   "confidence": 0.85
+  },
+  "correct": true,
+  "seconds": 8.4
+ },
+ {
+  "target": "test_00173",
+  "arm": "pad20-middle",
+  "n_files": 20,
+  "prompt_tokens": 3058,
+  "est_body_tokens": 2523,
+  "answer": "- Report test_00173 has a verdict of \"review\".\n- The first kept candidate listed is candidate 0.\n- Candidate 0 has a confidence of 0.85.\nsource: reports/test_00173.md\nANSWER: {\"verdict\": \"review\", \"confidence\": 0.85}",
+  "gold": {
+   "verdict": "review",
+   "confidence": 0.85
+  },
+  "correct": true,
+  "seconds": 9.1
+ },
+ {
+  "target": "test_00173",
+  "arm": "pad20-end",
+  "n_files": 20,
+  "prompt_tokens": 3058,
+  "est_body_tokens": 2523,
+  "answer": "ANSWER: {\"verdict\": \"review\", \"confidence\": 0.85}",
+  "gold": {
+   "verdict": "review",
+   "confidence": 0.85
+  },
+  "correct": true,
+  "seconds": 6.1
+ },
+ {
+  "target": "test_00173",
+  "arm": "pad100-start",
+  "n_files": 100,
+  "prompt_tokens": 13477,
+  "est_body_tokens": 11600,
+  "answer": "- Report test_00173 has a verdict of \"review\".\n- The first kept candidate (candidate 0) has a confidence of 0.85.\n- Candidate 0 is listed as kept with severity minor and uncertain false.\n- Candidate 1 was rejected by the classifier.\n\nsource: reports/test_00173.md\nANSWER: {\"verdict\": \"review\", \"confidence\": 0.85}",
+  "gold": {
+   "verdict": "review",
+   "confidence": 0.85
+  },
+  "correct": true,
+  "seconds": 21.6
+ },
+ {
+  "target": "test_00173",
+  "arm": "pad100-middle",
+  "n_files": 100,
+  "prompt_tokens": 13477,
+  "est_body_tokens": 11600,
+  "answer": "- Report test_00173 has a verdict of \"review\".\n- The first kept candidate listed is candidate 0.\n- Candidate 0 has a confidence of 0.85.\nsource: reports/test_00173.md\nANSWER: {\"verdict\": \"review\", \"confidence\": 0.85}",
+  "gold": {
+   "verdict": "review",
+   "confidence": 0.85
+  },
+  "correct": true,
+  "seconds": 20.2
+ },
+ {
+  "target": "test_00173",
+  "arm": "pad100-end",
+  "n_files": 100,
+  "prompt_tokens": 13477,
+  "est_body_tokens": 11600,
+  "answer": "- Report test_00173 has a verdict of \"review\".\n- The first kept candidate listed is candidate 0.\n- Candidate 0 has a confidence of 0.85.\nsource: reports/test_00173.md\nANSWER: {\"verdict\": \"review\", \"confidence\": 0.85}",
+  "gold": {
+   "verdict": "review",
+   "confidence": 0.85
+  },
+  "correct": true,
+  "seconds": 20.4
+ },
+ {
+  "target": "test_00165",
+  "arm": "narrow",
+  "n_files": 1,
+  "prompt_tokens": 333,
+  "est_body_tokens": 166,
+  "answer": "ANSWER: {\"verdict\": \"review\", \"confidence\": 0.75}",
+  "gold": {
+   "verdict": "review",
+   "confidence": 0.75
+  },
+  "correct": true,
+  "seconds": 1.5
+ },
+ {
+  "target": "test_00165",
+  "arm": "pad20-start",
+  "n_files": 20,
+  "prompt_tokens": 3176,
+  "est_body_tokens": 2621,
+  "answer": "- Report test_00165 has verdict: review\n- The first kept candidate listed is candidate 3\n- Candidate 3 has confidence: 0.75\nsource: reports/test_00165.md\nANSWER: {\"verdict\": \"review\", \"confidence\": 0.75}",
+  "gold": {
+   "verdict": "review",
+   "confidence": 0.75
+  },
+  "correct": true,
+  "seconds": 5.8
+ },
+ {
+  "target": "test_00165",
+  "arm": "pad20-middle",
+  "n_files": 20,
+  "prompt_tokens": 3176,
+  "est_body_tokens": 2621,
+  "answer": "- Report test_00165 has a verdict of \"review\".\n- The first (and only) kept candidate listed is candidate 3.\n- Candidate 3 has a confidence of 0.75.\nsource: reports/test_00165.md\nANSWER: {\"verdict\": \"review\", \"confidence\": 0.75}",
+  "gold": {
+   "verdict": "review",
+   "confidence": 0.75
+  },
+  "correct": true,
+  "seconds": 6.2
+ },
+ {
+  "target": "test_00165",
+  "arm": "pad20-end",
+  "n_files": 20,
+  "prompt_tokens": 3176,
+  "est_body_tokens": 2621,
+  "answer": "- Report test_00165 has verdict: review\n- The first kept candidate listed is candidate 3\n- Candidate 3 has confidence: 0.75\nsource: reports/test_00165.md\nANSWER: {\"verdict\": \"review\", \"confidence\": 0.75}",
+  "gold": {
+   "verdict": "review",
+   "confidence": 0.75
+  },
+  "correct": true,
+  "seconds": 5.8
+ },
+ {
+  "target": "test_00165",
+  "arm": "pad100-start",
+  "n_files": 100,
+  "prompt_tokens": 13219,
+  "est_body_tokens": 11401,
+  "answer": "- Report test_00165 has a verdict of \"review\".\n- The first (and only) kept candidate is candidate 3.\n- Candidate 3 has a confidence of 0.75.\nsource: reports/test_00165.md\nANSWER: {\"verdict\": \"review\", \"confidence\": 0.75}",
+  "gold": {
+   "verdict": "review",
+   "confidence": 0.75
+  },
+  "correct": true,
+  "seconds": 20.3
+ },
+ {
+  "target": "test_00165",
+  "arm": "pad100-middle",
+  "n_files": 100,
+  "prompt_tokens": 13219,
+  "est_body_tokens": 11401,
+  "answer": "- Report test_00165 has a verdict of \"review\".\n- The first kept candidate listed is candidate 3.\n- Candidate 3 has a confidence of 0.75.\nsource: reports/test_00165.md\nANSWER: {\"verdict\": \"review\", \"confidence\": 0.75}",
+  "gold": {
+   "verdict": "review",
+   "confidence": 0.75
+  },
+  "correct": true,
+  "seconds": 19.7
+ },
+ {
+  "target": "test_00165",
+  "arm": "pad100-end",
+  "n_files": 100,
+  "prompt_tokens": 13219,
+  "est_body_tokens": 11401,
+  "answer": "- Report test_00165 has a verdict of \"review\".\n- The first (and only) kept candidate is candidate 3.\n- Candidate 3 has a confidence of 0.75.\n- Candidate 3 has a severity of critical.\n\nsource: reports/test_00165.md\nANSWER: {\"verdict\": \"review\", \"confidence\": 0.75}",
+  "gold": {
+   "verdict": "review",
+   "confidence": 0.75
+  },
+  "correct": true,
+  "seconds": 22.4
+ },
+ {
+  "target": "test_00021",
+  "arm": "narrow",
+  "n_files": 1,
+  "prompt_tokens": 394,
+  "est_body_tokens": 222,
+  "answer": "ANSWER: {\"verdict\": \"review\", \"confidence\": 0.85}",
+  "gold": {
+   "verdict": "review",
+   "confidence": 0.85
+  },
+  "correct": true,
+  "seconds": 1.5
+ },
+ {
+  "target": "test_00021",
+  "arm": "pad20-start",
+  "n_files": 20,
+  "prompt_tokens": 3616,
+  "est_body_tokens": 3022,
+  "answer": "- Report test_00021 has a verdict of \"review\".\n- The first kept candidate listed is candidate 1 with a confidence of 0.85.\nsource: reports/test_00021.md\nANSWER: {\"verdict\": \"review\", \"confidence\": 0.85}",
+  "gold": {
+   "verdict": "review",
+   "confidence": 0.85
+  },
+  "correct": true,
+  "seconds": 6.5
+ },
+ {
+  "target": "test_00021",
+  "arm": "pad20-middle",
+  "n_files": 20,
+  "prompt_tokens": 3616,
+  "est_body_tokens": 3022,
+  "answer": "- Report test_00021 has verdict: review\n- The first kept candidate listed is candidate 1 with confidence 0.85\nsource: reports/test_00021.md\nANSWER: {\"verdict\": \"review\", \"confidence\": 0.85}",
+  "gold": {
+   "verdict": "review",
+   "confidence": 0.85
+  },
+  "correct": true,
+  "seconds": 6.6
+ },
+ {
+  "target": "test_00021",
+  "arm": "pad20-end",
+  "n_files": 20,
+  "prompt_tokens": 3616,
+  "est_body_tokens": 3022,
+  "answer": "- Report test_00021 has verdict: review\n- The first kept candidate listed is candidate 1\n- Candidate 1 has confidence 0.85\n- Candidate 1 has severity critical\n\nsource: reports/test_00021.md\nANSWER: {\"verdict\": \"review\", \"confidence\": 0.85}",
+  "gold": {
+   "verdict": "review",
+   "confidence": 0.85
+  },
+  "correct": true,
+  "seconds": 6.1
+ },
+ {
+  "target": "test_00021",
+  "arm": "pad100-start",
+  "n_files": 100,
+  "prompt_tokens": 14352,
+  "est_body_tokens": 12281,
+  "answer": "- Report test_00021 has a verdict of \"review\".\n- The first kept candidate (candidate 1) has a confidence of 0.85.\nsource: reports/test_00021.md\nANSWER: {\"verdict\": \"review\", \"confidence\": 0.85}",
+  "gold": {
+   "verdict": "review",
+   "confidence": 0.85
+  },
+  "correct": true,
+  "seconds": 18.2
+ },
+ {
+  "target": "test_00021",
+  "arm": "pad100-middle",
+  "n_files": 100,
+  "prompt_tokens": 14352,
+  "est_body_tokens": 12281,
+  "answer": "- Report test_00021 has a verdict of \"review\".\n- The first kept candidate listed is candidate 1.\n- Candidate 1 has a confidence of 0.85.\nsource: reports/test_00021.md\nANSWER: {\"verdict\": \"review\", \"confidence\": 0.85}",
+  "gold": {
+   "verdict": "review",
+   "confidence": 0.85
+  },
+  "correct": true,
+  "seconds": 18.6
+ },
+ {
+  "target": "test_00021",
+  "arm": "pad100-end",
+  "n_files": 100,
+  "prompt_tokens": 14352,
+  "est_body_tokens": 12281,
+  "answer": "- Report test_00021 has a verdict of \"review\".\n- The first kept candidate listed is candidate 1.\n- Candidate 1 has a confidence of 0.85.\nsource: reports/test_00021.md\nANSWER: {\"verdict\": \"review\", \"confidence\": 0.85}",
+  "gold": {
+   "verdict": "review",
+   "confidence": 0.85
+  },
+  "correct": true,
+  "seconds": 18.8
+ },
+ {
+  "target": "test_00005",
+  "arm": "narrow",
+  "n_files": 1,
+  "prompt_tokens": 340,
+  "est_body_tokens": 167,
+  "answer": "ANSWER: {\"verdict\": \"review\", \"confidence\": 0.85}",
+  "gold": {
+   "verdict": "review",
+   "confidence": 0.85
+  },
+  "correct": true,
+  "seconds": 1.5
+ },
+ {
+  "target": "test_00005",
+  "arm": "pad20-start",
+  "n_files": 20,
+  "prompt_tokens": 2945,
+  "est_body_tokens": 2438,
+  "answer": "- Report test_00005 has verdict: review\n- The first kept candidate (candidate 0) has confidence 0.85\nsource: reports/test_00005.md\nANSWER: {\"verdict\": \"review\", \"confidence\": 0.85}",
+  "gold": {
+   "verdict": "review",
+   "confidence": 0.85
+  },
+  "correct": true,
+  "seconds": 8.4
+ },
+ {
+  "target": "test_00005",
+  "arm": "pad20-middle",
+  "n_files": 20,
+  "prompt_tokens": 2945,
+  "est_body_tokens": 2438,
+  "answer": "- Report test_00005 has verdict: review\n- The first kept candidate listed is candidate 0 with confidence 0.85\nsource: reports/test_00005.md\nANSWER: {\"verdict\": \"review\", \"confidence\": 0.85}",
+  "gold": {
+   "verdict": "review",
+   "confidence": 0.85
+  },
+  "correct": true,
+  "seconds": 8.2
+ },
+ {
+  "target": "test_00005",
+  "arm": "pad20-end",
+  "n_files": 20,
+  "prompt_tokens": 2945,
+  "est_body_tokens": 2438,
+  "answer": "- Report test_00005 has a verdict of review.\n- The first kept candidate (candidate 0) has a confidence of 0.85.\nsource: reports/test_00005.md\nANSWER: {\"verdict\": \"review\", \"confidence\": 0.85}",
+  "gold": {
+   "verdict": "review",
+   "confidence": 0.85
+  },
+  "correct": true,
+  "seconds": 8.2
+ },
+ {
+  "target": "test_00005",
+  "arm": "pad100-start",
+  "n_files": 100,
+  "prompt_tokens": 13653,
+  "est_body_tokens": 11712,
+  "answer": "- Report test_00005 has a verdict of \"review\".\n- The first kept candidate (candidate 0) has a confidence of 0.85.\n- Candidate 0 is listed as severity major, uncertain false, contrast 32.45, area_px 135.\nsource: reports/test_00005.md\nANSWER: {\"verdict\": \"review\", \"confidence\": 0.85}",
+  "gold": {
+   "verdict": "review",
+   "confidence": 0.85
+  },
+  "correct": true,
+  "seconds": 21.9
+ },
+ {
+  "target": "test_00005",
+  "arm": "pad100-middle",
+  "n_files": 100,
+  "prompt_tokens": 13653,
+  "est_body_tokens": 11712,
+  "answer": "- Report test_00005 has a verdict of \"review\".\n- The first kept candidate listed is candidate 0 with a confidence of 0.85.\n- Candidate 0 has a severity of major and is marked as uncertain false.\n- The report notes that 2 confident defects survived the rules, leading to the review verdict.\n\nsource: reports/test_00005.md\nANSWER: {\"verdict\": \"review\", \"confidence\": 0.85}",
+  "gold": {
+   "verdict": "review",
+   "confidence": 0.85
+  },
+  "correct": true,
+  "seconds": 22.4
+ },
+ {
+  "target": "test_00005",
+  "arm": "pad100-end",
+  "n_files": 100,
+  "prompt_tokens": 13653,
+  "est_body_tokens": 11712,
+  "answer": "- Report test_00005 has a verdict of \"review\".\n- The first kept candidate listed is candidate 0 with a confidence of 0.85.\n- Candidate 0 has a severity of major and is marked as uncertain false.\n- Candidate 2 was rejected by the classifier.\n\nsource: reports/test_00005.md\nANSWER: {\"verdict\": \"review\", \"confidence\": 0.85}",
+  "gold": {
+   "verdict": "review",
+   "confidence": 0.85
+  },
+  "correct": true,
+  "seconds": 21.7
+ },
+ {
+  "target": "test_00075",
+  "arm": "narrow",
+  "n_files": 1,
+  "prompt_tokens": 374,
+  "est_body_tokens": 210,
+  "answer": "ANSWER: {\"verdict\": \"escalate\", \"confidence\": 0.45}",
+  "gold": {
+   "verdict": "escalate",
+   "confidence": 0.45
+  },
+  "correct": true,
+  "seconds": 4.2
+ },
+ {
+  "target": "test_00075",
+  "arm": "pad20-start",
+  "n_files": 20,
+  "prompt_tokens": 2781,
+  "est_body_tokens": 2283,
+  "answer": "- Report test_00075 has a verdict of \"escalate\".\n- The first kept candidate listed is candidate 2, which has a confidence of 0.45.\nsource: reports/test_00075.md\nANSWER: {\"verdict\": \"escalate\", \"confidence\": 0.45}",
+  "gold": {
+   "verdict": "escalate",
+   "confidence": 0.45
+  },
+  "correct": true,
+  "seconds": 9.2
+ },
+ {
+  "target": "test_00075",
+  "arm": "pad20-middle",
+  "n_files": 20,
+  "prompt_tokens": 2781,
+  "est_body_tokens": 2283,
+  "answer": "- Report test_00075 has a verdict of escalate.\n- The first kept candidate listed is candidate 2.\n- Candidate 2 has a confidence of 0.45.\nsource: reports/test_00075.md\nANSWER: {\"verdict\": \"escalate\", \"confidence\": 0.45}",
+  "gold": {
+   "verdict": "escalate",
+   "confidence": 0.45
+  },
+  "correct": true,
+  "seconds": 10.0
+ },
+ {
+  "target": "test_00075",
+  "arm": "pad20-end",
+  "n_files": 20,
+  "prompt_tokens": 2781,
+  "est_body_tokens": 2283,
+  "answer": "- Report test_00075 has a verdict of escalate.\n- The first kept candidate listed is candidate 2.\n- Candidate 2 has a confidence of 0.45.\nsource: reports/test_00075.md\nANSWER: {\"verdict\": \"escalate\", \"confidence\": 0.45}",
+  "gold": {
+   "verdict": "escalate",
+   "confidence": 0.45
+  },
+  "correct": true,
+  "seconds": 12.3
+ },
+ {
+  "target": "test_00075",
+  "arm": "pad100-start",
+  "n_files": 100,
+  "prompt_tokens": 13891,
+  "est_body_tokens": 11925,
+  "answer": "- Report test_00075 has verdict: escalate\n- The first kept candidate listed is candidate 2 with confidence 0.45\n- Candidate 2 is marked as uncertain true\n- The report states at least one surviving candidate is uncertain, leading to the escalate verdict\n\nsource: reports/test_00075.md\nANSWER: {\"verdict\": \"escalate\", \"confidence\": 0.45}",
+  "gold": {
+   "verdict": "escalate",
+   "confidence": 0.45
+  },
+  "correct": true,
+  "seconds": 22.2
+ },
+ {
+  "target": "test_00075",
+  "arm": "pad100-middle",
+  "n_files": 100,
+  "prompt_tokens": 13891,
+  "est_body_tokens": 11925,
+  "answer": "- Report test_00075 has a verdict of \"escalate\".\n- The first kept candidate listed is candidate 2 with a confidence of 0.45.\n- Candidate 2 is marked as uncertain (uncertain true).\n- Candidate 2 has a severity of minor.\n\nsource: reports/test_00075.md\nANSWER: {\"verdict\": \"escalate\", \"confidence\": 0.45}",
+  "gold": {
+   "verdict": "escalate",
+   "confidence": 0.45
+  },
+  "correct": true,
+  "seconds": 24.2
+ },
+ {
+  "target": "test_00075",
+  "arm": "pad100-end",
+  "n_files": 100,
+  "prompt_tokens": 13891,
+  "est_body_tokens": 11925,
+  "answer": "- Report test_00075 has verdict: escalate\n- The first kept candidate listed is candidate 2\n- Candidate 2 has confidence: 0.45\n- Candidate 2 is marked as uncertain: true\n\nsource: reports/test_00075.md\nANSWER: {\"verdict\": \"escalate\", \"confidence\": 0.45}",
+  "gold": {
+   "verdict": "escalate",
+   "confidence": 0.45
+  },
+  "correct": true,
+  "seconds": 23.1
+ }
+]

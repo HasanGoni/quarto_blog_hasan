@@ -11,11 +11,14 @@ from pathlib import Path
 
 import aisuite as ai
 
-from detector_tool import DATA_DIR, inspect_casting_xray
+import json
+
+from detector_tool import inspect_xray
 
 OUT_DIR = Path(__file__).parent / "out"
 OUT_DIR.mkdir(exist_ok=True)
-DEFAULT_IMAGE = DATA_DIR / "C0001_0001.png"
+DEFAULT_IMAGE = "test_00009"
+N_CHECK = 10  # the first ten held-out images, in order (not picked by outcome)
 MODEL = os.environ.get("AGENTIC_ZERO_MODEL", "openai:gpt-4o-mini")
 ENV_FILE = Path(__file__).parent / ".env"
 
@@ -35,7 +38,7 @@ def strip_tool_markup(text: str) -> str:
     return re.sub(r"<tool_call>.*", "", text, flags=re.DOTALL).strip()
 
 
-def run_tool_call(image_path: Path = DEFAULT_IMAGE) -> str:
+def run_tool_call(image_id: str = DEFAULT_IMAGE) -> str:
     load_dotenv()
     client = ai.Client()
     response = client.chat.completions.create(
@@ -44,8 +47,8 @@ def run_tool_call(image_path: Path = DEFAULT_IMAGE) -> str:
             {
                 "role": "system",
                 "content": (
-                    "You are an industrial X-ray inspection assistant. "
-                    "Always call inspect_casting_xray before answering. "
+                    "You are an industrial X-ray inspection assistant. The tool reports candidate voids; it has no answer key, so do not claim a candidate is a real defect. "
+                    "Always call inspect_xray before answering. "
                     "Explain what the detector found in plain English for a human operator. "
                     "Be honest about false positives and missed defects when the numbers say so."
                 ),
@@ -54,22 +57,41 @@ def run_tool_call(image_path: Path = DEFAULT_IMAGE) -> str:
                 "role": "user",
                 "content": (
                     f"Inspect this frame and tell me whether it looks like a pass or "
-                    f"needs human review. Image path: {image_path}. Keep it under 150 words."
+                    f"needs human review. Image id: {image_id}. Keep it under 100 words."
                 ),
             },
         ],
-        tools=[inspect_casting_xray],
+        tools=[inspect_xray],
         max_turns=3,
     )
     return strip_tool_markup(response.choices[0].message.content or "")
 
 
+WORDS = {"no": 0, "zero": 0, "one": 1, "two": 2, "three": 3, "four": 4, "five": 5, "six": 6,
+         "seven": 7, "eight": 8, "nine": 9, "ten": 10, "eleven": 11, "twelve": 12}
+COUNT_RE = re.compile(r"\b(\d+|" + "|".join(WORDS) + r")\s+(?:\w+\s+)?(?:candidate|box|region|detection|spot|area)", re.I)
+
+
+def stated_counts(text: str) -> set[int]:
+    return {int(g) if g.isdigit() else WORDS[g.lower()] for g in COUNT_RE.findall(text)}
+
+
+def consistency_check(n: int = N_CHECK) -> dict:
+    """Does the explanation quote the number of candidates the tool really returned?"""
+    rows = []
+    for i in range(n):
+        image_id = f"test_{i:05d}"
+        truth = json.loads(inspect_xray(image_id))["candidate_boxes"]
+        text = run_tool_call(image_id)
+        said = stated_counts(text)
+        rows.append({"image": image_id, "tool_count": truth, "stated": sorted(said),
+                     "consistent": said == {truth}, "explanation": text})
+    return {"n": n, "consistent": sum(r["consistent"] for r in rows), "rows": rows}
+
+
 def main():
     load_dotenv()
-    if not DEFAULT_IMAGE.exists():
-        raise FileNotFoundError(f"GDXray image not found: {DEFAULT_IMAGE}")
-
-    tool_only = inspect_casting_xray(str(DEFAULT_IMAGE))
+    tool_only = inspect_xray(DEFAULT_IMAGE)
     (OUT_DIR / "tool_result.json").write_text(tool_only)
 
     if not os.environ.get("OPENAI_API_KEY"):
@@ -88,13 +110,19 @@ def main():
 
     combined = (
         f"=== Backend: {backend} | model: {MODEL} ===\n\n"
-        "=== Tool result (inspect_casting_xray) ===\n"
+        "=== Tool result (inspect_xray) ===\n"
         f"{tool_only}\n\n"
         "=== LLM explanation ===\n"
         f"{explanation}\n"
     )
     (OUT_DIR / "first_tool_call_output.txt").write_text(combined)
     print(combined)
+
+    check = consistency_check()
+    (OUT_DIR / "consistency.json").write_text(json.dumps(check, indent=2))
+    for r in check["rows"]:
+        print(r["image"], "tool:", r["tool_count"], "stated:", r["stated"], "OK" if r["consistent"] else "MISMATCH")
+    print(f"consistent: {check['consistent']}/{check['n']}")
 
 
 if __name__ == "__main__":

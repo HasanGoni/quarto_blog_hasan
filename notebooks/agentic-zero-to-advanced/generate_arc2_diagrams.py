@@ -43,5 +43,82 @@ def agent_loop():
         plt.close(fig)
 
 
+def graph_map():
+    """Part 6: the Part 5 loop as a graph. Three nodes, five edges, one shared state."""
+    with plt.xkcd():
+        fig, ax = plt.subplots(figsize=(14, 7.5))
+        ax.set_xlim(0, 16); ax.set_ylim(0, 9); ax.axis("off")
+        box(ax, 1.4, 4.6, 1.8, 1.0, "START", "#e9ecef", fs=12)
+        box(ax, 5.2, 4.6, 3.0, 1.8, "agent\nask the model", "#a5d8ff")
+        box(ax, 11.0, 6.9, 3.2, 1.6, "tools\nrun what it asked", "#b2f2bb")
+        box(ax, 11.0, 2.3, 3.2, 1.6, "nudge\n\"use a tool, or submit\"", "#ffd8a8")
+        box(ax, 14.9, 4.6, 1.6, 1.0, "END", "#e9ecef", fs=12)
+        arrow(ax, (2.3, 4.6), (3.7, 4.6))
+        arrow(ax, (6.85, 5.7), (9.35, 7.2), "asked for a tool", off=(-0.5, 0.75))
+        arrow(ax, (9.35, 6.4), (6.85, 5.0), "result goes back", off=(0.9, -0.55))
+        arrow(ax, (6.85, 3.5), (9.35, 2.0), "just talked", off=(-0.4, -0.75))
+        arrow(ax, (9.35, 2.7), (6.85, 4.2), "then asks again", off=(1.0, 0.5))
+        arrow(ax, (12.6, 6.5), (14.4, 5.2), "report\nsubmitted", off=(0.9, 0.55))
+        arrow(ax, (12.6, 2.5), (14.4, 4.0), "step\nlimit", off=(0.95, -0.35), dashed=True)
+        ax.text(8.2, 0.7, "every node reads and writes the\nSAME shared state", ha="center", fontsize=11, color="#1971c2")
+        fig.text(0.5, 0.96, "Part 5's loop, drawn as a graph", ha="center", fontsize=16, fontweight="bold")
+        fig.tight_layout()
+        fig.savefig(f"{OUT_DIR}/graph-map-diagram.png", dpi=110, facecolor="white")
+        plt.close(fig)
+
+
+def state_board():
+    """Part 6: the state is a whiteboard; a node returns only the pieces it changes."""
+    with plt.xkcd():
+        fig, ax = plt.subplots(figsize=(14, 7.0))
+        ax.set_xlim(0, 16); ax.set_ylim(0, 8.5); ax.axis("off")
+        keys = [("messages", "everything said and seen", "#fff3bf"), ("trace", "what happened, per step", "#fff3bf"),
+                ("step", "how many times we asked", "#e9ecef"), ("tokens", "running cost", "#e9ecef"), ("report", "None until submit_report", "#e9ecef")]
+        ax.add_patch(FancyBboxPatch((0.4, 0.9), 7.0, 6.6, boxstyle="round,pad=0.05,rounding_size=0.25", fc="white", ec="#1e1e1e", lw=3, zorder=1))
+        ax.text(3.9, 7.1, "the state (shared whiteboard)", ha="center", fontsize=14, fontweight="bold")
+        for i, (k, d, c) in enumerate(keys):
+            box(ax, 3.9, 6.0 - i * 1.15, 6.2, 0.85, f"{k}: {d}", c, fs=11)
+        box(ax, 12.2, 5.6, 5.0, 1.8, "a node runs\nreads the board", "#a5d8ff")
+        box(ax, 12.2, 2.2, 5.0, 1.8, "returns ONLY what changed\n{messages: [one new], step: 2}", "#b2f2bb", fs=11)
+        arrow(ax, (7.5, 5.6), (9.7, 5.6), "read", off=(0, 0.35))
+        arrow(ax, (12.2, 4.7), (12.2, 3.2), None)
+        arrow(ax, (9.7, 2.2), (7.5, 2.2), "merge", off=(0, 0.35))
+        ax.text(12.2, 0.7, "messages and trace are APPENDED (reducer = operator.add)\nstep, tokens, report are REPLACED", ha="center", fontsize=11, color="#c92a2a")
+        fig.text(0.5, 0.96, "State: nodes don't pass values around, they write on one board", ha="center", fontsize=15, fontweight="bold")
+        fig.tight_layout()
+        fig.savefig(f"{OUT_DIR}/graph-state-board.png", dpi=110, facecolor="white")
+        plt.close(fig)
+
+
+def pipeline_map():
+    """Part 7: the inspection pipeline. A straight line with two exits; the model is used in two boxes only."""
+    with plt.xkcd():
+        fig, ax = plt.subplots(figsize=(15, 7.0))
+        ax.set_xlim(0, 18); ax.set_ylim(0, 8.5); ax.axis("off")
+        det, llm = "#b2f2bb", "#a5d8ff"
+        xs = [1.6, 4.5, 7.4, 10.3, 13.2, 16.1]
+        nodes = [(xs[0], "detect\nfind_candidates", det), (xs[1], "measure\nmeasure_candidate", det),
+                 (xs[2], "classify\nLLM, one batched call", llm), (xs[3], "rules\nborder, min area,\nseverity", det),
+                 (xs[4], "decide\npass / review /\nescalate", det), (xs[5], "report\nLLM writes prose", llm)]
+        for x, t, c in nodes:
+            box(ax, x, 4.4, 2.3, 1.9, t, c, fs=11)
+        for x1, x2 in zip(xs, xs[1:]):
+            arrow(ax, (x1 + 1.2, 4.4), (x2 - 1.2, 4.4))
+        ax.annotate("", xy=(xs[5], 5.5), xytext=(xs[0], 5.5), arrowprops=dict(arrowstyle="-|>", lw=2, color=RED, ls="--",
+                    connectionstyle="arc3,rad=-0.22", mutation_scale=22))
+        ax.text(8.85, 7.3, "no candidates: skip straight to report, no model call", ha="center", fontsize=11, color=RED)
+        ax.annotate("", xy=(xs[4], 3.3), xytext=(xs[2], 3.3), arrowprops=dict(arrowstyle="-|>", lw=2, color=RED, ls="--",
+                    connectionstyle="arc3,rad=0.35", mutation_scale=22))
+        ax.text(9.6, 1.5, "classifier output invalid after a retry:\nskip the rules, escalate to a human", ha="center", fontsize=11, color=RED)
+        ax.text(0.4, 0.45, "green = plain Python        blue = a model call", fontsize=11, color="#1971c2", fontweight="bold")
+        fig.text(0.5, 0.96, "The pipeline: code owns the order, the model owns two judgments", ha="center", fontsize=16, fontweight="bold")
+        fig.tight_layout()
+        fig.savefig(f"{OUT_DIR}/pipeline-map-diagram.png", dpi=110, facecolor="white")
+        plt.close(fig)
+
+
 if __name__ == "__main__":
     agent_loop()
+    graph_map()
+    state_board()
+    pipeline_map()

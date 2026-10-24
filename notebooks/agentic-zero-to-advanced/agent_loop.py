@@ -12,8 +12,8 @@ from pathlib import Path
 
 from openai import OpenAI
 
-from detector_tool import DATA_DIR
-from inspection_tools import TOOL_FUNCS, TOOL_SPECS, find_candidates, score_kept
+import void_data as vd
+from inspection_tools import N_PER_SPLIT, TOOL_FUNCS, TOOL_SPECS, find_candidates, score_kept
 from structured_output_demo import load_dotenv
 
 load_dotenv()
@@ -31,7 +31,7 @@ SUBMIT_SPEC = {"type": "function", "function": {
         "verdict": {"type": "string", "enum": ["pass", "review"]},
         "reason": {"type": "string"}}, "required": ["kept_ids", "verdict", "reason"]}}}
 
-SYSTEM = """You inspect aluminum casting X-ray frames for defects.
+SYSTEM = """You inspect X-ray images of metal parts for voids (small defects).
 Tools: find_candidates (noisy classical detector, most boxes are false alarms),
 measure_candidate (look closer at one box), submit_report (finish).
 Work like this: call find_candidates first. If there are no candidates, submit a pass right away.
@@ -41,7 +41,7 @@ Say in one short sentence what you are about to do before each tool call."""
 
 def run_agent(image: str) -> dict:
     messages = [{"role": "system", "content": SYSTEM},
-                {"role": "user", "content": f"Inspect frame {image}."}]
+                {"role": "user", "content": f"Inspect image {image}."}]
     trace, kept_ids, report, t0, tokens = [], [], None, time.time(), 0
     for step in range(1, MAX_STEPS + 1):
         resp = client.chat.completions.create(
@@ -73,7 +73,7 @@ def run_agent(image: str) -> dict:
     n_cand = len(find_candidates(image)["candidates"])  # for scoring only, not shown to the agent
     kept_ids = report["kept_ids"] if report else []
     tp, fp, fn = score_kept(image, kept_ids)
-    return {"image": image, "finished": report is not None, "steps": len(trace),
+    return {"image": image, "split": image.split("_")[0], "finished": report is not None, "steps": len(trace),
             "tool_calls": sum(len(s["calls"]) for s in trace), "tokens": tokens,
             "seconds": round(time.time() - t0, 1), "n_candidates": n_cand,
             "kept": len(kept_ids), "verdict": report["verdict"] if report else None,
@@ -81,33 +81,31 @@ def run_agent(image: str) -> dict:
 
 
 def main():
-    images = sorted(p.name for p in DATA_DIR.glob("C0001_*.png"))
-    with ThreadPoolExecutor(4) as pool:
+    # dev = first N val images, held-out = first N test images (in order, not picked by outcome)
+    images = [f"val_{i:05d}" for i in range(N_PER_SPLIT)] + [f"test_{i:05d}" for i in range(N_PER_SPLIT)]
+    with ThreadPoolExecutor(8) as pool:
         results = list(pool.map(run_agent, images))
-    for r in results:
-        print(f"{r['image']}: {r['n_candidates']:>3} cands -> kept {r['kept']:>3}, {r['steps']} steps, "
-              f"{r['tool_calls']} tool calls, {r['seconds']}s, tp={r['tp']} fp={r['fp']}")
     (OUT_DIR / "agent_loop_results.json").write_text(json.dumps(results, indent=2))
 
-    # baseline = keep every candidate (what Part 2 scored)
-    base_tp = base_fp = base_fn = 0
-    for r in results:
-        t, f, n = score_kept(r["image"], list(range(r["n_candidates"])))
-        base_tp, base_fp, base_fn = base_tp + t, base_fp + f, base_fn + n
-    tp, fp, fn = (sum(r[k] for r in results) for k in ("tp", "fp", "fn"))
     prec = lambda t, f: round(t / (t + f), 3) if t + f else None
-    summary = {
-        "model": MODEL, "n_images": len(results),
-        "finished": sum(r["finished"] for r in results),
-        "avg_steps": round(sum(r["steps"] for r in results) / len(results), 2),
-        "avg_tool_calls": round(sum(r["tool_calls"] for r in results) / len(results), 2),
-        "avg_tokens": round(sum(r["tokens"] for r in results) / len(results)),
-        "avg_seconds": round(sum(r["seconds"] for r in results) / len(results), 1),
-        "baseline": {"tp": base_tp, "fp": base_fp, "fn": base_fn, "precision": prec(base_tp, base_fp),
-                     "recall": round(base_tp / (base_tp + base_fn), 3)},
-        "agent": {"tp": tp, "fp": fp, "fn": fn, "precision": prec(tp, fp),
-                  "recall": round(tp / (tp + fn), 3)},
-    }
+    summary = {"model": MODEL, "n_per_split": N_PER_SPLIT}
+    for split in ("val", "test"):
+        rows = [r for r in results if r["split"] == split]
+        # baseline = keep every candidate (what Part 2 scored at the same K)
+        bt = bf = bn = 0
+        for r in rows:
+            t, f, n = score_kept(r["image"], list(range(r["n_candidates"])))
+            bt, bf, bn = bt + t, bf + f, bn + n
+        tp, fp, fn = (sum(r[k] for r in rows) for k in ("tp", "fp", "fn"))
+        summary[split] = {
+            "n_images": len(rows), "finished": sum(r["finished"] for r in rows),
+            "avg_steps": round(sum(r["steps"] for r in rows) / len(rows), 2),
+            "avg_tool_calls": round(sum(r["tool_calls"] for r in rows) / len(rows), 2),
+            "avg_tokens": round(sum(r["tokens"] for r in rows) / len(rows)),
+            "avg_seconds": round(sum(r["seconds"] for r in rows) / len(rows), 1),
+            "baseline": {"tp": bt, "fp": bf, "fn": bn, "precision": prec(bt, bf), "recall": round(bt / (bt + bn), 3)},
+            "agent": {"tp": tp, "fp": fp, "fn": fn, "precision": prec(tp, fp), "recall": round(tp / (tp + fn), 3)},
+        }
     (OUT_DIR / "agent_loop_summary.json").write_text(json.dumps(summary, indent=2))
     print(json.dumps(summary, indent=2))
 

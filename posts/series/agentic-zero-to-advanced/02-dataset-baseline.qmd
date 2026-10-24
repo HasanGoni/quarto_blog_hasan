@@ -1,9 +1,10 @@
 ---
 title: "Agentic Developer: Zero to Advanced, Part 2: The Dataset and the Baseline Model"
-subtitle: "A plain classical-CV detector, no agent anywhere in sight, scored honestly against real GDXray ground truth"
+subtitle: "A plain classical-CV detector, no agent anywhere in sight, scored honestly against exact ground truth on a synthetic void dataset"
 author: "Hasan Goni"
 date: 2026-09-05
-categories: [agentic-ai, computer-vision, gdxray, python]
+date-modified: 2026-10-18
+categories: [agentic-ai, computer-vision, synthetic-data, python]
 toc: true
 series:
   name: "Agentic Developer: Zero to Advanced"
@@ -15,58 +16,65 @@ This post is part of the [Agentic Developer: Zero to Advanced](index.qmd) series
 from [Part 1 -- why agentic AI, why X-ray defect detection](01-introduction.qmd).
 :::
 
-Part 1 was all talk. This one has no LLM in it at all -- on purpose. Before any agent shows up in
-Arc 2, there needs to be a real, boring, non-agentic baseline: load real GDXray data, run a plain
-classical computer-vision detector, score it honestly against real ground truth. Whatever number
-comes out of this post is the number every later, agentic addition in this series has to actually
-beat.
+:::{.callout-note}
+**Rewritten on 2026-10-18.** The first version of this series ran on the public GDXray casting
+radiographs. GDXray is free for research and education only, and redistribution is not allowed,
+so showing its images on a public blog was not something I should have done. This series now
+runs on a dataset I generate myself, described in
+[A Synthetic Void Dataset With Exact Masks](../agentic-factory-segmentation/01-synthetic-void-dataset.qmd).
+Every number below comes from a fresh run on that data, and they differ from the first version.
+:::
 
-## The data, for real
+Part 1 was all talk. This one has no LLM in it at all, on purpose. Before any agent shows up in
+Arc 2, there needs to be a real, boring, non-agentic baseline: load the data, run a plain
+classical computer-vision detector, score it honestly against exact ground truth. Whatever number
+comes out of this post is the number every later, agentic addition in this series has to beat.
 
-The running dataset is GDXray Castings -- specifically series **C0001**: 72 X-ray images of the
-same aluminum wheel casting, rotated 5 degrees between shots, with a `ground_truth.txt` file
-giving real bounding boxes for real casting defects in each frame. It's real research data from
-GRIMA (Pontificia Universidad Católica de Chile), for educational and research use.
+## The data
 
-Across all 72 images, `ground_truth.txt` marks **256 real defect instances** -- most images have
-2-4 small, faint boxes a few dozen pixels wide, in the aluminum where a void or inclusion sits.
+The running dataset is 4,000 synthetic 224x224 "X-ray" images. Each one is a Fashion-MNIST
+silhouette (a shirt, a sandal, a boot) treated as a metal part, with the grey level of the
+original picture used as the part's thickness. The image is made with Beer-Lambert attenuation
+(thicker means darker), plus blur, gain drift and noise. Then **voids** are cut into the part,
+meaning thickness is removed from small ellipse-like regions, so more X-rays get through and the
+spot comes out brighter. Because I made the voids, the mask of every void is exact, and the
+dataset post explains each step and shows the code.
+
+This series uses two of its three splits:
+
+| Split | Images | Voids | Images with no void | Role |
+|---|---|---|---|---|
+| `val` | 600 | 1,184 | 80 | **dev**: every choice (a threshold, later a prompt) is made here |
+| `test` | 600 | 1,164 | 100 | **held-out**: looked at once per question, to report the number |
+
+The parts are different shirts and shoes in each split, so a detector cannot have memorised a
+silhouette. The 2,800 `train` images stay untouched until a part trains something.
 
 ## What am I actually looking at?
 
-If you open one of these X-rays cold and think *I have no idea what the labels mean*, that is the
-correct first reaction. The defects are real, but they are tiny and low-contrast. GDXray Castings
-is a **single-class** dataset: every box just says *a defect is here*, not whether it is porosity,
-an inclusion, or a crack. A trained radiographer drew tight rectangles around local density
-anomalies -- places where the aluminum is not quite uniform.
+A void is a small bright region inside a dark part. The hard thing about it is the **contrast**,
+how much brighter it is than the material around it. In this dataset the voids range from
+almost invisible (contrast under 0.05, about 37% of all voids) to clearly visible (above 0.15).
+That range is deliberate: real defects are often faint, and a dataset where every void is
+obvious would make every baseline look good.
 
-Frame `C0001_0001` has only **three** labeled defects. Here they are, numbered on the full frame:
+The image below shows one held-out image with its voids (green boxes, exact), and the stages of
+the baseline.
 
-![The three ground-truth boxes on C0001_0001, numbered.](images/baseline-gt-overview.png)
-
-At full resolution (768×572) those boxes are 10–31 pixels wide. Zoomed in, each one wraps a faint
-smudge that is only a few grayscale levels darker or brighter than the surrounding metal:
-
-![Zoomed crops of the three labeled defects on C0001_0001.](images/baseline-gt-zoom-panels.png)
-
-That is what you are searching for: not the wheel shape, not the bright air gaps between spokes,
-not the spoke edges (the classical baseline flags those constantly) -- just a blob of slightly
-wrong density, often sitting on top of structural texture that is already hard to read. On a
-laptop screen at blog-post resolution, many of these labels look like rectangles on noise. That
-is the task, not a failure of your eyes.
+![The baseline, stage by stage, on one held-out image.](images/baseline-pipeline-diagram.png)
 
 ## The baseline: no learning at all
 
-The detector here is deliberately not deep learning. It's four classical steps, and that's the
-whole method:
+The detector is deliberately not deep learning. It is four classical steps:
 
-1. **Top-hat morphology.** Run both a white top-hat and a black top-hat filter over the image.
-   These flag small regions that are locally brighter or darker than their surroundings --
-   exactly the kind of thing a defect looks like, in theory.
-2. **Object masking.** Otsu-threshold the casting body away from the surrounding air, and erode
-   the mask a bit so the casting's own outer edge (a very strong, very boring top-hat response)
-   doesn't get treated as a candidate defect.
-3. **Percentile thresholding.** Keep only the top 0.5% strongest responses inside the object mask.
-4. **Connected components.** Turn surviving blobs into candidate bounding boxes.
+1. **White top-hat morphology.** Flag small regions that are locally brighter than their
+   surroundings, which is exactly what a void is. I use only the white version, because the
+   physics here says a void is brighter, not darker.
+2. **Part mask.** Otsu-threshold the part (dark) away from the air (bright), and erode the mask
+   so the part's own outer edge, a very strong and very boring response, is not a candidate.
+3. **A noise-scaled threshold.** Estimate the noise of the response inside the part (median
+   absolute deviation) and keep what is above `K` times that. `K` is the one free number.
+4. **Connected components.** Turn surviving blobs into candidate boxes.
 
 ```{=html}
 <details>
@@ -74,24 +82,17 @@ whole method:
 ```
 
 ```python
-def detect_candidates(gray, return_stages=False):
-    white_hat = cv2.morphologyEx(gray, cv2.MORPH_TOPHAT, TOPHAT_KERNEL)
-    black_hat = cv2.morphologyEx(gray, cv2.MORPH_BLACKHAT, TOPHAT_KERNEL)
-    response = np.maximum(white_hat, black_hat)
-
-    mask = object_mask(gray)
-    response = cv2.bitwise_and(response, response, mask=mask)
-
-    thresh_val = np.percentile(response[mask > 0], TOPHAT_PERCENTILE)
-    binary = (response >= thresh_val).astype(np.uint8) * 255
+def detect_candidates(gray, k=K_GUESS, return_stages=False):
+    mask = part_mask(gray)
+    resp = response_map(gray) * (mask > 0)
+    inside = resp[mask > 0]
+    # robust noise scale of the response inside the part (median absolute deviation)
+    sigma = 1.4826 * np.median(np.abs(inside - np.median(inside))) if inside.size else 1.0
+    binary = (resp >= k * max(sigma, 1e-3)).astype(np.uint8) * 255
     binary = cv2.morphologyEx(binary, cv2.MORPH_OPEN, CLEAN_KERNEL)
 
     n, _, stats, _ = cv2.connectedComponentsWithStats(binary)
-    boxes = [
-        (x, y, x + w, y + h)
-        for x, y, w, h, area in stats[1:]
-        if area >= MIN_BLOB_AREA
-    ]
+    boxes = [(int(x), int(y), int(x + w), int(y + h)) for x, y, w, h, a in stats[1:] if a >= MIN_BLOB_AREA]
     return boxes
 ```
 
@@ -99,40 +100,70 @@ def detect_candidates(gray, return_stages=False):
 </details>
 ```
 
-Every candidate box gets matched against the real ground-truth boxes by IoU (details below). No
-tracking across the 72-frame rotation sequence, no learning from labels, no memory between images
--- each image is scored completely on its own. That's the point of a baseline: the dumbest honest
-thing that could plausibly work.
+A candidate counts as a **hit** when its box overlaps an exact void box with an IoU of at least
+0.2 (matched one to one, best overlap first). No tracking, no learning from labels, no memory
+between images: each image is scored completely on its own. That is the point of a baseline,
+the dumbest honest thing that could plausibly work.
 
-![The full pipeline, run on one real image from the series.](images/baseline-pipeline-diagram.png)
+## Choosing K without cheating
 
-Panel 2 already gives away why this baseline struggles: the strongest top-hat responses are the
-wheel's own spoke and rim edges, not the tiny real defects. Structural geometry produces a much
-bigger signal than an actual flaw does. That's a real, explainable failure mode, not a bug in the
-code.
+I wrote `K = 4` as a first guess before looking at any score. Then I swept `K` on the **dev**
+split and let the F1 score pick, and only then scored the **held-out** split. The sweep, copied
+from the run:
+
+```{=html}
+<details>
+<summary><strong>Show the dev sweep (real output)</strong></summary>
+```
+
+```text
+dev  K=2.0  P=0.013 R=0.411 F1=0.026 cand=36209
+dev  K=2.5  P=0.025 R=0.519 F1=0.048 cand=24445
+dev  K=3.0  P=0.043 R=0.535 F1=0.079 cand=14891
+dev  K=3.5  P=0.077 R=0.520 F1=0.134 cand=8010
+dev  K=4.0  P=0.095 R=0.486 F1=0.158 cand=6089
+dev  K=5.0  P=0.135 R=0.418 F1=0.204 cand=3674
+dev  K=6.0  P=0.154 R=0.356 F1=0.215 cand=2741
+dev  K=8.0  P=0.185 R=0.271 F1=0.220 cand=1736
+dev  K=10.0 P=0.217 R=0.214 F1=0.216 cand=1164
+dev  K=12.0 P=0.237 R=0.160 F1=0.191 cand=802
+dev  K=16.0 P=0.247 R=0.092 F1=0.134 cand=442
+dev  K=20.0 P=0.202 R=0.053 F1=0.084 cand=312
+chosen K on dev: 8.0
+```
+
+```{=html}
+</details>
+```
+
+The first sweep stopped at `K = 8`, which was the edge of my grid, so I widened it to 20 to make
+sure the best value was not just past the edge. It is not: F1 peaks at `K = 8` and falls on both
+sides. The sweep also shows the trade-off in one column: a low `K` finds more voids and drowns in
+false alarms (36,209 candidates for about 1,184 real voids), a high `K` is quiet and misses most.
 
 ## The real numbers
 
-Run across all 72 images, scored with a loose IoU-hit-threshold of 0.05 (generous, given this is
-a coarse classical method):
+Scored once on the **held-out test split**:
 
-| Metric | Value |
-|---|---|
-| Images scored | 72 |
-| Real ground-truth defects | 256 |
-| Candidate boxes raised | 366 |
-| True positives | 24 |
-| False positives | 342 |
-| False negatives | 232 |
-| **Precision** | **0.066** |
-| **Recall** | **0.094** |
+| Metric | `K = 4` (my guess) | `K = 8` (chosen on dev) |
+|---|---|---|
+| Real voids | 1,164 | 1,164 |
+| Candidate boxes raised | 6,165 | 1,718 |
+| True positives | 507 | 284 |
+| False positives | 5,658 | 1,434 |
+| False negatives | 657 | 880 |
+| **Precision** | 0.082 | **0.165** |
+| **Recall** | 0.436 | **0.244** |
+| F1 | 0.138 | 0.197 |
+| Pixel Dice against the exact void mask | 0.178 | 0.218 |
 
-That's a genuinely bad detector -- it catches under 10% of real defects, and 93% of what it flags
-isn't a defect at all. Reported honestly, because that's the actual number, and it's the number
-every later post in this series has to improve on.
+That is a weak detector, reported as it is. With the dev-chosen `K` it catches about a quarter
+of the real voids, and five of six boxes it raises are not voids. The dev F1 (0.220) and the
+held-out F1 (0.197) are close, so the choice of `K` carried over to new shapes rather than
+being tuned to the dev split. This is the number the rest of the series has to beat.
 
-Drag the slider to see it on the actual image: green boxes are real ground truth, red boxes are
-what the classical detector raised.
+Drag the slider to see the held-out image from above, raw and with the answer on top: green is the
+exact void, red is what the baseline raised.
 
 ::: {.column-body}
 ```{=html}
@@ -141,7 +172,7 @@ what the classical detector raised.
   <img id="bl-after" src="images/baseline-slider-after.png" style="width:100%;display:block;position:absolute;top:0;left:0;border-radius:8px;border:1px solid #ddd;clip-path:inset(0 50% 0 0);">
   <div style="position:absolute;top:0;bottom:0;left:50%;width:2px;background:white;box-shadow:0 0 4px rgba(0,0,0,0.5);" id="bl-handle"></div>
   <input id="bl-range" type="range" min="0" max="100" value="50" style="width:100%;margin-top:10px;">
-  <p style="text-align:center;font-size:0.85em;color:#666;">left: the raw X-ray &nbsp;|&nbsp; right: real ground truth (green) vs. the classical detector's real candidates (red)</p>
+  <p style="text-align:center;font-size:0.85em;color:#666;">left: the image &nbsp;|&nbsp; right: exact voids (green) vs. the baseline's candidates (red)</p>
 </div>
 <script>
 (function(){
@@ -159,40 +190,84 @@ what the classical detector raised.
 ```
 :::
 
+On this image, which I picked because it is the first held-out image with exactly three voids
+(not because of how the detector did on it), the baseline misses all three. The top-hat response
+(third panel) lights up the faint voids, but it lights up the fabric-like texture of the shirt
+just as much, so at the threshold that keeps the false alarms down the voids fall below it.
+
+## Where it misses
+
+Because the voids are exact, every miss can be sliced. On the held-out split:
+
+![Recall of the baseline by void contrast and by void size.](images/baseline-recall-slices.png)
+
+| Slice | Voids | Recall |
+|---|---|---|
+| contrast < 0.05 | 457 | 2% |
+| contrast 0.05 to 0.15 | 370 | 25% |
+| contrast >= 0.15 | 337 | 55% |
+| diameter < 6 px | 253 | 18% |
+| diameter 6 to 12 px | 464 | 24% |
+| diameter >= 12 px | 447 | 29% |
+
+Contrast is the big lever: the faintest 457 voids are essentially invisible to this detector, and
+even the clearly visible ones are found only about half the time. Size matters much less. These
+slices overlap (small voids tend to be fainter), so this is a description of where it fails, not a
+proof of why. The factory series later uses exactly this kind of slicing to decide what to fix.
+
 ## Why bother with a baseline this bad
 
 Because "the agent found more defects" only means something if you know what "more" is being
-measured against. Precision 0.066, recall 0.094, zero learning, zero memory across frames -- that's
-the floor. Later posts in this series swap in better detectors, add tool-calling, add planning,
-add multi-agent review. Every one of those additions gets checked against this same 72-image,
-256-defect set, with the same IoU-hit-threshold. If a later post can't beat 0.066 precision and
-0.094 recall on this exact data, it isn't actually helping, no matter how sophisticated the agent
-architecture behind it looks.
+measured against. Precision 0.165, recall 0.244, zero learning, zero memory across images: that
+is the floor. Later posts in this series swap in better detectors, add tool calling, planning
+and review. Every one of those additions gets checked against the same 600 held-out images and
+1,164 voids, with the same hit rule. If a later post cannot beat this, it is not helping, no
+matter how sophisticated the agent architecture looks.
+
+## What I did not do
+
+- **No tuning beyond one number.** `K` is the only thing chosen on dev. The kernel sizes, the
+  erosion, the 0.2 IoU rule and the minimum blob area were fixed by me up front. A better
+  hand-tuned classical detector exists; this one is the plain version on purpose.
+- **No real X-rays.** The images are simulated. The numbers say how a classical detector behaves
+  on this dataset, not on a production line. The dataset post lists how this data differs from
+  real X-rays.
+- **No second seed.** The dataset is one fixed draw (one seed). I did not measure how much the
+  numbers move across freshly generated datasets.
+- **No confidence interval.** With 1,164 voids the recall has a standard error of roughly 1.3
+  points (my own arithmetic, `sqrt(0.244 * 0.756 / 1164)`), but I did not bootstrap it.
+- **Single-class and box-level.** Pixel Dice is reported once, but the series scores boxes.
+  Segmentation quality is the subject of the factory series.
 
 ## Jargon, explained simply
 
 **Ground truth.** The real, correct answer, established independently of whatever your model
-predicts. Think of the answer key a teacher already has before grading anyone's exam.
+predicts. Think of the answer key a teacher already has before grading anyone's exam. Here it is
+exact, because the voids were drawn by the generator.
 
 **Bounding box.** A rectangle marking roughly where something is in an image, not its exact
-pixel-perfect shape. For example, "the treasure is somewhere in this square on the map" -- not the
-exact spot, just a region.
+pixel-perfect shape. For example, "the treasure is somewhere in this square on the map".
 
 **IoU (Intersection over Union).** How much a predicted box overlaps a real one, as a fraction of
 their combined area. Suppose you and a friend each draw a circle on the ground guessing where a
-dropped coin landed -- IoU is how much your two circles overlap, divided by the total ground either
+dropped coin landed: IoU is how much your two circles overlap, divided by the total ground either
 circle covers.
 
 **Precision.** Of everything the model flagged, what fraction was actually real. If you wrote ten
 parking tickets today, precision is what fraction of those cars were actually illegally parked.
 
-**Recall.** Of everything that was actually real, what fraction the model actually caught. Suppose
-twenty cars were illegally parked today -- recall is what fraction of them you actually ticketed.
+**Recall.** Of everything that was actually real, what fraction the model caught. If twenty cars
+were illegally parked today, recall is what fraction of them you ticketed.
 
-**Classical computer vision.** Image analysis via fixed, hand-written rules (thresholds, filters,
-morphology) rather than a model that learned patterns from labeled examples. Think of reading a
-thermometer versus asking a doctor who's examined a thousand patients -- one follows a rule you
-could write down on paper, the other learned from experience.
+**Contrast.** How different a spot is from what is around it. A pale grey mark on white paper is
+low contrast, a black one is high.
+
+**Top-hat filter.** A filter that keeps only small features that stick out of their background,
+like picking out pebbles standing on a flat beach.
+
+**Dev set and held-out set.** The dev set is where you are allowed to make choices; the held-out
+set is the exam you take once. Choosing on the held-out set makes the score look better than it
+is.
 
 ## Reproduce this yourself
 
@@ -203,21 +278,21 @@ could write down on paper, the other learned from experience.
 
 ```bash
 git clone https://github.com/HasanGoni/quarto_blog_hasan
-cd quarto_blog_hasan/notebooks/agentic-zero-to-advanced
-uv sync
-uv run python baseline_detector.py
+cd quarto_blog_hasan/notebooks/agentic-factory-segmentation
+uv sync && uv run python make_dataset.py        # about 23 s, writes data/void_dataset_v1
+cd ../agentic-zero-to-advanced
+uv sync && uv run python baseline_detector.py   # about 10 s
 ```
 
 ```{=html}
 </details>
 ```
 
-The script expects GDXray Castings series C0001 (a Kaggle mirror of the original GRIMA dataset --
-search "gdxray" on Kaggle) with its `ground_truth.txt` alongside the `.png` frames. GDXray itself
-is free for educational and research use only.
+The dataset is MIT-licensed code generating silhouettes from Fashion-MNIST (MIT licence). Nothing
+here needs a download you do not control.
 
 ## What's next
 
 [Part 3](03-first-tool-call.qmd) wraps this exact detector as a callable tool and puts one LLM
 call in front of it: reading the detector's raw output and writing a plain-English explanation.
-Still no planning, no iteration, no real agent yet -- just the first tool call.
+Still no planning, no iteration, no real agent yet, just the first tool call.

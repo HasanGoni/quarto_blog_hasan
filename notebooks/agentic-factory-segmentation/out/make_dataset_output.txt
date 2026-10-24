@@ -1,0 +1,4 @@
+train 2800 images, 2368 with at least one void
+val 600 images, 520 with at least one void
+test 600 images, 500 with at least one void
+voids: 7794 | sha256 afce5f71f296f368 | written to /home/hasan-spark/workspace/projects/git_data/quarto_blog_hasan/notebooks/agentic-factory-segmentation/data/void_dataset_v1

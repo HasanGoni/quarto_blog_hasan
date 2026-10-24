@@ -3,7 +3,8 @@ title: "Agentic Developer: Zero to Advanced, Part 4: Prompting and Structured Ou
 subtitle: "Getting reliable JSON/structured responses from the LLM about defect type, severity, confidence"
 author: "Hasan Goni"
 date: 2026-09-15
-categories: [agentic-ai, langgraph, computer-vision, python]
+date-modified: 2026-10-18
+categories: [agentic-ai, structured-output, computer-vision, python]
 toc: true
 series:
   name: "Agentic Developer: Zero to Advanced"
@@ -13,6 +14,13 @@ series:
 :::{.callout-tip}
 This post is part of the [Agentic Developer: Zero to Advanced](index.qmd) series. It follows on
 from [Part 3 -- your first tool-calling LLM](03-first-tool-call.qmd).
+:::
+
+::: {.callout-note}
+**Rewritten on 2026-10-18** on the synthetic void dataset, with a fresh run on all 600 held-out
+images. The first version used GDXray images that I may not redistribute. The result is different
+in an interesting way: the structure is still perfect, and now I can show that the labels inside
+it are worthless.
 :::
 
 In Part 3, we wrapped our classical computer vision detector as a tool and called it from an LLM. But the LLM response was still a free-form text explanation. This post introduces structured output -- getting the LLM to return data in a predictable format (like JSON) that we can reliably parse and use in downstream code.
@@ -32,7 +40,7 @@ When an LLM gives you free-form text, you're essentially getting a human-readabl
 Here's what a typical unstructured response might look like:
 
 ```
-The image shows a casting with a potential defect. There's a small dark spot near the rim of the casting that appears to be a void. The defect is approximately 15x15 pixels in size and seems to be located in the lower left quadrant of the image. It's not very pronounced but could be significant if it represents a manufacturing flaw.
+The image shows a part with a potential defect. There's a small dark spot near the rim of the part that appears to be a void. The defect is approximately 15x15 pixels in size and seems to be located in the lower left quadrant of the image. It's not very pronounced but could be significant if it represents a manufacturing flaw.
 ```
 
 This response is informative for a human, but it's not machine-actionable. Parsing it reliably requires complex NLP and would be fragile to changes in the LLM's output format.
@@ -44,8 +52,8 @@ Drag the slider below to see the difference between unstructured text and struct
 ::: {.column-body}
 ```{=html}
 <div style="position:relative;max-width:560px;height:220px;margin:1.5em auto;font-family:ui-monospace,SFMono-Regular,Menlo,monospace;font-size:0.85em;">
-  <pre id="unstruct-before" style="width:100%;height:100%;margin:0;padding:14px;box-sizing:border-box;white-space:pre-wrap;display:block;border-radius:8px;border:1px solid #ddd;background:#fafafa;overflow:auto;">The image shows a casting with a potential defect. There's a small dark spot
-near the rim of the casting that appears to be a void. The defect is
+  <pre id="unstruct-before" style="width:100%;height:100%;margin:0;padding:14px;box-sizing:border-box;white-space:pre-wrap;display:block;border-radius:8px;border:1px solid #ddd;background:#fafafa;overflow:auto;">The image shows a part with a potential defect. There's a small dark spot
+near the rim of the part that appears to be a void. The defect is
 approximately 15x15 pixels in size and seems to be located in the lower left
 quadrant of the image. It's not very pronounced but could be significant if
 it represents a manufacturing flaw.</pre>
@@ -102,7 +110,7 @@ Let's look at how we can structure our tool to return well-defined JSON:
       "type": "void",
       "severity": "medium",
       "confidence": 0.85,
-      "explanation": "A small dark circular region in the lower left quadrant that appears to be a void or gas pocket in the aluminum casting material."
+      "explanation": "A small dark circular region in the lower left quadrant that appears to be a void or gas pocket in the metal part."
     }
   ]
 }
@@ -216,8 +224,8 @@ new category" into a hard validation failure instead of a silent, unnoticed drif
 ## The real input: Part 2's detector, not a raw image
 
 The model here is Qwen3-Coder-30B, served locally via vLLM -- a text model, no vision. It never
-sees the X-ray. What it gets is the real JSON from Part 3's `inspect_casting_xray` tool: the
-classical top-hat detector's candidate boxes, with no semantic label attached. The LLM's actual job
+sees the X-ray. What it gets is the real JSON from Part 3's `inspect_xray` tool: the
+classical top-hat detector's candidate boxes and their strength, with no semantic label attached. The LLM's actual job
 is to turn "these pixel coordinates and this confidence number" into a defect type, a severity, and
 a human-readable explanation -- which is a genuinely harder and more honest task than it sounds,
 because it has to admit when the numbers alone can't tell it what kind of defect this is.
@@ -226,8 +234,9 @@ because it has to admit when the numbers alone can't tell it what kind of defect
 SCHEMA_JSON = json.dumps(DefectReport.model_json_schema(), indent=2)
 
 SYSTEM_PROMPT = f"""You are an industrial X-ray inspection assistant. You will be given the raw
-output of a classical computer-vision defect detector (candidate bounding boxes, no semantic
-labels) for one aluminum casting X-ray frame. Turn it into a structured defect report.
+output of a classical computer-vision void detector (candidate bounding boxes, each with a
+strength, no semantic labels) for one X-ray image of a metal part. Turn it into a structured
+defect report.
 
 Output ONLY a single JSON object matching this schema -- no markdown fences, no prose before or
 after it:
@@ -236,7 +245,7 @@ after it:
 
 Rules:
 - Emit exactly one entry in "defects" per candidate box in the input, in the same order.
-- Infer "type" and "severity" from the box's size, position, and the detector's confidence score
+- Infer "type" and "severity" from the box's size, position, and the candidate's strength
   -- you do not have the image, only these numbers, so be conservative and say so in
   "explanation" when the numbers are genuinely ambiguous.
 - If the detector reports zero candidate boxes, return {{"defects": []}} -- that is a valid,
@@ -261,7 +270,7 @@ except json.JSONDecodeError:
 ```
 
 That line looks harmless and is actually the most dangerous line in the whole post: it makes "the
-model's response was malformed" and "the casting is genuinely defect-free" produce the *identical*
+model's response was malformed" and "the part is genuinely defect-free" produce the *identical*
 output. Anything downstream that reads `defects: []` can no longer tell "all clear" from "I have no
 idea what happened here" -- exactly the failure mode a real inspection system cannot afford.
 
@@ -283,17 +292,17 @@ def parse_and_validate(raw_text: str) -> tuple[DefectReport | None, str | None]:
         return None, f"ValidationError: {exc}"
 
 
-def structured_report_for_image(client, image_path: Path) -> dict:
-    tool_result = inspect_casting_xray(str(image_path))
+def structured_report_for_image(client, image_id: str) -> dict:
+    tool_result = inspect_xray(image_id)
     messages = [
         {"role": "system", "content": SYSTEM_PROMPT},
-        {"role": "user", "content": f"Detector output for {image_path.name}:\n{tool_result}"},
+        {"role": "user", "content": f"Detector output for {image_id}:\n{tool_result}"},
     ]
 
     raw = call_llm(client, messages)
     report, error = parse_and_validate(raw)
     if report is not None:
-        return {"image": image_path.name, "status": "ok", "attempts": 1,
+        return {"image": image_id, "status": "ok", "attempts": 1,
                 "defects": [d.model_dump() for d in report.defects]}
 
     # One retry: feed the exact error back, ask for a fix, nothing else.
@@ -308,90 +317,90 @@ def structured_report_for_image(client, image_path: Path) -> dict:
     raw_retry = call_llm(client, messages)
     report_retry, error_retry = parse_and_validate(raw_retry)
     if report_retry is not None:
-        return {"image": image_path.name, "status": "recovered_after_retry", "attempts": 2,
+        return {"image": image_id, "status": "recovered_after_retry", "attempts": 2,
                 "first_attempt_error": error,
                 "defects": [d.model_dump() for d in report_retry.defects]}
 
-    return {"image": image_path.name, "status": "needs_review", "attempts": 2,
+    return {"image": image_id, "status": "needs_review", "attempts": 2,
             "first_attempt_error": error, "second_attempt_error": error_retry,
             "raw_response": raw_retry[:800]}
 ```
 
-## The real result, measured on all 72 real GDXray frames
+## The real result, measured on all 600 held-out images
 
-Ran against Qwen3-Coder-30B (local vLLM, `temperature=0.2`) over every real frame in GDXray
-Castings series C0001 -- not a curated subset:
+Ran against Qwen3-Coder-30B (local vLLM, `temperature=0.2`) over every image in the held-out test
+split of the void dataset, not a subset. Six hundred calls, one per image:
 
 | | |
 |---|---|
-| Images | 72 |
-| Valid on first try | **72 / 72 (100%)** |
+| Images | 600 |
+| Valid on first try | **600 / 600 (100%)** |
 | Recovered after retry | 0 |
 | Needs review (both attempts failed) | 0 |
-| Total defect entries emitted | 366 |
-| Candidate-box <-> defect-entry mismatches | **0 / 72** |
+| Candidate boxes emitted | 1,718 |
+| Count matches the tool (one entry per candidate) | **600 / 600** |
+| Every `bbox` equals the tool's box, in order | **600 / 600** |
+| Images with zero candidates | 141 |
+| ... of which the model answered `{"defects": []}` | **141 / 141** |
 
-The honest headline: **the retry path never fired in this run.** With a strict system prompt,
-`temperature=0.2`, and a small, capable coder model, malformed JSON simply didn't happen across 72
-real calls. That's a genuinely different story than the illustrative version of this post implied
-(a `except JSONDecodeError` branch presented as if it would obviously be needed) -- it wasn't
-needed here, and claiming otherwise would be dishonest.
+The honest headline: **the retry path never fired.** With a strict system prompt,
+`temperature=0.2`, and a small, capable coder model, malformed JSON did not happen across 600
+real calls. The old version of this post could only say that about 72 calls, and it flagged one
+gap: it never exercised the "zero candidates, return an empty list" instruction, because every
+image had candidates. This dataset has 141 images where the detector raises nothing, and the
+model handled all of them correctly. That gap is closed.
 
-What the run *did* verify, and what actually matters going into a production pipeline: every single
-one of the 72 responses respected the "exactly one defect entry per candidate box, same order"
-rule, with zero count mismatches. That's the property the rest of this series' downstream tools
-(Arc 2's business-rule checks, Arc 2's report generation) will depend on -- not "did it produce
-valid JSON" alone, but "does the structure stay faithful to the input it was given."
+What the run verified, and what matters going into a pipeline: every response kept the structure
+faithful to the input, down to the exact box coordinates. That is the property the rest of the
+series' tools (the business rules, the report) depend on. But it is a copying task: the boxes are
+handed to the model, so getting them back unchanged says little about judgement.
 
-**Valid JSON is not the same claim as correct labels.** The model never sees the image -- it infers
-`type` and `severity` purely from box size, position, and the detector's confidence number. The
-`Literal` type guarantees every label is *one of the five allowed strings*, not that it's the
-*right* one. Here's what those 366 entries actually broke down as:
+**Valid JSON is not the same claim as correct labels.** The model never sees the image. It
+infers `type` and `severity` from a box's size, position and strength. The `Literal` type
+guarantees every label is one of the five allowed strings, not that it is the right one. With
+exact ground truth I can finally check that. `structured_semantic.py` splits the 1,718 candidates
+into the 284 that match a real void and the 1,434 that are false alarms (the held-out numbers
+from Part 2) and compares what the model wrote:
 
-::: {.columns}
-::: {.column width="48%"}
-| type | count |
-|---|---|
-| porosity | 133 |
-| void | 88 |
-| other | 43 |
-| inclusion | 68 |
-| crack | 34 |
-:::
-::: {.column width="4%"}
-:::
-::: {.column width="48%"}
-| severity | count |
-|---|---|
-| low | 268 |
-| medium | 88 |
-| high | 10 |
-:::
-:::
+| `type` the model wrote | for real voids (284) | for false alarms (1,434) |
+|---|---|---|
+| void | 282 (99%) | 1,375 (96%) |
+| porosity | 2 | 50 |
+| other | 0 | 7 |
+| inclusion / crack | 0 | 2 |
 
-43 entries (12%) landed in the catch-all `other` bucket, and the model was explicitly told to do
-that "when the numbers are genuinely ambiguous" -- a reasonable amount of honest uncertainty for a
-model working from four numbers and no pixels, not a metric to celebrate or worry about without a
-ground-truth defect-type label to check it against. That check belongs to a future evaluation-arc
-post, not this one -- this post's claim is scoped to *structural* correctness (valid JSON, right
-shape, right count), not *semantic* correctness (right label).
+The label barely depends on the truth: the model calls almost everything a `void`, real or not.
+That is partly my schema's fault. The dataset has one defect class and the schema offers no
+"this is not a defect" option, so the field cannot carry the one distinction that matters.
+`severity` and `confidence` show a small signal at best:
 
-**The count-fidelity result is the easier half of this problem, too:** the boxes themselves are
-handed to the model by the detector -- getting the count right is a copying task, not a perception
-task. The harder half (does `type`/`severity` match reality) is exactly the part this run cannot
-speak to.
+| | real voids | false alarms |
+|---|---|---|
+| severity `low` | 126 (44%) | 997 (70%) |
+| severity `medium` or `high` | 158 (56%) | 437 (30%) |
+
+and `confidence` ranks a real void above a false alarm with an AUC of **0.645** (0.5 is a coin
+flip), against **0.622** for the detector's own `strength` number, which the model was handed.
+So the model's confidence is only marginally better than the number it was reading, and the
+confidence values cluster on a few round numbers (0.6 for 675 of the 1,718, 0.7 for 389), as
+you would expect from a model writing a plausible-looking number rather than computing one.
+I have no confidence interval on that 0.02 gap, so I would not claim it is real.
+
+This is the lesson of the post in one table: perfect structure, no information. A downstream
+rule that read `type == "void"` would keep 96% of the false alarms.
 
 Two caveats, stated plainly rather than glossed over:
 
-- **This run never exercised the "zero candidate boxes -> empty defect list" instruction** --
-  every one of the 72 frames had at least one detector candidate (1-11 per image), so the "genuinely
-  clean casting" path is untested here. Worth a follow-up specifically targeting clean frames.
-- **This is one model, one prompt, one temperature setting, on structured extraction from numbers
-  it was already handed** -- not a general claim that "structured output never fails." The
-  retry + `needs_review` scaffolding stays in the code because it's a safety net for failure modes
-  this particular 72-image run happened not to hit, not because it was proven unnecessary.
+- **This is one model, one prompt, one temperature**, on structured extraction from numbers it
+  was already handed. It is not a general claim that "structured output never fails." The retry
+  and `needs_review` scaffolding stays in the code as a safety net, tested below, not because it
+  was proven unnecessary.
+- **The `dark` mistake from Part 3 did not appear** here (0 of 1,718 explanations call a
+  candidate dark), most likely because this prompt asks for one defect entry per candidate
+  rather than a free summary. I did not test why.
 
-Full per-image output: `notebooks/agentic-zero-to-advanced/out/structured_output_results.json`.
+Full per-image output: `notebooks/agentic-zero-to-advanced/out/structured_output_results.json`;
+the analysis above: `out/structured_semantic_summary.json`.
 
 ### Proving the untested paths actually work
 
@@ -436,7 +445,17 @@ Real output, all three assertions passing:
 ```
 
 Now the safety net is *tested*, not just *untried* -- both failure paths demonstrably do what the
-code claims, independent of whether the real 72-image run happened to need them.
+code claims, independent of whether the real 600-image run happened to need them.
+
+## What I did not do
+
+- **No fix for the useless label.** I did not add a "not a defect" option to the schema and rerun.
+  That is the obvious next step, and Part 7 sidesteps it by asking the model a different question.
+- **No other model, prompt or temperature.** One setting, one run.
+- **No confidence interval** on the AUCs or on the 99% / 96% label rates.
+- **No guided decoding** (see below), so I cannot say how it compares.
+- **No check that the explanations are true.** I checked structure, counts, boxes and labels, not
+  whether each sentence of free text is accurate (Part 3 showed that it often is not).
 
 ## Benefits of structured output
 
@@ -450,7 +469,7 @@ Structured output brings several benefits to our agentic system:
 
 ## Common pitfalls with structured output
 
-1. **LLMs sometimes ignore instructions.** Didn't happen in this post's 72-image run (see above),
+1. **LLMs sometimes ignore instructions.** Didn't happen in this post's 600-image run (see above),
    but plan for it anyway -- the retry/`needs_review` scaffolding exists precisely because prompt
    compliance isn't a guarantee, only an empirical result for one model/prompt/temperature
    combination, on one day, against one image set.
@@ -509,7 +528,7 @@ git clone https://github.com/HasanGoni/quarto_blog_hasan
 cd quarto_blog_hasan/notebooks/agentic-zero-to-advanced
 uv sync
 cp .env.example .env   # edit: local vLLM (see below) or your own OPENAI_API_KEY
-uv run python structured_output_demo.py
+uv run python structured_output_demo.py && uv run python structured_semantic.py
 ```
 
 ```{=html}
@@ -519,9 +538,11 @@ uv run python structured_output_demo.py
 Needs either a cloud `OPENAI_API_KEY`, or a local OpenAI-compatible server (this post's run used
 `vllm serve Qwen/Qwen3-Coder-30B-A3B-Instruct` on `localhost:8000`, matching Part 3's setup) with
 `.env` set to `OPENAI_API_KEY=local` and `OPENAI_BASE_URL=http://localhost:8000/v1`. Runs over
-every real frame in GDXray Castings series C0001 by default (72 images,
-`AGENTIC_ZERO_MAX_IMAGES=N` to cap it) and writes per-image results plus a summary to
-`out/structured_output_results.json` / `out/structured_output_summary.json`.
+the whole held-out split by default (600 images, `AGENTIC_ZERO_MAX_IMAGES=N` to cap it; on my
+shared GPU the full run took roughly half an hour) and writes per-image results plus a summary to
+`out/structured_output_results.json` / `out/structured_output_summary.json`. Then
+`uv run python structured_semantic.py` produces the label analysis. Build the dataset first, as
+described in [Part 2](02-dataset-baseline.qmd).
 
 ## Further reading
 

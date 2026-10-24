@@ -1,8 +1,9 @@
 ---
 title: "Agentic Developer: Zero to Advanced, Part 5: What Makes It an Agent"
-subtitle: "Planning, tool use, memory, control flow. Written by hand in one loop, then scored against real ground truth."
+subtitle: "Planning, tool use, memory, control flow. Written by hand in one loop, then scored against exact ground truth."
 author: "Hasan Goni"
 date: 2026-10-03
+date-modified: 2026-10-18
 categories: [agentic-ai, python, computer-vision]
 toc: true
 series:
@@ -16,12 +17,20 @@ from [Part 4 -- prompting and structured output](04-prompting-structured-output.
 [Arc 2, the agent loop](index.qmd#arc-2-the-agent-loop).
 :::
 
+::: {.callout-note}
+**Rewritten on 2026-10-18** on the synthetic void dataset, with fresh runs. The first version used
+GDXray images that I may not redistribute, and it found that the agent did *worse* than the plain
+detector, because on that data the model's prior about contrast was backwards. On this data the
+picture is different, and I report the different picture.
+:::
+
 Arc 1 is done. We have a detector, a tool wrapper, and a model that returns clean JSON. Still no
 agent. Every call so far was one shot: input in, answer out.
 
-This post builds the agent. No framework. It is a loop of about 40 lines. Then I run it on all 72
-real frames and score it. Spoiler: it does worse than the plain detector. That is the useful part, because then we get to look
-at why agents fail and what fixes it, with real numbers.
+This post builds the agent. No framework. It is a loop of about 40 lines. Then I run it on 200
+dev and 200 held-out images and score it. Spoiler: it is more precise than the plain detector and
+finds fewer real voids, and that trade is the useful part, because then we get to look at where
+the agent's decisions come from and what fixes help, with real numbers.
 
 ## What "agent" means
 
@@ -49,8 +58,8 @@ First, I split it into small tools. `find_candidates` runs the detector. `measur
 closer at one box: contrast against its surroundings, area, aspect ratio, distance to the image
 edge.
 
-Second, **no ground truth in any tool result.** Part 3's `inspect_casting_xray` also returned
-true/false positive counts. An agent that sees the answer key is not being tested. The scoring
+Second, **no ground truth in any tool result.** Part 3's tool already left the answer key out, and this
+stays true here: no tool result carries a hit count or a label. An agent that sees the answer key is not being tested. The scoring
 code sees ground truth, the agent does not.
 
 ```{=html}
@@ -60,10 +69,11 @@ code sees ground truth, the agent does not.
 
 ```{.python filename="notebooks/agentic-zero-to-advanced/inspection_tools.py"}
 def find_candidates(image: str) -> dict:
-    """Run the classical detector on one X-ray frame. Returns candidate boxes with an id each.
-    The detector is noisy: most boxes are not real defects."""
+    """Run the classical detector on one X-ray image. Returns candidate boxes with an id each.
+    The detector is noisy: most boxes are not real voids."""
+    image = norm(image)
     gray = load_gray(image)
-    boxes = detect_candidates(gray)
+    boxes = detect_candidates(gray, K_DEV)
     _CANDIDATES[image] = boxes
     return {
         "image": image,
@@ -78,8 +88,12 @@ def find_candidates(image: str) -> dict:
 def measure_candidate(image: str, candidate_id: int) -> dict:
     """Measure one candidate box: contrast against its surrounding ring (positive = brighter than
     surroundings, negative = darker), area, aspect ratio, and distance to the nearest image edge."""
+    image = norm(image)
     gray = load_gray(image)
-    boxes = _CANDIDATES.get(image) or find_candidates(image) and _CANDIDATES[image]
+    boxes = _CANDIDATES.get(image)
+    if boxes is None:
+        find_candidates(image)
+        boxes = _CANDIDATES[image]
     if not 0 <= candidate_id < len(boxes):
         return {"error": f"candidate_id {candidate_id} out of range (0..{len(boxes) - 1})"}
     x1, y1, x2, y2 = boxes[candidate_id]
@@ -108,7 +122,7 @@ This is the whole agent. A `for` loop, a list called `messages`, and one extra t
 ```{.python filename="notebooks/agentic-zero-to-advanced/agent_loop.py"}
 def run_agent(image: str) -> dict:
     messages = [{"role": "system", "content": SYSTEM},
-                {"role": "user", "content": f"Inspect frame {image}."}]
+                {"role": "user", "content": f"Inspect image {image}."}]
     trace, kept_ids, report, t0, tokens = [], [], None, time.time(), 0
     for step in range(1, MAX_STEPS + 1):
         resp = client.chat.completions.create(
@@ -150,8 +164,9 @@ Two details matter more than they look.
 
 ## One real run, step by step
 
-Frame `C0001_0069.png`. Four candidate boxes. Click through what the agent did. Everything below is
-the real trace from the run, not a mock-up.
+Image `test_00020`, the first held-out image with exactly four candidate boxes (picked by that
+rule, not by outcome). Click through what the agent did. Everything below is the real trace from
+the run, not a mock-up.
 
 ```{=html}
 <div id="trace-viewer" style="max-width:760px;margin:1.5em auto;font-family:ui-monospace,SFMono-Regular,Menlo,monospace;font-size:0.82em;">
@@ -173,7 +188,7 @@ the real trace from the run, not a mock-up.
 </div>
 <script>
 (function(){
-  var trace = [{"step": 1, "says": null, "calls": [{"tool": "find_candidates", "args": {"image": "C0001_0069.png"}, "result": {"image": "C0001_0069.png", "image_size": [768, 572], "candidates": [{"id": 0, "box": [218, 0, 252, 10], "w": 34, "h": 10}, {"id": 1, "box": [333, 112, 341, 124], "w": 8, "h": 12}, {"id": 2, "box": [516, 357, 547, 382], "w": 31, "h": 25}, {"id": 3, "box": [545, 360, 557, 367], "w": 12, "h": 7}]}}]}, {"step": 2, "says": "I will measure the candidates with IDs 0, 1, 2, and 3 to determine if they are real defects or false alarms.\n", "calls": [{"tool": "measure_candidate", "args": {"image": "C0001_0069.png", "candidate_id": 0}, "result": {"candidate_id": 0, "contrast": -1.66, "area_px": 340, "aspect_ratio": 3.4, "edge_distance_px": 0}}]}, {"step": 3, "says": null, "calls": [{"tool": "measure_candidate", "args": {"image": "C0001_0069.png", "candidate_id": 1}, "result": {"candidate_id": 1, "contrast": 59.01, "area_px": 96, "aspect_ratio": 0.67, "edge_distance_px": 112}}]}, {"step": 4, "says": null, "calls": [{"tool": "measure_candidate", "args": {"image": "C0001_0069.png", "candidate_id": 2}, "result": {"candidate_id": 2, "contrast": 13.46, "area_px": 775, "aspect_ratio": 1.24, "edge_distance_px": 190}}]}, {"step": 5, "says": null, "calls": [{"tool": "measure_candidate", "args": {"image": "C0001_0069.png", "candidate_id": 3}, "result": {"candidate_id": 3, "contrast": 6.69, "area_px": 84, "aspect_ratio": 1.71, "edge_distance_px": 205}}]}, {"step": 6, "says": "Based on the measurements, I will keep candidates with IDs 1 and 2 as they show significant contrast and reasonable aspect ratios, indicating potential real defects. Candidates 0 and 3 are likely false alarms due to low contrast or small size.\n\n", "calls": [{"tool": "submit_report", "args": {"kept_ids": [1, 2], "verdict": "review", "reason": "Candidates 1 and 2 show significant contrast and reasonable aspect ratios, suggesting they might be real defects. Candidates 0 and 3 are likely false alarms."}, "result": {"ok": true}}]}];
+  var trace = [{"step": 1, "says": null, "calls": [{"tool": "find_candidates", "args": {"image": "test_00020"}, "result": {"image": "test_00020", "image_size": [224, 224], "candidates": [{"id": 0, "box": [158, 71, 169, 83], "w": 11, "h": 12}, {"id": 1, "box": [115, 85, 122, 96], "w": 7, "h": 11}, {"id": 2, "box": [217, 118, 224, 131], "w": 7, "h": 13}, {"id": 3, "box": [217, 132, 224, 145], "w": 7, "h": 13}]}}]}, {"step": 2, "says": "I will measure the candidates that appear to be potential voids, starting with the ones that are more distinct or larger in size.\n", "calls": [{"tool": "measure_candidate", "args": {"image": "test_00020", "candidate_id": 0}, "result": {"candidate_id": 0, "contrast": 25.77, "area_px": 132, "aspect_ratio": 0.92, "edge_distance_px": 55}}]}, {"step": 3, "says": "I will now measure another candidate to gather more information for comparison.\n\n", "calls": [{"tool": "measure_candidate", "args": {"image": "test_00020", "candidate_id": 1}, "result": {"candidate_id": 1, "contrast": 17.53, "area_px": 77, "aspect_ratio": 0.64, "edge_distance_px": 85}}]}, {"step": 4, "says": "I will measure the third candidate to further assess the potential voids.\n\n", "calls": [{"tool": "measure_candidate", "args": {"image": "test_00020", "candidate_id": 2}, "result": {"candidate_id": 2, "contrast": 4.14, "area_px": 91, "aspect_ratio": 0.54, "edge_distance_px": 0}}]}, {"step": 5, "says": "Based on the measurements, I will now submit a report with the candidates that appear to be real defects.\n\n", "calls": [{"tool": "submit_report", "args": {"kept_ids": [0, 1], "verdict": "review", "reason": "Candidates 0 and 1 show significant contrast and reasonable area, suggesting they are likely real voids. Candidate 2 is too close to the edge and has low contrast, making it less reliable."}, "result": {"ok": true}}]}];
   var i = 0;
   function render(){
     var s = trace[i], txt = "step " + s.step + "\n";
@@ -183,7 +198,7 @@ the real trace from the run, not a mock-up.
       txt += "got:   " + JSON.stringify(c.result) + "\n";
     });
     document.getElementById("tv-step").textContent = txt;
-    var m = ["system: You inspect aluminum casting X-ray frames...", "user: Inspect frame C0001_0069.png."];
+    var m = ["system: You inspect X-ray images of metal parts for voids...", "user: Inspect image test_00020."];
     for (var k = 0; k <= i; k++) {
       var t = trace[k];
       m.push("assistant: " + (t.says ? t.says.trim().slice(0, 60) + "... + " : "") + t.calls.map(function(c){return c.tool + " call";}).join(", "));
@@ -208,58 +223,78 @@ Things to notice:
   followed.
 - It measures **one box per step**. It could have asked for all four in one go. Four steps instead of
   one. That costs time. More on this in Part 8.
+- It measured candidates 0, 1 and 2 and **never measured candidate 3**, then submitted. Nothing in
+  the loop objected. Hold that thought, it comes back as the verification gap.
 - The last step is `submit_report`. That is the stop signal. The loop ends because the model said so.
-- It dropped candidates 0 and 3 ("low contrast or small size") and kept 1 and 2 ("significant
-  contrast"). Hold that thought.
+- It kept 0 and 1 and dropped 2 ("too close to the edge and has low contrast"). Candidate 2 touches
+  the right border (`edge_distance_px` is 0), and the model noticed. On this image that was right:
+  one of the two it kept was a real void, the other a false alarm, and no real void was missed.
 
 ## Scoring it
 
-All 72 frames of GDXray Castings series C0001. Model: Qwen3-Coder-30B on local vLLM, same as Part 3.
-Scored the way Part 2 scored the detector: IoU >= 0.05 against the real ground-truth boxes.
+The protocol from Part 2: dev is the `val` split, held-out is the `test` split. The agent costs
+real model calls, so I ran the first 200 images of each (in order, not picked by outcome): 200 dev
+images with 420 real voids and 200 held-out images with 387. Model: Qwen3-Coder-30B on local vLLM,
+same as Part 3. A kept box is a hit when it overlaps an exact void box with IoU of at least 0.2,
+the same rule as Part 2. The plain detector row keeps every candidate at the Part 2 threshold.
 
-| | Boxes kept | Real defects found (TP) | False alarms (FP) | Missed (FN) | Precision | Recall |
+| Held-out (200 images, 387 voids) | Boxes kept | Real found (TP) | False alarms (FP) | Missed (FN) | Precision | Recall |
 |---|---|---|---|---|---|---|
-| Plain detector (Part 2) | all 366 | 24 | 342 | 232 | 6.6% | 9.4% |
-| Agent loop (this post) | 172 | 8 | 164 | 248 | 4.7% | 3.1% |
+| Plain detector (Part 2) | 513 | 81 | 432 | 306 | 15.8% | 20.9% |
+| Agent loop (this post) | 278 | 63 | 215 | 324 | **22.7%** | 16.3% |
 
-The agent is **worse**. Fewer false alarms, yes, but it threw away two thirds of the real defects to
-get there. It also costs a lot more:
+On dev the same two rows read 22.3% / 29.0% for the detector and 34.6% / 23.3% for the agent, the same
+shape at a different level: the agent keeps about half the boxes, gives up roughly a fifth of the
+real voids and gets more precise. The cost per image:
 
-| Per frame, average | Value |
+| Per image, average (held-out) | Value |
 |---|---|
-| Steps | 5.0 |
-| Tool calls | 5.3 |
-| Tokens | 5,753 |
-| Wall time | 39.5 s |
+| Steps | 3.8 |
+| Tool calls | 3.85 |
+| Tokens | 3,862 |
+| Wall time | 27.0 s |
 
-All 72 runs finished with `submit_report`. None hit the step limit.
+The wall time is high because the model server is shared with other work and eight runs went in
+parallel, so treat it as an upper bound. All 400 runs finished with `submit_report`. None hit the
+step limit.
 
-## Why it got worse
+## Where the agent's decisions come from
 
-Not a bug in the loop. The loop did what a loop does. The model looked at the measurements, applied
-common sense ("real defects are high contrast"), and decided.
+An agent loop adds decisions, not information, so the question is whether the measurements it sees
+carry any. Before writing any guidance I measured that on the **dev split only**, all 600 images:
+1,736 candidates, 321 of them real. Mann-Whitney AUC per measurement (0.5 is a coin flip):
 
-So I checked whether the measurements can separate real defects from false alarms at all. Mann-Whitney
-AUC per measurement, all 366 candidates, 24 of them real. 0.5 is a coin flip.
-
-| Measurement | AUC | Median, real defect | Median, false alarm |
+| Measurement | AUC | Median, real void | Median, false alarm |
 |---|---|---|---|
-| contrast | 0.41 | 9.8 | 15.4 |
-| area (px) | 0.47 | 49 | 108 |
-| aspect ratio | 0.58 | 1.0 | 1.0 |
-| distance to edge (px) | 0.64 | 148 | 108 |
+| contrast (signed) | **0.74** | 19.6 | 6.8 |
+| area (px) | 0.68 | 100 | 42 |
+| distance to edge (px) | 0.68 | 49 | 26 |
+| absolute contrast | 0.67 | 23.2 | 13.9 |
+| aspect ratio | 0.46 | 1.0 | 1.0 |
 
-Real defects here have **weaker** contrast than false alarms, not stronger. The model's prior was
-backwards for this data, and nothing in the tools told it so. Below 0.5 means a rule that keeps
-high-contrast boxes is worse than random. It was.
+Bands show it more plainly. Share of candidates that are real, by band, on dev:
 
-I want this lesson in the series early:
+| Contrast | Real | | Distance to edge | Real | | Area | Real |
+|---|---|---|---|---|---|---|---|
+| below 0 (n=544) | 10% | | 0 px (n=525) | **0.2%** | | under 20 (n=415) | 4% |
+| 10 to 15 (n=245) | 12% | | 1 to 5 (n=55) | 7% | | 40 to 80 (n=311) | 22% |
+| 20 to 30 (n=196) | 36% | | 10 to 20 (n=96) | 26% | | over 300 (n=187) | 31% |
+| 30 to 60 (n=121) | **71%** | | over 20 (n=1,028) | 27% | | | |
+
+So brighter really does mean more likely a real void, the model's common sense is right this time,
+and **525 of the 1,736 candidates (30%) touch the image border and exactly one of them is real**.
+That is why the agent gets more precise by simply reading `measure_candidate`: the information was
+in the tool output. In the first version of this post, on GDXray, contrast was backwards (AUC 0.41)
+and the same common sense made the agent worse. The lesson is the same, only the sign changed:
 
 > **An agent loop does not add information. It only adds decisions.**
 
-If the evidence is weak, a loop makes more confident decisions on the same weak evidence, and
-charges you tokens for it. The fix is better evidence, not a better loop. That is why Arc 4 puts a
-vision-language model on the actual image (Part 17).
+If the evidence is strong, the loop makes good decisions from it. If the evidence is weak or
+misleading, it makes confident decisions on the same weak evidence and charges you tokens for it.
+And there is a ceiling the loop cannot lift: it can only choose among the boxes the detector
+raised. The plain detector found 81 of 387 real voids, so no filtering of its output can find more
+than 21%. The agent's 16.3% is a filter on a 20.9% ceiling. A better detector, or a model that looks
+at the actual image (Part 17), is the only way up.
 
 ## Why agents fail: three buckets
 
@@ -275,32 +310,35 @@ write software, ours is one agent looking at X-rays, so I use the buckets, not t
 the waiter and the kitchen assumed different things (misalignment), or nobody looked at the plate
 before it left the kitchen (verification).
 
-Our agent from above fails in two of them, maybe three:
+Our agent from above shows the first and third, and the second only in a thin form:
 
-- **Design.** The system prompt never said what a real defect looks like here. The model filled the
-  gap with its own prior, "high contrast means real". That prior was backwards (AUC 0.41).
+- **Design.** The system prompt never said what a real void looks like or how this detector fails.
+  The model filled the gap with its own prior. The prior was decent here (brighter is better), but
+  it does not know that 30% of all candidates sit on the image border and are nearly never real,
+  and it kept some of them.
 - **Verification.** Nothing in the loop checked the answer against anything. `submit_report` took
-  whatever the model gave it.
+  whatever the model gave it, including a report that skipped a candidate (`test_00020` above).
 - **Misalignment.** The model assumed instead of asking, but it had nobody to ask. I did not see the
   classic version of this, agents contradicting each other, because there is only one agent. It
   shows up in Part 10 when there are several.
 
-So two fixes to try. Both run on the **even-numbered frames only**. I wrote the guidance below
-from the **odd** frames, so the even ones are held out. All numbers in this section are from the
-even frames, 36 images, 125 real defects.
+So two fixes to try. Both run on the **held-out** images only, and I wrote the guidance from the
+**dev** split (`val`), which the held-out split never touched. All numbers in this section are from
+the 200 held-out images, 387 real voids.
 
 ### Fix 1: design, a better role spec
 
-The odd frames showed this: boxes with contrast under 16 had 11.7% precision, against 7.4% for all
-boxes. Contrast under 8 had 2%. So I wrote that into the prompt, plus a rule to measure
-everything before keeping anything.
+The dev bands above are the guidance. Border boxes: 1 real in 525. Contrast above 30: 7 in 10.
+Area under 20 px: 1 in 25. I wrote exactly that into the prompt, plus a rule to measure everything
+before keeping anything.
 
 ```{.python filename="notebooks/agentic-zero-to-advanced/agent_fixes.py"}
 SYSTEM_DESIGN = SYSTEM + """
 What the labeled dev data says about this detector:
-- Real defects are weak: contrast roughly 8 to 20. High-contrast boxes (above ~20) are
-  usually casting structure or edges, not defects. Contrast under ~8 is almost never real.
-- Do not treat "high contrast" as a sign of a real defect. For this detector it is the opposite.
+- A box touching the image border (edge_distance_px = 0) is almost never real: 1 in 525.
+- Contrast is the best signal. Above 30 about 7 in 10 boxes are real, 20 to 30 about 1 in 3,
+  below 15 about 1 in 10 or fewer.
+- Boxes smaller than 20 pixels in area are almost never real: about 1 in 25.
 - Measure every candidate before you keep or drop it. Never keep an id you did not measure.
 - Finish with verdict "review" if you kept anything, "pass" if you kept nothing."""
 ```
@@ -343,40 +381,64 @@ else:
     report, result, done = args, {"ok": True}, True
 ```
 
-I ran this check over the 72 reports from the original agent, without changing anything. It would
-have bounced **39 of 72**. All 39 for the same reason: candidates the agent never measured. No
-invented ids, no pass/review mismatch. So the agent was skipping work, and nothing noticed.
+I ran this check over the 400 reports from the original agent, without changing anything. It would
+have bounced **70 of 400** (36 dev, 34 held-out). All 70 for the same reason: candidates the agent
+never measured. No invented ids, no pass/review mismatch, and it never kept a box it had not
+measured. So the agent was skipping work on 17% of images, and nothing noticed.
 
 ### Results
 
-| Even frames (36), 125 real defects | Boxes kept | Real found (TP) | False alarms (FP) | Precision | Recall | Avg tokens / frame |
+| Held-out (200 images, 387 voids) | Boxes kept | Real found (TP) | False alarms (FP) | Precision | Recall | Avg tokens / image |
 |---|---|---|---|---|---|---|
-| Plain detector | 191 | 11 | 180 | 5.8% | 8.8% | -- |
-| Original agent | 83 | 3 | 80 | 3.6% | 2.4% | 5,583 |
-| + design fix | 54 | 8 | 46 | **14.8%** | 6.4% | 10,256 |
-| + verify fix | 118 | 5 | 113 | 4.2% | 4.0% | 10,749 |
-| + both | 59 | 6 | 53 | 10.2% | 4.8% | 10,751 |
+| Plain detector | 513 | 81 | 432 | 15.8% | 20.9% | -- |
+| Original agent | 278 | 63 | 215 | 22.7% | 16.3% | 3,862 |
+| + design fix | 211 | 66 | 145 | **31.3%** | 17.1% | 4,901 |
+| + verify fix | 343 | 68 | 275 | 19.8% | 17.6% | 5,348 |
+| + both | 225 | 67 | 158 | 29.8% | 17.3% | 6,120 |
+
+Three runs (`verify` and `both` each ended 3 images without a report: the step limit, 197 of 200
+finished).
 
 What I read from this:
 
-- **The design fix did the real work.** Precision 3.6% to 14.8%, better than the plain detector.
-  It worked because the guidance came from data, not from opinion.
-- **The verify fix alone did not help.** It made the agent measure more (about 0.5 rejections per
-  frame) and doubled the tokens. But it still believed the wrong prior, so it kept the wrong boxes,
-  just with better paperwork. A check that tests process cannot fix a wrong belief.
-- **Both together were not better than design alone.** 6 real defects against 8. With counts this
-  small that is noise. Do not read it as "verification hurts".
-- **Everything costs about 2x the tokens.** More tool calls, longer prompt.
+- **The design fix did the real work.** Precision 22.7% to 31.3% with the same number of real voids
+  found (63 to 66). It dropped 70 false alarms and lost nothing. With counts this size that is about
+  two standard errors, so it is believable but I would not call it settled.
+- **The verify fix alone did not help precision.** It made the agent measure more (about 0.17
+  rejections per image) and the tokens rose by a third, but it kept the same kind of boxes, with
+  better paperwork. A check that tests process cannot fix a missing piece of knowledge.
+- **Both together were not better than design alone.** 29.8% against 31.3% precision, 67 against 66
+  real voids. That is noise. Do not read it as "verification hurts".
+- **Nothing gets above the plain detector's recall.** Every agent sits at 63 to 68 real voids out of
+  the detector's 81. The agent cannot find what the detector never boxed, and it loses a few on the way.
 
-Caveats, because they matter: one run each, temperature 0.2, single digits of true positives. The
-direction is believable. The exact numbers are not stable. And the guidance was written for this
+Caveats, because they matter: one run each, temperature 0.2, and a few dozen true positives per row.
+The direction is believable. The exact numbers are not stable. And the guidance was written for this
 detector on this data. Move to a different detector and it is wrong again.
+
+### The control: the same guidance as a plain rule
+
+The design fix is a bundle of numbers read off the dev data. So the obvious control is to apply
+those numbers as code, with no model. `rule_control.py` keeps a box if it does not touch the border,
+has area at least 20 and contrast at least `c`. At `c = 20` on the held-out images:
+
+| Held-out (200 images) | Boxes kept | Real found | Precision | Recall |
+|---|---|---|---|---|
+| Rule, contrast >= 20 | 77 | 45 | 58.4% | 11.6% |
+| Rule, contrast >= 5 | 171 | 65 | 38.0% | 16.8% |
+| + design fix (agent) | 211 | 66 | 31.3% | 17.1% |
+
+A rule is a point on a curve, and I swept `c` to find the one at the agent's recall. At that recall
+(16.8% vs 17.1%) the rule's precision is 38.0% against the agent's 31.3%. In fairness: I chose that
+threshold by looking at held-out numbers, which the agent did not get to do, and the gap is one
+configuration. But it says the agent is not buying anything here that three thresholds do not.
+That is a good question to carry into Part 8.
 
 ### The check that would have caught it: a gate on labeled data
 
 The `verify_report` check passes agents that are wrong, as shown. The check the paper asks for is
 at task level: does the whole thing do the job? Here that means: before trusting the agent, score
-it on labeled frames and compare it to the thing it replaces.
+it on labeled images and compare it to the thing it replaces.
 
 ```{.python filename="notebooks/agentic-zero-to-advanced/fixes_analysis.py"}
 def passes_gate(agent: dict, baseline: dict, min_recall_ratio: float = 0.8) -> bool:
@@ -384,11 +446,16 @@ def passes_gate(agent: dict, baseline: dict, min_recall_ratio: float = 0.8) -> b
     return agent["precision"] >= baseline["precision"] and agent["recall"] >= min_recall_ratio * baseline["recall"]
 ```
 
-The 0.8 is my choice, not a standard. Result: **all four agents fail the gate.** The design fix
-passes on precision (14.8% vs 5.8%) but its recall, 6.4%, is under 80% of the detector's 8.8%.
+The 0.8 is my choice, not a standard, and I set it in the first version of this post, before
+these runs. Result on the held-out images: the **original agent fails** (recall 16.3% is 78% of the
+detector's 20.9%, under the 80% line), and **all three fixed agents pass** (82%, 84% and 83%).
 
-That is the correct outcome. Every agent here finished without errors and returned valid JSON. A
-superficial check would have shipped all of them. The gate says: none of these beat what you have.
+Look at those margins: they are one or two points either side of the line, on one run each. A
+different seed could flip the verdict, and I would not trust this gate to separate "good" from "a
+little worse" at this sample size. What the gate does catch is the property it was built for:
+every agent here finished without errors and returned valid output, so a superficial check would
+have shipped all four, and the gate at least makes you look at precision and recall against the
+thing you are replacing.
 
 *Untested idea for the misalignment bucket:* give the agent a `defect_stats` tool that returns the
 dev-set numbers, so it can look up the data instead of guessing. I did not run it.
@@ -448,6 +515,17 @@ is clean.
 *Daily-life version:* guessing which of two people is taller by checking shoe size. Works if
 shoe size tracks height. Here it didn't.
 
+## What I did not do
+
+- **No repeat runs.** One run per variant at temperature 0.2. I have no estimate of run-to-run
+  noise, and several comparisons above are inside it.
+- **No intervals.** The percentages come from a few dozen to a few hundred boxes.
+- **Only 200 images per split.** The agent costs model calls, so I used the first 200 of 600 images
+  in each split. The plain detector and the rule were also scored on those 200 for a fair comparison.
+- **No second prompt wording**, and no other model. The design guidance is one text.
+- **The rule's threshold was swept on held-out numbers**, which flatters the rule against the agent.
+- **The agents never saw an image**, only measurements. A model that looks at the picture is Part 17.
+
 ## Reproduce this yourself
 
 ```{=html}
@@ -458,10 +536,11 @@ shoe size tracks height. Here it didn't.
 ```bash
 cd quarto_blog_hasan/notebooks/agentic-zero-to-advanced
 uv sync
-# local vLLM on :8000 serving qwen3-coder, same as Part 3. .env as in Part 4.
-uv run python agent_loop.py        # 72 frames, ~10 min, writes out/agent_loop_*.json
-uv run python feature_check.py     # the AUC table
-for v in design verify both; do uv run python agent_fixes.py $v; done   # fix experiments, even frames
+# build the dataset first (Part 2); local vLLM on :8000 serving qwen3-coder, same as Part 3. .env as in Part 4.
+uv run python agent_loop.py        # 200 dev + 200 held-out images, ~20 min, writes out/agent_loop_*.json
+uv run python feature_check.py     # the AUC table (dev only)
+for v in design verify both; do uv run python agent_fixes.py $v; done   # fix experiments, held-out images
+uv run python rule_control.py      # the no-model control
 uv run python fixes_analysis.py    # summary table and the gate
 uv run python generate_arc2_diagrams.py
 ```
@@ -477,5 +556,5 @@ I ran it once. Numbers will move between runs (temperature 0.2, not 0). I would 
 Further reading: [Cemri et al., Why Do Multi-Agent LLM Systems Fail?](https://arxiv.org/abs/2503.13657).
 Section 4 has the three categories with examples, Section 5 has what helps.
 
-Part 6 rebuilds this loop as a LangGraph graph: state, nodes, edges. Same idea, but the control
+[Part 6](06-building-the-graph.qmd) rebuilds this loop as a LangGraph graph: state, nodes, edges. Same idea, but the control
 flow stops being a `for` loop you wrote and becomes something you can draw, inspect, and pause.

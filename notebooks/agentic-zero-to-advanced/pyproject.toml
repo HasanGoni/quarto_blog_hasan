@@ -12,6 +12,9 @@ dependencies = [
     "pydantic",
     "openai",
     "langgraph>=1.2.12",
+    "laya>=0.4.11",
+    "lancedb>=0.40.0",
+    "timm>=1.0.30",
 ]
 
 [tool.uv]

@@ -1,0 +1,17 @@
+1. containment: voids outside the part
+   void pixels outside the part mask: 0  PASS
+2. mask matches the metadata: connected components per image == n_voids; no mask iff no voids
+   images where the mask component count differs from n_voids: 0  PASS
+   images where 'has a mask' disagrees with 'has voids': 0  PASS
+3. splits share no source shape
+   source items shared between splits: 0  PASS
+4. deterministic: regenerate the first 30 train images and compare byte for byte
+   identical: 30 of 30  PASS
+5. near-duplicate SHAPES (Fashion-MNIST has many look-alike items): nearest-neighbour distance, test source -> train source
+   test->train: p5=2.50 p25=3.53 p50=4.20 p75=5.07   | train->train (600 items, excluding self): p5=2.63 p25=3.64 p50=4.22 p75=5.16
+   test shapes with a train twin closer than the 5th percentile of train->train (2.63): 40 of 600
+6. what is in it
+   images 4000: with 0 voids 612 (15%), per-image void counts {0: 612, 1: 1086, 2: 974, 3: 729, 4: 422, 5: 177}
+   voids 7794: equivalent diameter px p5=4.2 p50=9.5 p95=21.7; smaller than 20 px area: 13%; physical contrast p5=0.018 p50=0.076 p95=0.443; contrast below 0.05: 37%
+   part classes in train: {'Ankle boot': 309, 'Bag': 247, 'Coat': 273, 'Dress': 270, 'Pullover': 299, 'Sandal': 311, 'Shirt': 270, 'Sneaker': 270, 'T-shirt/top': 269, 'Trouser': 282}
+   images with clustered voids: 431

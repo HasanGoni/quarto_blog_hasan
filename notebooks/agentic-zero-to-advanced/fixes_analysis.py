@@ -8,7 +8,6 @@ from inspection_tools import find_candidates, score_kept
 
 OUT = Path(__file__).parent / "out"
 runs = json.loads((OUT / "agent_loop_results.json").read_text())
-parity = lambda r: int(r["image"].split("_")[-1].split(".")[0]) % 2
 
 
 def plain_detector(rows):
@@ -21,7 +20,7 @@ def plain_detector(rows):
             "precision": round(tp / (tp + fp), 3), "recall": round(tp / (tp + fn), 3)}
 
 
-dev, test = [r for r in runs if parity(r)], [r for r in runs if not parity(r)]
+dev, test = [r for r in runs if r["split"] == "val"], [r for r in runs if r["split"] == "test"]
 out = {"plain_detector_dev": plain_detector(dev), "plain_detector_test": plain_detector(test),
        "original_agent_dev": summarize(dev), "original_agent_test": summarize(test)}
 

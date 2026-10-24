@@ -1,0 +1,35 @@
+task strategy                  ok ovfl  cap  peak tok  mean total tok      s
+T1   stuff                  0/6      6    0         0               0    0.4
+T1   payload                0/6      6    0       543             543    2.3
+T1   harness                6/6      0    0      1270            2834    9.4
+T1   harness+delegate       3/6      0    3      3343           16535   45.3
+
+T2   stuff                  3/3      0    0     28300           28300  145.7
+T2   payload                0/3      2    1     14879           34771   44.4
+T2   harness                0/3      0    3     29514          111476  107.5
+T2   harness+delegate       0/3      0    3      8118           65201   84.4
+
+T3   stuff                  2/2      0    0       453             452   10.2
+T3   payload                1/2      1    0      1146            2294   11.6
+T3   harness                1/2      0    1     14841           53299   51.8
+T3   harness+delegate       1/2      0    1     14575           51633   56.1
+
+T4   stuff                  3/3      0    0     28312           28308  151.8
+T4   payload                1/3      1    1     18407           46309   53.0
+T4   harness                1/3      0    2     12492           55062   80.1
+T4   harness+delegate       1/3      0    2     13734           59362  104.6
+T4   search-paths           2/3      0    1      7631           43245   92.6
+T4   search-paths+delegate  2/3      0    1      6030           27303  109.5
+
+T5   v-payload              3/3      0    0      3357            3949   56.1
+T5   v-harness              3/3      0    0      4355            9519  163.4
+T5   v-harness+delegate     2/3      0    1      6077           30710  222.8
+
+T6: sub-agent brief size (12 target reports, exact verdict + confidence)
+narrow         12/12  mean prompt tokens 364
+pad20-start    12/12  mean prompt tokens 2946
+pad20-middle   12/12  mean prompt tokens 2946
+pad20-end      12/12  mean prompt tokens 2946
+pad100-start   12/12  mean prompt tokens 13924
+pad100-middle  12/12  mean prompt tokens 13924
+pad100-end     12/12  mean prompt tokens 13924
