@@ -1,4 +1,4 @@
-import {waitFor} from '@motion-canvas/core';
+import {waitFor, useThread} from '@motion-canvas/core';
 
 export type Beat = {key: string; text: string; t0: number; dur: number; times: number[]};
 export type Timeline = {beats: Beat[]; end: number};
@@ -20,11 +20,12 @@ export function W(tl: Timeline, key: string, word: string): number {
   return i;
 }
 
-/** A clock for one thread: `yield* at(t)` waits until absolute time t (does nothing if it has passed). Make one per parallel thread. */
+/** A clock for one thread: `yield* at(t)` waits until absolute time t (does nothing if it has passed). Reads the thread's own time, so the
+ *  one-frame rounding of each waitFor cannot add up over a chapter (an earlier version counted `t - last t` and drifted about 2 s over 50 events). */
 export function clock() {
-  let now = 0;
   return function* at(t: number) {
-    if (t > now) { yield* waitFor(t - now); now = t; }
+    const d = t - useThread().time();
+    if (d > 0) yield* waitFor(d);
   };
 }
 

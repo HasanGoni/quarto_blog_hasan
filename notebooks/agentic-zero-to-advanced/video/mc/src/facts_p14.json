@@ -1,0 +1,92 @@
+{
+ "window": 65536,
+ "csv_tokens": 113500,
+ "t1": {
+  "stuff": {
+   "correct": 0,
+   "n": 6,
+   "overflow": 6,
+   "tokens": 0
+  },
+  "payload": {
+   "correct": 0,
+   "n": 6,
+   "overflow": 6,
+   "tokens": 543
+  },
+  "harness": {
+   "correct": 6,
+   "n": 6,
+   "overflow": 0,
+   "tokens": 2834
+  },
+  "harness+delegate": {
+   "correct": 3,
+   "n": 6,
+   "overflow": 0,
+   "tokens": 16535
+  }
+ },
+ "t2": {
+  "stuff": {
+   "correct": 3,
+   "n": 3,
+   "tokens": 28300
+  },
+  "payload": {
+   "correct": 0,
+   "n": 3,
+   "tokens": 34771
+  },
+  "harness": {
+   "correct": 0,
+   "n": 3,
+   "tokens": 111476
+  },
+  "harness+delegate": {
+   "correct": 0,
+   "n": 3,
+   "tokens": 65201
+  }
+ },
+ "t2_old_stuff_correct": 0,
+ "t2_old_stuff_completion_tokens": 1200,
+ "t6": {
+  "narrow": 364,
+  "pad100": 13924,
+  "runs": 84,
+  "correct": 84
+ },
+ "dino": {
+  "near": 0.728,
+  "random": 0.101
+ },
+ "t5": {
+  "payload": 3949,
+  "harness": 9519
+ },
+ "fw": {
+  "totals": {
+   "harness": 12,
+   "da": 6,
+   "da_chunk": 10,
+   "adk": 9,
+   "adk_chunk": 8,
+   "adk_env": 12
+  },
+  "n": 17,
+  "t1_tokens": {
+   "harness": 2834,
+   "adk": 5056,
+   "adk_env": 8137,
+   "da": 13099
+  },
+  "da_cap": 18,
+  "da_runs": 34,
+  "guard": [
+   "stopped",
+   "answered",
+   "looped"
+  ]
+ }
+}

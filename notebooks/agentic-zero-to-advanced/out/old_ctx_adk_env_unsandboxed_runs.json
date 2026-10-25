@@ -1,0 +1,152 @@
+[
+ {
+  "strategy": "adk-env",
+  "question": "In exports/inspection_log.csv, what are n_voids and void_area for the row with id test_00331? Answer: ANSWER: {\"n_voids\": int, \"void_area\": int}",
+  "status": "ok",
+  "answer": "ANSWER: {\"n_voids\": 1, \"void_area\": 156}",
+  "tools_used": {
+   "Execute": 1
+  },
+  "tool_calls": 1,
+  "seconds": 17.9,
+  "model_calls_all": 2,
+  "peak_prompt_tokens": 1529,
+  "total_prompt_tokens": 2825,
+  "completion_tokens": 82,
+  "task": "T1",
+  "parsed": {
+   "n_voids": 1,
+   "void_area": 156
+  },
+  "correct": true,
+  "gold": {
+   "n_voids": 1,
+   "void_area": 156
+  }
+ },
+ {
+  "strategy": "adk-env",
+  "question": "In exports/inspection_log.csv, what are n_voids and void_area for the row with id test_00154? Answer: ANSWER: {\"n_voids\": int, \"void_area\": int}",
+  "status": "ok",
+  "answer": "ANSWER: {\"n_voids\": 5, \"void_area\": 552}",
+  "tools_used": {
+   "Execute": 1
+  },
+  "tool_calls": 1,
+  "seconds": 14.3,
+  "model_calls_all": 2,
+  "peak_prompt_tokens": 1529,
+  "total_prompt_tokens": 2824,
+  "completion_tokens": 84,
+  "task": "T1",
+  "parsed": {
+   "n_voids": 5,
+   "void_area": 552
+  },
+  "correct": true,
+  "gold": {
+   "n_voids": 5,
+   "void_area": 552
+  }
+ },
+ {
+  "strategy": "adk-env",
+  "question": "In exports/inspection_log.csv, what are n_voids and void_area for the row with id test_00404? Answer: ANSWER: {\"n_voids\": int, \"void_area\": int}",
+  "status": "ok",
+  "answer": "ANSWER: {\"n_voids\": 1, \"void_area\": 93}",
+  "tools_used": {
+   "Execute": 1
+  },
+  "tool_calls": 1,
+  "seconds": 14.7,
+  "model_calls_all": 2,
+  "peak_prompt_tokens": 1524,
+  "total_prompt_tokens": 2818,
+  "completion_tokens": 79,
+  "task": "T1",
+  "parsed": {
+   "n_voids": 1,
+   "void_area": 93
+  },
+  "correct": true,
+  "gold": {
+   "n_voids": 1,
+   "void_area": 93
+  }
+ },
+ {
+  "strategy": "adk-env",
+  "question": "In exports/inspection_log.csv, what are n_voids and void_area for the row with id test_00049? Answer: ANSWER: {\"n_voids\": int, \"void_area\": int}",
+  "status": "ok",
+  "answer": "ANSWER: {\"n_voids\": 3, \"void_area\": 716}",
+  "tools_used": {
+   "Execute": 1
+  },
+  "tool_calls": 1,
+  "seconds": 25.9,
+  "model_calls_all": 2,
+  "peak_prompt_tokens": 1526,
+  "total_prompt_tokens": 2821,
+  "completion_tokens": 81,
+  "task": "T1",
+  "parsed": {
+   "n_voids": 3,
+   "void_area": 716
+  },
+  "correct": true,
+  "gold": {
+   "n_voids": 3,
+   "void_area": 716
+  }
+ },
+ {
+  "strategy": "adk-env",
+  "question": "In exports/inspection_log.csv, what are n_voids and void_area for the row with id test_00074? Answer: ANSWER: {\"n_voids\": int, \"void_area\": int}",
+  "status": "ok",
+  "answer": "ANSWER: {\"n_voids\": 0, \"void_area\": 0}",
+  "tools_used": {
+   "Execute": 1
+  },
+  "tool_calls": 1,
+  "seconds": 24.8,
+  "model_calls_all": 2,
+  "peak_prompt_tokens": 1512,
+  "total_prompt_tokens": 2805,
+  "completion_tokens": 77,
+  "task": "T1",
+  "parsed": {
+   "n_voids": 0,
+   "void_area": 0
+  },
+  "correct": true,
+  "gold": {
+   "n_voids": 0,
+   "void_area": 0
+  }
+ },
+ {
+  "strategy": "adk-env",
+  "question": "In exports/inspection_log.csv, what are n_voids and void_area for the row with id test_00548? Answer: ANSWER: {\"n_voids\": int, \"void_area\": int}",
+  "status": "ok",
+  "answer": "ANSWER: {\"n_voids\": 5, \"void_area\": 818}",
+  "tools_used": {
+   "Execute": 1
+  },
+  "tool_calls": 1,
+  "seconds": 27.2,
+  "model_calls_all": 2,
+  "peak_prompt_tokens": 1526,
+  "total_prompt_tokens": 2821,
+  "completion_tokens": 81,
+  "task": "T1",
+  "parsed": {
+   "n_voids": 5,
+   "void_area": 818
+  },
+  "correct": true,
+  "gold": {
+   "n_voids": 5,
+   "void_area": 818
+  }
+ }
+]

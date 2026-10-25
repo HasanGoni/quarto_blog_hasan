@@ -3,6 +3,7 @@ title: "Agentic Developer: Zero to Advanced, Part 14: Context Engineering Starts
 subtitle: "grep, paged reads, offloading, paths instead of payloads, and sub-agents that see one file. Measured on this series' own archive, and the result is not the one the checklist suggests."
 author: "Hasan Goni"
 date: 2026-10-24
+date-modified: 2026-10-25
 categories: [agentic-ai, python, retrieval, evaluation]
 toc: true
 search: false
@@ -77,6 +78,14 @@ Retrieval is a set of tools that move data from a store into that budget. Each t
 store crosses over, so the design question is the size and the relevance of what a tool returns. Everything
 the model sees is re-sent on every step of the loop, so a big tool result is paid for again on each later call.
 
+*The desk, the library, and what the harness decides: 26 seconds.*
+
+```{=html}
+<video controls preload="metadata" playsinline style="width:100%;max-width:760px;display:block;margin:1em auto;border-radius:6px;">
+  <source src="videos/part14-desk.mp4" type="video/mp4">
+</video>
+```
+
 ## Jargon, explained simply
 
 | Term | What it means | Daily-life version |
@@ -97,7 +106,7 @@ the model sees is re-sent on every step of the loop, so a big tool result is pai
 
 Everything the agent searches is a real file from this series, in `out/ctx_archive/`:
 
-- `exports/inspection_log.csv`: the **4,000-row** table of the synthetic void dataset. About 454 KB, around 115,000
+- `exports/inspection_log.csv`: the **4,000-row** table of the synthetic void dataset. About 454 KB, about 113,500
   tokens (characters divided by four), so it does not fit in a 65,536-token window. This stands in for the article's 40,000-row market export.
 - `reports/test_00000.md` to `test_00199.md`: the **200 per-image reports** that the Part 7 pipeline actually wrote
   (verdict, kept and rejected candidates, and the model-written note). About 91 KB, roughly 23,000 tokens by that estimate (the server counted 28,300 with a question attached), so it
@@ -138,7 +147,9 @@ archive at .../notebooks/agentic-zero-to-advanced/out/ctx_archive
 ## The harness: five ideas, five switches
 
 I wrote about 150 lines of Python in the style of the Part 5 loop (`ctx_harness.py`). It is **not** the
-Deep Agents library the article uses; it is the smallest thing that lets me turn each idea on and off. The
+Deep Agents library the article uses; it is the smallest thing that lets me turn each idea on and off. Later in the post
+([the same tasks through Deep Agents and Google ADK](#the-same-tasks-through-two-real-frameworks-deep-agents-and-google-adk))
+I run the same questions through the real libraries. The
 model is a local Qwen3.8-27B (FP8) behind vLLM, temperature 0, thinking off.
 
 - **`grep` / `glob`** (switch `grep`): search names and contents without loading files.
@@ -324,7 +335,15 @@ run that overflowed.
 
 ### T1: the needle in the big CSV, where the checklist earns its keep
 
-*"What are `n_voids` and `void_area` for the row with id `test_00xyz`?"* The CSV is around 115,000 tokens.
+*The needle task in 28 seconds, with the real token counts.*
+
+```{=html}
+<video controls preload="metadata" playsinline style="width:100%;max-width:760px;display:block;margin:1em auto;border-radius:6px;">
+  <source src="videos/part14-needle.mp4" type="video/mp4">
+</video>
+```
+
+*"What are `n_voids` and `void_area` for the row with id `test_00xyz`?"* The CSV is about 113,500 tokens.
 
 - **Stuffing and whole-file tools both fail, every time.** Stuffing is refused outright (6 of 6 overflow). The
   `payload` agent calls `read_file` on the CSV and the whole thing is refused (6 of 6).
@@ -337,6 +356,14 @@ run that overflowed.
   read a mechanism into it.
 
 ### T2: counting across 200 reports, and what the first bug taught me
+
+*Why the first bug made the wrong strategy look best: 25 seconds.*
+
+```{=html}
+<video controls preload="metadata" playsinline style="width:100%;max-width:760px;display:block;margin:1em auto;border-radius:6px;">
+  <source src="videos/part14-fits.mp4" type="video/mp4">
+</video>
+```
 
 *"How many reports have verdict escalate AND at least one kept candidate with severity critical?"*
 
@@ -421,6 +448,14 @@ voids"* (and two siblings). Each record is small, so 20 of them is only about 3,
 
 ### T6: how much should a sub-agent be given?
 
+*The sub-agent brief and the visual-search numbers: 36 seconds.*
+
+```{=html}
+<video controls preload="metadata" playsinline style="width:100%;max-width:760px;display:block;margin:1em auto;border-radius:6px;">
+  <source src="videos/part14-brief.mp4" type="video/mp4">
+</video>
+```
+
 You asked about this directly: a sub-agent given a lot of context may degrade ("context rot"), so give it
 only what the small job needs. I tested it, with the same analyst and the same question about **one** report (its verdict
 and the confidence of its first kept candidate), in three briefs: just that report, that report plus 19 others, and
@@ -442,10 +477,195 @@ a task where the answer is two exact lines. Published rot results are at much lo
 I would still give a sub-agent the narrow brief, because it is free and it is the version that scales, but this
 experiment gives you a reason of cost, not of accuracy.
 
+## The same tasks through two real frameworks: Deep Agents and Google ADK
+
+The first version of this post said "I did not use the Deep Agents library". That was the weakest part, so I ran the
+same 17 questions through it, and through **Google ADK** as well, because Google ADK is a common choice for teams working in company settings. Same model, same questions, same scoring. Nothing else about the task changed.
+
+**The kitchen picture.** My harness is cooking at home from a short recipe: I chose every pan. **Deep Agents** is a
+meal kit: it arrives with its own pans, a recipe book (a long built-in system prompt), a timer for big dishes
+(offloading results over 20,000 tokens) and a sous-chef you can call (the `task` sub-agent tool). **ADK** is a professional
+kitchen with the stove and the sous-chef system included, but with the pans mostly left for you to bring, and
+a set of "environment" pans that are still labelled experimental.
+
+| Word | Everyday meaning | In code |
+|---|---|---|
+| **Framework** | The kitchen that comes with the pans and the rules. | `deepagents`, `google-adk` |
+| **Middleware** | A checkpoint every order passes through before it reaches the cook. | Deep Agents' `ModelCallLimitMiddleware`; my repeat guard below |
+| **Sub-agent as a tool** | Calling the sous-chef like any other utensil. | Deep Agents' `task` tool; ADK's `AgentTool` |
+| **Toolset** | A drawer of pans sold together. | ADK's `EnvironmentToolset` |
+| **Sandbox** | A test kitchen with no door to the street, so a mistake stays inside. | A Docker container with no network |
+| **Call cap** | The oven timer that rings even if you forgot. | 40 model calls in both frameworks |
+
+### What each one ships
+
+I read the installed packages instead of trusting my memory (ADK 2.13, Deep Agents 0.7.32):
+
+- **Deep Agents** brings its own `ls`, `read_file`, `glob`, `grep`, a planning tool, the `task` sub-agent tool, and
+  offloading of tool results over 20,000 tokens by default. You add your own tools next to those.
+- **ADK** brings no file tools in the basic agent (you pass plain Python functions as tools; the type hints and docstring
+  become the schema), a sub-agent wrapper (`AgentTool`) and a call limit (`RunConfig.max_llm_calls`, default 500). In ADK 2.13
+  there is also an **experimental** `EnvironmentToolset`: `Execute` (a shell), `ReadFile`, `EditFile`, `WriteFile`. I did not find a
+  built-in "save this big result to a file" step; ADK has event compaction, which I did not switch on.
+
+So I ran ADK two ways: with **my own** harness tools wrapped as functions (the fair comparison for the *framework*), and with
+**its own** toolset (what a new ADK user gets). Here is the whole agent in ADK, the part you would copy:
+
+```python
+from google.adk.agents import LlmAgent
+from google.adk.models.lite_llm import LiteLlm          # any OpenAI-compatible server, here the local vLLM
+from google.adk.tools.agent_tool import AgentTool
+
+model = LiteLlm(model="openai/qwen3.8-27b", api_base=BASE_URL, api_key=KEY, temperature=0,
+                max_tokens=8000, extra_body={"chat_template_kwargs": {"enable_thinking": False}})
+
+analyst = LlmAgent(name="chunk_analyst", model=model, instruction=ANALYST_SYSTEM, tools=[read_file],
+                   description="Reads ONE file and returns only the facts that bear on the question.")
+agent = LlmAgent(name="archive_agent", model=model, instruction=SYSTEM,
+                 tools=[ls, glob, grep, read_file, search_reports, similar_cases, AgentTool(agent=analyst)])
+# run with RunConfig(max_llm_calls=40); every tool is a plain function with type hints and a docstring
+```
+
+### Results
+
+All figures are correct answers out of the questions in the column header. The "cap" and "overflow" columns count runs
+that ended without an answer. My harness row uses the best set-up *per task* (named in the script), which flatters it, and
+its cap was 14 model calls; both frameworks had 40.
+
+| Set-up | T1 needle (6) | T2 count (3) | T3 stale (2) | T4 meaning (3) | T5 visual (3) | **Total /17** | Hit the call cap | Overflowed the window |
+|---|---|---|---|---|---|---|---|---|
+| My harness (best set-up per task) | 6 | 0 | 1 | 2 | 3 | **12** | 5 | 0 |
+| Deep Agents | 4 | 0 | 1 | 0 | 1 | **6** | 11 | 0 |
+| Deep Agents + chunk sub-agent | 5 | 1 | 1 | 0 | 3 | **10** | 7 | 0 |
+| ADK, my tools | 6 | 0 | 0 | 1 | 2 | **9** | 7 | 1 |
+| ADK, my tools + chunk sub-agent | 5 | 0 | 1 | 1 | 1 | **8** | 5 | 3 |
+| ADK, its own toolset (sandboxed) | 6 | 1 | 2 | 1 | 2 | **12** | 5 | 0 |
+
+And what a correct answer on the needle task cost, in prompt tokens summed over all steps:
+
+| Set-up | Prompt tokens per correct T1 run |
+|---|---|
+| My harness | 2,834 |
+| ADK, my tools | 5,056 |
+| ADK, its own toolset | 8,137 |
+| Deep Agents + chunk sub-agent | 11,132 |
+| Deep Agents | 13,099 |
+| ADK, my tools + chunk sub-agent | 40,197 |
+
+For comparison, pasting the 23,000-token reports in scored 3 of 3, 2 of 2 and 3 of 3 on T2, T3 and T4; no framework matched that
+on counting or on finding reports by meaning.
+
+```{=html}
+<details>
+<summary><strong>Show output of ctx_frameworks.py</strong></summary>
+```
+
+```text
+harness (best set-up per task)       12/17  cap= 5 overflow=0  T1:6/6  T2:0/3  T3:1/2  T4:2/3  T5:3/3
+                                     tokens per correct run: {'T1': 2834, 'T2': None, 'T3': 2876, 'T4': 43225, 'T5': 9519}
+Deep Agents                           6/17  cap=11 overflow=0  T1:4/6  T2:0/3  T3:1/2  T4:0/3  T5:1/3
+                                     tokens per correct run: {'T1': 13099, 'T2': None, 'T3': 9601, 'T4': None, 'T5': 21599}
+Deep Agents + chunk sub-agent        10/17  cap= 7 overflow=0  T1:5/6  T2:1/3  T3:1/2  T4:0/3  T5:3/3
+                                     tokens per correct run: {'T1': 11132, 'T2': 375853, 'T3': 9730, 'T4': None, 'T5': 47891}
+ADK, my tools                         9/17  cap= 7 overflow=1  T1:6/6  T2:0/3  T3:0/2  T4:1/3  T5:2/3
+                                     tokens per correct run: {'T1': 5056, 'T2': None, 'T3': None, 'T4': 26243, 'T5': 26650}
+ADK, my tools + chunk sub-agent       8/17  cap= 5 overflow=3  T1:5/6  T2:0/3  T3:1/2  T4:1/3  T5:1/3
+                                     tokens per correct run: {'T1': 40197, 'T2': None, 'T3': 3831, 'T4': 22735, 'T5': 102573}
+ADK, its own toolset (sandboxed)     12/17  cap= 5 overflow=0  T1:6/6  T2:1/3  T3:2/2  T4:1/3  T5:2/3
+                                     tokens per correct run: {'T1': 8137, 'T2': 29023, 'T3': 39259, 'T4': 19069, 'T5': 10240}
+stuff {'T1': {'n': 6, 'correct': 0}, 'T2': {'n': 3, 'correct': 3}, 'T3': {'n': 2, 'correct': 2}, 'T4': {'n': 3, 'correct': 3}}
+guard [{'strategy': 'da', 'correct': False, 'calls': 7, 'tokens': 25270, 'status': 'no_answer'}, {'strategy': 'da+chunk', 'correct': True, 'calls': 4, 'tokens': 13270, 'status': 'ok'}, {'strategy': 'da', 'correct': False, 'calls': 33, 'tokens': 711047, 'status': 'error: GraphRecursionError: Re'}]
+```
+
+```{=html}
+</details>
+```
+
+*The framework comparison in 68 seconds: my loop, Deep Agents and Google ADK.*
+
+```{=html}
+<video controls preload="metadata" playsinline style="width:100%;max-width:760px;display:block;margin:1em auto;border-radius:6px;">
+  <source src="videos/part14-frameworks.mp4" type="video/mp4">
+</video>
+```
+
+### What I found
+
+1. **The framework mattered less than the tools it was given.** ADK with my own tools and with its own toolset scored 9 and 12;
+   the same ADK with my tools plus a sub-agent scored 8. Deep Agents scored 6 and 10. Differences of one or two runs are noise
+   at this sample size, so read the table as "no framework is clearly ahead", not as a ranking.
+2. **The runs that failed mostly did not give a wrong answer; they never gave one.** Deep Agents hit the call cap on 18 of its 34
+   runs, ADK with my tools on 12 and overflowed the window on 4 more. The cap is the oven timer: even with it,
+   one capped T1 run in Deep Agents used about 940,000 prompt tokens in total, with a peak of 57,000 against the 65,536 window.
+3. **I read the loops.** In a T1 run, Deep Agents had the answer after its first search (the row with
+   `n_voids` 1 and `void_area` 93) and the next call showed the header, so the columns were known. It then re-read the same line for
+   about 11 more calls, alternating `limit: 1` and `limit: 2`, and never answered. The four correct runs of the same question
+   took 3 to 4 calls. I do not know why the model would not commit. In a T3 run the agent found the current policy and then
+   searched for smaller areas one number at a time (`area_px 19`, `18`, `17`, ...), ten searches per step, until its window was full.
+4. **A repeat guard saves tokens; it does not fix the loop.** I added a middleware that ends the run when the same tool call has been
+   made three times, and re-ran the three looping T1 questions. One stopped after 7 calls and 25,270 tokens instead of burning
+   a window, but with no answer. One answered correctly in 4 calls. One still ran into the recursion limit (33 calls, 711,047 tokens).
+   My first version of the guard required three identical calls *in a row* and never fired, because the loop alternated between two
+   calls; those runs are kept as `old_ctx_da_guard_consecutive_rule.json`. Temperature 0 on this server is not bit-exact, so the
+   one that flipped to correct is not proof that the guard helped.
+5. **ADK's own toolset is a real shell, and I nearly ran it on my machine.** `Execute` runs a command with my user's rights and a
+   *copy of all my environment variables*, API keys included. A security check flagged it, and it was right. I stopped that run, set
+   its partial results aside (`old_ctx_adk_env_unsandboxed_runs.json`) and re-ran the whole arm with every command inside a throwaway
+   Alpine container: no network, read-only root, all capabilities dropped, memory and process limits, only a copy of the archive
+   mounted, no environment variables. I checked from inside it that the container could not see a test secret, could not reach the
+   model server, could not write to `/usr`, and could not read `/root`. A side effect: the shell is busybox `sh`, not bash. Whatever
+   framework you use, a model with a shell wants this boundary.
+6. **A tool that raises can end the whole run.** My first ADK wrapper let a `FileNotFoundError` from `read_file` escape, which killed one
+   run. My own harness hands the error back to the model as text, so I wrapped the ADK tools the same way and redid that run. This is a
+   harness decision, not a model one.
+7. **Offloading is a setting you have to choose.** Deep Agents offloads tool results over 20,000 tokens by default; I set my own
+   harness to 2,000 because the window here is 65,536. I did not measure how often Deep Agents' offloading fired. ADK, in my runs
+   (no offloading step), overflowed the window four times.
+
+### What this does not tell you
+
+It was one local model (Qwen3.8-27B through an OpenAI-compatible server), **not Gemini**. ADK is built around Gemini; I did not
+test it. A hosted model with a longer window and stronger tool use could behave very differently, and the two frameworks'
+defaults were designed for that. The takeaways below are about *how to measure*, not about which framework to buy.
+
+## Best practices, and how they connect to the rest of the series
+
+*The practices and where each meets an earlier part: 50 seconds.*
+
+```{=html}
+<video controls preload="metadata" playsinline style="width:100%;max-width:760px;display:block;margin:1em auto;border-radius:6px;">
+  <source src="videos/part14-practice.mp4" type="video/mp4">
+</video>
+```
+
+The article ends on a checklist. Here it is again, next to what my runs say about each item and where it meets
+something we already built. "Not tested" means exactly that: I am repeating the article's advice, not backing it
+with a measurement.
+
+| Practice (the article's checklist, plus two of mine) | What my runs say | Where it connects to this series |
+|---|---|---|
+| **1. Use the cheapest tool that works.** Grep beats embeddings when you know the words. | Confirmed on the CSV needle (grep + paged read, 6 of 6). Weaker when the question was phrased as an idea (T4): the arms with grep were 1 of 3, the semantic-only arm 2 of 3. | Same rule as [Part 8, tool design](08-tool-design.qmd): plain code, then a small typed model, then a language model, by what each step needs. Search tools are one more place that rule applies. |
+| **2. Check whether it fits before you retrieve** (mine). | Pasting 23,000 tokens beat every tool setup on counting and by-meaning (3 of 3 each). Only the 113,500-token table forced retrieval. | In [Part 5](05-what-makes-an-agent.qmd) the agent's only memory is the message list. Everything in it is re-read at every step, which is one reason a tool loop cost more tokens than one big prompt here. |
+| **3. Page instead of loading.** | The single biggest effect: 6 of 6 at about 1/40 of the table's tokens, against 0 of 6 for whole-file reads. | The Part 7 pipeline works one frame at a time with a small record per frame, so it never faces a whole archive. |
+| **4. Return pointers, not payloads, once results are big.** | Only true when results are big. At 20 small records the plain payload was cheapest (3,949 tokens against 9,519). | A threshold, not a rule. Mine was 2,000 tokens, the article's about 20,000. Set yours from your window and your data. |
+| **5. Delegate the reading with a narrow brief.** | 38x fewer tokens for the narrow brief and no accuracy difference up to 14,000 tokens (84 of 84). But adding the sub-agent tool to the needle task made a 6-of-6 agent 3 of 6. In the frameworks it was mixed: Deep Agents 6 to 10 of 17, ADK with my tools 9 to 8. | The Part 7 split, "code owns the order, the model owns two judgments", applied to context: the harness decides what crosses over, the model decides what to ask for. |
+| **6. Look at individual answers, not just the score** (mine). | It caught my 1,200-token cap bug, which had made the best strategy look like the worst. | The same lesson as the token-probability bug in [Part 8](08-tool-design.qmd): summary numbers will not tell you the harness is broken. |
+| **7. Use plain code for counting and joining.** | Every tool setup scored 0 of 3 on the count. Not measured: a script. | Part 8 again: when a step is arithmetic, it is not a model's job. |
+| **8. Package search know-how as a skill** (progressive disclosure). | Not tested. | Planned for the Deep Agents posts in Arc 3. |
+| **9. Treat retrieved text as untrusted, and verify answers against the source.** | Not tested. | Planned for the security post in Arc 6. |
+| **10. Prefer fresh sources, filter by date.** | Not really tested: my stale file was labelled "superseded", which made it easy. | Part 9 (human review) is the planned place for cases the system cannot settle by itself. |
+| **11. Cap your loops, and put a repeat guard next to the cap** (mine). | Deep Agents hit the 40-call cap on 18 of 34 runs; ADK with my tools on 12 of 34. A repeat guard saved tokens in one of three looping runs and did not rescue the answer. | The Part 5 loop already had a step limit; the frameworks make it a setting (`RunConfig.max_llm_calls`, a middleware). Set it, and log the runs that hit it. |
+| **12. A model with a shell needs a boundary** (mine). | ADK's `Execute` ran with my user's rights and a copy of my environment variables. Re-run inside a no-network Docker container with nothing mounted but a copy of the data. | The security post on the roadmap. Treat it the way the article treats retrieved text: untrusted. |
+
+One more connection, to the thing that is still missing in this series: the article's own next question is
+how an agent manages its context *after* retrieval, as a long task piles up. In this series that is the
+memory post on the roadmap, together with a longer look at Deep Agents, and this post's numbers (what a tool result costs on every later step)
+are the reason those matter.
+
 ## What I take from this
 
 1. **Check whether it fits before you build anything.** The 200 reports were 23,000 tokens; pasting them in beat every
-   retrieval setup I built on counting and by-meaning questions. The 4,000-row CSV was about 115,000 tokens; only the
+   retrieval setup I built on counting and by-meaning questions. The 4,000-row CSV was about 113,500 tokens; only the
    harness worked. The checklist is the plan for when the corpus *stops fitting*.
 2. **For a needle in a big file, grep + paged read is not a nicety, it is the whole difference** (6 of 6 against 0 of 6, at about one
    fortieth of the tokens).
@@ -455,6 +675,10 @@ experiment gives you a reason of cost, not of accuracy.
    not have needed any of this.
 5. **Small results do not need offloading.** On the visual task, the plain payload beat the harness.
 6. **Your first bug will be in the harness.** Mine was a token cap that made one strategy look bad.
+7. **The tools and the caps mattered more than the framework.** On the same model and questions, Deep Agents scored 6 and 10 of 17,
+   ADK with my tools 9 and 8, ADK with its own toolset 12, my harness 12 (with its best set-up per task). The failures were mostly
+   runs that never answered, not wrong answers: set a cap and read the loops.
+8. **Put the shell in a box.** ADK's `Execute` inherits your environment variables. Run it where a mistake stays inside.
 
 ## Jargon, once more, in one sentence each
 
@@ -464,7 +688,13 @@ experiment gives you a reason of cost, not of accuracy.
 
 ## What I did not do
 
-- **I did not use the Deep Agents library.** This is my own 150-line harness. Deep Agents will differ in its defaults, and the numbers here say nothing about how it performs.
+- **The framework comparison is small and local.** 17 questions per set-up, one run each, one model (Qwen3.8-27B through an
+  OpenAI-compatible server), **not Gemini**, so nothing here says how ADK behaves with the model it was designed for. My harness row
+  takes the best set-up per task and had a 14-call cap; Deep Agents and ADK had 40. Differences of one or two runs are noise.
+- **ADK's `EnvironmentToolset` is experimental** in 2.13, and my sandboxed shell is busybox, not bash. I did not enable ADK's event compaction
+  or look at Deep Agents' summarization, and I did not measure how often Deep Agents' offloading fired.
+- **My repeat guard was wrong the first time** (three identical calls *in a row*, which never happened) and the re-test has three runs.
+  The guard changed one outcome at most.
 - **One model, one setting:** Qwen3.8-27B (FP8), temperature 0, thinking off, on a GPU shared with other jobs. A different model, or thinking on, could change every ranking.
 - **Small samples.** 6, 3, 2, 3 and 3 questions per task. One run is 33 percentage points on T2 and T4. With the same configuration, T4's harness + delegate arm went from 2 of 3 to 1 of 3 between my two passes, so differences of one run are noise.
 - **A 14-step cap.** Many tool failures are "ran out of steps", not "gave a wrong answer". A larger cap would change T2 and T4 and I did not try one.
@@ -493,6 +723,13 @@ uv run python ctx_visual.py quality              # same-part-class share of the 
 uv run python ctx_eval.py                        # T1-T5, all strategies; resumes from out/ctx_eval_runs.json
 uv run python ctx_subagent.py                    # T6: narrow / 20 / 100-report briefs
 uv run python ctx_summary.py                     # the tables in this post
+uv run python ctx_deepagents.py                  # the same T1-T5 through Deep Agents (about 5 hours, most of it loops)
+uv run python ctx_da_guard.py                    # the repeat-guard re-test on the three looping T1 runs
+uv venv .venv-adk && uv pip install --python .venv-adk/bin/python google-adk litellm mcp lancedb timm transformers \
+    numpy scipy opencv-python-headless pillow matplotlib aisuite pydantic openai langgraph laya   # ADK in its own venv
+.venv-adk/bin/python ctx_adk.py                  # Google ADK with my tools (+ chunk sub-agent)
+.venv-adk/bin/python ctx_adk_env.py              # ADK's own toolset; needs Docker, runs every command in a no-network container
+uv run python ctx_frameworks.py                  # the framework tables in this post
 uv run python ctx_diagrams.py                    # the desk-and-library figure
 ```
 

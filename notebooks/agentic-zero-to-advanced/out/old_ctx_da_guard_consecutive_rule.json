@@ -1,0 +1,68 @@
+[
+ {
+  "strategy": "da",
+  "question": "In exports/inspection_log.csv, what are n_voids and void_area for the row with id test_00404? Answer: ANSWER: {\"n_voids\": int, \"void_area\": int}",
+  "status": "error: GraphRecursionError: Recursion limit of 160 reached without hitting a stop condition. You can increase the limit by setting the `recursion_limit` config key.\nFor troubleshooting, visit: https://docs.langchain.com/oss/pyth",
+  "answer": null,
+  "tools_used": {},
+  "tool_calls": 0,
+  "steps": 0,
+  "seconds": 212.2,
+  "model_calls_all": 32,
+  "peak_prompt_tokens": 10460,
+  "total_prompt_tokens": 213102,
+  "completion_tokens": 1838,
+  "sub_tokens": 0,
+  "task": "T1",
+  "parsed": null,
+  "correct": false,
+  "gold": {
+   "n_voids": 1,
+   "void_area": 93
+  }
+ },
+ {
+  "strategy": "da+chunk",
+  "question": "In exports/inspection_log.csv, what are n_voids and void_area for the row with id test_00404? Answer: ANSWER: {\"n_voids\": int, \"void_area\": int}",
+  "status": "error: GraphRecursionError: Recursion limit of 160 reached without hitting a stop condition. You can increase the limit by setting the `recursion_limit` config key.\nFor troubleshooting, visit: https://docs.langchain.com/oss/pyth",
+  "answer": null,
+  "tools_used": {},
+  "tool_calls": 0,
+  "steps": 0,
+  "seconds": 239.0,
+  "model_calls_all": 32,
+  "peak_prompt_tokens": 48026,
+  "total_prompt_tokens": 583995,
+  "completion_tokens": 1863,
+  "sub_tokens": 0,
+  "task": "T1",
+  "parsed": null,
+  "correct": false,
+  "gold": {
+   "n_voids": 1,
+   "void_area": 93
+  }
+ },
+ {
+  "strategy": "da",
+  "question": "In exports/inspection_log.csv, what are n_voids and void_area for the row with id test_00074? Answer: ANSWER: {\"n_voids\": int, \"void_area\": int}",
+  "status": "error: GraphRecursionError: Recursion limit of 160 reached without hitting a stop condition. You can increase the limit by setting the `recursion_limit` config key.\nFor troubleshooting, visit: https://docs.langchain.com/oss/pyth",
+  "answer": null,
+  "tools_used": {},
+  "tool_calls": 0,
+  "steps": 0,
+  "seconds": 386.7,
+  "model_calls_all": 33,
+  "peak_prompt_tokens": 53744,
+  "total_prompt_tokens": 706839,
+  "completion_tokens": 2521,
+  "sub_tokens": 0,
+  "task": "T1",
+  "parsed": null,
+  "correct": false,
+  "gold": {
+   "n_voids": 0,
+   "void_area": 0
+  }
+ }
+]

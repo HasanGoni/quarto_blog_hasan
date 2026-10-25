@@ -1,0 +1,1006 @@
+[
+ {
+  "strategy": "adk",
+  "question": "In exports/inspection_log.csv, what are n_voids and void_area for the row with id test_00331? Answer: ANSWER: {\"n_voids\": int, \"void_area\": int}",
+  "status": "ok",
+  "answer": "The row for test_00331 has n_voids=1 and void_area=156.\n\nANSWER: {\"n_voids\": 1, \"void_area\": 156}",
+  "tools_used": {
+   "grep": 1,
+   "read_file": 2
+  },
+  "tool_calls": 3,
+  "seconds": 17.5,
+  "model_calls_all": 4,
+  "peak_prompt_tokens": 1518,
+  "total_prompt_tokens": 5032,
+  "completion_tokens": 202,
+  "task": "T1",
+  "parsed": {
+   "n_voids": 1,
+   "void_area": 156
+  },
+  "correct": true,
+  "gold": {
+   "n_voids": 1,
+   "void_area": 156
+  }
+ },
+ {
+  "strategy": "adk",
+  "question": "In exports/inspection_log.csv, what are n_voids and void_area for the row with id test_00154? Answer: ANSWER: {\"n_voids\": int, \"void_area\": int}",
+  "status": "ok",
+  "answer": "The row for test_00154 has n_voids=5 and void_area=552.\n\nANSWER: {\"n_voids\": 5, \"void_area\": 552}",
+  "tools_used": {
+   "grep": 1,
+   "read_file": 2
+  },
+  "tool_calls": 3,
+  "seconds": 43.9,
+  "model_calls_all": 4,
+  "peak_prompt_tokens": 1516,
+  "total_prompt_tokens": 5028,
+  "completion_tokens": 202,
+  "task": "T1",
+  "parsed": {
+   "n_voids": 5,
+   "void_area": 552
+  },
+  "correct": true,
+  "gold": {
+   "n_voids": 5,
+   "void_area": 552
+  }
+ },
+ {
+  "strategy": "adk",
+  "question": "In exports/inspection_log.csv, what are n_voids and void_area for the row with id test_00404? Answer: ANSWER: {\"n_voids\": int, \"void_area\": int}",
+  "status": "ok",
+  "answer": "The row for test_00404 has n_voids=1 and void_area=93.\n\nANSWER: {\"n_voids\": 1, \"void_area\": 93}",
+  "tools_used": {
+   "grep": 1,
+   "read_file": 2
+  },
+  "tool_calls": 3,
+  "seconds": 43.0,
+  "model_calls_all": 4,
+  "peak_prompt_tokens": 1618,
+  "total_prompt_tokens": 5130,
+  "completion_tokens": 200,
+  "task": "T1",
+  "parsed": {
+   "n_voids": 1,
+   "void_area": 93
+  },
+  "correct": true,
+  "gold": {
+   "n_voids": 1,
+   "void_area": 93
+  }
+ },
+ {
+  "strategy": "adk",
+  "question": "In exports/inspection_log.csv, what are n_voids and void_area for the row with id test_00049? Answer: ANSWER: {\"n_voids\": int, \"void_area\": int}",
+  "status": "ok",
+  "answer": "The row for test_00049 has n_voids=3 and void_area=716.\n\nANSWER: {\"n_voids\": 3, \"void_area\": 716}",
+  "tools_used": {
+   "grep": 1,
+   "read_file": 2
+  },
+  "tool_calls": 3,
+  "seconds": 26.0,
+  "model_calls_all": 4,
+  "peak_prompt_tokens": 1516,
+  "total_prompt_tokens": 5028,
+  "completion_tokens": 202,
+  "task": "T1",
+  "parsed": {
+   "n_voids": 3,
+   "void_area": 716
+  },
+  "correct": true,
+  "gold": {
+   "n_voids": 3,
+   "void_area": 716
+  }
+ },
+ {
+  "strategy": "adk",
+  "question": "In exports/inspection_log.csv, what are n_voids and void_area for the row with id test_00074? Answer: ANSWER: {\"n_voids\": int, \"void_area\": int}",
+  "status": "ok",
+  "answer": "The row for test_00074 has n_voids=0 and void_area=0.\n\nANSWER: {\"n_voids\": 0, \"void_area\": 0}",
+  "tools_used": {
+   "grep": 1,
+   "read_file": 2
+  },
+  "tool_calls": 3,
+  "seconds": 15.5,
+  "model_calls_all": 4,
+  "peak_prompt_tokens": 1597,
+  "total_prompt_tokens": 5089,
+  "completion_tokens": 198,
+  "task": "T1",
+  "parsed": {
+   "n_voids": 0,
+   "void_area": 0
+  },
+  "correct": true,
+  "gold": {
+   "n_voids": 0,
+   "void_area": 0
+  }
+ },
+ {
+  "strategy": "adk",
+  "question": "In exports/inspection_log.csv, what are n_voids and void_area for the row with id test_00548? Answer: ANSWER: {\"n_voids\": int, \"void_area\": int}",
+  "status": "ok",
+  "answer": "The row for test_00548 has n_voids=5 and void_area=818.\n\nANSWER: {\"n_voids\": 5, \"void_area\": 818}",
+  "tools_used": {
+   "grep": 1,
+   "read_file": 2
+  },
+  "tool_calls": 3,
+  "seconds": 13.8,
+  "model_calls_all": 4,
+  "peak_prompt_tokens": 1516,
+  "total_prompt_tokens": 5028,
+  "completion_tokens": 202,
+  "task": "T1",
+  "parsed": {
+   "n_voids": 5,
+   "void_area": 818
+  },
+  "correct": true,
+  "gold": {
+   "n_voids": 5,
+   "void_area": 818
+  }
+ },
+ {
+  "strategy": "adk+chunk",
+  "question": "In exports/inspection_log.csv, what are n_voids and void_area for the row with id test_00331? Answer: ANSWER: {\"n_voids\": int, \"void_area\": int}",
+  "status": "ok",
+  "answer": "The row for test_00331 has n_voids=1 and void_area=156.\n\nANSWER: {\"n_voids\": 1, \"void_area\": 156}",
+  "tools_used": {
+   "grep": 1,
+   "read_file": 1
+  },
+  "tool_calls": 2,
+  "seconds": 18.5,
+  "model_calls_all": 3,
+  "peak_prompt_tokens": 1396,
+  "total_prompt_tokens": 3754,
+  "completion_tokens": 146,
+  "task": "T1",
+  "parsed": {
+   "n_voids": 1,
+   "void_area": 156
+  },
+  "correct": true,
+  "gold": {
+   "n_voids": 1,
+   "void_area": 156
+  }
+ },
+ {
+  "strategy": "adk+chunk",
+  "question": "In exports/inspection_log.csv, what are n_voids and void_area for the row with id test_00154? Answer: ANSWER: {\"n_voids\": int, \"void_area\": int}",
+  "status": "ok",
+  "answer": "The row for test_00154 has n_voids=5 and void_area=552.\n\nANSWER: {\"n_voids\": 5, \"void_area\": 552}",
+  "tools_used": {
+   "grep": 1,
+   "read_file": 1
+  },
+  "tool_calls": 2,
+  "seconds": 20.3,
+  "model_calls_all": 3,
+  "peak_prompt_tokens": 1395,
+  "total_prompt_tokens": 3752,
+  "completion_tokens": 146,
+  "task": "T1",
+  "parsed": {
+   "n_voids": 5,
+   "void_area": 552
+  },
+  "correct": true,
+  "gold": {
+   "n_voids": 5,
+   "void_area": 552
+  }
+ },
+ {
+  "strategy": "adk+chunk",
+  "question": "In exports/inspection_log.csv, what are n_voids and void_area for the row with id test_00404? Answer: ANSWER: {\"n_voids\": int, \"void_area\": int}",
+  "status": "ok",
+  "answer": "ANSWER: {\"n_voids\": 1, \"void_area\": 93}",
+  "tools_used": {
+   "grep": 1,
+   "read_file": 1,
+   "chunk_analyst": 1
+  },
+  "tool_calls": 3,
+  "seconds": 148.4,
+  "model_calls_all": 9,
+  "peak_prompt_tokens": 31284,
+  "total_prompt_tokens": 80282,
+  "completion_tokens": 758,
+  "task": "T1",
+  "parsed": {
+   "n_voids": 1,
+   "void_area": 93
+  },
+  "correct": true,
+  "gold": {
+   "n_voids": 1,
+   "void_area": 93
+  }
+ },
+ {
+  "strategy": "adk+chunk",
+  "question": "In exports/inspection_log.csv, what are n_voids and void_area for the row with id test_00049? Answer: ANSWER: {\"n_voids\": int, \"void_area\": int}",
+  "status": "ok",
+  "answer": "ANSWER: {\"n_voids\": 3, \"void_area\": 716}",
+  "tools_used": {
+   "grep": 1,
+   "read_file": 1,
+   "chunk_analyst": 1
+  },
+  "tool_calls": 3,
+  "seconds": 156.5,
+  "model_calls_all": 9,
+  "peak_prompt_tokens": 40643,
+  "total_prompt_tokens": 107850,
+  "completion_tokens": 663,
+  "task": "T1",
+  "parsed": {
+   "n_voids": 3,
+   "void_area": 716
+  },
+  "correct": true,
+  "gold": {
+   "n_voids": 3,
+   "void_area": 716
+  }
+ },
+ {
+  "strategy": "adk+chunk",
+  "question": "In exports/inspection_log.csv, what are n_voids and void_area for the row with id test_00074? Answer: ANSWER: {\"n_voids\": int, \"void_area\": int}",
+  "status": "error: ContextWindowExceededError: litellm.ContextWindowExceededError: litellm.BadRequestError: ContextWindowExceededError: OpenAIException - This model's maximum context length is 65536 tokens. ",
+  "answer": null,
+  "tools_used": {},
+  "tool_calls": 0,
+  "seconds": 277.0,
+  "model_calls_all": 9,
+  "peak_prompt_tokens": 50693,
+  "total_prompt_tokens": 156922,
+  "completion_tokens": 603,
+  "task": "T1",
+  "parsed": null,
+  "correct": false,
+  "gold": {
+   "n_voids": 0,
+   "void_area": 0
+  }
+ },
+ {
+  "strategy": "adk+chunk",
+  "question": "In exports/inspection_log.csv, what are n_voids and void_area for the row with id test_00548? Answer: ANSWER: {\"n_voids\": int, \"void_area\": int}",
+  "status": "ok",
+  "answer": "The row for test_00548 has n_voids=5 and void_area=818.\n\nANSWER: {\"n_voids\": 5, \"void_area\": 818}",
+  "tools_used": {
+   "grep": 1,
+   "read_file": 2
+  },
+  "tool_calls": 3,
+  "seconds": 20.1,
+  "model_calls_all": 4,
+  "peak_prompt_tokens": 1596,
+  "total_prompt_tokens": 5348,
+  "completion_tokens": 202,
+  "task": "T1",
+  "parsed": {
+   "n_voids": 5,
+   "void_area": 818
+  },
+  "correct": true,
+  "gold": {
+   "n_voids": 5,
+   "void_area": 818
+  }
+ },
+ {
+  "strategy": "adk",
+  "question": "How many reports in reports/ have verdict escalate AND at least one kept candidate with severity critical? Answer: ANSWER: {\"count\": int}",
+  "status": "error: LlmCallsLimitExceededError: Max number of llm calls limit of `40` exceeded",
+  "answer": null,
+  "tools_used": {},
+  "tool_calls": 0,
+  "seconds": 395.1,
+  "model_calls_all": 40,
+  "peak_prompt_tokens": 13897,
+  "total_prompt_tokens": 294064,
+  "completion_tokens": 2175,
+  "task": "T2",
+  "parsed": null,
+  "correct": false,
+  "gold": {
+   "count": 10
+  }
+ },
+ {
+  "strategy": "adk+chunk",
+  "question": "How many reports in reports/ have verdict escalate AND at least one kept candidate with severity critical? Answer: ANSWER: {\"count\": int}",
+  "status": "error: LlmCallsLimitExceededError: Max number of llm calls limit of `40` exceeded",
+  "answer": null,
+  "tools_used": {},
+  "tool_calls": 0,
+  "seconds": 265.2,
+  "model_calls_all": 40,
+  "peak_prompt_tokens": 13976,
+  "total_prompt_tokens": 297230,
+  "completion_tokens": 2174,
+  "task": "T2",
+  "parsed": null,
+  "correct": false,
+  "gold": {
+   "count": 10
+  }
+ },
+ {
+  "strategy": "adk",
+  "question": "How many reports in reports/ have verdict escalate AND at least one kept candidate with severity major? Answer: ANSWER: {\"count\": int}",
+  "status": "error: LlmCallsLimitExceededError: Max number of llm calls limit of `40` exceeded",
+  "answer": null,
+  "tools_used": {},
+  "tool_calls": 0,
+  "seconds": 329.5,
+  "model_calls_all": 40,
+  "peak_prompt_tokens": 21946,
+  "total_prompt_tokens": 438930,
+  "completion_tokens": 2174,
+  "task": "T2",
+  "parsed": null,
+  "correct": false,
+  "gold": {
+   "count": 23
+  }
+ },
+ {
+  "strategy": "adk+chunk",
+  "question": "How many reports in reports/ have verdict escalate AND at least one kept candidate with severity major? Answer: ANSWER: {\"count\": int}",
+  "status": "error: LlmCallsLimitExceededError: Max number of llm calls limit of `40` exceeded",
+  "answer": null,
+  "tools_used": {},
+  "tool_calls": 0,
+  "seconds": 309.1,
+  "model_calls_all": 40,
+  "peak_prompt_tokens": 22026,
+  "total_prompt_tokens": 442130,
+  "completion_tokens": 2174,
+  "task": "T2",
+  "parsed": null,
+  "correct": false,
+  "gold": {
+   "count": 23
+  }
+ },
+ {
+  "strategy": "adk",
+  "question": "How many reports in reports/ have verdict review AND at least one kept candidate with severity minor? Answer: ANSWER: {\"count\": int}",
+  "status": "error: LlmCallsLimitExceededError: Max number of llm calls limit of `40` exceeded",
+  "answer": null,
+  "tools_used": {},
+  "tool_calls": 0,
+  "seconds": 309.8,
+  "model_calls_all": 40,
+  "peak_prompt_tokens": 18840,
+  "total_prompt_tokens": 389539,
+  "completion_tokens": 2217,
+  "task": "T2",
+  "parsed": null,
+  "correct": false,
+  "gold": {
+   "count": 23
+  }
+ },
+ {
+  "strategy": "adk+chunk",
+  "question": "How many reports in reports/ have verdict review AND at least one kept candidate with severity minor? Answer: ANSWER: {\"count\": int}",
+  "status": "error: LlmCallsLimitExceededError: Max number of llm calls limit of `40` exceeded",
+  "answer": null,
+  "tools_used": {},
+  "tool_calls": 0,
+  "seconds": 346.3,
+  "model_calls_all": 40,
+  "peak_prompt_tokens": 18715,
+  "total_prompt_tokens": 386122,
+  "completion_tokens": 2174,
+  "task": "T2",
+  "parsed": null,
+  "correct": false,
+  "gold": {
+   "count": 23
+  }
+ },
+ {
+  "strategy": "adk",
+  "question": "What is the smallest void area, in pixels, that the pipeline reports? Name the policy file you used. Answer: ANSWER: {\"min_area_px\": int, \"source\": \"<file name>\"}",
+  "status": "error: ContextWindowExceededError: litellm.ContextWindowExceededError: litellm.BadRequestError: ContextWindowExceededError: OpenAIException - This model's maximum context length is 65536 tokens. ",
+  "answer": null,
+  "tools_used": {},
+  "tool_calls": 0,
+  "seconds": 228.5,
+  "model_calls_all": 16,
+  "peak_prompt_tokens": 51338,
+  "total_prompt_tokens": 385533,
+  "completion_tokens": 1172,
+  "task": "T3",
+  "parsed": null,
+  "correct": false,
+  "gold": {
+   "min_area_px": 20,
+   "source": "policy-2026-10-17.md"
+  }
+ },
+ {
+  "strategy": "adk+chunk",
+  "question": "What is the smallest void area, in pixels, that the pipeline reports? Name the policy file you used. Answer: ANSWER: {\"min_area_px\": int, \"source\": \"<file name>\"}",
+  "status": "error: ContextWindowExceededError: litellm.ContextWindowExceededError: litellm.BadRequestError: ContextWindowExceededError: OpenAIException - This model's maximum context length is 65536 tokens. ",
+  "answer": null,
+  "tools_used": {},
+  "tool_calls": 0,
+  "seconds": 301.9,
+  "model_calls_all": 29,
+  "peak_prompt_tokens": 52984,
+  "total_prompt_tokens": 587106,
+  "completion_tokens": 1737,
+  "task": "T3",
+  "parsed": null,
+  "correct": false,
+  "gold": {
+   "min_area_px": 20,
+   "source": "policy-2026-10-17.md"
+  }
+ },
+ {
+  "strategy": "adk",
+  "question": "Below how many pixels of area is a candidate NOT reported? Name the policy file you used. Answer: ANSWER: {\"min_area_px\": int, \"source\": \"<file name>\"}",
+  "status": "error: LlmCallsLimitExceededError: Max number of llm calls limit of `40` exceeded",
+  "answer": null,
+  "tools_used": {},
+  "tool_calls": 0,
+  "seconds": 363.0,
+  "model_calls_all": 40,
+  "peak_prompt_tokens": 21398,
+  "total_prompt_tokens": 574988,
+  "completion_tokens": 2224,
+  "task": "T3",
+  "parsed": null,
+  "correct": false,
+  "gold": {
+   "min_area_px": 20,
+   "source": "policy-2026-10-17.md"
+  }
+ },
+ {
+  "strategy": "adk+chunk",
+  "question": "Below how many pixels of area is a candidate NOT reported? Name the policy file you used. Answer: ANSWER: {\"min_area_px\": int, \"source\": \"<file name>\"}",
+  "status": "ok",
+  "answer": "The current policy (2026-10-17) sets the minimum reportable void area at 20 px, so candidates below 20 px are not reported.\n\nANSWER: {\"min_area_px\": 20, \"source\": \"policy-2026-10-17.md\"}",
+  "tools_used": {
+   "ls": 1,
+   "read_file": 2
+  },
+  "tool_calls": 3,
+  "seconds": 23.7,
+  "model_calls_all": 3,
+  "peak_prompt_tokens": 1597,
+  "total_prompt_tokens": 3831,
+  "completion_tokens": 174,
+  "task": "T3",
+  "parsed": {
+   "min_area_px": 20,
+   "source": "policy-2026-10-17.md"
+  },
+  "correct": true,
+  "gold": {
+   "min_area_px": 20,
+   "source": "policy-2026-10-17.md"
+  }
+ },
+ {
+  "strategy": "adk",
+  "question": "Find 4 reports where a human should double-check a defect that the model was unsure about. Answer: ANSWER: {\"ids\": [\"test_00000\", ...4 report ids]}",
+  "status": "error: LlmCallsLimitExceededError: Max number of llm calls limit of `40` exceeded",
+  "answer": null,
+  "tools_used": {},
+  "tool_calls": 0,
+  "seconds": 412.1,
+  "model_calls_all": 40,
+  "peak_prompt_tokens": 48673,
+  "total_prompt_tokens": 1148445,
+  "completion_tokens": 4746,
+  "task": "T4",
+  "parsed": null,
+  "correct": false,
+  "gold": [
+   "test_00002",
+   "test_00007",
+   "test_00014",
+   "test_00018",
+   "test_00020",
+   "test_00023",
+   "test_00031",
+   "test_00032",
+   "test_00038",
+   "test_00047",
+   "test_00049",
+   "test_00052",
+   "test_00054",
+   "test_00056",
+   "test_00062",
+   "test_00066",
+   "test_00070",
+   "test_00072",
+   "test_00074",
+   "test_00075",
+   "test_00076",
+   "test_00087",
+   "test_00099",
+   "test_00100",
+   "test_00126",
+   "test_00130",
+   "test_00150",
+   "test_00153",
+   "test_00158",
+   "test_00160",
+   "test_00163",
+   "test_00168",
+   "test_00171",
+   "test_00172",
+   "test_00184",
+   "test_00187"
+  ]
+ },
+ {
+  "strategy": "adk+chunk",
+  "question": "Find 4 reports where a human should double-check a defect that the model was unsure about. Answer: ANSWER: {\"ids\": [\"test_00000\", ...4 report ids]}",
+  "status": "error: LlmCallsLimitExceededError: Max number of llm calls limit of `40` exceeded",
+  "answer": null,
+  "tools_used": {},
+  "tool_calls": 0,
+  "seconds": 302.7,
+  "model_calls_all": 40,
+  "peak_prompt_tokens": 35646,
+  "total_prompt_tokens": 873552,
+  "completion_tokens": 3121,
+  "task": "T4",
+  "parsed": null,
+  "correct": false,
+  "gold": [
+   "test_00002",
+   "test_00007",
+   "test_00014",
+   "test_00018",
+   "test_00020",
+   "test_00023",
+   "test_00031",
+   "test_00032",
+   "test_00038",
+   "test_00047",
+   "test_00049",
+   "test_00052",
+   "test_00054",
+   "test_00056",
+   "test_00062",
+   "test_00066",
+   "test_00070",
+   "test_00072",
+   "test_00074",
+   "test_00075",
+   "test_00076",
+   "test_00087",
+   "test_00099",
+   "test_00100",
+   "test_00126",
+   "test_00130",
+   "test_00150",
+   "test_00153",
+   "test_00158",
+   "test_00160",
+   "test_00163",
+   "test_00168",
+   "test_00171",
+   "test_00172",
+   "test_00184",
+   "test_00187"
+  ]
+ },
+ {
+  "strategy": "adk",
+  "question": "Find 4 reports about large, serious voids. Answer: ANSWER: {\"ids\": [\"test_00000\", ...4 report ids]}",
+  "status": "error: LlmCallsLimitExceededError: Max number of llm calls limit of `40` exceeded",
+  "answer": null,
+  "tools_used": {},
+  "tool_calls": 0,
+  "seconds": 442.0,
+  "model_calls_all": 40,
+  "peak_prompt_tokens": 32170,
+  "total_prompt_tokens": 719744,
+  "completion_tokens": 6501,
+  "task": "T4",
+  "parsed": null,
+  "correct": false,
+  "gold": [
+   "test_00002",
+   "test_00013",
+   "test_00014",
+   "test_00021",
+   "test_00038",
+   "test_00046",
+   "test_00047",
+   "test_00056",
+   "test_00062",
+   "test_00073",
+   "test_00086",
+   "test_00093",
+   "test_00099",
+   "test_00100",
+   "test_00109",
+   "test_00115",
+   "test_00121",
+   "test_00123",
+   "test_00132",
+   "test_00139",
+   "test_00160",
+   "test_00165",
+   "test_00168",
+   "test_00189",
+   "test_00190",
+   "test_00197"
+  ]
+ },
+ {
+  "strategy": "adk",
+  "question": "Find 4 reports where candidates were examined but the part simply passed. Answer: ANSWER: {\"ids\": [\"test_00000\", ...4 report ids]}",
+  "status": "ok",
+  "answer": "I have found 4 reports where candidates were examined but the part simply passed (verdict: pass, candidates_examined > 0, candidates_kept: 0):\n\n- **test_00000**: pass, 3 candidates examined, none kept\n- **test_00001**: pass, 1 candidate examined, none kept\n- **test_00004**: pass, 1 candidate examined, none kept\n- **test_00009**: pass, 3 candidates examined, none kept\n\n(Other candidates like test_00005, test_00006, test_00007 were review/escalate verdicts, so excluded.)\n\nANSWER: {\"ids\": [\"test_00000\", \"test_00001\", \"test_00004\", \"test_00009\"]}",
+  "tools_used": {
+   "ls": 2,
+   "read_file": 9,
+   "grep": 3
+  },
+  "tool_calls": 14,
+  "seconds": 63.4,
+  "model_calls_all": 9,
+  "peak_prompt_tokens": 5123,
+  "total_prompt_tokens": 26243,
+  "completion_tokens": 821,
+  "task": "T4",
+  "parsed": {
+   "ids": [
+    "test_00000",
+    "test_00001",
+    "test_00004",
+    "test_00009"
+   ]
+  },
+  "correct": true,
+  "gold": [
+   "test_00000",
+   "test_00001",
+   "test_00004",
+   "test_00009",
+   "test_00010",
+   "test_00012",
+   "test_00017",
+   "test_00022",
+   "test_00025",
+   "test_00026",
+   "test_00028",
+   "test_00030",
+   "test_00033",
+   "test_00035",
+   "test_00040",
+   "test_00041",
+   "test_00042",
+   "test_00043",
+   "test_00044",
+   "test_00051",
+   "test_00053",
+   "test_00057",
+   "test_00060",
+   "test_00061",
+   "test_00065",
+   "test_00068",
+   "test_00071",
+   "test_00077",
+   "test_00082",
+   "test_00083",
+   "test_00088",
+   "test_00096",
+   "test_00101",
+   "test_00105",
+   "test_00108",
+   "test_00113",
+   "test_00114",
+   "test_00118",
+   "test_00122",
+   "test_00127",
+   "test_00136",
+   "test_00155",
+   "test_00156",
+   "test_00164",
+   "test_00169",
+   "test_00174",
+   "test_00175",
+   "test_00178",
+   "test_00180",
+   "test_00185",
+   "test_00191",
+   "test_00193",
+   "test_00196",
+   "test_00199"
+  ]
+ },
+ {
+  "strategy": "adk+chunk",
+  "question": "Find 4 reports where candidates were examined but the part simply passed. Answer: ANSWER: {\"ids\": [\"test_00000\", ...4 report ids]}",
+  "status": "ok",
+  "answer": "I found the reports where 4 candidates were examined but the part passed (verdict: pass, candidates_kept: 0):\n\n- **test_00035** \u2014 pass, 4 examined, 0 kept\n- **test_00044** \u2014 pass, 4 examined, 0 kept\n- **test_00113** \u2014 pass, 4 examined, 0 kept\n- **test_00127** \u2014 pass, 4 examined, 0 kept\n- **test_00178** \u2014 pass, 4 examined, 0 kept\n\n(All other reports with 4 candidates examined had kept candidates and non-pass verdicts.)\n\nANSWER: {\"ids\": [\"test_00035\", \"test_00044\", \"test_00113\", \"test_00127\"]}",
+  "tools_used": {
+   "search_reports": 1,
+   "ls": 1,
+   "read_file": 22,
+   "grep": 2
+  },
+  "tool_calls": 26,
+  "seconds": 73.1,
+  "model_calls_all": 7,
+  "peak_prompt_tokens": 8458,
+  "total_prompt_tokens": 22735,
+  "completion_tokens": 1086,
+  "task": "T4",
+  "parsed": {
+   "ids": [
+    "test_00035",
+    "test_00044",
+    "test_00113",
+    "test_00127"
+   ]
+  },
+  "correct": true,
+  "gold": [
+   "test_00000",
+   "test_00001",
+   "test_00004",
+   "test_00009",
+   "test_00010",
+   "test_00012",
+   "test_00017",
+   "test_00022",
+   "test_00025",
+   "test_00026",
+   "test_00028",
+   "test_00030",
+   "test_00033",
+   "test_00035",
+   "test_00040",
+   "test_00041",
+   "test_00042",
+   "test_00043",
+   "test_00044",
+   "test_00051",
+   "test_00053",
+   "test_00057",
+   "test_00060",
+   "test_00061",
+   "test_00065",
+   "test_00068",
+   "test_00071",
+   "test_00077",
+   "test_00082",
+   "test_00083",
+   "test_00088",
+   "test_00096",
+   "test_00101",
+   "test_00105",
+   "test_00108",
+   "test_00113",
+   "test_00114",
+   "test_00118",
+   "test_00122",
+   "test_00127",
+   "test_00136",
+   "test_00155",
+   "test_00156",
+   "test_00164",
+   "test_00169",
+   "test_00174",
+   "test_00175",
+   "test_00178",
+   "test_00180",
+   "test_00185",
+   "test_00191",
+   "test_00193",
+   "test_00196",
+   "test_00199"
+  ]
+ },
+ {
+  "strategy": "adk",
+  "question": "cases/ holds one record per test image. Use similar_cases to get the 20 test images that look most like test_00010 (not counting test_00010 itself). How many of them have n_voids of at least 3? For void_area, the record's void_area_total_px is the field. Answer: ANSWER: {\"count\": int}",
+  "status": "ok",
+  "answer": "I have all 20 records. Let me tally n_voids \u2265 3:\n\n- test_00259: 3 \u2713\n- test_00374: 2 \u2717\n- test_00151: 5 \u2713\n- test_00325: 3 \u2713\n- test_00127: 0 \u2717\n- test_00596: 4 \u2713\n- test_00136: 0 \u2717\n- test_00541: 4 \u2713\n- test_00063: 2 \u2717\n- test_00549: 4 \u2713\n- test_00233: 2 \u2717\n- test_00144: 0 \u2717\n- test_00547: 1 \u2717\n- test_00433: 1 \u2717\n- test_00410: 1 \u2717\n- test_00442: 3 \u2713\n- test_00212: 0 \u2717\n- test_00385: 0 \u2717\n- test_00560: 5 \u2713\n- test_00551: 4 \u2713\n\nCount = 9.\n\nANSWER: {\"count\": 9}",
+  "tools_used": {
+   "ls": 1,
+   "similar_cases": 1,
+   "read_file": 20,
+   "grep": 2
+  },
+  "tool_calls": 24,
+  "seconds": 82.5,
+  "model_calls_all": 7,
+  "peak_prompt_tokens": 11821,
+  "total_prompt_tokens": 41653,
+  "completion_tokens": 1192,
+  "task": "T5",
+  "parsed": {
+   "count": 9
+  },
+  "correct": true,
+  "gold": {
+   "count": 9
+  }
+ },
+ {
+  "strategy": "adk+chunk",
+  "question": "cases/ holds one record per test image. Use similar_cases to get the 20 test images that look most like test_00010 (not counting test_00010 itself). How many of them have n_voids of at least 3? For void_area, the record's void_area_total_px is the field. Answer: ANSWER: {\"count\": int}",
+  "status": "error: LlmCallsLimitExceededError: Max number of llm calls limit of `40` exceeded",
+  "answer": null,
+  "tools_used": {},
+  "tool_calls": 0,
+  "seconds": 260.3,
+  "model_calls_all": 40,
+  "peak_prompt_tokens": 28216,
+  "total_prompt_tokens": 820745,
+  "completion_tokens": 2039,
+  "task": "T5",
+  "parsed": null,
+  "correct": false,
+  "gold": {
+   "count": 9
+  }
+ },
+ {
+  "strategy": "adk",
+  "question": "cases/ holds one record per test image. Use similar_cases to get the 20 test images that look most like test_00123 (not counting test_00123 itself). How many of them have void_area of at least 400? For void_area, the record's void_area_total_px is the field. Answer: ANSWER: {\"count\": int}",
+  "status": "error: LlmCallsLimitExceededError: Max number of llm calls limit of `40` exceeded",
+  "answer": null,
+  "tools_used": {},
+  "tool_calls": 0,
+  "seconds": 305.1,
+  "model_calls_all": 40,
+  "peak_prompt_tokens": 11606,
+  "total_prompt_tokens": 372113,
+  "completion_tokens": 2765,
+  "task": "T5",
+  "parsed": null,
+  "correct": false,
+  "gold": {
+   "count": 3
+  }
+ },
+ {
+  "strategy": "adk+chunk",
+  "question": "cases/ holds one record per test image. Use similar_cases to get the 20 test images that look most like test_00123 (not counting test_00123 itself). How many of them have void_area of at least 400? For void_area, the record's void_area_total_px is the field. Answer: ANSWER: {\"count\": int}",
+  "status": "error: ContextWindowExceededError: litellm.ContextWindowExceededError: litellm.BadRequestError: ContextWindowExceededError: OpenAIException - This model's maximum context length is 65536 tokens. ",
+  "answer": null,
+  "tools_used": {},
+  "tool_calls": 0,
+  "seconds": 492.2,
+  "model_calls_all": 25,
+  "peak_prompt_tokens": 57428,
+  "total_prompt_tokens": 800828,
+  "completion_tokens": 7409,
+  "task": "T5",
+  "parsed": null,
+  "correct": false,
+  "gold": {
+   "count": 3
+  }
+ },
+ {
+  "strategy": "adk",
+  "question": "cases/ holds one record per test image. Use similar_cases to get the 20 test images that look most like test_00345 (not counting test_00345 itself). How many of them have no voids at all (n_voids 0)? For void_area, the record's void_area_total_px is the field. Answer: ANSWER: {\"count\": int}",
+  "status": "ok",
+  "answer": "I've checked all 20 similar test images. Counting those with n_voids = 0:\n\n- test_00308: n_voids 0 \u2713\n- test_00462: n_voids 0 \u2713\n\nAll others (test_00404, test_00429, test_00396, test_00035, test_00232, test_00263, test_00503, test_00108, test_00320, test_00160, test_00474, test_00093, test_00526, test_00591, test_00484, test_00139, test_00353, test_00316) have n_voids \u2265 1.\n\nSo 2 of the 20 similar images have no voids at all.\n\nANSWER: {\"count\": 2}",
+  "tools_used": {
+   "ls": 1,
+   "similar_cases": 1,
+   "read_file": 20
+  },
+  "tool_calls": 22,
+  "seconds": 55.1,
+  "model_calls_all": 4,
+  "peak_prompt_tokens": 5727,
+  "total_prompt_tokens": 11646,
+  "completion_tokens": 969,
+  "task": "T5",
+  "parsed": {
+   "count": 2
+  },
+  "correct": true,
+  "gold": {
+   "count": 2
+  }
+ },
+ {
+  "strategy": "adk+chunk",
+  "question": "cases/ holds one record per test image. Use similar_cases to get the 20 test images that look most like test_00345 (not counting test_00345 itself). How many of them have no voids at all (n_voids 0)? For void_area, the record's void_area_total_px is the field. Answer: ANSWER: {\"count\": int}",
+  "status": "ok",
+  "answer": "I have all 20 similar cases. Let me tally the n_voids values:\n\n| Case | n_voids |\n|------|---------|\n| test_00404 | 1 |\n| test_00429 | 4 |\n| test_00396 | 2 |\n| test_00035 | 1 |\n| test_00232 | 3 |\n| test_00263 | 1 |\n| test_00503 | 3 |\n| test_00308 | **0** |\n| test_00108 | 1 |\n| test_00462 | **0** |\n| test_00320 | 2 |\n| test_00160 | 3 |\n| test_00474 | 3 |\n| test_00093 | 1 |\n| test_00526 | 1 |\n| test_00591 | 2 |\n| test_00484 | 3 |\n| test_00139 | 5 |\n| test_00353 | 3 |\n| test_00316 | 4 |\n\nOnly test_00308 and test_00462 have n_voids 0 (both with void_area_total_px 0).\n\nANSWER: {\"count\": 2}",
+  "tools_used": {
+   "similar_cases": 1,
+   "grep": 3,
+   "read_file": 41
+  },
+  "tool_calls": 45,
+  "seconds": 133.7,
+  "model_calls_all": 9,
+  "peak_prompt_tokens": 21749,
+  "total_prompt_tokens": 102573,
+  "completion_tokens": 1955,
+  "task": "T5",
+  "parsed": {
+   "count": 2
+  },
+  "correct": true,
+  "gold": {
+   "count": 2
+  }
+ },
+ {
+  "strategy": "adk+chunk",
+  "question": "Find 4 reports about large, serious voids. Answer: ANSWER: {\"ids\": [\"test_00000\", ...4 report ids]}",
+  "status": "error: FileNotFoundError: [Errno 2] No such file or directory: '/home/hasan-spark/workspace/projects/git_data/quarto_blog_hasan/notebooks/agentic-zero-to-advanced/out/ctx_archive/report.",
+  "answer": null,
+  "tools_used": {},
+  "tool_calls": 0,
+  "seconds": 11.5,
+  "model_calls_all": 3,
+  "peak_prompt_tokens": 1228,
+  "total_prompt_tokens": 2771,
+  "completion_tokens": 154,
+  "task": "T4",
+  "parsed": null,
+  "correct": false,
+  "gold": [
+   "test_00002",
+   "test_00013",
+   "test_00014",
+   "test_00021",
+   "test_00038",
+   "test_00046",
+   "test_00047",
+   "test_00056",
+   "test_00062",
+   "test_00073",
+   "test_00086",
+   "test_00093",
+   "test_00099",
+   "test_00100",
+   "test_00109",
+   "test_00115",
+   "test_00121",
+   "test_00123",
+   "test_00132",
+   "test_00139",
+   "test_00160",
+   "test_00165",
+   "test_00168",
+   "test_00189",
+   "test_00190",
+   "test_00197"
+  ]
+ }
+]

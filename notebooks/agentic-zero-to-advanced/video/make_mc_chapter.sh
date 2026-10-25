@@ -4,7 +4,7 @@
 # Needs: video/mc (setup.sh), video/p8_voice.py, mc/src/scenes/<slug>.tsx and mc/src/<slug>.ts. Every step fails loudly; success ends with DONE.
 set -euo pipefail
 cd "$(dirname "$0")"; HERE=$PWD; SLUG=$1; CLS=$2
-[ -n "${SKIP_VOICE:-}" ] || ./make_chapter.sh p8_voice "$CLS" "$SLUG" clone warm | tail -n 2
+[ -n "${SKIP_VOICE:-}" ] || ./make_chapter.sh "${VOICE_MOD:-p8_voice}" "$CLS" "$SLUG" clone warm | tail -n 2
 mkdir -p "mc/src/$SLUG"
 ffmpeg -y -loglevel error -i "chapters/$SLUG.warm.mp4" -vn -ac 1 -ar 24000 "mc/src/$SLUG/audio.wav"
 cp "assets/um/timeline_$SLUG.warm.json" "mc/src/$SLUG/timeline.json"

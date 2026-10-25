@@ -1,0 +1,361 @@
+{
+ "harness (best set-up per task)": {
+  "per_task": {
+   "T1": {
+    "n": 6,
+    "correct": 6,
+    "cap": 0,
+    "overflow": 0,
+    "wrong": 0,
+    "tokens_per_correct": 2834,
+    "tokens_per_run": 2834
+   },
+   "T2": {
+    "n": 3,
+    "correct": 0,
+    "cap": 3,
+    "overflow": 0,
+    "wrong": 0,
+    "tokens_per_correct": null,
+    "tokens_per_run": 111476
+   },
+   "T3": {
+    "n": 2,
+    "correct": 1,
+    "cap": 1,
+    "overflow": 0,
+    "wrong": 0,
+    "tokens_per_correct": 2876,
+    "tokens_per_run": 53299
+   },
+   "T4": {
+    "n": 3,
+    "correct": 2,
+    "cap": 1,
+    "overflow": 0,
+    "wrong": 0,
+    "tokens_per_correct": 43225,
+    "tokens_per_run": 43245
+   },
+   "T5": {
+    "n": 3,
+    "correct": 3,
+    "cap": 0,
+    "overflow": 0,
+    "wrong": 0,
+    "tokens_per_correct": 9519,
+    "tokens_per_run": 9519
+   }
+  },
+  "correct": 12,
+  "n": 17,
+  "cap": 5,
+  "overflow": 0
+ },
+ "Deep Agents": {
+  "per_task": {
+   "T1": {
+    "n": 6,
+    "correct": 4,
+    "cap": 2,
+    "overflow": 0,
+    "wrong": 0,
+    "tokens_per_correct": 13099,
+    "tokens_per_run": 235193
+   },
+   "T2": {
+    "n": 3,
+    "correct": 0,
+    "cap": 3,
+    "overflow": 0,
+    "wrong": 0,
+    "tokens_per_correct": null,
+    "tokens_per_run": 651617
+   },
+   "T3": {
+    "n": 2,
+    "correct": 1,
+    "cap": 1,
+    "overflow": 0,
+    "wrong": 0,
+    "tokens_per_correct": 9601,
+    "tokens_per_run": 595464
+   },
+   "T4": {
+    "n": 3,
+    "correct": 0,
+    "cap": 3,
+    "overflow": 0,
+    "wrong": 0,
+    "tokens_per_correct": null,
+    "tokens_per_run": 1079802
+   },
+   "T5": {
+    "n": 3,
+    "correct": 1,
+    "cap": 2,
+    "overflow": 0,
+    "wrong": 0,
+    "tokens_per_correct": 21599,
+    "tokens_per_run": 654199
+   }
+  },
+  "correct": 6,
+  "n": 17,
+  "cap": 11,
+  "overflow": 0
+ },
+ "Deep Agents + chunk sub-agent": {
+  "per_task": {
+   "T1": {
+    "n": 6,
+    "correct": 5,
+    "cap": 1,
+    "overflow": 0,
+    "wrong": 0,
+    "tokens_per_correct": 11132,
+    "tokens_per_run": 166096
+   },
+   "T2": {
+    "n": 3,
+    "correct": 1,
+    "cap": 2,
+    "overflow": 0,
+    "wrong": 0,
+    "tokens_per_correct": 375853,
+    "tokens_per_run": 613704
+   },
+   "T3": {
+    "n": 2,
+    "correct": 1,
+    "cap": 1,
+    "overflow": 0,
+    "wrong": 0,
+    "tokens_per_correct": 9730,
+    "tokens_per_run": 587440
+   },
+   "T4": {
+    "n": 3,
+    "correct": 0,
+    "cap": 3,
+    "overflow": 0,
+    "wrong": 0,
+    "tokens_per_correct": null,
+    "tokens_per_run": 851612
+   },
+   "T5": {
+    "n": 3,
+    "correct": 3,
+    "cap": 0,
+    "overflow": 0,
+    "wrong": 0,
+    "tokens_per_correct": 47891,
+    "tokens_per_run": 47891
+   }
+  },
+  "correct": 10,
+  "n": 17,
+  "cap": 7,
+  "overflow": 0
+ },
+ "ADK, my tools": {
+  "per_task": {
+   "T1": {
+    "n": 6,
+    "correct": 6,
+    "cap": 0,
+    "overflow": 0,
+    "wrong": 0,
+    "tokens_per_correct": 5056,
+    "tokens_per_run": 5056
+   },
+   "T2": {
+    "n": 3,
+    "correct": 0,
+    "cap": 3,
+    "overflow": 0,
+    "wrong": 0,
+    "tokens_per_correct": null,
+    "tokens_per_run": 374178
+   },
+   "T3": {
+    "n": 2,
+    "correct": 0,
+    "cap": 1,
+    "overflow": 1,
+    "wrong": 0,
+    "tokens_per_correct": null,
+    "tokens_per_run": 480260
+   },
+   "T4": {
+    "n": 3,
+    "correct": 1,
+    "cap": 2,
+    "overflow": 0,
+    "wrong": 0,
+    "tokens_per_correct": 26243,
+    "tokens_per_run": 631477
+   },
+   "T5": {
+    "n": 3,
+    "correct": 2,
+    "cap": 1,
+    "overflow": 0,
+    "wrong": 0,
+    "tokens_per_correct": 26650,
+    "tokens_per_run": 141804
+   }
+  },
+  "correct": 9,
+  "n": 17,
+  "cap": 7,
+  "overflow": 1
+ },
+ "ADK, my tools + chunk sub-agent": {
+  "per_task": {
+   "T1": {
+    "n": 6,
+    "correct": 5,
+    "cap": 0,
+    "overflow": 1,
+    "wrong": 0,
+    "tokens_per_correct": 40197,
+    "tokens_per_run": 59651
+   },
+   "T2": {
+    "n": 3,
+    "correct": 0,
+    "cap": 3,
+    "overflow": 0,
+    "wrong": 0,
+    "tokens_per_correct": null,
+    "tokens_per_run": 375161
+   },
+   "T3": {
+    "n": 2,
+    "correct": 1,
+    "cap": 0,
+    "overflow": 1,
+    "wrong": 0,
+    "tokens_per_correct": 3831,
+    "tokens_per_run": 295468
+   },
+   "T4": {
+    "n": 3,
+    "correct": 1,
+    "cap": 1,
+    "overflow": 0,
+    "wrong": 1,
+    "tokens_per_correct": 22735,
+    "tokens_per_run": 299686
+   },
+   "T5": {
+    "n": 3,
+    "correct": 1,
+    "cap": 1,
+    "overflow": 1,
+    "wrong": 0,
+    "tokens_per_correct": 102573,
+    "tokens_per_run": 574715
+   }
+  },
+  "correct": 8,
+  "n": 17,
+  "cap": 5,
+  "overflow": 3
+ },
+ "ADK, its own toolset (sandboxed)": {
+  "per_task": {
+   "T1": {
+    "n": 6,
+    "correct": 6,
+    "cap": 0,
+    "overflow": 0,
+    "wrong": 0,
+    "tokens_per_correct": 8137,
+    "tokens_per_run": 8137
+   },
+   "T2": {
+    "n": 3,
+    "correct": 1,
+    "cap": 2,
+    "overflow": 0,
+    "wrong": 0,
+    "tokens_per_correct": 29023,
+    "tokens_per_run": 154954
+   },
+   "T3": {
+    "n": 2,
+    "correct": 2,
+    "cap": 0,
+    "overflow": 0,
+    "wrong": 0,
+    "tokens_per_correct": 39259,
+    "tokens_per_run": 39259
+   },
+   "T4": {
+    "n": 3,
+    "correct": 1,
+    "cap": 2,
+    "overflow": 0,
+    "wrong": 0,
+    "tokens_per_correct": 19069,
+    "tokens_per_run": 361948
+   },
+   "T5": {
+    "n": 3,
+    "correct": 2,
+    "cap": 1,
+    "overflow": 0,
+    "wrong": 0,
+    "tokens_per_correct": 10240,
+    "tokens_per_run": 132074
+   }
+  },
+  "correct": 12,
+  "n": 17,
+  "cap": 5,
+  "overflow": 0
+ },
+ "stuff": {
+  "T1": {
+   "n": 6,
+   "correct": 0
+  },
+  "T2": {
+   "n": 3,
+   "correct": 3
+  },
+  "T3": {
+   "n": 2,
+   "correct": 2
+  },
+  "T4": {
+   "n": 3,
+   "correct": 3
+  }
+ },
+ "guard": [
+  {
+   "strategy": "da",
+   "correct": false,
+   "calls": 7,
+   "tokens": 25270,
+   "status": "no_answer"
+  },
+  {
+   "strategy": "da+chunk",
+   "correct": true,
+   "calls": 4,
+   "tokens": 13270,
+   "status": "ok"
+  },
+  {
+   "strategy": "da",
+   "correct": false,
+   "calls": 33,
+   "tokens": 711047,
+   "status": "error: GraphRecursionError: Re"
+  }
+ ]
+}
