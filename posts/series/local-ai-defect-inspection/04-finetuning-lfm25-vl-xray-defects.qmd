@@ -5,7 +5,6 @@ author: "Hasan Goni"
 date: 2026-08-14
 categories: [computer-vision, VLM, fine-tuning, LoRA, semiconductor, X-ray, edge-ai]
 tags: [LFM2.5-VL, LiquidAI, LoRA, PEFT, Outlines, GDXray, structured-generation]
-image: images/lfm25-finetuned-box-offset.png
 toc: true
 series:
   name: "Local-AI Defect Inspection Series"
@@ -13,6 +12,10 @@ series:
 format:
   html: default
 ---
+
+::: {.callout-note}
+**Images removed.** This post's figures showed frames from [GDXray](https://domingomery.ing.uc.cl/material/gdxray) or outputs of models trained on them. GDXray is free for research and education only, and redistribution is not allowed, so the figures are gone. The text, code, numbers and plots are unchanged. The new [synthetic void dataset](../agentic-factory-segmentation/01-synthetic-void-dataset.qmd) is what this blog shows from now on.
+:::
 
 :::{.callout-tip}
 This post is part of the [Local-AI Defect Inspection Series](index.qmd). Full code:
@@ -77,7 +80,7 @@ When it *does* flag a defect, the box isn't localized either — it defaults to 
 the whole image, or a coarse grid quadrant, which honestly reads like the model hedging: "there's
 *something* wrong, somewhere in here."
 
-![Zero-shot LFM2.5-VL-3B: true defect (green) is a small region near the top; the predicted box (red) covers nearly the entire image — a "the defect is everywhere" shortcut, not real grounding.](images/lfm25-zeroshot-wholeimage.png)
+*[Figure removed: it showed GDXray pixels, or a model output made from them, and the GDXray licence does not allow redistribution.]*
 
 Mean IoU across the 10 true positives: 0.02. Not meaningfully different from post 3's 0.00, and
 not a number I'd defend as "close."
@@ -142,7 +145,7 @@ double- and triple-checked it before writing this section. Across the 68 true po
   that — larger than the box itself, on both axes. Not a small, fixable coordinate-frame bug. Just
   noise dressed up as a plausible-looking box.
 
-![Fine-tuned LFM2.5-VL-3B: a correctly-sized box (red), confidently drawn nowhere near the true defect (green). This is representative, not a cherry-picked failure — mean box size is right; mean position error is larger than the box itself.](images/lfm25-finetuned-box-offset.png)
+*[Figure removed: it showed GDXray pixels, or a model output made from them, and the GDXray licence does not allow redistribution.]*
 
 So the model learned **what** a plausible defect region looks like — shape and scale — without
 ever learning **where** to put it. My read: that's a more specific, more useful failure than

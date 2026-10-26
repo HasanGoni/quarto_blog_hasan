@@ -22,6 +22,7 @@ paper-topics:
   - "Generative Models"
 format:
   html: default
+search: false
 ---
 
 :::{.callout-tip}

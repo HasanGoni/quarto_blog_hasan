@@ -5,7 +5,6 @@ author: "Hasan Goni"
 date: 2026-08-09
 categories: [computer-vision, VLM, fine-tuning, LoRA, semiconductor, X-ray, edge-ai]
 tags: [LFM2-VL, LiquidAI, LoRA, PEFT, Outlines, GDXray, structured-generation]
-image: images/gdxray-box-sanity-check.png
 toc: true
 series:
   name: "Local-AI Defect Inspection Series"
@@ -13,6 +12,10 @@ series:
 format:
   html: default
 ---
+
+::: {.callout-note}
+**Images removed.** This post's figures showed frames from [GDXray](https://domingomery.ing.uc.cl/material/gdxray) or outputs of models trained on them. GDXray is free for research and education only, and redistribution is not allowed, so the figures are gone. The text, code, numbers and plots are unchanged. The new [synthetic void dataset](../agentic-factory-segmentation/01-synthetic-void-dataset.qmd) is what this blog shows from now on.
+:::
 
 :::{.callout-tip}
 This post is part of the [Local-AI Defect Inspection Series](index.qmd). Full code:
@@ -109,9 +112,7 @@ mistake that would have invalidated everything downstream without ever throwing 
 I didn't just trust the reference code either — I rendered the corrected box on a real image,
 because at this point I trust my own eyes more than either source:
 
-![A GDXray box, rendered with the corrected `[x1,x2,y1,y2]` column order — it lands exactly on a small localized anomaly near the rim of the casting.](images/gdxray-box-sanity-check.png)
-
-![Cropped and zoomed — the box sits precisely on the defect, not off in the background.](images/gdxray-box-sanity-crop.png){width=50%}
+*[Figure removed: it showed GDXray pixels, or a model output made from them, and the GDXray licence does not allow redistribution.]*
 
 Lesson I keep re-learning: when a dataset format is undocumented and a reference implementation
 disagrees with the "obvious" reading, render a box on a real image before trusting either.

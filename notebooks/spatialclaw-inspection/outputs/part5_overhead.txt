@@ -1,0 +1,2 @@
+unsandboxed Jupyter kernel   start: median    612 ms | per trivial cell: median   6.8 ms, p95   9.6 ms
+container                    start: median    650 ms | per trivial cell: median   0.3 ms, p95   0.9 ms

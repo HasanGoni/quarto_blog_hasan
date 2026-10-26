@@ -16,6 +16,10 @@ format:
     code-tools: true
 ---
 
+::: {.callout-note}
+**Images removed.** This post's figures showed frames from [GDXray](https://domingomery.ing.uc.cl/material/gdxray) or outputs of models trained on them. GDXray is free for research and education only, and redistribution is not allowed, so the figures are gone. The text, code, numbers and plots are unchanged. The new [synthetic void dataset](../agentic-factory-segmentation/01-synthetic-void-dataset.qmd) is what this blog shows from now on.
+:::
+
 :::{.callout-tip}
 This post is part of the [Synthetic Data Series](index.qmd) series.
 :::
@@ -386,9 +390,7 @@ identical at a glance: did the ControlNet actually learn anything? `lora_B` init
 zero; after these 150 real steps, **all 56 `lora_B` tensors moved off zero** (mean norm 0.174,
 none exactly zero) -- real gradients flowed, same as Part 2.
 
-```{=html}
-<img src="images/synth-xray-controlnet-training-progress.gif" alt="ControlNet output on a fixed held-out example, real shape signal shown alongside, across real training steps" style="max-width:100%;">
-```
+*[Figure removed: it showed GDXray pixels, or a model output made from them, and the GDXray licence does not allow redistribution.]*
 
 ## Results
 
@@ -399,17 +401,11 @@ a different test case:
 ![The real boundary shape fed to the ControlNet (white line on black) -- traced from the identical mask Part 1/2 used, not a filled blob.](images/synth-xray-controlnet-shape-signal.png)
 
 ::: {layout-ncol=3}
-![Part 1: physics-synthetic, same crop](images/synth-xray-defect-synthetic.png)
-
-![Part 2: diffusion-synthetic (mask only), same crop](images/synth-xray-defect-diffusion.png)
-
-![Part 3: ControlNet-synthetic (mask + real shape), same crop](images/synth-xray-defect-controlnet.png)
+*[Figure removed: it showed GDXray pixels, or a model output made from them, and the GDXray licence does not allow redistribution.]*
 :::
 
 ::: {layout-ncol=2}
-![Part 2, zoomed](images/synth-xray-defect-diffusion-zoom.png)
-
-![Part 3, zoomed](images/synth-xray-defect-controlnet-zoom.png)
+*[Figure removed: it showed GDXray pixels, or a model output made from them, and the GDXray licence does not allow redistribution.]*
 :::
 
 **Confirmed real and different, not a no-op:** the ControlNet-conditioned output differs from

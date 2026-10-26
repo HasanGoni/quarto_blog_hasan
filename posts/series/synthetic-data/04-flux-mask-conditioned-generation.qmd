@@ -16,6 +16,10 @@ format:
     code-tools: true
 ---
 
+::: {.callout-note}
+**Images removed.** This post's figures showed frames from [GDXray](https://domingomery.ing.uc.cl/material/gdxray) or outputs of models trained on them. GDXray is free for research and education only, and redistribution is not allowed, so the figures are gone. The text, code, numbers and plots are unchanged. The new [synthetic void dataset](../agentic-factory-segmentation/01-synthetic-void-dataset.qmd) is what this blog shows from now on.
+:::
+
 :::{.callout-tip}
 This post is part of the [Synthetic Data Series](index.qmd) series.
 :::
@@ -381,9 +385,7 @@ Same check Parts 2-3 used: all **266 `lora_B` tensors moved off their zero initi
 (mean norm 0.277, none exactly zero) after these 100 steps -- real gradients flowed through a
 13.07M-parameter LoRA riding on top of an 11.9B-parameter frozen transformer (0.110% trainable).
 
-```{=html}
-<img src="images/synth-xray-flux-training-progress.gif" alt="Flux output on a fixed held-out example across real training steps" style="max-width:100%;">
-```
+*[Figure removed: it showed GDXray pixels, or a model output made from them, and the GDXray licence does not allow redistribution.]*
 
 Unlike Parts 2-3's GIFs, this one shows a real, visible qualitative shift: the held-out example's
 step-0 output is a faint, barely-there mark; by step 100 there's a genuinely distinct dark region
@@ -393,13 +395,7 @@ visually, than 150-200 steps moved SD1.5's smaller UNet in Parts 2-3.
 ## Results
 
 ::: {layout-ncol=4}
-![Part 1: physics-synthetic, same crop](images/synth-xray-defect-synthetic.png)
-
-![Part 2: diffusion (SD1.5, mask only)](images/synth-xray-defect-diffusion.png)
-
-![Part 3: ControlNet (SD1.5, mask + real shape)](images/synth-xray-defect-controlnet.png)
-
-![Part 4: Flux (12B, mask only)](images/synth-xray-defect-flux.png)
+*[Figure removed: it showed GDXray pixels, or a model output made from them, and the GDXray licence does not allow redistribution.]*
 :::
 
 Same real base image, same synthetic crack mask, same crop window across all four -- only the

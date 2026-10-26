@@ -1,0 +1,11 @@
+(first replay, before the `__builtins__` fix; real output)
+A    episodes=12 cells=140 identical=139
+Ar2  episodes=12 cells=129 identical=129
+B    episodes=12 cells=100 identical=100
+Br2  episodes=12 cells=92 identical=92
+C    episodes=12 cells=94 identical=94
+Cr2  episodes=12 cells=79 identical=79
+
+TOTAL cells replayed: 634; identical in the sandbox: 633; different: 1
+DIFF ('A', 'val_00005', 11, False, False, True, True, 'thr 170 round voids: [(20, 11, 5, 6, np.float64(0.36666666666666664), 1.2)] | thr 180 ...', '', '', "... AttributeError: 'dict' object has no attribute 'round'")
+cause: the model's cell wrote `__builtins__.round`. In a notebook `__builtins__` is a module; in my exec namespace it was a dict.

@@ -5,16 +5,20 @@
   C  show() + tools, 14 turns        (adds eyes and hands)
 
 Ground truth is read only here, after the agent has finished. The held-out test split is not touched.
-Run:  .venv/bin/python -I minimal_loop/run_dev4.py A|B|C [N] [tag]     (tag = 'r2' for the repeat run, same settings)
+Part 5: SANDBOX=1 runs the model's cells in the container (docker_session.py) instead of the unsandboxed kernel.
+Run:  [SANDBOX=1] .venv/bin/python -I minimal_loop/run_dev4.py A|B|C [N] [tag]     (tag = 'r2' for the repeat run, same settings)
 """
 import base64
 import json
+import os
 import sys
 from pathlib import Path
 
 sys.path.insert(0, str(Path(__file__).parent))
 import numpy as np
 from loop4 import LIMIT_PCT, openai_chat, run_episode4
+from session4 import Session4
+from docker_session import DockerSession
 
 COND = {"A": (False, False), "B": (True, False), "C": (True, True)}
 cond = sys.argv[1]
@@ -32,7 +36,8 @@ print(f"condition {cond}: show={show} tools={tools} max_steps=14")
 print(f"{'image':10s} {'gt%':>6s} {'agent%':>7s} {'abs err':>8s} {'gt':>6s} {'agent':>6s} {'steps':>5s} {'tokens':>7s} {'sec':>6s}  reason")
 for i in range(N):
     gt = 100.0 * float((dmask[i] == 1).sum()) / float(pmask[i].sum())
-    ep = run_episode4(images[i], "Measure the void ratio of the part in `img` and submit it.", chat, with_show=show, with_tools=tools, max_steps=14)
+    ep = run_episode4(images[i], "Measure the void ratio of the part in `img` and submit it.", chat, with_show=show, with_tools=tools, max_steps=14,
+                      session_cls=DockerSession if os.environ.get("SANDBOX") else Session4)
     v = ep.verdict
     gt_status = "FAIL" if gt > LIMIT_PCT else "PASS"
     err = None if v.void_ratio_pct is None else abs(v.void_ratio_pct - gt)

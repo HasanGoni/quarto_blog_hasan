@@ -14,12 +14,16 @@ paper-urls:
 paper-topics:
   - "Diffusion Models"
   - "Synthetic Data"
-image: images/qwen-image-edit-defect-types.gif
 format:
   html:
     code-fold: true
     code-tools: true
+search: false
 ---
+
+::: {.callout-note}
+**Images removed.** This post's figures showed frames from [GDXray](https://domingomery.ing.uc.cl/material/gdxray) or outputs of models trained on them. GDXray is free for research and education only, and redistribution is not allowed, so the figures are gone. The text, code, numbers and plots are unchanged. The new [synthetic void dataset](../agentic-factory-segmentation/01-synthetic-void-dataset.qmd) is what this blog shows from now on.
+:::
 
 :::{.callout-tip}
 This post is part of the [Paper of the Week](index.qmd) series -- same standard as every deep-dive
@@ -277,35 +281,14 @@ Same mask, same prompt ("add a small dark circular void defect"), three differen
 real clean patch of `C0001_0001.png`:
 
 ::: {.column-body}
-```{=html}
-<div style="position:relative;max-width:560px;margin:1.5em auto;">
-  <img id="qie-before" src="images/qwen-image-edit-masked-input.png" style="width:100%;display:block;border-radius:8px;border:1px solid #ddd;">
-  <img id="qie-after" src="images/qwen-image-edit-void-seed0.png" style="width:100%;display:block;position:absolute;top:0;left:0;border-radius:8px;border:1px solid #ddd;clip-path:inset(0 50% 0 0);">
-  <div style="position:absolute;top:0;bottom:0;left:50%;width:2px;background:white;box-shadow:0 0 4px rgba(0,0,0,0.5);" id="qie-handle"></div>
-  <input id="qie-range" type="range" min="0" max="100" value="50" style="width:100%;margin-top:10px;">
-  <p style="text-align:center;font-size:0.85em;color:#666;">left: real clean X-ray, red circle = the mask &nbsp;|&nbsp; right: real Qwen-Image-2.1 output, seed 0</p>
-</div>
-<script>
-(function(){
-  var r = document.getElementById('qie-range');
-  var a = document.getElementById('qie-after');
-  var h = document.getElementById('qie-handle');
-  if (r && a && h) {
-    r.addEventListener('input', function(){
-      a.style.clipPath = 'inset(0 ' + (100 - r.value) + '% 0 0)';
-      h.style.left = r.value + '%';
-    });
-  }
-})();
-</script>
-```
+*[Figure removed: it showed GDXray pixels, or a model output made from them, and the GDXray licence does not allow redistribution.]*
 :::
 
 All three seeds landed cleanly inside the circle, and the red annotation itself was removed from
 every output as instructed -- placement control worked in 24/24 real runs. But the three seeds
 are **not near-duplicates**:
 
-![Same mask, same prompt, three different seeds — real, visible variation, not a copy-paste blob.](images/qwen-image-edit-void-diversity.gif){fig-align="center" width="480"}
+*[Figure removed: it showed GDXray pixels, or a model output made from them, and the GDXray licence does not allow redistribution.]*
 
 | Seed | Patch mean after edit | Laplacian variance after edit |
 |---|---|---|
@@ -326,14 +309,10 @@ crack:     "a thin, dark, linear crack defect a few pixels wide"
 inclusion: "a small elongated dark inclusion defect (an irregular blob)"
 ```
 
-![Void, crack, and inclusion prompts produce genuinely different shapes — a clean blob, a branching line, and an irregular elongated form — not the same circle relabeled.](images/qwen-image-edit-defect-types.gif){fig-align="center" width="480"}
+*[Figure removed: it showed GDXray pixels, or a model output made from them, and the GDXray licence does not allow redistribution.]*
 
 ::: {layout-ncol=3}
-![Void](images/qwen-image-edit-void-seed0.png)
-
-![Crack](images/qwen-image-edit-crack-example.png)
-
-![Inclusion](images/qwen-image-edit-inclusion-example.png)
+*[Figure removed: it showed GDXray pixels, or a model output made from them, and the GDXray licence does not allow redistribution.]*
 :::
 
 Texture jumped from a flat ~15 (background) to 165-695 in Laplacian variance across all nine
@@ -345,7 +324,7 @@ controllability is noticeably less consistent for that defect class than for voi
 
 Same location, same seed, two different severity words in the prompt:
 
-![Faint vs. pronounced — a real, ordered difference in both brightness and contrast, not just noise.](images/qwen-image-edit-severity.gif){fig-align="center" width="480"}
+*[Figure removed: it showed GDXray pixels, or a model output made from them, and the GDXray licence does not allow redistribution.]*
 
 | Severity prompt | Patch mean after edit | Laplacian variance after edit |
 |---|---|---|
@@ -364,13 +343,13 @@ augmentation pipeline that wants a spread of defect severities, not just one int
 defect randomly -- it found and modified a *pre-existing hollow feature already in the casting*.
 Plausible-looking, but completely uncontrolled:
 
-![No mask instruction given — the model picked its own location (an existing hollow feature), not a random or useful one. Uncontrolled placement defeats the point of targeted augmentation.](images/qwen-image-edit-failure-no-location.png){width="380"}
+*[Figure removed: it showed GDXray pixels, or a model output made from them, and the GDXray licence does not allow redistribution.]*
 
 **Contradictory instructions.** Asked to simultaneously "brighten and remove defects" inside the
 circle *and* "add a large crack across the whole casting," the model **abandoned the mask entirely**
 and painted a large branching crack across a completely different region of the image:
 
-![Contradictory prompt: the model ignored the marked circle entirely and edited a different region — a real risk for any automated pipeline that logs mask coordinates as ground truth without visually checking the result.](images/qwen-image-edit-failure-contradictory.gif){fig-align="center" width="480"}
+*[Figure removed: it showed GDXray pixels, or a model output made from them, and the GDXray licence does not allow redistribution.]*
 
 This second failure mode is the one that matters most for a real pipeline: if you're generating
 synthetic images *and* auto-labeling them with the mask coordinates you asked for (rather than
@@ -384,9 +363,7 @@ outputs for comparison -- their fine-tuned ControlNet/diffusion pipeline, purpos
 exact dataset:
 
 ::: {layout-ncol=2}
-![This blog's existing fine-tuned diffusion pipeline (ControlNet-conditioned) — a real defect crop.](../synthetic-data/images/synth-xray-defect-diffusion-zoom.png)
-
-![The corresponding real GDXray defect crop, for reference.](../synthetic-data/images/synth-xray-defect-real.png)
+*[Figure removed: it showed GDXray pixels, or a model output made from them, and the GDXray licence does not allow redistribution.]*
 :::
 
 **Where Qwen-Image-2.1 could genuinely help:**

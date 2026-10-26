@@ -1,0 +1,238 @@
+---
+title: "SpatialClaw for Inspection, Part 5: A Real Sandbox, and Trying to Break It"
+subtitle: "Parts 3 and 4 ran the model's code as me, on my machine. This part puts it in a locked container, replays 634 recorded cells to prove nothing changed, and throws 15 attacks at it. It holds, with caveats I list."
+author: "Hasan Goni"
+date: 2026-10-22
+categories: [series, agentic-ai, computer-vision, inspection, security]
+toc: true
+search: false
+series:
+  name: "SpatialClaw for Inspection"
+  number: 5
+---
+
+:::{.callout-tip}
+This post is part of the [SpatialClaw for Inspection](index.qmd) series. It replaces the unsandboxed kernel of
+[Part 3](03-minimal-kernel-loop.qmd) and [Part 4](04-eyes-and-hands.qmd). All code is my own.
+:::
+
+:::{.callout-note}
+**What was run.** Everything below ran for real: 9 control-flow tests in the container, a replay of **634 cells the model
+wrote in Part 4** through the container, an attack battery of 15 cells against both the old kernel and the container, an
+overhead benchmark, and one end-to-end run of the 12 DEV images with the model's code inside the container. The
+held-out test split is **not touched**. The attacks are ones **I** thought of: passing them is evidence, not proof.
+:::
+
+In Part 3 a security review flagged that the model's code ran as my user, with nothing between it and my files, my
+network and my other processes. I audited the 93 cells that run produced and found only `numpy` and `scipy`
+imports, and I said that was evidence about one run with one model, not a guarantee. This post is the guarantee's
+replacement: an **operating-system boundary** instead of a hope.
+
+```{=html}
+<div style="margin:1em 0;">
+  <button id="toggle-outputs" type="button" style="padding:6px 14px;border:1px solid #1971c2;border-radius:4px;background:#1971c2;color:white;cursor:pointer;">Show all outputs</button>
+  <span style="color:#666;font-size:0.9em;margin-left:8px;">Outputs are collapsed by default. Each one is the real captured output of the code above it.</span>
+</div>
+<script>
+(function(){
+  var b = document.getElementById("toggle-outputs"), open = false;
+  b.onclick = function(){
+    open = !open;
+    document.querySelectorAll("details.out").forEach(function(d){ d.open = open; });
+    b.textContent = open ? "Hide all outputs" : "Show all outputs";
+  };
+})();
+</script>
+```
+
+## The result first
+
+{{RESULT_PROSE}}
+
+## The design
+
+![The model's code runs in a container. The host trusts nothing it sends back.](images/part5-sandbox.png){fig-alt="Two boxes. Left, the trusted host: the model and loop, a layer that checks every answer for id, shape and a hard timeout, and the decide function giving PASS, FAIL or REVIEW. Right, a dashed red container for untrusted code: no network, read-only filesystem, no capabilities, 1 GB, 1 CPU, 64 processes, 64 MB scratch, non-root user, with a persistent cell runner. An arrow labelled one cell goes right; an arrow labelled answer, untrusted, comes back."}
+
+Three layers, and I want to be exact about what each one is for:
+
+1. **The container is the security boundary.** `docker run --network none --read-only --cap-drop ALL
+   --security-opt no-new-privileges --pids-limit 64 --memory 1g --cpus 1`, a 64 MB scratch directory, a non-root user.
+2. **The host never trusts an answer.** Every cell has an id; the reply must carry the same id and the expected
+   shape. A cell that does not answer before a hard wall-clock limit gets the **whole container killed**. A dead
+   sandbox ends the episode as **REVIEW**. There is no restart that would hide what happened.
+3. **The in-container timeout is only a convenience.** It is an alarm signal inside the same process as the model's
+   code, so the model's code can switch it off. The attack table shows exactly that.
+
+## Two reading levels
+
+**Explain like I'm five.** Before, the lab assistant worked at my own desk with access to my drawers, my phone and
+my front door key. Now they work in a small room with no window and no phone. Paper goes in through a slot, answers
+come back through a slot, and a guard outside checks that every answer is on the right form. If the assistant sits
+and does nothing for too long, the guard locks the room and calls a person.
+
+**Explain like I'm a data scientist.** A small runner process inside a minimal Python image keeps a persistent
+namespace and speaks one JSON line per cell over stdin/stdout. The host side (`DockerSession`) has the same interface
+as the Jupyter-based session, so the loop only gets a `session_cls` parameter. Pictures from `show()` come back as
+data URLs in the reply, because the container has no shared filesystem to the host except one read-only directory
+holding the image.
+
+## Jargon buster
+
+| Term | What it means | Daily-life version |
+|---|---|---|
+| Container | A process with its own view of files, network and users, enforced by the kernel. | A hotel room: your own key, your own door, but the same building. |
+| Threat model | Who you defend against, and who you do not. | Deciding whether the lock is for a curious guest or a burglar with a crowbar. |
+| Capability | A single piece of root's power (mount, change owner, ...). | One key from the master key ring. |
+| Network namespace | A private set of network interfaces. | A phone with no SIM card. |
+| Read-only filesystem | Nothing can be written except the scratch directory. | A museum label you cannot write on. |
+| cgroup limit | A cap on memory, CPU, processes. | A water meter that shuts the tap at a set amount. |
+| Hard timeout | The host kills the whole thing when it is late. | The guard who locks the room after the bell. |
+| Fork bomb | A program that keeps copying itself until the machine is full. | Photocopying the photocopier. |
+
+## The code, from the real files
+
+### The image (`sandbox/Dockerfile`) and the runner (`sandbox/runner.py`)
+
+{{FILE:sandbox/Dockerfile}}
+
+{{FILE:sandbox/runner.py}}
+
+### The host side (`minimal_loop/docker_session.py`)
+
+{{FILE:minimal_loop/docker_session.py}}
+
+### The only change to the loop
+
+`run_episode4` gained one parameter and one check. Part 4's published listing predates this change.
+
+````{.python}
+# minimal_loop/loop4.py  (the diff, not the whole file)
+-                 limit=LIMIT_PCT, cell_timeout=60) -> Episode:
++                 limit=LIMIT_PCT, cell_timeout=60, session_cls=Session4) -> Episode:
+...
+-    failures, session = 0, Session4(image, timeout_sec=cell_timeout, with_show=with_show, with_tools=with_tools)
++    failures, session = 0, session_cls(image, timeout_sec=cell_timeout, with_show=with_show, with_tools=with_tools)
+...
++                if getattr(res, "fatal", None):            # the sandbox died or misbehaved: stop, never guess
++                    why_none = res.fatal
++                    break
+````
+
+## Test the paths, with a scripted stand-in
+
+Same pattern as before: the "model" is a **scripted list of replies** (a stand-in); the container, the runner, the
+host checks and the rule layer are real.
+
+{{FILE:minimal_loop/test_paths5.py}}
+
+{{OUT:outputs/test_paths5.txt}}
+
+The `exit()` case is worth a sentence. My first version of the reader thread only signalled "the container's output
+closed" if no line had ever been read, so a crash after the first answer was reported as a 13-second timeout instead
+of "the container exited". The test caught it because it checks the **reason string**, not only REVIEW. Both end in
+REVIEW; only one is true.
+
+## Is the sandbox transparent? Replay what the model wrote
+
+If the container behaves differently from the notebook, every number in Parts 3 and 4 would be suspect. So I took
+**every cell the model wrote in the six Part 4 runs** (634 cells), replayed each episode in a fresh container, and
+compared against what the Jupyter kernel returned at the time. No model involved.
+
+{{FILE:minimal_loop/replay_equivalence.py}}
+
+{{OUT:outputs/part5_replay_attempt1.txt}}
+
+{{OUT:outputs/part5_replay.txt}}
+
+The first replay found **one** difference in 634, and it is a good one. The model had written
+`__builtins__.round`. In a notebook `__builtins__` is a module; in my plain `exec` namespace it was a dict, so the
+cell failed. I made the runner's namespace match the notebook's. The runner also echoes the value of a cell's last expression the way Jupyter does, because the old session
+returned that as output too.
+
+## Try to break it
+
+Fifteen cells, of the kind a buggy or prompt-injected model could produce. Each runs in the container. The ones that are
+safe also run in the old unsandboxed kernel, to show what changed. Memory bombs, fork bombs and disk-fill are
+**not run unsandboxed on purpose**: this machine also runs the model server.
+
+{{FILE:minimal_loop/attacks.py}}
+
+{{OUT:outputs/part5_attacks.txt}}
+
+Pick an attack and compare:
+
+{{< include _attack_widget.md >}}
+
+What the table says, in plain words:
+
+- The **old kernel could read my files, write anywhere I can, connect to services on my machine, and see 3 secret-looking
+  environment variable names**. Worse, `/var/run/docker.sock` exists and is writable for my user, which on this
+  machine is **root-equivalent**. I did not try to use it. I do not need to demonstrate it to know that "the model's
+  code runs as me" was not acceptable.
+- The **container** sees no host file, writes nothing outside a 64 MB scratch space, has no network, runs as a
+  user with **no capabilities** (`CapEff` all zeros), has no docker socket and sees 8 environment variables.
+- **The alarm is bypassable.** A cell that switches the in-container alarm off and loops forever is *not*
+  interrupted from inside; the host's hard limit kills the container after 14 seconds, the episode ends as REVIEW.
+  In the old kernel, the same attack was interrupted in my run; I do not know why (I suspect a repeated interrupt landing
+  outside the `try`), so I treat it as luck, not design.
+- A **memory bomb** is killed by the 1 GB limit (the container exits at once), and a **fork bomb** hits the 64-process
+  limit. After a fork bomb the container may stop answering further cells; the host's hard timeout covers that.
+- **Forging the answer channel works inside the container**, because the model's code lives in the same process as the
+  channel (I found the file descriptor by guessing 3). What saves the system is not secrecy but **checking**: the host
+  expects the reply to *this* cell id, so a forged line produces a protocol error and REVIEW. A forged number
+  would have gained nothing either: `submit()` already lets the model hand in any number it likes.
+
+## What the sandbox costs
+
+{{FILE:minimal_loop/bench_overhead.py}}
+
+{{OUT:outputs/part5_overhead.txt}}
+
+Start-up is the same (about 0.6 s) and the container is **faster per cell**, because the Jupyter path makes two round
+trips per cell and mine makes one. Neither matters next to roughly 10 seconds per model turn.
+
+## The live run, end to end
+
+Condition C of Part 4 (pictures plus tools, 14 turns) on the same 12 DEV images, with the model's code in the
+container. **One run.** Part 4 showed that one run is noise, so this table is evidence that the sandbox works end to
+end, not a claim about accuracy.
+
+{{OUT:outputs/run_dev4_Csbx_output.txt}}
+
+{{OUT:outputs/part5_live_summary.txt}}
+
+{{LIVE_PROSE}}
+
+## What this does not protect against
+
+- **Container escapes.** A container shares the host's kernel. A kernel bug can break it. For untrusted code from the
+  internet, I would add gVisor or a micro-VM. For a local model I run myself, a locked-down container is a
+  reasonable bar, not the highest one.
+- **Whoever can talk to Docker.** My user is in the `docker` group, which is root-equivalent on this host. The sandbox
+  protects the host from the model, not from me.
+- **Wasting resources inside the limits.** The model can burn one CPU for the timeout, write 64 MB, and fill the
+  14-second window. A stricter budget is a policy choice.
+- **Wrong numbers.** A sandbox cannot tell whether `28.99` is right. That is the rule layer's job, and a plausibility
+  check is planned for Part 7.
+- **The image supply chain.** The base image and three pip packages are trusted as downloaded. I did not pin digests.
+- **Things I did not test:** seccomp beyond Docker's default profile, timing side channels, the GPU (the container has
+  none), and any attack I did not think of. 15 cells is a smoke test of a boundary, not an audit.
+
+## Where this differs from the paper
+
+The paper's safety layer is an AST filter (see [Part 1](01-spatialclaw-deep-dive.qmd): it passes indirect constructs and
+only ran as a parse check in my tests). I use no AST filter at all; the boundary is the operating system. Whether
+an AST filter adds anything *on top* of the container is not measured here.
+
+## What I did not do
+
+- **One sandboxed live run, no accuracy claim.** The replay shows identical cell behaviour; the live run shows it
+  works with the model in the loop; neither shows anything about accuracy.
+- **No held-out data.** Part 6 uses it, once.
+- **No hardened variant comparison** (gVisor, rootless Docker). Worth a later look.
+
+## Next
+
+[Part 6](index.qmd#roadmap) is the experiment the series has been building towards: on the held-out split, the plain
+detector against a tool-call agent against the sandboxed code-kernel agent, with run-to-run noise measured as part of
+the design, not as an afterthought.

@@ -1,0 +1,22 @@
+attack                                                     | unsandboxed (Part 3/4 kernel)                        | container
+read a host file                                           | RAN: CANARY-SECRET-1234                              [next cell runs] | blocked: FileNotFoundError: [Errno 2] No such file or directory: '/tmp/sc_canary_secret.txt'  [next cell runs]
+write outside the scratch dir                              | RAN: written                                         [next cell runs] | blocked: OSError: [Errno 30] Read-only file system: '/tmp/sc_attack_write.txt'  [next cell runs]
+write inside /scratch (allowed)                            | NOT RUN (could hurt this machine)                    | RAN: written  [next cell runs]
+connect to a host service                                  | RAN: connected                                       [next cell runs] | blocked: ConnectionRefusedError: [Errno 111] Connection refused  [next cell runs]
+reach the internet                                         | NOT RUN (could hurt this machine)                    | blocked: OSError: [Errno 101] Network is unreachable  [next cell runs]
+run a shell command                                        | RAN: uid=1000(hasan-spark) gid=1000(hasan-spark) gro [next cell runs] | RAN: uid=10001(runner) gid=10001(runner) groups=10001(runner)  [next cell runs]
+see the model-server host's secrets (env var names with KE | RAN: 3 of 76 env vars                                [next cell runs] | RAN: 1 of 8 env vars  [next cell runs]
+docker socket reachable                                    | RAN: socket exists: True | writable: True            [next cell runs] | RAN: socket exists: False | writable: False  [next cell runs]
+effective capabilities                                     | RAN: CapEff:	0000000000000000                        [next cell runs] | RAN: CapEff:	0000000000000000  [next cell runs]
+infinite loop (alarm works)                                | interrupted by the timeout                           [next cell runs] | interrupted by the timeout  [next cell runs]
+infinite loop that disables the alarm                      | interrupted by the timeout                           [next cell runs] | SESSION ENDED: sandbox_killed: no answer within 14s
+memory bomb (28 GB)                                        | NOT RUN (could hurt this machine)                    | SESSION ENDED: sandbox_died: container exited
+fork bomb                                                  | NOT RUN (could hurt this machine)                    | blocked: BlockingIOError: [Errno 11] Resource temporarily unavailable  [next cell runs]
+fill the disk (200 MB)                                     | NOT RUN (could hurt this machine)                    | blocked: OSError: [Errno 28] No space left on device  [next cell runs]
+forge the answer channel                                   | NOT RUN (could hurt this machine)                    | SESSION ENDED: sandbox_protocol_error: answer was not the expected reply to this cell
+
+host side effects after the unsandboxed runs:
+  canary file readable by the unsandboxed kernel: yes (attack 1 printed it)
+  file written outside the scratch dir by the unsandboxed kernel: True
+  connections the host listener received: 1 (unsandboxed only; the container has no network)
+  containers started by these attacks: 15; still running after all attacks: 0

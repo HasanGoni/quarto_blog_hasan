@@ -13,7 +13,12 @@ format:
   html:
     code-fold: true
     code-tools: true
+search: false
 ---
+
+::: {.callout-note}
+**Images removed.** This post's figures showed frames from [GDXray](https://domingomery.ing.uc.cl/material/gdxray) or outputs of models trained on them. GDXray is free for research and education only, and redistribution is not allowed, so the figures are gone. The text, code, numbers and plots are unchanged. The new [synthetic void dataset](../agentic-factory-segmentation/01-synthetic-void-dataset.qmd) is what this blog shows from now on.
+:::
 
 :::{.callout-tip}
 This post is part of the [Synthetic Data Series](index.qmd) series.
@@ -196,7 +201,7 @@ The brief spike near step 2400 in both `G` and `D`'s losses (and its immediate r
 collapsed state) is a real, single training-instability blip -- not a recovery. Training-progress
 GIF, same fixed held-out example every 150 steps:
 
-![Real training progress: masked input, generated, real -- side by side, every 150 steps.](images/synth-xray-gan-training-progress.gif)
+*[Figure removed: it showed GDXray pixels, or a model output made from them, and the GDXray licence does not allow redistribution.]*
 
 A real, correctly-shaped, correctly-located dark defect blob emerges by the midpoint of training
 and holds through step 3000 -- purely from the L1 term, given the adversarial signal's collapse.
@@ -207,11 +212,7 @@ resolved on its own.
 Real comparison on the exact same synthetic crack mask and window every other part has used:
 
 ::: {layout-ncol=3}
-![Part 1: physics](images/synth-xray-defect-synthetic-zoom.png)
-
-![Part 2 (SD1.5 diffusion)](images/synth-xray-defect-diffusion-zoom.png)
-
-![Part 7: GAN (128px, from scratch)](images/synth-xray-defect-gan-zoom.png)
+*[Figure removed: it showed GDXray pixels, or a model output made from them, and the GDXray licence does not allow redistribution.]*
 :::
 
 **Real, measured contrast** (mask-pixel mean vs. immediate-surround mean, same 25px-ring

@@ -16,6 +16,10 @@ format:
     code-tools: true
 ---
 
+::: {.callout-note}
+**Images removed.** This post's figures showed frames from [GDXray](https://domingomery.ing.uc.cl/material/gdxray) or outputs of models trained on them. GDXray is free for research and education only, and redistribution is not allowed, so the figures are gone. The text, code, numbers and plots are unchanged. The new [synthetic void dataset](../agentic-factory-segmentation/01-synthetic-void-dataset.qmd) is what this blog shows from now on.
+:::
+
 :::{.callout-tip}
 This post is part of the [Synthetic Data Series](index.qmd) series.
 :::
@@ -366,9 +370,7 @@ Saved joint_loss_curve.png + joint_training_progress.gif + joint_unet_ema.pt + j
 
 ![Real loss curve with EMA added -- the shape is basically unchanged from the pre-EMA run: drops fast, then stays low and noisy for the whole back half of training. EMA fixed the *samples*, not the loss curve's blindness to sample quality -- see below.](images/synth-xray-joint-loss-curve.png)
 
-```{=html}
-<img src="images/synth-xray-joint-training-progress.gif" alt="Real sampling grids (6 fresh generated image|mask pairs, sampled from EMA weights) at checkpoints across training" style="max-width:100%;">
-```
+*[Figure removed: it showed GDXray pixels, or a model output made from them, and the GDXray licence does not allow redistribution.]*
 
 ## Results
 
@@ -387,11 +389,7 @@ mode-collapsed ones.
 checkpoints from the EMA-enabled run, unedited:
 
 ::: {layout-ncol=3}
-![Step 500 -- 5 of 6 panels show real, structured, cloud-like texture resembling weld-radiograph brightness variation, with correctly mostly-dark ("mostly background") masks](images/synth-xray-joint-step500.png)
-
-![Step 1000 -- still real structure, arguably richer/more varied cloud patterns than step 500 -- EMA extended the "good" region from a narrow peak into a broader, more stable plateau](images/synth-xray-joint-step1000-ema.png)
-
-![Step 2000 (final) -- partially degraded again: some panels regained real structure and diversity (an improvement over the pre-EMA run, where *all six* had collapsed), but roughly half are still near-uniform noise](images/synth-xray-joint-step2000.png)
+*[Figure removed: it showed GDXray pixels, or a model output made from them, and the GDXray licence does not allow redistribution.]*
 :::
 
 Before EMA, quality peaked narrowly around step 500 and then collapsed hard, uniformly, across

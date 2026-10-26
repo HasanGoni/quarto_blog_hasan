@@ -1,0 +1,10 @@
+ok   submit above limit                                 -> FAIL   rule: 2.00 > 1.50  (steps=1)
+ok   variables persist between cells                    -> PASS   rule: 0.40 <= 1.50  (steps=2)
+ok   error, then recovery                               -> PASS   rule: 0.20 <= 1.50  (steps=2)
+ok   never submits -> REVIEW                            -> REVIEW out_of_steps  (steps=3)
+ok   loop is interrupted, kernel lives                  -> PASS   rule: 0.10 <= 1.50  (steps=2)
+ok   alarm disabled -> container killed                 -> REVIEW sandbox_killed: no answer within 13s  (steps=1)
+ok   memory bomb -> REVIEW, never PASS                  -> REVIEW sandbox_died: container exited  (steps=1)
+ok   forged reply -> REVIEW                             -> REVIEW sandbox_protocol_error: answer was not the expected reply to this cell  (steps=1)
+ok   exit() inside a cell -> REVIEW                     -> REVIEW sandbox_died: container exited  (steps=1)
+ALL SANDBOX PATHS OK

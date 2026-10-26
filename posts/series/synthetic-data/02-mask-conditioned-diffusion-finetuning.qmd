@@ -16,6 +16,10 @@ format:
     code-tools: true
 ---
 
+::: {.callout-note}
+**Images removed.** This post's figures showed frames from [GDXray](https://domingomery.ing.uc.cl/material/gdxray) or outputs of models trained on them. GDXray is free for research and education only, and redistribution is not allowed, so the figures are gone. The text, code, numbers and plots are unchanged. The new [synthetic void dataset](../agentic-factory-segmentation/01-synthetic-void-dataset.qmd) is what this blog shows from now on.
+:::
+
 :::{.callout-tip}
 This post is part of the [Synthetic Data Series](index.qmd) series.
 :::
@@ -485,9 +489,7 @@ Hub repo, and harmless for a well-known official checkpoint like this one.
 The training-progress GIF's frames look nearly identical to each other at a glance -- worth
 confronting head-on rather than cropping around:
 
-```{=html}
-<img src="images/synth-xray-diffusion-training-progress.gif" alt="LoRA inpainting output on a fixed held-out example across real training steps" style="max-width:100%;">
-```
+*[Figure removed: it showed GDXray pixels, or a model output made from them, and the GDXray licence does not allow redistribution.]*
 
 That similarity is real, but it isn't evidence the fine-tune did nothing -- it's evidence the
 effect is *subtle relative to the pretrained model's already-strong prior*, which is a different
@@ -508,11 +510,7 @@ and more interesting claim. Checked two ways, both on real data:
 ## Results
 
 ::: {layout-ncol=3}
-![Real base image (W0001_0002), same crop as Part 1](images/synth-xray-clean.png)
-
-![Part 1: physics-synthetic defect, same crop](images/synth-xray-defect-synthetic.png)
-
-![Part 2: diffusion-synthetic defect, identical mask and location](images/synth-xray-defect-diffusion.png)
+*[Figure removed: it showed GDXray pixels, or a model output made from them, and the GDXray licence does not allow redistribution.]*
 :::
 
 Same real base image, same synthetic crack mask (`generate_crack_mask(..., rng=default_rng(0))`,
@@ -520,9 +518,7 @@ Part 1's own deterministic call, reused verbatim), same crop window -- only the 
 differs. Zoomed to native resolution at the injection site, matching Part 1's own zoom treatment:
 
 ::: {layout-ncol=2}
-![Physics-synthetic, zoomed](images/synth-xray-defect-synthetic-zoom.png)
-
-![Diffusion-synthetic, zoomed](images/synth-xray-defect-diffusion-zoom.png)
+*[Figure removed: it showed GDXray pixels, or a model output made from them, and the GDXray licence does not allow redistribution.]*
 :::
 
 **Where diffusion wins:** it never has to be told the "shape" of a crack -- given only the mask

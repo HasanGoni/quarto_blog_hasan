@@ -49,11 +49,11 @@ def _content(res, steps_left: int, with_show: bool):
 
 
 def run_episode4(image, question, chat, with_show=False, with_tools=False, max_steps=14, max_failures=4,
-                 limit=LIMIT_PCT, cell_timeout=60) -> Episode:
+                 limit=LIMIT_PCT, cell_timeout=60, session_cls=Session4) -> Episode:
     t0 = time.monotonic()
     ep = Episode(verdict=decide(None, limit, "not started"))
     messages = [{"role": "system", "content": system_prompt(with_show, with_tools)}, {"role": "user", "content": question}]
-    failures, session = 0, Session4(image, timeout_sec=cell_timeout, with_show=with_show, with_tools=with_tools)
+    failures, session = 0, session_cls(image, timeout_sec=cell_timeout, with_show=with_show, with_tools=with_tools)
     sub, why_none = None, "out_of_steps"
     try:
         for step in range(1, max_steps + 1):
@@ -73,6 +73,9 @@ def run_episode4(image, question, chat, with_show=False, with_tools=False, max_s
                 ep.cells.append({"step": step, "purpose": text.split("```")[0].strip()[:200], "code": m.group(1), "stdout": res.stdout[:2000],
                                  "error": res.error, "seconds": round(res.seconds, 2),
                                  "images": [{"title": t, "png": u} for t, u in imgs]})
+                if getattr(res, "fatal", None):            # the sandbox died or misbehaved: stop, never guess
+                    why_none = res.fatal
+                    break
                 if res.error:
                     failures += 1
                 if res.submission is not None:

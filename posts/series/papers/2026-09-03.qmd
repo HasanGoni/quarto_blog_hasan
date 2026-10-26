@@ -17,6 +17,7 @@ paper-topics:
   - "Segmentation"
 format:
   html: default
+search: false
 ---
 
 :::{.callout-tip}

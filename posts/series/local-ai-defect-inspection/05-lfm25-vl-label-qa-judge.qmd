@@ -5,7 +5,6 @@ author: "Hasan Goni"
 date: 2026-08-14
 categories: [computer-vision, VLM, LoRA, semiconductor, X-ray, edge-ai, few-shot]
 tags: [LFM2.5-VL, LiquidAI, Outlines, GDXray, structured-generation, LLM-as-judge]
-image: images/judge-fewshot-flip-fn-miss.png
 toc: true
 series:
   name: "Local-AI Defect Inspection Series"
@@ -13,6 +12,10 @@ series:
 format:
   html: default
 ---
+
+::: {.callout-note}
+**Images removed.** This post's figures showed frames from [GDXray](https://domingomery.ing.uc.cl/material/gdxray) or outputs of models trained on them. GDXray is free for research and education only, and redistribution is not allowed, so the figures are gone. The text, code, numbers and plots are unchanged. The new [synthetic void dataset](../agentic-factory-segmentation/01-synthetic-void-dataset.qmd) is what this blog shows from now on.
+:::
 
 :::{.callout-tip}
 This post is part of the [Local-AI Defect Inspection Series](index.qmd). Full code:
@@ -131,7 +134,7 @@ also be wrong. In few-shot mode, the model apparently picked up "no box shown �
 a shortcut reinforced by exactly the examples I gave it, and applied it to every single one of the
 37 real defects that got relabeled clean.
 
-![A real defect (this image is genuinely `defect: true` in GDXray), relabeled `no_defect` — no box shown. The few-shot judge said `correct`. Every one of the 37 images in this exact situation got the same wrong answer.](images/judge-fewshot-flip-fn-miss.png)
+*[Figure removed: it showed GDXray pixels, or a model output made from them, and the GDXray licence does not allow redistribution.]*
 
 That's a real, fixable gap in how I built the demo set, not necessarily a hard ceiling on the
 task. I didn't retest with a 5th demo covering this exact case before writing this up — I'd rather
@@ -150,7 +153,7 @@ Not every corrupted label is subtle. Here's one the few-shot judge caught cleanl
 `no_defect` casting, relabeled `defect` with a borrowed box that doesn't correspond to anything
 actually wrong with the part:
 
-![A real `no_defect` image, relabeled `defect` with a box borrowed from elsewhere in the dataset. The few-shot judge correctly said `incorrect`.](images/judge-fewshot-flip-fp-catch.png)
+*[Figure removed: it showed GDXray pixels, or a model output made from them, and the GDXray licence does not allow redistribution.]*
 
 272 of the 668 eval rows are this exact corruption type, and few-shot recall on it — 58.1% — is
 the best number in this entire post. If your auto-labeling pipeline's failure mode looks more like

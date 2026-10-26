@@ -4,7 +4,6 @@ description: "Testing small, local vision-language models against real industria
 author: "Hasan Goni"
 date: last-modified
 categories: [series, computer-vision, VLM, semiconductor, edge-ai]
-image: images/gdxray-box-sanity-check.png
 toc: true
 ---
 

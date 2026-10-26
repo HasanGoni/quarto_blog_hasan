@@ -13,12 +13,16 @@ paper-urls:
 paper-topics:
   - "Generative Models"
   - "Diffusion Models"
-image: images/marigold-v2-checkpoint-comparison-grid.jpg
 format:
   html:
     code-fold: true
     code-tools: true
+search: false
 ---
+
+::: {.callout-note}
+**Images removed.** This post's figures showed frames from [GDXray](https://domingomery.ing.uc.cl/material/gdxray) or outputs of models trained on them. GDXray is free for research and education only, and redistribution is not allowed, so the figures are gone. The text, code, numbers and plots are unchanged. The new [synthetic void dataset](../agentic-factory-segmentation/01-synthetic-void-dataset.qmd) is what this blog shows from now on.
+:::
 
 :::{.callout-tip}
 This post is part of the [Paper of the Week](index.qmd) series -- same standard as every deep-dive
@@ -270,28 +274,7 @@ model** -- there is no denoising loop to wait on.
 `depth/Log-stage2` output:
 
 ::: {.column-body}
-```{=html}
-<div style="position:relative;max-width:560px;margin:1.5em auto;">
-  <img id="mv2-before" src="images/marigold-v2-slider-C0008_0011_defect-before.jpg" style="width:100%;display:block;border-radius:8px;">
-  <img id="mv2-after" src="images/marigold-v2-slider-C0008_0011_defect-after.jpg" style="width:100%;display:block;position:absolute;top:0;left:0;border-radius:8px;clip-path:inset(0 50% 0 0);">
-  <div style="position:absolute;top:0;bottom:0;left:50%;width:2px;background:white;box-shadow:0 0 4px rgba(0,0,0,0.5);" id="mv2-handle"></div>
-  <input id="mv2-range" type="range" min="0" max="100" value="50" style="width:100%;margin-top:10px;">
-  <p style="text-align:center;font-size:0.85em;color:#666;">left: the real X-ray (spokes, cast holes, and the real annotated defect region) &nbsp;|&nbsp; right: real Marigold V2 depth prediction</p>
-</div>
-<script>
-(function(){
-  var r = document.getElementById('mv2-range');
-  var a = document.getElementById('mv2-after');
-  var h = document.getElementById('mv2-handle');
-  if (r && a && h) {
-    r.addEventListener('input', function(){
-      a.style.clipPath = 'inset(0 ' + (100 - r.value) + '% 0 0)';
-      h.style.left = r.value + '%';
-    });
-  }
-})();
-</script>
-```
+*[Figure removed: it showed GDXray pixels, or a model output made from them, and the GDXray licence does not allow redistribution.]*
 :::
 
 The real X-ray has genuine 3D structure -- radial spokes, several cast-through holes at very
@@ -308,18 +291,12 @@ Same crop, all three released Marigold V2 LoRA checkpoints (`depth/Log-stage2`, 
 `albedo`) -- four panels at full resolution:
 
 ::: {layout-ncol=2}
-![Real X-ray](images/marigold-v2-case2-xray.jpg)
-
-![Real depth prediction](images/marigold-v2-case2-depth.jpg)
-
-![Real surface-normal prediction](images/marigold-v2-case2-normals.jpg)
-
-![Real albedo prediction](images/marigold-v2-case2-albedo.jpg)
+*[Figure removed: it showed GDXray pixels, or a model output made from them, and the GDXray licence does not allow redistribution.]*
 :::
 
 Same four views as a lightweight loop (~209 KB):
 
-![Same defect crop cycling X-ray → depth → normals → albedo (real Marigold V2 LoRA outputs).](images/marigold-v2-modalities.gif){fig-align="center" width="480"}
+*[Figure removed: it showed GDXray pixels, or a model output made from them, and the GDXray licence does not allow redistribution.]*
 
 The normals output is the more revealing geometric failure. Camera-space surface normals should vary with
 real 3D orientation -- the spoke edges, the rims of the cast holes, the defect itself all have real
@@ -405,28 +382,7 @@ subprocess.run(
 </details>
 ```
 
-```{=html}
-<div style="position:relative;max-width:560px;margin:1.5em auto;">
-  <img id="mv2c-before" src="images/marigold-v2-ckpt-slider-defect-before.jpg" style="width:100%;display:block;border-radius:8px;">
-  <img id="mv2c-after" src="images/marigold-v2-ckpt-slider-defect-after.jpg" style="width:100%;display:block;position:absolute;top:0;left:0;border-radius:8px;clip-path:inset(0 50% 0 0);">
-  <div style="position:absolute;top:0;bottom:0;left:50%;width:2px;background:white;box-shadow:0 0 4px rgba(0,0,0,0.5);" id="mv2c-handle"></div>
-  <input id="mv2c-range" type="range" min="0" max="100" value="50" style="width:100%;margin-top:10px;">
-  <p style="text-align:center;font-size:0.85em;color:#666;">left: raw base model, NO Marigold LoRA &nbsp;|&nbsp; right: real Marigold V2 (LoRA fine-tuned)</p>
-</div>
-<script>
-(function(){
-  var r = document.getElementById('mv2c-range');
-  var a = document.getElementById('mv2c-after');
-  var h = document.getElementById('mv2c-handle');
-  if (r && a && h) {
-    r.addEventListener('input', function(){
-      a.style.clipPath = 'inset(0 ' + (100 - r.value) + '% 0 0)';
-      h.style.left = r.value + '%';
-    });
-  }
-})();
-</script>
-```
+*[Figure removed: it showed GDXray pixels, or a model output made from them, and the GDXray licence does not allow redistribution.]*
 
 The real surprise: **the raw, un-fine-tuned base model traces the casting's actual spokes and
 cast holes far more faithfully than the LoRA fine-tuned depth model does.** With no depth training
@@ -439,25 +395,17 @@ from Case 1.
 Same defect crop, same pipeline -- only the LoRA weights differ. Depth row, then normals:
 
 ::: {layout-ncol=3}
-![X-ray](images/marigold-v2-cmp-xray.jpg)
-
-![Base-model depth (no LoRA)](images/marigold-v2-cmp-depth-base.jpg)
-
-![Fine-tuned Marigold V2 depth](images/marigold-v2-cmp-depth-lora.jpg)
+*[Figure removed: it showed GDXray pixels, or a model output made from them, and the GDXray licence does not allow redistribution.]*
 :::
 
 ::: {layout-ncol=3}
-![X-ray (same crop)](images/marigold-v2-cmp-xray-bot.jpg)
-
-![Base-model normals (no LoRA)](images/marigold-v2-cmp-normals-base.jpg)
-
-![Fine-tuned Marigold V2 normals](images/marigold-v2-cmp-normals-lora.jpg)
+*[Figure removed: it showed GDXray pixels, or a model output made from them, and the GDXray licence does not allow redistribution.]*
 :::
 
 And the same depth/normals comparison as a short loop (~200 KB) -- watch the base model keep real
 edges that the LoRA then smooths away:
 
-![X-ray → base depth → LoRA depth → base normals → LoRA normals on the same defect crop.](images/marigold-v2-lora-vs-base.gif){fig-align="center" width="480"}
+*[Figure removed: it showed GDXray pixels, or a model output made from them, and the GDXray licence does not allow redistribution.]*
 
 Normals make the same inversion even more starkly: the base model's output is a sharp, mostly
 black-and-white edge map that closely tracks every real boundary in the X-ray, while the fine-tuned
@@ -473,55 +421,13 @@ measurably less structurally faithful, not more.**
 
 ### Case 4 -- a defect-free casting, for a control
 
-```{=html}
-<div style="position:relative;max-width:400px;margin:1.5em auto;">
-  <img id="mv2b-before" src="images/marigold-v2-slider-C0002_0001_no_defect-before.jpg" style="width:100%;display:block;border-radius:8px;">
-  <img id="mv2b-after" src="images/marigold-v2-slider-C0002_0001_no_defect-after.jpg" style="width:100%;display:block;position:absolute;top:0;left:0;border-radius:8px;clip-path:inset(0 50% 0 0);">
-  <div style="position:absolute;top:0;bottom:0;left:50%;width:2px;background:white;box-shadow:0 0 4px rgba(0,0,0,0.5);" id="mv2b-handle"></div>
-  <input id="mv2b-range" type="range" min="0" max="100" value="50" style="width:100%;margin-top:10px;">
-  <p style="text-align:center;font-size:0.85em;color:#666;">a defect-free casting from a different series -- same diagonal-gradient depth guess, no real structure recovered here either</p>
-</div>
-<script>
-(function(){
-  var r = document.getElementById('mv2b-range');
-  var a = document.getElementById('mv2b-after');
-  var h = document.getElementById('mv2b-handle');
-  if (r && a && h) {
-    r.addEventListener('input', function(){
-      a.style.clipPath = 'inset(0 ' + (100 - r.value) + '% 0 0)';
-      h.style.left = r.value + '%';
-    });
-  }
-})();
-</script>
-```
+*[Figure removed: it showed GDXray pixels, or a model output made from them, and the GDXray licence does not allow redistribution.]*
 
 The defect-free crop gets the same kind of answer: a smooth gradient tied to the image's own
 brightness ramp, not to any real geometry in the part -- and the same base-vs-fine-tuned inversion
 holds here too:
 
-```{=html}
-<div style="position:relative;max-width:400px;margin:1.5em auto;">
-  <img id="mv2d-before" src="images/marigold-v2-ckpt-slider-nodefect-before.jpg" style="width:100%;display:block;border-radius:8px;">
-  <img id="mv2d-after" src="images/marigold-v2-ckpt-slider-nodefect-after.jpg" style="width:100%;display:block;position:absolute;top:0;left:0;border-radius:8px;clip-path:inset(0 50% 0 0);">
-  <div style="position:absolute;top:0;bottom:0;left:50%;width:2px;background:white;box-shadow:0 0 4px rgba(0,0,0,0.5);" id="mv2d-handle"></div>
-  <input id="mv2d-range" type="range" min="0" max="100" value="50" style="width:100%;margin-top:10px;">
-  <p style="text-align:center;font-size:0.85em;color:#666;">left: raw base model (still shows the real rod-shaped part edge) &nbsp;|&nbsp; right: fine-tuned Marigold V2 (a plain diagonal gradient)</p>
-</div>
-<script>
-(function(){
-  var r = document.getElementById('mv2d-range');
-  var a = document.getElementById('mv2d-after');
-  var h = document.getElementById('mv2d-handle');
-  if (r && a && h) {
-    r.addEventListener('input', function(){
-      a.style.clipPath = 'inset(0 ' + (100 - r.value) + '% 0 0)';
-      h.style.left = r.value + '%';
-    });
-  }
-})();
-</script>
-```
+*[Figure removed: it showed GDXray pixels, or a model output made from them, and the GDXray licence does not allow redistribution.]*
 
 **The honest conclusion is that Marigold V2,
 zero-shot, is not reading 3D structure out of these X-rays at all -- it is doing exactly what a

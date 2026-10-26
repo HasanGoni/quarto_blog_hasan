@@ -4,7 +4,6 @@ description: "A real weld radiograph, a real 19B joint video+audio diffusion mod
 author: "Hasan Goni"
 date: last-modified
 categories: [computer-vision, video-generation, audio-generation, X-ray, diffusion]
-image: images/vsxray-frame-first.png
 toc: true
 series:
   name: "Video & Sound Generation Series"
@@ -14,6 +13,10 @@ format:
     code-fold: true
     code-tools: true
 ---
+
+::: {.callout-note}
+**Images removed.** This post's figures showed frames from [GDXray](https://domingomery.ing.uc.cl/material/gdxray) or outputs of models trained on them. GDXray is free for research and education only, and redistribution is not allowed, so the figures are gone. The text, code, numbers and plots are unchanged. The new [synthetic void dataset](../agentic-factory-segmentation/01-synthetic-void-dataset.qmd) is what this blog shows from now on.
+:::
 
 :::{.callout-tip}
 This post is part of the [Video & Sound Generation Series](index.qmd) series. It also connects
@@ -218,7 +221,7 @@ encode_video(
 
 Real generation, real GDXray Welds seed frame, real LTX-2 (int4), 768x512, 5.04s at 24fps:
 
-{{< video images/vsxray-scan-final.mp4 >}}
+*[Figure removed: it showed GDXray pixels, or a model output made from them, and the GDXray licence does not allow redistribution.]*
 
 Audio is real and non-silent (mean -44.5dB, max -31.4dB, no clipping) -- there genuinely is an
 ambient sound layer, not silence.
@@ -227,11 +230,7 @@ The frame-by-frame reality is more interesting than the played-back clip alone c
 first frame is the real image-conditioning anchor:
 
 ::: {layout-ncol=3}
-![Frame 0 (image-conditioned): real X-ray texture](images/vsxray-frame-first.png)
-
-![Frame ~60: drift underway](images/vsxray-frame-mid.png)
-
-![Frame ~119: fully drifted to color industrial photography](images/vsxray-frame-late.png)
+*[Figure removed: it showed GDXray pixels, or a model output made from them, and the GDXray licence does not allow redistribution.]*
 :::
 
 Frame 0 keeps the grayscale radiograph texture faithfully -- that's the direct effect of image

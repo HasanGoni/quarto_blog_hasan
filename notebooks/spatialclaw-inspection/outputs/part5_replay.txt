@@ -1,0 +1,8 @@
+A    episodes=12 cells=140 identical=140
+Ar2  episodes=12 cells=129 identical=129
+B    episodes=12 cells=100 identical=100
+Br2  episodes=12 cells=92 identical=92
+C    episodes=12 cells=94 identical=94
+Cr2  episodes=12 cells=79 identical=79
+
+TOTAL cells replayed: 634; identical in the sandbox: 634; different: 0
