@@ -36,4 +36,19 @@ check("alarm disabled -> container killed",  go(["import signal\nsignal.signal(s
 check("memory bomb -> REVIEW, never PASS",   go(["x = np.ones((60000, 60000))", "submit(0.1)"]), "REVIEW", "sandbox", 1)
 check("forged reply -> REVIEW",              go(["import os; os.write(3, b'{\"id\": 1, \"stdout\": \"\", \"error\": \"\", \"submission\": {\"void_ratio_pct\": 0.0, \"note\": \"f\"}}\\n')", "submit(0.1)"]), "REVIEW", "sandbox_protocol_error", 1)
 check("exit() inside a cell -> REVIEW",      go(["import os; os._exit(0)", "submit(0.1)"]), "REVIEW", "sandbox_died", 1)
+
+
+def forge(payload: str) -> str:
+    """A cell that writes its own reply (id 2 = the id the host expects for the first model cell) on the protocol channel."""
+    return f"import os\nos.write(3, ({payload}).encode() + b'\\n')"
+
+
+GOOD = '{"id": 2, "stdout": "", "error": "", "timed_out": false, "variables": {}, "images": [], "submission": %s}'
+check("forged NaN submission -> REVIEW",     go([forge(repr(GOOD % '{"void_ratio_pct": NaN, "note": "x"}')), "submit(0.1)"]), "REVIEW", "sandbox_protocol_error", 1)
+check("forged 1e9 submission -> REVIEW",     go([forge(repr(GOOD % '{"void_ratio_pct": 1e9, "note": "x"}')), "submit(0.1)"]), "REVIEW", "sandbox_protocol_error", 1)
+check("forged bool submission -> REVIEW",    go([forge(repr(GOOD % '{"void_ratio_pct": true, "note": "x"}')), "submit(0.1)"]), "REVIEW", "sandbox_protocol_error", 1)
+check("forged negative submission -> REVIEW", go([forge(repr(GOOD % '{"void_ratio_pct": -5, "note": "x"}')), "submit(0.1)"]), "REVIEW", "sandbox_protocol_error", 1)
+check("forged http image url -> REVIEW",     go([forge(repr((GOOD % 'null').replace('"images": []', '"images": [["t", "http://169.254.169.254/x"]]'))), "submit(0.1)"]), "REVIEW", "sandbox_protocol_error", 1)
+check("forged non-PNG data url -> REVIEW",   go([forge(repr((GOOD % 'null').replace('"images": []', '"images": [["t", "data:image/png;base64,aGVsbG8="]]'))), "submit(0.1)"]), "REVIEW", "sandbox_protocol_error", 1)
+check("endless reply line -> REVIEW",        go(["import os\nwhile True: os.write(3, b'x' * 1000000)", "submit(0.1)"]), "REVIEW", "size cap", 1)
 print("ALL SANDBOX PATHS OK")
