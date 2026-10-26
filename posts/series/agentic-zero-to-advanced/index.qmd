@@ -83,6 +83,10 @@ changed, and each post says where.
     embed is in [Retrieval and RAG](../agentic-development/09-retrieval-rag.qmd)
 15. Building the retrieval pipeline -- chunking, embeddings, vector store, evaluation of
     retrieval quality
+    - 15b. Graphs from your own data -- extracting entities and relations (defect type, batch, decision,
+      rule) from the pipeline reports and building a knowledge graph from them *(planned)*
+    - 15c. Graph RAG -- the same questions as Part 14 answered by graph queries instead of vector search,
+      measured honestly, including where the graph does not win *(planned)*
 16. Fine-tuning -- when RAG isn't enough, fine-tuning a model on your labeled defect explanations
     and decisions for domain precision
 17. Vision-language models -- letting the model reason directly over the X-ray image instead of
@@ -92,7 +96,12 @@ changed, and each post says where.
 
 18. Evaluation -- building an eval set, using LangSmith (or similar) to trace and score agent
     decisions
-19. Cost and latency tuning -- model selection per step, caching, batching
+    - 18b. A self-improving eval loop -- the agent proposes a change (a skill, a prompt rule), the eval set
+      decides whether it is kept; builds on skill induction from the
+      [adaptive agents hands-on](../course-notes/2026-08-27-adaptive-ai-agents-hands-on.qmd) post *(planned)*
+19. Cost and latency tuning -- model selection per step, caching, batching; includes a measured comparison of
+    the local vLLM server against a hosted API (latency and tokens measured, API cost calculated from list
+    prices) *(planned)*
 20. Failure handling -- retries, fallbacks, graceful degradation
 21. Deployment -- turning the pipeline into a real triggered service
 22. Monitoring in production -- drift detection, feedback loops, continuous improvement
