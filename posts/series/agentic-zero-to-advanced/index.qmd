@@ -63,7 +63,11 @@ changed, and each post says where.
    tokens. [TypeSafe's Jev](https://typesafe.ai) (hosted) was meant to be the other typed model, but I had no
    API access: its adapter is written and not run, and the post says so. The typed models' probabilities are
    what the review-vs-escalate threshold in post 9 would be set on
-9. Human-in-the-loop -- flagging uncertain cases for review, approval workflows
+9. [Human in the loop](09-human-in-the-loop.qmd) -- the Part 7 pipeline pauses with `interrupt()`, saves its place in
+   SQLite, refuses sloppy answers and holds (never passes) tickets nobody answers. Then simulated reviewers on the same
+   200 held-out images: a careful one lifts precision from 0.4 to 1.0 but cannot raise recall past the detector's ceiling,
+   one who errs on 1 box in 5 is no better than none, and a rubber stamp costs 46 minutes and changes nothing. Five
+   literate notebooks, two with cells for you to change
 
 ### Arc 3 -- Scaling Up: Multi-Agent and Deep Agents
 

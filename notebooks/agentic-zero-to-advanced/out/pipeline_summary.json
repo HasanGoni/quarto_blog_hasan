@@ -1,0 +1,158 @@
+{
+  "model": "qwen3-coder",
+  "variants": {
+    "band": [
+      {
+        "n_images": 200,
+        "verdicts": {
+          "pass": 104,
+          "review": 93,
+          "escalate": 3
+        },
+        "kept": 160,
+        "tp": 62,
+        "fp": 98,
+        "fn": 325,
+        "precision": 0.388,
+        "recall": 0.16,
+        "strict_precision": 0.388,
+        "avg_llm_calls": 0.48,
+        "avg_tokens": 139,
+        "avg_seconds": 3.4,
+        "classify_failed": 0,
+        "prose_rejected": 0,
+        "prose_from_llm": 96
+      }
+    ],
+    "llm": [
+      {
+        "n_images": 200,
+        "verdicts": {
+          "pass": 109,
+          "review": 55,
+          "escalate": 36
+        },
+        "kept": 146,
+        "tp": 60,
+        "fp": 86,
+        "fn": 327,
+        "precision": 0.411,
+        "recall": 0.155,
+        "strict_precision": 0.444,
+        "avg_llm_calls": 1.18,
+        "avg_tokens": 552,
+        "avg_seconds": 17.8,
+        "classify_failed": 0,
+        "prose_rejected": 0,
+        "prose_from_llm": 91
+      },
+      {
+        "n_images": 200,
+        "verdicts": {
+          "pass": 109,
+          "review": 54,
+          "escalate": 37
+        },
+        "kept": 147,
+        "tp": 60,
+        "fp": 87,
+        "fn": 327,
+        "precision": 0.408,
+        "recall": 0.155,
+        "strict_precision": 0.434,
+        "avg_llm_calls": 1.18,
+        "avg_tokens": 552,
+        "avg_seconds": 17.2,
+        "classify_failed": 0,
+        "prose_rejected": 0,
+        "prose_from_llm": 91
+      },
+      {
+        "n_images": 200,
+        "verdicts": {
+          "pass": 109,
+          "review": 57,
+          "escalate": 34
+        },
+        "kept": 145,
+        "tp": 60,
+        "fp": 85,
+        "fn": 327,
+        "precision": 0.414,
+        "recall": 0.155,
+        "strict_precision": 0.431,
+        "avg_llm_calls": 1.18,
+        "avg_tokens": 551,
+        "avg_seconds": 16.9,
+        "classify_failed": 0,
+        "prose_rejected": 0,
+        "prose_from_llm": 91
+      }
+    ],
+    "llm_noguide": [
+      {
+        "n_images": 200,
+        "verdicts": {
+          "pass": 118,
+          "review": 39,
+          "escalate": 43
+        },
+        "kept": 138,
+        "tp": 50,
+        "fp": 88,
+        "fn": 337,
+        "precision": 0.362,
+        "recall": 0.129,
+        "strict_precision": 0.457,
+        "avg_llm_calls": 1.14,
+        "avg_tokens": 460,
+        "avg_seconds": 15.0,
+        "classify_failed": 0,
+        "prose_rejected": 0,
+        "prose_from_llm": 82
+      },
+      {
+        "n_images": 200,
+        "verdicts": {
+          "pass": 117,
+          "review": 42,
+          "escalate": 41
+        },
+        "kept": 141,
+        "tp": 50,
+        "fp": 91,
+        "fn": 337,
+        "precision": 0.355,
+        "recall": 0.129,
+        "strict_precision": 0.443,
+        "avg_llm_calls": 1.15,
+        "avg_tokens": 461,
+        "avg_seconds": 15.0,
+        "classify_failed": 0,
+        "prose_rejected": 0,
+        "prose_from_llm": 83
+      },
+      {
+        "n_images": 200,
+        "verdicts": {
+          "pass": 118,
+          "review": 41,
+          "escalate": 41
+        },
+        "kept": 140,
+        "tp": 50,
+        "fp": 90,
+        "fn": 337,
+        "precision": 0.357,
+        "recall": 0.129,
+        "strict_precision": 0.432,
+        "avg_llm_calls": 1.14,
+        "avg_tokens": 453,
+        "avg_seconds": 13.9,
+        "classify_failed": 0,
+        "prose_rejected": 0,
+        "prose_from_llm": 82
+      }
+    ]
+  }
+}

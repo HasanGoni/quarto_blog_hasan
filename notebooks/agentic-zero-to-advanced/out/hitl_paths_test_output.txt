@@ -1,0 +1,23 @@
+ok  approve keeps the pipeline's boxes, verdict fail, decided_by human
+ok  reject clears everything, verdict pass, the note is in the reason
+ok  edit keeps exactly the given ids
+ok  7 malformed answers are each refused and the question is asked again
+ok  the audit trail keeps every refused answer and the final decision
+ok  edit can add a rejected box; it is flagged added_by_human
+ok  policy none never pauses
+ok  escalate_only pauses less than all_nonpass
+ok  the audit policy pauses on some images that the pipeline passed
+ok  without a human a 'review' verdict becomes fail by itself (decided_by auto-fail)
+ok  each resume starts the review node again from its first line
+ok  a brand-new process finishes a review started in this one
+ok  a second answer to a closed item is refused
+ok  an unknown item raises KeyError
+ok  submitting the same image twice does not run it twice
+ok  expire marks unanswered items 'held', never 'pass'
+ok  graph == simulation (reviewer error 0.0, scope all, rubber_stamp False)
+ok  graph == simulation (reviewer error 0.1, scope all, rubber_stamp False)
+ok  graph == simulation (reviewer error 0.1, scope kept, rubber_stamp False)
+ok  graph == simulation (reviewer error 0.0, scope all, rubber_stamp True)
+ok  rubber stamping gives the same tp/fp/fn as no human at all
+
+ALL HITL PATHS OK (21 checks)

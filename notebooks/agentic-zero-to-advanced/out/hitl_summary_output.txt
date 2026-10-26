@@ -1,0 +1,28 @@
+verdict mix {'band': {'pass': 104, 'review': 93, 'escalate': 3}, 'llm': {'pass': 109, 'review': 55, 'escalate': 36}}
+run/policy                 sent    min      P      R   ceil   fp  audited  rescued
+band/none                   0.0    0.0  0.388  0.160  0.209   98      0.0      0.0
+band/escalate_only          3.0    1.5  0.425  0.160  0.209   84      0.0      0.0
+band/all_nonpass           96.0   48.0  1.000  0.186  0.209    0      0.0      0.0
+band/all_plus_audit       111.0   55.5  1.000  0.186  0.209    0     15.0      0.0
+llm/none                    0.0    0.0  0.411  0.155  0.209   86      0.0      0.0
+llm/escalate_only          35.7   17.8  0.570  0.162  0.209   47      0.0      0.0
+llm/all_nonpass            91.0   45.5  1.000  0.181  0.209    0      0.0      0.0
+llm/all_plus_audit        105.0   52.5  1.000  0.181  0.209    0     14.0      0.0
+
+reviewer error sweep (all_nonpass, llm runs)       scope=all: P / R      scope=kept: P / R
+  error 0.00                                       1.000 / 0.181        1.000 / 0.155
+  error 0.02                                       0.897 / 0.179        0.950 / 0.153
+  error 0.05                                       0.764 / 0.172        0.892 / 0.146
+  error 0.10                                       0.647 / 0.165        0.832 / 0.141
+  error 0.15                                       0.541 / 0.156        0.770 / 0.131
+  error 0.20                                       0.453 / 0.144        0.692 / 0.121
+  error 0.30                                       0.328 / 0.127        0.581 / 0.109
+  error 0.40                                       0.242 / 0.108        0.481 / 0.093
+rubber stamp: {'precision': 0.411, 'recall': 0.155, 'sent_to_human': 91, 'human_minutes': 45.5}
+
+deferral (errors fixed after the person re-checks the k% least sure boxes, vs random)
+  {'judge': 'band/guided', 'errors': 241, 'fixed@10%': 22, 'random@10%': 23.5, 'fixed@25%': 56, 'random@25%': 61.1, 'fixed@50%': 104, 'random@50%': 119.8}
+  {'judge': 'laya-english/guided', 'errors': 212, 'fixed@10%': 25, 'random@10%': 20.7, 'fixed@25%': 69, 'random@25%': 53.7, 'fixed@50%': 124, 'random@50%': 105.4}
+  {'judge': 'llm-verbalized/guided', 'errors': 71, 'fixed@10%': 13, 'random@10%': 6.9, 'fixed@25%': 34, 'random@25%': 18.0, 'fixed@50%': 50, 'random@50%': 35.3}
+  {'judge': 'llm-logprob/plain', 'errors': 242, 'fixed@10%': 28, 'random@10%': 23.6, 'fixed@25%': 64, 'random@25%': 61.3, 'fixed@50%': 116, 'random@50%': 120.3}
+  {'judge': 'llm-logprob/guided', 'errors': 229, 'fixed@10%': 23, 'random@10%': 22.3, 'fixed@25%': 64, 'random@25%': 58.0, 'fixed@50%': 123, 'random@50%': 113.8}

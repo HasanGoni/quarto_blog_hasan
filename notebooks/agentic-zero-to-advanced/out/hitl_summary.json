@@ -1,0 +1,246 @@
+{
+ "seconds_per_image": 30,
+ "n_images": 200,
+ "verdict_mix": {
+  "band": {
+   "pass": 104,
+   "review": 93,
+   "escalate": 3
+  },
+  "llm": {
+   "pass": 109,
+   "review": 55,
+   "escalate": 36
+  }
+ },
+ "policies": {
+  "band/none": {
+   "sent_to_human": 0,
+   "human_minutes": 0.0,
+   "boxes_shown": 0,
+   "tp": 62,
+   "fp": 98,
+   "fn": 325,
+   "precision": 0.388,
+   "recall": 0.16,
+   "ceiling_recall": 0.209,
+   "passes_audited": 0,
+   "passes_rescued": 0
+  },
+  "band/escalate_only": {
+   "sent_to_human": 3,
+   "human_minutes": 1.5,
+   "boxes_shown": 32,
+   "tp": 62,
+   "fp": 84,
+   "fn": 325,
+   "precision": 0.425,
+   "recall": 0.16,
+   "ceiling_recall": 0.209,
+   "passes_audited": 0,
+   "passes_rescued": 0
+  },
+  "band/all_nonpass": {
+   "sent_to_human": 96,
+   "human_minutes": 48.0,
+   "boxes_shown": 368,
+   "tp": 72,
+   "fp": 0,
+   "fn": 315,
+   "precision": 1.0,
+   "recall": 0.186,
+   "ceiling_recall": 0.209,
+   "passes_audited": 0,
+   "passes_rescued": 0
+  },
+  "band/all_plus_audit": {
+   "sent_to_human": 111,
+   "human_minutes": 55.5,
+   "boxes_shown": 385,
+   "tp": 72,
+   "fp": 0,
+   "fn": 315,
+   "precision": 1.0,
+   "recall": 0.186,
+   "ceiling_recall": 0.209,
+   "passes_audited": 15,
+   "passes_rescued": 0
+  },
+  "llm/none": {
+   "sent_to_human": 0,
+   "human_minutes": 0.0,
+   "boxes_shown": 0,
+   "tp": 60,
+   "fp": 86,
+   "fn": 327,
+   "precision": 0.411,
+   "recall": 0.155,
+   "ceiling_recall": 0.209,
+   "passes_audited": 0,
+   "passes_rescued": 0
+  },
+  "llm/escalate_only": {
+   "sent_to_human": 35.667,
+   "human_minutes": 17.833,
+   "boxes_shown": 151,
+   "tp": 62.667,
+   "fp": 47.333,
+   "fn": 324.333,
+   "precision": 0.57,
+   "recall": 0.162,
+   "ceiling_recall": 0.209,
+   "passes_audited": 0,
+   "passes_rescued": 0
+  },
+  "llm/all_nonpass": {
+   "sent_to_human": 91,
+   "human_minutes": 45.5,
+   "boxes_shown": 399,
+   "tp": 70,
+   "fp": 0,
+   "fn": 317,
+   "precision": 1.0,
+   "recall": 0.181,
+   "ceiling_recall": 0.209,
+   "passes_audited": 0,
+   "passes_rescued": 0
+  },
+  "llm/all_plus_audit": {
+   "sent_to_human": 105,
+   "human_minutes": 52.5,
+   "boxes_shown": 404,
+   "tp": 70,
+   "fp": 0,
+   "fn": 317,
+   "precision": 1.0,
+   "recall": 0.181,
+   "ceiling_recall": 0.209,
+   "passes_audited": 14,
+   "passes_rescued": 0
+  }
+ },
+ "noise_sweep": {
+  "all/0.0": {
+   "precision": 1.0,
+   "recall": 0.181
+  },
+  "all/0.02": {
+   "precision": 0.897,
+   "recall": 0.179
+  },
+  "all/0.05": {
+   "precision": 0.764,
+   "recall": 0.172
+  },
+  "all/0.1": {
+   "precision": 0.647,
+   "recall": 0.165
+  },
+  "all/0.15": {
+   "precision": 0.541,
+   "recall": 0.156
+  },
+  "all/0.2": {
+   "precision": 0.453,
+   "recall": 0.144
+  },
+  "all/0.3": {
+   "precision": 0.328,
+   "recall": 0.127
+  },
+  "all/0.4": {
+   "precision": 0.242,
+   "recall": 0.108
+  },
+  "kept/0.0": {
+   "precision": 1.0,
+   "recall": 0.155
+  },
+  "kept/0.02": {
+   "precision": 0.95,
+   "recall": 0.153
+  },
+  "kept/0.05": {
+   "precision": 0.892,
+   "recall": 0.146
+  },
+  "kept/0.1": {
+   "precision": 0.832,
+   "recall": 0.141
+  },
+  "kept/0.15": {
+   "precision": 0.77,
+   "recall": 0.131
+  },
+  "kept/0.2": {
+   "precision": 0.692,
+   "recall": 0.121
+  },
+  "kept/0.3": {
+   "precision": 0.581,
+   "recall": 0.109
+  },
+  "kept/0.4": {
+   "precision": 0.481,
+   "recall": 0.093
+  }
+ },
+ "rubber_stamp": {
+  "precision": 0.411,
+  "recall": 0.155,
+  "sent_to_human": 91,
+  "human_minutes": 45.5
+ },
+ "deferral": [
+  {
+   "judge": "band/guided",
+   "errors": 241,
+   "fixed@10%": 22,
+   "random@10%": 23.5,
+   "fixed@25%": 56,
+   "random@25%": 61.1,
+   "fixed@50%": 104,
+   "random@50%": 119.8
+  },
+  {
+   "judge": "laya-english/guided",
+   "errors": 212,
+   "fixed@10%": 25,
+   "random@10%": 20.7,
+   "fixed@25%": 69,
+   "random@25%": 53.7,
+   "fixed@50%": 124,
+   "random@50%": 105.4
+  },
+  {
+   "judge": "llm-verbalized/guided",
+   "errors": 71,
+   "fixed@10%": 13,
+   "random@10%": 6.9,
+   "fixed@25%": 34,
+   "random@25%": 18.0,
+   "fixed@50%": 50,
+   "random@50%": 35.3
+  },
+  {
+   "judge": "llm-logprob/plain",
+   "errors": 242,
+   "fixed@10%": 28,
+   "random@10%": 23.6,
+   "fixed@25%": 64,
+   "random@25%": 61.3,
+   "fixed@50%": 116,
+   "random@50%": 120.3
+  },
+  {
+   "judge": "llm-logprob/guided",
+   "errors": 229,
+   "fixed@10%": 23,
+   "random@10%": 22.3,
+   "fixed@25%": 64,
+   "random@25%": 58.0,
+   "fixed@50%": 123,
+   "random@50%": 113.8
+  }
+ ]
+}
