@@ -55,8 +55,10 @@ def validate_reply(r, expected_id: int) -> dict:
     need(isinstance(r.get("error"), str) and len(r["error"]) <= MAX_ERROR, "error")
     need(isinstance(r.get("timed_out", False), bool), "timed_out")
     v = r.get("variables") or {}
-    need(isinstance(v, dict) and len(v) <= MAX_VARS, "variables")
-    need(all(isinstance(k, str) and len(k) <= 100 and isinstance(x, str) and len(x) <= MAX_VAR_TEXT for k, x in v.items()), "variables entries")
+    need(isinstance(v, dict), "variables")
+    need(all(isinstance(k, str) and isinstance(x, str) for k, x in v.items()), "variables entries")
+    # informational only (the loop shows the first 25): an honest model may define hundreds, so clip instead of refusing
+    v = {k[:100]: x[:MAX_VAR_TEXT] for k, x in list(v.items())[:MAX_VARS]}
     sub = r.get("submission")
     if sub is not None:
         need(isinstance(sub, dict) and set(sub) == {"void_ratio_pct", "note"}, "submission shape")

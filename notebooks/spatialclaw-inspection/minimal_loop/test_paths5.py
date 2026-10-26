@@ -51,4 +51,5 @@ check("forged negative submission -> REVIEW", go([forge(repr(GOOD % '{"void_rati
 check("forged http image url -> REVIEW",     go([forge(repr((GOOD % 'null').replace('"images": []', '"images": [["t", "http://169.254.169.254/x"]]'))), "submit(0.1)"]), "REVIEW", "sandbox_protocol_error", 1)
 check("forged non-PNG data url -> REVIEW",   go([forge(repr((GOOD % 'null').replace('"images": []', '"images": [["t", "data:image/png;base64,aGVsbG8="]]'))), "submit(0.1)"]), "REVIEW", "sandbox_protocol_error", 1)
 check("endless reply line -> REVIEW",        go(["import os\nwhile True: os.write(3, b'x' * 1000000)", "submit(0.1)"]), "REVIEW", "size cap", 1)
+check("200 honest variables are not an attack", go(["for i in range(200): globals()[f'v{i}'] = i", "submit(0.3)"]), "PASS", "0.30 <= 1.50", 2)
 print("ALL SANDBOX PATHS OK")
