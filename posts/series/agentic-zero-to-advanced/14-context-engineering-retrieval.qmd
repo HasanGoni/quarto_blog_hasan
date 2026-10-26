@@ -3,7 +3,7 @@ title: "Agentic Developer: Zero to Advanced, Part 14: Context Engineering Starts
 subtitle: "grep, paged reads, offloading, paths instead of payloads, and sub-agents that see one file. Measured on this series' own archive, and the result is not the one the checklist suggests."
 author: "Hasan Goni"
 date: 2026-10-24
-date-modified: 2026-10-25
+date-modified: 2026-10-26
 categories: [agentic-ai, python, retrieval, evaluation]
 toc: true
 search: false
@@ -64,6 +64,25 @@ with the identical setup), which is a reminder of how small these samples are. L
 individual saved answers, not just the score.
 :::
 
+:::{.callout-tip}
+## Read it as a notebook
+
+Every section of this post has a literate notebook next to the code: the idea in plain words with a daily-life picture,
+the real source, and cells you can run. Outputs are saved from a real run, and GitHub shows them without installing anything.
+
+| Notebook | Covers | Needs the model server? |
+|---|---|---|
+| [`14a_desk_and_archive`](https://github.com/HasanGoni/quarto_blog_hasan/blob/main/notebooks/agentic-zero-to-advanced/literate/14a_desk_and_archive.ipynb) | the desk and the library, the archive | no |
+| [`14b_harness_switches`](https://github.com/HasanGoni/quarto_blog_hasan/blob/main/notebooks/agentic-zero-to-advanced/literate/14b_harness_switches.ipynb) | the five switches, the offload rule, three live runs | yes (about 15 s) |
+| [`14c_results_t1_to_t5`](https://github.com/HasanGoni/quarto_blog_hasan/blob/main/notebooks/agentic-zero-to-advanced/literate/14c_results_t1_to_t5.ipynb) | the results table, charts, the 1,200-token bug | no, reads the saved runs |
+| [`14d_subagent_brief`](https://github.com/HasanGoni/quarto_blog_hasan/blob/main/notebooks/agentic-zero-to-advanced/literate/14d_subagent_brief.ipynb) | T6, the sub-agent brief | yes (2 calls) |
+| [`14e_two_frameworks`](https://github.com/HasanGoni/quarto_blog_hasan/blob/main/notebooks/agentic-zero-to-advanced/literate/14e_two_frameworks.ipynb) | Deep Agents and Google ADK | no, reads the saved runs |
+| [`14f_loops_guard_sandbox`](https://github.com/HasanGoni/quarto_blog_hasan/blob/main/notebooks/agentic-zero-to-advanced/literate/14f_loops_guard_sandbox.ipynb) | the loops, the repeat guard, the shell sandbox | Docker only |
+
+The framework runs took hours, so 14c and 14e read their saved results instead of repeating them. Each notebook says which
+parts are live and which are read from files.
+:::
+
 ## The desk and the library
 
 *Explain like I'm five.* You are doing an open-book exam, and the library has ten thousand books. Your desk
@@ -103,6 +122,10 @@ the model sees is re-sent on every step of the loop, so a big tool result is pai
 | **Stuffing** | Pasting everything into the prompt and skipping retrieval. | Carrying the whole shelf to the desk, if the shelf fits. |
 
 ## The archive
+
+:::{.callout-note appearance="minimal"}
+**Run it:** [notebook `14a_desk_and_archive`](https://github.com/HasanGoni/quarto_blog_hasan/blob/main/notebooks/agentic-zero-to-advanced/literate/14a_desk_and_archive.ipynb) sizes every folder against the window and diffs the planted stale policy.
+:::
 
 Everything the agent searches is a real file from this series, in `out/ctx_archive/`:
 
@@ -145,6 +168,10 @@ archive at .../notebooks/agentic-zero-to-advanced/out/ctx_archive
 ```
 
 ## The harness: five ideas, five switches
+
+:::{.callout-note appearance="minimal"}
+**Run it:** [notebook `14b_harness_switches`](https://github.com/HasanGoni/quarto_blog_hasan/blob/main/notebooks/agentic-zero-to-advanced/literate/14b_harness_switches.ipynb) turns the switches into tool lists, calls grep and paged reads by hand, triggers the offload rule on a real result, then makes three live runs.
+:::
 
 I wrote about 150 lines of Python in the style of the Part 5 loop (`ctx_harness.py`). It is **not** the
 Deep Agents library the article uses; it is the smallest thing that lets me turn each idea on and off. Later in the post
@@ -204,6 +231,10 @@ Every question has an exact answer computed from the same files, so a run is sim
 6 needle lookups, 3 counts, 2 policy questions, 3 find-by-meaning, 3 visual-neighbour questions.
 
 ## Results
+
+:::{.callout-note appearance="minimal"}
+**Run it:** [notebook `14c_results_t1_to_t5`](https://github.com/HasanGoni/quarto_blog_hasan/blob/main/notebooks/agentic-zero-to-advanced/literate/14c_results_t1_to_t5.ipynb) prints the table from the saved runs, draws the bars against the window, and shows the 1,200-token bug in the old file.
+:::
 
 One table, every run. "Overflow" means the request exceeded the 65,536-token window and the server refused it.
 "Cap" means the agent used all 14 steps without answering. "Mean total tokens" is the sum of prompt tokens over all
@@ -448,6 +479,10 @@ voids"* (and two siblings). Each record is small, so 20 of them is only about 3,
 
 ### T6: how much should a sub-agent be given?
 
+:::{.callout-note appearance="minimal"}
+**Run it:** [notebook `14d_subagent_brief`](https://github.com/HasanGoni/quarto_blog_hasan/blob/main/notebooks/agentic-zero-to-advanced/literate/14d_subagent_brief.ipynb) tabulates the 84 runs and sends the narrow and the 100-report brief for one target live.
+:::
+
 *The sub-agent brief and the visual-search numbers: 36 seconds.*
 
 ```{=html}
@@ -478,6 +513,10 @@ I would still give a sub-agent the narrow brief, because it is free and it is th
 experiment gives you a reason of cost, not of accuracy.
 
 ## The same tasks through two real frameworks: Deep Agents and Google ADK
+
+:::{.callout-note appearance="minimal"}
+**Run it:** [notebook `14e_two_frameworks`](https://github.com/HasanGoni/quarto_blog_hasan/blob/main/notebooks/agentic-zero-to-advanced/literate/14e_two_frameworks.ipynb) rebuilds the framework tables from the saved runs and shows how each agent is wired.
+:::
 
 The first version of this post said "I did not use the Deep Agents library". That was the weakest part, so I ran the
 same 17 questions through it, and through **Google ADK** as well, because Google ADK is a common choice for teams working in company settings. Same model, same questions, same scoring. Nothing else about the task changed.
@@ -590,6 +629,10 @@ guard [{'strategy': 'da', 'correct': False, 'calls': 7, 'tokens': 25270, 'status
 ```
 
 ### What I found
+
+:::{.callout-note appearance="minimal"}
+**Run it:** [notebook `14f_loops_guard_sandbox`](https://github.com/HasanGoni/quarto_blog_hasan/blob/main/notebooks/agentic-zero-to-advanced/literate/14f_loops_guard_sandbox.ipynb) compares the two repeat-guard rules, the guard's effect on the three real looping runs, and checks a real no-network container for the `Execute` shell.
+:::
 
 1. **The framework mattered less than the tools it was given.** ADK with my own tools and with its own toolset scored 9 and 12;
    the same ADK with my tools plus a sub-agent scored 8. Deep Agents scored 6 and 10. Differences of one or two runs are noise
@@ -731,6 +774,11 @@ uv venv .venv-adk && uv pip install --python .venv-adk/bin/python google-adk lit
 .venv-adk/bin/python ctx_adk_env.py              # ADK's own toolset; needs Docker, runs every command in a no-network container
 uv run python ctx_frameworks.py                  # the framework tables in this post
 uv run python ctx_diagrams.py                    # the desk-and-library figure
+
+# the six literate notebooks (outputs are saved in the files; this re-executes them in place, about 2 minutes)
+uv pip install ipykernel nbclient nbformat       # once
+cd literate && ../.venv/bin/python run_all.py 14a_desk_and_archive 14b_harness_switches 14c_results_t1_to_t5 \
+    14d_subagent_brief 14e_two_frameworks 14f_loops_guard_sandbox
 ```
 
 Do not rerun `ctx_corpus.py` after `ctx_visual.py build` without building again: it recreates the archive folder.
