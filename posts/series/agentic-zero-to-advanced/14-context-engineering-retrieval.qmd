@@ -776,7 +776,6 @@ uv run python ctx_frameworks.py                  # the framework tables in this 
 uv run python ctx_diagrams.py                    # the desk-and-library figure
 
 # the six literate notebooks (outputs are saved in the files; this re-executes them in place, about 2 minutes)
-uv pip install ipykernel nbclient nbformat       # once
 cd literate && ../.venv/bin/python run_all.py 14a_desk_and_archive 14b_harness_switches 14c_results_t1_to_t5 \
     14d_subagent_brief 14e_two_frameworks 14f_loops_guard_sandbox
 ```

@@ -15,7 +15,7 @@ The T1 to T5 runs, the framework runs and the guard test took hours, so 14c, 14e
 
 ```bash
 cd notebooks/agentic-zero-to-advanced
-uv pip install ipykernel nbclient nbformat            # once, into the project venv
+uv sync                                               # ipykernel, nbclient, nbformat are in pyproject.toml
 cd literate
 ../.venv/bin/python run_all.py 14a_desk_and_archive 14b_harness_switches 14c_results_t1_to_t5 14d_subagent_brief 14e_two_frameworks 14f_loops_guard_sandbox
 ```
