@@ -11,9 +11,9 @@ toc: true
 
 Every week I pick a handful of the most relevant papers from arXiv and the HF Daily Papers list — filtered against my own work (semiconductor X-ray/casting defect detection, VLM fine-tuning, auto-label verification) — and write each one up twice: once so a 5-year-old could follow it, once with the full methodology, a code sketch, and an honest note on whether it's actually useful for what I'm building.
 
-**Papers covered so far:** 57
+**Papers covered so far:** 62
 
-**By topic:** Vision-Language Models (12), Reasoning & Agents (9), Segmentation (8), Anomaly Detection (5), Benchmarks & Evaluation (5), Generative Models (4), Synthetic Data (4), Diffusion Models (3), Medical Imaging (3), Model Efficiency (3), Multimodal Learning (3), Generative Retrieval (1), Reasoning (1), Reinforcement Learning (1)
+**By topic:** Vision-Language Models (15), Reasoning & Agents (9), Segmentation (8), Anomaly Detection (5), Benchmarks & Evaluation (5), Generative Models (4), Model Efficiency (4), Multimodal Learning (4), Synthetic Data (4), Diffusion Models (3), Medical Imaging (3), Generative Retrieval (1), Reasoning (1), Reinforcement Learning (1)
 
 ## Posts in this Series
 
@@ -43,3 +43,4 @@ Most recent first.
 - **2026-10-02** — [5 Papers Worth Reading — Week of October 2, 2026](2026-10-02.qmd) (5 papers)
 - **2026-10-09** — [5 Papers Worth Reading — Week of October 9, 2026](2026-10-09.qmd) (5 papers)
 - **2026-10-23** — [4 Papers Worth Reading — Week of October 23, 2026](2026-10-23.qmd) (4 papers)
+- **2026-10-30** — [5 Papers Worth Reading — Week of October 30, 2026](2026-10-30.qmd) (5 papers)
