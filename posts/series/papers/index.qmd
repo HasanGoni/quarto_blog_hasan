@@ -44,3 +44,4 @@ Most recent first.
 - **2026-10-09** — [5 Papers Worth Reading — Week of October 9, 2026](2026-10-09.qmd) (5 papers)
 - **2026-10-23** — [4 Papers Worth Reading — Week of October 23, 2026](2026-10-23.qmd) (4 papers)
 - **2026-10-30** — [5 Papers Worth Reading — Week of October 30, 2026](2026-10-30.qmd) (5 papers)
+- **2026-10-31** — [Reimplementing SAMBA-UNet — SAM Features Guiding a Mamba Decoder, and What the Paper Doesn't Say](2026-10-31-sambaunet.qmd) — our own reference implementation (the paper has no released code): SAM ViT-B with LoRA + Adapters, a VSS Mamba U-Net, and the HCEM fusion module, run for real (identity at init, gradient flow, one-image overfit) with every guess marked, plus an interactive explainer page and a list of what the paper does not say.

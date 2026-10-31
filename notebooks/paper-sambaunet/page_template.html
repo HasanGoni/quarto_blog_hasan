@@ -38,7 +38,7 @@ Real = SAM ViT-B weights (<code>facebook/sam-vit-base</code>) and the numbers ca
 <div class="row">
 <div class="card"><b>The problem.</b> A skin-lesion or organ boundary is a <i>low-contrast edge</i>. CNNs (U-Net) see only locally. Transformers see globally but cost O(N²). Mamba (state-space models) sees globally at O(N) but has no "what is an object" knowledge. SAM knows objects, but medical images look nothing like its training photos.</div>
 <div class="card"><b>The trick.</b> Run both on the same image. Fine-tune SAM cheaply (LoRA + Adapters, 2.5 M of 121 M params). Then at three depths hand SAM's features to the Mamba U-Net decoder through a small attention gate (HCEM). SAM says <i>what</i>, Mamba says <i>where exactly</i>. No prompts needed.</div>
-<div class="card"><b>The claim.</b> Synapse DSC 81.94 (VM-UNet 81.08), HD95 17.34 (19.21); ISIC17 mIoU 81.07 (80.23); ISIC18 mIoU 81.69 (81.35). Gains of 0.3–0.9 points; no seeds or error bars reported — see "What the paper does not say" below.</div>
+<div class="card"><b>The claim.</b> Synapse DSC 81.94 (VM-UNet 81.08), HD95 17.34 (19.21); ISIC17 mIoU 81.07 (80.23); ISIC18 mIoU 81.69 (81.35). Gains of 0.2–0.9 points; no seeds or error bars reported — see "What the paper does not say" below.</div>
 </div>
 
 <h2>1 · The pipeline — click a stage</h2>
@@ -48,6 +48,7 @@ Real = SAM ViT-B weights (<code>facebook/sam-vit-base</code>) and the numbers ca
 <div style="margin:6px 0"><button id="tgl">Show / hide ALL captured outputs</button></div>
 
 <h2>2 · The paper's own figure, up close</h2>
+<div class="sub">Figures 1(a)–(c) below are reproduced from the paper (Wang &amp; Zhou, <a href="https://arxiv.org/abs/2610.40029">arXiv:2610.40029</a>) for explanation; they belong to the authors.</div>
 <div class="row">
 <div><img id="f1a" alt="Fig 1a"><div class="sub">Fig. 1(a) — the architecture. Left: Mamba encoder (VSS blocks). Middle: SAM encoder with adapters (🔥 trainable, ❄ frozen). Right: Mamba decoder. Orange arrows M1–M3 are the skips; Sa6/9/12 the SAM taps.</div></div>
 <div><img id="f1b" alt="Fig 1b"><div class="sub">Fig. 1(b) — "CPEM" (called HCEM in the text): Upsample → concat → Conv → GAP ∥ GMP → add → sigmoid → gate → concat with M → Conv.</div></div>
@@ -112,7 +113,7 @@ Real = SAM ViT-B weights (<code>facebook/sam-vit-base</code>) and the numbers ca
 <li><b>Text vs tables:</b> prose cites VM-UNet "only 82% DSC", "ACM-UNet 85.12%" and TransUNet "89.8% Dice on ISIC-17", none of which are in Tables 1–2 (VM-UNet is 81.08 there).</li>
 <li><b>Citation:</b> "MedSAM [41]" — reference [41] is Medical SAM Adapter (same as [31]), not MedSAM.</li>
 <li><b>Unspecified:</b> SAM input size/position handling, LoRA rank, adapter width, λ values, how multi-scale transform MS(·) works beyond "upsample", where exactly the Adapters add, decoder fusion (concat vs add), whether SAM's mask decoder was used in the reported numbers.</li>
-<li><b>Statistics:</b> single numbers, no seeds, no confidence intervals; the gains over VM-UNet are 0.3–0.9 points.</li>
+<li><b>Statistics:</b> single numbers, no seeds, no confidence intervals; the gains over VM-UNet are 0.2–0.9 points.</li>
 </ul>
 <script>
 /*STAGES*/
