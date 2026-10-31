@@ -1,0 +1,1 @@
+{"layers": 12, "hidden": 768, "heads": 12, "window": 14, "global_attn_indexes_0based": [2, 5, 8, 11], "image_size": 1024, "patch": 16, "neck_out": 256}

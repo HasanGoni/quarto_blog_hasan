@@ -1,0 +1,7 @@
+[project]
+name = "paper-sambaunet"
+version = "0.1.0"
+requires-python = ">=3.10"
+dependencies = ["torch", "transformers", "einops", "pillow", "numpy", "matplotlib", "safetensors"]
+[tool.uv]
+package = false

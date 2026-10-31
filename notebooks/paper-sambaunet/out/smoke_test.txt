@@ -1,0 +1,36 @@
+input (2, 3, 256, 256) mask (2, 1, 256, 256) mask fg fraction 0.534
+chunked vs sequential selective scan: max abs diff = 1.43e-06
+S6: shape (2, 768, 16, 16)  max|CoSE - original SAM| = 0.00e+00
+S9: shape (2, 768, 16, 16)  max|CoSE - original SAM| = 0.00e+00
+S12: shape (2, 768, 16, 16)  max|CoSE - original SAM| = 0.00e+00
+total params             120.99 M
+frozen SAM encoder        89.67 M
+LoRA + Adapters (CoSE)     2.53 M  trainable
+Mamba UNet + HCEM         28.79 M  trainable (random init here; the paper starts from VMamba-S)
+trainable total           31.32 M  (25.9% of all)
+forward 5.91s  logits (2, 1, 256, 256)
+  SAM tap S6 : (2, 768, 16, 16)
+  SAM tap S9 : (2, 768, 16, 16)
+  SAM tap S12: (2, 768, 16, 16)
+  Mamba skip M1: (2, 96, 64, 64)
+  Mamba skip M2: (2, 192, 32, 32)
+  Mamba skip M3: (2, 384, 16, 16)
+  decoder out dec0: (2, 16, 16, 384)
+  decoder out dec1: (2, 32, 32, 192)
+  decoder out dec2: (2, 64, 64, 96)
+loss 1.2328   backward 11.54s
+  grad non-zero: LoRA down (q)  0/12 tensors
+  grad non-zero: LoRA up (q)    12/12 tensors
+  grad non-zero: Adapter up     48/48 tensors
+  grad non-zero: HCEM           12/12 tensors
+  grad non-zero: VSS encoder    104/104 tensors
+  frozen SAM qkv has grad: False
+  frozen SAM weight unchanged after step: True
+  step  5  loss 0.1666
+  step 10  loss 0.0713
+  step 15  loss 0.0566
+  step 20  loss 0.0353
+  step 25  loss 0.0348
+  step 30  loss 0.0292
+after 30 steps on ONE image: dice vs mask = 0.993  (memorisation check only, not generalisation)
+peak GPU memory 21.0 GB

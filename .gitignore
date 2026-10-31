@@ -132,3 +132,14 @@ notebooks/synthetic-data-anomalygen/data/
 notebooks/synthetic-data-anomalygen/results/
 notebooks/agentic-factory-segmentation/out/sam3/
 /notebooks/agentic-zero-to-advanced/.venv-adk/
+
+# SAMBA-UNet explainer: per-project uv venv, bulky derived/third-party files
+notebooks/paper-sambaunet/.venv/
+notebooks/paper-sambaunet/assets/paper.pdf
+notebooks/paper-sambaunet/assets/pg*.png
+notebooks/paper-sambaunet/assets/emb/
+notebooks/paper-sambaunet/review_site/
+notebooks/paper-sambaunet/shot.png
+notebooks/paper-sambaunet/out/shot_*.png
+notebooks/paper-sambaunet/out/pred.pt
+notebooks/agentic-zero-to-advanced/video/mc/src/sb_*/audio.wav

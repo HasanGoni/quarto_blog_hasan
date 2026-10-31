@@ -1,0 +1,182 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>SAMBA-UNet explained: SAM + Mamba, step by step</title>
+<style>
+:root{--bg:#0f1419;--panel:#171e26;--ink:#e6edf3;--mute:#9aa7b4;--acc:#6EC6FF;--ok:#58d68d;--warn:#f0a050;--bad:#ef6b6b;--line:#2a3541;--code:#0b0f14}
+@media (prefers-color-scheme:light){:root{--bg:#f6f8fa;--panel:#fff;--ink:#1c2630;--mute:#5a6874;--acc:#0b6fb3;--ok:#1f8a4c;--warn:#b0600e;--bad:#c0392b;--line:#d5dde5;--code:#f0f3f6}}
+*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--ink);font:16px/1.55 system-ui,Segoe UI,Roboto,sans-serif}
+main{max-width:1060px;margin:0 auto;padding:20px 16px 80px}
+h1{font-size:1.9rem;margin:.2em 0}h2{margin:2.2em 0 .4em;font-size:1.35rem;border-bottom:1px solid var(--line);padding-bottom:.3em}h3{margin:1.2em 0 .3em;font-size:1.05rem}
+.sub{color:var(--mute)}.banner{background:var(--panel);border:1px solid var(--line);border-left:4px solid var(--warn);padding:10px 14px;border-radius:8px;margin:14px 0}
+.card{background:var(--panel);border:1px solid var(--line);border-radius:10px;padding:14px 16px;margin:12px 0}
+.row{display:flex;gap:14px;flex-wrap:wrap;align-items:flex-start}.row>*{flex:1 1 280px}
+button,select{background:var(--panel);color:var(--ink);border:1px solid var(--line);border-radius:7px;padding:6px 10px;font:inherit;cursor:pointer}
+button.on{border-color:var(--acc);color:var(--acc)}button:hover{border-color:var(--acc)}
+input[type=range]{width:100%}
+code,pre{font-family:ui-monospace,Menlo,Consolas,monospace;font-size:.82rem}
+pre{background:var(--code);border:1px solid var(--line);border-radius:8px;padding:10px 12px;overflow:auto;max-height:420px;margin:6px 0}
+.pipe{display:flex;flex-wrap:wrap;gap:8px;margin:10px 0}.pipe button{flex:1 1 130px;text-align:left;line-height:1.25;padding:9px 10px}
+.pipe small{display:block;color:var(--mute);font-size:.72rem}
+.tag{display:inline-block;font-size:.72rem;padding:1px 7px;border-radius:99px;border:1px solid var(--line);color:var(--mute);margin-right:4px}
+.tag.real{color:var(--ok);border-color:var(--ok)}.tag.mine{color:var(--warn);border-color:var(--warn)}.tag.paper{color:var(--acc);border-color:var(--acc)}
+canvas{max-width:100%;border:1px solid var(--line);border-radius:8px;background:#000;image-rendering:pixelated}
+img{max-width:100%;border-radius:8px;border:1px solid var(--line);background:#fff}
+table{border-collapse:collapse;width:100%;font-size:.9rem}td,th{border-bottom:1px solid var(--line);padding:5px 8px;text-align:right}th:first-child,td:first-child{text-align:left}
+.best{color:var(--ok);font-weight:600}.mono{font-family:ui-monospace,monospace}
+.bar{height:14px;background:var(--acc);border-radius:3px}.stp{display:flex;gap:6px;flex-wrap:wrap;margin:6px 0}
+.shape{font-family:ui-monospace,monospace;color:var(--acc)}
+details>summary{cursor:pointer;color:var(--acc);margin:6px 0}
+ul.gaps li{margin:6px 0}
+.big{font-size:1.5rem;font-weight:700}
+</style></head><body><main>
+<h1>SAMBA-UNet, explained step by step</h1>
+<div class="sub">arXiv 2610.40029 · "Segment Anything Model Based Context Guided Mamba Unet for Medical Image Segmentation" · Wang &amp; Zhou, Cardiff University · 29 Oct 2026</div>
+<div class="banner"><b>Read this first.</b> This is an unofficial explainer. The paper says "code will be released upon acceptance", so <b>there is no official repo</b>: every line of code on this page was written by us from the paper's equations and Figure 1, and every guess is marked <span class="tag mine">our assumption</span>.
+Real = SAM ViT-B weights (<code>facebook/sam-vit-base</code>) and the numbers captured from running our code. Stand-in = the Mamba branch is randomly initialised (the paper starts from VMamba-S weights), and the selective scan is plain PyTorch. Nothing here reproduces the paper's accuracy numbers.</div>
+
+<h2>The whole idea in one minute</h2>
+<div class="row">
+<div class="card"><b>The problem.</b> A skin-lesion or organ boundary is a <i>low-contrast edge</i>. CNNs (U-Net) see only locally. Transformers see globally but cost O(N²). Mamba (state-space models) sees globally at O(N) but has no "what is an object" knowledge. SAM knows objects, but medical images look nothing like its training photos.</div>
+<div class="card"><b>The trick.</b> Run both on the same image. Fine-tune SAM cheaply (LoRA + Adapters, 2.5 M of 121 M params). Then at three depths hand SAM's features to the Mamba U-Net decoder through a small attention gate (HCEM). SAM says <i>what</i>, Mamba says <i>where exactly</i>. No prompts needed.</div>
+<div class="card"><b>The claim.</b> Synapse DSC 81.94 (VM-UNet 81.08), HD95 17.34 (19.21); ISIC17 mIoU 81.07 (80.23); ISIC18 mIoU 81.69 (81.35). Gains of 0.3–0.9 points; no seeds or error bars reported — see "What the paper does not say" below.</div>
+</div>
+
+<h2>1 · The pipeline — click a stage</h2>
+<div class="sub">Tags: <span class="tag paper">paper</span> says it · <span class="tag real">real</span> captured from a run · <span class="tag mine">our assumption</span></div>
+<div class="pipe" id="pipe"></div>
+<div class="card" id="panel"></div>
+<div style="margin:6px 0"><button id="tgl">Show / hide ALL captured outputs</button></div>
+
+<h2>2 · The paper's own figure, up close</h2>
+<div class="row">
+<div><img id="f1a" alt="Fig 1a"><div class="sub">Fig. 1(a) — the architecture. Left: Mamba encoder (VSS blocks). Middle: SAM encoder with adapters (🔥 trainable, ❄ frozen). Right: Mamba decoder. Orange arrows M1–M3 are the skips; Sa6/9/12 the SAM taps.</div></div>
+<div><img id="f1b" alt="Fig 1b"><div class="sub">Fig. 1(b) — "CPEM" (called HCEM in the text): Upsample → concat → Conv → GAP ∥ GMP → add → sigmoid → gate → concat with M → Conv.</div></div>
+<div><img id="f1c" alt="Fig 1c"><div class="sub">Fig. 1(c) — the VSS block: LN → Linear → DW-Conv → SS2D → LN, gated by a Linear→activation branch, then Linear + residual.</div></div>
+</div>
+
+<h2>3 · Interactive: why Mamba scans in four directions</h2>
+<div class="card">
+<div class="sub">SS2D flattens the 16×16 grid (here: the paper's lesion image) into a sequence, in 4 orders. A state-space model reads the sequence once and keeps a running memory. In one order, a pixel never sees what comes <i>after</i> it. The decay below is <b>illustrative</b> (real decay is learned and input-dependent — that is the "selective" in S6).</div>
+<div class="stp" id="dirs"></div>
+<div class="row"><div><canvas id="scan" width="384" height="384"></canvas></div>
+<div>
+<label>Step t: <b id="tv">0</b> / 255</label><input type="range" id="t" min="0" max="255" value="40">
+<label>Memory decay a (illustrative): <b id="av">0.90</b></label><input type="range" id="a" min="50" max="99" value="90">
+<div class="stp"><button id="m1" class="on">one direction</button><button id="m4">all four at once</button></div>
+<div id="scantxt" class="sub"></div>
+</div></div></div>
+
+<h2>4 · Interactive: what CoSE costs</h2>
+<div class="card">
+<div class="sub">Count trainable parameters of LoRA (Q,V) + 2 Adapters across the 12 ViT blocks (d = 768). With the paper-like defaults the formula gives exactly what we measured: <b>2,526,720 ≈ 2.53 M</b> (smoke test output).</div>
+<div class="row"><div>
+<label>LoRA rank r: <b id="rv">4</b></label><input type="range" id="r" min="1" max="64" value="4">
+<label>Adapter bottleneck: <b id="hv">64</b></label><input type="range" id="h" min="8" max="256" step="8" value="64">
+<label><input type="checkbox" id="cq" checked> LoRA on Q</label> &nbsp; <label><input type="checkbox" id="cv" checked> LoRA on V</label> &nbsp;
+<label><input type="checkbox" id="a1" checked> Adapter after attention</label> &nbsp; <label><input type="checkbox" id="a2" checked> Adapter in MLP path</label>
+</div><div><div class="big" id="pc">–</div><div class="sub" id="pct"></div><div class="bar" id="pbar" style="width:3%"></div>
+<div class="sub">Paper does not state rank or adapter width — r=4 / 64 are our choice.</div></div></div></div>
+
+<h2>5 · Interactive: inside one HCEM</h2>
+<div class="card">
+<div class="stp" id="lv"></div><div id="hc"></div>
+<div class="row" style="margin-top:8px"><div><b>What SAM's features of the lesion look like at the 3 tap depths</b> <span class="tag real">real</span><br>
+<img id="s0" style="width:24%"> <img id="s6" style="width:24%"> <img id="s9" style="width:24%"> <img id="s12" style="width:24%">
+<div class="sub">Image · S6 · S9 · S12 (pre-trained SAM ViT-B, 16×16 tokens, one shared PCA→RGB). Even at block 6 the lesion separates from skin; by block 12 it is a distinct blob. These are what HCEM hands to the decoder.</div></div></div></div>
+
+<h2>6 · The paper's results (as printed)</h2>
+<div class="row"><div class="card"><b>Ablation (Table 3, Synapse).</b> <div class="sub">The printed header says "DSC↓ HD95↑" — the arrows are swapped; higher DSC and lower HD95 are better.</div><div id="abl"></div></div>
+<div class="card"><img id="t3" alt="Table 3"></div></div>
+<img id="f2" alt="Fig 2"><div class="sub">Fig. 2 — qualitative Synapse results (GT, U-Net, TransUNet, MT-UNet, SwinUNet, UCTransUNet, VM-UNet, MedSAM, Ours). Boxes zoom on pancreas/gallbladder area.</div>
+
+<h2>7 · How a data scientist implements this</h2>
+<div class="card"><ol>
+<li><b>Load SAM ViT-B</b> from <code>transformers</code>, freeze it, take the vision encoder only (no prompt encoder / mask decoder needed — that is the "prompt-free" claim).</li>
+<li><b>Feed it 256×256.</b> HF's patch embedding refuses anything but 1024 — call the conv <code>patch_embed.projection</code> directly and interpolate the absolute position embedding 64×64 → 16×16. <span class="tag mine">our assumption</span></li>
+<li><b>Wrap each block:</b> LoRA on the fused <code>qkv</code> (Q and V slices only, zero-init up-projection), Adapter after attention and in the MLP path (zero-init). <b>Check:</b> output must equal plain SAM at step 0 — we got max diff 0.00e+00.</li>
+<li><b>Tap blocks 6, 9, 12</b> (the global-attention blocks) → three (B,768,16,16) maps.</li>
+<li><b>Build the VSS U-Net</b> (96-192-384-768, two VSS blocks per stage). Use VMamba's official <code>selective_scan</code> CUDA kernel for speed and load VMamba-S weights (<code>vmamba_small_e238_ema.pth</code>, as the paper does). We used a chunked PyTorch scan to stay dependency-free: ≈25× faster backward than a naive loop (282 s → 11.5 s) and equal to it up to 1.4e-6.</li>
+<li><b>HCEM ×3</b> at (S6,M1), (S9,M2), (S12,M3); fuse into the decoder.</li>
+<li><b>Loss</b> BCE+Dice (binary: ISIC) or CE+Dice (Synapse); AdamW lr 1e-3, cosine to 1e-4, batch 32, 256×256 — all from §4.2.</li>
+<li><b>Sanity-check before any real run:</b> (a) identity at init, (b) gradients non-zero where expected and zero on frozen SAM, (c) overfit one batch to Dice ≈ 1. Then train; report mean ± std over seeds (the paper does not).</li>
+</ol>
+<div class="sub">Compute we measured: 121.0 M params (89.7 M frozen SAM, 2.5 M CoSE, 28.8 M Mamba U-Net + HCEM); batch-2 forward 5.9 s / backward 11.5 s with the pure-PyTorch scan, peak 21 GB on a GB10. The paper claims "computational efficiency" but prints no parameter, FLOP or speed numbers.</div></div>
+<details><summary>Full captured output of smoke_test.py</summary><pre><!--FULLOUT--></pre></details>
+
+<h2>8 · What the paper does not say (or gets inconsistent)</h2>
+<ul class="gaps">
+<li><b>No code, no weights</b> ("upon acceptance").</li>
+<li><b>Names:</b> SAMBA-UNet / SAMamba-UNet / SAMambUnet; HCEM in text, CPEM in Fig. 1; "SKBS" is a leftover from another paper in §3.3.</li>
+<li><b>Table 3:</b> header arrows swapped. Text says LoRA "reduces HD95 by 6.2%" — 29.89 → 23.69 is 6.2 <i>points</i> (≈21%); "HD95 of 23.18%" is not a percentage.</li>
+<li><b>Ablation baseline (a)</b> is undefined and scores 79.05, below VM-UNet's 81.08 in Table 2. There is no HCEM-only row, so we cannot tell how much of the gain is SAM's features and how much is HCEM itself.</li>
+<li><b>Text vs tables:</b> prose cites VM-UNet "only 82% DSC", "ACM-UNet 85.12%" and TransUNet "89.8% Dice on ISIC-17", none of which are in Tables 1–2 (VM-UNet is 81.08 there).</li>
+<li><b>Citation:</b> "MedSAM [41]" — reference [41] is Medical SAM Adapter (same as [31]), not MedSAM.</li>
+<li><b>Unspecified:</b> SAM input size/position handling, LoRA rank, adapter width, λ values, how multi-scale transform MS(·) works beyond "upsample", where exactly the Adapters add, decoder fusion (concat vs add), whether SAM's mask decoder was used in the reported numbers.</li>
+<li><b>Statistics:</b> single numbers, no seeds, no confidence intervals; the gains over VM-UNet are 0.3–0.9 points.</li>
+</ul>
+<script>
+/*STAGES*/
+/*IMG*/
+const $=id=>document.getElementById(id);
+for(const [k,i] of [["f1a","fig1a"],["f1b","fig1b"],["f1c","fig1c"],["f2","fig2"],["t3","table3"],["s0","lesion"],["s6","S6"],["s9","S9"],["s12","S12"]]) $(k).src=IMG[i];
+// ---- pipeline
+const SHORT={in:'3×256×256',sam:'frozen · taps 6, 9, 12',cose:'+2.53 M trainable',mamba:'skips M1, M2, M3',hcem:'(S_i, M_i) → guided skip',dec:'mask logits',loss:'BCE + Dice'};let showAll=false;const order=["in","sam","cose","mamba","hcem","dec","loss"];
+function esc(s){return s.replace(/[&<>]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;"}[c]))}
+function show(k){document.querySelectorAll('#pipe button').forEach(b=>b.classList.toggle('on',b.dataset.k===k));const s=STAGES[k];
+ let h=`<h3>${s.t}</h3><div class="shape">${s.shape}</div><p><b>Everyday picture:</b> ${s.analogy}</p><p>${s.text}</p>`;
+ for(const c of s.code) h+=`<span class="tag mine">written by us</span> <code>${esc(c.title)}</code><pre>${esc(c.code)}</pre>`;
+ if(s.out) h+=`<details class="out" ${showAll?'open':''}><summary>Show real captured output</summary><pre>${esc(s.out)}</pre></details>`;
+ $('panel').innerHTML=h;}
+for(const k of order){const b=document.createElement('button');b.dataset.k=k;b.innerHTML=STAGES[k].t.split('(')[0]+'<small>'+(SHORT[k]||'')+'</small>';b.onclick=()=>show(k);$('pipe').appendChild(b)}
+let cur="in";const _show=show;show=function(k){cur=k;_show(k)};show("in");
+$('tgl').onclick=()=>{showAll=!showAll;document.querySelectorAll('details.out').forEach(d=>d.open=showAll)};
+// ---- scan viewer
+const G=16,CV=$('scan'),cx=CV.getContext('2d');let cells=null,dir=0,mode=1;
+const im=new Image();im.onload=()=>{const c=document.createElement('canvas');c.width=G;c.height=G;const x=c.getContext('2d');x.drawImage(im,0,0,G,G);cells=x.getImageData(0,0,G,G).data;draw()};im.src=IMG.lesion;
+const names=["→ rows","↓ columns","← rows reversed","↑ columns reversed"];
+function path(d){const p=[];for(let i=0;i<G;i++)for(let j=0;j<G;j++)p.push(d%2==0?[i,j]:[j,i]);return d>=2?p.reverse():p}
+for(let d=0;d<4;d++){const b=document.createElement('button');b.textContent=names[d];b.onclick=()=>{dir=d;mode=1;sync()};b.id='d'+d;$('dirs').appendChild(b)}
+function sync(){for(let d=0;d<4;d++)$('d'+d).classList.toggle('on',mode==1&&d==dir);$('m1').classList.toggle('on',mode==1);$('m4').classList.toggle('on',mode==4);draw()}
+$('m1').onclick=()=>{mode=1;sync()};$('m4').onclick=()=>{mode=4;sync()};$('t').oninput=draw;$('a').oninput=draw;
+function draw(){if(!cells)return;const t=+$('t').value,a=+$('a').value/100;$('tv').textContent=t;$('av').textContent=a.toFixed(2);const S=CV.width/G;
+ cx.clearRect(0,0,CV.width,CV.height);
+ const cover=new Array(G*G).fill(0);
+ const dirs=mode==1?[dir]:[0,1,2,3];
+ for(const d of dirs){const p=path(d);for(let s=0;s<=t;s++){const [i,j]=p[s];cover[i*G+j]++}}
+ for(let i=0;i<G;i++)for(let j=0;j<G;j++){const k=(i*G+j)*4;let r=cells[k],g=cells[k+1],b=cells[k+2];
+  const seen=cover[i*G+j]/dirs.length;cx.globalAlpha=0.25+0.75*seen;cx.fillStyle=`rgb(${r},${g},${b})`;cx.fillRect(j*S,i*S,S,S)}
+ cx.globalAlpha=1;
+ if(mode==1){const p=path(dir);cx.strokeStyle='#6EC6FF';cx.lineWidth=2;cx.beginPath();for(let s=0;s<=t;s++){const [i,j]=p[s];const X=j*S+S/2,Y=i*S+S/2;s?cx.lineTo(X,Y):cx.moveTo(X,Y)}cx.stroke();
+  for(let s=Math.max(0,t-30);s<=t;s++){const [i,j]=p[s];cx.fillStyle=`rgba(110,198,255,${0.55*Math.pow(a,t-s)})`;cx.fillRect(j*S+3,i*S+3,S-6,S-6)}
+  const [ci,cj]=p[t];cx.strokeStyle='#fff';cx.lineWidth=3;cx.strokeRect(cj*S+1,ci*S+1,S-2,S-2);
+  const infl=Math.pow(a,10).toFixed(2);
+  $('scantxt').innerHTML=`Current cell = white box. Cyan glow = how much of earlier cells is still in the memory (a<sup>Δt</sup>). Cells not yet visited are dimmed: <b>in this order the current cell has seen ${t+1} of 256 cells and nothing after it.</b> A cell 10 steps back still counts ${infl}; with a=${a.toFixed(2)} cells ~${Math.round(Math.log(0.05)/Math.log(a))} steps back have faded below 5%. Note cells that are neighbours vertically are ${G} steps apart in a row scan — the other directions fix that.`}
+ else{const full=cover.filter(c=>c==4).length,none=cover.filter(c=>c==0).length;
+  $('scantxt').innerHTML=`Brightness = how many of the 4 directions have already read this cell (dim = none, full = all four). After ${t+1} steps per direction: <b>${256-none}</b> of 256 cells have been read by at least one direction, <b>${full}</b> by all four. At the end every cell is read 4 times, from 4 sides — that is what SS2D merges.`}}
+sync();
+// ---- param calculator
+const dm=768,L=12,SAMP=89.67e6;
+function params(){const r=+$('r').value,h=+$('h').value;$('rv').textContent=r;$('hv').textContent=h;
+ let n=0;if($('cq').checked)n+=2*dm*r;if($('cv').checked)n+=2*dm*r;const ad=dm*h+h+h*dm+dm;if($('a1').checked)n+=ad;if($('a2').checked)n+=ad;n*=L;
+ $('pc').textContent=n.toLocaleString()+' params';$('pct').textContent=(n/1e6).toFixed(2)+' M  =  '+(100*n/SAMP).toFixed(2)+'% of the frozen SAM encoder (89.67 M)';$('pbar').style.width=Math.min(100,3+100*n/SAMP*4)+'%'}
+for(const i of ['r','h','cq','cv','a1','a2'])$(i).oninput=params;params();
+// ---- HCEM stepper
+const LV=[{n:"HCEM at (S6, M1)",C:96,H:64},{n:"HCEM at (S9, M2)",C:192,H:32},{n:"HCEM at (S12, M3)",C:384,H:16}];let lvl=0,stp=0;
+for(let i=0;i<3;i++){const b=document.createElement('button');b.textContent=LV[i].n;b.onclick=()=>{lvl=i;hc()};b.id='lv'+i;$('lv').appendChild(b)}
+function hc(){const {C,H}=LV[lvl];for(let i=0;i<3;i++)$('lv'+i).classList.toggle('on',i==lvl);
+ const S=[["SAM tap S_i",`(768, 16, 16)`,"what SAM thinks is where (coarse, 16×16 tokens)"],
+ ["Mamba skip M_i",`(${C}, ${H}, ${H})`,"the inspector's fine-grained map from the encoder"],
+ ["MS(S_i): upsample to M's size",`(768, ${H}, ${H})`,H==16?"already 16×16 — no change":"bilinear ×"+(H/16)+" (Fig. 1b trapezoid)"],
+ ["Eq.3 concat + 1×1 conv",`(768+${C}, ${H}, ${H}) → (${C}, ${H}, ${H})`,"mix the two experts' channels"],
+ ["Eq.4 gate: σ(AvgPool + MaxPool)",`(${C}, 1, 1)`,"one volume knob per channel — loud channels are kept"],
+ ["residual: F + F·att",`(${C}, ${H}, ${H})`,"gated features added back to themselves"],
+ ["concat with M_i + 1×1 conv",`(${2*C}, ${H}, ${H}) → (${C}, ${H}, ${H})`,"guided skip handed to the decoder"]];
+ let h='<table><tr><th>step</th><th>tensor (C,H,W)</th><th>meaning</th></tr>';
+ S.forEach((s,i)=>{h+=`<tr style="${i==stp?'background:rgba(110,198,255,.15)':''}"><td>${i+1}. ${s[0]}</td><td class="mono">${s[1]}</td><td style="text-align:left">${s[2]}</td></tr>`});
+ h+='</table><div class="stp"><button id="pv">◀</button><button id="nx">▶</button></div>';$('hc').innerHTML=h;
+ $('pv').onclick=()=>{stp=Math.max(0,stp-1);hc()};$('nx').onclick=()=>{stp=Math.min(6,stp+1);hc()}}
+hc();
+// ---- ablation bars
+const AB=[["(a) baseline",79.05,29.89],["(b) + LoRA",80.33,23.69],["(c) + Adapter only",80.58,24.92],["(d) LoRA + Adapter",81.06,23.18],["(e) + HCEM",81.94,17.34]];
+$('abl').innerHTML='<table><tr><th></th><th>DSC (higher=better)</th><th>HD95 (lower=better)</th></tr>'+AB.map(r=>`<tr><td>${r[0]}</td><td><div class="bar" style="width:${(r[1]-77)*18}px"></div>${r[1]}</td><td><div class="bar" style="width:${r[2]*4}px;background:var(--warn)"></div>${r[2]}</td></tr>`).join('')+'</table>';
+</script></main></body></html>
