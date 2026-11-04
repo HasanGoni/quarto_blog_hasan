@@ -71,7 +71,11 @@ changed, and each post says where.
 
 ### Arc 3 -- Scaling Up: Multi-Agent and Deep Agents
 
-10. When one agent isn't enough -- sub-agents per defect category or per inspection stage
+10. [When one agent isn't enough](10-when-one-agent-is-not-enough.qmd) -- the same inspection as one agent, a supervisor with two
+    specialists, a sub-agent per box, and a voting panel, measured on 200 held-out images. The supervisor costs 1.9 times the
+    tokens and is no better than blindly keeping fewer boxes; a sub-agent per box gives a genuinely different, better-ranked answer
+    with a flat context and failures that cost one box; the panel is not worth its 3.4 times the tokens. The dataset has one defect
+    category, so "per category" was not testable and the post says so. Five literate notebooks, two with cells for you to change
 11. Deep Agents harness -- planning, virtual filesystem, context management for long-running
     investigations
 12. Orchestration patterns -- supervisor agents, delegation, aggregating sub-agent results

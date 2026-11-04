@@ -199,6 +199,8 @@ website:
             href: posts/series/agentic-zero-to-advanced/08-tool-design.qmd
           - text: "9. Human in the Loop"
             href: posts/series/agentic-zero-to-advanced/09-human-in-the-loop.qmd
+          - text: "10. When One Agent Is Not Enough"
+            href: posts/series/agentic-zero-to-advanced/10-when-one-agent-is-not-enough.qmd
           - text: "14. Context Engineering and Retrieval"
             href: posts/series/agentic-zero-to-advanced/14-context-engineering-retrieval.qmd
       - section: "Agentic Architecture: Supply Chain"

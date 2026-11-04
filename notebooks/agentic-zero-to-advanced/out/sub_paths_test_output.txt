@@ -1,0 +1,31 @@
+ok  loop: finishes on submit
+ok  loop: unknown tool, bad JSON and tool error all go back to the model, none crash it
+ok  loop: a talking model is nudged
+ok  meter: counts every call, by role
+ok  loop: stops at the step limit with nothing submitted
+ok  rules: duplicates and out-of-range ids are dropped
+ok  rules: ids that are not integers (strings, booleans, floats) are dropped, not guessed
+ok  finish: the dropped ids are recorded
+ok  batched: one call, kept = defects after rules
+ok  batched: a malformed answer is retried with the error
+ok  batched: valid JSON that skips ids is refused, and one failure drops the WHOLE image
+ok  fanout: one call per box
+ok  fanout: every context is just system + one box
+ok  fanout: each sub-agent saw exactly its own box, once
+ok  fanout: the box is in its own brief
+ok  fanout: a failed sub-agent keeps its box (never silently drops it) and does not touch the other boxes
+ok  fanout: the failed box was retried once
+ok  panel3: three sub-agents per box
+ok  panel3: box 0 wins 2 of 3, box 1 loses 1 of 3
+ok  panel3: counts boxes where the panel disagreed
+ok  panel3: copies run warm (else they would be identical)
+ok  single: one agent, tools then submit
+ok  single: never submitting counts as unfinished with nothing kept
+ok  supervisor: a faithful brief carries every measurement
+ok  supervisor: tokens are counted per role
+ok  supervisor: the judge sees only the brief, nothing else
+ok  supervisor: rounding contrast to a whole number loses the measurement
+ok  supervisor: a vague brief carries nothing
+ok  fidelity: empty text carries nothing
+
+ALL SUB-AGENT PATHS OK (29 checks)

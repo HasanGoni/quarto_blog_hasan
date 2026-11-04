@@ -1,4 +1,4 @@
-# Literate notebooks for Parts 9 and 14
+# Literate notebooks for Parts 9, 10 and 14
 
 ## Part 9 (Human in the Loop): `09-human-in-the-loop.qmd`
 
@@ -18,6 +18,25 @@ cd notebooks/agentic-zero-to-advanced/literate
 ```
 
 To work in VS Code, pick the interpreter `notebooks/agentic-zero-to-advanced/.venv/bin/python` (Select Kernel, then Python Environments, then Enter interpreter path).
+
+## Part 10 (When One Agent Is Not Enough): `10-when-one-agent-is-not-enough.qmd`
+
+Five notebooks. Cells marked "Your turn" are for you to change (10a: pick an image; 10b: write the supervisor's brief yourself; 10d: choose a bucket and a measure).
+
+| Notebook | Post section | Model server? | Runtime |
+|---|---|---|---|
+| `10a_three_ways` | the three designs, what the dataset allows | two cells | about 2 min |
+| `10b_supervisor_and_handoff` | the supervisor, what survives a hand-off | yes | about 2 min |
+| `10c_fanout_and_panel` | one sub-agent per box, the panel | yes | about 1 min |
+| `10d_the_200_image_results` | tables, intervals, buckets, latency | no (saved runs) | seconds |
+| `10e_failures_and_tests` | what went wrong, the offline tests | no | seconds |
+
+```bash
+cd notebooks/agentic-zero-to-advanced/literate
+../.venv/bin/python run_all.py 10a_three_ways 10b_supervisor_and_handoff 10c_fanout_and_panel 10d_the_200_image_results 10e_failures_and_tests
+```
+
+The notebooks read `out/sub_runs*.jsonl` (about 2,000 saved image-runs), `out/sub_summary.json` and `out/sub_latency.json`.
 
 ## Part 14 (Context Engineering Starts With Retrieval)
 
