@@ -1,0 +1,399 @@
+---
+title: "5 Papers Worth Reading — Week of November 6, 2026"
+author: "Hasan Goni"
+date: 2026-11-06
+categories: ["papers", "weekly-pick", "computer-vision", "VLM", "Vision-Language Models", "Reasoning & Agents", "Model Efficiency"]
+image: "https://cdn-thumbnails.huggingface.co/social-thumbnails/papers/2611.08449.png"
+toc: true
+series:
+  name: "Paper of the Week"
+  number: 27
+paper-urls:
+  - https://huggingface.co/papers/2611.08449
+  - https://huggingface.co/papers/2611.06918
+  - https://huggingface.co/papers/2611.04418
+  - https://huggingface.co/papers/2611.04814
+  - https://huggingface.co/papers/2611.05193
+paper-topics:
+  - "Vision-Language Models"
+  - "Vision-Language Models"
+  - "Reasoning & Agents"
+  - "Model Efficiency"
+  - "Vision-Language Models"
+format:
+  html: default
+---
+
+:::{.callout-tip}
+This post is part of the [Paper of the Week](index.qmd) series — a handful of papers a week, picked and explained for my own semiconductor CV/VLM work.
+:::
+
+This week I scanned 135 candidates from arXiv and HF Daily Papers and picked 5 worth writing up in full — same format as always: one-sentence version, ELI5, then the full data-scientist breakdown with a code sketch and an honest read on whether it's actually useful for what I'm building.
+
+## 1. VFlash: Fast, Accurate Visual Planning via Flash Primitive Decoding
+
+[https://huggingface.co/papers/2611.08449](https://huggingface.co/papers/2611.08449) · _VFlash offers a concrete method for fast, accurate visual planning using bounding boxes and points, which directly enhances the localization capabilities of small VLMs like Qwen3-VL for defect detection._ · **Vision-Language Models**
+
+[▶ Interactive explainer: step through the pipeline](explainers/2026-11-06/01-vflash-fast-accurate-visual-planning-via.html){target="_blank"} · _auto-generated, code not run_
+
+### The One-Sentence Version
+
+VFlash replaces the slow, token-by-token generation of spatial coordinates in vision-language models with a single-pass "drafting" mechanism that predicts entire visual primitives (like boxes or trajectories) simultaneously.
+
+### Explain It Like I'm 5
+
+Imagine you are drawing a square on paper. Usually, you have to draw one tiny line at a time, waiting for the next instruction before you can draw the next line. This is very slow. VFlash is like having a magic ruler that knows exactly where the four corners of the square should be. Instead of drawing line by line, you just snap the ruler into place, and the whole square appears instantly. It works for circles and wiggly lines too, but it does it all in one quick move.
+
+### Jargon Buster
+
+*   **Visual Primitives** — The basic geometric shapes (points, boxes, lines) used to describe objects or motion in an image; here, they serve as the structured output format for the model’s spatial reasoning.
+*   **Flash Primitive Decoding** — The specific inference strategy introduced in the paper where a lightweight model predicts all coordinates of a primitive in a single forward pass rather than sequentially.
+*   **Drafter** — A small, fast auxiliary neural network that generates a rough, complete guess of the visual primitive’s coordinates to speed up the main model’s processing.
+*   **Autoregressive Generation** — The standard method where a model generates output one token at a time, where each new token depends on the previous ones; this is the slow process VFlash aims to bypass for spatial data.
+*   **Coordinate Tokens** — The discrete numerical values (e.g., x, y, width, height) that represent spatial locations, which are typically generated sequentially in standard VLMs.
+*   **Variable-Length Trajectories** — Paths of motion that can have different numbers of points depending on the duration or complexity of the movement; VFlash’s layout adapts to handle these without fixed-size constraints.
+
+### Explain It Like I'm a Data Scientist
+
+**What problem does it solve?**
+
+Current vision-language models (VLMs) are great at language but clumsy with space. When asked to localize an object or predict a path, they treat coordinates like words, generating them one token at a time (e.g., "x=102", "y=45", "w=200", "h=150"). This autoregressive process is computationally expensive and slow, especially for complex tasks like predicting long trajectories or multiple bounding boxes. The cost scales linearly with the number of coordinates, making real-time applications in robotics or autonomous driving impractical.
+
+**How does it solve it?**
+
+VFlash introduces a "drafter" model that exploits the known structure of visual primitives. Instead of guessing one coordinate at a time, the drafter predicts the entire set of coordinates for a primitive (e.g., all four corners of a box) in a single forward pass. The architecture uses a dynamic layout that adapts to the primitive’s type (box vs. trajectory) and dimensionality. This allows the model to handle compact boxes and long, variable-length trajectories efficiently. The main VLM then verifies or refines this draft, drastically reducing the number of inference steps required for spatial outputs.
+
+**Minimal code sketch**
+
+```python
+import torch
+import torch.nn as nn
+
+class VFlashDrafter(nn.Module):
+    def __init__(self, input_dim, primitive_types):
+        super().__init__()
+        # Lightweight network to predict full primitive coordinates
+        self.encoder = nn.Linear(input_dim, 256)
+        self.decoder = nn.Linear(256, 4) # Assuming 2D box: x, y, w, h
+        
+    def forward(self, image_features, primitive_type):
+        # image_features: [Batch, Sequence, Dim]
+        # primitive_type: Indicates if it's a box, point, or trajectory
+        
+        # 1. Aggregate context from image features
+        context = image_features.mean(dim=1) # Simplified pooling
+        
+        # 2. Predict all coordinates at once
+        coords = self.decoder(self.encoder(context))
+        
+        # 3. Adjust layout based on primitive type
+        if primitive_type == 'box':
+            return coords[:, :4] # x, y, w, h
+        elif primitive_type == 'point':
+            return coords[:, :2] # x, y
+        # For trajectories, this would output a variable-length tensor
+        # handled by a separate head or masking strategy
+
+# Usage in inference loop
+drafter = VFlashDrafter(input_dim=768, primitive_types=['box', 'point'])
+image_feats = get_image_features(image) # From VLM backbone
+
+# Single pass to get full box
+box_coords = drafter(image_feats, 'box') 
+# box_coords is now [Batch, 4] instead of 4 separate forward passes
+```
+
+### Why This Matters For My Work
+
+This is directly relevant to my fine-tuning of small local VLMs (like Qwen3-VL) for defect detection. Currently, my models struggle with the latency of generating precise bounding boxes for defects in X-ray images, especially when verifying multiple candidates. VFlash’s approach to joint coordinate prediction could significantly speed up the localization phase of my auto-label verification pipeline. While I’m not doing autonomous driving, the efficiency gain in predicting variable-length structures (like irregular defect shapes or paths) could make real-time inference on edge devices more feasible for my casting defect detection projects.
+
+## 2. From Pixels to Actions - Towards Native Vision-Language-Action Policies
+
+[https://huggingface.co/papers/2611.06918](https://huggingface.co/papers/2611.06918) · _This paper addresses the loss of local geometry and boundaries in visual encoders, a critical issue for precise segmentation and defect localization in industrial X-ray and casting inspection._ · **Vision-Language Models**
+
+[▶ Interactive explainer: step through the pipeline](explainers/2026-11-06/02-from-pixels-to-actions-towards-native-vi.html){target="_blank"} · _auto-generated, code not run_
+
+### The One-Sentence Version
+
+NEO-VLA removes the fixed visual encoder bottleneck in vision-language-action models by letting raw image patches evolve jointly with language tokens, allowing the action head to access fine-grained geometric details that standard encoders typically discard.
+
+### Explain It Like I'm 5
+
+Imagine you are trying to draw a picture of a cat, but you can only see it through a very blurry window. You know it’s a cat, but you can’t see where the ears are or if the tail is wagging. This new robot brain doesn’t use the blurry window. Instead, it looks at the cat piece by piece, like tiny squares of paper, and keeps looking at those squares while it thinks about what to do. This helps it see the exact shape of the cat’s ears so it can pick up the toy without squishing it.
+
+### Jargon Buster
+
+*   **Vision-Language-Action (VLA) Model** — A type of AI that connects what it sees (vision) and what it hears (language) directly to physical movements (action), used here to control robot arms.
+*   **Visual Encoder** — The part of the AI that compresses an image into a simplified mathematical representation, which often loses fine details like sharp edges or small textures.
+*   **Patch Convolutional Layers** — A lightweight method for breaking an image into small blocks (patches) and processing them, used here to replace the heavy visual encoder.
+*   **Flow-Matching** — A training technique for generating continuous data (like robot movements) by learning how to transform noise into a specific target trajectory, used here to generate smooth arm actions.
+*   **Action Expert** — A specific module within the model dedicated to predicting the next physical movement, which in this case pulls information from different layers of the main network.
+*   **Instruction-Conditioned** — Meaning the model’s behavior is guided by a specific text prompt or command, ensuring the visual processing is relevant to the task at hand.
+
+### Explain It Like I'm a Data Scientist
+
+**What problem does it solve?**
+
+Standard Vision-Language-Action (VLA) models follow a rigid pipeline: first, a visual encoder (like a ViT) compresses the image into a fixed set of tokens, and only then does the language model start reasoning. This "bottleneck" is fatal for manipulation tasks. The encoder optimizes for semantic understanding (e.g., "this is a cup"), not geometric precision. It smooths out local geometry, blurs boundaries, and loses subtle depth cues. When a robot needs to grasp a fragile object or align a part with millimeter precision, these lost details cause failures. The core gap is that the action policy is forced to reason from a lossy, static summary of the visual scene rather than the raw, evolving visual data.
+
+**How does it solve it?**
+
+NEO-VLA eliminates the standalone visual encoder entirely. Instead, images are tokenized using lightweight patch convolutional layers and injected directly into the transformer backbone alongside language tokens. This means visual features are not compressed into a fixed endpoint; they evolve layer-by-layer in parallel with the language context. The model uses a flow-matching action expert that can query visual representations from various depths of the backbone. By accessing these multi-scale, instruction-conditioned visual features, the action head retains access to high-frequency details (edges, textures) that were preserved in the early layers, while also benefiting from the high-level semantic context developed in deeper layers.
+
+**Minimal code sketch**
+
+```python
+# Pseudocode: NEO-VLA Forward Pass Concept
+class NEOVLA(nn.Module):
+    def __init__(self):
+        # No heavy ViT encoder. Just lightweight patch convs.
+        self.patch_conv = nn.Conv2d(3, embed_dim, kernel_size=14, stride=14)
+        self.transformer_backbone = TransformerBlock(num_layers=24)
+        self.action_expert = FlowMatchingHead()
+
+    def forward(self, image, instruction):
+        # 1. Tokenize image into patches (no semantic compression yet)
+        visual_tokens = self.patch_conv(image) # Shape: [B, N_patches, D]
+        
+        # 2. Tokenize instruction
+        lang_tokens = self.tokenizer(instruction) # Shape: [B, N_text, D]
+        
+        # 3. Interleave or concatenate, then process jointly
+        # Visual tokens evolve with language in every layer
+        combined = torch.cat([lang_tokens, visual_tokens], dim=1)
+        
+        # 4. Run through backbone, keeping track of intermediate states
+        hidden_states = []
+        for layer in self.transformer_backbone:
+            combined = layer(combined)
+            # Store visual features at different depths
+            hidden_states.append(combined[:, -len(visual_tokens):])
+            
+        # 5. Action Expert draws from multiple depths
+        # Instead of just using the final layer, it aggregates
+        multi_scale_visuals = torch.stack(hidden_states, dim=1)
+        
+        # 6. Flow matching to predict action trajectory
+        action = self.action_expert(multi_scale_visuals, instruction)
+        return action
+```
+
+### Why This Matters For My Work
+
+This is directly relevant to my industrial X-ray and casting defect detection work, where the "action" isn't a robot arm but a precise bounding box or segmentation mask. Standard VLMs often hallucinate or miss small defects because the visual encoder smooths out the very high-frequency noise that defines a crack or porosity. By keeping visual features "alive" and accessible at multiple depths, NEO-VLA’s approach suggests a path for fine-tuning small local VLMs (like Qwen3-VL) to retain geometric fidelity without the computational cost of a full-resolution decoder. It’s a strong architectural argument for why my current fine-tuning efforts on LFM2-VL might be hitting a ceiling if the base encoder is too aggressive in its compression.
+
+## 3. VidUEU-Agent: A Data-Curation Agent for Multimodal Understanding, Editing, and Unified Tasks
+
+[https://huggingface.co/papers/2611.04418](https://huggingface.co/papers/2611.04418) · _VidUEU-Agent provides a data-curation agent to generate high-quality instruction data from raw videos, which is essential for fine-tuning small local VLMs and verifying auto-labels in low-data industrial settings._ · **Reasoning & Agents**
+
+[▶ Interactive explainer: step through the pipeline](explainers/2026-11-06/03-vidueu-agent-a-data-curation-agent-for-m.html){target="_blank"} · _auto-generated, code not run_
+
+### The One-Sentence Version
+
+VidUEU-Agent is an automated pipeline that converts raw, unstructured video footage into high-quality, task-specific instruction data for multimodal models by autonomously filtering shots, mining keyframes, and synthesizing metadata.
+
+### Explain It Like I'm 5
+
+Imagine you have a huge box of random videos, but you need to teach a robot how to spot broken toys. Instead of watching every single video yourself, you build a helper robot. This helper robot watches the videos, skips the boring or blurry parts, picks out the best pictures, and writes down simple instructions like "look for the crack here." It even gets smarter over time, learning which parts of the videos are most useful for teaching the main robot.
+
+### Jargon Buster
+
+*   **Multimodal learning** — Training a model to understand and process different types of data (like text and images) simultaneously; here, it’s used to link video frames with textual instructions.
+*   **Instruction data** — Pairs of inputs (like an image or video clip) and desired outputs (like a description or a label) used to fine-tune large models; the core product of this pipeline.
+*   **Global perception** — A high-level analysis of the entire video to assess quality and context before diving into details; used here to filter out low-quality or irrelevant shots early in the pipeline.
+*   **Keyframe mining** — The process of selecting the most representative or informative frames from a video sequence; critical for reducing the computational load of processing continuous video.
+*   **Metadata routing** — Directing structured data (descriptions, tags, timestamps) to specific synthesis modules based on the task type; ensures the generated instructions match the intended goal (e.g., editing vs. understanding).
+*   **Autonomous iteration** — The system’s ability to adjust its own data generation strategy based on feedback from downstream model performance; allows the agent to refine what data it produces without manual intervention.
+
+### Explain It Like I'm a Data Scientist
+
+**What problem does it solve?**
+
+Fine-tuning Vision-Language Models (VLMs) requires massive amounts of high-quality instruction data, which is expensive and time-consuming to annotate manually. Raw video is abundant but noisy; it contains irrelevant motion, low-quality frames, and lacks the precise textual grounding needed for supervised learning. Existing methods often treat video processing as a static extraction task, failing to adapt the data distribution to the specific needs of downstream tasks like editing or unified understanding.
+
+**How does it solve it?**
+
+VidUEU-Agent implements a four-stage automated pipeline. First, it performs global perception to filter out low-quality shots, ensuring only viable content proceeds. Second, it mines keyframes and extracts multimodal signals (visual and audio cues) to build a rich metadata structure. Third, it routes this metadata to synthesize instruction samples tailored to specific tasks (understanding, editing, or unified). Crucially, the agent framework includes a feedback loop: it monitors downstream training results and autonomously iterates its data distribution strategy, prioritizing data types that yield the best performance improvements.
+
+**Minimal code sketch**
+
+```python
+class VidUEUAgent:
+    def __init__(self, video_source, task_type):
+        self.video_source = video_source
+        self.task_type = task_type
+        self.data_distribution = "uniform" # Initial state
+
+    def process_video(self, video_path):
+        # Stage 1: Global Perception & Filtering
+        shots = self.extract_shots(video_path)
+        filtered_shots = [s for s in shots if s.quality_score > 0.8]
+        
+        if not filtered_shots:
+            return []
+
+        # Stage 2: Keyframe Mining & Metadata Construction
+        keyframes = self.mine_keyframes(filtered_shots)
+        metadata = self.construct_metadata(keyframes, self.video_source)
+        
+        # Stage 3: Routing & Synthesis
+        # Route based on task type (e.g., 'editing' needs different prompts than 'understanding')
+        instruction_samples = self.synthesize_instructions(metadata, self.task_type)
+        
+        return instruction_samples
+
+    def iterate_distribution(self, downstream_metrics):
+        # Stage 4: Autonomous Iteration
+        # If 'editing' accuracy is low, increase weight on 'editing' specific keyframes
+        if downstream_metrics['editing_accuracy'] < 0.7:
+            self.data_distribution = "editing_heavy"
+        elif downstream_metrics['understanding_accuracy'] < 0.7:
+            self.data_distribution = "understanding_heavy"
+        # In a real implementation, this would adjust sampling weights in the pipeline
+```
+
+### Why This Matters For My Work
+
+This pipeline is directly relevant to my work on fine-tuning small local VLMs like LFM2-VL and Qwen3-VL for industrial defect detection. While the paper focuses on general video, the core mechanism of autonomously filtering low-quality shots and synthesizing instruction data from raw media can be adapted to my casting defect datasets, where manual annotation is a bottleneck. Specifically, the "autonomous iteration" aspect is promising for verifying auto-labels; if my local VLM struggles with a specific defect type, the agent could theoretically prioritize generating more high-quality examples of that defect from raw inspection videos, reducing the need for manual curation in low-data industrial settings.
+
+## 4. Think Less, Locally: Local Preference Learning for Reasoning Compression
+
+[https://huggingface.co/papers/2611.04814](https://huggingface.co/papers/2611.04814) · _Local Preference Learning for Reasoning Compression helps reduce inference costs and latency, making it feasible to deploy fine-tuned VLMs on local hardware for real-time defect detection._ · **Model Efficiency**
+
+[▶ Interactive explainer: step through the pipeline](explainers/2026-11-06/04-think-less-locally-local-preference-lear.html){target="_blank"} · _auto-generated, code not run_
+
+### The One-Sentence Version
+
+LoCo uses Direct Preference Optimization to teach reasoning models to stop thinking as soon as they have enough information, rather than continuing to deliberate until the token limit is hit.
+
+### Explain It Like I'm 5
+
+Imagine you are solving a puzzle, but you keep moving pieces around even after you already found the right spot. This paper teaches the computer to stop moving pieces the moment it knows the answer, instead of wasting time and energy on unnecessary steps. It’s like telling a friend, "You figured it out, now stop talking," so you can both go play outside faster.
+
+### Jargon Buster
+
+*   **Chain-of-Thought (CoT)** — A technique where the model writes out its step-by-step logic before giving a final answer; here, it’s the long text that causes high inference costs.
+*   **Overthinking** — The specific failure mode where the model continues to generate reasoning tokens after the correct answer has already been derived; this is the behavior LoCo aims to eliminate.
+*   **Direct Preference Optimization (DPO)** — A training method that adjusts model weights based on pairs of "good" and "bad" responses; LoCo uses it to prefer shorter, correct continuations over longer, redundant ones.
+*   **State-Conditioned Preference Pairs** — Training data consisting of a specific intermediate reasoning state paired with a preferred (shorter) continuation and a dispreferred (longer) continuation; this allows the model to learn when to stop from any given point in the trace.
+*   **Reasoning Prefix** — The portion of the chain-of-thought generated up to a specific "overthinking" state; LoCo freezes this part to ensure the model learns to stop from that exact context.
+
+### Explain It Like I'm a Data Scientist
+
+**What problem does it solve?**
+
+Current large reasoning models are effective but expensive because they often "overthink." They continue to generate long chains of thought even after they have sufficient information to answer the question correctly. Existing compression methods usually try to shorten the entire trajectory or use heuristics, but they fail to address the local decision: *at this specific point in the reasoning, is more thinking actually necessary?* This leads to wasted compute and latency, especially in real-time applications.
+
+**How does it solve it?**
+
+LoCo proposes a local preference learning approach. First, it identifies "candidate overthinking states" from the model's own generated traces—points where the model has already found the answer but keeps going. It then freezes the reasoning prefix up to that state and regenerates two continuations: one that is short and verified correct, and one that is the original long, redundant continuation. These form state-conditioned preference pairs. The model is then trained using DPO on these pairs, effectively teaching it to recognize when it has reached a sufficient state and to terminate the reasoning process locally, rather than globally.
+
+**Minimal code sketch**
+
+```python
+import torch
+from transformers import AutoModelForCausalLM, AutoTokenizer
+
+# Pseudocode for LoCo training step
+def train_loco_step(model, tokenizer, overthinking_state, short_cont, long_cont):
+    # 1. Freeze the prefix (the state where overthinking starts)
+    prefix_ids = tokenizer.encode(overthinking_state, add_special_tokens=False)
+    
+    # 2. Create two full sequences: prefix + short vs prefix + long
+    seq_short = prefix_ids + tokenizer.encode(short_cont, add_special_tokens=False)
+    seq_long  = prefix_ids + tokenizer.encode(long_cont, add_special_tokens=False)
+    
+    # 3. Compute log-probabilities for the continuation parts only
+    # Note: In practice, you mask the prefix in the loss calculation
+    log_prob_short = model.log_probs(seq_short, mask_prefix=True)
+    log_prob_long  = model.log_probs(seq_long, mask_prefix=True)
+    
+    # 4. DPO Loss: Prefer short over long given the same state
+    # beta is the DPO temperature parameter
+    beta = 0.1 
+    loss = -torch.nn.functional.logsigmoid(
+        beta * (log_prob_short - log_prob_long)
+    )
+    
+    return loss.mean()
+```
+
+### Why This Matters For My Work
+
+This is directly relevant to my deployment of small local VLMs (like LFM2-VL and Qwen3-VL) for industrial defect detection, where inference latency on edge hardware is a hard constraint. If I can apply LoCo-style training to my fine-tuned models, I can significantly reduce the token count for localization and auto-label verification tasks, making real-time processing on local GPUs feasible without sacrificing accuracy. While the paper focuses on general reasoning, the mechanism of stopping early when confidence is high translates well to visual reasoning tasks where the model might otherwise "hallucinate" extra details after identifying a defect.
+
+## 5. Factorized MLLM Embeddings for Composed Image Retrieval
+
+[https://huggingface.co/papers/2611.05193](https://huggingface.co/papers/2611.05193) · _Factorized MLLM Embeddings for Composed Image Retrieval offers techniques for compositional understanding that can be adapted to improve defect classification and retrieval in complex industrial visual datasets._ · **Vision-Language Models**
+
+[▶ Interactive explainer: step through the pipeline](explainers/2026-11-06/05-factorized-mllm-embeddings-for-composed.html){target="_blank"} · _auto-generated, code not run_
+
+### The One-Sentence Version
+
+FactEmbed improves Composed Image Retrieval by forcing the MLLM to explicitly decompose the visual modification into separate latent factors before generating the final retrieval embedding, rather than relying on implicit contrastive learning.
+
+### Explain It Like I'm 5
+
+Imagine you have a picture of a red car and you want to find a picture of a blue car.
+Usually, the computer just guesses what "blue car" looks like all at once, which is hard.
+This new method makes the computer pause and think: "Okay, first I see the car shape, and second, I need to change the color to blue."
+By breaking the job into two small steps, it gets much better at finding the right picture.
+It’s like telling a friend, "Find the car, then make it blue," instead of just shouting "Blue car!" and hoping they understand.
+
+### Jargon Buster
+
+*   **Composed Image Retrieval (CIR)** — The task of finding a target image by combining a reference image with a text description of how to modify it (e.g., "same dog, but wearing a hat").
+*   **Multimodal Large Language Model (MLLM)** — A large AI model that understands both text and images simultaneously, used here as the backbone for understanding the query.
+*   **Contrastive Supervision** — A training method where the model learns by being shown pairs of "correct" and "incorrect" examples and penalizing it for mixing them up; here, it’s the standard way CIR models are trained, which the authors argue is insufficient.
+*   **Factorized Latents** — A set of separate, distinct internal variables (vectors) that represent different aspects of the data (like shape vs. color) rather than one giant, mixed-up blob of information.
+*   **Discriminative Embeddings** — The final numerical representation of an image or query that is optimized specifically to be distinct from other unrelated items, allowing for fast and accurate searching in a database.
+
+### Explain It Like I'm a Data Scientist
+
+**What problem does it solve?**
+
+Current CIR approaches using MLLMs treat the composed query (reference image + modification text) as a monolithic input. They project this directly into a single embedding space using contrastive loss. The core issue is that the MLLM’s compositional reasoning capabilities are underutilized because the model is never forced to explicitly resolve *what* the visual modification is. It often fails on complex queries where the modification is subtle or requires multi-step reasoning, effectively "averaging out" the reference and the text into a generic representation that loses specific details.
+
+**How does it solve it?**
+
+FactEmbed decouples the process of understanding the modification from the process of creating the retrieval vector. Instead of a direct projection, the MLLM generates a set of factorized latents. These latents act as intermediate reasoning steps that explicitly isolate the visual changes described in the text. The model is trained to ensure these latents capture the specific modifications (e.g., color change, object addition) before they are aggregated into the final discriminative embedding. This forces the model to "think" about the composition explicitly, leveraging the MLLM’s internal language-visual alignment to resolve the query more accurately than a single-step contrastive loss allows.
+
+**Minimal code sketch**
+
+```python
+# Pseudocode illustrating the FactEmbed logic flow
+# Standard CIR: query_emb = mllm(reference_img, text)
+# FactEmbed: query_emb = mllm(reference_img, text, factorized=True)
+
+def fact_embed_forward(reference_img, modification_text, mllm):
+    # 1. Input processing
+    # MLLM processes the multimodal input
+    
+    # 2. Factorized Latent Generation
+    # Instead of a single hidden state, extract specific latent vectors
+    # that represent the 'base' visual features and the 'modification' features
+    base_latent, mod_latent = mllm.extract_factorized_latents(
+        image=reference_img, 
+        text=modification_text
+    )
+    
+    # 3. Explicit Resolution
+    # The model is trained to ensure mod_latent captures the text's intent
+    # relative to the base_latent, not just a generic blend
+    
+    # 4. Aggregation into Discriminative Embedding
+    # Combine the resolved factors into the final retrieval vector
+    # This step is supervised to be discriminative in the retrieval space
+    final_embedding = mllm.aggregate_latents(base_latent, mod_latent)
+    
+    return final_embedding
+
+# Training Loop Concept:
+# Loss = ContrastiveLoss(final_embedding, target_embedding) 
+#        + FactorizationLoss(base_latent, mod_latent, ground_truth_mods)
+# The FactorizationLoss encourages the latents to be distinct and meaningful
+```
+
+### Why This Matters For My Work
+
+This is directly relevant to my fine-tuning of small local VLMs (like Qwen3-VL) for defect detection, particularly for auto-label verification. In industrial X-ray or casting data, a "defect" is often a specific modification to a standard part (e.g., "same casting, but with a porosity cluster in the upper left"). Current VLMs often struggle to localize these subtle deviations because they treat the image as a whole. By adopting a factorized approach, I can potentially force my small VLMs to explicitly separate the "normal part geometry" from the "anomaly features," which should improve both the precision of defect localization and the reliability of the auto-judging step by reducing false positives caused by generic visual similarity.
