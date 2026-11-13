@@ -1,0 +1,115 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>dNaViT: Discrete Codes are General-Purpose Visua — explainer</title><style>
+:root{--bg:#f7f8fa;--card:#fff;--ink:#1c2430;--mut:#5d6877;--line:#e1e5ec;--acc:#2c6bed;--accbg:#eaf1ff;
+--ok:#177a3c;--okbg:#e4f5ea;--warn:#8a5a00;--warnbg:#fff3d6;--bad:#a1281f;--badbg:#fde8e6;--info:#1e5a96;--infobg:#e3f0fc;
+--codebg:#0f1620;--codeink:#d6deeb;--kw:#c792ea;--str:#a5e075;--num:#f78c6c;--com:#6b7a90;--fn:#82aaff}
+@media(prefers-color-scheme:dark){:root{--bg:#10151d;--card:#171e29;--ink:#e6ebf2;--mut:#9aa6b6;--line:#2a3443;--acc:#7aa7ff;--accbg:#1b2a47;
+--ok:#6fd48f;--okbg:#14301f;--warn:#f0c15a;--warnbg:#3a2e10;--bad:#ff9a90;--badbg:#3b1815;--info:#8cc3f5;--infobg:#142a40}}
+*{box-sizing:border-box}html{scroll-behavior:smooth}
+body{margin:0;background:var(--bg);color:var(--ink);font:16px/1.6 system-ui,-apple-system,Segoe UI,Roboto,sans-serif}
+a{color:var(--acc)}
+.wrap{display:grid;grid-template-columns:230px minmax(0,1fr);gap:28px;max-width:1280px;margin:0 auto;padding:24px}
+nav.side{position:sticky;top:16px;align-self:start;font-size:14px;max-height:calc(100vh - 32px);overflow:auto}
+nav.side h4{margin:0 0 8px;font-size:12px;letter-spacing:.08em;text-transform:uppercase;color:var(--mut)}
+nav.side a{display:block;padding:5px 10px;border-left:3px solid var(--line);color:var(--ink);text-decoration:none}
+nav.side a:hover{background:var(--accbg);border-color:var(--acc)}
+main{min-width:0}
+header.hero{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:26px 28px;margin-bottom:22px}
+header.hero h1{margin:.1em 0 .2em;font-size:1.75rem;line-height:1.25}
+header.hero .sub{color:var(--mut);margin:0 0 12px}
+.links a{margin-right:14px;font-size:14px}
+.badge{display:inline-block;font-size:11px;font-weight:700;letter-spacing:.04em;padding:2px 8px;border-radius:99px;margin-right:6px;vertical-align:middle}
+.badge.ok{background:var(--okbg);color:var(--ok)}.badge.warn{background:var(--warnbg);color:var(--warn)}
+.badge.bad{background:var(--badbg);color:var(--bad)}.badge.info{background:var(--infobg);color:var(--info)}
+section{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:22px 26px;margin-bottom:22px}
+section>h2{margin:0 0 .4em;font-size:1.3rem}
+section h3{margin:1.3em 0 .3em;font-size:1.05rem}
+.callout{border-left:4px solid var(--acc);background:var(--accbg);padding:10px 14px;border-radius:0 8px 8px 0;margin:12px 0}
+.callout.warn{border-color:var(--warn);background:var(--warnbg)}.callout.bad{border-color:var(--bad);background:var(--badbg)}.callout.ok{border-color:var(--ok);background:var(--okbg)}
+.callout b.t{display:block;margin-bottom:2px}
+.two{display:grid;grid-template-columns:1fr 1fr;gap:16px}@media(max-width:900px){.two{grid-template-columns:1fr}.wrap{grid-template-columns:1fr}nav.side{position:static}}
+/* pipeline */
+.pipe{display:flex;flex-wrap:wrap;gap:10px;align-items:stretch;margin:14px 0}
+.pipe .node{flex:1 1 150px;min-width:140px;background:var(--bg);border:2px solid var(--line);border-radius:10px;padding:10px 12px;cursor:pointer;position:relative;transition:.15s}
+.pipe .node:hover{border-color:var(--acc);transform:translateY(-1px)}
+.pipe .node.on{border-color:var(--acc);background:var(--accbg)}
+.pipe .node .n{font-size:11px;font-weight:700;color:var(--acc)}
+.pipe .node .tt{font-weight:650;line-height:1.25}.pipe .node .ss{font-size:12.5px;color:var(--mut);margin-top:3px;line-height:1.3}
+.pipe .node.nocode::after{content:"no code released";position:absolute;top:-9px;right:8px;font-size:10px;background:var(--warnbg);color:var(--warn);padding:1px 7px;border-radius:99px;font-weight:700}
+.pipe .arrow{align-self:center;color:var(--mut);font-size:20px}
+.tabs{display:flex;flex-wrap:wrap;gap:6px;margin:10px 0 14px;border-bottom:1px solid var(--line);padding-bottom:8px}
+.tabs button{border:1px solid var(--line);background:var(--bg);color:var(--ink);padding:6px 12px;border-radius:8px;cursor:pointer;font:inherit;font-size:14px}
+.tabs button.on{background:var(--acc);color:#fff;border-color:var(--acc)}
+.stage{display:none}.stage.on,body.all .stage{display:block}
+.stage h3.q{margin-top:0}
+/* code */
+figure{margin:14px 0}
+figure.code,figure.out{border:1px solid var(--line);border-radius:10px;overflow:hidden;background:var(--codebg)}
+figure figcaption{display:flex;flex-wrap:wrap;gap:8px;align-items:center;padding:7px 12px;background:var(--bg);border-bottom:1px solid var(--line);font-size:12.5px;color:var(--mut)}
+figure .path{font:12px ui-monospace,SFMono-Regular,Menlo,monospace;color:var(--ink)}
+figure .cap{flex:1 1 100%;color:var(--mut)}
+.copy{margin-left:auto;border:1px solid var(--line);background:var(--card);color:var(--ink);border-radius:6px;font-size:11px;padding:2px 8px;cursor:pointer}
+pre{margin:0;padding:10px 0;overflow:auto;color:var(--codeink);font:12.5px/1.5 ui-monospace,SFMono-Regular,Menlo,monospace;max-height:520px}
+figure.out pre{padding:10px 14px;white-space:pre;color:#c3e88d}
+pre .l{display:block;padding:0 14px 0 0;white-space:pre}
+pre .l i{display:inline-block;width:46px;text-align:right;padding-right:12px;color:#51607a;font-style:normal;user-select:none}
+.t-com{color:var(--com)}.t-str{color:var(--str)}.t-kw{color:var(--kw)}.t-num{color:var(--num)}.t-fn{color:var(--fn)}
+table{border-collapse:collapse;width:100%;font-size:14px;margin:10px 0}
+th,td{border:1px solid var(--line);padding:7px 10px;text-align:left;vertical-align:top}
+th{background:var(--bg)}
+td.ok{color:var(--ok);font-weight:650}td.bad{color:var(--bad);font-weight:650}td.warn{color:var(--warn);font-weight:650}
+.widget{border:1px dashed var(--acc);border-radius:12px;padding:14px 16px;margin:16px 0;background:var(--bg)}
+.widget h4{margin:0 0 6px}.widget .hint{font-size:13px;color:var(--mut);margin:0 0 8px}
+.widget canvas{width:100%;display:block;background:var(--card);border:1px solid var(--line);border-radius:8px}
+.widget label{font-size:13px;margin-right:10px}.widget input[type=range]{vertical-align:middle;width:170px}
+.widget button.b{border:1px solid var(--acc);background:var(--card);color:var(--acc);border-radius:7px;padding:5px 11px;cursor:pointer;font:inherit;font-size:13px;margin:2px 4px 2px 0}
+.widget button.b:hover{background:var(--accbg)}
+.mono{font:13px ui-monospace,Menlo,monospace}
+.pill{display:inline-block;padding:1px 8px;border-radius:99px;font-size:12px;background:var(--accbg);color:var(--acc);margin-right:4px}
+.glossary dt{font-weight:650;margin-top:8px}.glossary dd{margin:0 0 4px 0;color:var(--mut)}
+.eli5{font-size:1.02rem}
+details{margin:8px 0}summary{cursor:pointer;font-weight:600}
+</style></head><body><div class="wrap">
+<nav class="side"><h4>dNaViT: Discrete Codes are General-Purpose Visua</h4><a href="#overview">Overview</a><a href="#eli5">Explain it simply</a><a href="#stages-pipe">The pipeline</a><a href="#verify">What was checked</a><a href="#gaps">Limits</a><h4 style="margin-top:18px">This week</h4><a href="../../2026-11-13.html">← Back to this week&#x27;s post</a></nav>
+<main>
+<header class="hero" id="overview"><div><span class="badge warn">Auto-generated</span><span class="badge warn">Code not run</span><span class="badge bad">No official repo found</span></div><h1>dNaViT: Discrete Codes are General-Purpose Visual Representations</h1><p class="sub">arXiv 2611.12426 · picked for the week of 2026-11-13 · Investigates discrete codes as general-purpose visual representations, which is highly relevant for unifying vision and language in small VLMs like LFM2-VL and Qwen3-VL for efficient defect analysis.</p><div class="links"><a href="https://arxiv.org/abs/2611.12426" target="_blank" rel="noopener">arXiv</a> <a href="https://huggingface.co/papers/2611.12426" target="_blank" rel="noopener">HF paper page</a></div>
+<p>dNaViT is a visual tokenizer that converts images into discrete codes, similar to how language models use text tokens. It uses a frozen encoder with residual modulation and grouped product quantization to preserve both semantic meaning and pixel-level detail. The paper claims this approach allows a single discrete vocabulary to handle understanding, generation, and editing tasks effectively.</p><div class="callout warn"><b class="t">Read this first</b>This page was generated automatically from the paper's text by a local language model on 2026-11-13. A person has not reviewed it. <b>No code was executed.</b> No official repository with usable code was found, so there are no code excerpts.</div></header>
+<section id="eli5"><h2>Explain it simply</h2><div class="eli5"><h3>Explain it like I'm five</h3><p>Imagine you have a magic box that turns pictures into a secret code made of little blocks. Usually, computers need different boxes for looking at pictures and drawing new ones. But this magic box uses one special code for everything. It keeps the big ideas of the picture, like 'that is a dog,' and the tiny details, like the color of its fur. It does this by adding extra clues to the picture before turning it into blocks. Then, it can turn those blocks back into a perfect picture or use them to understand what is in the image. It is like having one universal language for all your visual toys.</p><h3>Explain it like I'm a data scientist</h3><p>The core problem is that visual models typically use continuous representations for understanding and separate latents for generation, creating a fragmented infrastructure. Discretizing vision into tokens offers a unified path but faces an information bottleneck where high-level semantics and fine-grained pixel details conflict within a limited vocabulary. Existing methods struggle to balance these opposing requirements without sacrificing performance in either domain.</p><p>dNaViT addresses this by using a frozen pretrained encoder and a Residual Modulator (ResMod) that injects reconstruction-aware cues into semantic features via a zero-initialized residual path. It employs Grouped Product Quantization to scale discrete capacity without increasing sequence length, followed by dual-branch supervision. One branch aligns codes with semantic features, while the other reconstructs pixels using a combination of MSE, LPIPS, and perceptual losses, ensuring the discrete codes retain both abstract meaning and visual fidelity.</p></div><h3>Jargon buster (each with a daily-life picture)</h3><dl class="glossary"><dt>Discrete Autoregressive Modeling</dt><dd><i>Like predicting the next word in a sentence based on the previous ones.</i> A method where models predict the next item in a sequence from a fixed set of options, used here to treat visual tokens like text tokens.</dd><dt>Residual Modulator (ResMod)</dt><dd><i>Like adding a filter to a photo to bring out hidden details without changing the main subject.</i> A module that fuses intermediate features from a frozen encoder and applies a learned scale-and-shift correction to enrich semantic features with pixel-level detail.</dd><dt>Grouped Product Quantization</dt><dd><i>Like describing a color by combining a hue, brightness, and saturation code rather than one giant unique number.</i> A technique that splits feature channels into groups and quantizes each group separately to expand the codebook capacity without increasing the spatial sequence length.</dd><dt>Dual-Branch Reconstruction</dt><dd><i>Like checking a map for both the city names (semantics) and the street textures (pixels) to ensure it&#x27;s accurate.</i> A training strategy where the same discrete codes are decoded by two separate branches: one for semantic feature alignment and one for pixel-level image reconstruction.</dd><dt>Frozen Pretrained Encoder</dt><dd><i>Using a trusted, unchangeable camera lens to capture the base image before adding effects.</i> A vision transformer whose weights are kept fixed during training to preserve its original semantic capabilities while new modules learn to add detail.</dd><dt>LPIPS</dt><dd><i>Measuring how much two pictures look different to a human eye, not just mathematically.</i> A perceptual similarity metric based on VGG features used to supervise the pixel reconstruction branch for visual fidelity.</dd></dl></section>
+<section id="stages-pipe"><h2>The method step by step</h2><p>Click a step (box or tab) to open it. The order follows how the method runs, as described in the paper.</p><div class="pipe"><div class="node" data-st="s0"><div class="n">STEP 1</div><div class="tt">Feature Extraction</div><div class="ss">Frozen encoder processing</div></div><div class="arrow">→</div><div class="node" data-st="s1"><div class="n">STEP 2</div><div class="tt">Residual Modulation</div><div class="ss">Injecting pixel cues</div></div><div class="arrow">→</div><div class="node" data-st="s2"><div class="n">STEP 3</div><div class="tt">Quantization</div><div class="ss">Grouped product quantization</div></div><div class="arrow">→</div><div class="node" data-st="s3"><div class="n">STEP 4</div><div class="tt">Semantic Decoding</div><div class="ss">Feature alignment branch</div></div><div class="arrow">→</div><div class="node" data-st="s4"><div class="n">STEP 5</div><div class="tt">Pixel Decoding</div><div class="ss">Image reconstruction branch</div></div><div class="arrow">→</div><div class="node" data-st="s5"><div class="n">STEP 6</div><div class="tt">Joint Optimization</div><div class="ss">Balancing objectives</div></div></div><p class="mono" style="color:var(--mut);margin:4px 0 0">Click a box (or a tab) to open that stage.</p><div class="tabs"><button data-st="s0">1. Feature Extraction</button><button data-st="s1">2. Residual Modulation</button><button data-st="s2">3. Quantization</button><button data-st="s3">4. Semantic Decoding</button><button data-st="s4">5. Pixel Decoding</button><button data-st="s5">6. Joint Optimization</button></div><div class="stage" id="st-s0" data-group="pipe"><h3 class="q">Extracting multi-level features from the frozen vision transformer</h3><p>The input image is processed by a frozen pretrained vision transformer. Spatial tokens from various layers are selected to capture information at different levels of abstraction, from low-level details to high-level semantics.</p></div><div class="stage" id="st-s1" data-group="pipe"><h3 class="q">Enriching semantic features with reconstruction-aware details via ResMod</h3><p>The Residual Modulator fuses the selected intermediate features and predicts a zero-initialized scale-and-shift residual. This reorganizes the geometry of the semantic features to accommodate reconstruction-relevant information without compromising the original semantic structure.</p></div><div class="stage" id="st-s2" data-group="pipe"><h3 class="q">Converting enriched features into discrete codes using grouped product quantization</h3><p>The modulated features are split into channel groups, and each group is quantized using its own learned codebook. This creates a tuple of discrete indices for each spatial position, scaling the discrete capacity while keeping the spatial grid unchanged.</p></div><div class="stage" id="st-s3" data-group="pipe"><h3 class="q">Aligning discrete codes with continuous semantic features</h3><p>The quantized embeddings are fed into a semantic decoder that maps them back to the continuous feature space. This branch is supervised by a loss combining feature regression and cosine alignment to ensure the codes retain the pretrained semantic structure.</p></div><div class="stage" id="st-s4" data-group="pipe"><h3 class="q">Reconstructing high-fidelity images from discrete codes</h3><p>The same quantized embeddings are passed to a pixel decoder that restores the spatial grid and generates the image. This branch is trained with multiple losses, including MSE, LPIPS, and perceptual losses, to ensure the reconstruction matches the original image in both structure and detail.</p></div><div class="stage" id="st-s5" data-group="pipe"><h3 class="q">Training the system to balance semantic and pixel-level information</h3><p>The model undergoes progressive training that coordinates the dual-branch objectives. This process suppresses gradient interference between the semantic and pixel reconstruction tasks, allowing the discrete codes to serve as a general-purpose representation for both understanding and generation.</p></div></section>
+
+<section id="verify"><h2>What was checked</h2><table><tr><th>Check</th><th>How</th><th>Status</th></tr><tr><td>Paper text read</td><td class="mono">pdftotext on the arXiv PDF (first ~32k characters, references cut)</td><td class="ok">DONE</td></tr><tr><td>Official repository</td><td class="mono">none found via the Hugging Face papers API</td><td class="warn">NOT FOUND</td></tr><tr><td>Code excerpts</td><td class="mono">none</td><td class="warn">NONE</td></tr><tr><td>Numbers</td><td class="mono">every number in the generated text compared with the paper text</td><td class="ok">ALL FOUND IN PAPER</td></tr><tr><td>Running the code</td><td class="mono">never done by the weekly job</td><td class="warn">NOT RUN</td></tr><tr><td>Reproducing the paper's results</td><td class="mono">never done by the weekly job</td><td class="warn">NOT DONE</td></tr></table></section>
+<section id="gaps"><h2>Limits of this page</h2><ul><li><b>Machine-written.</b> The text comes from a language model that only saw the first ~32k characters of the paper (no figures, tables or appendix). Details may be missing or wrong.</li><li><b>Nothing was run.</b> Code excerpts show what the authors wrote, not that it works; the explanation of how stages map to code is the model's guess.</li><li>The specific values for the lambda coefficients in the pixel reconstruction loss are not provided in the text.</li><li>The exact number of groups (G) and codebook size (K) used in the final dNaViT-8B model is not explicitly stated in the main text, though &#x27;G64&#x27; appears in a figure caption.</li><li>The specific architecture details of the &#x27;lightweight stack of self-attention and feed-forward blocks&#x27; in ResMod are not described in depth.</li></ul></section>
+<p style="color:var(--mut);font-size:13px">Generated automatically on 2026-11-13. Not reviewed by a person; code was not executed.</p>
+</main></div>
+<script>
+if(location.hash==='#all')document.body.classList.add('all');
+function copyCode(btn){const pre=btn.closest('figure').querySelector('pre');
+ const t=[...pre.querySelectorAll('.l')].map(l=>l.textContent.replace(/^\d+/,'')).join('\n');
+ navigator.clipboard&&navigator.clipboard.writeText(t);btn.textContent='copied';setTimeout(()=>btn.textContent='copy',1200);}
+function showStage(id,scroll){const el=document.getElementById('st-'+id);if(!el)return;const g=el.dataset.group;const sec=document.getElementById('stages-'+g);
+ sec.querySelectorAll('.stage').forEach(s=>s.classList.toggle('on',s.id==='st-'+id));
+ sec.querySelectorAll('.tabs button').forEach(b=>b.classList.toggle('on',b.dataset.st===id));
+ sec.querySelectorAll('.pipe .node').forEach(n=>n.classList.toggle('on',n.dataset.st===id));
+ if(scroll){const t=sec.querySelector('.tabs');if(t)t.scrollIntoView({block:'start',behavior:'smooth'});}
+ window.dispatchEvent(new CustomEvent('stageshown',{detail:id}));}
+document.querySelectorAll('.pipe .node,.tabs button').forEach(n=>n.addEventListener('click',()=>showStage(n.dataset.st,n.classList.contains('node'))));
+document.querySelectorAll('.tabs').forEach(t=>{const f=t.querySelector('button');});
+/* tiny plotting helper used by the widgets */
+function plot(cv,series,opts){opts=opts||{};const dpr=window.devicePixelRatio||1;const W=cv.clientWidth,H=opts.h||cv.clientHeight||240;
+ cv.width=W*dpr;cv.height=H*dpr;cv.style.height=H+'px';const c=cv.getContext('2d');c.scale(dpr,dpr);c.clearRect(0,0,W,H);
+ const cs=getComputedStyle(document.body);const ink=cs.getPropertyValue('--mut').trim()||'#888';
+ const padL=38,padR=8,padT=8,padB=22;const n=Math.max(...series.map(s=>s.y.length));
+ let ymax=opts.ymax||Math.max(1e-9,...series.map(s=>Math.max(...s.y)));let ymin=opts.ymin!==undefined?opts.ymin:0;
+ const X=i=>padL+(W-padL-padR)*i/(n-1),Y=v=>padT+(H-padT-padB)*(1-(v-ymin)/(ymax-ymin));
+ (opts.bands||[]).forEach(b=>{c.fillStyle=b[2];c.fillRect(X(b[0]),padT,Math.max(1,X(b[1])-X(b[0])),H-padT-padB);});
+ c.strokeStyle=ink;c.fillStyle=ink;c.font='11px system-ui';c.globalAlpha=.35;c.beginPath();c.moveTo(padL,padT);c.lineTo(padL,H-padB);c.lineTo(W-padR,H-padB);c.stroke();c.globalAlpha=1;
+ const x0=opts.x0!==undefined?opts.x0:10,x1=opts.x1!==undefined?opts.x1:80;const unit=opts.unit!==undefined?opts.unit:'°';for(let k=0;k<=7;k++){const xv=x0+(x1-x0)*k/7;c.fillText(xv.toFixed(opts.dec||0)+unit,X((n-1)*k/7)-8,H-6);}
+ c.fillText(ymax.toFixed(2),2,padT+8);c.fillText(ymin.toFixed(2),2,H-padB);
+ series.forEach(s=>{c.strokeStyle=s.color;c.lineWidth=s.w||1.3;c.globalAlpha=s.alpha===undefined?1:s.alpha;c.beginPath();
+  s.y.forEach((v,i)=>{i?c.lineTo(X(i),Y(v)):c.moveTo(X(i),Y(v))});c.stroke();});c.globalAlpha=1;
+ let lx=padL+6;series.forEach(s=>{if(!s.name)return;c.fillStyle=s.color;c.fillRect(lx,padT+4,10,3);c.fillStyle=ink;c.fillText(s.name,lx+14,padT+10);lx+=c.measureText(s.name).width+34;});}
+
+const DATA={};
+
+(function(){const ids=["s0"];document.querySelectorAll('.tabs').forEach(t=>{const b=t.querySelector('button');if(b)showStage(b.dataset.st,false)});if(location.hash.indexOf('#st-')===0)showStage(location.hash.slice(4),false);})();
+</script></body></html>

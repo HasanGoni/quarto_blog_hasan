@@ -1,0 +1,439 @@
+---
+title: "5 Papers Worth Reading — Week of November 13, 2026"
+author: "Hasan Goni"
+date: 2026-11-13
+categories: ["papers", "weekly-pick", "computer-vision", "VLM", "Vision-Language Models", "Reasoning & Agents", "Model Efficiency", "Parameter-Efficient Fine-Tuning"]
+image: "https://cdn-thumbnails.huggingface.co/social-thumbnails/papers/2611.15844.png"
+toc: true
+series:
+  name: "Paper of the Week"
+  number: 28
+paper-urls:
+  - https://huggingface.co/papers/2611.15844
+  - https://huggingface.co/papers/2611.12426
+  - https://huggingface.co/papers/2611.17167
+  - https://huggingface.co/papers/2611.10649
+  - https://huggingface.co/papers/2611.10866
+paper-topics:
+  - "Vision-Language Models"
+  - "Vision-Language Models"
+  - "Reasoning & Agents"
+  - "Model Efficiency"
+  - "Parameter-Efficient Fine-Tuning"
+format:
+  html: default
+---
+
+:::{.callout-tip}
+This post is part of the [Paper of the Week](index.qmd) series — a handful of papers a week, picked and explained for my own semiconductor CV/VLM work.
+:::
+
+This week I scanned 121 candidates from arXiv and HF Daily Papers and picked 5 worth writing up in full — same format as always: one-sentence version, ELI5, then the full data-scientist breakdown with a code sketch and an honest read on whether it's actually useful for what I'm building.
+
+## 1. Open Vision Banana: A Fully Open Recipe for Generative Visual Perception
+
+[https://huggingface.co/papers/2611.15844](https://huggingface.co/papers/2611.15844) · _Provides a fully open recipe for generative visual perception, offering concrete techniques for leveraging pretrained image generators for vision tasks that can be adapted for defect detection and localization._ · **Vision-Language Models**
+
+[▶ Interactive explainer: step through the pipeline](explainers/2026-11-13/01-open-vision-banana-a-fully-open-recipe-f.html){target="_blank"} · _auto-generated, code not run_
+
+### The One-Sentence Version
+
+Open Vision Banana (OVB) provides a fully open, reproducible recipe for turning pretrained image generators into unified multi-task vision systems by framing perception tasks as conditional image editing.
+
+### Explain It Like I'm 5
+
+Imagine you have a magic paintbrush that can draw any picture you ask for. Usually, it just makes pretty art. But this paper shows you how to teach the paintbrush to be a detective instead. You don't ask it to "draw a cat." You ask it to "draw the picture, but make the cat's ear glow red so I can see where it is." The paper gives you the exact instructions on how to teach the magic paintbrush to do this, so you can use it to find broken toys or missing buttons in a box of stuff.
+
+### Jargon Buster
+
+*   **Conditional Image Editing** — The process of modifying an existing image based on a specific instruction or condition, rather than generating an image from scratch; here, it is used to highlight or segment objects by "editing" the original image to reveal the target.
+*   **Parameter Adaptation** — The technique of adjusting only a small subset of a model's weights (or using adapters) to specialize it for a new task without retraining the entire network; OVB uses this to make large, frozen image generators perform specific vision tasks efficiently.
+*   **Task Balancing** — The strategy of weighting different training examples or tasks to ensure the model doesn't get better at one thing (like drawing) while getting worse at another (like finding defects); this is critical when training a single model to handle multiple types of visual queries.
+*   **Prompt Design** — The specific way instructions are formatted for the model to understand; in this context, it involves crafting text inputs that effectively guide the image generator to perform perception tasks like localization rather than just synthesis.
+*   **Color Encoding** — A method of representing spatial information or segmentation masks using color channels in the image; OVB analyzes how different ways of encoding "where things are" in color affect the model's ability to generalize to new tasks.
+
+### Explain It Like I'm a Data Scientist
+
+**What problem does it solve?**
+
+Recent research suggests that large pretrained image generators (like Stable Diffusion variants) have learned a rich understanding of the physical world, including object relationships and spatial layouts, even though they were trained only to synthesize images. However, the specific work "Vision Banana" that demonstrated this capability by framing vision tasks as image editing kept its data, weights, and code private. This created a gap: practitioners knew the approach worked but couldn't reproduce it, audit it, or adapt it for their own use cases because the "recipe" was a black box.
+
+**How does it solve it?**
+
+Open Vision Banana (OVB) releases a fully open recipe to convert these pretrained generators into unified multi-task perception systems. Instead of training a new segmentation or detection model from scratch, OVB fine-tunes open-weight base models (4B and 9B parameters) using a dataset of 2.1M–3.8M pairs from public sources. The core mechanism is treating vision tasks (like segmentation or detection) as conditional image editing: the model takes an input image and a text prompt, and outputs an edited image where the target regions are highlighted or modified according to the task. The paper highlights that success depends heavily on specific design choices—such as how colors are encoded for masks, how prompts are structured, and how different tasks are balanced during training—and that these factors interact in non-obvious ways.
+
+**Minimal code sketch**
+
+```python
+import torch
+from transformers import AutoModelForImageEditing
+
+# Load a pretrained open-weight image generator (e.g., 4B or 9B params)
+# Note: This is pseudocode; actual loading depends on the specific base model architecture
+base_model = AutoModelForImageEditing.from_pretrained("open-vision-banana-base-4b")
+
+# Freeze base weights, enable parameter adaptation (e.g., LoRA or similar)
+base_model.requires_grad_(False)
+# base_model.enable_adapters() # Hypothetical method for enabling fine-tuning adapters
+
+# Define the task: "Segment the defect in this X-ray image"
+# Input: Original image tensor, Text prompt
+input_image = torch.randn(1, 3, 512, 512) 
+prompt = "Highlight the crack in the metal casting"
+
+# The model performs conditional editing:
+# It doesn't output a class label, but an edited image where the defect is visually distinct
+# (e.g., colored red or masked)
+edited_image = base_model(
+    image=input_image,
+    prompt=prompt,
+    # Hyperparameters related to color encoding and task balancing are set here
+    color_encoding_mode="rgb_mask", 
+    task_weight=1.0
+)
+
+# Post-processing: Convert the edited image back to a segmentation mask
+# This step relies on the specific color encoding scheme defined in the paper
+segmentation_mask = post_process_to_mask(edited_image)
+```
+
+### Why This Matters For My Work
+
+This is directly relevant to my fine-tuning of small local VLMs (like LFM2-VL and Qwen3-VL) for defect detection. While I currently rely on standard segmentation heads or VLM bounding box outputs, OVB suggests that leveraging the latent spatial understanding of generative models via "editing" could offer a more robust localization mechanism, especially for subtle defects in industrial X-rays where standard detection models often fail. The emphasis on "task balancing" and "color encoding" is particularly useful for my auto-label verification pipeline, as it provides concrete levers to adjust how the model prioritizes precision in localization versus general image understanding when handling mixed datasets of good and defective parts.
+
+## 2. dNaViT: Discrete Codes are General-Purpose Visual Representations
+
+[https://huggingface.co/papers/2611.12426](https://huggingface.co/papers/2611.12426) · _Investigates discrete codes as general-purpose visual representations, which is highly relevant for unifying vision and language in small VLMs like LFM2-VL and Qwen3-VL for efficient defect analysis._ · **Vision-Language Models**
+
+[▶ Interactive explainer: step through the pipeline](explainers/2026-11-13/02-dnavit-discrete-codes-are-general-purpos.html){target="_blank"} · _auto-generated, code not run_
+
+### The One-Sentence Version
+
+dNaViT converts high-resolution images into a fixed set of discrete "visual tokens" using a lightweight module on a frozen encoder, enabling vision models to use the same autoregressive training loop as language models.
+
+### Explain It Like I'm 5
+
+Imagine you have a huge, detailed picture of a castle. Instead of keeping the whole picture, you chop it into tiny, square stickers. Each sticker is a simple color or shape, like a red brick or a blue window. You line up these stickers in a row, just like words in a sentence. Now, a computer can learn to guess the next sticker in the line, exactly like it learns to guess the next word in a story. This makes it easier for the computer to understand pictures because it treats them like language.
+
+### Jargon Buster
+
+*   **Discrete Autoregressive Modeling** — A method where a model predicts the next item in a sequence from a fixed, finite list of options (like words in a dictionary), rather than generating continuous values; here, it allows visual data to be processed sequentially like text.
+*   **Native-resolution** — Processing images at their original pixel dimensions without resizing them to a fixed square (e.g., 224x224), which preserves aspect ratio and fine details; dNaViT uses this to avoid losing information in irregularly shaped industrial images.
+*   **Residual Modulation** — A technique where a small neural network adjusts the output of a larger, frozen model by adding a calculated correction (residual) rather than replacing the original output; this allows dNaViT to tweak semantic features for reconstruction without retraining the heavy encoder.
+*   **Dual-branch Objective** — A training strategy that optimizes two different goals simultaneously (usually semantic understanding and pixel-level reconstruction); this ensures the discrete codes capture both high-level meaning and low-level visual details.
+*   **Grouped Product Quantization (GPQ)** — A compression method that splits a high-dimensional vector into smaller groups and maps each group to the nearest code in a codebook; this reduces the complexity of representing visual features while keeping the vocabulary size manageable.
+*   **Frozen Pretrained Encoder** — A large vision model (like a ViT) whose weights are locked and not updated during training; dNaViT uses this as a stable backbone to extract features, saving compute by only training the lightweight modulation layers.
+
+### Explain It Like I'm a Data Scientist
+
+**What problem does it solve?**
+
+Current Vision-Language Models (VLMs) often struggle to unify visual and textual processing because images are continuous tensors while text is discrete tokens. Most approaches either resize images to fixed squares (losing resolution and aspect ratio) or use complex cross-attention mechanisms that don't scale well with autoregressive language modeling. The core gap is the lack of a robust, general-purpose discrete representation for high-resolution images that can be plugged directly into a next-token prediction framework without losing critical visual fidelity.
+
+**How does it solve it?**
+
+dNaViT takes a frozen, pretrained vision transformer as a backbone. Instead of retraining this heavy model, it attaches a lightweight "residual modulation" module. This module uses a dual-branch objective: one branch focuses on semantic alignment (making the tokens useful for language tasks), and the other focuses on reconstruction (ensuring the tokens can still reconstruct the original image details). The continuous features from the frozen encoder are then discretized using Grouped Product Quantization. This creates a finite vocabulary of visual primitives. The result is a system where an image is effectively a sequence of tokens, allowing a standard autoregressive transformer to process it alongside text tokens in a unified architecture.
+
+**Minimal code sketch**
+
+```python
+import torch
+import torch.nn as nn
+
+class dNaViT(nn.Module):
+    def __init__(self, frozen_encoder, codebook_size=4096, groups=8):
+        super().__init__()
+        self.encoder = frozen_encoder
+        self.encoder.eval() # Freeze weights
+        
+        # Lightweight modulation to adjust features for discretization
+        self.modulation = nn.Sequential(
+            nn.Linear(768, 768),
+            nn.GELU(),
+            nn.Linear(768, 768)
+        )
+        
+        # Grouped Product Quantizer
+        self.quantizer = GroupedProductQuantizer(dim=768, groups=groups, codebook_size=codebook_size)
+
+    def forward(self, images):
+        # 1. Extract continuous features from frozen backbone
+        with torch.no_grad():
+            features = self.encoder(images) # [B, H*W, D]
+        
+        # 2. Apply residual modulation (semantic + reconstruction cues)
+        # Simplified: just adding a learned offset
+        modulated_features = features + self.modulation(features)
+        
+        # 3. Discretize into tokens
+        # Returns indices [B, H*W] and reconstructed features
+        token_indices, recon_features = self.quantizer(modulated_features)
+        
+        return token_indices, recon_features
+
+# Pseudocode for GroupedProductQuantizer
+class GroupedProductQuantizer(nn.Module):
+    def __init__(self, dim, groups, codebook_size):
+        super().__init__()
+        self.groups = groups
+        self.codebook_size = codebook_size
+        # Each group has its own codebook
+        self.codebooks = nn.ParameterList([
+            nn.Parameter(torch.randn(codebook_size, dim // groups)) for _ in range(groups)
+        ])
+
+    def forward(self, x):
+        # Split x into groups
+        x_groups = x.view(-1, self.groups, -1)
+        indices = []
+        recon_groups = []
+        
+        for i, codebook in enumerate(self.codebooks):
+            # Find nearest code for each group
+            dists = torch.cdist(x_groups[:, i], codebook)
+            idx = torch.argmin(dists, dim=1)
+            indices.append(idx)
+            recon_groups.append(codebook[idx])
+            
+        # Concatenate reconstructed groups
+        recon = torch.cat(recon_groups, dim=1).view(x.shape)
+        return torch.stack(indices, dim=1), recon
+```
+
+### Why This Matters For My Work
+
+This is directly relevant to my fine-tuning of small local VLMs like LFM2-VL and Qwen3-VL for semiconductor defect detection. By converting high-resolution X-ray or casting images into discrete tokens, I can potentially use standard autoregressive training loops to teach these models to "read" defects as sequences, which might improve localization accuracy without requiring massive cross-attention layers. However, the connection is partially speculative: I need to verify if the "native-resolution" discrete codes preserve the fine-grained edge details critical for detecting micro-cracks in casting defects, or if the quantization loss blurs them out. If it works, it could simplify my pipeline by unifying the vision and language heads in my local models.
+
+## 3. Actor, Judge, or Teacher? Understanding Decision Models in Long-Horizon Agents
+
+[https://huggingface.co/papers/2611.17167](https://huggingface.co/papers/2611.17167) · _Analyzes decision models as judges or teachers, directly applicable to the user's work on auto-label verification and judging in industrial defect detection pipelines._ · **Reasoning & Agents**
+
+[▶ Interactive explainer: step through the pipeline](explainers/2026-11-13/03-actor-judge-or-teacher-understanding-dec.html){target="_blank"} · _auto-generated, code not run_
+
+### The One-Sentence Version
+
+This paper argues that an LLM’s ability to act in a long-horizon task is a poor proxy for its ability to judge or teach, showing that models can fail as agents while still providing high-quality supervision signals for reinforcement learning.
+
+### Explain It Like I'm 5
+
+Imagine you have three friends who are really bad at playing a board game. They keep making mistakes and losing. But when they watch someone else play, they are very good at saying, "Oh, that move was smart," or "No, that was a bad move." This paper says that just because someone is bad at playing doesn't mean they are bad at coaching. In fact, the "bad player" might be a better coach than the "good player" because they pay more attention to the rules. So, you might want to hire the bad player to teach the computer how to play, even if you never let them play the game themselves.
+
+### Jargon Buster
+
+*   **Decision Model** — A model configured to output a specific, structured choice (like a probability distribution over options) rather than free-form text, used here to standardize how agents choose actions, evaluate steps, or provide rewards.
+*   **Long-Horizon Agent** — An AI system that must make a sequence of many decisions to achieve a goal, where early mistakes can compound and make later steps impossible, typical in tasks like navigating a house or browsing a website.
+*   **Actor** — The role where the model directly selects the next action for the agent to take; the paper tests if a model that is bad at this role can still be useful in other roles.
+*   **Judge** — The role where the model evaluates a sequence of actions already taken, assigning credit or blame to specific steps; this is distinct from acting because it sees the full context of the trajectory.
+*   **Teacher** — The role where the model provides a score or reward signal for every action to guide a separate policy (the "student") via reinforcement learning, effectively labeling the data for training.
+*   **ALFWorld** — A benchmark environment simulating a household where an agent must complete tasks like "put a clean apple in the fridge," used here to test decision-making in a controlled, text-based setting.
+*   **WebShop** — A benchmark environment simulating an online store where an agent must search for and purchase items based on a user query, used here to test generalization of the judging/teaching capabilities to a different domain.
+*   **JEV** — A specific decision model (likely an acronym for a variant of a Judge/Evaluator/Verifier architecture or a specific baseline model name in the paper) used as the primary "teacher" in the experiments; the paper compares its teaching efficacy against its acting performance.
+
+### Explain It Like I'm a Data Scientist
+
+**What problem does it solve?**
+
+The standard evaluation metric for Large Language Models (LLMs) in agentic tasks is "success rate" as an actor. If a model can't complete the task, we assume it's useless. This paper challenges that assumption by decoupling the *action* capability from the *evaluation* capability. The core gap is that prior work assumes a model that fails to act well also fails to understand *why* it failed. The authors demonstrate that models can be systematically biased as actors (e.g., getting distracted by easier subgoals) but still possess the internal logic to correctly identify which steps were critical for success when viewed retrospectively.
+
+**How does it solve it?**
+
+The authors conduct a comparative study using three specialized decision models and three general-purpose LLMs. They evaluate these models in three distinct roles: Actor (choosing the next move), Judge (evaluating a completed trajectory), and Teacher (providing step-wise rewards for RL). They use ALFWorld and WebShop as testbeds. The key finding is a dissociation: all six models struggled as actors, often deviating from necessary subgoals to pursue easier ones. However, when acting as judges with full trajectory visibility, these same models correctly credited the difficult, necessary steps. When used as teachers (via the JEV model), they provided supervision signals that led to better policy learning than if the model had acted on its own. This suggests that for auto-labeling or verification pipelines, you don't need a model that can *do* the task perfectly; you just need one that can *recognize* correctness.
+
+**Minimal code sketch**
+
+```python
+import numpy as np
+
+class DecisionModel:
+    def __init__(self, name):
+        self.name = name
+
+    def act(self, state):
+        # Simulates the "Actor" role: often picks the easier, wrong path
+        # e.g., in ALFWorld, picking up a distractor object instead of the target
+        if "distractor" in state:
+            return "pick_up_distractor" 
+        return "random_action"
+
+    def judge(self, trajectory):
+        # Simulates the "Judge" role: sees the whole history
+        # Returns a boolean or score for each step
+        # Even if the agent failed, it can identify which steps were logically correct
+        scores = []
+        for step in trajectory:
+            if step.is_critical_subgoal():
+                scores.append(1.0) # Correctly identifies the hard part
+            else:
+                scores.append(0.0)
+        return scores
+
+    def teach(self, trajectory, rl_policy):
+        # Simulates the "Teacher" role: provides reward signal for RL
+        rewards = self.judge(trajectory)
+        # Update the policy using these rewards
+        # This is where the "poor actor" becomes a "good teacher"
+        rl_policy.update(rewards)
+
+# Usage
+model = DecisionModel("JEV")
+agent_trajectory = simulate_agent_run(model, env="ALFWorld")
+
+# The agent failed (low success rate as actor)
+print(f"Actor Success: {agent_trajectory.success}") 
+
+# But the judge/teacher signal is high quality
+rewards = model.teach(agent_trajectory, rl_policy)
+print(f"Teacher Signal Quality: High")
+```
+
+### Why This Matters For My Work
+
+This directly validates the architecture of my auto-label verification pipeline, where I use a VLM to judge segmentation masks rather than generate them from scratch. The paper confirms that a model’s failure to accurately segment a defect (acting) does not preclude it from correctly identifying *why* a human-generated mask is wrong (judging). For my fine-tuning of LFM2-VL and Qwen3-VL, this suggests I can leverage the "teacher" role of a larger, less fine-tuned model to generate high-quality reward signals for my smaller local models, even if the larger model isn't yet capable of standalone defect detection. It also highlights a risk in my current setup: if I rely on the model's "actor" performance to filter training data, I might be discarding valuable negative examples where the model failed to act but could have correctly judged the error.
+
+## 4. MACaQ: Fast, Model Agnostic Calibrated Quantization for Low-Precision Weights and Activations
+
+[https://huggingface.co/papers/2611.10649](https://huggingface.co/papers/2611.10649) · _Introduces a fast, model-agnostic quantization method (MACaQ) that can significantly reduce inference costs for deploying small local VLMs in real-time industrial settings._ · **Model Efficiency**
+
+[▶ Interactive explainer: step through the pipeline](explainers/2026-11-13/04-macaq-fast-model-agnostic-calibrated-qua.html){target="_blank"} · _auto-generated, code not run_
+
+### The One-Sentence Version
+
+MACaQ enables fast, model-agnostic W4A4 quantization by applying online block-Hadamard transforms to activations and absorbing their inverses into weights, eliminating cross-layer dependencies for efficient streaming inference.
+
+### Explain It Like I'm 5
+
+Imagine you have a huge box of colorful blocks that is too big to fit in your toy car. Usually, you have to look at the whole box to figure out how to squeeze it in, which takes forever. This new trick lets you look at one small pile of blocks at a time, twist them into a tighter shape, and put them in the car. Because you only look at one pile at a time, you don’t have to remember how the other piles are arranged. It’s like packing your lunch: you pack one sandwich, then the next, without needing to hold the whole fridge in your hands.
+
+### Jargon Buster
+
+*   **W4A4** — Weights and Activations quantized to 4 bits each; used here to drastically reduce memory footprint and compute cost for inference.
+*   **Post-Training Quantization (PTQ)** — The process of converting a trained model to lower precision after training is complete; MACaQ is a PTQ method, meaning it doesn't require retraining the model from scratch.
+*   **Block-Hadamard Transform** — A specific mathematical operation that rotates data within small blocks to reduce outliers; used here to make activations easier to quantize without losing accuracy.
+*   **Round-to-Nearest (RTN)** — The standard, simple method of mapping values to the closest available quantized level; MACaQ improves upon this by using a more sophisticated refinement step.
+*   **Flip-Refinement** — A Hessian-based optimization step that adjusts quantization decisions to minimize error; used here to correct the inaccuracies introduced by simple rounding.
+*   **Streaming Implementation** — A processing method where data is handled in a continuous flow, layer by layer; enabled by MACaQ’s lack of cross-layer dependencies, allowing only one layer to be in memory at a time.
+
+### Explain It Like I'm a Data Scientist
+
+**What problem does it solve?**
+
+Current low-precision quantization methods for neural networks often suffer from two major issues: high computational overhead during the quantization process and rigid architectural dependencies. Many recent approaches require expensive optimization loops or propagate basis transforms across multiple layers, which creates a dependency chain. This makes it difficult to implement these methods in a streaming fashion, where you want to process one layer at a time to save memory. For deploying small models on edge devices or in real-time industrial settings, this lack of modularity and high setup cost is a significant bottleneck.
+
+**How does it solve it?**
+
+MACaQ treats each linear layer independently by applying a per-channel scale and a block-Hadamard transform to the activations *online*. Crucially, it absorbs the inverse of these transforms into the weights. By keeping the transforms online for activations and offline for weights, it eliminates the need for cross-layer communication during the quantization process. This allows for a simple streaming implementation where only one layer needs to reside in memory at a time. To further improve accuracy over basic round-to-nearest quantization, it introduces "Flip-Refinement," a Hessian-based adjustment that fine-tunes the quantization decisions to minimize error.
+
+**Minimal code sketch**
+
+```python
+import numpy as np
+
+def hadamard_transform(x):
+    # Simplified Hadamard transform for illustration
+    # In practice, this would be a specific block-wise operation
+    return x * np.sign(x) # Pseudocode for rotation/scaling effect
+
+def macaq_quantize_layer(weights, activations):
+    # 1. Apply online transform to activations
+    act_transformed = hadamard_transform(activations)
+    
+    # 2. Absorb inverse transform into weights (conceptual)
+    # In a real implementation, this would involve matrix multiplication
+    # with the inverse Hadamard matrix applied to the weights
+    weights_adjusted = weights @ np.linalg.inv(hadamard_transform(np.eye(weights.shape[1])))
+    
+    # 3. Quantize weights and activations to 4 bits
+    # Pseudocode for quantization
+    w_quant = np.round(weights_adjusted / 0.1) * 0.1
+    a_quant = np.round(act_transformed / 0.1) * 0.1
+    
+    # 4. Flip-Refinement (Hessian-based adjustment)
+    # Pseudocode: Calculate Hessian, adjust quantization levels to minimize error
+    # hessian = compute_hessian(weights_adjusted, act_transformed)
+    # w_quant = refine_quantization(w_quant, hessian)
+    
+    return w_quant, a_quant
+
+# Example usage in a streaming fashion
+for layer in model.layers:
+    w_q, a_q = macaq_quantize_layer(layer.weights, layer.activations)
+    # Process layer with quantized values
+    # Move to next layer, previous layer can be discarded
+```
+
+### Why This Matters For My Work
+
+This is directly relevant to my work on fine-tuning small local VLMs like LFM2-VL and Qwen3-VL for industrial defect detection. Since I’m deploying these models in real-time settings for X-ray and casting defect analysis, reducing inference latency and memory footprint is critical. MACaQ’s model-agnostic approach and streaming capability mean I can apply W4A4 quantization to these VLMs without needing to re-architect them or run expensive cross-layer optimizations, potentially allowing me to run higher-resolution segmentation models on edge hardware without sacrificing the accuracy needed for auto-label verification.
+
+## 5. The Surprising Effectiveness of Deleting Weights in LLM Post-Training
+
+[https://huggingface.co/papers/2611.10866](https://huggingface.co/papers/2611.10866) · _Demonstrates that deleting a tiny fraction of weights can match full fine-tuning, offering a novel, low-cost post-training strategy for adapting small VLMs to specific defect detection domains._ · **Parameter-Efficient Fine-Tuning**
+
+[▶ Interactive explainer: step through the pipeline](explainers/2026-11-13/05-the-surprising-effectiveness-of-deleting.html){target="_blank"} · _auto-generated, code not run_
+
+### The One-Sentence Version
+
+Zeroing out less than 0.05% of an LLM's weights achieves performance parity with full fine-tuning while drastically reducing model size and catastrophic forgetting.
+
+### Explain It Like I'm 5
+
+Imagine you have a huge, messy toy box that already knows how to play with blocks. Instead of adding new toys or rearranging everything, you just hide a tiny handful of specific blocks under a blanket. Surprisingly, the toy box now knows how to play a brand-new game, just as well as if you had bought a whole new box. It’s like turning off a few specific light switches in a house to change the mood, rather than rewiring the entire building.
+
+### Jargon Buster
+
+*   **Deletion Tuning** — The paper’s proposed method where you learn which specific weights to set to zero, rather than adjusting their values. It’s used here to adapt models without changing the underlying architecture’s capacity.
+*   **Gate Projection** — A specific layer in Transformer blocks that controls the flow of information (like a valve). The paper only applies its deletion mask to these layers, not the entire network.
+*   **Reinforcement Learning with Verifiable Rewards (RLVR)** — A training technique where the model gets a "score" based on whether its output is objectively correct (e.g., code runs, math is right). It’s one of the three regimes tested to see if deletion works for complex reasoning tasks.
+*   **On-policy Distillation** — A method where a smaller student model learns to mimic a larger teacher model by generating its own outputs and comparing them to the teacher’s. It’s used here to show that deletion works even when transferring knowledge from one model to another.
+*   **Catastrophic Forgetting** — The tendency of neural networks to lose previously learned skills when trained on new data. Deletion Tuning is highlighted because it retains old skills much better than standard fine-tuning.
+*   **FFT (Full Fine-Tuning)** — The standard baseline where every single weight in the model is updated during training. It serves as the "heavyweight" comparison that Deletion Tuning surprisingly matches.
+
+### Explain It Like I'm a Data Scientist
+
+**What problem does it solve?**
+
+Standard post-training methods like Full Fine-Tuning (FFT) or LoRA require storing and updating a significant portion of the model’s parameters. This creates two major pain points: storage overhead (you need to keep the full checkpoint or adapters) and catastrophic forgetting (the model overwrites its general knowledge to fit the new task). While sparse training has been explored, most approaches rely on complex masking schedules or pruning heuristics that don’t scale well to modern LLM post-training regimes like RLVR.
+
+**How does it solve it?**
+
+The authors propose "Deletion Tuning," which learns a binary mask specifically over the gate projections of transformer blocks. Instead of optimizing weight values, the optimizer decides which weights should be exactly zero. The key insight is that you don’t need to change *how* the weights work, just *which* ones are active. By restricting the search space to these gate layers and using a binary mask, the method finds that zeroing out <0.05% of total weights is sufficient to match FFT performance. The resulting artifact is just the mask, which is orders of magnitude smaller than an FFT checkpoint, and because so few weights are touched, the model’s prior knowledge remains largely intact.
+
+**Minimal code sketch**
+
+```python
+import torch
+import torch.nn as nn
+
+class DeletionTuningLayer(nn.Module):
+    def __init__(self, original_gate_proj):
+        super().__init__()
+        self.original_gate_proj = original_gate_proj
+        # Learnable binary mask (initialized to 1, meaning "keep")
+        # In practice, this is optimized with a sigmoid + threshold or straight-through estimator
+        self.mask_logits = nn.Parameter(torch.zeros_like(original_gate_proj.weight))
+
+    def forward(self, x):
+        # Get the raw weights
+        w = self.original_gate_proj.weight
+        
+        # Create a hard binary mask from the learned logits
+        # 1.0 means keep, 0.0 means delete (zero out)
+        mask = (torch.sigmoid(self.mask_logits) > 0.5).float()
+        
+        # Apply the mask: multiply weights by the mask
+        # This effectively "deletes" the weights where mask is 0
+        masked_w = w * mask
+        
+        # Perform the linear operation with the masked weights
+        return F.linear(x, masked_w, self.original_gate_proj.bias)
+
+# Usage in a training loop (pseudocode)
+# 1. Freeze all original model weights
+# 2. Initialize DeletionTuningLayer for each gate projection
+# 3. Optimize only self.mask_logits using standard loss (e.g., cross-entropy)
+# 4. After training, extract the mask and apply it to the base model
+```
+
+### Why This Matters For My Work
+
+This is highly relevant to my work on fine-tuning small local VLMs like LFM2-VL and Qwen3-VL for defect detection. Since I’m working with constrained local hardware, the storage and inference overhead of full fine-tuning or even LoRA adapters is a real bottleneck. If Deletion Tuning holds up for vision-language models, I could potentially adapt these small VLMs to specific casting defect domains by only storing a tiny binary mask, keeping the base model lightweight and preserving its general visual grounding capabilities. However, I’ll need to verify if the "gate projection" strategy translates to the vision encoders in these VLMs, as the paper focuses primarily on text-based LLM post-training regimes.

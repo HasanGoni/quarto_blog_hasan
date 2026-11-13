@@ -11,9 +11,9 @@ toc: true
 
 Every week I pick a handful of the most relevant papers from arXiv and the HF Daily Papers list — filtered against my own work (semiconductor X-ray/casting defect detection, VLM fine-tuning, auto-label verification) — and write each one up twice: once so a 5-year-old could follow it, once with the full methodology, a code sketch, and an honest note on whether it's actually useful for what I'm building.
 
-**Papers covered so far:** 68
+**Papers covered so far:** 73
 
-**By topic:** Vision-Language Models (18), Reasoning & Agents (10), Segmentation (9), Anomaly Detection (5), Benchmarks & Evaluation (5), Model Efficiency (5), Generative Models (4), Medical Imaging (4), Multimodal Learning (4), Synthetic Data (4), Diffusion Models (3), Foundation Models (1), Generative Retrieval (1), Reasoning (1), Reinforcement Learning (1)
+**By topic:** Vision-Language Models (20), Reasoning & Agents (11), Segmentation (9), Model Efficiency (6), Anomaly Detection (5), Benchmarks & Evaluation (5), Generative Models (4), Medical Imaging (4), Multimodal Learning (4), Synthetic Data (4), Diffusion Models (3), Foundation Models (1), Generative Retrieval (1), Parameter-Efficient Fine-Tuning (1), Reasoning (1), Reinforcement Learning (1)
 
 ## Posts in this Series
 
@@ -46,3 +46,4 @@ Most recent first.
 - **2026-10-30** — [5 Papers Worth Reading — Week of October 30, 2026](2026-10-30.qmd) (5 papers)
 - **2026-10-31** — [Reimplementing SAMBA-UNet — SAM Features Guiding a Mamba Decoder, and What the Paper Doesn't Say](2026-10-31-sambaunet.qmd) — our own reference implementation (the paper has no released code): SAM ViT-B with LoRA + Adapters, a VSS Mamba U-Net, and the HCEM fusion module, run for real (identity at init, gradient flow, one-image overfit) with every guess marked, plus an interactive explainer page and a list of what the paper does not say.
 - **2026-11-06** — [5 Papers Worth Reading — Week of November 6, 2026](2026-11-06.qmd) (5 papers)
+- **2026-11-13** — [5 Papers Worth Reading — Week of November 13, 2026](2026-11-13.qmd) (5 papers)
