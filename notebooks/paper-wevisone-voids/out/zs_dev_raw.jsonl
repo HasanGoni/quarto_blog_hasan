@@ -1,0 +1,1200 @@
+{"split": "val", "i": 0, "query": ["void"], "scale": 1, "response": "<ref>void</ref><box><0><0><1000><1000></box>", "n_pred": 1, "n_gt": 2}
+{"split": "val", "i": 1, "query": ["void"], "scale": 1, "response": "<ref>void</ref><box><0><0><1000><1000></box>", "n_pred": 1, "n_gt": 2}
+{"split": "val", "i": 2, "query": ["void"], "scale": 1, "response": "<ref>void</ref><box><0><0><1000><1000></box>", "n_pred": 1, "n_gt": 1}
+{"split": "val", "i": 3, "query": ["void"], "scale": 1, "response": "<ref>void</ref><box><558><460><612><520></box>", "n_pred": 1, "n_gt": 2}
+{"split": "val", "i": 4, "query": ["void"], "scale": 1, "response": "<ref>void</ref><box><0><0><1000><1000></box>", "n_pred": 1, "n_gt": 3}
+{"split": "val", "i": 5, "query": ["void"], "scale": 1, "response": "<ref>void</ref><box><310><210><390><297></box>", "n_pred": 1, "n_gt": 2}
+{"split": "val", "i": 6, "query": ["void"], "scale": 1, "response": "<ref>void</ref><box><0><0><1000><1000></box>", "n_pred": 1, "n_gt": 0}
+{"split": "val", "i": 7, "query": ["void"], "scale": 1, "response": "<ref>void</ref><box><0><0><1000><1000></box>", "n_pred": 1, "n_gt": 4}
+{"split": "val", "i": 8, "query": ["void"], "scale": 1, "response": "<ref>void</ref><box><0><0><1000><1000></box>", "n_pred": 1, "n_gt": 0}
+{"split": "val", "i": 9, "query": ["void"], "scale": 1, "response": "<ref>void</ref><box><0><0><1000><1000></box>", "n_pred": 1, "n_gt": 3}
+{"split": "val", "i": 10, "query": ["void"], "scale": 1, "response": "<ref>void</ref><box><0><0><1000><1000></box>", "n_pred": 1, "n_gt": 2}
+{"split": "val", "i": 11, "query": ["void"], "scale": 1, "response": "<ref>void</ref><box><0><312><117><517></box>", "n_pred": 1, "n_gt": 2}
+{"split": "val", "i": 12, "query": ["void"], "scale": 1, "response": "<ref>void</ref><box><0><0><1000><1000></box>", "n_pred": 1, "n_gt": 1}
+{"split": "val", "i": 13, "query": ["void"], "scale": 1, "response": "<ref>void</ref><box><0><0><1000><1000></box>", "n_pred": 1, "n_gt": 2}
+{"split": "val", "i": 14, "query": ["void"], "scale": 1, "response": "<ref>void</ref><box>none</box>", "n_pred": 0, "n_gt": 1}
+{"split": "val", "i": 15, "query": ["void"], "scale": 1, "response": "<ref>void</ref><box>none</box>", "n_pred": 0, "n_gt": 2}
+{"split": "val", "i": 16, "query": ["void"], "scale": 1, "response": "<ref>void</ref><box><0><0><1000><1000></box>", "n_pred": 1, "n_gt": 1}
+{"split": "val", "i": 17, "query": ["void"], "scale": 1, "response": "<ref>void</ref><box><400><42><610><247></box>", "n_pred": 1, "n_gt": 3}
+{"split": "val", "i": 18, "query": ["void"], "scale": 1, "response": "<ref>void</ref><box><0><0><1000><1000></box>", "n_pred": 1, "n_gt": 3}
+{"split": "val", "i": 19, "query": ["void"], "scale": 1, "response": "<ref>void</ref><box><0><0><1000><1000></box>", "n_pred": 1, "n_gt": 1}
+{"split": "val", "i": 20, "query": ["void"], "scale": 1, "response": "<ref>void</ref><box><400><542><600><695></box>", "n_pred": 1, "n_gt": 2}
+{"split": "val", "i": 21, "query": ["void"], "scale": 1, "response": "<ref>void</ref><box><0><0><1000><1000></box>", "n_pred": 1, "n_gt": 3}
+{"split": "val", "i": 22, "query": ["void"], "scale": 1, "response": "<ref>void</ref><box><0><0><1000><1000></box>", "n_pred": 1, "n_gt": 0}
+{"split": "val", "i": 23, "query": ["void"], "scale": 1, "response": "<ref>void</ref><box><270><562><380><700>,<433><520><573><688></box>", "n_pred": 2, "n_gt": 2}
+{"split": "val", "i": 24, "query": ["void"], "scale": 1, "response": "<ref>void</ref><box><0><0><1000><1000></box>", "n_pred": 1, "n_gt": 1}
+{"split": "val", "i": 25, "query": ["void"], "scale": 1, "response": "<ref>void</ref><box><383><162><492><273></box>", "n_pred": 1, "n_gt": 4}
+{"split": "val", "i": 26, "query": ["void"], "scale": 1, "response": "<ref>void</ref><box><308><44><733><620></box>", "n_pred": 1, "n_gt": 0}
+{"split": "val", "i": 27, "query": ["void"], "scale": 1, "response": "<ref>void</ref><box>none</box>", "n_pred": 0, "n_gt": 1}
+{"split": "val", "i": 28, "query": ["void"], "scale": 1, "response": "<ref>void</ref><box><30><577><264><695></box>", "n_pred": 1, "n_gt": 0}
+{"split": "val", "i": 29, "query": ["void"], "scale": 1, "response": "<ref>void</ref><box><270><317><363><477>,<808><417><910><540></box>", "n_pred": 2, "n_gt": 4}
+{"split": "val", "i": 30, "query": ["void"], "scale": 1, "response": "<ref>void</ref><box><177><712><344><783>,<577><462><664><540></box>", "n_pred": 2, "n_gt": 5}
+{"split": "val", "i": 31, "query": ["void"], "scale": 1, "response": "<ref>void</ref><box><0><0><1000><1000></box>", "n_pred": 1, "n_gt": 1}
+{"split": "val", "i": 32, "query": ["void"], "scale": 1, "response": "<ref>void</ref><box><425><611><660><688></box>", "n_pred": 1, "n_gt": 4}
+{"split": "val", "i": 33, "query": ["void"], "scale": 1, "response": "<ref>void</ref><box><0><0><1000><1000></box>", "n_pred": 1, "n_gt": 1}
+{"split": "val", "i": 34, "query": ["void"], "scale": 1, "response": "<ref>void</ref><box><0><0><1000><1000></box>", "n_pred": 1, "n_gt": 3}
+{"split": "val", "i": 35, "query": ["void"], "scale": 1, "response": "<ref>void</ref><box>none</box>", "n_pred": 0, "n_gt": 2}
+{"split": "val", "i": 36, "query": ["void"], "scale": 1, "response": "<ref>void</ref><box><412><340><495><443></box>", "n_pred": 1, "n_gt": 5}
+{"split": "val", "i": 37, "query": ["void"], "scale": 1, "response": "<ref>void</ref><box><0><270><1000><738></box>", "n_pred": 1, "n_gt": 0}
+{"split": "val", "i": 38, "query": ["void"], "scale": 1, "response": "<ref>void</ref><box><0><0><1000><1000></box>", "n_pred": 1, "n_gt": 2}
+{"split": "val", "i": 39, "query": ["void"], "scale": 1, "response": "<ref>void</ref><box><0><0><1000><1000></box>", "n_pred": 1, "n_gt": 2}
+{"split": "val", "i": 40, "query": ["void"], "scale": 1, "response": "<ref>void</ref><box>none</box>", "n_pred": 0, "n_gt": 1}
+{"split": "val", "i": 41, "query": ["void"], "scale": 1, "response": "<ref>void</ref><box><0><0><1000><1000></box>", "n_pred": 1, "n_gt": 3}
+{"split": "val", "i": 42, "query": ["void"], "scale": 1, "response": "<ref>void</ref><box><0><0><1000><1000></box>", "n_pred": 1, "n_gt": 2}
+{"split": "val", "i": 43, "query": ["void"], "scale": 1, "response": "<ref>void</ref><box><0><0><1000><1000></box>", "n_pred": 1, "n_gt": 0}
+{"split": "val", "i": 44, "query": ["void"], "scale": 1, "response": "<ref>void</ref><box><0><0><1000><1000></box>", "n_pred": 1, "n_gt": 1}
+{"split": "val", "i": 45, "query": ["void"], "scale": 1, "response": "<ref>void</ref><box>none</box>", "n_pred": 0, "n_gt": 4}
+{"split": "val", "i": 46, "query": ["void"], "scale": 1, "response": "<ref>void</ref><box>none</box>", "n_pred": 0, "n_gt": 0}
+{"split": "val", "i": 47, "query": ["void"], "scale": 1, "response": "<ref>void</ref><box><0><0><1000><1000></box>", "n_pred": 1, "n_gt": 0}
+{"split": "val", "i": 48, "query": ["void"], "scale": 1, "response": "<ref>void</ref><box><0><0><1000><1000></box>", "n_pred": 1, "n_gt": 2}
+{"split": "val", "i": 49, "query": ["void"], "scale": 1, "response": "<ref>void</ref><box><558><273><644><354></box>", "n_pred": 1, "n_gt": 3}
+{"split": "val", "i": 50, "query": ["void"], "scale": 1, "response": "<ref>void</ref><box><0><0><1000><1000></box>", "n_pred": 1, "n_gt": 1}
+{"split": "val", "i": 51, "query": ["void"], "scale": 1, "response": "<ref>void</ref><box><0><0><1000><1000></box>", "n_pred": 1, "n_gt": 2}
+{"split": "val", "i": 52, "query": ["void"], "scale": 1, "response": "<ref>void</ref><box><0><0><1000><1000></box>", "n_pred": 1, "n_gt": 2}
+{"split": "val", "i": 53, "query": ["void"], "scale": 1, "response": "<ref>void</ref><box><0><0><1000><1000></box>", "n_pred": 1, "n_gt": 1}
+{"split": "val", "i": 54, "query": ["void"], "scale": 1, "response": "<ref>void</ref><box><0><0><1000><1000></box>", "n_pred": 1, "n_gt": 3}
+{"split": "val", "i": 55, "query": ["void"], "scale": 1, "response": "<ref>void</ref><box><510><397><667><523>,<683><353><875><490></box>", "n_pred": 2, "n_gt": 2}
+{"split": "val", "i": 56, "query": ["void"], "scale": 1, "response": "<ref>void</ref><box><440><480><590><560></box>", "n_pred": 1, "n_gt": 1}
+{"split": "val", "i": 57, "query": ["void"], "scale": 1, "response": "<ref>void</ref><box>none</box>", "n_pred": 0, "n_gt": 1}
+{"split": "val", "i": 58, "query": ["void"], "scale": 1, "response": "<ref>void</ref><box><450><148><533><207>,<552><165><596><238></box>", "n_pred": 2, "n_gt": 2}
+{"split": "val", "i": 59, "query": ["void"], "scale": 1, "response": "<ref>void</ref><box><0><0><1000><1000></box>", "n_pred": 1, "n_gt": 1}
+{"split": "val", "i": 60, "query": ["void"], "scale": 1, "response": "<ref>void</ref><box><0><0><1000><1000></box>", "n_pred": 1, "n_gt": 3}
+{"split": "val", "i": 61, "query": ["void"], "scale": 1, "response": "<ref>void</ref><box><0><0><1000><1000></box>", "n_pred": 1, "n_gt": 2}
+{"split": "val", "i": 62, "query": ["void"], "scale": 1, "response": "<ref>void</ref><box><580><440><700><540></box>", "n_pred": 1, "n_gt": 2}
+{"split": "val", "i": 63, "query": ["void"], "scale": 1, "response": "<ref>void</ref><box><233><440><294><625>,<688><67><755><155>,<706><433><753><615></box>", "n_pred": 3, "n_gt": 5}
+{"split": "val", "i": 64, "query": ["void"], "scale": 1, "response": "<ref>void</ref><box><0><0><1000><1000></box>", "n_pred": 1, "n_gt": 0}
+{"split": "val", "i": 65, "query": ["void"], "scale": 1, "response": "<ref>void</ref><box><0><0><1000><1000></box>", "n_pred": 1, "n_gt": 3}
+{"split": "val", "i": 66, "query": ["void"], "scale": 1, "response": "<ref>void</ref><box><0><0><1000><1000></box>", "n_pred": 1, "n_gt": 5}
+{"split": "val", "i": 67, "query": ["void"], "scale": 1, "response": "<ref>void</ref><box><762><438><831><535></box>", "n_pred": 1, "n_gt": 3}
+{"split": "val", "i": 68, "query": ["void"], "scale": 1, "response": "<ref>void</ref><box><0><0><1000><1000></box>", "n_pred": 1, "n_gt": 0}
+{"split": "val", "i": 69, "query": ["void"], "scale": 1, "response": "<ref>void</ref><box><343><492><417><570>,<377><362><462><444></box>", "n_pred": 2, "n_gt": 4}
+{"split": "val", "i": 70, "query": ["void"], "scale": 1, "response": "<ref>void</ref><box><473><55><511><140></box>", "n_pred": 1, "n_gt": 3}
+{"split": "val", "i": 71, "query": ["void"], "scale": 1, "response": "<ref>void</ref><box><0><0><1000><1000></box>", "n_pred": 1, "n_gt": 1}
+{"split": "val", "i": 72, "query": ["void"], "scale": 1, "response": "<ref>void</ref><box><0><0><1000><1000></box>", "n_pred": 1, "n_gt": 1}
+{"split": "val", "i": 73, "query": ["void"], "scale": 1, "response": "<ref>void</ref><box><148><333><212><611></box>", "n_pred": 1, "n_gt": 1}
+{"split": "val", "i": 74, "query": ["void"], "scale": 1, "response": "<ref>void</ref><box><0><0><1000><1000></box>", "n_pred": 1, "n_gt": 1}
+{"split": "val", "i": 75, "query": ["void"], "scale": 1, "response": "<ref>void</ref><box>none</box>", "n_pred": 0, "n_gt": 2}
+{"split": "val", "i": 76, "query": ["void"], "scale": 1, "response": "<ref>void</ref><box><0><0><1000><1000></box>", "n_pred": 1, "n_gt": 3}
+{"split": "val", "i": 77, "query": ["void"], "scale": 1, "response": "<ref>void</ref><box><0><0><1000><1000></box>", "n_pred": 1, "n_gt": 1}
+{"split": "val", "i": 78, "query": ["void"], "scale": 1, "response": "<ref>void</ref><box><0><0><1000><1000></box>", "n_pred": 1, "n_gt": 0}
+{"split": "val", "i": 79, "query": ["void"], "scale": 1, "response": "<ref>void</ref><box>none</box>", "n_pred": 0, "n_gt": 1}
+{"split": "val", "i": 80, "query": ["void"], "scale": 1, "response": "<ref>void</ref><box><777><462><858><530></box>", "n_pred": 1, "n_gt": 5}
+{"split": "val", "i": 81, "query": ["void"], "scale": 1, "response": "<ref>void</ref><box><397><3><580><160></box>", "n_pred": 1, "n_gt": 0}
+{"split": "val", "i": 82, "query": ["void"], "scale": 1, "response": "<ref>void</ref><box><258><823><350><908>,<292><910><427><998></box>", "n_pred": 2, "n_gt": 2}
+{"split": "val", "i": 83, "query": ["void"], "scale": 1, "response": "<ref>void</ref><box><458><575><521><665></box>", "n_pred": 1, "n_gt": 4}
+{"split": "val", "i": 84, "query": ["void"], "scale": 1, "response": "<ref>void</ref><box><0><0><1000><1000></box>", "n_pred": 1, "n_gt": 0}
+{"split": "val", "i": 85, "query": ["void"], "scale": 1, "response": "<ref>void</ref><box>none</box>", "n_pred": 0, "n_gt": 5}
+{"split": "val", "i": 86, "query": ["void"], "scale": 1, "response": "<ref>void</ref><box><406><698><510><802></box>", "n_pred": 1, "n_gt": 2}
+{"split": "val", "i": 87, "query": ["void"], "scale": 1, "response": "<ref>void</ref><box><388><0><617><55></box>", "n_pred": 1, "n_gt": 0}
+{"split": "val", "i": 88, "query": ["void"], "scale": 1, "response": "<ref>void</ref><box>none</box>", "n_pred": 0, "n_gt": 3}
+{"split": "val", "i": 89, "query": ["void"], "scale": 1, "response": "<ref>void</ref><box><0><0><1000><1000></box>", "n_pred": 1, "n_gt": 3}
+{"split": "val", "i": 90, "query": ["void"], "scale": 1, "response": "<ref>void</ref><box><388><112><604><397></box>", "n_pred": 1, "n_gt": 4}
+{"split": "val", "i": 91, "query": ["void"], "scale": 1, "response": "<ref>void</ref><box><408><370><617><625></box>", "n_pred": 1, "n_gt": 3}
+{"split": "val", "i": 92, "query": ["void"], "scale": 1, "response": "<ref>void</ref><box><377><0><623><108></box>", "n_pred": 1, "n_gt": 1}
+{"split": "val", "i": 93, "query": ["void"], "scale": 1, "response": "<ref>void</ref><box><0><0><1000><1000></box>", "n_pred": 1, "n_gt": 3}
+{"split": "val", "i": 94, "query": ["void"], "scale": 1, "response": "<ref>void</ref><box><0><0><1000><1000></box>", "n_pred": 1, "n_gt": 3}
+{"split": "val", "i": 95, "query": ["void"], "scale": 1, "response": "<ref>void</ref><box><0><0><1000><1000></box>", "n_pred": 1, "n_gt": 3}
+{"split": "val", "i": 96, "query": ["void"], "scale": 1, "response": "<ref>void</ref><box>none</box>", "n_pred": 0, "n_gt": 3}
+{"split": "val", "i": 97, "query": ["void"], "scale": 1, "response": "<ref>void</ref><box><0><0><1000><1000></box>", "n_pred": 1, "n_gt": 4}
+{"split": "val", "i": 98, "query": ["void"], "scale": 1, "response": "<ref>void</ref><box><410><428><490><512></box>", "n_pred": 1, "n_gt": 2}
+{"split": "val", "i": 99, "query": ["void"], "scale": 1, "response": "<ref>void</ref><box><0><0><1000><1000></box>", "n_pred": 1, "n_gt": 0}
+{"split": "val", "i": 0, "query": ["air bubble"], "scale": 1, "response": "<ref>air bubble</ref><box><438><577><462><602></box>", "n_pred": 1, "n_gt": 2}
+{"split": "val", "i": 1, "query": ["air bubble"], "scale": 1, "response": "<ref>air bubble</ref><box>none</box>", "n_pred": 0, "n_gt": 2}
+{"split": "val", "i": 2, "query": ["air bubble"], "scale": 1, "response": "<ref>air bubble</ref><box>none</box>", "n_pred": 0, "n_gt": 1}
+{"split": "val", "i": 3, "query": ["air bubble"], "scale": 1, "response": "<ref>air bubble</ref><box><562><467><606><515></box>", "n_pred": 1, "n_gt": 2}
+{"split": "val", "i": 4, "query": ["air bubble"], "scale": 1, "response": "<ref>air bubble</ref><box>none</box>", "n_pred": 0, "n_gt": 3}
+{"split": "val", "i": 5, "query": ["air bubble"], "scale": 1, "response": "<ref>air bubble</ref><box><312><214><388><294></box>", "n_pred": 1, "n_gt": 2}
+{"split": "val", "i": 6, "query": ["air bubble"], "scale": 1, "response": "<ref>air bubble</ref><box>none</box>", "n_pred": 0, "n_gt": 0}
+{"split": "val", "i": 7, "query": ["air bubble"], "scale": 1, "response": "<ref>air bubble</ref><box>none</box>", "n_pred": 0, "n_gt": 4}
+{"split": "val", "i": 8, "query": ["air bubble"], "scale": 1, "response": "<ref>air bubble</ref><box><284><719><398><792></box>", "n_pred": 1, "n_gt": 0}
+{"split": "val", "i": 9, "query": ["air bubble"], "scale": 1, "response": "<ref>air bubble</ref><box>none</box>", "n_pred": 0, "n_gt": 3}
+{"split": "val", "i": 10, "query": ["air bubble"], "scale": 1, "response": "<ref>air bubble</ref><box><174><486><212><669></box>", "n_pred": 1, "n_gt": 2}
+{"split": "val", "i": 11, "query": ["air bubble"], "scale": 1, "response": "<ref>air bubble</ref><box><0><350><94><438>,<112><550><203><628></box>", "n_pred": 2, "n_gt": 2}
+{"split": "val", "i": 12, "query": ["air bubble"], "scale": 1, "response": "<ref>air bubble</ref><box>none</box>", "n_pred": 0, "n_gt": 1}
+{"split": "val", "i": 13, "query": ["air bubble"], "scale": 1, "response": "<ref>air bubble</ref><box><302><442><398><566></box>", "n_pred": 1, "n_gt": 2}
+{"split": "val", "i": 14, "query": ["air bubble"], "scale": 1, "response": "<ref>air bubble</ref><box><322><646><420><745>,<430><250><594><400>,<477><638><630><767>,<483><108><642><217>,<512><462><688><617>,<634><695><769><839>,<660><156><792><294></box>", "n_pred": 7, "n_gt": 1}
+{"split": "val", "i": 15, "query": ["air bubble"], "scale": 1, "response": "<ref>air bubble</ref><box>none</box>", "n_pred": 0, "n_gt": 2}
+{"split": "val", "i": 16, "query": ["air bubble"], "scale": 1, "response": "<ref>air bubble</ref><box>none</box>", "n_pred": 0, "n_gt": 1}
+{"split": "val", "i": 17, "query": ["air bubble"], "scale": 1, "response": "<ref>air bubble</ref><box><404><49><500><177>,<470><185><535><250>,<533><58><608><178></box>", "n_pred": 3, "n_gt": 3}
+{"split": "val", "i": 18, "query": ["air bubble"], "scale": 1, "response": "<ref>air bubble</ref><box>none</box>", "n_pred": 0, "n_gt": 3}
+{"split": "val", "i": 19, "query": ["air bubble"], "scale": 1, "response": "<ref>air bubble</ref><box>none</box>", "n_pred": 0, "n_gt": 1}
+{"split": "val", "i": 20, "query": ["air bubble"], "scale": 1, "response": "<ref>air bubble</ref><box><411><558><591><674></box>", "n_pred": 1, "n_gt": 2}
+{"split": "val", "i": 21, "query": ["air bubble"], "scale": 1, "response": "<ref>air bubble</ref><box><310><162><383><214></box>", "n_pred": 1, "n_gt": 3}
+{"split": "val", "i": 22, "query": ["air bubble"], "scale": 1, "response": "<ref>air bubble</ref><box>none</box>", "n_pred": 0, "n_gt": 0}
+{"split": "val", "i": 23, "query": ["air bubble"], "scale": 1, "response": "<ref>air bubble</ref><box><286><575><377><688>,<567><486><665><627></box>", "n_pred": 2, "n_gt": 2}
+{"split": "val", "i": 24, "query": ["air bubble"], "scale": 1, "response": "<ref>air bubble</ref><box><0><312><1000><706></box>", "n_pred": 1, "n_gt": 1}
+{"split": "val", "i": 25, "query": ["air bubble"], "scale": 1, "response": "<ref>air bubble</ref><box><388><169><489><269></box>", "n_pred": 1, "n_gt": 4}
+{"split": "val", "i": 26, "query": ["air bubble"], "scale": 1, "response": "<ref>air bubble</ref><box><410><318><492><354>,<583><320><644><348></box>", "n_pred": 2, "n_gt": 0}
+{"split": "val", "i": 27, "query": ["air bubble"], "scale": 1, "response": "<ref>air bubble</ref><box><199><262><308><438></box>", "n_pred": 1, "n_gt": 1}
+{"split": "val", "i": 28, "query": ["air bubble"], "scale": 1, "response": "<ref>air bubble</ref><box><174><714><222><746>,<391><469><424><498>,<599><580><682><623>,<906><754><963><783></box>", "n_pred": 4, "n_gt": 0}
+{"split": "val", "i": 29, "query": ["air bubble"], "scale": 1, "response": "<ref>air bubble</ref><box><275><325><358><473>,<812><422><907><539></box>", "n_pred": 2, "n_gt": 4}
+{"split": "val", "i": 30, "query": ["air bubble"], "scale": 1, "response": "<ref>air bubble</ref><box><180><719><342><779>,<568><669><599><701>,<582><468><658><536></box>", "n_pred": 3, "n_gt": 5}
+{"split": "val", "i": 31, "query": ["air bubble"], "scale": 1, "response": "<ref>air bubble</ref><box>none</box>", "n_pred": 0, "n_gt": 1}
+{"split": "val", "i": 32, "query": ["air bubble"], "scale": 1, "response": "<ref>air bubble</ref><box>none</box>", "n_pred": 0, "n_gt": 4}
+{"split": "val", "i": 33, "query": ["air bubble"], "scale": 1, "response": "<ref>air bubble</ref><box><216><715><263><780></box>", "n_pred": 1, "n_gt": 1}
+{"split": "val", "i": 34, "query": ["air bubble"], "scale": 1, "response": "<ref>air bubble</ref><box><520><535><562><591></box>", "n_pred": 1, "n_gt": 3}
+{"split": "val", "i": 35, "query": ["air bubble"], "scale": 1, "response": "<ref>air bubble</ref><box>none</box>", "n_pred": 0, "n_gt": 2}
+{"split": "val", "i": 36, "query": ["air bubble"], "scale": 1, "response": "<ref>air bubble</ref><box><417><348><490><438>,<419><484><463><542></box>", "n_pred": 2, "n_gt": 5}
+{"split": "val", "i": 37, "query": ["air bubble"], "scale": 1, "response": "<ref>air bubble</ref><box><0><281><1000><719></box>", "n_pred": 1, "n_gt": 0}
+{"split": "val", "i": 38, "query": ["air bubble"], "scale": 1, "response": "<ref>air bubble</ref><box><452><635><485><669>,<535><685><610><740></box>", "n_pred": 2, "n_gt": 2}
+{"split": "val", "i": 39, "query": ["air bubble"], "scale": 1, "response": "<ref>air bubble</ref><box><266><705><323><762>,<746><367><790><414></box>", "n_pred": 2, "n_gt": 2}
+{"split": "val", "i": 40, "query": ["air bubble"], "scale": 1, "response": "<ref>air bubble</ref><box><83><450><225><625>,<130><738><300><889>,<169><217><340><344>,<245><302><422><500>,<247><590><433><777>,<377><455><569><605>,<454><266><630><423>,<461><608><650><775>,<631><438><812><615>,<658><719><854><857>,<678><208><880><333>,<833><575><1000><779>,<839><312><1000><487></box>", "n_pred": 13, "n_gt": 1}
+{"split": "val", "i": 41, "query": ["air bubble"], "scale": 1, "response": "<ref>air bubble</ref><box>none</box>", "n_pred": 0, "n_gt": 3}
+{"split": "val", "i": 42, "query": ["air bubble"], "scale": 1, "response": "<ref>air bubble</ref><box><783><245><828><295></box>", "n_pred": 1, "n_gt": 2}
+{"split": "val", "i": 43, "query": ["air bubble"], "scale": 1, "response": "<ref>air bubble</ref><box>none</box>", "n_pred": 0, "n_gt": 0}
+{"split": "val", "i": 44, "query": ["air bubble"], "scale": 1, "response": "<ref>air bubble</ref><box>none</box>", "n_pred": 0, "n_gt": 1}
+{"split": "val", "i": 45, "query": ["air bubble"], "scale": 1, "response": "<ref>air bubble</ref><box><316><573><358><617>,<331><721><377><770>,<402><503><465><562>,<404><656><467><708>,<408><370><455><419>,<414><794><468><848>,<560><620><598><660>,<594><333><638><380>,<596><745><633><788>,<644><801><677><852>,<658><407><725><454>,<678><605><717><648>,<682><258><729><308></box>", "n_pred": 13, "n_gt": 4}
+{"split": "val", "i": 46, "query": ["air bubble"], "scale": 1, "response": "<ref>air bubble</ref><box>none</box>", "n_pred": 0, "n_gt": 0}
+{"split": "val", "i": 47, "query": ["air bubble"], "scale": 1, "response": "<ref>air bubble</ref><box>none</box>", "n_pred": 0, "n_gt": 0}
+{"split": "val", "i": 48, "query": ["air bubble"], "scale": 1, "response": "<ref>air bubble</ref><box><358><700><474><875></box>", "n_pred": 1, "n_gt": 2}
+{"split": "val", "i": 49, "query": ["air bubble"], "scale": 1, "response": "<ref>air bubble</ref><box><562><275><644><352>,<722><335><769><375></box>", "n_pred": 2, "n_gt": 3}
+{"split": "val", "i": 50, "query": ["air bubble"], "scale": 1, "response": "<ref>air bubble</ref><box><458><767><495><812>,<462><312><500><359></box>", "n_pred": 2, "n_gt": 1}
+{"split": "val", "i": 51, "query": ["air bubble"], "scale": 1, "response": "<ref>air bubble</ref><box>none</box>", "n_pred": 0, "n_gt": 2}
+{"split": "val", "i": 52, "query": ["air bubble"], "scale": 1, "response": "<ref>air bubble</ref><box><500><271><590><367></box>", "n_pred": 1, "n_gt": 2}
+{"split": "val", "i": 53, "query": ["air bubble"], "scale": 1, "response": "<ref>air bubble</ref><box>none</box>", "n_pred": 0, "n_gt": 1}
+{"split": "val", "i": 54, "query": ["air bubble"], "scale": 1, "response": "<ref>air bubble</ref><box><62><660><102><720></box>", "n_pred": 1, "n_gt": 3}
+{"split": "val", "i": 55, "query": ["air bubble"], "scale": 1, "response": "<ref>air bubble</ref><box><521><411><658><510>,<690><367><867><479></box>", "n_pred": 2, "n_gt": 2}
+{"split": "val", "i": 56, "query": ["air bubble"], "scale": 1, "response": "<ref>air bubble</ref><box><474><750><525><810></box>", "n_pred": 1, "n_gt": 1}
+{"split": "val", "i": 57, "query": ["air bubble"], "scale": 1, "response": "<ref>air bubble</ref><box><12><245><977><753></box>", "n_pred": 1, "n_gt": 1}
+{"split": "val", "i": 58, "query": ["air bubble"], "scale": 1, "response": "<ref>air bubble</ref><box><364><706><408><770>,<454><153><530><204>,<557><167><594><234></box>", "n_pred": 3, "n_gt": 2}
+{"split": "val", "i": 59, "query": ["air bubble"], "scale": 1, "response": "<ref>air bubble</ref><box>none</box>", "n_pred": 0, "n_gt": 1}
+{"split": "val", "i": 60, "query": ["air bubble"], "scale": 1, "response": "<ref>air bubble</ref><box>none</box>", "n_pred": 0, "n_gt": 3}
+{"split": "val", "i": 61, "query": ["air bubble"], "scale": 1, "response": "<ref>air bubble</ref><box><156><433><270><519>,<402><294><455><359>,<483><58><546><120>,<591><181><662><258></box>", "n_pred": 4, "n_gt": 2}
+{"split": "val", "i": 62, "query": ["air bubble"], "scale": 1, "response": "<ref>air bubble</ref><box><583><448><695><536>,<776><622><839><704>,<867><379><911><417></box>", "n_pred": 3, "n_gt": 2}
+{"split": "val", "i": 63, "query": ["air bubble"], "scale": 1, "response": "<ref>air bubble</ref><box><188><288><234><351>,<689><73><753><155></box>", "n_pred": 2, "n_gt": 5}
+{"split": "val", "i": 64, "query": ["air bubble"], "scale": 1, "response": "<ref>air bubble</ref><box>none</box>", "n_pred": 0, "n_gt": 0}
+{"split": "val", "i": 65, "query": ["air bubble"], "scale": 1, "response": "<ref>air bubble</ref><box>none</box>", "n_pred": 0, "n_gt": 3}
+{"split": "val", "i": 66, "query": ["air bubble"], "scale": 1, "response": "<ref>air bubble</ref><box><610><646><680><712>,<755><666><816><713></box>", "n_pred": 2, "n_gt": 5}
+{"split": "val", "i": 67, "query": ["air bubble"], "scale": 1, "response": "<ref>air bubble</ref><box><765><445><828><533></box>", "n_pred": 1, "n_gt": 3}
+{"split": "val", "i": 68, "query": ["air bubble"], "scale": 1, "response": "<ref>air bubble</ref><box>none</box>", "n_pred": 0, "n_gt": 0}
+{"split": "val", "i": 69, "query": ["air bubble"], "scale": 1, "response": "<ref>air bubble</ref><box><346><501><412><568>,<381><369><458><440></box>", "n_pred": 2, "n_gt": 4}
+{"split": "val", "i": 70, "query": ["air bubble"], "scale": 1, "response": "<ref>air bubble</ref><box><358><617><379><660>,<440><576><481><608>,<450><466><505><520>,<474><64><506><139>,<570><258><658><310></box>", "n_pred": 5, "n_gt": 3}
+{"split": "val", "i": 71, "query": ["air bubble"], "scale": 1, "response": "<ref>air bubble</ref><box>none</box>", "n_pred": 0, "n_gt": 1}
+{"split": "val", "i": 72, "query": ["air bubble"], "scale": 1, "response": "<ref>air bubble</ref><box><538><458><594><502>,<870><644><937><711></box>", "n_pred": 2, "n_gt": 1}
+{"split": "val", "i": 73, "query": ["air bubble"], "scale": 1, "response": "<ref>air bubble</ref><box>none</box>", "n_pred": 0, "n_gt": 1}
+{"split": "val", "i": 74, "query": ["air bubble"], "scale": 1, "response": "<ref>air bubble</ref><box><680><342><745><438></box>", "n_pred": 1, "n_gt": 1}
+{"split": "val", "i": 75, "query": ["air bubble"], "scale": 1, "response": "<ref>air bubble</ref><box>none</box>", "n_pred": 0, "n_gt": 2}
+{"split": "val", "i": 76, "query": ["air bubble"], "scale": 1, "response": "<ref>air bubble</ref><box>none</box>", "n_pred": 0, "n_gt": 3}
+{"split": "val", "i": 77, "query": ["air bubble"], "scale": 1, "response": "<ref>air bubble</ref><box><0><275><981><695></box>", "n_pred": 1, "n_gt": 1}
+{"split": "val", "i": 78, "query": ["air bubble"], "scale": 1, "response": "<ref>air bubble</ref><box>none</box>", "n_pred": 0, "n_gt": 0}
+{"split": "val", "i": 79, "query": ["air bubble"], "scale": 1, "response": "<ref>air bubble</ref><box><138><719><219><819></box>", "n_pred": 1, "n_gt": 1}
+{"split": "val", "i": 80, "query": ["air bubble"], "scale": 1, "response": "<ref>air bubble</ref><box><785><473><852><522></box>", "n_pred": 1, "n_gt": 5}
+{"split": "val", "i": 81, "query": ["air bubble"], "scale": 1, "response": "<ref>air bubble</ref><box><416><12><572><148></box>", "n_pred": 1, "n_gt": 0}
+{"split": "val", "i": 82, "query": ["air bubble"], "scale": 1, "response": "<ref>air bubble</ref><box><262><827><347><904>,<295><916><425><994></box>", "n_pred": 2, "n_gt": 2}
+{"split": "val", "i": 83, "query": ["air bubble"], "scale": 1, "response": "<ref>air bubble</ref><box><458><578><519><660></box>", "n_pred": 1, "n_gt": 4}
+{"split": "val", "i": 84, "query": ["air bubble"], "scale": 1, "response": "<ref>air bubble</ref><box>none</box>", "n_pred": 0, "n_gt": 0}
+{"split": "val", "i": 85, "query": ["air bubble"], "scale": 1, "response": "<ref>air bubble</ref><box><58><654><122><677>,<327><674><530><704>,<617><658><688><690>,<710><652><958><698></box>", "n_pred": 4, "n_gt": 5}
+{"split": "val", "i": 86, "query": ["air bubble"], "scale": 1, "response": "<ref>air bubble</ref><box><411><704><507><798></box>", "n_pred": 1, "n_gt": 2}
+{"split": "val", "i": 87, "query": ["air bubble"], "scale": 1, "response": "<ref>air bubble</ref><box>none</box>", "n_pred": 0, "n_gt": 0}
+{"split": "val", "i": 88, "query": ["air bubble"], "scale": 1, "response": "<ref>air bubble</ref><box>none</box>", "n_pred": 0, "n_gt": 3}
+{"split": "val", "i": 89, "query": ["air bubble"], "scale": 1, "response": "<ref>air bubble</ref><box>none</box>", "n_pred": 0, "n_gt": 3}
+{"split": "val", "i": 90, "query": ["air bubble"], "scale": 1, "response": "<ref>air bubble</ref><box><317><660><421><741>,<398><767><447><801></box>", "n_pred": 2, "n_gt": 4}
+{"split": "val", "i": 91, "query": ["air bubble"], "scale": 1, "response": "<ref>air bubble</ref><box>none</box>", "n_pred": 0, "n_gt": 3}
+{"split": "val", "i": 92, "query": ["air bubble"], "scale": 1, "response": "<ref>air bubble</ref><box>none</box>", "n_pred": 0, "n_gt": 1}
+{"split": "val", "i": 93, "query": ["air bubble"], "scale": 1, "response": "<ref>air bubble</ref><box>none</box>", "n_pred": 0, "n_gt": 3}
+{"split": "val", "i": 94, "query": ["air bubble"], "scale": 1, "response": "<ref>air bubble</ref><box><12><362><1000><680></box>", "n_pred": 1, "n_gt": 3}
+{"split": "val", "i": 95, "query": ["air bubble"], "scale": 1, "response": "<ref>air bubble</ref><box><375><575><425><612></box>", "n_pred": 1, "n_gt": 3}
+{"split": "val", "i": 96, "query": ["air bubble"], "scale": 1, "response": "<ref>air bubble</ref><box><328><596><384><665>,<350><750><458><848>,<362><420><467><555>,<392><148><490><250>,<425><562><520><677>,<433><297><495><359>,<503><692><585><792>,<525><127><602><229>,<558><273><625><411>,<568><892><670><1000>,<622><455><681><552></box>", "n_pred": 11, "n_gt": 3}
+{"split": "val", "i": 97, "query": ["air bubble"], "scale": 1, "response": "<ref>air bubble</ref><box>none</box>", "n_pred": 0, "n_gt": 4}
+{"split": "val", "i": 98, "query": ["air bubble"], "scale": 1, "response": "<ref>air bubble</ref><box><411><432><489><510></box>", "n_pred": 1, "n_gt": 2}
+{"split": "val", "i": 99, "query": ["air bubble"], "scale": 1, "response": "<ref>air bubble</ref><box><672><325><773><417>,<794><527><844><573>,<889><233><930><281></box>", "n_pred": 3, "n_gt": 0}
+{"split": "val", "i": 0, "query": ["bright spot"], "scale": 1, "response": "<ref>bright spot</ref><box><438><577><462><600></box>", "n_pred": 1, "n_gt": 2}
+{"split": "val", "i": 1, "query": ["bright spot"], "scale": 1, "response": "<ref>bright spot</ref><box><656><260><692><318></box>", "n_pred": 1, "n_gt": 2}
+{"split": "val", "i": 2, "query": ["bright spot"], "scale": 1, "response": "<ref>bright spot</ref><box><390><677><433><714></box>", "n_pred": 1, "n_gt": 1}
+{"split": "val", "i": 3, "query": ["bright spot"], "scale": 1, "response": "<ref>bright spot</ref><box><564><470><604><513></box>", "n_pred": 1, "n_gt": 2}
+{"split": "val", "i": 4, "query": ["bright spot"], "scale": 1, "response": "<ref>bright spot</ref><box><532><127><564><157></box>", "n_pred": 1, "n_gt": 3}
+{"split": "val", "i": 5, "query": ["bright spot"], "scale": 1, "response": "<ref>bright spot</ref><box><313><217><387><294></box>", "n_pred": 1, "n_gt": 2}
+{"split": "val", "i": 6, "query": ["bright spot"], "scale": 1, "response": "<ref>bright spot</ref><box><0><0><997><1000></box>", "n_pred": 1, "n_gt": 0}
+{"split": "val", "i": 7, "query": ["bright spot"], "scale": 1, "response": "<ref>bright spot</ref><box><481><448><514><480></box>", "n_pred": 1, "n_gt": 4}
+{"split": "val", "i": 8, "query": ["bright spot"], "scale": 1, "response": "<ref>bright spot</ref><box><288><721><394><792></box>", "n_pred": 1, "n_gt": 0}
+{"split": "val", "i": 9, "query": ["bright spot"], "scale": 1, "response": "<ref>bright spot</ref><box><0><0><1000><1000></box>", "n_pred": 1, "n_gt": 3}
+{"split": "val", "i": 10, "query": ["bright spot"], "scale": 1, "response": "<ref>bright spot</ref><box><175><487><213><669></box>", "n_pred": 1, "n_gt": 2}
+{"split": "val", "i": 11, "query": ["bright spot"], "scale": 1, "response": "<ref>bright spot</ref><box><0><350><90><438>,<117><555><201><626></box>", "n_pred": 2, "n_gt": 2}
+{"split": "val", "i": 12, "query": ["bright spot"], "scale": 1, "response": "<ref>bright spot</ref><box>none</box>", "n_pred": 0, "n_gt": 1}
+{"split": "val", "i": 13, "query": ["bright spot"], "scale": 1, "response": "<ref>bright spot</ref><box><304><444><398><566></box>", "n_pred": 1, "n_gt": 2}
+{"split": "val", "i": 14, "query": ["bright spot"], "scale": 1, "response": "<ref>bright spot</ref><box><468><438><503><502></box>", "n_pred": 1, "n_gt": 1}
+{"split": "val", "i": 15, "query": ["bright spot"], "scale": 1, "response": "<ref>bright spot</ref><box><0><0><997><994></box>", "n_pred": 1, "n_gt": 2}
+{"split": "val", "i": 16, "query": ["bright spot"], "scale": 1, "response": "<ref>bright spot</ref><box><700><602><796><672></box>", "n_pred": 1, "n_gt": 1}
+{"split": "val", "i": 17, "query": ["bright spot"], "scale": 1, "response": "<ref>bright spot</ref><box><356><281><406><330></box>", "n_pred": 1, "n_gt": 3}
+{"split": "val", "i": 18, "query": ["bright spot"], "scale": 1, "response": "<ref>bright spot</ref><box><816><334><873><389></box>", "n_pred": 1, "n_gt": 3}
+{"split": "val", "i": 19, "query": ["bright spot"], "scale": 1, "response": "<ref>bright spot</ref><box>none</box>", "n_pred": 0, "n_gt": 1}
+{"split": "val", "i": 20, "query": ["bright spot"], "scale": 1, "response": "<ref>bright spot</ref><box><413><560><589><672></box>", "n_pred": 1, "n_gt": 2}
+{"split": "val", "i": 21, "query": ["bright spot"], "scale": 1, "response": "<ref>bright spot</ref><box><310><165><381><213></box>", "n_pred": 1, "n_gt": 3}
+{"split": "val", "i": 22, "query": ["bright spot"], "scale": 1, "response": "<ref>bright spot</ref><box><265><295><363><406></box>", "n_pred": 1, "n_gt": 0}
+{"split": "val", "i": 23, "query": ["bright spot"], "scale": 1, "response": "<ref>bright spot</ref><box><288><575><375><688>,<567><487><665><632></box>", "n_pred": 2, "n_gt": 2}
+{"split": "val", "i": 24, "query": ["bright spot"], "scale": 1, "response": "<ref>bright spot</ref><box>none</box>", "n_pred": 0, "n_gt": 1}
+{"split": "val", "i": 25, "query": ["bright spot"], "scale": 1, "response": "<ref>bright spot</ref><box><388><169><489><268></box>", "n_pred": 1, "n_gt": 4}
+{"split": "val", "i": 26, "query": ["bright spot"], "scale": 1, "response": "<ref>bright spot</ref><box><410><317><492><354>,<583><320><644><348></box>", "n_pred": 2, "n_gt": 0}
+{"split": "val", "i": 27, "query": ["bright spot"], "scale": 1, "response": "<ref>bright spot</ref><box><370><860><403><918>,<644><833><672><875></box>", "n_pred": 2, "n_gt": 1}
+{"split": "val", "i": 28, "query": ["bright spot"], "scale": 1, "response": "<ref>bright spot</ref><box><599><580><682><623>,<652><367><794><520>,<907><754><963><782></box>", "n_pred": 3, "n_gt": 0}
+{"split": "val", "i": 29, "query": ["bright spot"], "scale": 1, "response": "<ref>bright spot</ref><box><193><801><260><840>,<279><326><356><472>,<813><424><906><537></box>", "n_pred": 3, "n_gt": 4}
+{"split": "val", "i": 30, "query": ["bright spot"], "scale": 1, "response": "<ref>bright spot</ref><box><180><719><342><778>,<568><670><598><700>,<582><468><658><536></box>", "n_pred": 3, "n_gt": 5}
+{"split": "val", "i": 31, "query": ["bright spot"], "scale": 1, "response": "<ref>bright spot</ref><box><0><0><1000><996></box>", "n_pred": 1, "n_gt": 1}
+{"split": "val", "i": 32, "query": ["bright spot"], "scale": 1, "response": "<ref>bright spot</ref><box><429><617><658><679></box>", "n_pred": 1, "n_gt": 4}
+{"split": "val", "i": 33, "query": ["bright spot"], "scale": 1, "response": "<ref>bright spot</ref><box><217><715><263><780></box>", "n_pred": 1, "n_gt": 1}
+{"split": "val", "i": 34, "query": ["bright spot"], "scale": 1, "response": "<ref>bright spot</ref><box><522><536><562><590></box>", "n_pred": 1, "n_gt": 3}
+{"split": "val", "i": 35, "query": ["bright spot"], "scale": 1, "response": "<ref>bright spot</ref><box><494><465><533><530>,<546><215><582><336>,<554><552><606><585>,<640><415><715><462>,<644><288><714><334>,<642><551><692><583></box>", "n_pred": 6, "n_gt": 2}
+{"split": "val", "i": 36, "query": ["bright spot"], "scale": 1, "response": "<ref>bright spot</ref><box><417><348><490><440>,<420><485><463><542></box>", "n_pred": 2, "n_gt": 5}
+{"split": "val", "i": 37, "query": ["bright spot"], "scale": 1, "response": "<ref>bright spot</ref><box><0><0><1000><1000></box>", "n_pred": 1, "n_gt": 0}
+{"split": "val", "i": 38, "query": ["bright spot"], "scale": 1, "response": "<ref>bright spot</ref><box><452><637><483><668></box>", "n_pred": 1, "n_gt": 2}
+{"split": "val", "i": 39, "query": ["bright spot"], "scale": 1, "response": "<ref>bright spot</ref><box><266><706><322><762>,<747><369><790><414></box>", "n_pred": 2, "n_gt": 2}
+{"split": "val", "i": 40, "query": ["bright spot"], "scale": 1, "response": "<ref>bright spot</ref><box><90><452><223><625>,<241><303><420><498>,<250><593><430><775>,<377><455><569><606>,<454><266><626><421>,<463><610><647><774>,<631><440><812><615>,<658><721><853><854>,<839><576><1000><779>,<840><313><1000><485></box>", "n_pred": 10, "n_gt": 1}
+{"split": "val", "i": 41, "query": ["bright spot"], "scale": 1, "response": "<ref>bright spot</ref><box>none</box>", "n_pred": 0, "n_gt": 3}
+{"split": "val", "i": 42, "query": ["bright spot"], "scale": 1, "response": "<ref>bright spot</ref><box><785><248><828><294></box>", "n_pred": 1, "n_gt": 2}
+{"split": "val", "i": 43, "query": ["bright spot"], "scale": 1, "response": "<ref>bright spot</ref><box>none</box>", "n_pred": 0, "n_gt": 0}
+{"split": "val", "i": 44, "query": ["bright spot"], "scale": 1, "response": "<ref>bright spot</ref><box><289><580><342><625></box>", "n_pred": 1, "n_gt": 1}
+{"split": "val", "i": 45, "query": ["bright spot"], "scale": 1, "response": "<ref>bright spot</ref><box><316><575><356><618>,<332><721><375><770>,<404><505><463><561>,<406><366><453><417>,<407><647><465><706>,<416><796><467><847>,<559><623><596><660>,<580><742><616><785>,<598><336><638><378>,<639><801><674><850>,<659><408><724><454>,<678><605><717><649>,<682><260><729><308></box>", "n_pred": 13, "n_gt": 4}
+{"split": "val", "i": 46, "query": ["bright spot"], "scale": 1, "response": "<ref>bright spot</ref><box><0><0><1000><1000></box>", "n_pred": 1, "n_gt": 0}
+{"split": "val", "i": 47, "query": ["bright spot"], "scale": 1, "response": "<ref>bright spot</ref><box><0><2><997><996></box>", "n_pred": 1, "n_gt": 0}
+{"split": "val", "i": 48, "query": ["bright spot"], "scale": 1, "response": "<ref>bright spot</ref><box><360><704><474><875></box>", "n_pred": 1, "n_gt": 2}
+{"split": "val", "i": 49, "query": ["bright spot"], "scale": 1, "response": "<ref>bright spot</ref><box><562><275><644><351>,<722><335><769><375></box>", "n_pred": 2, "n_gt": 3}
+{"split": "val", "i": 50, "query": ["bright spot"], "scale": 1, "response": "<ref>bright spot</ref><box><458><773><493><812>,<462><313><498><356></box>", "n_pred": 2, "n_gt": 1}
+{"split": "val", "i": 51, "query": ["bright spot"], "scale": 1, "response": "<ref>bright spot</ref><box>none</box>", "n_pred": 0, "n_gt": 2}
+{"split": "val", "i": 52, "query": ["bright spot"], "scale": 1, "response": "<ref>bright spot</ref><box><501><273><589><365>,<585><498><608><524></box>", "n_pred": 2, "n_gt": 2}
+{"split": "val", "i": 53, "query": ["bright spot"], "scale": 1, "response": "<ref>bright spot</ref><box><0><0><1000><1000></box>", "n_pred": 1, "n_gt": 1}
+{"split": "val", "i": 54, "query": ["bright spot"], "scale": 1, "response": "<ref>bright spot</ref><box><62><660><100><720></box>", "n_pred": 1, "n_gt": 3}
+{"split": "val", "i": 55, "query": ["bright spot"], "scale": 1, "response": "<ref>bright spot</ref><box>none</box>", "n_pred": 0, "n_gt": 2}
+{"split": "val", "i": 56, "query": ["bright spot"], "scale": 1, "response": "<ref>bright spot</ref><box><474><750><525><810></box>", "n_pred": 1, "n_gt": 1}
+{"split": "val", "i": 57, "query": ["bright spot"], "scale": 1, "response": "<ref>bright spot</ref><box>none</box>", "n_pred": 0, "n_gt": 1}
+{"split": "val", "i": 58, "query": ["bright spot"], "scale": 1, "response": "<ref>bright spot</ref><box><364><706><408><770>,<454><153><530><204>,<557><167><593><234></box>", "n_pred": 3, "n_gt": 2}
+{"split": "val", "i": 59, "query": ["bright spot"], "scale": 1, "response": "<ref>bright spot</ref><box><764><252><796><300></box>", "n_pred": 1, "n_gt": 1}
+{"split": "val", "i": 60, "query": ["bright spot"], "scale": 1, "response": "<ref>bright spot</ref><box><377><0><460><135></box>", "n_pred": 1, "n_gt": 3}
+{"split": "val", "i": 61, "query": ["bright spot"], "scale": 1, "response": "<ref>bright spot</ref><box><156><434><270><519>,<198><179><237><226>,<403><295><455><359>,<485><59><546><120></box>", "n_pred": 4, "n_gt": 2}
+{"split": "val", "i": 62, "query": ["bright spot"], "scale": 1, "response": "<ref>bright spot</ref><box><583><448><695><536>,<867><375><911><414></box>", "n_pred": 2, "n_gt": 2}
+{"split": "val", "i": 63, "query": ["bright spot"], "scale": 1, "response": "<ref>bright spot</ref><box><189><288><234><350>,<245><450><284><611>,<690><73><752><153>,<716><438><748><606></box>", "n_pred": 4, "n_gt": 5}
+{"split": "val", "i": 64, "query": ["bright spot"], "scale": 1, "response": "<ref>bright spot</ref><box><0><0><997><1000></box>", "n_pred": 1, "n_gt": 0}
+{"split": "val", "i": 65, "query": ["bright spot"], "scale": 1, "response": "<ref>bright spot</ref><box><532><790><559><820>,<781><516><900><596></box>", "n_pred": 2, "n_gt": 3}
+{"split": "val", "i": 66, "query": ["bright spot"], "scale": 1, "response": "<ref>bright spot</ref><box><612><647><680><712>,<758><668><815><711></box>", "n_pred": 2, "n_gt": 5}
+{"split": "val", "i": 67, "query": ["bright spot"], "scale": 1, "response": "<ref>bright spot</ref><box><766><447><828><533></box>", "n_pred": 1, "n_gt": 3}
+{"split": "val", "i": 68, "query": ["bright spot"], "scale": 1, "response": "<ref>bright spot</ref><box>none</box>", "n_pred": 0, "n_gt": 0}
+{"split": "val", "i": 69, "query": ["bright spot"], "scale": 1, "response": "<ref>bright spot</ref><box><346><502><412><568>,<381><369><458><440></box>", "n_pred": 2, "n_gt": 4}
+{"split": "val", "i": 70, "query": ["bright spot"], "scale": 1, "response": "<ref>bright spot</ref><box><359><617><379><660>,<440><577><481><608>,<474><65><505><139>,<571><258><661><309></box>", "n_pred": 4, "n_gt": 3}
+{"split": "val", "i": 71, "query": ["bright spot"], "scale": 1, "response": "<ref>bright spot</ref><box><0><0><997><996></box>", "n_pred": 1, "n_gt": 1}
+{"split": "val", "i": 72, "query": ["bright spot"], "scale": 1, "response": "<ref>bright spot</ref><box><540><460><594><500>,<872><645><935><711></box>", "n_pred": 2, "n_gt": 1}
+{"split": "val", "i": 73, "query": ["bright spot"], "scale": 1, "response": "<ref>bright spot</ref><box><158><352><205><600></box>", "n_pred": 1, "n_gt": 1}
+{"split": "val", "i": 74, "query": ["bright spot"], "scale": 1, "response": "<ref>bright spot</ref><box><682><343><745><438></box>", "n_pred": 1, "n_gt": 1}
+{"split": "val", "i": 75, "query": ["bright spot"], "scale": 1, "response": "<ref>bright spot</ref><box><916><452><961><478></box>", "n_pred": 1, "n_gt": 2}
+{"split": "val", "i": 76, "query": ["bright spot"], "scale": 1, "response": "<ref>bright spot</ref><box><647><568><726><656></box>", "n_pred": 1, "n_gt": 3}
+{"split": "val", "i": 77, "query": ["bright spot"], "scale": 1, "response": "<ref>bright spot</ref><box>none</box>", "n_pred": 0, "n_gt": 1}
+{"split": "val", "i": 78, "query": ["bright spot"], "scale": 1, "response": "<ref>bright spot</ref><box><0><0><997><996></box>", "n_pred": 1, "n_gt": 0}
+{"split": "val", "i": 79, "query": ["bright spot"], "scale": 1, "response": "<ref>bright spot</ref><box><140><719><217><818></box>", "n_pred": 1, "n_gt": 1}
+{"split": "val", "i": 80, "query": ["bright spot"], "scale": 1, "response": "<ref>bright spot</ref><box><786><474><851><522></box>", "n_pred": 1, "n_gt": 5}
+{"split": "val", "i": 81, "query": ["bright spot"], "scale": 1, "response": "<ref>bright spot</ref><box>none</box>", "n_pred": 0, "n_gt": 0}
+{"split": "val", "i": 82, "query": ["bright spot"], "scale": 1, "response": "<ref>bright spot</ref><box><263><829><347><903>,<296><916><425><994></box>", "n_pred": 2, "n_gt": 2}
+{"split": "val", "i": 83, "query": ["bright spot"], "scale": 1, "response": "<ref>bright spot</ref><box><458><580><517><660></box>", "n_pred": 1, "n_gt": 4}
+{"split": "val", "i": 84, "query": ["bright spot"], "scale": 1, "response": "<ref>bright spot</ref><box>none</box>", "n_pred": 0, "n_gt": 0}
+{"split": "val", "i": 85, "query": ["bright spot"], "scale": 1, "response": "<ref>bright spot</ref><box><645><421><678><472></box>", "n_pred": 1, "n_gt": 5}
+{"split": "val", "i": 86, "query": ["bright spot"], "scale": 1, "response": "<ref>bright spot</ref><box><412><705><507><798>,<465><0><509><26></box>", "n_pred": 2, "n_gt": 2}
+{"split": "val", "i": 87, "query": ["bright spot"], "scale": 1, "response": "<ref>bright spot</ref><box><0><0><997><1000></box>", "n_pred": 1, "n_gt": 0}
+{"split": "val", "i": 88, "query": ["bright spot"], "scale": 1, "response": "<ref>bright spot</ref><box><634><427><717><481></box>", "n_pred": 1, "n_gt": 3}
+{"split": "val", "i": 89, "query": ["bright spot"], "scale": 1, "response": "<ref>bright spot</ref><box><0><0><997><996></box>", "n_pred": 1, "n_gt": 3}
+{"split": "val", "i": 90, "query": ["bright spot"], "scale": 1, "response": "<ref>bright spot</ref><box><400><767><448><799></box>", "n_pred": 1, "n_gt": 4}
+{"split": "val", "i": 91, "query": ["bright spot"], "scale": 1, "response": "<ref>bright spot</ref><box><497><78><528><111></box>", "n_pred": 1, "n_gt": 3}
+{"split": "val", "i": 92, "query": ["bright spot"], "scale": 1, "response": "<ref>bright spot</ref><box><0><0><997><996></box>", "n_pred": 1, "n_gt": 1}
+{"split": "val", "i": 93, "query": ["bright spot"], "scale": 1, "response": "<ref>bright spot</ref><box><525><332><554><370>,<564><446><592><485></box>", "n_pred": 2, "n_gt": 3}
+{"split": "val", "i": 94, "query": ["bright spot"], "scale": 1, "response": "<ref>bright spot</ref><box>none</box>", "n_pred": 0, "n_gt": 3}
+{"split": "val", "i": 95, "query": ["bright spot"], "scale": 1, "response": "<ref>bright spot</ref><box><377><577><424><611></box>", "n_pred": 1, "n_gt": 3}
+{"split": "val", "i": 96, "query": ["bright spot"], "scale": 1, "response": "<ref>bright spot</ref><box><352><750><456><847>,<362><425><467><558>,<389><148><486><246>,<432><295><495><356>,<504><692><585><786>,<525><127><599><228>,<556><273><625><412>,<569><892><665><1000>,<622><458><680><550></box>", "n_pred": 9, "n_gt": 3}
+{"split": "val", "i": 97, "query": ["bright spot"], "scale": 1, "response": "<ref>bright spot</ref><box><665><807><693><846></box>", "n_pred": 1, "n_gt": 4}
+{"split": "val", "i": 98, "query": ["bright spot"], "scale": 1, "response": "<ref>bright spot</ref><box><411><432><489><510></box>", "n_pred": 1, "n_gt": 2}
+{"split": "val", "i": 99, "query": ["bright spot"], "scale": 1, "response": "<ref>bright spot</ref><box><674><326><773><414>,<794><528><842><572>,<890><237><928><281></box>", "n_pred": 3, "n_gt": 0}
+{"split": "val", "i": 0, "query": ["defect"], "scale": 1, "response": "<ref>defect</ref><box><133><0><885><1000></box>", "n_pred": 1, "n_gt": 2}
+{"split": "val", "i": 1, "query": ["defect"], "scale": 1, "response": "<ref>defect</ref><box><642><245><700><333></box>", "n_pred": 1, "n_gt": 2}
+{"split": "val", "i": 2, "query": ["defect"], "scale": 1, "response": "<ref>defect</ref><box><280><0><720><1000></box>", "n_pred": 1, "n_gt": 1}
+{"split": "val", "i": 3, "query": ["defect"], "scale": 1, "response": "<ref>defect</ref><box><0><367><1000><625></box>", "n_pred": 1, "n_gt": 2}
+{"split": "val", "i": 4, "query": ["defect"], "scale": 1, "response": "<ref>defect</ref><box><303><0><833><1000></box>", "n_pred": 1, "n_gt": 3}
+{"split": "val", "i": 5, "query": ["defect"], "scale": 1, "response": "<ref>defect</ref><box><300><200><395><302></box>", "n_pred": 1, "n_gt": 2}
+{"split": "val", "i": 6, "query": ["defect"], "scale": 1, "response": "<ref>defect</ref><box><100><0><917><1000></box>", "n_pred": 1, "n_gt": 0}
+{"split": "val", "i": 7, "query": ["defect"], "scale": 1, "response": "<ref>defect</ref><box><255><0><777><1000></box>", "n_pred": 1, "n_gt": 4}
+{"split": "val", "i": 8, "query": ["defect"], "scale": 1, "response": "<ref>defect</ref><box><280><708><400><798></box>", "n_pred": 1, "n_gt": 0}
+{"split": "val", "i": 9, "query": ["defect"], "scale": 1, "response": "<ref>defect</ref><box><0><0><1000><1000></box>", "n_pred": 1, "n_gt": 3}
+{"split": "val", "i": 10, "query": ["defect"], "scale": 1, "response": "<ref>defect</ref><box><170><475><220><673></box>", "n_pred": 1, "n_gt": 2}
+{"split": "val", "i": 11, "query": ["defect"], "scale": 1, "response": "<ref>defect</ref><box><0><167><1000><875></box>", "n_pred": 1, "n_gt": 2}
+{"split": "val", "i": 12, "query": ["defect"], "scale": 1, "response": "<ref>defect</ref><box><20><195><1000><745></box>", "n_pred": 1, "n_gt": 1}
+{"split": "val", "i": 13, "query": ["defect"], "scale": 1, "response": "<ref>defect</ref><box><290><430><403><573></box>", "n_pred": 1, "n_gt": 2}
+{"split": "val", "i": 14, "query": ["defect"], "scale": 1, "response": "<ref>defect</ref><box><423><220><600><405>,<470><625><630><773>,<500><450><690><620>,<623><688><770><845>,<650><142><800><300></box>", "n_pred": 5, "n_gt": 1}
+{"split": "val", "i": 15, "query": ["defect"], "scale": 1, "response": "<ref>defect</ref><box><33><0><960><983></box>", "n_pred": 1, "n_gt": 2}
+{"split": "val", "i": 16, "query": ["defect"], "scale": 1, "response": "<ref>defect</ref><box><690><583><805><680></box>", "n_pred": 1, "n_gt": 1}
+{"split": "val", "i": 17, "query": ["defect"], "scale": 1, "response": "<ref>defect</ref><box><250><0><773><1000></box>", "n_pred": 1, "n_gt": 3}
+{"split": "val", "i": 18, "query": ["defect"], "scale": 1, "response": "<ref>defect</ref><box><805><320><875><400></box>", "n_pred": 1, "n_gt": 3}
+{"split": "val", "i": 19, "query": ["defect"], "scale": 1, "response": "<ref>defect</ref><box><0><255><1000><673></box>", "n_pred": 1, "n_gt": 1}
+{"split": "val", "i": 20, "query": ["defect"], "scale": 1, "response": "<ref>defect</ref><box><0><273><1000><750></box>", "n_pred": 1, "n_gt": 2}
+{"split": "val", "i": 21, "query": ["defect"], "scale": 1, "response": "<ref>defect</ref><box><300><150><385><223></box>", "n_pred": 1, "n_gt": 3}
+{"split": "val", "i": 22, "query": ["defect"], "scale": 1, "response": "<ref>defect</ref><box><83><0><910><1000></box>", "n_pred": 1, "n_gt": 0}
+{"split": "val", "i": 23, "query": ["defect"], "scale": 1, "response": "<ref>defect</ref><box><17><195><975><780></box>", "n_pred": 1, "n_gt": 2}
+{"split": "val", "i": 24, "query": ["defect"], "scale": 1, "response": "<ref>defect</ref><box><0><300><1000><720></box>", "n_pred": 1, "n_gt": 1}
+{"split": "val", "i": 25, "query": ["defect"], "scale": 1, "response": "<ref>defect</ref><box><377><156><495><275></box>", "n_pred": 1, "n_gt": 4}
+{"split": "val", "i": 26, "query": ["defect"], "scale": 1, "response": "<ref>defect</ref><box><217><0><812><1000></box>", "n_pred": 1, "n_gt": 0}
+{"split": "val", "i": 27, "query": ["defect"], "scale": 1, "response": "<ref>defect</ref><box><197><225><312><445>,<612><150><767><280></box>", "n_pred": 2, "n_gt": 1}
+{"split": "val", "i": 28, "query": ["defect"], "scale": 1, "response": "<ref>defect</ref><box><0><150><1000><870></box>", "n_pred": 1, "n_gt": 0}
+{"split": "val", "i": 29, "query": ["defect"], "scale": 1, "response": "<ref>defect</ref><box><270><312><362><477>,<805><417><910><542></box>", "n_pred": 2, "n_gt": 4}
+{"split": "val", "i": 30, "query": ["defect"], "scale": 1, "response": "<ref>defect</ref><box><562><660><604><708>,<573><460><665><542></box>", "n_pred": 2, "n_gt": 5}
+{"split": "val", "i": 31, "query": ["defect"], "scale": 1, "response": "<ref>defect</ref><box><0><0><1000><1000></box>", "n_pred": 1, "n_gt": 1}
+{"split": "val", "i": 32, "query": ["defect"], "scale": 1, "response": "<ref>defect</ref><box><417><600><665><690></box>", "n_pred": 1, "n_gt": 4}
+{"split": "val", "i": 33, "query": ["defect"], "scale": 1, "response": "<ref>defect</ref><box><202><708><267><788></box>", "n_pred": 1, "n_gt": 1}
+{"split": "val", "i": 34, "query": ["defect"], "scale": 1, "response": "<ref>defect</ref><box><505><520><570><600></box>", "n_pred": 1, "n_gt": 3}
+{"split": "val", "i": 35, "query": ["defect"], "scale": 1, "response": "<ref>defect</ref><box><233><167><773><625></box>", "n_pred": 1, "n_gt": 2}
+{"split": "val", "i": 36, "query": ["defect"], "scale": 1, "response": "<ref>defect</ref><box><405><335><500><447>,<410><473><475><550></box>", "n_pred": 2, "n_gt": 5}
+{"split": "val", "i": 37, "query": ["defect"], "scale": 1, "response": "<ref>defect</ref><box><0><267><1000><730></box>", "n_pred": 1, "n_gt": 0}
+{"split": "val", "i": 38, "query": ["defect"], "scale": 1, "response": "<ref>defect</ref><box><438><625><490><677>,<530><675><615><750></box>", "n_pred": 2, "n_gt": 2}
+{"split": "val", "i": 39, "query": ["defect"], "scale": 1, "response": "<ref>defect</ref><box><253><695><330><773>,<738><358><798><423></box>", "n_pred": 2, "n_gt": 2}
+{"split": "val", "i": 40, "query": ["defect"], "scale": 1, "response": "<ref>defect</ref><box><23><95><1000><927></box>", "n_pred": 1, "n_gt": 1}
+{"split": "val", "i": 41, "query": ["defect"], "scale": 1, "response": "<ref>defect</ref><box><0><377><1000><650></box>", "n_pred": 1, "n_gt": 3}
+{"split": "val", "i": 42, "query": ["defect"], "scale": 1, "response": "<ref>defect</ref><box><773><233><833><300></box>", "n_pred": 1, "n_gt": 2}
+{"split": "val", "i": 43, "query": ["defect"], "scale": 1, "response": "<ref>defect</ref><box><273><0><717><1000></box>", "n_pred": 1, "n_gt": 0}
+{"split": "val", "i": 44, "query": ["defect"], "scale": 1, "response": "<ref>defect</ref><box><92><0><900><1000></box>", "n_pred": 1, "n_gt": 1}
+{"split": "val", "i": 45, "query": ["defect"], "scale": 1, "response": "<ref>defect</ref><box><310><562><365><625>,<320><712><380><779>,<388><490><473><570>,<392><638><475><715>,<397><356><467><430>,<403><780><479><858>,<547><605><606><670>,<573><738><630><798>,<583><317><647><391>,<623><785><685><862>,<642><396><733><460>,<658><595><723><660>,<665><238><740><318></box>", "n_pred": 13, "n_gt": 4}
+{"split": "val", "i": 46, "query": ["defect"], "scale": 1, "response": "<ref>defect</ref><box><53><0><969><1000></box>", "n_pred": 1, "n_gt": 0}
+{"split": "val", "i": 47, "query": ["defect"], "scale": 1, "response": "<ref>defect</ref><box><107><0><923><1000></box>", "n_pred": 1, "n_gt": 0}
+{"split": "val", "i": 48, "query": ["defect"], "scale": 1, "response": "<ref>defect</ref><box><348><688><490><875></box>", "n_pred": 1, "n_gt": 2}
+{"split": "val", "i": 49, "query": ["defect"], "scale": 1, "response": "<ref>defect</ref><box><550><255><650><360>,<555><385><805><595></box>", "n_pred": 2, "n_gt": 3}
+{"split": "val", "i": 50, "query": ["defect"], "scale": 1, "response": "<ref>defect</ref><box><217><0><800><1000></box>", "n_pred": 1, "n_gt": 1}
+{"split": "val", "i": 51, "query": ["defect"], "scale": 1, "response": "<ref>defect</ref><box><150><0><883><1000></box>", "n_pred": 1, "n_gt": 2}
+{"split": "val", "i": 52, "query": ["defect"], "scale": 1, "response": "<ref>defect</ref><box><490><260><595><370></box>", "n_pred": 1, "n_gt": 2}
+{"split": "val", "i": 53, "query": ["defect"], "scale": 1, "response": "<ref>defect</ref><box><100><0><883><1000></box>", "n_pred": 1, "n_gt": 1}
+{"split": "val", "i": 54, "query": ["defect"], "scale": 1, "response": "<ref>defect</ref><box><0><333><1000><1000></box>", "n_pred": 1, "n_gt": 3}
+{"split": "val", "i": 55, "query": ["defect"], "scale": 1, "response": "<ref>defect</ref><box><15><358><1000><650></box>", "n_pred": 1, "n_gt": 2}
+{"split": "val", "i": 56, "query": ["defect"], "scale": 1, "response": "<ref>defect</ref><box><0><133><1000><905></box>", "n_pred": 1, "n_gt": 1}
+{"split": "val", "i": 57, "query": ["defect"], "scale": 1, "response": "<ref>defect</ref><box><10><233><981><758></box>", "n_pred": 1, "n_gt": 1}
+{"split": "val", "i": 58, "query": ["defect"], "scale": 1, "response": "<ref>defect</ref><box><358><700><410><772>,<450><146><533><206>,<552><163><597><238></box>", "n_pred": 3, "n_gt": 2}
+{"split": "val", "i": 59, "query": ["defect"], "scale": 1, "response": "<ref>defect</ref><box><107><0><885><1000></box>", "n_pred": 1, "n_gt": 1}
+{"split": "val", "i": 60, "query": ["defect"], "scale": 1, "response": "<ref>defect</ref><box><573><377><688><473></box>", "n_pred": 1, "n_gt": 3}
+{"split": "val", "i": 61, "query": ["defect"], "scale": 1, "response": "<ref>defect</ref><box><392><280><462><367></box>", "n_pred": 1, "n_gt": 2}
+{"split": "val", "i": 62, "query": ["defect"], "scale": 1, "response": "<ref>defect</ref><box><17><320><1000><715></box>", "n_pred": 1, "n_gt": 2}
+{"split": "val", "i": 63, "query": ["defect"], "scale": 1, "response": "<ref>defect</ref><box><683><62><758><158></box>", "n_pred": 1, "n_gt": 5}
+{"split": "val", "i": 64, "query": ["defect"], "scale": 1, "response": "<ref>defect</ref><box><227><0><792><1000></box>", "n_pred": 1, "n_gt": 0}
+{"split": "val", "i": 65, "query": ["defect"], "scale": 1, "response": "<ref>defect</ref><box><770><500><908><600></box>", "n_pred": 1, "n_gt": 3}
+{"split": "val", "i": 66, "query": ["defect"], "scale": 1, "response": "<ref>defect</ref><box><602><638><685><720></box>", "n_pred": 1, "n_gt": 5}
+{"split": "val", "i": 67, "query": ["defect"], "scale": 1, "response": "<ref>defect</ref><box><758><438><831><538></box>", "n_pred": 1, "n_gt": 3}
+{"split": "val", "i": 68, "query": ["defect"], "scale": 1, "response": "<ref>defect</ref><box><273><0><767><1000></box>", "n_pred": 1, "n_gt": 0}
+{"split": "val", "i": 69, "query": ["defect"], "scale": 1, "response": "<ref>defect</ref><box><333><480><438><580>,<370><356><470><448></box>", "n_pred": 2, "n_gt": 4}
+{"split": "val", "i": 70, "query": ["defect"], "scale": 1, "response": "<ref>defect</ref><box><100><0><900><1000></box>", "n_pred": 1, "n_gt": 3}
+{"split": "val", "i": 71, "query": ["defect"], "scale": 1, "response": "<ref>defect</ref><box><135><0><840><1000></box>", "n_pred": 1, "n_gt": 1}
+{"split": "val", "i": 72, "query": ["defect"], "scale": 1, "response": "<ref>defect</ref><box><860><625><950><720></box>", "n_pred": 1, "n_gt": 1}
+{"split": "val", "i": 73, "query": ["defect"], "scale": 1, "response": "<ref>defect</ref><box><0><117><983><910></box>", "n_pred": 1, "n_gt": 1}
+{"split": "val", "i": 74, "query": ["defect"], "scale": 1, "response": "<ref>defect</ref><box><0><200><1000><833></box>", "n_pred": 1, "n_gt": 1}
+{"split": "val", "i": 75, "query": ["defect"], "scale": 1, "response": "<ref>defect</ref><box><10><340><1000><700></box>", "n_pred": 1, "n_gt": 2}
+{"split": "val", "i": 76, "query": ["defect"], "scale": 1, "response": "<ref>defect</ref><box><0><300><1000><730></box>", "n_pred": 1, "n_gt": 3}
+{"split": "val", "i": 77, "query": ["defect"], "scale": 1, "response": "<ref>defect</ref><box><0><267><985><700></box>", "n_pred": 1, "n_gt": 1}
+{"split": "val", "i": 78, "query": ["defect"], "scale": 1, "response": "<ref>defect</ref><box><267><0><747><1000></box>", "n_pred": 1, "n_gt": 0}
+{"split": "val", "i": 79, "query": ["defect"], "scale": 1, "response": "<ref>defect</ref><box><125><705><223><823></box>", "n_pred": 1, "n_gt": 1}
+{"split": "val", "i": 80, "query": ["defect"], "scale": 1, "response": "<ref>defect</ref><box><0><270><1000><740></box>", "n_pred": 1, "n_gt": 5}
+{"split": "val", "i": 81, "query": ["defect"], "scale": 1, "response": "<ref>defect</ref><box><153><317><327><950>,<403><3><577><157>,<690><310><858><1000></box>", "n_pred": 3, "n_gt": 0}
+{"split": "val", "i": 82, "query": ["defect"], "scale": 1, "response": "<ref>defect</ref><box><255><823><350><908>,<288><910><427><998></box>", "n_pred": 2, "n_gt": 2}
+{"split": "val", "i": 83, "query": ["defect"], "scale": 1, "response": "<ref>defect</ref><box><450><570><523><669></box>", "n_pred": 1, "n_gt": 4}
+{"split": "val", "i": 84, "query": ["defect"], "scale": 1, "response": "<ref>defect</ref><box><0><255><1000><780></box>", "n_pred": 1, "n_gt": 0}
+{"split": "val", "i": 85, "query": ["defect"], "scale": 1, "response": "<ref>defect</ref><box><42><645><125><685>,<317><662><535><710>,<610><650><690><695>,<700><643><962><703></box>", "n_pred": 4, "n_gt": 5}
+{"split": "val", "i": 86, "query": ["defect"], "scale": 1, "response": "<ref>defect</ref><box><400><695><512><805></box>", "n_pred": 1, "n_gt": 2}
+{"split": "val", "i": 87, "query": ["defect"], "scale": 1, "response": "<ref>defect</ref><box><275><0><723><1000></box>", "n_pred": 1, "n_gt": 0}
+{"split": "val", "i": 88, "query": ["defect"], "scale": 1, "response": "<ref>defect</ref><box><623><415><727><500></box>", "n_pred": 1, "n_gt": 3}
+{"split": "val", "i": 89, "query": ["defect"], "scale": 1, "response": "<ref>defect</ref><box><200><0><820><1000></box>", "n_pred": 1, "n_gt": 3}
+{"split": "val", "i": 90, "query": ["defect"], "scale": 1, "response": "<ref>defect</ref><box><312><650><423><745>,<392><762><452><805></box>", "n_pred": 2, "n_gt": 4}
+{"split": "val", "i": 91, "query": ["defect"], "scale": 1, "response": "<ref>defect</ref><box><90><0><867><1000></box>", "n_pred": 1, "n_gt": 3}
+{"split": "val", "i": 92, "query": ["defect"], "scale": 1, "response": "<ref>defect</ref><box><210><0><773><1000></box>", "n_pred": 1, "n_gt": 1}
+{"split": "val", "i": 93, "query": ["defect"], "scale": 1, "response": "<ref>defect</ref><box><177><0><850><1000></box>", "n_pred": 1, "n_gt": 3}
+{"split": "val", "i": 94, "query": ["defect"], "scale": 1, "response": "<ref>defect</ref><box><10><350><1000><695></box>", "n_pred": 1, "n_gt": 3}
+{"split": "val", "i": 95, "query": ["defect"], "scale": 1, "response": "<ref>defect</ref><box><183><0><808><1000></box>", "n_pred": 1, "n_gt": 3}
+{"split": "val", "i": 96, "query": ["defect"], "scale": 1, "response": "<ref>defect</ref><box><233><0><800><1000></box>", "n_pred": 1, "n_gt": 3}
+{"split": "val", "i": 97, "query": ["defect"], "scale": 1, "response": "<ref>defect</ref><box><660><792><700><852>,<670><148><720><212></box>", "n_pred": 2, "n_gt": 4}
+{"split": "val", "i": 98, "query": ["defect"], "scale": 1, "response": "<ref>defect</ref><box><405><425><495><517></box>", "n_pred": 1, "n_gt": 2}
+{"split": "val", "i": 99, "query": ["defect"], "scale": 1, "response": "<ref>defect</ref><box><0><30><1000><1000></box>", "n_pred": 1, "n_gt": 0}
+{"split": "val", "i": 0, "query": ["void"], "scale": 2, "response": "<ref>void</ref><box><0><0><1000><1000></box>", "n_pred": 1, "n_gt": 2}
+{"split": "val", "i": 1, "query": ["void"], "scale": 2, "response": "<ref>void</ref><box><0><0><1000><1000></box>", "n_pred": 1, "n_gt": 2}
+{"split": "val", "i": 2, "query": ["void"], "scale": 2, "response": "<ref>void</ref><box><0><0><1000><1000></box>", "n_pred": 1, "n_gt": 1}
+{"split": "val", "i": 3, "query": ["void"], "scale": 2, "response": "<ref>void</ref><box><207><465><414><540></box>", "n_pred": 1, "n_gt": 2}
+{"split": "val", "i": 4, "query": ["void"], "scale": 2, "response": "<ref>void</ref><box><0><0><1000><1000></box>", "n_pred": 1, "n_gt": 3}
+{"split": "val", "i": 5, "query": ["void"], "scale": 2, "response": "<ref>void</ref><box><305><210><390><300></box>", "n_pred": 1, "n_gt": 2}
+{"split": "val", "i": 6, "query": ["void"], "scale": 2, "response": "<ref>void</ref><box><0><0><1000><1000></box>", "n_pred": 1, "n_gt": 0}
+{"split": "val", "i": 7, "query": ["void"], "scale": 2, "response": "<ref>void</ref><box><267><10><773><1000></box>", "n_pred": 1, "n_gt": 4}
+{"split": "val", "i": 8, "query": ["void"], "scale": 2, "response": "<ref>void</ref><box><0><0><1000><1000></box>", "n_pred": 1, "n_gt": 0}
+{"split": "val", "i": 9, "query": ["void"], "scale": 2, "response": "<ref>void</ref><box><0><0><1000><1000></box>", "n_pred": 1, "n_gt": 3}
+{"split": "val", "i": 10, "query": ["void"], "scale": 2, "response": "<ref>void</ref><box><412><30><690><292></box>", "n_pred": 1, "n_gt": 2}
+{"split": "val", "i": 11, "query": ["void"], "scale": 2, "response": "<ref>void</ref><box><0><333><90><450></box>", "n_pred": 1, "n_gt": 2}
+{"split": "val", "i": 12, "query": ["void"], "scale": 2, "response": "<ref>void</ref><box><0><0><1000><1000></box>", "n_pred": 1, "n_gt": 1}
+{"split": "val", "i": 13, "query": ["void"], "scale": 2, "response": "<ref>void</ref><box><308><442><402><565></box>", "n_pred": 1, "n_gt": 2}
+{"split": "val", "i": 14, "query": ["void"], "scale": 2, "response": "<ref>void</ref><box><0><0><1000><1000></box>", "n_pred": 1, "n_gt": 1}
+{"split": "val", "i": 15, "query": ["void"], "scale": 2, "response": "<ref>void</ref><box><0><0><1000><1000></box>", "n_pred": 1, "n_gt": 2}
+{"split": "val", "i": 16, "query": ["void"], "scale": 2, "response": "<ref>void</ref><box><0><0><1000><1000></box>", "n_pred": 1, "n_gt": 1}
+{"split": "val", "i": 17, "query": ["void"], "scale": 2, "response": "<ref>void</ref><box><397><36><622><258></box>", "n_pred": 1, "n_gt": 3}
+{"split": "val", "i": 18, "query": ["void"], "scale": 2, "response": "<ref>void</ref><box><0><0><1000><1000></box>", "n_pred": 1, "n_gt": 3}
+{"split": "val", "i": 19, "query": ["void"], "scale": 2, "response": "<ref>void</ref><box><0><0><1000><1000></box>", "n_pred": 1, "n_gt": 1}
+{"split": "val", "i": 20, "query": ["void"], "scale": 2, "response": "<ref>void</ref><box><406><546><598><673></box>", "n_pred": 1, "n_gt": 2}
+{"split": "val", "i": 21, "query": ["void"], "scale": 2, "response": "<ref>void</ref><box><312><165><382><215></box>", "n_pred": 1, "n_gt": 3}
+{"split": "val", "i": 22, "query": ["void"], "scale": 2, "response": "<ref>void</ref><box><0><0><1000><1000></box>", "n_pred": 1, "n_gt": 0}
+{"split": "val", "i": 23, "query": ["void"], "scale": 2, "response": "<ref>void</ref><box><440><490><673><675></box>", "n_pred": 1, "n_gt": 2}
+{"split": "val", "i": 24, "query": ["void"], "scale": 2, "response": "<ref>void</ref><box><0><0><1000><1000></box>", "n_pred": 1, "n_gt": 1}
+{"split": "val", "i": 25, "query": ["void"], "scale": 2, "response": "<ref>void</ref><box><383><167><492><276></box>", "n_pred": 1, "n_gt": 4}
+{"split": "val", "i": 26, "query": ["void"], "scale": 2, "response": "<ref>void</ref><box><308><0><738><615></box>", "n_pred": 1, "n_gt": 0}
+{"split": "val", "i": 27, "query": ["void"], "scale": 2, "response": "<ref>void</ref><box><188><255><312><445></box>", "n_pred": 1, "n_gt": 1}
+{"split": "val", "i": 28, "query": ["void"], "scale": 2, "response": "<ref>void</ref><box><0><0><1000><1000></box>", "n_pred": 1, "n_gt": 0}
+{"split": "val", "i": 29, "query": ["void"], "scale": 2, "response": "<ref>void</ref><box><270><317><363><478>,<808><415><910><544></box>", "n_pred": 2, "n_gt": 4}
+{"split": "val", "i": 30, "query": ["void"], "scale": 2, "response": "<ref>void</ref><box><183><719><343><785>,<576><465><657><540></box>", "n_pred": 2, "n_gt": 5}
+{"split": "val", "i": 31, "query": ["void"], "scale": 2, "response": "<ref>void</ref><box><0><0><1000><1000></box>", "n_pred": 1, "n_gt": 1}
+{"split": "val", "i": 32, "query": ["void"], "scale": 2, "response": "<ref>void</ref><box><420><604><658><685></box>", "n_pred": 1, "n_gt": 4}
+{"split": "val", "i": 33, "query": ["void"], "scale": 2, "response": "<ref>void</ref><box><0><0><1000><1000></box>", "n_pred": 1, "n_gt": 1}
+{"split": "val", "i": 34, "query": ["void"], "scale": 2, "response": "<ref>void</ref><box><522><530><569><589></box>", "n_pred": 1, "n_gt": 3}
+{"split": "val", "i": 35, "query": ["void"], "scale": 2, "response": "<ref>void</ref><box><233><417><290><840></box>", "n_pred": 1, "n_gt": 2}
+{"split": "val", "i": 36, "query": ["void"], "scale": 2, "response": "<ref>void</ref><box><410><340><494><445></box>", "n_pred": 1, "n_gt": 5}
+{"split": "val", "i": 37, "query": ["void"], "scale": 2, "response": "<ref>void</ref><box><0><0><1000><1000></box>", "n_pred": 1, "n_gt": 0}
+{"split": "val", "i": 38, "query": ["void"], "scale": 2, "response": "<ref>void</ref><box><450><632><483><667></box>", "n_pred": 1, "n_gt": 2}
+{"split": "val", "i": 39, "query": ["void"], "scale": 2, "response": "<ref>void</ref><box><742><360><796><420></box>", "n_pred": 1, "n_gt": 2}
+{"split": "val", "i": 40, "query": ["void"], "scale": 2, "response": "<ref>void</ref><box>none</box>", "n_pred": 0, "n_gt": 1}
+{"split": "val", "i": 41, "query": ["void"], "scale": 2, "response": "<ref>void</ref><box><0><0><1000><1000></box>", "n_pred": 1, "n_gt": 3}
+{"split": "val", "i": 42, "query": ["void"], "scale": 2, "response": "<ref>void</ref><box><0><0><1000><1000></box>", "n_pred": 1, "n_gt": 2}
+{"split": "val", "i": 43, "query": ["void"], "scale": 2, "response": "<ref>void</ref><box><0><0><1000><1000></box>", "n_pred": 1, "n_gt": 0}
+{"split": "val", "i": 44, "query": ["void"], "scale": 2, "response": "<ref>void</ref><box><0><0><1000><1000></box>", "n_pred": 1, "n_gt": 1}
+{"split": "val", "i": 45, "query": ["void"], "scale": 2, "response": "<ref>void</ref><box>none</box>", "n_pred": 0, "n_gt": 4}
+{"split": "val", "i": 46, "query": ["void"], "scale": 2, "response": "<ref>void</ref><box><0><0><1000><1000></box>", "n_pred": 1, "n_gt": 0}
+{"split": "val", "i": 47, "query": ["void"], "scale": 2, "response": "<ref>void</ref><box><0><0><1000><1000></box>", "n_pred": 1, "n_gt": 0}
+{"split": "val", "i": 48, "query": ["void"], "scale": 2, "response": "<ref>void</ref><box><0><0><1000><1000></box>", "n_pred": 1, "n_gt": 2}
+{"split": "val", "i": 49, "query": ["void"], "scale": 2, "response": "<ref>void</ref><box><558><270><646><354></box>", "n_pred": 1, "n_gt": 3}
+{"split": "val", "i": 50, "query": ["void"], "scale": 2, "response": "<ref>void</ref><box><0><0><1000><1000></box>", "n_pred": 1, "n_gt": 1}
+{"split": "val", "i": 51, "query": ["void"], "scale": 2, "response": "<ref>void</ref><box><0><0><1000><1000></box>", "n_pred": 1, "n_gt": 2}
+{"split": "val", "i": 52, "query": ["void"], "scale": 2, "response": "<ref>void</ref><box><0><0><1000><1000></box>", "n_pred": 1, "n_gt": 2}
+{"split": "val", "i": 53, "query": ["void"], "scale": 2, "response": "<ref>void</ref><box><0><0><1000><1000></box>", "n_pred": 1, "n_gt": 1}
+{"split": "val", "i": 54, "query": ["void"], "scale": 2, "response": "<ref>void</ref><box><0><0><1000><1000></box>", "n_pred": 1, "n_gt": 3}
+{"split": "val", "i": 55, "query": ["void"], "scale": 2, "response": "<ref>void</ref><box><0><0><1000><1000></box>", "n_pred": 1, "n_gt": 2}
+{"split": "val", "i": 56, "query": ["void"], "scale": 2, "response": "<ref>void</ref><box><458><495><580><540></box>", "n_pred": 1, "n_gt": 1}
+{"split": "val", "i": 57, "query": ["void"], "scale": 2, "response": "<ref>void</ref><box><0><0><1000><1000></box>", "n_pred": 1, "n_gt": 1}
+{"split": "val", "i": 58, "query": ["void"], "scale": 2, "response": "<ref>void</ref><box><358><700><415><777>,<457><154><535><210>,<550><167><598><238></box>", "n_pred": 3, "n_gt": 2}
+{"split": "val", "i": 59, "query": ["void"], "scale": 2, "response": "<ref>void</ref><box><0><0><1000><1000></box>", "n_pred": 1, "n_gt": 1}
+{"split": "val", "i": 60, "query": ["void"], "scale": 2, "response": "<ref>void</ref><box><0><0><1000><1000></box>", "n_pred": 1, "n_gt": 3}
+{"split": "val", "i": 61, "query": ["void"], "scale": 2, "response": "<ref>void</ref><box><0><0><1000><1000></box>", "n_pred": 1, "n_gt": 2}
+{"split": "val", "i": 62, "query": ["void"], "scale": 2, "response": "<ref>void</ref><box><581><445><700><542></box>", "n_pred": 1, "n_gt": 2}
+{"split": "val", "i": 63, "query": ["void"], "scale": 2, "response": "<ref>void</ref><box><231><442><290><615>,<695><68><760><155>,<710><433><758><612></box>", "n_pred": 3, "n_gt": 5}
+{"split": "val", "i": 64, "query": ["void"], "scale": 2, "response": "<ref>void</ref><box><0><0><1000><1000></box>", "n_pred": 1, "n_gt": 0}
+{"split": "val", "i": 65, "query": ["void"], "scale": 2, "response": "<ref>void</ref><box><0><0><1000><1000></box>", "n_pred": 1, "n_gt": 3}
+{"split": "val", "i": 66, "query": ["void"], "scale": 2, "response": "<ref>void</ref><box><0><0><1000><1000></box>", "n_pred": 1, "n_gt": 5}
+{"split": "val", "i": 67, "query": ["void"], "scale": 2, "response": "<ref>void</ref><box><762><438><831><535></box>", "n_pred": 1, "n_gt": 3}
+{"split": "val", "i": 68, "query": ["void"], "scale": 2, "response": "<ref>void</ref><box><0><0><1000><1000></box>", "n_pred": 1, "n_gt": 0}
+{"split": "val", "i": 69, "query": ["void"], "scale": 2, "response": "<ref>void</ref><box><342><490><418><570>,<375><361><466><443></box>", "n_pred": 2, "n_gt": 4}
+{"split": "val", "i": 70, "query": ["void"], "scale": 2, "response": "<ref>void</ref><box><471><52><502><138></box>", "n_pred": 1, "n_gt": 3}
+{"split": "val", "i": 71, "query": ["void"], "scale": 2, "response": "<ref>void</ref><box><0><0><1000><1000></box>", "n_pred": 1, "n_gt": 1}
+{"split": "val", "i": 72, "query": ["void"], "scale": 2, "response": "<ref>void</ref><box><0><0><1000><1000></box>", "n_pred": 1, "n_gt": 1}
+{"split": "val", "i": 73, "query": ["void"], "scale": 2, "response": "<ref>void</ref><box><164><333><212><604></box>", "n_pred": 1, "n_gt": 1}
+{"split": "val", "i": 74, "query": ["void"], "scale": 2, "response": "<ref>void</ref><box><0><0><1000><1000></box>", "n_pred": 1, "n_gt": 1}
+{"split": "val", "i": 75, "query": ["void"], "scale": 2, "response": "<ref>void</ref><box><0><0><1000><1000></box>", "n_pred": 1, "n_gt": 2}
+{"split": "val", "i": 76, "query": ["void"], "scale": 2, "response": "<ref>void</ref><box><0><0><1000><1000></box>", "n_pred": 1, "n_gt": 3}
+{"split": "val", "i": 77, "query": ["void"], "scale": 2, "response": "<ref>void</ref><box><0><0><1000><1000></box>", "n_pred": 1, "n_gt": 1}
+{"split": "val", "i": 78, "query": ["void"], "scale": 2, "response": "<ref>void</ref><box><0><0><1000><1000></box>", "n_pred": 1, "n_gt": 0}
+{"split": "val", "i": 79, "query": ["void"], "scale": 2, "response": "<ref>void</ref><box><0><0><1000><1000></box>", "n_pred": 1, "n_gt": 1}
+{"split": "val", "i": 80, "query": ["void"], "scale": 2, "response": "<ref>void</ref><box><778><467><855><527></box>", "n_pred": 1, "n_gt": 5}
+{"split": "val", "i": 81, "query": ["void"], "scale": 2, "response": "<ref>void</ref><box><405><5><580><157></box>", "n_pred": 1, "n_gt": 0}
+{"split": "val", "i": 82, "query": ["void"], "scale": 2, "response": "<ref>void</ref><box><260><817><350><900>,<292><910><421><993></box>", "n_pred": 2, "n_gt": 2}
+{"split": "val", "i": 83, "query": ["void"], "scale": 2, "response": "<ref>void</ref><box><452><575><520><665></box>", "n_pred": 1, "n_gt": 4}
+{"split": "val", "i": 84, "query": ["void"], "scale": 2, "response": "<ref>void</ref><box><0><0><1000><1000></box>", "n_pred": 1, "n_gt": 0}
+{"split": "val", "i": 85, "query": ["void"], "scale": 2, "response": "<ref>void</ref><box><0><0><1000><1000></box>", "n_pred": 1, "n_gt": 5}
+{"split": "val", "i": 86, "query": ["void"], "scale": 2, "response": "<ref>void</ref><box><409><700><511><800></box>", "n_pred": 1, "n_gt": 2}
+{"split": "val", "i": 87, "query": ["void"], "scale": 2, "response": "<ref>void</ref><box><0><0><1000><1000></box>", "n_pred": 1, "n_gt": 0}
+{"split": "val", "i": 88, "query": ["void"], "scale": 2, "response": "<ref>void</ref><box><0><0><1000><1000></box>", "n_pred": 1, "n_gt": 3}
+{"split": "val", "i": 89, "query": ["void"], "scale": 2, "response": "<ref>void</ref><box><0><0><1000><1000></box>", "n_pred": 1, "n_gt": 3}
+{"split": "val", "i": 90, "query": ["void"], "scale": 2, "response": "<ref>void</ref><box><359><75><646><423></box>", "n_pred": 1, "n_gt": 4}
+{"split": "val", "i": 91, "query": ["void"], "scale": 2, "response": "<ref>void</ref><box><410><370><619><620></box>", "n_pred": 1, "n_gt": 3}
+{"split": "val", "i": 92, "query": ["void"], "scale": 2, "response": "<ref>void</ref><box><0><0><1000><1000></box>", "n_pred": 1, "n_gt": 1}
+{"split": "val", "i": 93, "query": ["void"], "scale": 2, "response": "<ref>void</ref><box><0><0><1000><1000></box>", "n_pred": 1, "n_gt": 3}
+{"split": "val", "i": 94, "query": ["void"], "scale": 2, "response": "<ref>void</ref><box><0><0><1000><1000></box>", "n_pred": 1, "n_gt": 3}
+{"split": "val", "i": 95, "query": ["void"], "scale": 2, "response": "<ref>void</ref><box><0><0><1000><1000></box>", "n_pred": 1, "n_gt": 3}
+{"split": "val", "i": 96, "query": ["void"], "scale": 2, "response": "<ref>void</ref><box>none</box>", "n_pred": 0, "n_gt": 3}
+{"split": "val", "i": 97, "query": ["void"], "scale": 2, "response": "<ref>void</ref><box><0><0><1000><1000></box>", "n_pred": 1, "n_gt": 4}
+{"split": "val", "i": 98, "query": ["void"], "scale": 2, "response": "<ref>void</ref><box><410><427><492><515></box>", "n_pred": 1, "n_gt": 2}
+{"split": "val", "i": 99, "query": ["void"], "scale": 2, "response": "<ref>void</ref><box><0><0><1000><1000></box>", "n_pred": 1, "n_gt": 0}
+{"split": "val", "i": 0, "query": ["air bubble"], "scale": 2, "response": "<ref>air bubble</ref><box>none</box>", "n_pred": 0, "n_gt": 2}
+{"split": "val", "i": 1, "query": ["air bubble"], "scale": 2, "response": "<ref>air bubble</ref><box><658><266><693><320></box>", "n_pred": 1, "n_gt": 2}
+{"split": "val", "i": 2, "query": ["air bubble"], "scale": 2, "response": "<ref>air bubble</ref><box>none</box>", "n_pred": 0, "n_gt": 1}
+{"split": "val", "i": 3, "query": ["air bubble"], "scale": 2, "response": "<ref>air bubble</ref><box><560><470><604><517></box>", "n_pred": 1, "n_gt": 2}
+{"split": "val", "i": 4, "query": ["air bubble"], "scale": 2, "response": "<ref>air bubble</ref><box>none</box>", "n_pred": 0, "n_gt": 3}
+{"split": "val", "i": 5, "query": ["air bubble"], "scale": 2, "response": "<ref>air bubble</ref><box><309><213><388><295></box>", "n_pred": 1, "n_gt": 2}
+{"split": "val", "i": 6, "query": ["air bubble"], "scale": 2, "response": "<ref>air bubble</ref><box>none</box>", "n_pred": 0, "n_gt": 0}
+{"split": "val", "i": 7, "query": ["air bubble"], "scale": 2, "response": "<ref>air bubble</ref><box>none</box>", "n_pred": 0, "n_gt": 4}
+{"split": "val", "i": 8, "query": ["air bubble"], "scale": 2, "response": "<ref>air bubble</ref><box><286><722><393><794></box>", "n_pred": 1, "n_gt": 0}
+{"split": "val", "i": 9, "query": ["air bubble"], "scale": 2, "response": "<ref>air bubble</ref><box>none</box>", "n_pred": 0, "n_gt": 3}
+{"split": "val", "i": 10, "query": ["air bubble"], "scale": 2, "response": "<ref>air bubble</ref><box><175><486><212><667></box>", "n_pred": 1, "n_gt": 2}
+{"split": "val", "i": 11, "query": ["air bubble"], "scale": 2, "response": "<ref>air bubble</ref><box><30><359><80><432></box>", "n_pred": 1, "n_gt": 2}
+{"split": "val", "i": 12, "query": ["air bubble"], "scale": 2, "response": "<ref>air bubble</ref><box><27><210><1000><729></box>", "n_pred": 1, "n_gt": 1}
+{"split": "val", "i": 13, "query": ["air bubble"], "scale": 2, "response": "<ref>air bubble</ref><box><310><445><400><562></box>", "n_pred": 1, "n_gt": 2}
+{"split": "val", "i": 14, "query": ["air bubble"], "scale": 2, "response": "<ref>air bubble</ref><box>none</box>", "n_pred": 0, "n_gt": 1}
+{"split": "val", "i": 15, "query": ["air bubble"], "scale": 2, "response": "<ref>air bubble</ref><box>none</box>", "n_pred": 0, "n_gt": 2}
+{"split": "val", "i": 16, "query": ["air bubble"], "scale": 2, "response": "<ref>air bubble</ref><box>none</box>", "n_pred": 0, "n_gt": 1}
+{"split": "val", "i": 17, "query": ["air bubble"], "scale": 2, "response": "<ref>air bubble</ref><box><359><283><409><329>,<405><52><503><188>,<470><186><538><252>,<527><62><614><190></box>", "n_pred": 4, "n_gt": 3}
+{"split": "val", "i": 18, "query": ["air bubble"], "scale": 2, "response": "<ref>air bubble</ref><box><812><329><875><392></box>", "n_pred": 1, "n_gt": 3}
+{"split": "val", "i": 19, "query": ["air bubble"], "scale": 2, "response": "<ref>air bubble</ref><box>none</box>", "n_pred": 0, "n_gt": 1}
+{"split": "val", "i": 20, "query": ["air bubble"], "scale": 2, "response": "<ref>air bubble</ref><box><412><557><539><658>,<519><562><593><667></box>", "n_pred": 2, "n_gt": 2}
+{"split": "val", "i": 21, "query": ["air bubble"], "scale": 2, "response": "<ref>air bubble</ref><box><312><167><381><214></box>", "n_pred": 1, "n_gt": 3}
+{"split": "val", "i": 22, "query": ["air bubble"], "scale": 2, "response": "<ref>air bubble</ref><box>none</box>", "n_pred": 0, "n_gt": 0}
+{"split": "val", "i": 23, "query": ["air bubble"], "scale": 2, "response": "<ref>air bubble</ref><box><444><527><594><667>,<575><488><666><634></box>", "n_pred": 2, "n_gt": 2}
+{"split": "val", "i": 24, "query": ["air bubble"], "scale": 2, "response": "<ref>air bubble</ref><box><273><490><409><602>,<430><447><546><542>,<547><354><658><473>,<548><487><644><585>,<717><456><818><545></box>", "n_pred": 5, "n_gt": 1}
+{"split": "val", "i": 25, "query": ["air bubble"], "scale": 2, "response": "<ref>air bubble</ref><box><389><172><489><272></box>", "n_pred": 1, "n_gt": 4}
+{"split": "val", "i": 26, "query": ["air bubble"], "scale": 2, "response": "<ref>air bubble</ref><box><409><318><491><359>,<579><322><644><354></box>", "n_pred": 2, "n_gt": 0}
+{"split": "val", "i": 27, "query": ["air bubble"], "scale": 2, "response": "<ref>air bubble</ref><box><199><263><303><438>,<366><812><406><867>,<367><875><405><918>,<635><836><668><885></box>", "n_pred": 4, "n_gt": 1}
+{"split": "val", "i": 28, "query": ["air bubble"], "scale": 2, "response": "<ref>air bubble</ref><box><29><593><259><679>,<172><716><221><743>,<390><470><423><496>,<596><582><681><625>,<909><755><965><781></box>", "n_pred": 5, "n_gt": 0}
+{"split": "val", "i": 29, "query": ["air bubble"], "scale": 2, "response": "<ref>air bubble</ref><box><105><509><169><668>,<196><804><260><842>,<281><326><358><473>,<814><421><906><539></box>", "n_pred": 4, "n_gt": 4}
+{"split": "val", "i": 30, "query": ["air bubble"], "scale": 2, "response": "<ref>air bubble</ref><box><186><723><340><782>,<567><671><596><701>,<581><471><654><536></box>", "n_pred": 3, "n_gt": 5}
+{"split": "val", "i": 31, "query": ["air bubble"], "scale": 2, "response": "<ref>air bubble</ref><box>none</box>", "n_pred": 0, "n_gt": 1}
+{"split": "val", "i": 32, "query": ["air bubble"], "scale": 2, "response": "<ref>air bubble</ref><box><512><698><544><729></box>", "n_pred": 1, "n_gt": 4}
+{"split": "val", "i": 33, "query": ["air bubble"], "scale": 2, "response": "<ref>air bubble</ref><box><220><716><266><783></box>", "n_pred": 1, "n_gt": 1}
+{"split": "val", "i": 34, "query": ["air bubble"], "scale": 2, "response": "<ref>air bubble</ref><box><525><534><567><588></box>", "n_pred": 1, "n_gt": 3}
+{"split": "val", "i": 35, "query": ["air bubble"], "scale": 2, "response": "<ref>air bubble</ref><box>none</box>", "n_pred": 0, "n_gt": 2}
+{"split": "val", "i": 36, "query": ["air bubble"], "scale": 2, "response": "<ref>air bubble</ref><box><418><348><490><440>,<421><487><466><544></box>", "n_pred": 2, "n_gt": 5}
+{"split": "val", "i": 37, "query": ["air bubble"], "scale": 2, "response": "<ref>air bubble</ref><box><0><280><1000><719></box>", "n_pred": 1, "n_gt": 0}
+{"split": "val", "i": 38, "query": ["air bubble"], "scale": 2, "response": "<ref>air bubble</ref><box><449><635><482><666></box>", "n_pred": 1, "n_gt": 2}
+{"split": "val", "i": 39, "query": ["air bubble"], "scale": 2, "response": "<ref>air bubble</ref><box><264><702><329><760>,<750><369><791><414></box>", "n_pred": 2, "n_gt": 2}
+{"split": "val", "i": 40, "query": ["air bubble"], "scale": 2, "response": "<ref>air bubble</ref><box><83><453><224><622>,<122><733><288><875>,<145><223><302><349>,<250><315><409><500>,<252><594><423><771>,<390><455><576><608>,<460><271><618><420>,<467><615><646><777>,<632><440><807><616>,<664><724><852><857>,<670><210><842><333>,<840><575><976><760>,<844><316><988><479></box>", "n_pred": 13, "n_gt": 1}
+{"split": "val", "i": 41, "query": ["air bubble"], "scale": 2, "response": "<ref>air bubble</ref><box>none</box>", "n_pred": 0, "n_gt": 3}
+{"split": "val", "i": 42, "query": ["air bubble"], "scale": 2, "response": "<ref>air bubble</ref><box><786><252><826><295></box>", "n_pred": 1, "n_gt": 2}
+{"split": "val", "i": 43, "query": ["air bubble"], "scale": 2, "response": "<ref>air bubble</ref><box>none</box>", "n_pred": 0, "n_gt": 0}
+{"split": "val", "i": 44, "query": ["air bubble"], "scale": 2, "response": "<ref>air bubble</ref><box>none</box>", "n_pred": 0, "n_gt": 1}
+{"split": "val", "i": 45, "query": ["air bubble"], "scale": 2, "response": "<ref>air bubble</ref><box><307><323><354><378>,<320><578><358><625>,<332><724><379><776>,<334><868><420><964>,<402><370><455><422>,<403><505><467><568>,<403><650><468><714>,<416><790><471><847>,<560><620><604><669>,<560><727><605><789>,<598><331><635><377>,<636><798><678><852>,<649><688><685><737>,<654><545><702><599>,<666><411><723><450>,<686><260><729><308></box>", "n_pred": 16, "n_gt": 4}
+{"split": "val", "i": 46, "query": ["air bubble"], "scale": 2, "response": "<ref>air bubble</ref><box>none</box>", "n_pred": 0, "n_gt": 0}
+{"split": "val", "i": 47, "query": ["air bubble"], "scale": 2, "response": "<ref>air bubble</ref><box>none</box>", "n_pred": 0, "n_gt": 0}
+{"split": "val", "i": 48, "query": ["air bubble"], "scale": 2, "response": "<ref>air bubble</ref><box><356><706><471><870></box>", "n_pred": 1, "n_gt": 2}
+{"split": "val", "i": 49, "query": ["air bubble"], "scale": 2, "response": "<ref>air bubble</ref><box><565><277><642><352>,<723><336><768><374></box>", "n_pred": 2, "n_gt": 3}
+{"split": "val", "i": 50, "query": ["air bubble"], "scale": 2, "response": "<ref>air bubble</ref><box><460><307><495><350>,<461><770><494><810>,<536><280><567><318></box>", "n_pred": 3, "n_gt": 1}
+{"split": "val", "i": 51, "query": ["air bubble"], "scale": 2, "response": "<ref>air bubble</ref><box>none</box>", "n_pred": 0, "n_gt": 2}
+{"split": "val", "i": 52, "query": ["air bubble"], "scale": 2, "response": "<ref>air bubble</ref><box><503><271><589><368></box>", "n_pred": 1, "n_gt": 2}
+{"split": "val", "i": 53, "query": ["air bubble"], "scale": 2, "response": "<ref>air bubble</ref><box>none</box>", "n_pred": 0, "n_gt": 1}
+{"split": "val", "i": 54, "query": ["air bubble"], "scale": 2, "response": "<ref>air bubble</ref><box><62><665><102><727></box>", "n_pred": 1, "n_gt": 3}
+{"split": "val", "i": 55, "query": ["air bubble"], "scale": 2, "response": "<ref>air bubble</ref><box><198><477><261><560>,<272><476><373><557>,<525><413><657><510>,<689><368><867><480></box>", "n_pred": 4, "n_gt": 2}
+{"split": "val", "i": 56, "query": ["air bubble"], "scale": 2, "response": "<ref>air bubble</ref><box><468><746><525><805></box>", "n_pred": 1, "n_gt": 1}
+{"split": "val", "i": 57, "query": ["air bubble"], "scale": 2, "response": "<ref>air bubble</ref><box><14><245><975><750></box>", "n_pred": 1, "n_gt": 1}
+{"split": "val", "i": 58, "query": ["air bubble"], "scale": 2, "response": "<ref>air bubble</ref><box><368><708><411><773>,<463><161><532><206>,<555><121><582><145>,<556><173><594><234></box>", "n_pred": 4, "n_gt": 2}
+{"split": "val", "i": 59, "query": ["air bubble"], "scale": 2, "response": "<ref>air bubble</ref><box>none</box>", "n_pred": 0, "n_gt": 1}
+{"split": "val", "i": 60, "query": ["air bubble"], "scale": 2, "response": "<ref>air bubble</ref><box>none</box>", "n_pred": 0, "n_gt": 3}
+{"split": "val", "i": 61, "query": ["air bubble"], "scale": 2, "response": "<ref>air bubble</ref><box><154><434><266><518>,<401><296><454><364>,<476><52><544><125>,<588><181><663><258>,<743><179><797><273></box>", "n_pred": 5, "n_gt": 2}
+{"split": "val", "i": 62, "query": ["air bubble"], "scale": 2, "response": "<ref>air bubble</ref><box><533><347><599><442>,<585><451><696><538>,<867><380><913><419></box>", "n_pred": 3, "n_gt": 2}
+{"split": "val", "i": 63, "query": ["air bubble"], "scale": 2, "response": "<ref>air bubble</ref><box><188><297><231><350>,<691><73><758><154></box>", "n_pred": 2, "n_gt": 5}
+{"split": "val", "i": 64, "query": ["air bubble"], "scale": 2, "response": "<ref>air bubble</ref><box>none</box>", "n_pred": 0, "n_gt": 0}
+{"split": "val", "i": 65, "query": ["air bubble"], "scale": 2, "response": "<ref>air bubble</ref><box><530><789><564><822>,<783><516><900><599></box>", "n_pred": 2, "n_gt": 3}
+{"split": "val", "i": 66, "query": ["air bubble"], "scale": 2, "response": "<ref>air bubble</ref><box><596><576><640><617>,<612><646><680><709>,<753><666><817><710></box>", "n_pred": 3, "n_gt": 5}
+{"split": "val", "i": 67, "query": ["air bubble"], "scale": 2, "response": "<ref>air bubble</ref><box><724><476><752><511>,<766><444><828><532></box>", "n_pred": 2, "n_gt": 3}
+{"split": "val", "i": 68, "query": ["air bubble"], "scale": 2, "response": "<ref>air bubble</ref><box>none</box>", "n_pred": 0, "n_gt": 0}
+{"split": "val", "i": 69, "query": ["air bubble"], "scale": 2, "response": "<ref>air bubble</ref><box><349><497><415><568>,<381><368><462><440>,<435><501><461><530></box>", "n_pred": 3, "n_gt": 4}
+{"split": "val", "i": 70, "query": ["air bubble"], "scale": 2, "response": "<ref>air bubble</ref><box><361><620><383><664>,<440><582><482><611>,<452><462><506><520>,<473><63><498><137>,<571><261><653><314></box>", "n_pred": 5, "n_gt": 3}
+{"split": "val", "i": 71, "query": ["air bubble"], "scale": 2, "response": "<ref>air bubble</ref><box>none</box>", "n_pred": 0, "n_gt": 1}
+{"split": "val", "i": 72, "query": ["air bubble"], "scale": 2, "response": "<ref>air bubble</ref><box><544><460><593><495>,<875><646><932><708></box>", "n_pred": 2, "n_gt": 1}
+{"split": "val", "i": 73, "query": ["air bubble"], "scale": 2, "response": "<ref>air bubble</ref><box><165><340><206><602></box>", "n_pred": 1, "n_gt": 1}
+{"split": "val", "i": 74, "query": ["air bubble"], "scale": 2, "response": "<ref>air bubble</ref><box><678><338><745><438></box>", "n_pred": 1, "n_gt": 1}
+{"split": "val", "i": 75, "query": ["air bubble"], "scale": 2, "response": "<ref>air bubble</ref><box>none</box>", "n_pred": 0, "n_gt": 2}
+{"split": "val", "i": 76, "query": ["air bubble"], "scale": 2, "response": "<ref>air bubble</ref><box><650><567><730><656></box>", "n_pred": 1, "n_gt": 3}
+{"split": "val", "i": 77, "query": ["air bubble"], "scale": 2, "response": "<ref>air bubble</ref><box><0><275><981><690></box>", "n_pred": 1, "n_gt": 1}
+{"split": "val", "i": 78, "query": ["air bubble"], "scale": 2, "response": "<ref>air bubble</ref><box>none</box>", "n_pred": 0, "n_gt": 0}
+{"split": "val", "i": 79, "query": ["air bubble"], "scale": 2, "response": "<ref>air bubble</ref><box>none</box>", "n_pred": 0, "n_gt": 1}
+{"split": "val", "i": 80, "query": ["air bubble"], "scale": 2, "response": "<ref>air bubble</ref><box><783><473><852><524></box>", "n_pred": 1, "n_gt": 5}
+{"split": "val", "i": 81, "query": ["air bubble"], "scale": 2, "response": "<ref>air bubble</ref><box><414><7><576><152></box>", "n_pred": 1, "n_gt": 0}
+{"split": "val", "i": 82, "query": ["air bubble"], "scale": 2, "response": "<ref>air bubble</ref><box><266><825><346><896>,<292><913><419><990></box>", "n_pred": 2, "n_gt": 2}
+{"split": "val", "i": 83, "query": ["air bubble"], "scale": 2, "response": "<ref>air bubble</ref><box><455><581><516><660></box>", "n_pred": 1, "n_gt": 4}
+{"split": "val", "i": 84, "query": ["air bubble"], "scale": 2, "response": "<ref>air bubble</ref><box>none</box>", "n_pred": 0, "n_gt": 0}
+{"split": "val", "i": 85, "query": ["air bubble"], "scale": 2, "response": "<ref>air bubble</ref><box><58><650><121><680>,<324><674><530><706>,<618><658><690><690>,<715><653><956><698></box>", "n_pred": 4, "n_gt": 5}
+{"split": "val", "i": 86, "query": ["air bubble"], "scale": 2, "response": "<ref>air bubble</ref><box><415><704><508><797>,<466><0><509><28></box>", "n_pred": 2, "n_gt": 2}
+{"split": "val", "i": 87, "query": ["air bubble"], "scale": 2, "response": "<ref>air bubble</ref><box>none</box>", "n_pred": 0, "n_gt": 0}
+{"split": "val", "i": 88, "query": ["air bubble"], "scale": 2, "response": "<ref>air bubble</ref><box>none</box>", "n_pred": 0, "n_gt": 3}
+{"split": "val", "i": 89, "query": ["air bubble"], "scale": 2, "response": "<ref>air bubble</ref><box>none</box>", "n_pred": 0, "n_gt": 3}
+{"split": "val", "i": 90, "query": ["air bubble"], "scale": 2, "response": "<ref>air bubble</ref><box><317><659><424><734>,<397><768><448><798></box>", "n_pred": 2, "n_gt": 4}
+{"split": "val", "i": 91, "query": ["air bubble"], "scale": 2, "response": "<ref>air bubble</ref><box>none</box>", "n_pred": 0, "n_gt": 3}
+{"split": "val", "i": 92, "query": ["air bubble"], "scale": 2, "response": "<ref>air bubble</ref><box>none</box>", "n_pred": 0, "n_gt": 1}
+{"split": "val", "i": 93, "query": ["air bubble"], "scale": 2, "response": "<ref>air bubble</ref><box><523><330><560><375>,<561><448><594><490></box>", "n_pred": 2, "n_gt": 3}
+{"split": "val", "i": 94, "query": ["air bubble"], "scale": 2, "response": "<ref>air bubble</ref><box>none</box>", "n_pred": 0, "n_gt": 3}
+{"split": "val", "i": 95, "query": ["air bubble"], "scale": 2, "response": "<ref>air bubble</ref><box><375><577><424><615></box>", "n_pred": 1, "n_gt": 3}
+{"split": "val", "i": 96, "query": ["air bubble"], "scale": 2, "response": "<ref>air bubble</ref><box><337><602><398><676>,<347><746><458><849>,<361><430><470><556>,<394><158><498><255>,<435><303><494><359>,<438><583><513><685>,<455><889><500><946>,<503><690><596><794>,<525><146><613><258>,<545><67><587><111>,<557><279><628><456>,<576><562><688><703>,<584><885><695><1000>,<610><90><670><138>,<623><454><687><550></box>", "n_pred": 15, "n_gt": 3}
+{"split": "val", "i": 97, "query": ["air bubble"], "scale": 2, "response": "<ref>air bubble</ref><box>none</box>", "n_pred": 0, "n_gt": 4}
+{"split": "val", "i": 98, "query": ["air bubble"], "scale": 2, "response": "<ref>air bubble</ref><box><416><434><488><511></box>", "n_pred": 1, "n_gt": 2}
+{"split": "val", "i": 99, "query": ["air bubble"], "scale": 2, "response": "<ref>air bubble</ref><box><200><785><298><888>,<412><570><476><643>,<676><329><776><419>,<800><529><845><574>,<887><243><930><286></box>", "n_pred": 5, "n_gt": 0}
+{"split": "val", "i": 0, "query": ["bright spot"], "scale": 2, "response": "<ref>bright spot</ref><box><440><577><468><600></box>", "n_pred": 1, "n_gt": 2}
+{"split": "val", "i": 1, "query": ["bright spot"], "scale": 2, "response": "<ref>bright spot</ref><box><660><267><692><320></box>", "n_pred": 1, "n_gt": 2}
+{"split": "val", "i": 2, "query": ["bright spot"], "scale": 2, "response": "<ref>bright spot</ref><box><386><677><434><721></box>", "n_pred": 1, "n_gt": 1}
+{"split": "val", "i": 3, "query": ["bright spot"], "scale": 2, "response": "<ref>bright spot</ref><box><562><473><602><516></box>", "n_pred": 1, "n_gt": 2}
+{"split": "val", "i": 4, "query": ["bright spot"], "scale": 2, "response": "<ref>bright spot</ref><box><538><129><567><163></box>", "n_pred": 1, "n_gt": 3}
+{"split": "val", "i": 5, "query": ["bright spot"], "scale": 2, "response": "<ref>bright spot</ref><box><312><216><386><294></box>", "n_pred": 1, "n_gt": 2}
+{"split": "val", "i": 6, "query": ["bright spot"], "scale": 2, "response": "<ref>bright spot</ref><box><0><0><1000><1000></box>", "n_pred": 1, "n_gt": 0}
+{"split": "val", "i": 7, "query": ["bright spot"], "scale": 2, "response": "<ref>bright spot</ref><box><489><452><520><481></box>", "n_pred": 1, "n_gt": 4}
+{"split": "val", "i": 8, "query": ["bright spot"], "scale": 2, "response": "<ref>bright spot</ref><box><289><724><392><793></box>", "n_pred": 1, "n_gt": 0}
+{"split": "val", "i": 9, "query": ["bright spot"], "scale": 2, "response": "<ref>bright spot</ref><box><411><63><711><280></box>", "n_pred": 1, "n_gt": 3}
+{"split": "val", "i": 10, "query": ["bright spot"], "scale": 2, "response": "<ref>bright spot</ref><box><177><488><211><666></box>", "n_pred": 1, "n_gt": 2}
+{"split": "val", "i": 11, "query": ["bright spot"], "scale": 2, "response": "<ref>bright spot</ref><box><33><364><76><431>,<114><558><193><628></box>", "n_pred": 2, "n_gt": 2}
+{"split": "val", "i": 12, "query": ["bright spot"], "scale": 2, "response": "<ref>bright spot</ref><box>none</box>", "n_pred": 0, "n_gt": 1}
+{"split": "val", "i": 13, "query": ["bright spot"], "scale": 2, "response": "<ref>bright spot</ref><box><312><446><399><562></box>", "n_pred": 1, "n_gt": 2}
+{"split": "val", "i": 14, "query": ["bright spot"], "scale": 2, "response": "<ref>bright spot</ref><box><176><786><207><818>,<368><464><396><494>,<470><438><501><498>,<533><608><560><634></box>", "n_pred": 4, "n_gt": 1}
+{"split": "val", "i": 15, "query": ["bright spot"], "scale": 2, "response": "<ref>bright spot</ref><box>none</box>", "n_pred": 0, "n_gt": 2}
+{"split": "val", "i": 16, "query": ["bright spot"], "scale": 2, "response": "<ref>bright spot</ref><box><698><602><793><674></box>", "n_pred": 1, "n_gt": 1}
+{"split": "val", "i": 17, "query": ["bright spot"], "scale": 2, "response": "<ref>bright spot</ref><box><361><284><408><329>,<407><53><502><188>,<472><187><537><252>,<529><63><613><190></box>", "n_pred": 4, "n_gt": 3}
+{"split": "val", "i": 18, "query": ["bright spot"], "scale": 2, "response": "<ref>bright spot</ref><box><815><332><875><391></box>", "n_pred": 1, "n_gt": 3}
+{"split": "val", "i": 19, "query": ["bright spot"], "scale": 2, "response": "<ref>bright spot</ref><box>none</box>", "n_pred": 0, "n_gt": 1}
+{"split": "val", "i": 20, "query": ["bright spot"], "scale": 2, "response": "<ref>bright spot</ref><box><413><558><539><657>,<520><562><592><666></box>", "n_pred": 2, "n_gt": 2}
+{"split": "val", "i": 21, "query": ["bright spot"], "scale": 2, "response": "<ref>bright spot</ref><box><314><171><379><211>,<363><454><382><494></box>", "n_pred": 2, "n_gt": 3}
+{"split": "val", "i": 22, "query": ["bright spot"], "scale": 2, "response": "<ref>bright spot</ref><box><270><300><360><409></box>", "n_pred": 1, "n_gt": 0}
+{"split": "val", "i": 23, "query": ["bright spot"], "scale": 2, "response": "<ref>bright spot</ref><box><447><532><591><665>,<576><490><666><634></box>", "n_pred": 2, "n_gt": 2}
+{"split": "val", "i": 24, "query": ["bright spot"], "scale": 2, "response": "<ref>bright spot</ref><box>none</box>", "n_pred": 0, "n_gt": 1}
+{"split": "val", "i": 25, "query": ["bright spot"], "scale": 2, "response": "<ref>bright spot</ref><box><389><172><489><272></box>", "n_pred": 1, "n_gt": 4}
+{"split": "val", "i": 26, "query": ["bright spot"], "scale": 2, "response": "<ref>bright spot</ref><box><410><318><491><359>,<580><322><643><354></box>", "n_pred": 2, "n_gt": 0}
+{"split": "val", "i": 27, "query": ["bright spot"], "scale": 2, "response": "<ref>bright spot</ref><box><367><812><406><867>,<368><877><405><917>,<636><837><668><884></box>", "n_pred": 3, "n_gt": 1}
+{"split": "val", "i": 28, "query": ["bright spot"], "scale": 2, "response": "<ref>bright spot</ref><box><597><583><681><625>,<649><364><788><521>,<909><756><965><781></box>", "n_pred": 3, "n_gt": 0}
+{"split": "val", "i": 29, "query": ["bright spot"], "scale": 2, "response": "<ref>bright spot</ref><box><106><509><168><668>,<196><805><260><842>,<281><326><358><472>,<815><422><906><539></box>", "n_pred": 4, "n_gt": 4}
+{"split": "val", "i": 30, "query": ["bright spot"], "scale": 2, "response": "<ref>bright spot</ref><box><186><724><340><782>,<567><671><596><701>,<581><471><654><536></box>", "n_pred": 3, "n_gt": 5}
+{"split": "val", "i": 31, "query": ["bright spot"], "scale": 2, "response": "<ref>bright spot</ref><box><0><0><1000><1000></box>", "n_pred": 1, "n_gt": 1}
+{"split": "val", "i": 32, "query": ["bright spot"], "scale": 2, "response": "<ref>bright spot</ref><box><428><612><651><677>,<513><698><543><727></box>", "n_pred": 2, "n_gt": 4}
+{"split": "val", "i": 33, "query": ["bright spot"], "scale": 2, "response": "<ref>bright spot</ref><box><221><717><266><783></box>", "n_pred": 1, "n_gt": 1}
+{"split": "val", "i": 34, "query": ["bright spot"], "scale": 2, "response": "<ref>bright spot</ref><box><526><535><566><588></box>", "n_pred": 1, "n_gt": 3}
+{"split": "val", "i": 35, "query": ["bright spot"], "scale": 2, "response": "<ref>bright spot</ref><box><236><425><281><838>,<418><227><455><325>,<498><474><530><531>,<542><215><580><322>,<550><548><617><583>,<630><549><690><581>,<648><407><715><465>,<651><289><712><332></box>", "n_pred": 8, "n_gt": 2}
+{"split": "val", "i": 36, "query": ["bright spot"], "scale": 2, "response": "<ref>bright spot</ref><box><418><349><489><440>,<421><488><466><544></box>", "n_pred": 2, "n_gt": 5}
+{"split": "val", "i": 37, "query": ["bright spot"], "scale": 2, "response": "<ref>bright spot</ref><box>none</box>", "n_pred": 0, "n_gt": 0}
+{"split": "val", "i": 38, "query": ["bright spot"], "scale": 2, "response": "<ref>bright spot</ref><box><450><636><481><665></box>", "n_pred": 1, "n_gt": 2}
+{"split": "val", "i": 39, "query": ["bright spot"], "scale": 2, "response": "<ref>bright spot</ref><box><265><703><329><760>,<750><369><791><414></box>", "n_pred": 2, "n_gt": 2}
+{"split": "val", "i": 40, "query": ["bright spot"], "scale": 2, "response": "<ref>bright spot</ref><box><94><458><221><619>,<135><738><284><860>,<156><228><298><342>,<254><320><406><497>,<256><599><421><768>,<393><459><574><606>,<463><276><615><418>,<470><620><643><773>,<636><446><804><612>,<669><729><848><850>,<674><216><839><329>,<845><582><969><755>,<846><321><981><474></box>", "n_pred": 13, "n_gt": 1}
+{"split": "val", "i": 41, "query": ["bright spot"], "scale": 2, "response": "<ref>bright spot</ref><box>none</box>", "n_pred": 0, "n_gt": 3}
+{"split": "val", "i": 42, "query": ["bright spot"], "scale": 2, "response": "<ref>bright spot</ref><box><788><252><826><295></box>", "n_pred": 1, "n_gt": 2}
+{"split": "val", "i": 43, "query": ["bright spot"], "scale": 2, "response": "<ref>bright spot</ref><box>none</box>", "n_pred": 0, "n_gt": 0}
+{"split": "val", "i": 44, "query": ["bright spot"], "scale": 2, "response": "<ref>bright spot</ref><box><291><580><344><623></box>", "n_pred": 1, "n_gt": 1}
+{"split": "val", "i": 45, "query": ["bright spot"], "scale": 2, "response": "<ref>bright spot</ref><box><312><326><351><375>,<321><580><356><622>,<332><727><378><775>,<404><505><465><567>,<404><650><466><713>,<405><368><453><421>,<417><793><469><846>,<435><92><472><127>,<480><0><515><16>,<562><623><602><668>,<562><729><604><789>,<599><333><633><377>,<605><369><640><406>,<638><801><676><850>,<651><690><683><735>,<655><547><700><597>,<667><413><723><448>,<688><262><728><306></box>", "n_pred": 18, "n_gt": 4}
+{"split": "val", "i": 46, "query": ["bright spot"], "scale": 2, "response": "<ref>bright spot</ref><box>none</box>", "n_pred": 0, "n_gt": 0}
+{"split": "val", "i": 47, "query": ["bright spot"], "scale": 2, "response": "<ref>bright spot</ref><box><292><630><313><704>,<723><615><741><650></box>", "n_pred": 2, "n_gt": 0}
+{"split": "val", "i": 48, "query": ["bright spot"], "scale": 2, "response": "<ref>bright spot</ref><box><360><710><465><868></box>", "n_pred": 1, "n_gt": 2}
+{"split": "val", "i": 49, "query": ["bright spot"], "scale": 2, "response": "<ref>bright spot</ref><box><565><278><642><352>,<724><337><768><374></box>", "n_pred": 2, "n_gt": 3}
+{"split": "val", "i": 50, "query": ["bright spot"], "scale": 2, "response": "<ref>bright spot</ref><box><464><312><493><348>,<465><775><492><806>,<541><284><564><314></box>", "n_pred": 3, "n_gt": 1}
+{"split": "val", "i": 51, "query": ["bright spot"], "scale": 2, "response": "<ref>bright spot</ref><box><767><334><830><380></box>", "n_pred": 1, "n_gt": 2}
+{"split": "val", "i": 52, "query": ["bright spot"], "scale": 2, "response": "<ref>bright spot</ref><box><504><272><589><367>,<587><500><608><526></box>", "n_pred": 2, "n_gt": 2}
+{"split": "val", "i": 53, "query": ["bright spot"], "scale": 2, "response": "<ref>bright spot</ref><box><503><515><589><594></box>", "n_pred": 1, "n_gt": 1}
+{"split": "val", "i": 54, "query": ["bright spot"], "scale": 2, "response": "<ref>bright spot</ref><box><63><666><100><726></box>", "n_pred": 1, "n_gt": 3}
+{"split": "val", "i": 55, "query": ["bright spot"], "scale": 2, "response": "<ref>bright spot</ref><box>none</box>", "n_pred": 0, "n_gt": 2}
+{"split": "val", "i": 56, "query": ["bright spot"], "scale": 2, "response": "<ref>bright spot</ref><box><468><505><575><532>,<469><746><525><805>,<572><424><596><442></box>", "n_pred": 3, "n_gt": 1}
+{"split": "val", "i": 57, "query": ["bright spot"], "scale": 2, "response": "<ref>bright spot</ref><box>none</box>", "n_pred": 0, "n_gt": 1}
+{"split": "val", "i": 58, "query": ["bright spot"], "scale": 2, "response": "<ref>bright spot</ref><box><368><708><411><773>,<463><161><532><206>,<555><122><582><145>,<556><173><594><234></box>", "n_pred": 4, "n_gt": 2}
+{"split": "val", "i": 59, "query": ["bright spot"], "scale": 2, "response": "<ref>bright spot</ref><box><765><259><792><296></box>", "n_pred": 1, "n_gt": 1}
+{"split": "val", "i": 60, "query": ["bright spot"], "scale": 2, "response": "<ref>bright spot</ref><box><380><0><457><130></box>", "n_pred": 1, "n_gt": 3}
+{"split": "val", "i": 61, "query": ["bright spot"], "scale": 2, "response": "<ref>bright spot</ref><box><156><435><265><517>,<402><298><452><363>,<478><53><542><125>,<589><183><661><257>,<745><181><796><273></box>", "n_pred": 5, "n_gt": 2}
+{"split": "val", "i": 62, "query": ["bright spot"], "scale": 2, "response": "<ref>bright spot</ref><box><585><451><696><538>,<867><381><913><419></box>", "n_pred": 2, "n_gt": 2}
+{"split": "val", "i": 63, "query": ["bright spot"], "scale": 2, "response": "<ref>bright spot</ref><box><190><298><231><350>,<226><690><243><732>,<247><453><281><609>,<694><74><757><153>,<720><440><750><606>,<738><366><782><412></box>", "n_pred": 6, "n_gt": 5}
+{"split": "val", "i": 64, "query": ["bright spot"], "scale": 2, "response": "<ref>bright spot</ref><box>none</box>", "n_pred": 0, "n_gt": 0}
+{"split": "val", "i": 65, "query": ["bright spot"], "scale": 2, "response": "<ref>bright spot</ref><box><531><790><562><822>,<784><517><899><599></box>", "n_pred": 2, "n_gt": 3}
+{"split": "val", "i": 66, "query": ["bright spot"], "scale": 2, "response": "<ref>bright spot</ref><box><599><578><639><616>,<614><647><679><709>,<755><668><817><710></box>", "n_pred": 3, "n_gt": 5}
+{"split": "val", "i": 67, "query": ["bright spot"], "scale": 2, "response": "<ref>bright spot</ref><box><724><476><752><512>,<766><444><828><532></box>", "n_pred": 2, "n_gt": 3}
+{"split": "val", "i": 68, "query": ["bright spot"], "scale": 2, "response": "<ref>bright spot</ref><box>none</box>", "n_pred": 0, "n_gt": 0}
+{"split": "val", "i": 69, "query": ["bright spot"], "scale": 2, "response": "<ref>bright spot</ref><box><349><497><415><568>,<381><368><462><440>,<435><501><461><530></box>", "n_pred": 3, "n_gt": 4}
+{"split": "val", "i": 70, "query": ["bright spot"], "scale": 2, "response": "<ref>bright spot</ref><box><362><620><383><664>,<441><583><481><611>,<452><462><506><520>,<473><62><498><137>,<571><262><653><314></box>", "n_pred": 5, "n_gt": 3}
+{"split": "val", "i": 71, "query": ["bright spot"], "scale": 2, "response": "<ref>bright spot</ref><box><0><0><1000><1000></box>", "n_pred": 1, "n_gt": 1}
+{"split": "val", "i": 72, "query": ["bright spot"], "scale": 2, "response": "<ref>bright spot</ref><box><547><463><592><495>,<876><648><932><708></box>", "n_pred": 2, "n_gt": 1}
+{"split": "val", "i": 73, "query": ["bright spot"], "scale": 2, "response": "<ref>bright spot</ref><box><169><342><204><601></box>", "n_pred": 1, "n_gt": 1}
+{"split": "val", "i": 74, "query": ["bright spot"], "scale": 2, "response": "<ref>bright spot</ref><box><679><339><744><438></box>", "n_pred": 1, "n_gt": 1}
+{"split": "val", "i": 75, "query": ["bright spot"], "scale": 2, "response": "<ref>bright spot</ref><box><889><614><940><636>,<919><454><961><479></box>", "n_pred": 2, "n_gt": 2}
+{"split": "val", "i": 76, "query": ["bright spot"], "scale": 2, "response": "<ref>bright spot</ref><box><651><568><730><655></box>", "n_pred": 1, "n_gt": 3}
+{"split": "val", "i": 77, "query": ["bright spot"], "scale": 2, "response": "<ref>bright spot</ref><box>none</box>", "n_pred": 0, "n_gt": 1}
+{"split": "val", "i": 78, "query": ["bright spot"], "scale": 2, "response": "<ref>bright spot</ref><box>none</box>", "n_pred": 0, "n_gt": 0}
+{"split": "val", "i": 79, "query": ["bright spot"], "scale": 2, "response": "<ref>bright spot</ref><box><137><720><217><816>,<288><862><306><892>,<396><230><418><262></box>", "n_pred": 3, "n_gt": 1}
+{"split": "val", "i": 80, "query": ["bright spot"], "scale": 2, "response": "<ref>bright spot</ref><box><784><474><852><524></box>", "n_pred": 1, "n_gt": 5}
+{"split": "val", "i": 81, "query": ["bright spot"], "scale": 2, "response": "<ref>bright spot</ref><box>none</box>", "n_pred": 0, "n_gt": 0}
+{"split": "val", "i": 82, "query": ["bright spot"], "scale": 2, "response": "<ref>bright spot</ref><box><266><825><345><896>,<292><914><418><989></box>", "n_pred": 2, "n_gt": 2}
+{"split": "val", "i": 83, "query": ["bright spot"], "scale": 2, "response": "<ref>bright spot</ref><box><456><582><516><660></box>", "n_pred": 1, "n_gt": 4}
+{"split": "val", "i": 84, "query": ["bright spot"], "scale": 2, "response": "<ref>bright spot</ref><box><512><468><705><561></box>", "n_pred": 1, "n_gt": 0}
+{"split": "val", "i": 85, "query": ["bright spot"], "scale": 2, "response": "<ref>bright spot</ref><box><645><422><681><478></box>", "n_pred": 1, "n_gt": 5}
+{"split": "val", "i": 86, "query": ["bright spot"], "scale": 2, "response": "<ref>bright spot</ref><box><415><705><508><796>,<467><0><509><28></box>", "n_pred": 2, "n_gt": 2}
+{"split": "val", "i": 87, "query": ["bright spot"], "scale": 2, "response": "<ref>bright spot</ref><box><0><0><1000><1000></box>", "n_pred": 1, "n_gt": 0}
+{"split": "val", "i": 88, "query": ["bright spot"], "scale": 2, "response": "<ref>bright spot</ref><box><638><428><709><481></box>", "n_pred": 1, "n_gt": 3}
+{"split": "val", "i": 89, "query": ["bright spot"], "scale": 2, "response": "<ref>bright spot</ref><box>none</box>", "n_pred": 0, "n_gt": 3}
+{"split": "val", "i": 90, "query": ["bright spot"], "scale": 2, "response": "<ref>bright spot</ref><box><397><769><448><798></box>", "n_pred": 1, "n_gt": 4}
+{"split": "val", "i": 91, "query": ["bright spot"], "scale": 2, "response": "<ref>bright spot</ref><box><210><388><239><425>,<496><80><525><112>,<503><827><564><850>,<535><900><570><921></box>", "n_pred": 4, "n_gt": 3}
+{"split": "val", "i": 92, "query": ["bright spot"], "scale": 2, "response": "<ref>bright spot</ref><box>none</box>", "n_pred": 0, "n_gt": 1}
+{"split": "val", "i": 93, "query": ["bright spot"], "scale": 2, "response": "<ref>bright spot</ref><box><526><332><559><373>,<563><451><592><489></box>", "n_pred": 2, "n_gt": 3}
+{"split": "val", "i": 94, "query": ["bright spot"], "scale": 2, "response": "<ref>bright spot</ref><box><668><468><721><506></box>", "n_pred": 1, "n_gt": 3}
+{"split": "val", "i": 95, "query": ["bright spot"], "scale": 2, "response": "<ref>bright spot</ref><box><377><579><423><614></box>", "n_pred": 1, "n_gt": 3}
+{"split": "val", "i": 96, "query": ["bright spot"], "scale": 2, "response": "<ref>bright spot</ref><box><340><604><397><674>,<350><749><458><847>,<364><434><470><555>,<396><161><497><255>,<436><305><493><359>,<438><586><511><685>,<457><891><498><945>,<504><691><595><793>,<527><148><611><257>,<545><69><585><110>,<558><281><628><463>,<576><575><688><702>,<587><888><680><1000>,<612><92><669><137>,<624><455><686><549></box>", "n_pred": 15, "n_gt": 3}
+{"split": "val", "i": 97, "query": ["bright spot"], "scale": 2, "response": "<ref>bright spot</ref><box><660><810><691><849>,<674><169><714><204>,<690><706><718><738></box>", "n_pred": 3, "n_gt": 4}
+{"split": "val", "i": 98, "query": ["bright spot"], "scale": 2, "response": "<ref>bright spot</ref><box><416><434><488><511></box>", "n_pred": 1, "n_gt": 2}
+{"split": "val", "i": 99, "query": ["bright spot"], "scale": 2, "response": "<ref>bright spot</ref><box><678><332><775><417>,<802><531><844><573>,<889><246><929><284></box>", "n_pred": 3, "n_gt": 0}
+{"split": "val", "i": 0, "query": ["defect"], "scale": 2, "response": "<ref>defect</ref><box><430><565><477><607></box>", "n_pred": 1, "n_gt": 2}
+{"split": "val", "i": 1, "query": ["defect"], "scale": 2, "response": "<ref>defect</ref><box><650><258><700><325></box>", "n_pred": 1, "n_gt": 2}
+{"split": "val", "i": 2, "query": ["defect"], "scale": 2, "response": "<ref>defect</ref><box><297><0><705><1000></box>", "n_pred": 1, "n_gt": 1}
+{"split": "val", "i": 3, "query": ["defect"], "scale": 2, "response": "<ref>defect</ref><box><0><370><991><615></box>", "n_pred": 1, "n_gt": 2}
+{"split": "val", "i": 4, "query": ["defect"], "scale": 2, "response": "<ref>defect</ref><box>none</box>", "n_pred": 0, "n_gt": 3}
+{"split": "val", "i": 5, "query": ["defect"], "scale": 2, "response": "<ref>defect</ref><box><300><206><394><302></box>", "n_pred": 1, "n_gt": 2}
+{"split": "val", "i": 6, "query": ["defect"], "scale": 2, "response": "<ref>defect</ref><box><110><0><913><1000></box>", "n_pred": 1, "n_gt": 0}
+{"split": "val", "i": 7, "query": ["defect"], "scale": 2, "response": "<ref>defect</ref><box><265><7><773><1000></box>", "n_pred": 1, "n_gt": 4}
+{"split": "val", "i": 8, "query": ["defect"], "scale": 2, "response": "<ref>defect</ref><box><0><47><1000><950></box>", "n_pred": 1, "n_gt": 0}
+{"split": "val", "i": 9, "query": ["defect"], "scale": 2, "response": "<ref>defect</ref><box>none</box>", "n_pred": 0, "n_gt": 3}
+{"split": "val", "i": 10, "query": ["defect"], "scale": 2, "response": "<ref>defect</ref><box><163><477><219><673></box>", "n_pred": 1, "n_gt": 2}
+{"split": "val", "i": 11, "query": ["defect"], "scale": 2, "response": "<ref>defect</ref><box><0><165><1000><875></box>", "n_pred": 1, "n_gt": 2}
+{"split": "val", "i": 12, "query": ["defect"], "scale": 2, "response": "<ref>defect</ref><box><22><204><1000><733></box>", "n_pred": 1, "n_gt": 1}
+{"split": "val", "i": 13, "query": ["defect"], "scale": 2, "response": "<ref>defect</ref><box><300><438><405><570></box>", "n_pred": 1, "n_gt": 2}
+{"split": "val", "i": 14, "query": ["defect"], "scale": 2, "response": "<ref>defect</ref><box><83><640><231><773>,<94><770><217><930>,<108><280><192><427>,<125><150><228><267>,<219><450><340><585>,<333><650><415><737>,<335><120><448><288>,<422><233><597><405>,<440><798><558><880>,<449><20><580><110>,<475><632><638><775>,<481><105><658><220>,<510><452><688><620>,<633><690><767><838>,<655><165><792><294></box>", "n_pred": 15, "n_gt": 1}
+{"split": "val", "i": 15, "query": ["defect"], "scale": 2, "response": "<ref>defect</ref><box><36><2><962><983></box>", "n_pred": 1, "n_gt": 2}
+{"split": "val", "i": 16, "query": ["defect"], "scale": 2, "response": "<ref>defect</ref><box><13><267><1000><695></box>", "n_pred": 1, "n_gt": 1}
+{"split": "val", "i": 17, "query": ["defect"], "scale": 2, "response": "<ref>defect</ref><box><460><180><543><258></box>", "n_pred": 1, "n_gt": 3}
+{"split": "val", "i": 18, "query": ["defect"], "scale": 2, "response": "<ref>defect</ref><box><135><2><909><1000></box>", "n_pred": 1, "n_gt": 3}
+{"split": "val", "i": 19, "query": ["defect"], "scale": 2, "response": "<ref>defect</ref><box><0><255><1000><670></box>", "n_pred": 1, "n_gt": 1}
+{"split": "val", "i": 20, "query": ["defect"], "scale": 2, "response": "<ref>defect</ref><box><0><280><1000><733></box>", "n_pred": 1, "n_gt": 2}
+{"split": "val", "i": 21, "query": ["defect"], "scale": 2, "response": "<ref>defect</ref><box><305><162><385><217></box>", "n_pred": 1, "n_gt": 3}
+{"split": "val", "i": 22, "query": ["defect"], "scale": 2, "response": "<ref>defect</ref><box><83><2><908><1000></box>", "n_pred": 1, "n_gt": 0}
+{"split": "val", "i": 23, "query": ["defect"], "scale": 2, "response": "<ref>defect</ref><box><17><195><1000><840></box>", "n_pred": 1, "n_gt": 2}
+{"split": "val", "i": 24, "query": ["defect"], "scale": 2, "response": "<ref>defect</ref><box><0><305><1000><715></box>", "n_pred": 1, "n_gt": 1}
+{"split": "val", "i": 25, "query": ["defect"], "scale": 2, "response": "<ref>defect</ref><box><380><165><494><278></box>", "n_pred": 1, "n_gt": 4}
+{"split": "val", "i": 26, "query": ["defect"], "scale": 2, "response": "<ref>defect</ref><box><221><0><806><1000></box>", "n_pred": 1, "n_gt": 0}
+{"split": "val", "i": 27, "query": ["defect"], "scale": 2, "response": "<ref>defect</ref><box><180><0><881><983></box>", "n_pred": 1, "n_gt": 1}
+{"split": "val", "i": 28, "query": ["defect"], "scale": 2, "response": "<ref>defect</ref><box><0><160><1000><865></box>", "n_pred": 1, "n_gt": 0}
+{"split": "val", "i": 29, "query": ["defect"], "scale": 2, "response": "<ref>defect</ref><box><183><797><263><850>,<273><320><362><478>,<807><415><910><545></box>", "n_pred": 3, "n_gt": 4}
+{"split": "val", "i": 30, "query": ["defect"], "scale": 2, "response": "<ref>defect</ref><box><185><717><344><785>,<560><665><600><705>,<576><465><658><540></box>", "n_pred": 3, "n_gt": 5}
+{"split": "val", "i": 31, "query": ["defect"], "scale": 2, "response": "<ref>defect</ref><box><17><0><1000><1000></box>", "n_pred": 1, "n_gt": 1}
+{"split": "val", "i": 32, "query": ["defect"], "scale": 2, "response": "<ref>defect</ref><box><425><602><658><685>,<505><462><591><558></box>", "n_pred": 2, "n_gt": 4}
+{"split": "val", "i": 33, "query": ["defect"], "scale": 2, "response": "<ref>defect</ref><box><0><215><991><808></box>", "n_pred": 1, "n_gt": 1}
+{"split": "val", "i": 34, "query": ["defect"], "scale": 2, "response": "<ref>defect</ref><box><517><527><572><594></box>", "n_pred": 1, "n_gt": 3}
+{"split": "val", "i": 35, "query": ["defect"], "scale": 2, "response": "<ref>defect</ref><box><255><180><750><600></box>", "n_pred": 1, "n_gt": 2}
+{"split": "val", "i": 36, "query": ["defect"], "scale": 2, "response": "<ref>defect</ref><box><408><340><495><445></box>", "n_pred": 1, "n_gt": 5}
+{"split": "val", "i": 37, "query": ["defect"], "scale": 2, "response": "<ref>defect</ref><box><0><270><1000><725></box>", "n_pred": 1, "n_gt": 0}
+{"split": "val", "i": 38, "query": ["defect"], "scale": 2, "response": "<ref>defect</ref><box><438><625><488><673>,<531><677><612><738></box>", "n_pred": 2, "n_gt": 2}
+{"split": "val", "i": 39, "query": ["defect"], "scale": 2, "response": "<ref>defect</ref><box><255><692><335><767>,<743><362><796><420></box>", "n_pred": 2, "n_gt": 2}
+{"split": "val", "i": 40, "query": ["defect"], "scale": 2, "response": "<ref>defect</ref><box><23><100><1000><930></box>", "n_pred": 1, "n_gt": 1}
+{"split": "val", "i": 41, "query": ["defect"], "scale": 2, "response": "<ref>defect</ref><box><0><380><1000><640></box>", "n_pred": 1, "n_gt": 3}
+{"split": "val", "i": 42, "query": ["defect"], "scale": 2, "response": "<ref>defect</ref><box><780><245><831><300></box>", "n_pred": 1, "n_gt": 2}
+{"split": "val", "i": 43, "query": ["defect"], "scale": 2, "response": "<ref>defect</ref><box><295><7><705><1000></box>", "n_pred": 1, "n_gt": 0}
+{"split": "val", "i": 44, "query": ["defect"], "scale": 2, "response": "<ref>defect</ref><box><90><2><900><1000></box>", "n_pred": 1, "n_gt": 1}
+{"split": "val", "i": 45, "query": ["defect"], "scale": 2, "response": "<ref>defect</ref><box><217><0><805><1000></box>", "n_pred": 1, "n_gt": 4}
+{"split": "val", "i": 46, "query": ["defect"], "scale": 2, "response": "<ref>defect</ref><box><52><2><970><1000></box>", "n_pred": 1, "n_gt": 0}
+{"split": "val", "i": 47, "query": ["defect"], "scale": 2, "response": "<ref>defect</ref><box>none</box>", "n_pred": 0, "n_gt": 0}
+{"split": "val", "i": 48, "query": ["defect"], "scale": 2, "response": "<ref>defect</ref><box><108><0><875><1000></box>", "n_pred": 1, "n_gt": 2}
+{"split": "val", "i": 49, "query": ["defect"], "scale": 2, "response": "<ref>defect</ref><box><555><267><647><355>,<722><331><773><378></box>", "n_pred": 2, "n_gt": 3}
+{"split": "val", "i": 50, "query": ["defect"], "scale": 2, "response": "<ref>defect</ref><box><233><0><791><1000></box>", "n_pred": 1, "n_gt": 1}
+{"split": "val", "i": 51, "query": ["defect"], "scale": 2, "response": "<ref>defect</ref><box><155><0><875><1000></box>", "n_pred": 1, "n_gt": 2}
+{"split": "val", "i": 52, "query": ["defect"], "scale": 2, "response": "<ref>defect</ref><box><495><263><595><372></box>", "n_pred": 1, "n_gt": 2}
+{"split": "val", "i": 53, "query": ["defect"], "scale": 2, "response": "<ref>defect</ref><box>none</box>", "n_pred": 0, "n_gt": 1}
+{"split": "val", "i": 54, "query": ["defect"], "scale": 2, "response": "<ref>defect</ref><box><0><47><1000><1000></box>", "n_pred": 1, "n_gt": 3}
+{"split": "val", "i": 55, "query": ["defect"], "scale": 2, "response": "<ref>defect</ref><box><17><358><1000><646></box>", "n_pred": 1, "n_gt": 2}
+{"split": "val", "i": 56, "query": ["defect"], "scale": 2, "response": "<ref>defect</ref><box><0><140><1000><900></box>", "n_pred": 1, "n_gt": 1}
+{"split": "val", "i": 57, "query": ["defect"], "scale": 2, "response": "<ref>defect</ref><box><8><235><981><758></box>", "n_pred": 1, "n_gt": 1}
+{"split": "val", "i": 58, "query": ["defect"], "scale": 2, "response": "<ref>defect</ref><box><356><700><416><779>,<457><154><535><210>,<550><167><598><238></box>", "n_pred": 3, "n_gt": 2}
+{"split": "val", "i": 59, "query": ["defect"], "scale": 2, "response": "<ref>defect</ref><box><111><2><878><983></box>", "n_pred": 1, "n_gt": 1}
+{"split": "val", "i": 60, "query": ["defect"], "scale": 2, "response": "<ref>defect</ref><box><83><2><950><1000></box>", "n_pred": 1, "n_gt": 3}
+{"split": "val", "i": 61, "query": ["defect"], "scale": 2, "response": "<ref>defect</ref><box><135><417><273><525>,<392><288><460><370></box>", "n_pred": 2, "n_gt": 2}
+{"split": "val", "i": 62, "query": ["defect"], "scale": 2, "response": "<ref>defect</ref><box><17><325><1000><712></box>", "n_pred": 1, "n_gt": 2}
+{"split": "val", "i": 63, "query": ["defect"], "scale": 2, "response": "<ref>defect</ref><box><180><290><238><356>,<685><67><762><158></box>", "n_pred": 2, "n_gt": 5}
+{"split": "val", "i": 64, "query": ["defect"], "scale": 2, "response": "<ref>defect</ref><box><238><0><790><1000></box>", "n_pred": 1, "n_gt": 0}
+{"split": "val", "i": 65, "query": ["defect"], "scale": 2, "response": "<ref>defect</ref><box><522><780><570><828></box>", "n_pred": 1, "n_gt": 3}
+{"split": "val", "i": 66, "query": ["defect"], "scale": 2, "response": "<ref>defect</ref><box><591><562><688><717></box>", "n_pred": 1, "n_gt": 5}
+{"split": "val", "i": 67, "query": ["defect"], "scale": 2, "response": "<ref>defect</ref><box><718><470><754><515>,<762><440><830><535></box>", "n_pred": 2, "n_gt": 3}
+{"split": "val", "i": 68, "query": ["defect"], "scale": 2, "response": "<ref>defect</ref><box><292><0><742><1000></box>", "n_pred": 1, "n_gt": 0}
+{"split": "val", "i": 69, "query": ["defect"], "scale": 2, "response": "<ref>defect</ref><box><261><0><758><1000></box>", "n_pred": 1, "n_gt": 4}
+{"split": "val", "i": 70, "query": ["defect"], "scale": 2, "response": "<ref>defect</ref><box><109><0><890><1000></box>", "n_pred": 1, "n_gt": 3}
+{"split": "val", "i": 71, "query": ["defect"], "scale": 2, "response": "<ref>defect</ref><box><150><0><833><1000></box>", "n_pred": 1, "n_gt": 1}
+{"split": "val", "i": 72, "query": ["defect"], "scale": 2, "response": "<ref>defect</ref><box><17><195><979><767></box>", "n_pred": 1, "n_gt": 1}
+{"split": "val", "i": 73, "query": ["defect"], "scale": 2, "response": "<ref>defect</ref><box><0><122><983><908></box>", "n_pred": 1, "n_gt": 1}
+{"split": "val", "i": 74, "query": ["defect"], "scale": 2, "response": "<ref>defect</ref><box><0><205><1000><830></box>", "n_pred": 1, "n_gt": 1}
+{"split": "val", "i": 75, "query": ["defect"], "scale": 2, "response": "<ref>defect</ref><box><15><350><1000><685></box>", "n_pred": 1, "n_gt": 2}
+{"split": "val", "i": 76, "query": ["defect"], "scale": 2, "response": "<ref>defect</ref><box><0><305><1000><720></box>", "n_pred": 1, "n_gt": 3}
+{"split": "val", "i": 77, "query": ["defect"], "scale": 2, "response": "<ref>defect</ref><box><0><270><985><695></box>", "n_pred": 1, "n_gt": 1}
+{"split": "val", "i": 78, "query": ["defect"], "scale": 2, "response": "<ref>defect</ref><box><290><0><729><1000></box>", "n_pred": 1, "n_gt": 0}
+{"split": "val", "i": 79, "query": ["defect"], "scale": 2, "response": "<ref>defect</ref><box><120><0><911><1000></box>", "n_pred": 1, "n_gt": 1}
+{"split": "val", "i": 80, "query": ["defect"], "scale": 2, "response": "<ref>defect</ref><box><778><467><855><527></box>", "n_pred": 1, "n_gt": 5}
+{"split": "val", "i": 81, "query": ["defect"], "scale": 2, "response": "<ref>defect</ref><box><158><317><327><950>,<403><2><582><159>,<695><315><858><1000></box>", "n_pred": 3, "n_gt": 0}
+{"split": "val", "i": 82, "query": ["defect"], "scale": 2, "response": "<ref>defect</ref><box><255><817><350><900>,<284><908><422><993></box>", "n_pred": 2, "n_gt": 2}
+{"split": "val", "i": 83, "query": ["defect"], "scale": 2, "response": "<ref>defect</ref><box><450><573><521><665></box>", "n_pred": 1, "n_gt": 4}
+{"split": "val", "i": 84, "query": ["defect"], "scale": 2, "response": "<ref>defect</ref><box><0><270><1000><767></box>", "n_pred": 1, "n_gt": 0}
+{"split": "val", "i": 85, "query": ["defect"], "scale": 2, "response": "<ref>defect</ref><box><42><642><127><685>,<315><665><535><710>,<612><650><695><694>,<708><646><960><702></box>", "n_pred": 4, "n_gt": 5}
+{"split": "val", "i": 86, "query": ["defect"], "scale": 2, "response": "<ref>defect</ref><box><406><695><515><802></box>", "n_pred": 1, "n_gt": 2}
+{"split": "val", "i": 87, "query": ["defect"], "scale": 2, "response": "<ref>defect</ref><box><267><0><727><1000></box>", "n_pred": 1, "n_gt": 0}
+{"split": "val", "i": 88, "query": ["defect"], "scale": 2, "response": "<ref>defect</ref><box><88><2><906><1000></box>", "n_pred": 1, "n_gt": 3}
+{"split": "val", "i": 89, "query": ["defect"], "scale": 2, "response": "<ref>defect</ref><box><217><0><808><1000></box>", "n_pred": 1, "n_gt": 3}
+{"split": "val", "i": 90, "query": ["defect"], "scale": 2, "response": "<ref>defect</ref><box><183><0><821><1000></box>", "n_pred": 1, "n_gt": 4}
+{"split": "val", "i": 91, "query": ["defect"], "scale": 2, "response": "<ref>defect</ref><box><94><0><861><1000></box>", "n_pred": 1, "n_gt": 3}
+{"split": "val", "i": 92, "query": ["defect"], "scale": 2, "response": "<ref>defect</ref><box><223><0><770><1000></box>", "n_pred": 1, "n_gt": 1}
+{"split": "val", "i": 93, "query": ["defect"], "scale": 2, "response": "<ref>defect</ref><box><516><320><570><380>,<552><440><600><495></box>", "n_pred": 2, "n_gt": 3}
+{"split": "val", "i": 94, "query": ["defect"], "scale": 2, "response": "<ref>defect</ref><box><10><354><1000><685></box>", "n_pred": 1, "n_gt": 3}
+{"split": "val", "i": 95, "query": ["defect"], "scale": 2, "response": "<ref>defect</ref><box><370><570><429><620></box>", "n_pred": 1, "n_gt": 3}
+{"split": "val", "i": 96, "query": ["defect"], "scale": 2, "response": "<ref>defect</ref><box><244><0><797><1000></box>", "n_pred": 1, "n_gt": 3}
+{"split": "val", "i": 97, "query": ["defect"], "scale": 2, "response": "<ref>defect</ref><box><650><800><698><854>,<668><160><719><210>,<680><700><723><743></box>", "n_pred": 3, "n_gt": 4}
+{"split": "val", "i": 98, "query": ["defect"], "scale": 2, "response": "<ref>defect</ref><box><408><425><493><515></box>", "n_pred": 1, "n_gt": 2}
+{"split": "val", "i": 99, "query": ["defect"], "scale": 2, "response": "<ref>defect</ref><box><0><35><1000><1000></box>", "n_pred": 1, "n_gt": 0}
+{"split": "val", "i": 0, "query": ["void"], "scale": 4, "response": "<ref>void</ref><box><0><0><1000><999></box>", "n_pred": 1, "n_gt": 2}
+{"split": "val", "i": 1, "query": ["void"], "scale": 4, "response": "<ref>void</ref><box><0><0><1000><1000></box>", "n_pred": 1, "n_gt": 2}
+{"split": "val", "i": 2, "query": ["void"], "scale": 4, "response": "<ref>void</ref><box><0><0><1000><1000></box>", "n_pred": 1, "n_gt": 1}
+{"split": "val", "i": 3, "query": ["void"], "scale": 4, "response": "<ref>void</ref><box><207><468><415><538></box>", "n_pred": 1, "n_gt": 2}
+{"split": "val", "i": 4, "query": ["void"], "scale": 4, "response": "<ref>void</ref><box><0><0><1000><1000></box>", "n_pred": 1, "n_gt": 3}
+{"split": "val", "i": 5, "query": ["void"], "scale": 4, "response": "<ref>void</ref><box><305><212><390><298></box>", "n_pred": 1, "n_gt": 2}
+{"split": "val", "i": 6, "query": ["void"], "scale": 4, "response": "<ref>void</ref><box><0><0><1000><1000></box>", "n_pred": 1, "n_gt": 0}
+{"split": "val", "i": 7, "query": ["void"], "scale": 4, "response": "<ref>void</ref><box><270><12><769><1000></box>", "n_pred": 1, "n_gt": 4}
+{"split": "val", "i": 8, "query": ["void"], "scale": 4, "response": "<ref>void</ref><box><0><0><1000><1000></box>", "n_pred": 1, "n_gt": 0}
+{"split": "val", "i": 9, "query": ["void"], "scale": 4, "response": "<ref>void</ref><box><412><58><716><284></box>", "n_pred": 1, "n_gt": 3}
+{"split": "val", "i": 10, "query": ["void"], "scale": 4, "response": "<ref>void</ref><box><412><30><670><294></box>", "n_pred": 1, "n_gt": 2}
+{"split": "val", "i": 11, "query": ["void"], "scale": 4, "response": "<ref>void</ref><box><31><358><80><427></box>", "n_pred": 1, "n_gt": 2}
+{"split": "val", "i": 12, "query": ["void"], "scale": 4, "response": "<ref>void</ref><box><0><0><1000><1000></box>", "n_pred": 1, "n_gt": 1}
+{"split": "val", "i": 13, "query": ["void"], "scale": 4, "response": "<ref>void</ref><box><308><440><400><565></box>", "n_pred": 1, "n_gt": 2}
+{"split": "val", "i": 14, "query": ["void"], "scale": 4, "response": "<ref>void</ref><box><452><0><577><31></box>", "n_pred": 1, "n_gt": 1}
+{"split": "val", "i": 15, "query": ["void"], "scale": 4, "response": "<ref>void</ref><box><0><0><1000><1000></box>", "n_pred": 1, "n_gt": 2}
+{"split": "val", "i": 16, "query": ["void"], "scale": 4, "response": "<ref>void</ref><box><0><0><1000><1000></box>", "n_pred": 1, "n_gt": 1}
+{"split": "val", "i": 17, "query": ["void"], "scale": 4, "response": "<ref>void</ref><box><397><39><622><255></box>", "n_pred": 1, "n_gt": 3}
+{"split": "val", "i": 18, "query": ["void"], "scale": 4, "response": "<ref>void</ref><box><0><0><1000><1000></box>", "n_pred": 1, "n_gt": 3}
+{"split": "val", "i": 19, "query": ["void"], "scale": 4, "response": "<ref>void</ref><box><0><0><1000><1000></box>", "n_pred": 1, "n_gt": 1}
+{"split": "val", "i": 20, "query": ["void"], "scale": 4, "response": "<ref>void</ref><box><0><0><1000><1000></box>", "n_pred": 1, "n_gt": 2}
+{"split": "val", "i": 21, "query": ["void"], "scale": 4, "response": "<ref>void</ref><box><312><165><382><217></box>", "n_pred": 1, "n_gt": 3}
+{"split": "val", "i": 22, "query": ["void"], "scale": 4, "response": "<ref>void</ref><box><0><0><1000><1000></box>", "n_pred": 1, "n_gt": 0}
+{"split": "val", "i": 23, "query": ["void"], "scale": 4, "response": "<ref>void</ref><box><280><479><673><688></box>", "n_pred": 1, "n_gt": 2}
+{"split": "val", "i": 24, "query": ["void"], "scale": 4, "response": "<ref>void</ref><box><0><0><1000><1000></box>", "n_pred": 1, "n_gt": 1}
+{"split": "val", "i": 25, "query": ["void"], "scale": 4, "response": "<ref>void</ref><box><383><167><492><276></box>", "n_pred": 1, "n_gt": 4}
+{"split": "val", "i": 26, "query": ["void"], "scale": 4, "response": "<ref>void</ref><box><312><0><738><615></box>", "n_pred": 1, "n_gt": 0}
+{"split": "val", "i": 27, "query": ["void"], "scale": 4, "response": "<ref>void</ref><box><188><260><308><442></box>", "n_pred": 1, "n_gt": 1}
+{"split": "val", "i": 28, "query": ["void"], "scale": 4, "response": "<ref>void</ref><box><0><0><1000><1000></box>", "n_pred": 1, "n_gt": 0}
+{"split": "val", "i": 29, "query": ["void"], "scale": 4, "response": "<ref>void</ref><box><95><505><173><670>,<273><323><361><477>,<808><415><911><542></box>", "n_pred": 3, "n_gt": 4}
+{"split": "val", "i": 30, "query": ["void"], "scale": 4, "response": "<ref>void</ref><box><177><717><343><785>,<562><666><599><704>,<577><467><658><538></box>", "n_pred": 3, "n_gt": 5}
+{"split": "val", "i": 31, "query": ["void"], "scale": 4, "response": "<ref>void</ref><box><0><0><1000><1000></box>", "n_pred": 1, "n_gt": 1}
+{"split": "val", "i": 32, "query": ["void"], "scale": 4, "response": "<ref>void</ref><box><420><602><658><685></box>", "n_pred": 1, "n_gt": 4}
+{"split": "val", "i": 33, "query": ["void"], "scale": 4, "response": "<ref>void</ref><box><0><0><1000><1000></box>", "n_pred": 1, "n_gt": 1}
+{"split": "val", "i": 34, "query": ["void"], "scale": 4, "response": "<ref>void</ref><box><523><531><569><588></box>", "n_pred": 1, "n_gt": 3}
+{"split": "val", "i": 35, "query": ["void"], "scale": 4, "response": "<ref>void</ref><box><417><217><462><333>,<489><470><535><538>,<536><211><585><323>,<544><542><620><588>,<623><543><692><585>,<640><402><719><468>,<645><285><716><335></box>", "n_pred": 7, "n_gt": 2}
+{"split": "val", "i": 36, "query": ["void"], "scale": 4, "response": "<ref>void</ref><box><410><340><492><444></box>", "n_pred": 1, "n_gt": 5}
+{"split": "val", "i": 37, "query": ["void"], "scale": 4, "response": "<ref>void</ref><box><0><0><1000><1000></box>", "n_pred": 1, "n_gt": 0}
+{"split": "val", "i": 38, "query": ["void"], "scale": 4, "response": "<ref>void</ref><box><445><629><485><670></box>", "n_pred": 1, "n_gt": 2}
+{"split": "val", "i": 39, "query": ["void"], "scale": 4, "response": "<ref>void</ref><box><745><362><795><417></box>", "n_pred": 1, "n_gt": 2}
+{"split": "val", "i": 40, "query": ["void"], "scale": 4, "response": "<ref>void</ref><box><477><188><588><248></box>", "n_pred": 1, "n_gt": 1}
+{"split": "val", "i": 41, "query": ["void"], "scale": 4, "response": "<ref>void</ref><box><0><0><1000><1000></box>", "n_pred": 1, "n_gt": 3}
+{"split": "val", "i": 42, "query": ["void"], "scale": 4, "response": "<ref>void</ref><box><0><0><1000><1000></box>", "n_pred": 1, "n_gt": 2}
+{"split": "val", "i": 43, "query": ["void"], "scale": 4, "response": "<ref>void</ref><box><0><0><1000><1000></box>", "n_pred": 1, "n_gt": 0}
+{"split": "val", "i": 44, "query": ["void"], "scale": 4, "response": "<ref>void</ref><box><0><0><1000><1000></box>", "n_pred": 1, "n_gt": 1}
+{"split": "val", "i": 45, "query": ["void"], "scale": 4, "response": "<ref>void</ref><box><0><0><1000><1000></box>", "n_pred": 1, "n_gt": 4}
+{"split": "val", "i": 46, "query": ["void"], "scale": 4, "response": "<ref>void</ref><box><0><0><1000><999></box>", "n_pred": 1, "n_gt": 0}
+{"split": "val", "i": 47, "query": ["void"], "scale": 4, "response": "<ref>void</ref><box><0><0><1000><1000></box>", "n_pred": 1, "n_gt": 0}
+{"split": "val", "i": 48, "query": ["void"], "scale": 4, "response": "<ref>void</ref><box><0><0><1000><999></box>", "n_pred": 1, "n_gt": 2}
+{"split": "val", "i": 49, "query": ["void"], "scale": 4, "response": "<ref>void</ref><box><558><272><647><356></box>", "n_pred": 1, "n_gt": 3}
+{"split": "val", "i": 50, "query": ["void"], "scale": 4, "response": "<ref>void</ref><box><0><0><1000><1000></box>", "n_pred": 1, "n_gt": 1}
+{"split": "val", "i": 51, "query": ["void"], "scale": 4, "response": "<ref>void</ref><box><0><0><1000><1000></box>", "n_pred": 1, "n_gt": 2}
+{"split": "val", "i": 52, "query": ["void"], "scale": 4, "response": "<ref>void</ref><box><0><0><1000><1000></box>", "n_pred": 1, "n_gt": 2}
+{"split": "val", "i": 53, "query": ["void"], "scale": 4, "response": "<ref>void</ref><box><0><0><1000><1000></box>", "n_pred": 1, "n_gt": 1}
+{"split": "val", "i": 54, "query": ["void"], "scale": 4, "response": "<ref>void</ref><box><0><0><1000><1000></box>", "n_pred": 1, "n_gt": 3}
+{"split": "val", "i": 55, "query": ["void"], "scale": 4, "response": "<ref>void</ref><box><520><408><662><512></box>", "n_pred": 1, "n_gt": 2}
+{"split": "val", "i": 56, "query": ["void"], "scale": 4, "response": "<ref>void</ref><box><0><0><1000><1000></box>", "n_pred": 1, "n_gt": 1}
+{"split": "val", "i": 57, "query": ["void"], "scale": 4, "response": "<ref>void</ref><box><0><0><999><999></box>", "n_pred": 1, "n_gt": 1}
+{"split": "val", "i": 58, "query": ["void"], "scale": 4, "response": "<ref>void</ref><box><359><702><416><775>,<455><154><535><213>,<551><169><598><238></box>", "n_pred": 3, "n_gt": 2}
+{"split": "val", "i": 59, "query": ["void"], "scale": 4, "response": "<ref>void</ref><box><0><0><1000><1000></box>", "n_pred": 1, "n_gt": 1}
+{"split": "val", "i": 60, "query": ["void"], "scale": 4, "response": "<ref>void</ref><box><0><0><1000><1000></box>", "n_pred": 1, "n_gt": 3}
+{"split": "val", "i": 61, "query": ["void"], "scale": 4, "response": "<ref>void</ref><box><0><0><1000><1000></box>", "n_pred": 1, "n_gt": 2}
+{"split": "val", "i": 62, "query": ["void"], "scale": 4, "response": "<ref>void</ref><box><580><445><698><541></box>", "n_pred": 1, "n_gt": 2}
+{"split": "val", "i": 63, "query": ["void"], "scale": 4, "response": "<ref>void</ref><box><235><447><285><612>,<695><70><760><157>,<714><436><752><611></box>", "n_pred": 3, "n_gt": 5}
+{"split": "val", "i": 64, "query": ["void"], "scale": 4, "response": "<ref>void</ref><box><0><0><1000><1000></box>", "n_pred": 1, "n_gt": 0}
+{"split": "val", "i": 65, "query": ["void"], "scale": 4, "response": "<ref>void</ref><box><0><0><1000><1000></box>", "n_pred": 1, "n_gt": 3}
+{"split": "val", "i": 66, "query": ["void"], "scale": 4, "response": "<ref>void</ref><box><383><67><660><431></box>", "n_pred": 1, "n_gt": 5}
+{"split": "val", "i": 67, "query": ["void"], "scale": 4, "response": "<ref>void</ref><box><762><440><831><535></box>", "n_pred": 1, "n_gt": 3}
+{"split": "val", "i": 68, "query": ["void"], "scale": 4, "response": "<ref>void</ref><box><0><0><1000><1000></box>", "n_pred": 1, "n_gt": 0}
+{"split": "val", "i": 69, "query": ["void"], "scale": 4, "response": "<ref>void</ref><box><345><492><415><570>,<377><365><465><442></box>", "n_pred": 2, "n_gt": 4}
+{"split": "val", "i": 70, "query": ["void"], "scale": 4, "response": "<ref>void</ref><box><352><609><388><669>,<433><577><486><616></box>", "n_pred": 2, "n_gt": 3}
+{"split": "val", "i": 71, "query": ["void"], "scale": 4, "response": "<ref>void</ref><box><0><0><1000><1000></box>", "n_pred": 1, "n_gt": 1}
+{"split": "val", "i": 72, "query": ["void"], "scale": 4, "response": "<ref>void</ref><box><0><0><1000><1000></box>", "n_pred": 1, "n_gt": 1}
+{"split": "val", "i": 73, "query": ["void"], "scale": 4, "response": "<ref>void</ref><box><159><338><212><606></box>", "n_pred": 1, "n_gt": 1}
+{"split": "val", "i": 74, "query": ["void"], "scale": 4, "response": "<ref>void</ref><box><0><0><1000><1000></box>", "n_pred": 1, "n_gt": 1}
+{"split": "val", "i": 75, "query": ["void"], "scale": 4, "response": "<ref>void</ref><box><0><0><1000><1000></box>", "n_pred": 1, "n_gt": 2}
+{"split": "val", "i": 76, "query": ["void"], "scale": 4, "response": "<ref>void</ref><box><0><0><1000><1000></box>", "n_pred": 1, "n_gt": 3}
+{"split": "val", "i": 77, "query": ["void"], "scale": 4, "response": "<ref>void</ref><box><0><265><985><700></box>", "n_pred": 1, "n_gt": 1}
+{"split": "val", "i": 78, "query": ["void"], "scale": 4, "response": "<ref>void</ref><box><0><0><1000><1000></box>", "n_pred": 1, "n_gt": 0}
+{"split": "val", "i": 79, "query": ["void"], "scale": 4, "response": "<ref>void</ref><box><302><167><758><340></box>", "n_pred": 1, "n_gt": 1}
+{"split": "val", "i": 80, "query": ["void"], "scale": 4, "response": "<ref>void</ref><box><780><468><856><527></box>", "n_pred": 1, "n_gt": 5}
+{"split": "val", "i": 81, "query": ["void"], "scale": 4, "response": "<ref>void</ref><box><405><5><580><157></box>", "n_pred": 1, "n_gt": 0}
+{"split": "val", "i": 82, "query": ["void"], "scale": 4, "response": "<ref>void</ref><box><259><817><349><900></box>", "n_pred": 1, "n_gt": 2}
+{"split": "val", "i": 83, "query": ["void"], "scale": 4, "response": "<ref>void</ref><box><455><575><519><660></box>", "n_pred": 1, "n_gt": 4}
+{"split": "val", "i": 84, "query": ["void"], "scale": 4, "response": "<ref>void</ref><box><0><0><1000><1000></box>", "n_pred": 1, "n_gt": 0}
+{"split": "val", "i": 85, "query": ["void"], "scale": 4, "response": "<ref>void</ref><box><0><0><1000><1000></box>", "n_pred": 1, "n_gt": 5}
+{"split": "val", "i": 86, "query": ["void"], "scale": 4, "response": "<ref>void</ref><box><408><700><513><800></box>", "n_pred": 1, "n_gt": 2}
+{"split": "val", "i": 87, "query": ["void"], "scale": 4, "response": "<ref>void</ref><box><400><0><600><40></box>", "n_pred": 1, "n_gt": 0}
+{"split": "val", "i": 88, "query": ["void"], "scale": 4, "response": "<ref>void</ref><box><0><0><1000><1000></box>", "n_pred": 1, "n_gt": 3}
+{"split": "val", "i": 89, "query": ["void"], "scale": 4, "response": "<ref>void</ref><box><0><0><1000><1000></box>", "n_pred": 1, "n_gt": 3}
+{"split": "val", "i": 90, "query": ["void"], "scale": 4, "response": "<ref>void</ref><box><377><75><636><415></box>", "n_pred": 1, "n_gt": 4}
+{"split": "val", "i": 91, "query": ["void"], "scale": 4, "response": "<ref>void</ref><box><495><75><529><114></box>", "n_pred": 1, "n_gt": 3}
+{"split": "val", "i": 92, "query": ["void"], "scale": 4, "response": "<ref>void</ref><box><388><0><615><104></box>", "n_pred": 1, "n_gt": 1}
+{"split": "val", "i": 93, "query": ["void"], "scale": 4, "response": "<ref>void</ref><box><0><0><1000><1000></box>", "n_pred": 1, "n_gt": 3}
+{"split": "val", "i": 94, "query": ["void"], "scale": 4, "response": "<ref>void</ref><box><233><433><677><604></box>", "n_pred": 1, "n_gt": 3}
+{"split": "val", "i": 95, "query": ["void"], "scale": 4, "response": "<ref>void</ref><box><442><33><580><352></box>", "n_pred": 1, "n_gt": 3}
+{"split": "val", "i": 96, "query": ["void"], "scale": 4, "response": "<ref>void</ref><box>none</box>", "n_pred": 0, "n_gt": 3}
+{"split": "val", "i": 97, "query": ["void"], "scale": 4, "response": "<ref>void</ref><box><0><0><1000><1000></box>", "n_pred": 1, "n_gt": 4}
+{"split": "val", "i": 98, "query": ["void"], "scale": 4, "response": "<ref>void</ref><box><410><428><492><515></box>", "n_pred": 1, "n_gt": 2}
+{"split": "val", "i": 99, "query": ["void"], "scale": 4, "response": "<ref>void</ref><box><0><0><1000><1000></box>", "n_pred": 1, "n_gt": 0}
+{"split": "val", "i": 0, "query": ["air bubble"], "scale": 4, "response": "<ref>air bubble</ref><box><438><575><469><601></box>", "n_pred": 1, "n_gt": 2}
+{"split": "val", "i": 1, "query": ["air bubble"], "scale": 4, "response": "<ref>air bubble</ref><box><659><267><693><321></box>", "n_pred": 1, "n_gt": 2}
+{"split": "val", "i": 2, "query": ["air bubble"], "scale": 4, "response": "<ref>air bubble</ref><box><381><675><434><725>,<458><0><533><42></box>", "n_pred": 2, "n_gt": 1}
+{"split": "val", "i": 3, "query": ["air bubble"], "scale": 4, "response": "<ref>air bubble</ref><box><564><474><602><513></box>", "n_pred": 1, "n_gt": 2}
+{"split": "val", "i": 4, "query": ["air bubble"], "scale": 4, "response": "<ref>air bubble</ref><box>none</box>", "n_pred": 0, "n_gt": 3}
+{"split": "val", "i": 5, "query": ["air bubble"], "scale": 4, "response": "<ref>air bubble</ref><box><312><217><388><294></box>", "n_pred": 1, "n_gt": 2}
+{"split": "val", "i": 6, "query": ["air bubble"], "scale": 4, "response": "<ref>air bubble</ref><box>none</box>", "n_pred": 0, "n_gt": 0}
+{"split": "val", "i": 7, "query": ["air bubble"], "scale": 4, "response": "<ref>air bubble</ref><box><488><452><517><480></box>", "n_pred": 1, "n_gt": 4}
+{"split": "val", "i": 8, "query": ["air bubble"], "scale": 4, "response": "<ref>air bubble</ref><box><288><721><394><792></box>", "n_pred": 1, "n_gt": 0}
+{"split": "val", "i": 9, "query": ["air bubble"], "scale": 4, "response": "<ref>air bubble</ref><box>none</box>", "n_pred": 0, "n_gt": 3}
+{"split": "val", "i": 10, "query": ["air bubble"], "scale": 4, "response": "<ref>air bubble</ref><box><176><488><213><668></box>", "n_pred": 1, "n_gt": 2}
+{"split": "val", "i": 11, "query": ["air bubble"], "scale": 4, "response": "<ref>air bubble</ref><box><35><365><75><425>,<116><558><194><628></box>", "n_pred": 2, "n_gt": 2}
+{"split": "val", "i": 12, "query": ["air bubble"], "scale": 4, "response": "<ref>air bubble</ref><box>none</box>", "n_pred": 0, "n_gt": 1}
+{"split": "val", "i": 13, "query": ["air bubble"], "scale": 4, "response": "<ref>air bubble</ref><box><312><444><399><562></box>", "n_pred": 1, "n_gt": 2}
+{"split": "val", "i": 14, "query": ["air bubble"], "scale": 4, "response": "<ref>air bubble</ref><box><177><787><206><817>,<368><466><394><494>,<467><437><503><497>,<500><321><530><354>,<534><606><560><633></box>", "n_pred": 5, "n_gt": 1}
+{"split": "val", "i": 15, "query": ["air bubble"], "scale": 4, "response": "<ref>air bubble</ref><box>none</box>", "n_pred": 0, "n_gt": 2}
+{"split": "val", "i": 16, "query": ["air bubble"], "scale": 4, "response": "<ref>air bubble</ref><box><700><599><795><674></box>", "n_pred": 1, "n_gt": 1}
+{"split": "val", "i": 17, "query": ["air bubble"], "scale": 4, "response": "<ref>air bubble</ref><box><362><282><410><328>,<407><52><501><186>,<471><188><538><252>,<532><59><615><189></box>", "n_pred": 4, "n_gt": 3}
+{"split": "val", "i": 18, "query": ["air bubble"], "scale": 4, "response": "<ref>air bubble</ref><box><814><331><874><390></box>", "n_pred": 1, "n_gt": 3}
+{"split": "val", "i": 19, "query": ["air bubble"], "scale": 4, "response": "<ref>air bubble</ref><box>none</box>", "n_pred": 0, "n_gt": 1}
+{"split": "val", "i": 20, "query": ["air bubble"], "scale": 4, "response": "<ref>air bubble</ref><box><412><558><539><656>,<519><561><593><668></box>", "n_pred": 2, "n_gt": 2}
+{"split": "val", "i": 21, "query": ["air bubble"], "scale": 4, "response": "<ref>air bubble</ref><box><312><168><381><214></box>", "n_pred": 1, "n_gt": 3}
+{"split": "val", "i": 22, "query": ["air bubble"], "scale": 4, "response": "<ref>air bubble</ref><box>none</box>", "n_pred": 0, "n_gt": 0}
+{"split": "val", "i": 23, "query": ["air bubble"], "scale": 4, "response": "<ref>air bubble</ref><box><291><582><381><687>,<446><539><588><668>,<576><488><666><635></box>", "n_pred": 3, "n_gt": 2}
+{"split": "val", "i": 24, "query": ["air bubble"], "scale": 4, "response": "<ref>air bubble</ref><box><276><510><405><600>,<434><452><542><538>,<555><366><656><468>,<558><495><642><580>,<721><462><819><543></box>", "n_pred": 5, "n_gt": 1}
+{"split": "val", "i": 25, "query": ["air bubble"], "scale": 4, "response": "<ref>air bubble</ref><box><390><172><489><272></box>", "n_pred": 1, "n_gt": 4}
+{"split": "val", "i": 26, "query": ["air bubble"], "scale": 4, "response": "<ref>air bubble</ref><box><411><319><490><358>,<580><323><643><354></box>", "n_pred": 2, "n_gt": 0}
+{"split": "val", "i": 27, "query": ["air bubble"], "scale": 4, "response": "<ref>air bubble</ref><box><199><267><302><437>,<366><810><405><870>,<366><877><406><920>,<416><75><468><148>,<537><74><607><156>,<636><836><668><886>,<706><276><823><432></box>", "n_pred": 7, "n_gt": 1}
+{"split": "val", "i": 28, "query": ["air bubble"], "scale": 4, "response": "<ref>air bubble</ref><box><174><716><219><742>,<391><469><421><495>,<601><582><680><625>,<906><756><963><782></box>", "n_pred": 4, "n_gt": 0}
+{"split": "val", "i": 29, "query": ["air bubble"], "scale": 4, "response": "<ref>air bubble</ref><box><105><512><168><666>,<193><802><261><840>,<280><328><357><473>,<813><421><907><539></box>", "n_pred": 4, "n_gt": 4}
+{"split": "val", "i": 30, "query": ["air bubble"], "scale": 4, "response": "<ref>air bubble</ref><box><185><722><340><781>,<568><670><596><701>,<582><471><655><535></box>", "n_pred": 3, "n_gt": 5}
+{"split": "val", "i": 31, "query": ["air bubble"], "scale": 4, "response": "<ref>air bubble</ref><box>none</box>", "n_pred": 0, "n_gt": 1}
+{"split": "val", "i": 32, "query": ["air bubble"], "scale": 4, "response": "<ref>air bubble</ref><box><428><612><650><677></box>", "n_pred": 1, "n_gt": 4}
+{"split": "val", "i": 33, "query": ["air bubble"], "scale": 4, "response": "<ref>air bubble</ref><box><220><717><265><781></box>", "n_pred": 1, "n_gt": 1}
+{"split": "val", "i": 34, "query": ["air bubble"], "scale": 4, "response": "<ref>air bubble</ref><box><527><536><566><585></box>", "n_pred": 1, "n_gt": 3}
+{"split": "val", "i": 35, "query": ["air bubble"], "scale": 4, "response": "<ref>air bubble</ref><box><418><225><458><330>,<496><474><532><534>,<542><216><581><319>,<550><548><617><584>,<628><547><688><582>,<646><406><715><464>,<649><291><712><331></box>", "n_pred": 7, "n_gt": 2}
+{"split": "val", "i": 36, "query": ["air bubble"], "scale": 4, "response": "<ref>air bubble</ref><box><417><348><488><440>,<422><485><466><545></box>", "n_pred": 2, "n_gt": 5}
+{"split": "val", "i": 37, "query": ["air bubble"], "scale": 4, "response": "<ref>air bubble</ref><box>none</box>", "n_pred": 0, "n_gt": 0}
+{"split": "val", "i": 38, "query": ["air bubble"], "scale": 4, "response": "<ref>air bubble</ref><box><452><635><481><666>,<539><686><607><730></box>", "n_pred": 2, "n_gt": 2}
+{"split": "val", "i": 39, "query": ["air bubble"], "scale": 4, "response": "<ref>air bubble</ref><box><750><369><790><413></box>", "n_pred": 1, "n_gt": 2}
+{"split": "val", "i": 40, "query": ["air bubble"], "scale": 4, "response": "<ref>air bubble</ref><box><31><815><119><896>,<105><456><221><622>,<135><745><359><921>,<177><214><314><337>,<255><312><400><503>,<258><597><416><770>,<394><460><574><608>,<427><106><522><220>,<461><279><616><418>,<471><618><645><768>,<519><111><613><227>,<642><441><803><612>,<672><721><854><852>,<682><205><848><331>,<845><578><963><758>,<847><313><1000><479></box>", "n_pred": 16, "n_gt": 1}
+{"split": "val", "i": 41, "query": ["air bubble"], "scale": 4, "response": "<ref>air bubble</ref><box>none</box>", "n_pred": 0, "n_gt": 3}
+{"split": "val", "i": 42, "query": ["air bubble"], "scale": 4, "response": "<ref>air bubble</ref><box><787><253><829><295></box>", "n_pred": 1, "n_gt": 2}
+{"split": "val", "i": 43, "query": ["air bubble"], "scale": 4, "response": "<ref>air bubble</ref><box>none</box>", "n_pred": 0, "n_gt": 0}
+{"split": "val", "i": 44, "query": ["air bubble"], "scale": 4, "response": "<ref>air bubble</ref><box><290><579><346><625></box>", "n_pred": 1, "n_gt": 1}
+{"split": "val", "i": 45, "query": ["air bubble"], "scale": 4, "response": "<ref>air bubble</ref><box><317><332><353><375>,<323><483><349><521>,<325><583><357><620>,<334><728><379><775>,<403><507><466><565>,<404><370><454><422>,<404><651><468><712>,<417><794><470><847>,<437><91><473><126>,<562><623><604><670>,<562><729><606><791>,<600><333><636><376>,<613><372><644><406>,<638><798><678><852>,<650><691><685><732>,<654><546><702><597>,<667><412><724><448>,<686><261><726><308></box>", "n_pred": 18, "n_gt": 4}
+{"split": "val", "i": 46, "query": ["air bubble"], "scale": 4, "response": "<ref>air bubble</ref><box>none</box>", "n_pred": 0, "n_gt": 0}
+{"split": "val", "i": 47, "query": ["air bubble"], "scale": 4, "response": "<ref>air bubble</ref><box>none</box>", "n_pred": 0, "n_gt": 0}
+{"split": "val", "i": 48, "query": ["air bubble"], "scale": 4, "response": "<ref>air bubble</ref><box>none</box>", "n_pred": 0, "n_gt": 2}
+{"split": "val", "i": 49, "query": ["air bubble"], "scale": 4, "response": "<ref>air bubble</ref><box><566><278><644><352>,<724><337><769><373></box>", "n_pred": 2, "n_gt": 3}
+{"split": "val", "i": 50, "query": ["air bubble"], "scale": 4, "response": "<ref>air bubble</ref><box><464><312><494><350>,<467><774><494><806>,<541><284><567><315></box>", "n_pred": 3, "n_gt": 1}
+{"split": "val", "i": 51, "query": ["air bubble"], "scale": 4, "response": "<ref>air bubble</ref><box>none</box>", "n_pred": 0, "n_gt": 2}
+{"split": "val", "i": 52, "query": ["air bubble"], "scale": 4, "response": "<ref>air bubble</ref><box><506><273><589><367>,<587><501><610><526></box>", "n_pred": 2, "n_gt": 2}
+{"split": "val", "i": 53, "query": ["air bubble"], "scale": 4, "response": "<ref>air bubble</ref><box>none</box>", "n_pred": 0, "n_gt": 1}
+{"split": "val", "i": 54, "query": ["air bubble"], "scale": 4, "response": "<ref>air bubble</ref><box><62><666><100><725></box>", "n_pred": 1, "n_gt": 3}
+{"split": "val", "i": 55, "query": ["air bubble"], "scale": 4, "response": "<ref>air bubble</ref><box><199><478><261><562>,<276><477><372><555>,<526><415><658><507>,<690><413><788><481>,<691><370><867><481>,<779><370><868><467></box>", "n_pred": 6, "n_gt": 2}
+{"split": "val", "i": 56, "query": ["air bubble"], "scale": 4, "response": "<ref>air bubble</ref><box><469><505><573><532>,<470><746><525><804></box>", "n_pred": 2, "n_gt": 1}
+{"split": "val", "i": 57, "query": ["air bubble"], "scale": 4, "response": "<ref>air bubble</ref><box><14><245><975><752></box>", "n_pred": 1, "n_gt": 1}
+{"split": "val", "i": 58, "query": ["air bubble"], "scale": 4, "response": "<ref>air bubble</ref><box><368><708><411><771>,<462><159><531><209>,<554><122><580><146>,<556><172><594><235></box>", "n_pred": 4, "n_gt": 2}
+{"split": "val", "i": 59, "query": ["air bubble"], "scale": 4, "response": "<ref>air bubble</ref><box>none</box>", "n_pred": 0, "n_gt": 1}
+{"split": "val", "i": 60, "query": ["air bubble"], "scale": 4, "response": "<ref>air bubble</ref><box><380><3><455><131></box>", "n_pred": 1, "n_gt": 3}
+{"split": "val", "i": 61, "query": ["air bubble"], "scale": 4, "response": "<ref>air bubble</ref><box><157><436><265><517>,<401><297><451><362>,<480><55><541><121>,<589><182><660><257>,<748><181><796><271></box>", "n_pred": 5, "n_gt": 2}
+{"split": "val", "i": 62, "query": ["air bubble"], "scale": 4, "response": "<ref>air bubble</ref><box><535><346><599><440>,<585><452><694><536>,<775><624><838><704>,<868><380><913><418></box>", "n_pred": 4, "n_gt": 2}
+{"split": "val", "i": 63, "query": ["air bubble"], "scale": 4, "response": "<ref>air bubble</ref><box><190><298><231><351>,<245><452><281><610>,<694><75><757><154>,<719><440><747><608>,<743><366><781><407></box>", "n_pred": 5, "n_gt": 5}
+{"split": "val", "i": 64, "query": ["air bubble"], "scale": 4, "response": "<ref>air bubble</ref><box>none</box>", "n_pred": 0, "n_gt": 0}
+{"split": "val", "i": 65, "query": ["air bubble"], "scale": 4, "response": "<ref>air bubble</ref><box><531><789><562><823>,<783><515><897><596></box>", "n_pred": 2, "n_gt": 3}
+{"split": "val", "i": 66, "query": ["air bubble"], "scale": 4, "response": "<ref>air bubble</ref><box><600><578><640><616>,<614><648><680><709>,<756><668><817><710></box>", "n_pred": 3, "n_gt": 5}
+{"split": "val", "i": 67, "query": ["air bubble"], "scale": 4, "response": "<ref>air bubble</ref><box><724><476><752><512>,<766><445><827><533></box>", "n_pred": 2, "n_gt": 3}
+{"split": "val", "i": 68, "query": ["air bubble"], "scale": 4, "response": "<ref>air bubble</ref><box>none</box>", "n_pred": 0, "n_gt": 0}
+{"split": "val", "i": 69, "query": ["air bubble"], "scale": 4, "response": "<ref>air bubble</ref><box><349><498><413><568>,<381><369><462><439>,<434><501><461><532></box>", "n_pred": 3, "n_gt": 4}
+{"split": "val", "i": 70, "query": ["air bubble"], "scale": 4, "response": "<ref>air bubble</ref><box><363><619><382><664>,<440><583><482><611>,<453><466><505><521>,<471><67><495><137>,<568><261><653><315></box>", "n_pred": 5, "n_gt": 3}
+{"split": "val", "i": 71, "query": ["air bubble"], "scale": 4, "response": "<ref>air bubble</ref><box>none</box>", "n_pred": 0, "n_gt": 1}
+{"split": "val", "i": 72, "query": ["air bubble"], "scale": 4, "response": "<ref>air bubble</ref><box><544><464><592><497>,<875><645><934><706></box>", "n_pred": 2, "n_gt": 1}
+{"split": "val", "i": 73, "query": ["air bubble"], "scale": 4, "response": "<ref>air bubble</ref><box><164><347><205><601></box>", "n_pred": 1, "n_gt": 1}
+{"split": "val", "i": 74, "query": ["air bubble"], "scale": 4, "response": "<ref>air bubble</ref><box>none</box>", "n_pred": 0, "n_gt": 1}
+{"split": "val", "i": 75, "query": ["air bubble"], "scale": 4, "response": "<ref>air bubble</ref><box><919><452><961><480></box>", "n_pred": 1, "n_gt": 2}
+{"split": "val", "i": 76, "query": ["air bubble"], "scale": 4, "response": "<ref>air bubble</ref><box><651><567><732><656></box>", "n_pred": 1, "n_gt": 3}
+{"split": "val", "i": 77, "query": ["air bubble"], "scale": 4, "response": "<ref>air bubble</ref><box>none</box>", "n_pred": 0, "n_gt": 1}
+{"split": "val", "i": 78, "query": ["air bubble"], "scale": 4, "response": "<ref>air bubble</ref><box>none</box>", "n_pred": 0, "n_gt": 0}
+{"split": "val", "i": 79, "query": ["air bubble"], "scale": 4, "response": "<ref>air bubble</ref><box><140><719><217><815>,<289><862><308><896>,<398><233><415><258></box>", "n_pred": 3, "n_gt": 1}
+{"split": "val", "i": 80, "query": ["air bubble"], "scale": 4, "response": "<ref>air bubble</ref><box><785><474><852><524></box>", "n_pred": 1, "n_gt": 5}
+{"split": "val", "i": 81, "query": ["air bubble"], "scale": 4, "response": "<ref>air bubble</ref><box><252><325><321><400>,<414><9><575><152>,<704><323><811><410></box>", "n_pred": 3, "n_gt": 0}
+{"split": "val", "i": 82, "query": ["air bubble"], "scale": 4, "response": "<ref>air bubble</ref><box><266><824><345><896>,<293><936><404><992>,<355><914><420><969></box>", "n_pred": 3, "n_gt": 2}
+{"split": "val", "i": 83, "query": ["air bubble"], "scale": 4, "response": "<ref>air bubble</ref><box><457><581><515><656></box>", "n_pred": 1, "n_gt": 4}
+{"split": "val", "i": 84, "query": ["air bubble"], "scale": 4, "response": "<ref>air bubble</ref><box>none</box>", "n_pred": 0, "n_gt": 0}
+{"split": "val", "i": 85, "query": ["air bubble"], "scale": 4, "response": "<ref>air bubble</ref><box><61><651><119><676>,<328><675><528><702>,<619><659><687><688>,<715><654><954><695></box>", "n_pred": 4, "n_gt": 5}
+{"split": "val", "i": 86, "query": ["air bubble"], "scale": 4, "response": "<ref>air bubble</ref><box><415><706><508><795></box>", "n_pred": 1, "n_gt": 2}
+{"split": "val", "i": 87, "query": ["air bubble"], "scale": 4, "response": "<ref>air bubble</ref><box>none</box>", "n_pred": 0, "n_gt": 0}
+{"split": "val", "i": 88, "query": ["air bubble"], "scale": 4, "response": "<ref>air bubble</ref><box><638><428><710><480></box>", "n_pred": 1, "n_gt": 3}
+{"split": "val", "i": 89, "query": ["air bubble"], "scale": 4, "response": "<ref>air bubble</ref><box>none</box>", "n_pred": 0, "n_gt": 3}
+{"split": "val", "i": 90, "query": ["air bubble"], "scale": 4, "response": "<ref>air bubble</ref><box><316><659><422><735>,<399><770><447><797></box>", "n_pred": 2, "n_gt": 4}
+{"split": "val", "i": 91, "query": ["air bubble"], "scale": 4, "response": "<ref>air bubble</ref><box><210><383><238><425>,<497><79><526><112>,<504><828><562><851>,<535><900><573><923>,<606><899><732><927></box>", "n_pred": 5, "n_gt": 3}
+{"split": "val", "i": 92, "query": ["air bubble"], "scale": 4, "response": "<ref>air bubble</ref><box>none</box>", "n_pred": 0, "n_gt": 1}
+{"split": "val", "i": 93, "query": ["air bubble"], "scale": 4, "response": "<ref>air bubble</ref><box><526><329><560><372>,<565><451><593><490></box>", "n_pred": 2, "n_gt": 3}
+{"split": "val", "i": 94, "query": ["air bubble"], "scale": 4, "response": "<ref>air bubble</ref><box>none</box>", "n_pred": 0, "n_gt": 3}
+{"split": "val", "i": 95, "query": ["air bubble"], "scale": 4, "response": "<ref>air bubble</ref><box><376><580><424><615></box>", "n_pred": 1, "n_gt": 3}
+{"split": "val", "i": 96, "query": ["air bubble"], "scale": 4, "response": "<ref>air bubble</ref><box><294><919><332><960>,<337><602><394><674>,<350><748><462><847>,<364><430><491><557>,<395><158><498><259>,<396><353><427><407>,<436><302><494><359>,<437><581><519><690>,<456><890><499><948>,<506><692><593><789>,<528><143><618><260>,<529><482><607><541>,<543><69><580><109>,<558><284><628><448>,<566><755><597><808>,<576><570><704><700>,<611><92><667><141>,<626><453><686><548>,<687><307><716><373></box>", "n_pred": 19, "n_gt": 3}
+{"split": "val", "i": 97, "query": ["air bubble"], "scale": 4, "response": "<ref>air bubble</ref><box><659><810><692><850>,<676><170><716><202>,<691><705><718><739></box>", "n_pred": 3, "n_gt": 4}
+{"split": "val", "i": 98, "query": ["air bubble"], "scale": 4, "response": "<ref>air bubble</ref><box><417><435><488><510></box>", "n_pred": 1, "n_gt": 2}
+{"split": "val", "i": 99, "query": ["air bubble"], "scale": 4, "response": "<ref>air bubble</ref><box><678><333><776><417>,<801><533><844><571>,<891><247><930><285></box>", "n_pred": 3, "n_gt": 0}
+{"split": "val", "i": 0, "query": ["bright spot"], "scale": 4, "response": "<ref>bright spot</ref><box><440><576><468><600></box>", "n_pred": 1, "n_gt": 2}
+{"split": "val", "i": 1, "query": ["bright spot"], "scale": 4, "response": "<ref>bright spot</ref><box><660><268><692><320></box>", "n_pred": 1, "n_gt": 2}
+{"split": "val", "i": 2, "query": ["bright spot"], "scale": 4, "response": "<ref>bright spot</ref><box><460><0><533><41></box>", "n_pred": 1, "n_gt": 1}
+{"split": "val", "i": 3, "query": ["bright spot"], "scale": 4, "response": "<ref>bright spot</ref><box><564><475><602><513></box>", "n_pred": 1, "n_gt": 2}
+{"split": "val", "i": 4, "query": ["bright spot"], "scale": 4, "response": "<ref>bright spot</ref><box><539><132><566><163></box>", "n_pred": 1, "n_gt": 3}
+{"split": "val", "i": 5, "query": ["bright spot"], "scale": 4, "response": "<ref>bright spot</ref><box><313><218><386><293></box>", "n_pred": 1, "n_gt": 2}
+{"split": "val", "i": 6, "query": ["bright spot"], "scale": 4, "response": "<ref>bright spot</ref><box>none</box>", "n_pred": 0, "n_gt": 0}
+{"split": "val", "i": 7, "query": ["bright spot"], "scale": 4, "response": "<ref>bright spot</ref><box><489><454><516><479></box>", "n_pred": 1, "n_gt": 4}
+{"split": "val", "i": 8, "query": ["bright spot"], "scale": 4, "response": "<ref>bright spot</ref><box><290><723><394><791></box>", "n_pred": 1, "n_gt": 0}
+{"split": "val", "i": 9, "query": ["bright spot"], "scale": 4, "response": "<ref>bright spot</ref><box><414><66><708><279></box>", "n_pred": 1, "n_gt": 3}
+{"split": "val", "i": 10, "query": ["bright spot"], "scale": 4, "response": "<ref>bright spot</ref><box><425><36><648><291></box>", "n_pred": 1, "n_gt": 2}
+{"split": "val", "i": 11, "query": ["bright spot"], "scale": 4, "response": "<ref>bright spot</ref><box><36><365><74><425>,<117><558><194><628></box>", "n_pred": 2, "n_gt": 2}
+{"split": "val", "i": 12, "query": ["bright spot"], "scale": 4, "response": "<ref>bright spot</ref><box>none</box>", "n_pred": 0, "n_gt": 1}
+{"split": "val", "i": 13, "query": ["bright spot"], "scale": 4, "response": "<ref>bright spot</ref><box><313><444><398><561></box>", "n_pred": 1, "n_gt": 2}
+{"split": "val", "i": 14, "query": ["bright spot"], "scale": 4, "response": "<ref>bright spot</ref><box><177><787><206><818>,<368><467><394><494>,<468><437><503><497>,<501><322><530><354>,<535><607><559><633></box>", "n_pred": 5, "n_gt": 1}
+{"split": "val", "i": 15, "query": ["bright spot"], "scale": 4, "response": "<ref>bright spot</ref><box>none</box>", "n_pred": 0, "n_gt": 2}
+{"split": "val", "i": 16, "query": ["bright spot"], "scale": 4, "response": "<ref>bright spot</ref><box><702><601><794><673></box>", "n_pred": 1, "n_gt": 1}
+{"split": "val", "i": 17, "query": ["bright spot"], "scale": 4, "response": "<ref>bright spot</ref><box><363><283><409><328>,<408><53><501><186>,<471><188><538><252>,<532><60><614><189></box>", "n_pred": 4, "n_gt": 3}
+{"split": "val", "i": 18, "query": ["bright spot"], "scale": 4, "response": "<ref>bright spot</ref><box><815><333><873><389></box>", "n_pred": 1, "n_gt": 3}
+{"split": "val", "i": 19, "query": ["bright spot"], "scale": 4, "response": "<ref>bright spot</ref><box><471><477><826><568></box>", "n_pred": 1, "n_gt": 1}
+{"split": "val", "i": 20, "query": ["bright spot"], "scale": 4, "response": "<ref>bright spot</ref><box><412><559><539><656>,<519><561><593><668></box>", "n_pred": 2, "n_gt": 2}
+{"split": "val", "i": 21, "query": ["bright spot"], "scale": 4, "response": "<ref>bright spot</ref><box><313><170><380><213>,<363><455><382><495></box>", "n_pred": 2, "n_gt": 3}
+{"split": "val", "i": 22, "query": ["bright spot"], "scale": 4, "response": "<ref>bright spot</ref><box><272><300><349><402></box>", "n_pred": 1, "n_gt": 0}
+{"split": "val", "i": 23, "query": ["bright spot"], "scale": 4, "response": "<ref>bright spot</ref><box><291><582><381><687>,<446><539><588><668>,<576><489><666><635></box>", "n_pred": 3, "n_gt": 2}
+{"split": "val", "i": 24, "query": ["bright spot"], "scale": 4, "response": "<ref>bright spot</ref><box>none</box>", "n_pred": 0, "n_gt": 1}
+{"split": "val", "i": 25, "query": ["bright spot"], "scale": 4, "response": "<ref>bright spot</ref><box><390><172><488><271>,<507><930><525><961>,<508><976><541><1000></box>", "n_pred": 3, "n_gt": 4}
+{"split": "val", "i": 26, "query": ["bright spot"], "scale": 4, "response": "<ref>bright spot</ref><box><322><0><720><608></box>", "n_pred": 1, "n_gt": 0}
+{"split": "val", "i": 27, "query": ["bright spot"], "scale": 4, "response": "<ref>bright spot</ref><box><366><811><405><870>,<366><878><406><920>,<638><836><668><886></box>", "n_pred": 3, "n_gt": 1}
+{"split": "val", "i": 28, "query": ["bright spot"], "scale": 4, "response": "<ref>bright spot</ref><box><601><583><680><625>,<652><363><789><521>,<907><756><963><782></box>", "n_pred": 3, "n_gt": 0}
+{"split": "val", "i": 29, "query": ["bright spot"], "scale": 4, "response": "<ref>bright spot</ref><box><105><512><168><666>,<193><802><261><840>,<281><328><357><473>,<814><421><907><538></box>", "n_pred": 4, "n_gt": 4}
+{"split": "val", "i": 30, "query": ["bright spot"], "scale": 4, "response": "<ref>bright spot</ref><box><185><722><340><781>,<568><670><596><701>,<582><471><655><535></box>", "n_pred": 3, "n_gt": 5}
+{"split": "val", "i": 31, "query": ["bright spot"], "scale": 4, "response": "<ref>bright spot</ref><box><399><69><707><380></box>", "n_pred": 1, "n_gt": 1}
+{"split": "val", "i": 32, "query": ["bright spot"], "scale": 4, "response": "<ref>bright spot</ref><box><428><612><650><677>,<514><700><542><726></box>", "n_pred": 2, "n_gt": 4}
+{"split": "val", "i": 33, "query": ["bright spot"], "scale": 4, "response": "<ref>bright spot</ref><box><220><717><265><781></box>", "n_pred": 1, "n_gt": 1}
+{"split": "val", "i": 34, "query": ["bright spot"], "scale": 4, "response": "<ref>bright spot</ref><box><528><536><566><585></box>", "n_pred": 1, "n_gt": 3}
+{"split": "val", "i": 35, "query": ["bright spot"], "scale": 4, "response": "<ref>bright spot</ref><box><236><427><282><834>,<419><226><458><329>,<497><475><532><534>,<543><216><580><319>,<550><548><617><584>,<628><549><688><582>,<646><407><715><464>,<650><291><712><331></box>", "n_pred": 8, "n_gt": 2}
+{"split": "val", "i": 36, "query": ["bright spot"], "scale": 4, "response": "<ref>bright spot</ref><box><417><348><488><439>,<422><485><466><545></box>", "n_pred": 2, "n_gt": 5}
+{"split": "val", "i": 37, "query": ["bright spot"], "scale": 4, "response": "<ref>bright spot</ref><box>none</box>", "n_pred": 0, "n_gt": 0}
+{"split": "val", "i": 38, "query": ["bright spot"], "scale": 4, "response": "<ref>bright spot</ref><box><452><636><481><666></box>", "n_pred": 1, "n_gt": 2}
+{"split": "val", "i": 39, "query": ["bright spot"], "scale": 4, "response": "<ref>bright spot</ref><box><267><704><330><762>,<751><370><790><413></box>", "n_pred": 2, "n_gt": 2}
+{"split": "val", "i": 40, "query": ["bright spot"], "scale": 4, "response": "<ref>bright spot</ref><box><480><195><578><246>,<985><478><1000><533></box>", "n_pred": 2, "n_gt": 1}
+{"split": "val", "i": 41, "query": ["bright spot"], "scale": 4, "response": "<ref>bright spot</ref><box>none</box>", "n_pred": 0, "n_gt": 3}
+{"split": "val", "i": 42, "query": ["bright spot"], "scale": 4, "response": "<ref>bright spot</ref><box><318><777><347><809>,<787><253><829><295></box>", "n_pred": 2, "n_gt": 2}
+{"split": "val", "i": 43, "query": ["bright spot"], "scale": 4, "response": "<ref>bright spot</ref><box>none</box>", "n_pred": 0, "n_gt": 0}
+{"split": "val", "i": 44, "query": ["bright spot"], "scale": 4, "response": "<ref>bright spot</ref><box><291><580><345><624></box>", "n_pred": 1, "n_gt": 1}
+{"split": "val", "i": 45, "query": ["bright spot"], "scale": 4, "response": "<ref>bright spot</ref><box><320><333><352><374>,<321><486><347><521>,<326><585><356><620>,<335><729><379><775>,<404><508><466><565>,<405><369><453><421>,<404><652><468><711>,<418><795><469><846>,<437><92><471><126>,<479><0><511><23>,<560><730><606><791>,<563><625><603><669>,<600><334><635><375>,<613><372><643><406>,<638><799><677><852>,<651><692><684><732>,<654><547><702><596>,<668><414><723><447>,<686><263><725><307></box>", "n_pred": 19, "n_gt": 4}
+{"split": "val", "i": 46, "query": ["bright spot"], "scale": 4, "response": "<ref>bright spot</ref><box>none</box>", "n_pred": 0, "n_gt": 0}
+{"split": "val", "i": 47, "query": ["bright spot"], "scale": 4, "response": "<ref>bright spot</ref><box><292><632><312><704>,<724><615><740><653></box>", "n_pred": 2, "n_gt": 0}
+{"split": "val", "i": 48, "query": ["bright spot"], "scale": 4, "response": "<ref>bright spot</ref><box><364><710><463><867></box>", "n_pred": 1, "n_gt": 2}
+{"split": "val", "i": 49, "query": ["bright spot"], "scale": 4, "response": "<ref>bright spot</ref><box><566><278><644><352>,<725><337><769><373></box>", "n_pred": 2, "n_gt": 3}
+{"split": "val", "i": 50, "query": ["bright spot"], "scale": 4, "response": "<ref>bright spot</ref><box><465><312><494><349>,<468><775><493><805>,<542><285><567><315></box>", "n_pred": 3, "n_gt": 1}
+{"split": "val", "i": 51, "query": ["bright spot"], "scale": 4, "response": "<ref>bright spot</ref><box><765><336><832><385></box>", "n_pred": 1, "n_gt": 2}
+{"split": "val", "i": 52, "query": ["bright spot"], "scale": 4, "response": "<ref>bright spot</ref><box><506><274><589><367>,<588><501><610><526></box>", "n_pred": 2, "n_gt": 2}
+{"split": "val", "i": 53, "query": ["bright spot"], "scale": 4, "response": "<ref>bright spot</ref><box>none</box>", "n_pred": 0, "n_gt": 1}
+{"split": "val", "i": 54, "query": ["bright spot"], "scale": 4, "response": "<ref>bright spot</ref><box><63><667><100><725></box>", "n_pred": 1, "n_gt": 3}
+{"split": "val", "i": 55, "query": ["bright spot"], "scale": 4, "response": "<ref>bright spot</ref><box>none</box>", "n_pred": 0, "n_gt": 2}
+{"split": "val", "i": 56, "query": ["bright spot"], "scale": 4, "response": "<ref>bright spot</ref><box><466><506><573><532>,<470><746><525><804>,<574><424><596><441></box>", "n_pred": 3, "n_gt": 1}
+{"split": "val", "i": 57, "query": ["bright spot"], "scale": 4, "response": "<ref>bright spot</ref><box>none</box>", "n_pred": 0, "n_gt": 1}
+{"split": "val", "i": 58, "query": ["bright spot"], "scale": 4, "response": "<ref>bright spot</ref><box><368><708><411><771>,<462><160><531><209>,<554><122><580><146>,<556><173><594><235></box>", "n_pred": 4, "n_gt": 2}
+{"split": "val", "i": 59, "query": ["bright spot"], "scale": 4, "response": "<ref>bright spot</ref><box><766><259><789><293></box>", "n_pred": 1, "n_gt": 1}
+{"split": "val", "i": 60, "query": ["bright spot"], "scale": 4, "response": "<ref>bright spot</ref><box><381><6><453><131></box>", "n_pred": 1, "n_gt": 3}
+{"split": "val", "i": 61, "query": ["bright spot"], "scale": 4, "response": "<ref>bright spot</ref><box><157><437><265><517>,<401><297><451><362>,<481><57><541><121>,<589><182><660><257>,<748><181><796><271></box>", "n_pred": 5, "n_gt": 2}
+{"split": "val", "i": 62, "query": ["bright spot"], "scale": 4, "response": "<ref>bright spot</ref><box><585><452><694><536></box>", "n_pred": 1, "n_gt": 2}
+{"split": "val", "i": 63, "query": ["bright spot"], "scale": 4, "response": "<ref>bright spot</ref><box><190><298><231><351>,<229><690><242><730>,<246><452><281><610>,<694><75><757><154>,<719><440><747><608>,<743><366><781><407></box>", "n_pred": 6, "n_gt": 5}
+{"split": "val", "i": 64, "query": ["bright spot"], "scale": 4, "response": "<ref>bright spot</ref><box>none</box>", "n_pred": 0, "n_gt": 0}
+{"split": "val", "i": 65, "query": ["bright spot"], "scale": 4, "response": "<ref>bright spot</ref><box><532><790><562><823>,<784><515><897><596></box>", "n_pred": 2, "n_gt": 3}
+{"split": "val", "i": 66, "query": ["bright spot"], "scale": 4, "response": "<ref>bright spot</ref><box><600><578><640><616>,<614><648><680><709>,<756><668><817><710></box>", "n_pred": 3, "n_gt": 5}
+{"split": "val", "i": 67, "query": ["bright spot"], "scale": 4, "response": "<ref>bright spot</ref><box><725><476><752><512>,<766><446><827><533></box>", "n_pred": 2, "n_gt": 3}
+{"split": "val", "i": 68, "query": ["bright spot"], "scale": 4, "response": "<ref>bright spot</ref><box>none</box>", "n_pred": 0, "n_gt": 0}
+{"split": "val", "i": 69, "query": ["bright spot"], "scale": 4, "response": "<ref>bright spot</ref><box><349><498><413><568>,<381><369><462><439>,<434><501><461><532></box>", "n_pred": 3, "n_gt": 4}
+{"split": "val", "i": 70, "query": ["bright spot"], "scale": 4, "response": "<ref>bright spot</ref><box><363><619><381><664>,<440><583><482><611>,<471><67><495><137></box>", "n_pred": 3, "n_gt": 3}
+{"split": "val", "i": 71, "query": ["bright spot"], "scale": 4, "response": "<ref>bright spot</ref><box>none</box>", "n_pred": 0, "n_gt": 1}
+{"split": "val", "i": 72, "query": ["bright spot"], "scale": 4, "response": "<ref>bright spot</ref><box><545><465><592><496>,<875><645><934><706></box>", "n_pred": 2, "n_gt": 1}
+{"split": "val", "i": 73, "query": ["bright spot"], "scale": 4, "response": "<ref>bright spot</ref><box><165><348><204><600></box>", "n_pred": 1, "n_gt": 1}
+{"split": "val", "i": 74, "query": ["bright spot"], "scale": 4, "response": "<ref>bright spot</ref><box><681><343><745><436></box>", "n_pred": 1, "n_gt": 1}
+{"split": "val", "i": 75, "query": ["bright spot"], "scale": 4, "response": "<ref>bright spot</ref><box><919><453><961><480></box>", "n_pred": 1, "n_gt": 2}
+{"split": "val", "i": 76, "query": ["bright spot"], "scale": 4, "response": "<ref>bright spot</ref><box><651><568><732><656></box>", "n_pred": 1, "n_gt": 3}
+{"split": "val", "i": 77, "query": ["bright spot"], "scale": 4, "response": "<ref>bright spot</ref><box>none</box>", "n_pred": 0, "n_gt": 1}
+{"split": "val", "i": 78, "query": ["bright spot"], "scale": 4, "response": "<ref>bright spot</ref><box>none</box>", "n_pred": 0, "n_gt": 0}
+{"split": "val", "i": 79, "query": ["bright spot"], "scale": 4, "response": "<ref>bright spot</ref><box><141><720><217><815>,<289><862><308><896>,<399><233><415><258></box>", "n_pred": 3, "n_gt": 1}
+{"split": "val", "i": 80, "query": ["bright spot"], "scale": 4, "response": "<ref>bright spot</ref><box><786><474><852><524></box>", "n_pred": 1, "n_gt": 5}
+{"split": "val", "i": 81, "query": ["bright spot"], "scale": 4, "response": "<ref>bright spot</ref><box>none</box>", "n_pred": 0, "n_gt": 0}
+{"split": "val", "i": 82, "query": ["bright spot"], "scale": 4, "response": "<ref>bright spot</ref><box><266><824><345><896>,<293><936><403><992>,<355><914><419><968></box>", "n_pred": 3, "n_gt": 2}
+{"split": "val", "i": 83, "query": ["bright spot"], "scale": 4, "response": "<ref>bright spot</ref><box><458><581><515><656>,<473><973><528><1000></box>", "n_pred": 2, "n_gt": 4}
+{"split": "val", "i": 84, "query": ["bright spot"], "scale": 4, "response": "<ref>bright spot</ref><box><515><468><706><559></box>", "n_pred": 1, "n_gt": 0}
+{"split": "val", "i": 85, "query": ["bright spot"], "scale": 4, "response": "<ref>bright spot</ref><box><646><424><681><477></box>", "n_pred": 1, "n_gt": 5}
+{"split": "val", "i": 86, "query": ["bright spot"], "scale": 4, "response": "<ref>bright spot</ref><box><415><706><508><795>,<466><0><503><25></box>", "n_pred": 2, "n_gt": 2}
+{"split": "val", "i": 87, "query": ["bright spot"], "scale": 4, "response": "<ref>bright spot</ref><box>none</box>", "n_pred": 0, "n_gt": 0}
+{"split": "val", "i": 88, "query": ["bright spot"], "scale": 4, "response": "<ref>bright spot</ref><box><640><430><709><479></box>", "n_pred": 1, "n_gt": 3}
+{"split": "val", "i": 89, "query": ["bright spot"], "scale": 4, "response": "<ref>bright spot</ref><box><648><270><695><438></box>", "n_pred": 1, "n_gt": 3}
+{"split": "val", "i": 90, "query": ["bright spot"], "scale": 4, "response": "<ref>bright spot</ref><box><399><770><447><797></box>", "n_pred": 1, "n_gt": 4}
+{"split": "val", "i": 91, "query": ["bright spot"], "scale": 4, "response": "<ref>bright spot</ref><box><210><383><238><425>,<497><79><526><112>,<504><828><562><851>,<535><900><573><923>,<606><899><732><927></box>", "n_pred": 5, "n_gt": 3}
+{"split": "val", "i": 92, "query": ["bright spot"], "scale": 4, "response": "<ref>bright spot</ref><box><391><0><608><98></box>", "n_pred": 1, "n_gt": 1}
+{"split": "val", "i": 93, "query": ["bright spot"], "scale": 4, "response": "<ref>bright spot</ref><box><527><330><560><372>,<565><452><593><490></box>", "n_pred": 2, "n_gt": 3}
+{"split": "val", "i": 94, "query": ["bright spot"], "scale": 4, "response": "<ref>bright spot</ref><box><668><465><727><512></box>", "n_pred": 1, "n_gt": 3}
+{"split": "val", "i": 95, "query": ["bright spot"], "scale": 4, "response": "<ref>bright spot</ref><box><377><581><424><614></box>", "n_pred": 1, "n_gt": 3}
+{"split": "val", "i": 96, "query": ["bright spot"], "scale": 4, "response": "<ref>bright spot</ref><box><337><602><394><674>,<351><749><461><846>,<365><430><491><557>,<395><159><498><258>,<397><353><427><406>,<436><581><519><690>,<437><302><494><359>,<456><890><499><948>,<506><693><593><789>,<528><484><606><540>,<529><144><618><259>,<543><70><580><109>,<558><284><628><448>,<566><756><596><807>,<577><570><704><700>,<579><894><691><1000>,<612><93><667><141>,<626><454><686><548>,<687><307><715><373></box>", "n_pred": 19, "n_gt": 3}
+{"split": "val", "i": 97, "query": ["bright spot"], "scale": 4, "response": "<ref>bright spot</ref><box><660><810><692><850>,<676><170><716><202>,<691><705><717><739></box>", "n_pred": 3, "n_gt": 4}
+{"split": "val", "i": 98, "query": ["bright spot"], "scale": 4, "response": "<ref>bright spot</ref><box><417><435><488><510></box>", "n_pred": 1, "n_gt": 2}
+{"split": "val", "i": 99, "query": ["bright spot"], "scale": 4, "response": "<ref>bright spot</ref><box><679><333><776><417>,<801><534><844><571>,<891><247><930><285></box>", "n_pred": 3, "n_gt": 0}
+{"split": "val", "i": 0, "query": ["defect"], "scale": 4, "response": "<ref>defect</ref><box><430><567><475><606></box>", "n_pred": 1, "n_gt": 2}
+{"split": "val", "i": 1, "query": ["defect"], "scale": 4, "response": "<ref>defect</ref><box><653><260><700><325></box>", "n_pred": 1, "n_gt": 2}
+{"split": "val", "i": 2, "query": ["defect"], "scale": 4, "response": "<ref>defect</ref><box><300><0><698><1000></box>", "n_pred": 1, "n_gt": 1}
+{"split": "val", "i": 3, "query": ["defect"], "scale": 4, "response": "<ref>defect</ref><box><0><375><988><615></box>", "n_pred": 1, "n_gt": 2}
+{"split": "val", "i": 4, "query": ["defect"], "scale": 4, "response": "<ref>defect</ref><box><530><125><572><167></box>", "n_pred": 1, "n_gt": 3}
+{"split": "val", "i": 5, "query": ["defect"], "scale": 4, "response": "<ref>defect</ref><box><305><210><392><300></box>", "n_pred": 1, "n_gt": 2}
+{"split": "val", "i": 6, "query": ["defect"], "scale": 4, "response": "<ref>defect</ref><box><117><0><911><1000></box>", "n_pred": 1, "n_gt": 0}
+{"split": "val", "i": 7, "query": ["defect"], "scale": 4, "response": "<ref>defect</ref><box><272><12><767><1000></box>", "n_pred": 1, "n_gt": 4}
+{"split": "val", "i": 8, "query": ["defect"], "scale": 4, "response": "<ref>defect</ref><box><280><715><400><798></box>", "n_pred": 1, "n_gt": 0}
+{"split": "val", "i": 9, "query": ["defect"], "scale": 4, "response": "<ref>defect</ref><box><17><0><997><1000></box>", "n_pred": 1, "n_gt": 3}
+{"split": "val", "i": 10, "query": ["defect"], "scale": 4, "response": "<ref>defect</ref><box><167><481><217><673></box>", "n_pred": 1, "n_gt": 2}
+{"split": "val", "i": 11, "query": ["defect"], "scale": 4, "response": "<ref>defect</ref><box><0><172><1000><870></box>", "n_pred": 1, "n_gt": 2}
+{"split": "val", "i": 12, "query": ["defect"], "scale": 4, "response": "<ref>defect</ref><box><23><206><1000><733></box>", "n_pred": 1, "n_gt": 1}
+{"split": "val", "i": 13, "query": ["defect"], "scale": 4, "response": "<ref>defect</ref><box><305><438><402><566></box>", "n_pred": 1, "n_gt": 2}
+{"split": "val", "i": 14, "query": ["defect"], "scale": 4, "response": "<ref>defect</ref><box><85><0><940><1000></box>", "n_pred": 1, "n_gt": 1}
+{"split": "val", "i": 15, "query": ["defect"], "scale": 4, "response": "<ref>defect</ref><box><36><0><965><1000></box>", "n_pred": 1, "n_gt": 2}
+{"split": "val", "i": 16, "query": ["defect"], "scale": 4, "response": "<ref>defect</ref><box><15><272><1000><690></box>", "n_pred": 1, "n_gt": 1}
+{"split": "val", "i": 17, "query": ["defect"], "scale": 4, "response": "<ref>defect</ref><box><356><275><414><332>,<466><185><541><255></box>", "n_pred": 2, "n_gt": 3}
+{"split": "val", "i": 18, "query": ["defect"], "scale": 4, "response": "<ref>defect</ref><box><811><327><877><392></box>", "n_pred": 1, "n_gt": 3}
+{"split": "val", "i": 19, "query": ["defect"], "scale": 4, "response": "<ref>defect</ref><box><5><267><997><660></box>", "n_pred": 1, "n_gt": 1}
+{"split": "val", "i": 20, "query": ["defect"], "scale": 4, "response": "<ref>defect</ref><box><0><280><1000><730></box>", "n_pred": 1, "n_gt": 2}
+{"split": "val", "i": 21, "query": ["defect"], "scale": 4, "response": "<ref>defect</ref><box><305><162><383><217></box>", "n_pred": 1, "n_gt": 3}
+{"split": "val", "i": 22, "query": ["defect"], "scale": 4, "response": "<ref>defect</ref><box><83><0><908><1000></box>", "n_pred": 1, "n_gt": 0}
+{"split": "val", "i": 23, "query": ["defect"], "scale": 4, "response": "<ref>defect</ref><box><17><198><950><758></box>", "n_pred": 1, "n_gt": 2}
+{"split": "val", "i": 24, "query": ["defect"], "scale": 4, "response": "<ref>defect</ref><box><0><310><1000><710></box>", "n_pred": 1, "n_gt": 1}
+{"split": "val", "i": 25, "query": ["defect"], "scale": 4, "response": "<ref>defect</ref><box><384><167><492><276></box>", "n_pred": 1, "n_gt": 4}
+{"split": "val", "i": 26, "query": ["defect"], "scale": 4, "response": "<ref>defect</ref><box><223><0><805><1000></box>", "n_pred": 1, "n_gt": 0}
+{"split": "val", "i": 27, "query": ["defect"], "scale": 4, "response": "<ref>defect</ref><box><183><55><880><980></box>", "n_pred": 1, "n_gt": 1}
+{"split": "val", "i": 28, "query": ["defect"], "scale": 4, "response": "<ref>defect</ref><box><0><160><1000><862></box>", "n_pred": 1, "n_gt": 0}
+{"split": "val", "i": 29, "query": ["defect"], "scale": 4, "response": "<ref>defect</ref><box><102><505><172><670>,<188><798><264><845>,<275><323><360><477>,<808><416><911><542></box>", "n_pred": 4, "n_gt": 4}
+{"split": "val", "i": 30, "query": ["defect"], "scale": 4, "response": "<ref>defect</ref><box><177><717><344><785>,<562><666><600><705>,<578><467><658><538></box>", "n_pred": 3, "n_gt": 5}
+{"split": "val", "i": 31, "query": ["defect"], "scale": 4, "response": "<ref>defect</ref><box>none</box>", "n_pred": 0, "n_gt": 1}
+{"split": "val", "i": 32, "query": ["defect"], "scale": 4, "response": "<ref>defect</ref><box><422><604><658><685></box>", "n_pred": 1, "n_gt": 4}
+{"split": "val", "i": 33, "query": ["defect"], "scale": 4, "response": "<ref>defect</ref><box><0><215><989><805></box>", "n_pred": 1, "n_gt": 1}
+{"split": "val", "i": 34, "query": ["defect"], "scale": 4, "response": "<ref>defect</ref><box><520><530><570><589></box>", "n_pred": 1, "n_gt": 3}
+{"split": "val", "i": 35, "query": ["defect"], "scale": 4, "response": "<ref>defect</ref><box><410><212><717><592></box>", "n_pred": 1, "n_gt": 2}
+{"split": "val", "i": 36, "query": ["defect"], "scale": 4, "response": "<ref>defect</ref><box><409><341><493><444>,<417><480><470><549></box>", "n_pred": 2, "n_gt": 5}
+{"split": "val", "i": 37, "query": ["defect"], "scale": 4, "response": "<ref>defect</ref><box><0><275><1000><720></box>", "n_pred": 1, "n_gt": 0}
+{"split": "val", "i": 38, "query": ["defect"], "scale": 4, "response": "<ref>defect</ref><box><446><630><485><670>,<535><681><612><735></box>", "n_pred": 2, "n_gt": 2}
+{"split": "val", "i": 39, "query": ["defect"], "scale": 4, "response": "<ref>defect</ref><box><747><364><794><417></box>", "n_pred": 1, "n_gt": 2}
+{"split": "val", "i": 40, "query": ["defect"], "scale": 4, "response": "<ref>defect</ref><box><23><97><996><930></box>", "n_pred": 1, "n_gt": 1}
+{"split": "val", "i": 41, "query": ["defect"], "scale": 4, "response": "<ref>defect</ref><box><6><383><997><630></box>", "n_pred": 1, "n_gt": 3}
+{"split": "val", "i": 42, "query": ["defect"], "scale": 4, "response": "<ref>defect</ref><box><783><247><833><298></box>", "n_pred": 1, "n_gt": 2}
+{"split": "val", "i": 43, "query": ["defect"], "scale": 4, "response": "<ref>defect</ref><box><295><8><705><1000></box>", "n_pred": 1, "n_gt": 0}
+{"split": "val", "i": 44, "query": ["defect"], "scale": 4, "response": "<ref>defect</ref><box><284><573><350><630></box>", "n_pred": 1, "n_gt": 1}
+{"split": "val", "i": 45, "query": ["defect"], "scale": 4, "response": "<ref>defect</ref><box><320><578><360><625>,<327><328><355><375>,<330><725><381><778>,<400><502><469><568>,<400><362><458><426>,<399><646><471><716>,<412><789><473><850>,<552><723><609><795>,<558><618><606><673>,<595><329><639><379>,<610><370><645><408>,<632><794><682><856>,<644><686><688><738>,<648><541><706><602>,<662><406><727><453>,<680><256><729><312></box>", "n_pred": 16, "n_gt": 4}
+{"split": "val", "i": 46, "query": ["defect"], "scale": 4, "response": "<ref>defect</ref><box><52><0><973><1000></box>", "n_pred": 1, "n_gt": 0}
+{"split": "val", "i": 47, "query": ["defect"], "scale": 4, "response": "<ref>defect</ref><box>none</box>", "n_pred": 0, "n_gt": 0}
+{"split": "val", "i": 48, "query": ["defect"], "scale": 4, "response": "<ref>defect</ref><box><109><0><875><1000></box>", "n_pred": 1, "n_gt": 2}
+{"split": "val", "i": 49, "query": ["defect"], "scale": 4, "response": "<ref>defect</ref><box><558><272><648><356>,<566><510><642><580>,<600><355><685><423>,<644><448><720><520>,<712><485><792><556>,<719><332><774><378></box>", "n_pred": 6, "n_gt": 3}
+{"split": "val", "i": 50, "query": ["defect"], "scale": 4, "response": "<ref>defect</ref><box><237><0><788><1000></box>", "n_pred": 1, "n_gt": 1}
+{"split": "val", "i": 51, "query": ["defect"], "scale": 4, "response": "<ref>defect</ref><box><162><0><870><1000></box>", "n_pred": 1, "n_gt": 2}
+{"split": "val", "i": 52, "query": ["defect"], "scale": 4, "response": "<ref>defect</ref><box><498><268><594><372></box>", "n_pred": 1, "n_gt": 2}
+{"split": "val", "i": 53, "query": ["defect"], "scale": 4, "response": "<ref>defect</ref><box>none</box>", "n_pred": 0, "n_gt": 1}
+{"split": "val", "i": 54, "query": ["defect"], "scale": 4, "response": "<ref>defect</ref><box><50><655><106><730></box>", "n_pred": 1, "n_gt": 3}
+{"split": "val", "i": 55, "query": ["defect"], "scale": 4, "response": "<ref>defect</ref><box><17><358><997><648></box>", "n_pred": 1, "n_gt": 2}
+{"split": "val", "i": 56, "query": ["defect"], "scale": 4, "response": "<ref>defect</ref><box><0><138><1000><900></box>", "n_pred": 1, "n_gt": 1}
+{"split": "val", "i": 57, "query": ["defect"], "scale": 4, "response": "<ref>defect</ref><box><8><238><979><758></box>", "n_pred": 1, "n_gt": 1}
+{"split": "val", "i": 58, "query": ["defect"], "scale": 4, "response": "<ref>defect</ref><box><363><704><414><775>,<457><155><534><212>,<552><167><596><238></box>", "n_pred": 3, "n_gt": 2}
+{"split": "val", "i": 59, "query": ["defect"], "scale": 4, "response": "<ref>defect</ref><box><758><250><795><300></box>", "n_pred": 1, "n_gt": 1}
+{"split": "val", "i": 60, "query": ["defect"], "scale": 4, "response": "<ref>defect</ref><box><580><390><675><473></box>", "n_pred": 1, "n_gt": 3}
+{"split": "val", "i": 61, "query": ["defect"], "scale": 4, "response": "<ref>defect</ref><box><147><430><270><523>,<394><292><456><367></box>", "n_pred": 2, "n_gt": 2}
+{"split": "val", "i": 62, "query": ["defect"], "scale": 4, "response": "<ref>defect</ref><box><19><327><1000><710></box>", "n_pred": 1, "n_gt": 2}
+{"split": "val", "i": 63, "query": ["defect"], "scale": 4, "response": "<ref>defect</ref><box><180><292><236><358>,<688><69><762><158></box>", "n_pred": 2, "n_gt": 5}
+{"split": "val", "i": 64, "query": ["defect"], "scale": 4, "response": "<ref>defect</ref><box><245><0><788><1000></box>", "n_pred": 1, "n_gt": 0}
+{"split": "val", "i": 65, "query": ["defect"], "scale": 4, "response": "<ref>defect</ref><box><525><783><567><827></box>", "n_pred": 1, "n_gt": 3}
+{"split": "val", "i": 66, "query": ["defect"], "scale": 4, "response": "<ref>defect</ref><box><594><567><648><620>,<608><642><685><715>,<752><662><820><716></box>", "n_pred": 3, "n_gt": 5}
+{"split": "val", "i": 67, "query": ["defect"], "scale": 4, "response": "<ref>defect</ref><box><722><473><753><514>,<762><442><830><535></box>", "n_pred": 2, "n_gt": 3}
+{"split": "val", "i": 68, "query": ["defect"], "scale": 4, "response": "<ref>defect</ref><box>none</box>", "n_pred": 0, "n_gt": 0}
+{"split": "val", "i": 69, "query": ["defect"], "scale": 4, "response": "<ref>defect</ref><box><345><492><415><571>,<377><364><466><442>,<431><496><464><534></box>", "n_pred": 3, "n_gt": 4}
+{"split": "val", "i": 70, "query": ["defect"], "scale": 4, "response": "<ref>defect</ref><box><355><612><387><669>,<435><577><486><616></box>", "n_pred": 2, "n_gt": 3}
+{"split": "val", "i": 71, "query": ["defect"], "scale": 4, "response": "<ref>defect</ref><box><155><0><833><1000></box>", "n_pred": 1, "n_gt": 1}
+{"split": "val", "i": 72, "query": ["defect"], "scale": 4, "response": "<ref>defect</ref><box><870><638><938><712></box>", "n_pred": 1, "n_gt": 1}
+{"split": "val", "i": 73, "query": ["defect"], "scale": 4, "response": "<ref>defect</ref><box><0><125><983><905></box>", "n_pred": 1, "n_gt": 1}
+{"split": "val", "i": 74, "query": ["defect"], "scale": 4, "response": "<ref>defect</ref><box><0><205><1000><828></box>", "n_pred": 1, "n_gt": 1}
+{"split": "val", "i": 75, "query": ["defect"], "scale": 4, "response": "<ref>defect</ref><box><17><352><1000><680></box>", "n_pred": 1, "n_gt": 2}
+{"split": "val", "i": 76, "query": ["defect"], "scale": 4, "response": "<ref>defect</ref><box><0><305><1000><720></box>", "n_pred": 1, "n_gt": 3}
+{"split": "val", "i": 77, "query": ["defect"], "scale": 4, "response": "<ref>defect</ref><box><0><272><983><695></box>", "n_pred": 1, "n_gt": 1}
+{"split": "val", "i": 78, "query": ["defect"], "scale": 4, "response": "<ref>defect</ref><box><295><0><725><1000></box>", "n_pred": 1, "n_gt": 0}
+{"split": "val", "i": 79, "query": ["defect"], "scale": 4, "response": "<ref>defect</ref><box><131><712><223><820></box>", "n_pred": 1, "n_gt": 1}
+{"split": "val", "i": 80, "query": ["defect"], "scale": 4, "response": "<ref>defect</ref><box><0><275><1000><725></box>", "n_pred": 1, "n_gt": 5}
+{"split": "val", "i": 81, "query": ["defect"], "scale": 4, "response": "<ref>defect</ref><box><160><317><327><950>,<406><5><580><158>,<695><318><856><1000></box>", "n_pred": 3, "n_gt": 0}
+{"split": "val", "i": 82, "query": ["defect"], "scale": 4, "response": "<ref>defect</ref><box><261><819><348><900>,<290><912><423><995></box>", "n_pred": 2, "n_gt": 2}
+{"split": "val", "i": 83, "query": ["defect"], "scale": 4, "response": "<ref>defect</ref><box><450><575><520><662></box>", "n_pred": 1, "n_gt": 4}
+{"split": "val", "i": 84, "query": ["defect"], "scale": 4, "response": "<ref>defect</ref><box><0><275><1000><762></box>", "n_pred": 1, "n_gt": 0}
+{"split": "val", "i": 85, "query": ["defect"], "scale": 4, "response": "<ref>defect</ref><box><50><644><125><682>,<320><668><533><708>,<614><652><692><692>,<710><648><959><702></box>", "n_pred": 4, "n_gt": 5}
+{"split": "val", "i": 86, "query": ["defect"], "scale": 4, "response": "<ref>defect</ref><box><408><700><514><800></box>", "n_pred": 1, "n_gt": 2}
+{"split": "val", "i": 87, "query": ["defect"], "scale": 4, "response": "<ref>defect</ref><box><275><0><715><1000></box>", "n_pred": 1, "n_gt": 0}
+{"split": "val", "i": 88, "query": ["defect"], "scale": 4, "response": "<ref>defect</ref><box><633><423><715><485></box>", "n_pred": 1, "n_gt": 3}
+{"split": "val", "i": 89, "query": ["defect"], "scale": 4, "response": "<ref>defect</ref><box>none</box>", "n_pred": 0, "n_gt": 3}
+{"split": "val", "i": 90, "query": ["defect"], "scale": 4, "response": "<ref>defect</ref><box><394><765><452><802></box>", "n_pred": 1, "n_gt": 4}
+{"split": "val", "i": 91, "query": ["defect"], "scale": 4, "response": "<ref>defect</ref><box><94><0><861><1000></box>", "n_pred": 1, "n_gt": 3}
+{"split": "val", "i": 92, "query": ["defect"], "scale": 4, "response": "<ref>defect</ref><box><227><0><767><1000></box>", "n_pred": 1, "n_gt": 1}
+{"split": "val", "i": 93, "query": ["defect"], "scale": 4, "response": "<ref>defect</ref><box><517><322><567><377>,<558><445><598><495></box>", "n_pred": 2, "n_gt": 3}
+{"split": "val", "i": 94, "query": ["defect"], "scale": 4, "response": "<ref>defect</ref><box><10><356><1000><682></box>", "n_pred": 1, "n_gt": 3}
+{"split": "val", "i": 95, "query": ["defect"], "scale": 4, "response": "<ref>defect</ref><box><370><575><430><620></box>", "n_pred": 1, "n_gt": 3}
+{"split": "val", "i": 96, "query": ["defect"], "scale": 4, "response": "<ref>defect</ref><box><245><0><795><1000></box>", "n_pred": 1, "n_gt": 3}
+{"split": "val", "i": 97, "query": ["defect"], "scale": 4, "response": "<ref>defect</ref><box><653><803><698><855>,<677><163><720><206>,<685><700><723><745></box>", "n_pred": 3, "n_gt": 4}
+{"split": "val", "i": 98, "query": ["defect"], "scale": 4, "response": "<ref>defect</ref><box><411><428><492><515></box>", "n_pred": 1, "n_gt": 2}
+{"split": "val", "i": 99, "query": ["defect"], "scale": 4, "response": "<ref>defect</ref><box><672><325><781><425>,<794><527><850><577>,<883><240><935><292></box>", "n_pred": 3, "n_gt": 0}

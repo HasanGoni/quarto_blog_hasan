@@ -1,0 +1,25 @@
+{
+ "query": [
+  "bright spot"
+ ],
+ "scale": 2,
+ "images": 200,
+ "iou0.2": {
+  "tp": 124,
+  "fp": 358,
+  "fn": 263,
+  "precision": 0.257,
+  "recall": 0.32,
+  "f1": 0.285
+ },
+ "iou0.5": {
+  "tp": 88,
+  "fp": 394,
+  "fn": 299,
+  "precision": 0.183,
+  "recall": 0.227,
+  "f1": 0.203
+ },
+ "boxes_per_image": 2.41,
+ "seconds": 162.8
+}

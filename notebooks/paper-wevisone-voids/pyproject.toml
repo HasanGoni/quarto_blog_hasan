@@ -1,0 +1,22 @@
+[project]
+name = "paper-wevisone-voids"
+version = "0.1.0"
+description = "WeVisOne-VL (arXiv 2610.31329) on the series' synthetic void X-ray images: zero-shot detection, then LoRA fine-tuning of the language backbone, then a measured comparison. The official package is installed from ./official (no vLLM, transformers backend)."
+requires-python = ">=3.11"
+dependencies = [
+    "torch>=2.4",
+    "torchvision>=0.19",
+    "transformers==5.12.1",
+    "accelerate>=0.34",
+    "peft>=0.13",
+    "pillow>=10.4",
+    "matplotlib>=3.9",
+    "huggingface_hub>=0.25",
+    "numpy",
+    "scipy",
+    "qwen-vl-utils>=0.0.8",
+    "safetensors",
+]
+
+[tool.uv]
+package = false

@@ -143,3 +143,7 @@ notebooks/paper-sambaunet/shot.png
 notebooks/paper-sambaunet/out/shot_*.png
 notebooks/paper-sambaunet/out/pred.pt
 notebooks/agentic-zero-to-advanced/video/mc/src/sb_*/audio.wav
+notebooks/paper-wevisone-voids/.venv/
+notebooks/paper-wevisone-voids/official/
+notebooks/paper-wevisone-voids/out/lora_*/
+notebooks/paper-wevisone-voids/__pycache__/

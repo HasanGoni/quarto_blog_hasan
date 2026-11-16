@@ -1,0 +1,57 @@
+{
+ "args": {
+  "scale": 2,
+  "epochs": 2,
+  "n_train": 2800,
+  "tag": "s2"
+ },
+ "log": [
+  {
+   "epoch": 1,
+   "val": {
+    "iou0.2": {
+     "tp": 97,
+     "fp": 13,
+     "fn": 105,
+     "precision": 0.882,
+     "recall": 0.48,
+     "f1": 0.622
+    },
+    "iou0.5": {
+     "tp": 89,
+     "fp": 21,
+     "fn": 113,
+     "precision": 0.809,
+     "recall": 0.441,
+     "f1": 0.571
+    },
+    "boxes_per_image": 1.1
+   },
+   "seconds": 880
+  },
+  {
+   "epoch": 2,
+   "val": {
+    "iou0.2": {
+     "tp": 97,
+     "fp": 11,
+     "fn": 105,
+     "precision": 0.898,
+     "recall": 0.48,
+     "f1": 0.626
+    },
+    "iou0.5": {
+     "tp": 92,
+     "fp": 16,
+     "fn": 110,
+     "precision": 0.852,
+     "recall": 0.455,
+     "f1": 0.594
+    },
+    "boxes_per_image": 1.08
+   },
+   "seconds": 1758
+  }
+ ],
+ "best_epoch": 2
+}
