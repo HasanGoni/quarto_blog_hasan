@@ -1,0 +1,115 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>AltRA-Test: An Alternative Annotator Test for LL — explainer</title><style>
+:root{--bg:#f7f8fa;--card:#fff;--ink:#1c2430;--mut:#5d6877;--line:#e1e5ec;--acc:#2c6bed;--accbg:#eaf1ff;
+--ok:#177a3c;--okbg:#e4f5ea;--warn:#8a5a00;--warnbg:#fff3d6;--bad:#a1281f;--badbg:#fde8e6;--info:#1e5a96;--infobg:#e3f0fc;
+--codebg:#0f1620;--codeink:#d6deeb;--kw:#c792ea;--str:#a5e075;--num:#f78c6c;--com:#6b7a90;--fn:#82aaff}
+@media(prefers-color-scheme:dark){:root{--bg:#10151d;--card:#171e29;--ink:#e6ebf2;--mut:#9aa6b6;--line:#2a3443;--acc:#7aa7ff;--accbg:#1b2a47;
+--ok:#6fd48f;--okbg:#14301f;--warn:#f0c15a;--warnbg:#3a2e10;--bad:#ff9a90;--badbg:#3b1815;--info:#8cc3f5;--infobg:#142a40}}
+*{box-sizing:border-box}html{scroll-behavior:smooth}
+body{margin:0;background:var(--bg);color:var(--ink);font:16px/1.6 system-ui,-apple-system,Segoe UI,Roboto,sans-serif}
+a{color:var(--acc)}
+.wrap{display:grid;grid-template-columns:230px minmax(0,1fr);gap:28px;max-width:1280px;margin:0 auto;padding:24px}
+nav.side{position:sticky;top:16px;align-self:start;font-size:14px;max-height:calc(100vh - 32px);overflow:auto}
+nav.side h4{margin:0 0 8px;font-size:12px;letter-spacing:.08em;text-transform:uppercase;color:var(--mut)}
+nav.side a{display:block;padding:5px 10px;border-left:3px solid var(--line);color:var(--ink);text-decoration:none}
+nav.side a:hover{background:var(--accbg);border-color:var(--acc)}
+main{min-width:0}
+header.hero{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:26px 28px;margin-bottom:22px}
+header.hero h1{margin:.1em 0 .2em;font-size:1.75rem;line-height:1.25}
+header.hero .sub{color:var(--mut);margin:0 0 12px}
+.links a{margin-right:14px;font-size:14px}
+.badge{display:inline-block;font-size:11px;font-weight:700;letter-spacing:.04em;padding:2px 8px;border-radius:99px;margin-right:6px;vertical-align:middle}
+.badge.ok{background:var(--okbg);color:var(--ok)}.badge.warn{background:var(--warnbg);color:var(--warn)}
+.badge.bad{background:var(--badbg);color:var(--bad)}.badge.info{background:var(--infobg);color:var(--info)}
+section{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:22px 26px;margin-bottom:22px}
+section>h2{margin:0 0 .4em;font-size:1.3rem}
+section h3{margin:1.3em 0 .3em;font-size:1.05rem}
+.callout{border-left:4px solid var(--acc);background:var(--accbg);padding:10px 14px;border-radius:0 8px 8px 0;margin:12px 0}
+.callout.warn{border-color:var(--warn);background:var(--warnbg)}.callout.bad{border-color:var(--bad);background:var(--badbg)}.callout.ok{border-color:var(--ok);background:var(--okbg)}
+.callout b.t{display:block;margin-bottom:2px}
+.two{display:grid;grid-template-columns:1fr 1fr;gap:16px}@media(max-width:900px){.two{grid-template-columns:1fr}.wrap{grid-template-columns:1fr}nav.side{position:static}}
+/* pipeline */
+.pipe{display:flex;flex-wrap:wrap;gap:10px;align-items:stretch;margin:14px 0}
+.pipe .node{flex:1 1 150px;min-width:140px;background:var(--bg);border:2px solid var(--line);border-radius:10px;padding:10px 12px;cursor:pointer;position:relative;transition:.15s}
+.pipe .node:hover{border-color:var(--acc);transform:translateY(-1px)}
+.pipe .node.on{border-color:var(--acc);background:var(--accbg)}
+.pipe .node .n{font-size:11px;font-weight:700;color:var(--acc)}
+.pipe .node .tt{font-weight:650;line-height:1.25}.pipe .node .ss{font-size:12.5px;color:var(--mut);margin-top:3px;line-height:1.3}
+.pipe .node.nocode::after{content:"no code released";position:absolute;top:-9px;right:8px;font-size:10px;background:var(--warnbg);color:var(--warn);padding:1px 7px;border-radius:99px;font-weight:700}
+.pipe .arrow{align-self:center;color:var(--mut);font-size:20px}
+.tabs{display:flex;flex-wrap:wrap;gap:6px;margin:10px 0 14px;border-bottom:1px solid var(--line);padding-bottom:8px}
+.tabs button{border:1px solid var(--line);background:var(--bg);color:var(--ink);padding:6px 12px;border-radius:8px;cursor:pointer;font:inherit;font-size:14px}
+.tabs button.on{background:var(--acc);color:#fff;border-color:var(--acc)}
+.stage{display:none}.stage.on,body.all .stage{display:block}
+.stage h3.q{margin-top:0}
+/* code */
+figure{margin:14px 0}
+figure.code,figure.out{border:1px solid var(--line);border-radius:10px;overflow:hidden;background:var(--codebg)}
+figure figcaption{display:flex;flex-wrap:wrap;gap:8px;align-items:center;padding:7px 12px;background:var(--bg);border-bottom:1px solid var(--line);font-size:12.5px;color:var(--mut)}
+figure .path{font:12px ui-monospace,SFMono-Regular,Menlo,monospace;color:var(--ink)}
+figure .cap{flex:1 1 100%;color:var(--mut)}
+.copy{margin-left:auto;border:1px solid var(--line);background:var(--card);color:var(--ink);border-radius:6px;font-size:11px;padding:2px 8px;cursor:pointer}
+pre{margin:0;padding:10px 0;overflow:auto;color:var(--codeink);font:12.5px/1.5 ui-monospace,SFMono-Regular,Menlo,monospace;max-height:520px}
+figure.out pre{padding:10px 14px;white-space:pre;color:#c3e88d}
+pre .l{display:block;padding:0 14px 0 0;white-space:pre}
+pre .l i{display:inline-block;width:46px;text-align:right;padding-right:12px;color:#51607a;font-style:normal;user-select:none}
+.t-com{color:var(--com)}.t-str{color:var(--str)}.t-kw{color:var(--kw)}.t-num{color:var(--num)}.t-fn{color:var(--fn)}
+table{border-collapse:collapse;width:100%;font-size:14px;margin:10px 0}
+th,td{border:1px solid var(--line);padding:7px 10px;text-align:left;vertical-align:top}
+th{background:var(--bg)}
+td.ok{color:var(--ok);font-weight:650}td.bad{color:var(--bad);font-weight:650}td.warn{color:var(--warn);font-weight:650}
+.widget{border:1px dashed var(--acc);border-radius:12px;padding:14px 16px;margin:16px 0;background:var(--bg)}
+.widget h4{margin:0 0 6px}.widget .hint{font-size:13px;color:var(--mut);margin:0 0 8px}
+.widget canvas{width:100%;display:block;background:var(--card);border:1px solid var(--line);border-radius:8px}
+.widget label{font-size:13px;margin-right:10px}.widget input[type=range]{vertical-align:middle;width:170px}
+.widget button.b{border:1px solid var(--acc);background:var(--card);color:var(--acc);border-radius:7px;padding:5px 11px;cursor:pointer;font:inherit;font-size:13px;margin:2px 4px 2px 0}
+.widget button.b:hover{background:var(--accbg)}
+.mono{font:13px ui-monospace,Menlo,monospace}
+.pill{display:inline-block;padding:1px 8px;border-radius:99px;font-size:12px;background:var(--accbg);color:var(--acc);margin-right:4px}
+.glossary dt{font-weight:650;margin-top:8px}.glossary dd{margin:0 0 4px 0;color:var(--mut)}
+.eli5{font-size:1.02rem}
+details{margin:8px 0}summary{cursor:pointer;font-weight:600}
+</style></head><body><div class="wrap">
+<nav class="side"><h4>AltRA-Test: An Alternative Annotator Test for LL</h4><a href="#overview">Overview</a><a href="#eli5">Explain it simply</a><a href="#stages-pipe">The pipeline</a><a href="#verify">What was checked</a><a href="#gaps">Limits</a><h4 style="margin-top:18px">This week</h4><a href="../../2026-11-20.html">← Back to this week&#x27;s post</a></nav>
+<main>
+<header class="hero" id="overview"><div><span class="badge warn">Auto-generated</span><span class="badge warn">Code not run</span><span class="badge bad">No official repo found</span></div><h1>AltRA-Test: An Alternative Annotator Test for LLM Judges Without Shared Annotators</h1><p class="sub">arXiv 2611.26073 · picked for the week of 2026-11-20 · AltRA-Test provides a statistical framework for validating LLM judges, which is critical for the user&#x27;s auto-label verification and judging workflows.</p><div class="links"><a href="https://arxiv.org/abs/2611.26073" target="_blank" rel="noopener">arXiv</a> <a href="https://huggingface.co/papers/2611.26073" target="_blank" rel="noopener">HF paper page</a></div>
+<p>The paper introduces ALT RA-TEST, a statistical method to determine if Large Language Models (LLMs) can replace human annotators without requiring the same humans to label every item. It uses a bootstrap resampling technique to compare the agreement between human-only and mixed human-LLM panels, establishing that the test is consistent and asymptotically valid.</p><div class="callout warn"><b class="t">Read this first</b>This page was generated automatically from the paper's text by a local language model on 2026-11-20. A person has not reviewed it. <b>No code was executed.</b> No official repository with usable code was found, so there are no code excerpts.</div></header>
+<section id="eli5"><h2>Explain it simply</h2><div class="eli5"><h3>Explain it like I'm five</h3><p>Imagine you have a box of colored blocks and you want to know if a robot can pick them out as well as your friends do. Usually, you need the same friends to look at every single block to be fair. But what if different friends look at different blocks? This new test lets you check if the robot is good enough even when the friends are mixed up. You take a handful of blocks, let the robot guess one color, and see if the group still agrees on the colors. If the robot makes the group agree less, it might not be ready to help. If the group still agrees well, the robot is a good helper. This helps us know when we can let the robot do the work.</p><h3>Explain it like I'm a data scientist</h3><p>The primary gap addressed is that existing statistical tests for LLM-as-a-judge, such as ALT-TEST and STT, require a dense annotation setting where the exact same set of annotators labels every item in the evaluation set. This assumption fails in common large-scale scenarios like crowdsourcing or preference annotation, where items are labeled by different subsets of annotators, rendering these tests inapplicable to a significant portion of real-world datasets.</p><p>ALT RA-TEST solves this by employing a paired percentile bootstrap that resamples items with replacement and draws a fixed number of human annotations ($k$) for each item without relying on annotator identities. It constructs a mixed panel by substituting one human annotation with the LLM's prediction and tests whether the inter-annotator agreement (IAA) of this mixed panel is non-inferior to the all-human panel. By using an adaptive margin proportional to observed human disagreement, the test accommodates both objective and subjective tasks, providing a statistically grounded decision on whether the LLM preserves the shared signal among human annotators.</p></div><h3>Jargon buster (each with a daily-life picture)</h3><dl class="glossary"><dt>Inter-Annotator Agreement (IAA)</dt><dd><i>It&#x27;s like checking how often a group of friends picks the same favorite movie when asked independently.</i> A statistical measure of the degree of consensus among multiple annotators, used here to quantify the shared signal in human labels.</dd><dt>Bootstrap Resampling</dt><dd><i>Shuffling a deck of cards and dealing out hands multiple times to see how often you get a specific pattern.</i> A statistical method that repeatedly samples data points with replacement to estimate the distribution of a statistic, used here to simulate the variability of the agreement scores.</dd><dt>Non-Inferiority Test</dt><dd><i>Checking if a new generic pill works at least as well as the brand-name one, allowing for a tiny, acceptable difference.</i> A statistical hypothesis test that determines if a new treatment or method is not significantly worse than an established standard, within a pre-specified margin.</dd><dt>Krippendorff’s α</dt><dd><i>A score that tells you how much more your friends agree than if they were just guessing randomly.</i> A chance-corrected coefficient of agreement that supports multiple annotators and missing data, used as the primary reliability metric in the test.</dd><dt>Asymptotic Level</dt><dd><i>Knowing that if you flip a coin enough times, the chance of getting heads will get closer and closer to 50%.</i> The property of a statistical test where the probability of making a false positive error approaches a specific significance level (α) as the sample size grows infinitely large.</dd><dt>Adaptive Margin</dt><dd><i>Giving a wider tolerance for error when the task is tricky, and a tighter tolerance when the task is easy.</i> A threshold for acceptable loss in agreement that scales with the observed human disagreement, allowing the test to be sensitive to both objective and subjective tasks.</dd><dt>Paired Bootstrap</dt><dd><i>Comparing the same group of students before and after a lesson by shuffling the class list multiple times.</i> A resampling technique where the same items are used to generate both the control (human-only) and treatment (mixed) groups in each iteration to reduce variance in the comparison.</dd></dl></section>
+<section id="stages-pipe"><h2>The method step by step</h2><p>Click a step (box or tab) to open it. The order follows how the method runs, as described in the paper.</p><div class="pipe"><div class="node" data-st="s0"><div class="n">STEP 1</div><div class="tt">Input Setup</div><div class="ss">Define dataset and parameters</div></div><div class="arrow">→</div><div class="node" data-st="s1"><div class="n">STEP 2</div><div class="tt">Bootstrap Sampling</div><div class="ss">Resample items and annotations</div></div><div class="arrow">→</div><div class="node" data-st="s2"><div class="n">STEP 3</div><div class="tt">Panel Construction</div><div class="ss">Create human and mixed panels</div></div><div class="arrow">→</div><div class="node" data-st="s3"><div class="n">STEP 4</div><div class="tt">Agreement Calculation</div><div class="ss">Compute IAA scores</div></div><div class="arrow">→</div><div class="node" data-st="s4"><div class="n">STEP 5</div><div class="tt">Gap Adjustment</div><div class="ss">Apply adaptive margin</div></div><div class="arrow">→</div><div class="node" data-st="s5"><div class="n">STEP 6</div><div class="tt">Statistical Decision</div><div class="ss">Test non-inferiority</div></div></div><p class="mono" style="color:var(--mut);margin:4px 0 0">Click a box (or a tab) to open that stage.</p><div class="tabs"><button data-st="s0">1. Input Setup</button><button data-st="s1">2. Bootstrap Sampling</button><button data-st="s2">3. Panel Construction</button><button data-st="s3">4. Agreement Calculation</button><button data-st="s4">5. Gap Adjustment</button><button data-st="s5">6. Statistical Decision</button></div><div class="stage" id="st-s0" data-group="pipe"><h3 class="q">Prepare the annotated dataset and test parameters</h3><p>The process begins with a dataset of items, each having multiple human annotations, and an LLM that provides a single annotation per item. The researcher specifies the panel size $k$, the margin constant $c$, and the number of bootstrap iterations $B$. This setup ensures the test can handle items labeled by different subsets of annotators.</p></div><div class="stage" id="st-s1" data-group="pipe"><h3 class="q">Resample items and draw human annotation panels</h3><p>In each bootstrap iteration, the algorithm samples $N$ items with replacement from the dataset. For each sampled item, it draws $k$ human annotations without replacement from the available pool. This step creates a synthetic dataset that mimics the original structure but allows for statistical estimation of variability.</p></div><div class="stage" id="st-s2" data-group="pipe"><h3 class="q">Construct human-only and mixed human-LLM panels</h3><p>For each sampled item, a human-only panel is formed from the $k$ drawn annotations. A mixed panel is then created by replacing one random human annotation in the panel with the LLM's annotation for that item. This substitution simulates the effect of replacing one human annotator with the LLM.</p></div><div class="stage" id="st-s3" data-group="pipe"><h3 class="q">Calculate inter-annotator agreement for both panels</h3><p>The algorithm computes the agreement score $R$ (e.g., Krippendorff’s α) for both the human-only matrix and the mixed matrix. These scores quantify the reliability of the annotation panels, with higher values indicating greater consensus among the annotators in each configuration.</p></div><div class="stage" id="st-s4" data-group="pipe"><h3 class="q">Compute the adjusted substitution gap</h3><p>The difference in agreement between the mixed and human-only panels is calculated as the substitution gap. An adaptive margin, proportional to the human disagreement, is added to this gap. This adjustment accounts for the inherent noise in the task, allowing for a small, acceptable loss in agreement due to the LLM substitution.</p></div><div class="stage" id="st-s5" data-group="pipe"><h3 class="q">Determine if the LLM passes the non-inferiority test</h3><p>The empirical quantile of the adjusted gaps across all bootstrap iterations is compared to zero. If the quantile is positive, the null hypothesis that the LLM reduces agreement by more than the margin is rejected. This indicates that the LLM is a statistically valid alternative to a human annotator.</p></div></section>
+
+<section id="verify"><h2>What was checked</h2><table><tr><th>Check</th><th>How</th><th>Status</th></tr><tr><td>Paper text read</td><td class="mono">pdftotext on the arXiv PDF (first ~32k characters, references cut)</td><td class="ok">DONE</td></tr><tr><td>Official repository</td><td class="mono">none found via the Hugging Face papers API</td><td class="warn">NOT FOUND</td></tr><tr><td>Code excerpts</td><td class="mono">none</td><td class="warn">NONE</td></tr><tr><td>Numbers</td><td class="mono">every number in the generated text compared with the paper text</td><td class="ok">ALL FOUND IN PAPER</td></tr><tr><td>Running the code</td><td class="mono">never done by the weekly job</td><td class="warn">NOT RUN</td></tr><tr><td>Reproducing the paper's results</td><td class="mono">never done by the weekly job</td><td class="warn">NOT DONE</td></tr></table></section>
+<section id="gaps"><h2>Limits of this page</h2><ul><li><b>Machine-written.</b> The text comes from a language model that only saw the first ~32k characters of the paper (no figures, tables or appendix). Details may be missing or wrong.</li><li><b>Nothing was run.</b> Code excerpts show what the authors wrote, not that it works; the explanation of how stages map to code is the model's guess.</li><li>The specific implementation details of the &#x27;best prompting technique&#x27; selection process for the real-world experiments are not fully detailed in the provided text.</li><li>The exact method for handling missing annotations in the real-world datasets beyond the general support of Krippendorff&#x27;s α is not specified.</li><li>The text mentions &#x27;Appendix A&#x27; and &#x27;Appendix C&#x27; for full algorithms and proofs, but these are not included in the provided excerpt, leaving some theoretical derivations unverified.</li></ul></section>
+<p style="color:var(--mut);font-size:13px">Generated automatically on 2026-11-20. Not reviewed by a person; code was not executed.</p>
+</main></div>
+<script>
+if(location.hash==='#all')document.body.classList.add('all');
+function copyCode(btn){const pre=btn.closest('figure').querySelector('pre');
+ const t=[...pre.querySelectorAll('.l')].map(l=>l.textContent.replace(/^\d+/,'')).join('\n');
+ navigator.clipboard&&navigator.clipboard.writeText(t);btn.textContent='copied';setTimeout(()=>btn.textContent='copy',1200);}
+function showStage(id,scroll){const el=document.getElementById('st-'+id);if(!el)return;const g=el.dataset.group;const sec=document.getElementById('stages-'+g);
+ sec.querySelectorAll('.stage').forEach(s=>s.classList.toggle('on',s.id==='st-'+id));
+ sec.querySelectorAll('.tabs button').forEach(b=>b.classList.toggle('on',b.dataset.st===id));
+ sec.querySelectorAll('.pipe .node').forEach(n=>n.classList.toggle('on',n.dataset.st===id));
+ if(scroll){const t=sec.querySelector('.tabs');if(t)t.scrollIntoView({block:'start',behavior:'smooth'});}
+ window.dispatchEvent(new CustomEvent('stageshown',{detail:id}));}
+document.querySelectorAll('.pipe .node,.tabs button').forEach(n=>n.addEventListener('click',()=>showStage(n.dataset.st,n.classList.contains('node'))));
+document.querySelectorAll('.tabs').forEach(t=>{const f=t.querySelector('button');});
+/* tiny plotting helper used by the widgets */
+function plot(cv,series,opts){opts=opts||{};const dpr=window.devicePixelRatio||1;const W=cv.clientWidth,H=opts.h||cv.clientHeight||240;
+ cv.width=W*dpr;cv.height=H*dpr;cv.style.height=H+'px';const c=cv.getContext('2d');c.scale(dpr,dpr);c.clearRect(0,0,W,H);
+ const cs=getComputedStyle(document.body);const ink=cs.getPropertyValue('--mut').trim()||'#888';
+ const padL=38,padR=8,padT=8,padB=22;const n=Math.max(...series.map(s=>s.y.length));
+ let ymax=opts.ymax||Math.max(1e-9,...series.map(s=>Math.max(...s.y)));let ymin=opts.ymin!==undefined?opts.ymin:0;
+ const X=i=>padL+(W-padL-padR)*i/(n-1),Y=v=>padT+(H-padT-padB)*(1-(v-ymin)/(ymax-ymin));
+ (opts.bands||[]).forEach(b=>{c.fillStyle=b[2];c.fillRect(X(b[0]),padT,Math.max(1,X(b[1])-X(b[0])),H-padT-padB);});
+ c.strokeStyle=ink;c.fillStyle=ink;c.font='11px system-ui';c.globalAlpha=.35;c.beginPath();c.moveTo(padL,padT);c.lineTo(padL,H-padB);c.lineTo(W-padR,H-padB);c.stroke();c.globalAlpha=1;
+ const x0=opts.x0!==undefined?opts.x0:10,x1=opts.x1!==undefined?opts.x1:80;const unit=opts.unit!==undefined?opts.unit:'°';for(let k=0;k<=7;k++){const xv=x0+(x1-x0)*k/7;c.fillText(xv.toFixed(opts.dec||0)+unit,X((n-1)*k/7)-8,H-6);}
+ c.fillText(ymax.toFixed(2),2,padT+8);c.fillText(ymin.toFixed(2),2,H-padB);
+ series.forEach(s=>{c.strokeStyle=s.color;c.lineWidth=s.w||1.3;c.globalAlpha=s.alpha===undefined?1:s.alpha;c.beginPath();
+  s.y.forEach((v,i)=>{i?c.lineTo(X(i),Y(v)):c.moveTo(X(i),Y(v))});c.stroke();});c.globalAlpha=1;
+ let lx=padL+6;series.forEach(s=>{if(!s.name)return;c.fillStyle=s.color;c.fillRect(lx,padT+4,10,3);c.fillStyle=ink;c.fillText(s.name,lx+14,padT+10);lx+=c.measureText(s.name).width+34;});}
+
+const DATA={};
+
+(function(){const ids=["s0"];document.querySelectorAll('.tabs').forEach(t=>{const b=t.querySelector('button');if(b)showStage(b.dataset.st,false)});if(location.hash.indexOf('#st-')===0)showStage(location.hash.slice(4),false);})();
+</script></body></html>

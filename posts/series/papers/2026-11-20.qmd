@@ -1,0 +1,424 @@
+---
+title: "5 Papers Worth Reading — Week of November 20, 2026"
+author: "Hasan Goni"
+date: 2026-11-20
+categories: ["papers", "weekly-pick", "computer-vision", "VLM", "Vision-Language Models", "Benchmarks & Evaluation", "Parameter-Efficient Fine-Tuning", "Reasoning & Agents"]
+image: "https://cdn-thumbnails.huggingface.co/social-thumbnails/papers/2611.19200.png"
+toc: true
+series:
+  name: "Paper of the Week"
+  number: 30
+paper-urls:
+  - https://huggingface.co/papers/2611.19200
+  - https://huggingface.co/papers/2611.26073
+  - https://huggingface.co/papers/2611.24654
+  - https://huggingface.co/papers/2611.24651
+  - https://huggingface.co/papers/2611.26510
+paper-topics:
+  - "Vision-Language Models"
+  - "Benchmarks & Evaluation"
+  - "Parameter-Efficient Fine-Tuning"
+  - "Reasoning & Agents"
+  - "Reasoning & Agents"
+format:
+  html: default
+---
+
+:::{.callout-tip}
+This post is part of the [Paper of the Week](index.qmd) series — a handful of papers a week, picked and explained for my own semiconductor CV/VLM work.
+:::
+
+This week I scanned 140 candidates from arXiv and HF Daily Papers and picked 5 worth writing up in full — same format as always: one-sentence version, ELI5, then the full data-scientist breakdown with a code sketch and an honest read on whether it's actually useful for what I'm building.
+
+## 1. LogT: Logically Think with Images for Visual Search
+
+[https://huggingface.co/papers/2611.19200](https://huggingface.co/papers/2611.19200) · _LogT's logical reasoning with images for visual search directly enhances the localization and fine-grained defect detection capabilities of small VLMs like Qwen3-VL._ · **Vision-Language Models**
+
+[▶ Interactive explainer: step through the pipeline](explainers/2026-11-20/01-logt-logically-think-with-images-for-vis.html){target="_blank"} · _auto-generated, code not run_
+
+### The One-Sentence Version
+
+LogT argues that the bottleneck in teaching VLMs to use visual tools isn't the reinforcement learning algorithm, but the quality of the supervised fine-tuning data, and proposes an automated engine to generate high-quality, logic-driven training examples.
+
+### Explain It Like I'm 5
+
+Imagine you are looking for a lost toy in a messy room. You have a magic magnifying glass, but you don't know how to use it well. Most teachers just show you random pictures of the room and say, "Look here!" but they don't explain *why* you should look there. This new teacher makes a very clear list of steps: "First, look at the rug. Then, zoom in on the corner. Then, check under the pillow." By showing you the exact thinking steps, not just the final answer, you learn how to be a much better detective.
+
+### Jargon Buster
+
+*   **Vision-Language Models (VLMs)** — AI systems that can process both images and text simultaneously, used here to interpret visual scenes and generate textual reasoning.
+*   **Zoom-in Tool** — An external function that allows the model to crop and magnify a specific region of an image, used to inspect fine details that are invisible in the full view.
+*   **Supervised Fine-Tuning (SFT)** — A training phase where the model learns from a dataset of input-output pairs, used here as the primary method for instilling tool-use logic rather than relying on complex reinforcement learning.
+*   **Reinforcement Learning (RL)** — A training method where an agent learns by receiving rewards for actions, mentioned here as the complex approach that LogT intentionally avoids to simplify the pipeline.
+*   **Logic-Chain-Guided Reasoning** — A structured reasoning format where each step explicitly depends on the previous one, used to ensure the model's tool usage follows a coherent, human-like logical path.
+*   **Visually Grounded Questions** — Questions that require specific visual evidence to answer, used to ensure the generated training data forces the model to actually look at the image rather than relying on text priors.
+*   **Tool-Use Traces** — The step-by-step record of how a tool was invoked and what result was obtained, used as the target output for the SFT process to teach the model the correct sequence of actions.
+
+### Explain It Like I'm a Data Scientist
+
+**What problem does it solve?**
+
+Current approaches to enabling VLMs to use tools like "zoom-in" for visual search often rely on heavy reinforcement learning (RL) setups or poorly curated supervised fine-tuning (SFT) data. The core issue is that while models can learn to *call* a tool, they often fail to do so *logically*—they might zoom in on irrelevant areas or skip necessary steps. Prior work has tried to fix this by making the RL reward functions more complex, but this increases computational cost and instability. The authors identify that the real bottleneck is the quality of the SFT data: if the initial training examples don't demonstrate clear, logical reasoning chains, the model learns bad habits that are hard to correct later.
+
+**How does it solve it?**
+
+LogT shifts the focus from complex RL to a fully automated SFT data generation engine. Instead of manually curating data or using complex reward models, LogT generates challenging, visually grounded questions and pairs them with structured tool-use traces that explicitly enforce logical consistency. The engine ensures that each step in the reasoning chain is justified by the previous visual evidence, creating a "human-like" logic flow. By training on this high-quality, logic-enforced SFT data, the model learns to use the zoom-in tool accurately and efficiently without needing the overhead of complex RL fine-tuning.
+
+**Minimal code sketch**
+
+```python
+def generate_logt_sft_sample(image, question):
+    # 1. Identify key regions requiring inspection
+    # (Simulated by a vision encoder or heuristic)
+    candidate_regions = detect_interesting_regions(image)
+    
+    # 2. Generate a logical chain of tool calls
+    # Instead of random zooms, enforce a dependency chain
+    logic_chain = []
+    current_view = image
+    
+    for region in candidate_regions:
+        # Step 1: Justify the zoom (Why look here?)
+        justification = generate_reasoning(current_view, region, question)
+        
+        # Step 2: Execute the tool
+        zoomed_view = call_zoom_in_tool(current_view, region)
+        
+        # Step 3: Verify if the question is answered
+        answer = check_if_answered(zoomed_view, question)
+        
+        # Append to trace: [Reason, Action, Observation]
+        logic_chain.append({
+            "reason": justification,
+            "action": f"zoom_in({region})",
+            "observation": zoomed_view,
+            "is_final": answer
+        })
+        
+        if answer:
+            break
+            
+    # 3. Format for SFT
+    # Input: Original Image + Question
+    # Target: Structured JSON of the logic_chain
+    return {
+        "input": {"image": image, "question": question},
+        "target": serialize_logic_chain(logic_chain)
+    }
+```
+
+### Why This Matters For My Work
+
+This is directly relevant to my fine-tuning of small local VLMs like Qwen3-VL for defect detection, where "zooming in" on a specific casting flaw is often necessary to distinguish between a true defect and a sensor artifact. The paper’s argument that SFT data quality matters more than complex RL is a useful heuristic for my pipeline: rather than wrestling with RL rewards for localization, I can focus on generating high-quality, logic-driven traces of "where to look and why" for my auto-label verification tasks. It suggests that if my current small models are failing at fine-grained localization, the issue might be my training data’s lack of explicit reasoning chains rather than the model architecture itself.
+
+## 2. AltRA-Test: An Alternative Annotator Test for LLM Judges Without Shared Annotators
+
+[https://huggingface.co/papers/2611.26073](https://huggingface.co/papers/2611.26073) · _AltRA-Test provides a statistical framework for validating LLM judges, which is critical for the user's auto-label verification and judging workflows._ · **Benchmarks & Evaluation**
+
+[▶ Interactive explainer: step through the pipeline](explainers/2026-11-20/02-altra-test-an-alternative-annotator-test.html){target="_blank"} · _auto-generated, code not run_
+
+### The One-Sentence Version
+
+AltRA-Test offers a statistical bootstrap method to determine if an LLM judge is statistically indistinguishable from human annotators, even when the human labels are sparse or unevenly distributed across items.
+
+### Explain It Like I'm 5
+
+Imagine you have a box of 100 cookies, but you only tasted 5 of them. A robot also tasted all 100. You want to know if the robot tastes cookies the same way you do, but you can't just compare the 5 you ate to the 100 the robot ate because the numbers don't match. So, you pretend to taste 5 random cookies again and again, swapping one of your tastes with the robot's taste each time. If the robot's opinion looks just like your pretend opinions, then the robot is probably a good cookie taster.
+
+### Jargon Buster
+
+*   **Alt-Test** — The original statistical test for comparing LLM judges to humans, which only works if every single item was rated by the exact same group of humans; this paper generalizes it.
+*   **Dense vs. Sparse Annotation** — "Dense" means every item has labels from all annotators; "Sparse" means items have labels from random subsets of annotators, which is the real-world scenario AltRA-Test handles.
+*   **Bootstrap Resampling** — A statistical technique where you repeatedly sample data with replacement to estimate the distribution of a statistic; here, it’s used to simulate the variability of human judgment.
+*   **Paired Comparison** — A statistical test design where you compare two measurements taken on the same subject (or item) to control for item-specific difficulty; AltRA-Test creates these pairs by mixing human and LLM labels.
+*   **Statistical Justification** — The formal proof that replacing humans with LLMs doesn't significantly change the results of your evaluation; it’s about confidence intervals, not just accuracy scores.
+
+### Explain It Like I'm a Data Scientist
+
+**What problem does it solve?**
+
+The standard "Alternative Annotator Test" (Alt-Test) assumes a "dense" annotation setting: every data point is labeled by the same set of human annotators. In reality, large-scale annotation is sparse. Item A might be labeled by Humans 1 and 2, while Item B is labeled by Humans 3 and 4. The original Alt-Test breaks down here because it relies on the covariance structure of the same annotators across all items. If you try to force the original test on sparse data, your variance estimates are wrong, and your p-values are garbage. You end up thinking your LLM judge is "statistically equivalent" to humans when it’s actually just benefiting from a statistical artifact of the missing data.
+
+**How does it solve it?**
+
+AltRA-Test uses a bootstrap approach that respects the sparse nature of the data. Instead of assuming a fixed set of annotators, it resamples items from the dataset. For each resampled item, it draws $k$ human annotations (from whatever subset labeled that specific item) and substitutes one of them with the LLM’s annotation. This creates a synthetic "paired" dataset where you have an all-human version and a mixed human/LLM version for the same item. By repeating this thousands of times, you build a distribution of the difference between the all-human and mixed scores. If the observed difference between your actual LLM judge and the human baseline falls within this bootstrap distribution, you can claim statistical equivalence. It’s essentially a permutation test tailored for incomplete annotation matrices.
+
+**Minimal code sketch**
+
+```python
+import numpy as np
+
+def alt_ra_test(human_labels, llm_labels, n_bootstraps=1000, k=3):
+    """
+    human_labels: dict {item_id: list_of_human_scores}
+    llm_labels: dict {item_id: llm_score}
+    """
+    item_ids = list(human_labels.keys())
+    diffs = []
+    
+    for _ in range(n_bootstraps):
+        # 1. Resample items with replacement
+        sampled_items = np.random.choice(item_ids, size=len(item_ids), replace=True)
+        
+        human_scores = []
+        mixed_scores = []
+        
+        for item in sampled_items:
+            # 2. Get available human annotations for this item
+            available_humans = human_labels[item]
+            
+            # 3. Draw k human annotations (with replacement if < k available)
+            drawn_humans = np.random.choice(available_humans, size=k, replace=True)
+            
+            # 4. Create the "all-human" score (mean of drawn humans)
+            human_score = np.mean(drawn_humans)
+            
+            # 5. Create the "mixed" score (replace one human with LLM)
+            # Replace a random index in the drawn humans with the LLM score
+            replace_idx = np.random.randint(0, k)
+            mixed_drawn = drawn_humans.copy()
+            mixed_drawn[replace_idx] = llm_labels[item]
+            mixed_score = np.mean(mixed_drawn)
+            
+            human_scores.append(human_score)
+            mixed_scores.append(mixed_score)
+            
+        # 6. Calculate the difference in means for this bootstrap iteration
+        diff = np.mean(mixed_scores) - np.mean(human_scores)
+        diffs.append(diff)
+        
+    # 7. Calculate p-value or confidence interval based on 'diffs'
+    # e.g., fraction of diffs that are more extreme than observed difference
+    return np.array(diffs)
+```
+
+### Why This Matters For My Work
+
+This is directly applicable to my auto-label verification pipeline for semiconductor defect detection. When I fine-tune small local VLMs like LFM2-VL for X-ray defect localization, I don't have the budget to have three human experts label every single image in my validation set; I usually have a sparse set of ground-truth labels from a few key engineers. AltRA-Test gives me a rigorous way to prove that my VLM's judgments on the unlabeled or sparsely labeled portions of the dataset are statistically consistent with the human experts, rather than just relying on a high IoU score which might be biased by the specific subset of defects the humans happened to label. It turns "my model looks good" into "my model is statistically indistinguishable from the expert," which is a much stronger claim for deploying these models in industrial QA workflows.
+
+## 3. CurvDelta: Low-Curvature Delta Modeling For Surgical Learning and Unlearning
+
+[https://huggingface.co/papers/2611.24654](https://huggingface.co/papers/2611.24654) · _CurvDelta offers a method for fine-tuning models while preserving general capabilities, addressing the catastrophic forgetting risk when adapting small VLMs to specific industrial tasks._ · **Parameter-Efficient Fine-Tuning**
+
+[▶ Interactive explainer: step through the pipeline](explainers/2026-11-20/03-curvdelta-low-curvature-delta-modeling-f.html){target="_blank"} · _auto-generated, code not run_
+
+### The One-Sentence Version
+
+CurvDelta constrains fine-tuning updates to a low-curvature subspace of the parameter space, ensuring that new task-specific knowledge is learned without degrading the model’s pre-existing general capabilities.
+
+### Explain It Like I'm 5
+
+Imagine you have a very good drawing of a cat. You want to teach the cat how to wear a hat, but you are afraid that while adding the hat, you might accidentally erase the ears or the tail. This paper is like a special ruler that only lets you draw the hat in the empty space above the head. It stops your pencil from going into the parts of the paper where the ears and tail are. So, the cat still looks like a cat, but now it has a hat.
+
+### Jargon Buster
+
+*   **Capability Preservation** — The requirement that a model retains its original general skills after being adapted for a new task; here, it is the primary constraint that the optimization process must satisfy.
+*   **Catastrophic Forgetting** — The phenomenon where a neural network overwrites previously learned information when trained on new data; this is the specific failure mode CurvDelta aims to prevent.
+*   **Local Geometry** — The mathematical description of how the loss function curves and slopes in the immediate neighborhood of the current model weights; the paper analyzes this to find "safe" directions for updating weights.
+*   **Low-Curvature Space** — A subspace of the parameter space where changes to the weights result in minimal change to the preservation loss; updates are projected here to ensure stability.
+*   **K-FAC (Kronecker-Factored Approximate Curvature)** — An efficient approximation of the second-order derivative information (Hessian) of the loss function; it is used to compute the geometry of the preservation constraint without prohibitive computational cost.
+*   **Factorized Projection** — A mathematical operation that maps a standard gradient update into the low-curvature subspace; it ensures the final weight update stays within the "safe" region defined by the preservation constraint.
+*   **CurvLoRA** — A variant of the method that uses Low-Rank Adaptation (LoRA) matrices but constrains their updates within the same preservation geometry; it is designed for more memory-efficient adaptation.
+
+### Explain It Like I'm a Data Scientist
+
+**What problem does it solve?**
+
+Standard fine-tuning, even with techniques like LoRA, often suffers from capability degradation. When you adapt a Large Language Model (or Vision-Language Model) to a specific domain, the model tends to "forget" its general knowledge to fit the new data. This is catastrophic forgetting. While we can monitor this with validation sets, there is no hard guarantee that the model will retain its baseline performance. The problem is that the loss landscape for the new task and the loss landscape for the old tasks are not aligned; optimizing for one often pushes the parameters away from the optimum of the other.
+
+**How does it solve it?**
+
+CurvDelta treats capability preservation as a hard constraint rather than just a regularization term. It analyzes the local geometry of the preservation loss (the loss on the original, general data) around the pre-adaptation model. By using K-FAC to approximate the curvature of this loss, it identifies a subspace where the preservation loss is nearly invariant (flat). The method then projects the gradient updates for the new task into this low-curvature subspace. Essentially, it only allows the model to change in directions that do not significantly impact its ability to perform the original tasks. CurvLoRA applies this same geometric constraint to low-rank adapters, making it feasible for smaller models.
+
+**Minimal code sketch**
+
+```python
+# Pseudocode for the core mechanism
+import torch
+import torch.nn as nn
+
+class CurvDeltaTrainer:
+    def __init__(self, model, preservation_dataset, new_task_dataset):
+        self.model = model
+        self.preservation_loss_fn = self._compute_preservation_loss_fn(preservation_dataset)
+        # Approximate curvature of the preservation loss at current weights
+        # Using K-FAC for efficiency
+        self.curvature_approx = self._compute_kfac(self.model, self.preservation_loss_fn)
+        
+    def _compute_kfac(self, model, loss_fn):
+        # Placeholder for K-FAC computation
+        # Returns a factorized approximation of the Hessian
+        return torch.eye(model.param_count()) # Simplified for sketch
+
+    def _project_to_low_curvature(self, gradient):
+        # Project gradient into the subspace where preservation loss is flat
+        # This involves eigen-decomposition of the curvature approx
+        # and zeroing out components in high-curvature directions
+        eigvals, eigvecs = torch.linalg.eigh(self.curvature_approx)
+        # Keep only directions with low curvature (small eigenvalues)
+        mask = eigvals < threshold
+        projected_grad = (eigvecs * mask) @ (eigvecs.T @ gradient)
+        return projected_grad
+
+    def train_step(self, batch):
+        # 1. Compute gradient for the NEW task
+        loss_new = self.model(batch)
+        loss_new.backward()
+        
+        # 2. Get the raw gradient
+        raw_grad = self.model.get_grad()
+        
+        # 3. Project gradient into the safe subspace
+        safe_grad = self._project_to_low_curvature(raw_grad)
+        
+        # 4. Apply update
+        with torch.no_grad():
+            for p in self.model.parameters():
+                p -= lr * safe_grad[p]
+```
+
+### Why This Matters For My Work
+
+This is directly relevant to my fine-tuning of small local VLMs like Qwen3-VL and LFM2-VL for industrial defect detection. When I adapt these models to recognize specific casting defects, I am constantly worried about degrading their general vision-language alignment, which is critical for the auto-label verification and judging steps. CurvDelta offers a principled way to constrain these updates, potentially allowing me to push harder on the specific defect classes without the model becoming "blind" to general visual context. While implementing K-FAC for small VLMs might be computationally non-trivial, the concept of projecting updates into a preservation-invariant subspace is a robust alternative to simple weight decay or KL-divergence penalties, which often feel like tuning a black box.
+
+## 4. Piccolo: Co-Evolving Decision Models and Data through Recursive Self-Improvement
+
+[https://huggingface.co/papers/2611.24651](https://huggingface.co/papers/2611.24651) · _Piccolo's co-evolution of decision models and data via recursive self-improvement offers a concrete technique for improving the accuracy of small VLMs in visual judgment tasks._ · **Reasoning & Agents**
+
+[▶ Interactive explainer: step through the pipeline](explainers/2026-11-20/04-piccolo-co-evolving-decision-models-and.html){target="_blank"} · _auto-generated, code not run_
+
+### The One-Sentence Version
+
+Piccolo uses a recursive loop where AI agents analyze model failures to generate better training data, which is then used to retrain the model, effectively allowing small vision-language models to bootstrap their own decision-making capabilities.
+
+### Explain It Like I'm 5
+
+Imagine you have a toy robot that is bad at picking the right color from a box. Instead of you telling it what’s wrong every time, you give the robot a little notebook. The robot looks at the box, makes a guess, and if it’s wrong, it writes down *why* it got confused. Then, it uses those notes to make a new, better box of colors for itself to practice on. It keeps doing this—guessing, writing notes, making a new practice box—until it gets really good at picking the right color without you helping.
+
+### Jargon Buster
+
+*   **Multimodal decision models** — AI systems that process both text and images to make specific choices or judgments, rather than just generating open-ended text.
+*   **Agentic Data Engineering** — A process where AI agents autonomously design, execute, and refine data pipelines to create high-quality training sets, rather than relying on static, pre-collected datasets.
+*   **Recursive Self-Improvement (RSI)** — A feedback loop where a system uses its own outputs to generate data or instructions that improve its own future performance, iterating until a performance ceiling is reached.
+*   **Semantic slices** — Subsets of data grouped by specific concepts or failure modes (e.g., "confusing red and orange") rather than random sampling, used to target specific weaknesses during training.
+*   **Shared research memory** — A persistent knowledge base where agents store insights, experiment results, and data generation strategies to inform subsequent iterations of the improvement loop.
+*   **Decision Index Vision Full** — A specific benchmark leaderboard that evaluates models on their ability to make accurate visual judgments and decisions, rather than just describing images.
+
+### Explain It Like I'm a Data Scientist
+
+**What problem does it solve?**
+
+Small vision-language models (VLMs) often struggle with fine-grained visual judgment tasks, such as detecting subtle defects or making precise binary decisions, because they lack the massive parameter counts of larger foundation models. Traditional fine-tuning relies on static, human-annotated datasets that may not capture the specific edge cases where the model fails. This leads to a performance plateau where the model remains brittle on out-of-distribution or nuanced visual inputs.
+
+**How does it solve it?**
+
+Piccolo introduces a co-evolutionary framework where the model and its training data improve simultaneously. Research agents analyze the model's current behavior, identifying specific failure patterns. These agents then construct targeted training data (semantic slices) designed to address those exact weaknesses. The model is retrained on this new data, and the agents update their "research memory" with the outcomes. This recursive loop allows the model to iteratively refine its decision boundaries, effectively self-supervising its improvement on complex visual tasks without requiring new human annotation for every iteration.
+
+**Minimal code sketch**
+
+```python
+def piccolo_rsi_loop(initial_model, max_iterations=10):
+    research_memory = {}
+    current_model = initial_model
+    
+    for i in range(max_iterations):
+        # 1. Agent analyzes current model performance
+        # Identifies specific failure modes (e.g., "confuses cracks with shadows")
+        failure_modes = agent_analyze_failures(current_model)
+        
+        # 2. Agent generates targeted data for these failures
+        # Creates "semantic slices" of training data
+        new_data = agent_generate_data(failure_modes, research_memory)
+        
+        # 3. Retrain the model on the new data
+        current_model = retrain_model(current_model, new_data)
+        
+        # 4. Update memory with what worked/didn't work
+        research_memory.update({
+            "iteration": i,
+            "targeted_failures": failure_modes,
+            "data_strategy": new_data.metadata
+        })
+        
+        # 5. Check if performance improved
+        if not evaluate_improvement(current_model):
+            break
+            
+    return current_model
+```
+
+### Why This Matters For My Work
+
+This approach is directly relevant to my work on fine-tuning small local VLMs like Qwen3-VL for semiconductor defect detection, where static datasets often miss rare or subtle casting defects. The concept of using agents to generate "semantic slices" of data based on specific failure modes could help me automate the creation of hard-negative examples for X-ray defect localization, reducing the manual effort required to curate training data for auto-label verification. While I don't have a full agentic pipeline yet, the core idea of iteratively refining training data based on model-specific errors is a practical technique I can adapt to improve the robustness of my local VLMs in industrial settings.
+
+## 5. AutoMaster: Autonomous Post-Training by Making the Same Model a Better Teacher
+
+[https://huggingface.co/papers/2611.26510](https://huggingface.co/papers/2611.26510) · _AutoMaster's Skill-Guided Fine-Tuning provides a structured post-training method to reinforce specific behaviors, useful for refining VLMs on complex defect detection criteria._ · **Reasoning & Agents**
+
+[▶ Interactive explainer: step through the pipeline](explainers/2026-11-20/05-automaster-autonomous-post-training-by-m.html){target="_blank"} · _auto-generated, code not run_
+
+### The One-Sentence Version
+
+AutoMaster uses an LLM agent to iteratively design natural-language "skills" that guide a teacher model to generate higher-quality training data, which is then used to fine-tune a smaller target model for better performance on complex tasks.
+
+### Explain It Like I'm 5
+
+Imagine you have a very smart teacher who sometimes makes silly mistakes, like guessing answers without looking or repeating the same wrong thing over and over. Instead of just letting the teacher teach, you give them a little checklist of good habits, like "always check your work" or "don't guess." The teacher follows the checklist and writes down better examples. Then, you show those better examples to a younger student so they can learn the right way to do things.
+
+### Jargon Buster
+
+*   **Post-training** — The phase of model development after initial pre-training where the model is refined for specific tasks; here, it refers to the final tuning step to improve task performance.
+*   **Teacher trajectories** — The step-by-step reasoning and actions generated by a larger, more capable model (the "teacher") that serve as examples for the smaller model to learn from.
+*   **Skill-FT (Skill-Guided Fine-Tuning)** — A method where specific natural-language instructions ("skills") are injected into the teacher's prompt to suppress bad habits and encourage good ones before the resulting data is used for fine-tuning.
+*   **Rollouts** — The process of generating a full sequence of actions or responses from a model; in this context, the teacher model generates multiple attempts to solve a task.
+*   **Target model** — The smaller, less capable model that is being trained; it learns from the improved data generated by the teacher.
+*   **Autonomous post-training** — A system where an AI agent manages the entire training loop, including analyzing failures, designing new interventions, and selecting data, without human intervention.
+
+### Explain It Like I'm a Data Scientist
+
+**What problem does it solve?**
+
+Standard post-training often relies on Reinforcement Learning from Human Feedback (RLHF) or simple supervised fine-tuning (SFT) on successful trajectories. However, "success" is a binary metric that doesn't capture *how* a model arrived at the answer. A model might solve a coding task but use inefficient loops, make unsupported assumptions, or skip verification steps. These "undesirable habits" get baked into the target model during SFT, leading to brittle or inefficient behavior in deployment. The gap is the lack of a mechanism to explicitly penalize bad reasoning patterns and reinforce good ones during the data generation phase.
+
+**How does it solve it?**
+
+AutoMaster introduces an agentic loop where an LLM analyzes failed or suboptimal trajectories to identify specific behavioral flaws. It then synthesizes natural-language "skills" (e.g., "verify variable types before assignment") and injects these into the teacher model's prompt. The teacher generates new rollouts constrained by these skills. The system evaluates these new trajectories and selects the best ones to fine-tune the target model. This creates a feedback loop where the teacher's output quality improves iteratively, providing cleaner, more robust training data for the smaller target model.
+
+**Minimal code sketch**
+
+```python
+def automaster_loop(teacher_model, target_model, initial_skills):
+    skills = initial_skills
+    for iteration in range(N):
+        # 1. Generate rollouts with current skills
+        trajectories = teacher_model.generate(
+            tasks, 
+            prompt_modifier=skills
+        )
+        
+        # 2. Agent analyzes trajectories for bad habits
+        # (e.g., detects "unsupported assumptions")
+        analysis = agent.analyze(trajectories)
+        
+        # 3. Update skills based on analysis
+        # (e.g., add "Always verify input types")
+        skills = agent.update_skills(skills, analysis)
+        
+        # 4. Select high-quality trajectories
+        # (Filter for those that followed skills and succeeded)
+        clean_data = select_best(trajectories, skills)
+        
+        # 5. Fine-tune target model on clean data
+        target_model.fine_tune(clean_data)
+        
+        # 6. Evaluate target model to check for improvement
+        score = evaluate(target_model)
+        if score > threshold:
+            break
+            
+    return target_model
+```
+
+### Why This Matters For My Work
+
+This approach is directly applicable to my VLM fine-tuning pipeline for defect detection, where "success" (correct label) often masks poor localization or hallucinated defect types. By using Skill-FT, I could guide my teacher VLM to explicitly verify bounding box coordinates against image features or reject ambiguous labels, generating cleaner training data for my smaller local models (Qwen3-VL, LFM2-VL). This could reduce the need for manual data cleaning and help my auto-label verification system learn more robust decision boundaries for industrial X-ray and casting defects.

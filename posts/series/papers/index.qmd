@@ -11,9 +11,9 @@ toc: true
 
 Every week I pick a handful of the most relevant papers from arXiv and the HF Daily Papers list — filtered against my own work (semiconductor X-ray/casting defect detection, VLM fine-tuning, auto-label verification) — and write each one up twice: once so a 5-year-old could follow it, once with the full methodology, a code sketch, and an honest note on whether it's actually useful for what I'm building.
 
-**Papers covered so far:** 73
+**Papers covered so far:** 79
 
-**By topic:** Vision-Language Models (20), Reasoning & Agents (11), Segmentation (9), Model Efficiency (6), Anomaly Detection (5), Benchmarks & Evaluation (5), Generative Models (4), Medical Imaging (4), Multimodal Learning (4), Synthetic Data (4), Diffusion Models (3), Foundation Models (1), Generative Retrieval (1), Parameter-Efficient Fine-Tuning (1), Reasoning (1), Reinforcement Learning (1)
+**By topic:** Vision-Language Models (21), Reasoning & Agents (13), Segmentation (9), Benchmarks & Evaluation (6), Model Efficiency (6), Anomaly Detection (5), Generative Models (4), Medical Imaging (4), Multimodal Learning (4), Synthetic Data (4), Diffusion Models (3), Parameter-Efficient Fine-Tuning (2), Foundation Models (1), Generative Retrieval (1), Reasoning (1), Reinforcement Learning (1)
 
 ## Posts in this Series
 
@@ -48,3 +48,4 @@ Most recent first.
 - **2026-11-06** — [5 Papers Worth Reading — Week of November 6, 2026](2026-11-06.qmd) (5 papers)
 - **2026-11-13** — [5 Papers Worth Reading — Week of November 13, 2026](2026-11-13.qmd) (5 papers)
 - **2026-11-16** — [WeVisOne-VL on Voids — Zero-Shot vs Fine-Tuned on My X-Ray Images](2026-11-16-wevisone-voids.qmd) — Tencent's text-decoded detector on 200 held-out void images: zero-shot F1 0.29 vs my own LoRA fine-tune F1 0.61 (the authors' fine-tuning code is unreleased), with bootstrap intervals
+- **2026-11-20** — [5 Papers Worth Reading — Week of November 20, 2026](2026-11-20.qmd) (5 papers)
